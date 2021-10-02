@@ -167,7 +167,7 @@ public class ImageButton
             else if (pressedImage != null && isToggleable() && isSelected())
                 return pressedImage;
             return standardImage;
-        }, observables.toArray(new Observable[observables.size()])));
+        }, observables.toArray(new Observable[0])));
         
         imagePane.setPickOnBounds(true);
         imagePane.setOnMouseClicked(Event::consume);
@@ -410,7 +410,7 @@ public class ImageButton
             TB.executor().execute(new Task<>()
             {
                 @Override
-                protected Object call() throws Exception
+                protected Object call()
                 {
                     actionResponder.run();
                     return null;
