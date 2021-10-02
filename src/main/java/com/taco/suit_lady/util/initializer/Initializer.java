@@ -13,16 +13,16 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
 
-public final class Initializer extends ReadOnlyInitializer
+public final class Initializer<T> extends ReadOnlyInitializer<T>
 {
     
-    private ReadOnlyInitializer readOnlyInitializer;
+    private ReadOnlyInitializer<T> readOnlyInitializer;
     
     private final Runnable onInitializeAction;
     private final ReadOnlyBooleanWrapper initializedProperty;
     
-    private final ChangeListener propertyUpdateBlock;
-    private final ReadOnlyListWrapper<ObservableValue> blockedProperties;
+    private final ChangeListener<T> propertyUpdateBlock;
+    private final ReadOnlyListWrapper<ObservableValue<T>> blockedProperties;
     
     public Initializer()
     {
@@ -52,26 +52,26 @@ public final class Initializer extends ReadOnlyInitializer
     
     //<editor-fold desc="Properties">
     
-    public final ReadOnlyBooleanProperty initializedProperty()
+    public ReadOnlyBooleanProperty initializedProperty()
     {
         return initializedProperty.getReadOnlyProperty();
     }
     
-    public final boolean isInitialized()
+    public boolean isInitialized()
     {
         return initializedProperty.get();
     }
     
     //
     
-    public final ReadOnlyListProperty<ObservableValue> blockedProperties()
+    public ReadOnlyListProperty<ObservableValue<T>> blockedProperties()
     {
         return blockedProperties.getReadOnlyProperty();
     }
     
     //
     
-    public final ReadOnlyInitializer getReadOnlyInitializer()
+    public ReadOnlyInitializer<T> getReadOnlyInitializer()
     {
         if (readOnlyInitializer == null) // Lazy initialization
             readOnlyInitializer = new ReadOnlyInitializerImpl();
@@ -82,13 +82,13 @@ public final class Initializer extends ReadOnlyInitializer
     
     //
     
-    public final void initialize()
+    public void initialize()
     {
         checkNotInitialized();
         initializeUnchecked();
     }
     
-    public final void initializeUnchecked()
+    public void initializeUnchecked()
     {
         initializedProperty.set(true);
         if (onInitializeAction != null)
@@ -97,24 +97,28 @@ public final class Initializer extends ReadOnlyInitializer
     
     //
     
-    @Override public final void checkInitialized()
+    @Override
+    public void checkInitialized()
     {
-        checkInitialized(null);
+        checkInitialized(() -> null);
     }
     
-    @Override public final <T> T checkInitialized(Supplier<T> supplier)
+    @Override
+    public T checkInitialized(Supplier<T> supplier)
     {
         if (!isInitialized())
             throw new IllegalStateException("The initializer has not yet been initialized.");
         return supplier == null ? null : supplier.get();
     }
     
-    @Override public final void checkNotInitialized()
+    @Override
+    public void checkNotInitialized()
     {
-        checkNotInitialized(null);
+        checkNotInitialized(() -> null);
     }
     
-    @Override public final <T> T checkNotInitialized(Supplier<T> supplier)
+    @Override
+    public T checkNotInitialized(Supplier<T> supplier)
     {
         if (isInitialized())
             throw new IllegalStateException("The initializer has already been initialized.");
@@ -123,9 +127,11 @@ public final class Initializer extends ReadOnlyInitializer
     
     //
     
-    @Override public void blockUpdates(ObservableValue... observableValues)
+    @SafeVarargs
+    @Override
+    public final void blockUpdates(ObservableValue<T>... observableValues)
     {
-        for (ObservableValue observableValue: observableValues)
+        for (ObservableValue<T> observableValue: observableValues)
             if (observableValue != null)
             {
                 if (!blockedProperties.contains(observableValue))
@@ -140,9 +146,11 @@ public final class Initializer extends ReadOnlyInitializer
                 ConsoleBB.CONSOLE.dev("WARNING: Observable Value is null.");
     }
     
-    @Override public void unblockUpdates(ObservableValue... observableValues)
+    @SafeVarargs
+    @Override
+    public final void unblockUpdates(ObservableValue<T>... observableValues)
     {
-        for (ObservableValue observableValue: observableValues)
+        for (ObservableValue<T> observableValue: observableValues)
             if (observableValue != null)
             {
                 if (blockedProperties.contains(observableValue))
@@ -159,35 +167,42 @@ public final class Initializer extends ReadOnlyInitializer
     
     //
     
-    private class ReadOnlyInitializerImpl extends ReadOnlyInitializer
+    private class ReadOnlyInitializerImpl extends ReadOnlyInitializer<T>
     {
-        
-        @Override public void checkInitialized()
+        @Override
+        public void checkInitialized()
         {
             Initializer.this.checkInitialized();
         }
         
-        @Override public <T> T checkInitialized(Supplier<T> supplier)
+        @Override
+        public T checkInitialized(Supplier<T> supplier)
         {
             return Initializer.this.checkInitialized(supplier);
         }
         
-        @Override public void checkNotInitialized()
+        @Override
+        public void checkNotInitialized()
         {
             Initializer.this.checkNotInitialized();
         }
         
-        @Override public <T> T checkNotInitialized(Supplier<T> supplier)
+        @Override
+        public T checkNotInitialized(Supplier<T> supplier)
         {
             return Initializer.this.checkNotInitialized(supplier);
         }
         
-        @Override public void blockUpdates(ObservableValue... observableValues)
+        @SafeVarargs
+        @Override
+        public final void blockUpdates(ObservableValue<T>... observableValues)
         {
             Initializer.this.blockUpdates(observableValues);
         }
         
-        @Override public void unblockUpdates(ObservableValue... observableValues)
+        @SafeVarargs
+        @Override
+        public final void unblockUpdates(ObservableValue<T>... observableValues)
         {
             Initializer.this.blockUpdates(observableValues);
         }
