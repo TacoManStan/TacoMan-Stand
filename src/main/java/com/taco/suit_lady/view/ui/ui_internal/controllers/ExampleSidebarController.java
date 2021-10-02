@@ -34,7 +34,6 @@ public class ExampleSidebarController extends SidebarNodeGroupController<Example
     @Override
     protected void onPageBindingComplete()
     {
-        ConsoleBB.CONSOLE.print("Initializing Example Sidebar Controller w/ Color of " + getPage().getColor());
         root().setStyle("-fx-background-color: " + getPage().getColor());
     }
 }

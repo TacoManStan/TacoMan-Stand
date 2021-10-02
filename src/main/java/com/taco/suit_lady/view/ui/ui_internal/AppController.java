@@ -192,8 +192,7 @@ public class AppController
     
     // Called automatically by FXML loader.
     // As some properties may not yet be finished loading, all actual UI initialization should be done in the initialize(Stage) method.
-    @FXML
-    public final void initialize()
+    @FXML public final void initialize()
     {
         AppUI ui = TB.ui();
         
@@ -228,17 +227,17 @@ public class AppController
         Console.consolify(
                 weaver, ctx,
                 new ConsoleUIDataContainer(
-                consoleTree,
-                consoleTRiBotCheckBox.selectedProperty(),
-                consoleClientCheckBox.selectedProperty(),
-                consoleScriptCheckBox.selectedProperty(),
-                consoleSelectedInstanceOnlyCheckBox.selectedProperty()
-        ));
+                        consoleTree,
+                        consoleTRiBotCheckBox.selectedProperty(),
+                        consoleClientCheckBox.selectedProperty(),
+                        consoleScriptCheckBox.selectedProperty(),
+                        consoleSelectedInstanceOnlyCheckBox.selectedProperty()
+                )
+        );
         
         FXTools.get().constructDraggableNode(dragBar);
-        FXTools.get().constructResizableNode(
-                getStage(), cornerResizePane, topResizePane, bottomResizePane, leftResizePane, rightResizePane,
-                minimizeImagePane, maximizeImagePane, closeImagePane, settingsImagePane, sidebarImagePane
+        FXTools.get().constructResizableNode(getStage(), cornerResizePane, topResizePane, bottomResizePane, leftResizePane, rightResizePane,
+                                             minimizeImagePane, maximizeImagePane, closeImagePane, settingsImagePane, sidebarImagePane
         );
         
         stage.show();
@@ -279,13 +278,6 @@ public class AppController
                         () -> new EntityDebugPage(_node)
                 ), null
         ));
-        //        _inDevelopmentSidebarNodeGroup.getNodes().add(new UINode(
-        //                "Account Manager",
-        //                "account_manager",
-        //                _node -> App.resources().get("pages", _node.getID(), () -> new AccountManagerPage(_node)),
-        //                null
-        //        ));
-        //		_inDevelopmentSidebarNodeGroup.getNodes().add(new UINode("Console", "console", node -> App.resources().get("pages", node.getID(), () -> new ConsolePage(node)), null));
         _inDevelopmentSidebarNodeGroup.getButtonViewGroup().selectFirst();
         
         SidebarNodeGroup _nyiSidebarGroup = new SidebarNodeGroup(_sidebar, nyiSidebarButton);
@@ -313,16 +305,59 @@ public class AppController
     
     private void initImageButtons()
     {
-        new ImageButton(settingsImagePane, "settings", this::openSettings, false, true, ImageButton.SMALL).initialize();
-        new ImageButton(sidebarImagePane, "hide_sidebar", this::toggleSidebar, false, true, ImageButton.SMALL).initialize();
-        
-        new ImageButton(minimizeImagePane, "minimize", () -> FXTools.get().runFX(() -> stage.setIconified(!stage.isIconified()), false), false, true, ImageButton.SMALL).initialize();
-        new ImageButton(maximizeImagePane, Bindings.createObjectBinding(() -> stage.isMaximized() ? "maximize_both" : "maximize", stage.maximizedProperty()),
-                        () -> FXTools.get().runFX(() -> stage.setMaximized(!stage.isMaximized()), false), false, true, ImageButton.SMALL
+        new ImageButton(
+                settingsImagePane,
+                "settings",
+                this::openSettings,
+                false,
+                true,
+                ImageButton.SMALL
         ).initialize();
-        new ImageButton(closeImagePane, "close", () -> FXTools.get().runFX(stage::close, false), false, true, ImageButton.SMALL).initialize();
         
-        new ImageButton(logoImagePane, "logo", () -> TB.web().browse("google", true), false, false, new Point2D(20.0, 20.0)).initialize();
+        new ImageButton(
+                sidebarImagePane,
+                "hide_sidebar",
+                this::toggleSidebar,
+                false,
+                true,
+                ImageButton.SMALL
+        ).initialize();
+        
+        new ImageButton(
+                minimizeImagePane,
+                "minimize",
+                () -> FXTools.get().runFX(() -> stage.setIconified(!stage.isIconified()), false),
+                false,
+                true,
+                ImageButton.SMALL
+        ).initialize();
+        
+        new ImageButton(
+                maximizeImagePane,
+                Bindings.createObjectBinding(() -> stage.isMaximized() ? "maximize_both" : "maximize", stage.maximizedProperty()),
+                () -> FXTools.get().runFX(() -> stage.setMaximized(!stage.isMaximized()), false),
+                false,
+                true,
+                ImageButton.SMALL
+        ).initialize();
+        
+        new ImageButton(
+                closeImagePane,
+                "close",
+                () -> FXTools.get().runFX(stage::close, false),
+                false,
+                true,
+                ImageButton.SMALL
+        ).initialize();
+        
+        new ImageButton(
+                logoImagePane,
+                "logo",
+                () -> TB.web().browse("google", true),
+                false,
+                false,
+                new Point2D(20.0, 20.0)
+        ).initialize();
         
         sidebarImagePane.visibleProperty().bind(Bindings.not(stage.maximizedProperty()));
     }
@@ -376,9 +411,7 @@ public class AppController
             double end_stage_pref_width = STAGE_MIN_WIDTH + (PUI_WIDTH * (hiding ? 0 : 1));
             
             if (hiding)
-            {
                 stage.setMinWidth(end_stage_pref_width);
-            }
             else
             {
                 sidebarPaneAnchor.setPrefWidth(0);
@@ -441,8 +474,7 @@ public class AppController
                         FXDialogTools.OK,
                         true,
                         weaver.loadController(SettingsController.class)
-                ),
-                false
+                ), false
         );
     }
     
@@ -457,59 +489,6 @@ public class AppController
     @FXML void onPrintAction(ActionEvent event) { }
     
     @FXML void onDebugAction(ActionEvent event) { }
-    
-    //</editor-fold>
-    
-    //<editor-fold desc="Old">
-    
-    private final boolean resizeable = true;
-    
-//    @Deprecated
-//    private Node addContent(Node content)
-//    {
-//        if (content != null)
-//        {
-//            if (content instanceof Region regionContent)
-//            {
-//                regionContent.maxWidthProperty().bind(contentStackPane.widthProperty());
-//                regionContent.maxHeightProperty().bind(contentStackPane.heightProperty());
-//            }
-//            else if (content instanceof ImageView imageViewContent)
-//            {
-//
-//                imageViewContent.fitWidthProperty().bind(Bindings.createDoubleBinding(() -> {
-//                    Image image = imageViewContent.getImage();
-//                    double paneWidth = contentStackPane.getWidth();
-//                    double imageWidth = image != null ? image.getHeight() : 0;
-//                    if (!resizeable && paneWidth > imageWidth)
-//                        return imageWidth;
-//                    else if (paneWidth < 0)
-//                        return 0.0;
-//                    return paneWidth;
-//                }, contentStackPane.widthProperty()));
-//
-//                imageViewContent.fitHeightProperty().bind(Bindings.createDoubleBinding(() -> {
-//                    Image image = imageViewContent.getImage();
-//                    double paneHeight = contentStackPane.getHeight();
-//                    double imageHeight = image != null ? image.getHeight() : 0;
-//                    if (!resizeable && paneHeight > imageHeight)
-//                        return imageHeight;
-//                    else if (paneHeight < 0)
-//                        return 0.0;
-//                    return paneHeight;
-//                }, contentStackPane.heightProperty()));
-//
-//                imageViewContent.visibleProperty()
-//                        .bind(Bindings.createBooleanBinding(
-//                                () -> contentStackPane.getWidth() > 0 && contentStackPane.getHeight() > 0,
-//                                contentStackPane.widthProperty(), contentStackPane.heightProperty()
-//                        ));
-//            }
-//            if (!contentStackPane.getChildren().contains(content))
-//                contentStackPane.getChildren().add(content);
-//        }
-//        return content;
-//    }
     
     //</editor-fold>
 }

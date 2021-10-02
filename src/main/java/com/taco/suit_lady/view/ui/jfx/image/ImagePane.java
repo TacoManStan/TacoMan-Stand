@@ -31,6 +31,7 @@ public class ImagePane extends AnchorPane {
 		AnchorPane.setBottomAnchor(wrappedImageView, 0.0);
 		AnchorPane.setLeftAnchor(wrappedImageView, 0.0);
 		AnchorPane.setRightAnchor(wrappedImageView, 0.0);
+		
 		super.getChildren().add(wrappedImageView);
 	}
 
@@ -74,43 +75,51 @@ public class ImagePane extends AnchorPane {
 
 		//<editor-fold desc="Implementation">
 
-		@Override public double prefWidth(double height) {
+		@Override
+		public double prefWidth(double height) {
 			Image image = getImage();
 			if (image == null)
 				return minWidth(height);
 			return image.getWidth();
 		}
 
-		@Override public double prefHeight(double height) {
+		@Override
+		public double prefHeight(double height) {
 			Image image = getImage();
 			if (image == null)
 				return minHeight(height);
 			return image.getHeight();
 		}
 
-		@Override public double minWidth(double height) {
+		@Override
+		public double minWidth(double height) {
 			return 0;
 		}
 
-		@Override public double minHeight(double height) {
+		@Override
+		public double minHeight(double height) {
 			return 0;
 		}
 
-		@Override public double maxWidth(double height) {
+		@Override
+		public double maxWidth(double height) {
 			return 16384;
 		}
 
-		@Override public double maxHeight(double height) {
+		@Override
+		public double maxHeight(double height) {
 			return 16384;
 		}
 
 		//
 
-		@Override public boolean isResizable() {
+		@Override
+		public boolean isResizable() {
 			return true;
 		}
 
-		@Override public void resize(double width, double height) {
+		@Override
+		public void resize(double width, double height) {
 			setFitWidth(width);
 			setFitHeight(height);
 		}
