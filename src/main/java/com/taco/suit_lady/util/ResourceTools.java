@@ -102,7 +102,7 @@ public class ResourceTools
     {
         ExceptionTools.nullCheck(groupKey, "Lookup Key");
         ArrayList<Object> returnList = new ArrayList<>();
-        List<HashMap<String, Object>> maps = ExceptionTools.nullCheck(TB.get().getMapValues(resources), debugMessage(groupKey, "N/A", "Map Values"));
+        List<HashMap<String, Object>> maps = ExceptionTools.nullCheck(ArrayTools.getMapValues(resources), debugMessage(groupKey, "N/A", "Map Values"));
         maps.stream().filter(Objects::nonNull).forEach(map -> {
             Object element = map.get(groupKey);
             if (element != null && (typeReq == null || GeneralTools.get().instanceOf(element, typeReq)))
@@ -129,8 +129,8 @@ public class ResourceTools
     {
         ExceptionTools.nullCheck(extension, "File Extension");
         
-        String hashID = TB.get().replaceSeparator((pathID != null ? pathID : "") + imageID);
-        String filePath = TB.get().replaceSeparator("images/" + hashID + "." + extension);
+        String hashID = TB.strings().replaceSeparator((pathID != null ? pathID : "") + imageID);
+        String filePath = TB.strings().replaceSeparator("images/" + hashID + "." + extension);
         
         //noinspection Duplicates
         return get(image_type_key, hashID, () ->
@@ -157,8 +157,8 @@ public class ResourceTools
         ExceptionTools.nullCheck(extension, "File Extension");
         
         String theme = isTheme ? "themes/dark/" : ""; // TODO [S]: Load the theme from settings.
-        String hashID = TB.get().replaceSeparator((pathID != null ? pathID : "") + imageID);
-        String filePath = TB.get().replaceSeparator("images/" + theme + hashID + "." + extension);
+        String hashID = TB.strings().replaceSeparator((pathID != null ? pathID : "") + imageID);
+        String filePath = TB.strings().replaceSeparator("images/" + theme + hashID + "." + extension);
         
         //noinspection Duplicates
         return get(image_type_key, hashID, () ->
@@ -216,13 +216,13 @@ public class ResourceTools
     public InputStream getResourceStream(String resource) throws IOException
     {
         ExceptionTools.nullCheck(resource, "Resource");
-        return getClass().getResourceAsStream(TB.get().replaceSeparator("/" + resource));
+        return getClass().getResourceAsStream(TB.strings().replaceSeparator("/" + resource));
     } // TODO: Load from resource jar file
     
     public URL getResourceURL(String resource)
     {
         ExceptionTools.nullCheck(resource, "Resource");
-        return getClass().getResource(TB.get().replaceSeparator("/" + resource));
+        return getClass().getResource(TB.strings().replaceSeparator("/" + resource));
     } // TODO: Load from resource jar file
 }
 

@@ -633,6 +633,12 @@ public class StringTools
 		stringBuilder.delete(0, stringBuilder.capacity());
 		return stringBuilder;
 	}
+	
+	public String replaceSeparator(String filePath)
+	{
+		String separator = "/";
+		return StringTools.get().replace(filePath, separator, false, "/", "\\");
+	}
 
 	//
 

@@ -1,11 +1,10 @@
 package com.taco.suit_lady.util;
 
-import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
 import com.taco.suit_lady.view.ui.console.Console;
+import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
 import com.taco.suit_lady.view.ui.ui_internal.AppUI;
 import com.taco.suit_lady.view.ui.ui_internal.contents.DummyContentsHandler;
 
-import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -157,29 +156,5 @@ public class TB // Stands for ToolBox
     
     //
     
-    public String replaceSeparator(String filePath)
-    {
-        String separator = "/";
-        return StringTools.get().replace(filePath, separator, false, "/", "\\");
-    }
-    
-    //
-    
-    public <V> ArrayList<V> getMapValues(Map<?, V> map)
-    {
-        return (ArrayList<V>) getMapValues(ExceptionTools.nullCheck(map, "Map"), null);
-    }
-    
-    public <V> List<V> getMapValues(Map<?, V> map, List<V> targetList)
-    {
-        Collection<V> _mapContents = ExceptionTools.nullCheck(map, "Map").values();
-        
-        if (targetList == null)
-            return new ArrayList<>(_mapContents);
-        
-        if (!targetList.addAll(_mapContents))
-            throw ExceptionTools.ex("Failed to add contents of map (" + map + ")" + " to target list (" + targetList + ")");
-        
-        return targetList;
-    }
+
 }
