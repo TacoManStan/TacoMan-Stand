@@ -324,7 +324,7 @@ public class GeneralTools
     }
     
     public long generateHashID() {
-        return (long) RandomTools.nextDouble(0, Long.MAX_VALUE);
+        return (long) TB.random().nextDouble(0, Long.MAX_VALUE);
     }
     
     /**

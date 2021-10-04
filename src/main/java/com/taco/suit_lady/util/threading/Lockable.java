@@ -34,7 +34,7 @@ public interface Lockable
      * @param action           See {@link TaskTools#sync(Lock, Runnable, boolean, Consumer[])}.
      * @param onFinallyActions See {@link TaskTools#sync(Lock, Runnable, boolean, Consumer[])}.
      */
-    default void sync(Runnable action, Consumer<Throwable>... onFinallyActions)
+    default void sync(Runnable action, Consumer<Throwable>[] onFinallyActions)
     {
         TaskTools.sync(getLock(), action, isNullableLock(), onFinallyActions);
     }
@@ -45,7 +45,7 @@ public interface Lockable
      * @param action           See {@link TaskTools#sync(Lock, Supplier, boolean, Consumer[])}.
      * @param onFinallyActions See {@link TaskTools#sync(Lock, Supplier, boolean, Consumer[])}.
      */
-    default <R> R sync(Supplier<R> action, Consumer<Throwable>... onFinallyActions)
+    default <R> R sync(Supplier<R> action, Consumer<Throwable>[] onFinallyActions)
     {
         return TaskTools.sync(getLock(), action, isNullableLock(), onFinallyActions);
     }
@@ -57,7 +57,7 @@ public interface Lockable
      * @param actionSupplier   See {@link TaskTools#sync(Lock, Function, Supplier, boolean, Consumer[])}.
      * @param onFinallyActions See {@link TaskTools#sync(Lock, Function, Supplier, boolean, Consumer[])}.
      */
-    default <T, R> R sync(Function<T, R> action, Supplier<T> actionSupplier, Consumer<Throwable>... onFinallyActions)
+    default <T, R> R sync(Function<T, R> action, Supplier<T> actionSupplier, Consumer<Throwable>[] onFinallyActions)
     {
         return TaskTools.sync(getLock(), action, actionSupplier, isNullableLock(), onFinallyActions);
     }

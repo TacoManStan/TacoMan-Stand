@@ -32,6 +32,7 @@ public class TB // Stands for ToolBox
     private static final EnumTools ENUM_TOOLS;
     private static final CollectionTools COLLECTION_TOOLS;
     private static final WebTools WEB_TOOLS;
+    private static final RandomTools RANDOM_TOOLS;
     
     // --- OTHER SINGLETON OBJECTS --- //
     
@@ -60,6 +61,7 @@ public class TB // Stands for ToolBox
         ENUM_TOOLS = new EnumTools();
         COLLECTION_TOOLS = new CollectionTools();
         WEB_TOOLS = new WebTools();
+        RANDOM_TOOLS = new RandomTools();
     
         // --- OTHER SINGLETON OBJECTS --- //
         
@@ -128,6 +130,11 @@ public class TB // Stands for ToolBox
     public static WebTools web()
     {
         return WEB_TOOLS;
+    }
+    
+    public static RandomTools random()
+    {
+        return RANDOM_TOOLS;
     }
     
     // --- OTHER SINGLETON OBJECTS --- //

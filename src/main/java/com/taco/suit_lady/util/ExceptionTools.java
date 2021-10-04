@@ -30,7 +30,7 @@ public class ExceptionTools
 
 	public static <T> T check(T obj, Predicate<T> condition) {
 		ExceptionTools.nullCheck(condition, "Condition");
-		return check(obj, condition, () -> new RuntimeException());
+		return check(obj, condition, RuntimeException::new);
 	}
 
 	public static <T> T check(T obj, Predicate<T> condition, String message) {
