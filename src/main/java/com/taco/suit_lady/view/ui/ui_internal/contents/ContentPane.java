@@ -71,11 +71,6 @@ public abstract class ContentPane<T> extends StackPane {
 		}, true);
 	}
 
-	// CHANGE-HERE
-//	private boolean validate() {
-//		return !ArrayTools.containsAnyMatching(getChildren(), child -> child != null && !child.equals(currentContentPane));
-//	}
-
 	//</editor-fold>
 }
 

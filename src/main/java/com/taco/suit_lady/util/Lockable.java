@@ -1,4 +1,4 @@
-package com.taco.suit_lady.util.threading;
+package com.taco.suit_lady.util;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;

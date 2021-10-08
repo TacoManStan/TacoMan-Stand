@@ -1,4 +1,4 @@
-package com.taco.suit_lady.uncategorized;
+package com.taco.suit_lady.util;
 
 public class UndefinedRuntimeException extends RuntimeException
 {

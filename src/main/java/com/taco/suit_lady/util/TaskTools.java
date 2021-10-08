@@ -1,8 +1,4 @@
-package com.taco.suit_lady.util.threading;
-
-import com.taco.suit_lady.uncategorized.UndefinedRuntimeException;
-import com.taco.suit_lady.util.ArrayTools;
-import com.taco.suit_lady.util.ExceptionTools;
+package com.taco.suit_lady.util;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -17,7 +13,7 @@ import java.util.function.Supplier;
  */
 public class TaskTools
 {
-    private TaskTools() { } //No instance
+    private TaskTools() { }
     
     public static Thread start(Thread thread)
     {
@@ -41,40 +37,10 @@ public class TaskTools
      * @return The {@code Thread} returned by the specified {@code Supplier}.
      * @throws NullPointerException if the specified {@code Supplier} is null.
      */
-    public static Thread createAndStart(Supplier<Runnable> threadSupplier)
+    public static Thread start(Supplier<Runnable> threadSupplier)
     {
         Runnable runnable = ExceptionTools.nullCheck(threadSupplier, "Thread Supplier").get();
         return start(runnable instanceof Thread ? (Thread) runnable : new Thread(runnable));
-    }
-    
-    //
-    
-    /**
-     * Returns the {@link TaskMetadata} for the current {@link Thread}.
-     *
-     * @return The {@link TaskMetadata} for the current {@code Thread}.
-     * @see #getMetadata(Thread)
-     */
-    public static TaskMetadata getMetadata()
-    {
-        return getMetadata(Thread.currentThread());
-    }
-    
-    /**
-     * Returns the {@link TaskMetadata} for the specified {@link Thread}.
-     *
-     * @param thread The {@code Thread}.
-     * @return The {@link TaskMetadata} for the specified {@code Thread}.
-     * @throws NullPointerException if the specified {@code Thread} is null.
-     */
-    public static TaskMetadata getMetadata(Thread thread)
-    {
-        ExceptionTools.nullCheck(thread, "Thread");
-        
-        ThreadGroup threadGroup = thread.getThreadGroup();
-        ExceptionTools.nullCheck(threadGroup, "Thread Group [" + thread + "]");
-        
-        throw new UndefinedRuntimeException(ExceptionTools.nyi());
     }
     
     //
@@ -207,7 +173,7 @@ public class TaskTools
         ExceptionTools.nullCheck(runnableSupplier, "Runnable Supplier");
         ExceptionTools.nullCheck(onFinallyActions, "On-Finally Actions", "leave empty for no actions");
         
-        return TaskTools.sync(lock, ignored -> runnableSupplier.get(), () -> null, allowNull);
+        return TaskTools.sync(lock, ignored -> runnableSupplier.get(), () -> null, allowNull, onFinallyActions);
     }
     
     /**

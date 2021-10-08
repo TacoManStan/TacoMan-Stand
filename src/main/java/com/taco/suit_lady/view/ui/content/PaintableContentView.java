@@ -1,6 +1,6 @@
 package com.taco.suit_lady.view.ui.content;
 
-import com.taco.suit_lady.uncategorized.UndefinedRuntimeException;
+import com.taco.suit_lady.util.UndefinedRuntimeException;
 import com.taco.suit_lady.view.ui.jfx.image.WritableImagePane;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelWriter;

@@ -1,6 +1,6 @@
 package com.taco.suit_lady.view.ui.jfx.button;
 
-import com.taco.suit_lady.uncategorized.UndefinedRuntimeException;
+import com.taco.suit_lady.util.UndefinedRuntimeException;
 import com.taco.suit_lady.util.ResourceTools;
 import com.taco.suit_lady.util.TB;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;

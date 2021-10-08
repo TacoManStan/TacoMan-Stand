@@ -16,12 +16,6 @@ public class GeneralTools
     
     GeneralTools() { }
     
-    /* *************************************************************************** *
-     *                                                                             *
-     * General                                                                     *
-     *                                                                             *
-     * *************************************************************************** */
-    
     /**
      * Checks if the specified {@link Predicate} is valid for the specified {@code Object},
      * and that the specified {@code Object} is not null.
@@ -39,11 +33,7 @@ public class GeneralTools
         return obj != null && predicate.test(obj);
     }
     
-    /* *************************************************************************** *
-     *                                                                             *
-     * Sleeping                                                                    *
-     *                                                                             *
-     * *************************************************************************** */
+    //<editor-fold desc="--- SLEEPING ---">
     
     /**
      * Sleeps for the specified amount of time. In milliseconds.
@@ -74,6 +64,8 @@ public class GeneralTools
         return sleep(15);
     } // TODO
     
+    //</editor-fold>
+    
     /* *************************************************************************** *
      *                                                                             *
      * Classes/Instances                                                           *
@@ -98,8 +90,9 @@ public class GeneralTools
      * @param <T>   The value type of the {@link Class} being returned.
      * @return The component type {@link Class} for the specified value.
      */
-    public <T> Class<T> getClass(T... param)
+    public <T> Class<? extends T> getClass(T[] param)
     {
+        ExceptionTools.nullCheck(param, "Param Array");
         return (Class<T>) param.getClass().getComponentType();
     }
     
@@ -114,7 +107,8 @@ public class GeneralTools
      * @param <T>   The type of value being returned.
      * @return The array {@link Class} for the specified value.
      */
-    public <T> Class getArrayClass(T... param)
+    @SafeVarargs
+    public final <T> Class getArrayClass(T... param)
     {
         if (param != null)
         {
@@ -151,7 +145,7 @@ public class GeneralTools
     {
         if (obj != null)
             return obj.getClass().getSimpleName();
-        return "Null";
+        return null;
     }
     
     /**
@@ -323,7 +317,8 @@ public class GeneralTools
             return deep ? Objects.deepEquals(obj1, obj2) : Objects.equals(obj1, obj2);
     }
     
-    public long generateHashID() {
+    public long generateHashID()
+    {
         return (long) TB.random().nextDouble(0, Long.MAX_VALUE);
     }
     
@@ -331,10 +326,10 @@ public class GeneralTools
      * Generates a hash id that is useful for saving/loading unique objects.
      *
      * @return A hash id.
-     *
      * @see #generateHashID()
      */
-    public String generateHashString() {
+    public String generateHashString()
+    {
         return "" + generateHashID();
     }
 }

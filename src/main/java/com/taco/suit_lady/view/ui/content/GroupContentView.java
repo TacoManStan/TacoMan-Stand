@@ -1,6 +1,6 @@
 package com.taco.suit_lady.view.ui.content;
 
-import com.taco.suit_lady.uncategorized.UndefinedRuntimeException;
+import com.taco.suit_lady.util.UndefinedRuntimeException;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
