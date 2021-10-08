@@ -2,13 +2,15 @@ package com.taco.suit_lady.util;
 
 import com.taco.util.obj_traits.common.Nameable;
 
-import java.awt.Graphics;
+import java.awt.*;
 import java.lang.reflect.Array;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.List;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Locale;
 
 /**
  * Contains methods related to manipulating strings.
@@ -703,8 +705,9 @@ public class StringTools
      *     <li>
      *         If the {@code object} param is an {@link Array}, the class name of the array is returned.
      *         <br>
-     *         See {@link Collections#singletonList(Object)} & {@link List#toString()}
+     *         ( See {@link Collections#singletonList(Object)} )
      *     </li>
+     *     <li>If the {@code object} param is an instance of {@link Nameable}, the {@link Nameable#getName() name} of the {@code object} param is returned.</li>
      * </ul>
      *
      * @param obj The {@link Object} being toString'd.

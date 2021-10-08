@@ -26,52 +26,49 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class Console {
 
-	//<editor-fold desc="Static">
+	//<editor-fold desc="--- STATIC VARS ---">
 
 	private static final String CONSOLE_ROOT_NAME;
-
-	static {
-		CONSOLE_ROOT_NAME = "Console";
-	}
-
-	//</editor-fold>
-
-	// <editor-fold desc="Pseudo-Singleton">
-
 	private static boolean created;
 
 	static {
+		CONSOLE_ROOT_NAME = "Console";
 		created = false;
 	}
 
 	// </editor-fold>
 
 	//
-
+	
+	//<editor-fold desc="--- INSTANCE FIELD VARS ---">
+	
 	private final ReentrantLock lock;
 
 	private final ReadOnlyListWrapper<WrappingTreeLoader<ConsoleMessageable<?>, ConsoleElementController>> treeLoaders;
 	private final ReadOnlyListWrapper<ConsoleMessageable<?>> messages;
 	private final HashMap<Thread, StringBuilder> inProgressMap;
-
-	// TODO: Read below
-	// Note: Is is dangerous to store Threads like this as this can create
-	// memory leaks when all instances to a certain thing are invalid except
-	// this one. A simple solution would be to use thread IDs instead.
-
+	
 	private ConsolePage consolePage;
-
+	
+	//</editor-fold>
+	
+	//<editor-fold desc="--- CONSTRUCTORS ---">
+	
 	public Console() {
 		this.lock = new ReentrantLock();
 
 		this.treeLoaders = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
 		this.messages = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
 		this.inProgressMap = new HashMap<>();
+		
 	}
+	//</editor-fold>
+	
+	//
 
-	// <editor-fold desc="Properties">
+	// <editor-fold desc="--- PROPERTIES ---">
 
-	public final ConsolePage getConsolePage() {
+	public final ConsolePage getPage() {
 			if (consolePage == null) // Lazy initialization
 				consolePage = TB.resources().get("pages", "console");
 			return consolePage;
@@ -88,13 +85,9 @@ public class Console {
 	}
 
 	// </editor-fold>
-
-	/* *************************************************************************** *
-	 *                                                                             *
-	 * Initialization                                                              *
-	 *                                                                             *
-	 * *************************************************************************** */
-
+	
+	//<editor-fold desc="--- INITIALIZATION ---">
+	
 	public final void initialize() {
 		initStreams();
 		// TODO [S]: Move this functionality to TreeLoader.
@@ -131,35 +124,22 @@ public class Console {
 		System.setOut(outputStream);
 		System.setErr(errorStream);
 	}
-
-	/* *************************************************************************** *
-	 *                                                                             *
-	 * Implementation                                                              *
-	 *                                                                             *
-	 * *************************************************************************** */
-
-	/* *************************************************************************** *
-	 *                                                                             *
-	 * Helpers                                                                     *
-	 *                                                                             *
-	 * *************************************************************************** */
-
+	
+	//</editor-fold>
+	
+	//<editor-fold desc="--- HELPER METHODS ---">
+	
 	private void append(String str) {
 		// CHANGE-HERE
 		FXTools.get().runFX(() -> messages.add(new SimpleConsoleMessage(str)), false);
 	}
-
-//	private void append(String str) {
-//		ThreadSource _threadSource = ThreadTools.getThreadSource();
-//		FXTools.runFX(() -> FXTools.runFX(() -> this.messages.add(new SimpleConsoleMessage(str, _threadSource)), false), false);
-//	}
-
-	/* *************************************************************************** *
-	 *                                                                             *
-	 * Static                                                                      *
-	 *                                                                             *
-	 * *************************************************************************** */
-
+	
+	//</editor-fold>
+	
+	//
+	
+	//<editor-fold desc="--- STATIC ---">
+	
 	public static void consolify(FxWeaver weaver, ConfigurableApplicationContext ctx, ConsoleUIDataContainer consoleContainer) {
 		ExceptionTools.nullCheck(consoleContainer, "Console UI Data Container");
 		
@@ -186,13 +166,11 @@ public class Console {
 			_console.treeLoaders.add(_treeLoader);
 		}, true);
 	}
-
-	/* *************************************************************************** *
-	 *                                                                             *
-	 * Classes                                                                     *
-	 *                                                                             *
-	 * *************************************************************************** */
-
+	
+	//</editor-fold>
+	
+	//<editor-fold desc="--- INNER CLASSES ---">
+	
 	private class ConsolePrintStream extends PrintStream {
 
 		private final PrintStream system_stream;
@@ -316,6 +294,8 @@ public class Console {
 			}
 		}
 	}
+	
+	//</editor-fold>
 }
 
 /*
