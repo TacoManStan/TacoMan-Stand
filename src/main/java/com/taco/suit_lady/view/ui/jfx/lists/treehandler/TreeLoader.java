@@ -4,12 +4,10 @@ import com.taco.suit_lady.util.ExceptionTools;
 import com.taco.suit_lady.util.TB;
 import com.taco.suit_lady.util.Validatable;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
-import com.taco.suit_lady.view.ui.ui_internal.controllers.CellController;
 import com.taco.suit_lady.view.ui.jfx.lists.TreeCellFX;
 import com.taco.suit_lady.view.ui.jfx.lists.WrappingCell;
-import com.taco.util.quick.ConsoleBB;
+import com.taco.suit_lady.view.ui.ui_internal.controllers.CellController;
 import javafx.beans.property.*;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
@@ -58,7 +56,6 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
     private final ReadOnlyObjectWrapper<Function<E, C>> controllerSupplierProperty;
     
     private final Validatable<T> validator; // TODO [S]: Change into property, then reload the TreeView when the property value changes?
-    private final ObservableValue revalidateObservable;
     
     private final String rootName;
     private boolean hasSetRoot; // TODO [S]: Could likely be more elegantly/reliably implemented via synchronization.
@@ -70,20 +67,20 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
     
     public TreeLoader(TreeView<E> treeView, Function<E, C> controllerSupplier)
     {
-        this(treeView, controllerSupplier, null, null);
+        this(treeView, controllerSupplier, null);
     }
     
-    public TreeLoader(TreeView<E> treeView, Function<E, C> controllerSupplier, Validatable<T> validator, ObservableValue revalidateObservable)
+    public TreeLoader(TreeView<E> treeView, Function<E, C> controllerSupplier, Validatable<T> validator)
     {
-        this(treeView, controllerSupplier, validator, revalidateObservable, null);
+        this(treeView, controllerSupplier, validator, null);
     }
     
-    public TreeLoader(TreeView<E> treeView, Function<E, C> controllerSupplier, Validatable<T> validator, ObservableValue revalidateObservable, String rootName)
+    public TreeLoader(TreeView<E> treeView, Function<E, C> controllerSupplier, Validatable<T> validator, String rootName)
     {
-        this(treeView, controllerSupplier, validator, revalidateObservable, null, rootName);
+        this(treeView, controllerSupplier, validator, null, rootName);
     }
     
-    public TreeLoader(TreeView<E> treeView, Function<E, C> controllerSupplier, Validatable<T> validator, ObservableValue revalidateObservable, Consumer<TreeItem<E>> settingsApplier, String rootName)
+    public TreeLoader(TreeView<E> treeView, Function<E, C> controllerSupplier, Validatable<T> validator, Consumer<TreeItem<E>> settingsApplier, String rootName)
     {
         this.lock = new ReentrantLock();
         
@@ -97,8 +94,6 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
         this.controllerSupplierProperty = new ReadOnlyObjectWrapper<>(controllerSupplier);
         
         this.validator = validator;
-        // TODO [S]: Ensure synchronization here is necessary.
-        this.revalidateObservable = revalidateObservable;
         
         this.rootName = rootName != null ? rootName : TreeLoader.DEFAULT_ROOT_NAME;
         this.rootItem = new TreeItemFX<>(generateFolderCell(this.rootName, null, settingsApplier));
@@ -143,11 +138,6 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
     public final Validatable getValidator()
     {
         return validator;
-    }
-    
-    public final ObservableValue getRevalidateObservable()
-    {
-        return revalidateObservable;
     }
     
     //

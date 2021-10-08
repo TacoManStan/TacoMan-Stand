@@ -143,27 +143,27 @@ public class Console {
 	public static void consolify(FxWeaver weaver, ConfigurableApplicationContext ctx, ConsoleUIDataContainer consoleContainer) {
 		ExceptionTools.nullCheck(consoleContainer, "Console UI Data Container");
 		
-		Console _console = TB.console();
+		final Console console = TB.console();
 		FXTools.get().runFX(() -> {
 			// treeView.setShowRoot(false); // Disabled temporarily because for some reason hiding the root causes messages to be truncated.
 
-			IntegerBinding _incrementingBinding = BindingTools.get().incrementingBinding(
+			// The below binding is used to trigger a refresh whenever a console display checkbox is toggled.
+			final IntegerBinding incrementingBinding = BindingTools.get().incrementingBinding(
 					consoleContainer.showTRiBotProperty(),
 					consoleContainer.showClientProperty(),
 					consoleContainer.showScriptProperty(),
 					consoleContainer.showSelectedInstanceOnlyProperty(),
 					TB.handler().selectedInstanceProperty());
 			
-			WrappingTreeLoader<ConsoleMessageable<?>, ConsoleElementController> _treeLoader = new WrappingTreeLoader<>(
+			final WrappingTreeLoader<ConsoleMessageable<?>, ConsoleElementController> treeLoader = new WrappingTreeLoader<>(
 					consoleContainer.getTreeView(),
 					_cellData -> weaver.loadController(ConsoleElementController.class),
 					consoleContainer.getValidator(),
-					_incrementingBinding,
 					CONSOLE_ROOT_NAME
 			).initializeAndGet();
 
-			_incrementingBinding.addListener((observable, oldValue, newValue) -> _treeLoader.revalidate());
-			_console.treeLoaders.add(_treeLoader);
+			incrementingBinding.addListener((observable, oldValue, newValue) -> treeLoader.revalidate());
+			console.treeLoaders.add(treeLoader);
 		}, true);
 	}
 	
