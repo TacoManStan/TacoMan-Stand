@@ -5,10 +5,12 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 /**
  * <b>--- To Format ---</b>
- * <br><br>
- * An interface that guarantees all implementations will have direct and public access to...
- * 1. Application Context
- * 2. FxWeaver Singleton Instance
+ * <br>
+ * <p>An interface that guarantees all implementations will have direct and public access to...</p>
+ * <ol>
+ *     <li>Application Context Instance</li>
+ *     <li>FxWeaver Instance
+ * </ol>
  */
 public interface Springable
 {

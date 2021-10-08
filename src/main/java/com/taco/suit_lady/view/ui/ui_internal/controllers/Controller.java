@@ -11,12 +11,15 @@ public abstract class Controller
     private final FxWeaver weaver;
     private final ConfigurableApplicationContext ctx;
     
-    public Controller(FxWeaver weaver, ConfigurableApplicationContext ctx) {
+    public Controller(FxWeaver weaver, ConfigurableApplicationContext ctx)
+    {
         this.weaver = weaver;
         this.ctx = ctx;
     }
     
     //
+    
+    //<editor-fold desc="--- SPRING ---">
     
     @Override
     public FxWeaver weaver()
@@ -30,36 +33,13 @@ public abstract class Controller
         return this.ctx;
     }
     
-    //<editor-fold desc="Properties">
+    //</editor-fold>
     
-    //
-    
-    //
+    //<editor-fold desc="--- ABSTRACT ---">
     
     public abstract Pane root();
     
-    //</editor-fold>
-    
-    /* *************************************************************************** *
-     *                                                                             *
-     * Loading                                                                     *
-     *                                                                             *
-     * *************************************************************************** */
-    
-    /* *************************************************************************** *
-     *                                                                             *
-     * Abstract                                                              *
-     *                                                                             *
-     * *************************************************************************** */
-    
-    /**
-     * Initializes this {@code Controller}.
-     */
     public abstract void initialize();
     
-    /* *************************************************************************** *
-     *                                                                             *
-     * Misc.                                                                       *
-     *                                                                             *
-     * *************************************************************************** */
+    //</editor-fold>
 }
