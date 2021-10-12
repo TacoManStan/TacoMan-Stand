@@ -11,12 +11,10 @@ public class ConsolePage extends UIPage<ConsoleController>
     {
         super(owner);
         
-//        final ConsoleController pageController = this.ctx().getBean(ConsoleController.class);
         final ConsoleController pageController = this.weaver().loadController(ConsoleController.class);
         ConsoleBB.CONSOLE.print("Console Page Controller: " + pageController);
         pageController.setPage(this);
         setController(pageController);
-//        pageController.initialize();
     }
     
     //<editor-fold desc="Classes">

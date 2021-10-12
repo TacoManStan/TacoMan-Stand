@@ -162,7 +162,8 @@ public class Console {
 					CONSOLE_ROOT_NAME
 			).initializeAndGet();
 
-			incrementingBinding.addListener((observable, oldValue, newValue) -> treeLoader.revalidate());
+			incrementingBinding.addListener((observable, oldValue, newValue) -> treeLoader.revalidate()); // currently unused
+			
 			console.treeLoaders.add(treeLoader);
 		}, true);
 	}

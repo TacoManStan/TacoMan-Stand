@@ -29,5 +29,5 @@ public class DummySidebarController extends UIPageController<DummyPage>
     }
     
     @Override
-    @FXML public void initialize() { }
+    public void initialize() { }
 }

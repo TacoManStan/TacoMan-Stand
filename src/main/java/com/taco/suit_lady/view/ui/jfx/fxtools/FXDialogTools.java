@@ -145,7 +145,10 @@ public class FXDialogTools
      */
     public static ButtonBar.ButtonData showYesNoCancelDialog(String title, String message)
     {
-        return showDialog(title, message, null, null, DEFAULT_SPACING, YES_NO_CANCEL, SizeType.RESIZEABLE, new DialogCallback<>(null, (param -> param != null ? param.getButtonData() : null)));
+        return showDialog(
+                title, message, null, null, DEFAULT_SPACING, YES_NO_CANCEL, SizeType.RESIZEABLE,
+                new DialogCallback<>(param -> param != null ? param.getButtonData() : null)
+        );
     }
     
     /**
@@ -162,7 +165,16 @@ public class FXDialogTools
         TextField textField = new TextField();
         FXTools.get().numberTextField(textField, false);
         textField.setText("" + initialVal);
-        Integer value = showDialog(title, message, textField, textField, DEFAULT_SPACING, DONE_CANCEL, SizeType.RESIZEABLE, new DialogCallback<>(NULL_NUMBER, param -> FXTools.get().getIntValue(textField)));
+        Integer value = showDialog(
+                title,
+                message,
+                textField,
+                textField,
+                DEFAULT_SPACING,
+                DONE_CANCEL,
+                SizeType.RESIZEABLE,
+                new DialogCallback<>(NULL_NUMBER, param -> FXTools.get().getIntValue(textField))
+        );
         return value != null ? value : NULL_NUMBER;
     }
     
@@ -235,7 +247,7 @@ public class FXDialogTools
             String initialVal = initialValue != null && initialValue.length != 0 ? initialValue[0] : "";
             TextField textField = new TextField();
             textField.setText(initialVal);
-            value = showDialog(title, message, textField, textField, DEFAULT_SPACING, DONE_CANCEL, SizeType.RESIZEABLE, new DialogCallback<>(null, param -> textField.getText()));
+            value = showDialog(title, message, textField, textField, DEFAULT_SPACING, DONE_CANCEL, SizeType.RESIZEABLE, new DialogCallback<>(param -> textField.getText()));
             if (value != null && value.isEmpty() && !allowEmpty)
                 showMessageDialog("You must enter at least 1 character.", null);
         }
@@ -255,7 +267,7 @@ public class FXDialogTools
         String initialVal = initialValue != null && initialValue.length != 0 ? initialValue[0] : "";
         TextArea area = new TextArea();
         area.setText(initialVal);
-        return showDialog(title, message, area, area, DEFAULT_SPACING, DONE_CANCEL, SizeType.RESIZEABLE, new DialogCallback<>(null, param -> area.getText()));
+        return showDialog(title, message, area, area, DEFAULT_SPACING, DONE_CANCEL, SizeType.RESIZEABLE, new DialogCallback<>(param -> area.getText()));
     }
     
     /**
@@ -360,8 +372,8 @@ public class FXDialogTools
     public static <R> R showControllableDialog(String title, String message, double spacing, ButtonType[] buttonTypes, boolean launch, DialogController<R> controller)
     {
         // CHANGE-HERE
-//        if (launch)
-//            controller.launch();
+        //        if (launch)
+        //            controller.launch();
         //        if (controller.getInitializer().isInitialized()) // CHANGE-HERE
         return showDialog(title, message, controller.root(), controller.root(), spacing, buttonTypes, SizeType.RESIZEABLE, controller.getCallback());
         //        return null; // CHANGE-HERE

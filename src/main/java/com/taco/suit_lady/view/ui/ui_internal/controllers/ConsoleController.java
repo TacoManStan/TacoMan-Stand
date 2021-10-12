@@ -29,7 +29,8 @@ public class ConsoleController extends SidebarNodeGroupController<ConsolePage>
         super(weaver, ctx);
     }
     
-    @Override public Pane root()
+    @Override
+    public Pane root()
     {
         return root;
     }

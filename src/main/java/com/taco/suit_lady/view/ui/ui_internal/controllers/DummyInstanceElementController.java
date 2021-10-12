@@ -56,8 +56,10 @@ public final class DummyInstanceElementController extends CellController<DummyIn
     }
     
     @Override
-    @FXML public void initialize()
+    public void initialize()
     {
+        ConsoleBB.CONSOLE.print("Initializing instance element");
+        
         (this.iconButton = new ImageButton(iconImagePane, "logo", this::icon, false, false, null)).initialize();
         (this.closeButton = new ImageButton(closeImagePane, "close", this::close, false, false, new Point2D(15, 15))).initialize();
         

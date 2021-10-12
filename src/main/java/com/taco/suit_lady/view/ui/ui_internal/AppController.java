@@ -180,7 +180,7 @@ public class AppController
     //
     
     private Stage stage;
-    private DummyContentsInstancePane contentPane; // CHANGE-HERE
+    private DummyContentsInstancePane contentPane;
     
     public AppController(FxWeaver weaver, ConfigurableApplicationContext ctx)
     {

@@ -21,11 +21,13 @@ public class SimpleConsoleMessage
 
 	//<editor-fold desc="Properties">
 
-	@Override public final String getText() {
+	@Override
+	public final String getText() {
 		return text;
 	}
 
-	@Override public final LocalDateTime getTimestamp() {
+	@Override
+	public final LocalDateTime getTimestamp() {
 		return timestamp;
 	}
 
@@ -35,7 +37,8 @@ public class SimpleConsoleMessage
 
 	private UIDProcessor uIDContainer;
 
-	@Override public UIDProcessor getUIDProcessor() {
+	@Override
+	public UIDProcessor getUIDProcessor() {
 		if (uIDContainer == null) // Lazy initialization
 			uIDContainer = new UIDProcessor("console-message");
 		return uIDContainer;

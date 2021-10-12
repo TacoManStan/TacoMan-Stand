@@ -74,7 +74,8 @@ public final class DummyInstancesController extends SidebarNodeGroupController<D
                 listCellFX -> new WrappingCell<>(
                         listView, listCellFX,
                         element -> {
-                            CellController<DummyInstance> controller = ctx().getBean(DummyInstanceElementController.class, weaver(), ctx());
+//                            CellController<DummyInstance> controller = ctx().getBean(DummyInstanceElementController.class, weaver(), ctx());
+                            CellController<DummyInstance> controller = this.weaver().loadController(DummyInstanceElementController.class);
                             return controller;
                         }
                 )));
