@@ -60,7 +60,8 @@ public final class DummyInstancesController extends SidebarNodeGroupController<D
         this.selectedInstanceMMProperty = new ReadOnlyObjectWrapper<>();
     }
     
-    @Override public Pane root()
+    @Override
+    public Pane root()
     {
         return root;
     }
@@ -73,11 +74,7 @@ public final class DummyInstancesController extends SidebarNodeGroupController<D
         instanceListView.setCellFactory(listView -> new ListCellFX<>(
                 listCellFX -> new WrappingCell<>(
                         listView, listCellFX,
-                        element -> {
-//                            CellController<DummyInstance> controller = ctx().getBean(DummyInstanceElementController.class, weaver(), ctx());
-                            CellController<DummyInstance> controller = this.weaver().loadController(DummyInstanceElementController.class);
-                            return controller;
-                        }
+                        element -> this.weaver().loadController(DummyInstanceElementController.class)
                 )));
         
         ArrayTools.applyChangeHandler(TB.handler().instances(), this::onAdded, this::onRemoved);

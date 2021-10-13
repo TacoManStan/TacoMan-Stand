@@ -62,8 +62,6 @@ public final class ConsoleElementController extends CellController<WrappingTreeC
     @Override
     public void initialize()
     {
-        ConsoleBB.CONSOLE.print("Initializing Console Element");
-        
         (this.settingsButton = new ImageButton(settingsImagePane, "details", this::onDetails, false, false, null)).initialize();
         this.settingsImagePane.setMinSize(settingsImagePane.getImage().getWidth(), settingsImagePane.getImage().getHeight());
         

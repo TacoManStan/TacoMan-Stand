@@ -45,7 +45,7 @@ public class ConsoleController extends SidebarNodeGroupController<ConsolePage>
     //
     
     @Override
-    @FXML public void initialize()
+    public void initialize()
     {
         Console.consolify(weaver(), ctx(), new ConsoleUIDataContainer(consoleTree));
     }
