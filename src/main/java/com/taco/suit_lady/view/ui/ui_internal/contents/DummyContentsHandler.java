@@ -117,9 +117,10 @@ public class DummyContentsHandler
             throw ExceptionTools.ex("Client List should be empty! (" + instances + ")");
     }
     
-    public void shutdown(DummyInstance instance)
+    public boolean shutdown(DummyInstance instance)
     {
         instances.remove(instance);
-        instance.shutdown();
+        instance.shutdownInstanceEngine();
+        return true; // TODO: This should actually return the proper value.
     }
 }

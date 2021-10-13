@@ -86,11 +86,6 @@ public class DummyContentsInstanceUI
     
     //</editor-fold>
     
-    protected boolean shutdown()
-    {
-        return true;
-    }
-    
     private void bindToContainer(Pane pane, Pane container) {
         pane.prefWidthProperty().bind(containerPane.widthProperty());
         pane.prefHeightProperty().bind(containerPane.heightProperty());

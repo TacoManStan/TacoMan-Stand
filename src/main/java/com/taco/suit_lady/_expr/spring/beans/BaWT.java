@@ -1,7 +1,5 @@
 package com.taco.suit_lady._expr.spring.beans;
 
-import com.taco.suit_lady.logic.calendar.CalendarBase;
-import com.taco.suit_lady.logic.calendar.CalendarGroups;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
@@ -26,8 +24,6 @@ public class BaWT
     
     public void runBaWT_AvatarClick()
     {
-        final CalendarGroups cg = ctx.getBean("calendar_base", CalendarBase.class).groups();
-        cg.forEach(cge -> System.out.println(cge.getName()));
     }
     
     public String runBaWT_DialogContents()

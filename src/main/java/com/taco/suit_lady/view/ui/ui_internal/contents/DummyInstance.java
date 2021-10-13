@@ -1,5 +1,6 @@
 package com.taco.suit_lady.view.ui.ui_internal.contents;
 
+import com.taco.suit_lady.util.TB;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
 
@@ -20,7 +21,13 @@ public class DummyInstance
     
     public boolean shutdown()
     {
-        return this.ui().shutdown();
+        return TB.handler().shutdown(this);
+    }
+    
+    protected final void shutdownInstanceEngine()
+    {
+        // CHANGE-HERE
+        // This used to be where the thread executor system would be wrapped up and then shutdown when used in TRiBotFX.
     }
     
     private UIDProcessor uidProcessor;
