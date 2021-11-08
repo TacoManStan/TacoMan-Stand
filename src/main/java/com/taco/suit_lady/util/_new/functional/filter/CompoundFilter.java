@@ -10,32 +10,11 @@ import java.util.List;
 public class CompoundFilter<T>
         implements Filter<T>
 {
-    public static void main(String[] args)
-    {
-        Filter<String> filter1 = s -> s.length() > 3;
-        Filter<String> filter2 = s -> s.contains("s");
-        Filter<String> filter3 = s -> !s.isEmpty();
-        
-        String testString = "superman is here";
-        CompoundFilter<String> cf = new CompoundFilter<>(FilterType.ALL, Arrays.asList(filter1, filter2));
-        cf.filterListProperty.add(filter3);
-        cf.filterListProperty().add(filter3);
-        
-        System.out.println("Result for String \"" + testString + "\": " + cf.filter(testString));
-    }
-    
-    //
-    
     private final BooleanProperty checkMidLoopProperty;
     private final BooleanProperty onEmptyResultProperty;
-    private final ObjectProperty<FilterType> filterTypeProperty;
+    private final ObjectProperty<CFType> filterTypeProperty;
     
     private final ReadOnlyListWrapper<Filter<T>> filterListProperty;
-    
-    public CompoundFilter(List<Filter<T>> filterList)
-    {
-        this(null, filterList);
-    }
     
     @SafeVarargs
     public CompoundFilter(Filter<T>... filters)
@@ -43,19 +22,24 @@ public class CompoundFilter<T>
         this(null, filters);
     }
     
+    public CompoundFilter(List<Filter<T>> filterList)
+    {
+        this(null, filterList);
+    }
+    
     @SafeVarargs
-    public CompoundFilter(FilterType filterType, Filter<T>... filters)
+    public CompoundFilter(CFType filterType, Filter<T>... filters)
     {
         this(filterType, Arrays.asList(filters));
     }
     
-    public CompoundFilter(FilterType filterType, List<Filter<T>> filterList)
+    public CompoundFilter(CFType filterType, List<Filter<T>> filterList)
     {
         this(filterType, true, true, filterList);
     }
     
     @SafeVarargs
-    public CompoundFilter(FilterType filterType, boolean checkMidLoop, boolean onEmptyResult, Filter<T>... filters)
+    public CompoundFilter(CFType filterType, boolean checkMidLoop, boolean onEmptyResult, Filter<T>... filters)
     {
         this(filterType, checkMidLoop, onEmptyResult, Arrays.asList(filters));
     }
@@ -63,20 +47,20 @@ public class CompoundFilter<T>
     /**
      * <p>The fully parameterized {@link CompoundFilter} constructor; all other constructors must either directly or indirectly use this constructor.</p>
      *
-     * @param filterType    The {@link FilterType} enum defining how this {@link CompoundFilter} compares its {@link Filter Sub-Filters}.
-     *                      If the specified value is {@code null}, the {@link FilterType} defaults to {@link FilterType#ANY}.
+     * @param filterType    The {@link CFType} enum defining how this {@link CompoundFilter} compares its {@link Filter Sub-Filters}.
+     *                      If the specified value is {@code null}, the {@link CFType} defaults to {@link CFType#ANY}.
      * @param checkMidLoop  Tells this {@link CompoundFilter} whether it should check if it can deduce a guaranteed return value after each individual {@link Filter Sub-Filter} is called.
      * @param onEmptyResult Tells this {@link CompoundFilter} what result should be returned if this {@link CompoundFilter} has no {@link Filter Sub-Filters} added.
-     * @param filterList    The list of {@link Filter Sub-Filters} to be called by this {@link CompoundFilter} given the aforementioned {@link FilterType}.
+     * @param filterList    The list of {@link Filter Sub-Filters} to be called by this {@link CompoundFilter} given the aforementioned {@link CFType}.
      */
-    public CompoundFilter(FilterType filterType, boolean checkMidLoop, boolean onEmptyResult, List<Filter<T>> filterList)
+    public CompoundFilter(CFType filterType, boolean checkMidLoop, boolean onEmptyResult, List<Filter<T>> filterList)
     {
         if (filterList == null)
             throw new NullPointerException("Filters list cannot be null.");
         
         this.checkMidLoopProperty = new SimpleBooleanProperty(checkMidLoop);
         this.onEmptyResultProperty = new SimpleBooleanProperty(onEmptyResult);
-        this.filterTypeProperty = new SimpleObjectProperty<>(filterType != null ? filterType : FilterType.ANY);
+        this.filterTypeProperty = new SimpleObjectProperty<>(filterType != null ? filterType : CFType.ANY);
         
         this.filterListProperty = new ReadOnlyListWrapper<>(FXCollections.observableArrayList(filterList));
     }
@@ -193,17 +177,17 @@ public class CompoundFilter<T>
     
     //
     
-    public ObjectProperty<FilterType> filterTypeProperty()
+    public ObjectProperty<CFType> filterTypeProperty()
     {
         return filterTypeProperty;
     }
     
-    public FilterType getFilterType()
+    public CFType getFilterType()
     {
         return filterTypeProperty.get();
     }
     
-    public void setFilterType(FilterType filterType)
+    public void setFilterType(CFType filterType)
     {
         filterTypeProperty.set(filterType);
     }
