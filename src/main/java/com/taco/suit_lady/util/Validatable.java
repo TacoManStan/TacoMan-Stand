@@ -7,10 +7,11 @@ public interface Validatable<T>
 
 	/**
 	 * Checks if the specified value is valid.
-	 * <p>
+	 * <br><br>
 	 * This method is oftentimes executed inside of a loop.
 	 * It is therefore recommended to avoid the following when using this method (when possible):
-	 * <code><ol>
+	 * <code>
+	 * <ol>
 	 * <li>Lengthy operations</li>
 	 * <li>CPU intensive operations</li>
 	 * <li>The modification of any external values based on this method's result</li>

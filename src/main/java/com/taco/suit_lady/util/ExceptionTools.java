@@ -317,6 +317,11 @@ public class ExceptionTools
 	public static RuntimeException nyi() {
 		return unsupported("Operation is not yet implemented.");
 	}
+	
+	public static void throwNYI()
+	{
+		throw new RuntimeException(nyi());
+	}
 
 	// Read-Only
 
