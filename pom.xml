@@ -93,6 +93,12 @@
             <artifactId>javafx-web</artifactId>
             <version>16</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.docx4j</groupId>
+            <artifactId>docx4j-JAXB-MOXy</artifactId>
+            <version>11.2.9</version>
+        </dependency>
     </dependencies>
 
 </project>
