@@ -6,40 +6,41 @@ import javafx.collections.FXCollections;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class CompoundFilter<T>
-        implements Filter<T>
+        implements Predicate<T>
 {
     private final BooleanProperty checkMidLoopProperty;
     private final BooleanProperty onEmptyResultProperty;
     private final ObjectProperty<CFType> filterTypeProperty;
     
-    private final ReadOnlyListWrapper<Filter<T>> filterListProperty;
+    private final ReadOnlyListWrapper<Predicate<T>> filterListProperty;
     
     @SafeVarargs
-    public CompoundFilter(Filter<T>... filters)
+    public CompoundFilter(Predicate<T>... filters)
     {
         this(null, filters);
     }
     
-    public CompoundFilter(List<Filter<T>> filterList)
+    public CompoundFilter(List<Predicate<T>> filterList)
     {
         this(null, filterList);
     }
     
     @SafeVarargs
-    public CompoundFilter(CFType filterType, Filter<T>... filters)
+    public CompoundFilter(CFType filterType, Predicate<T>... filters)
     {
         this(filterType, Arrays.asList(filters));
     }
     
-    public CompoundFilter(CFType filterType, List<Filter<T>> filterList)
+    public CompoundFilter(CFType filterType, List<Predicate<T>> filterList)
     {
         this(filterType, true, true, filterList);
     }
     
     @SafeVarargs
-    public CompoundFilter(CFType filterType, boolean checkMidLoop, boolean onEmptyResult, Filter<T>... filters)
+    public CompoundFilter(CFType filterType, boolean checkMidLoop, boolean onEmptyResult, Predicate<T>... filters)
     {
         this(filterType, checkMidLoop, onEmptyResult, Arrays.asList(filters));
     }
@@ -47,13 +48,13 @@ public class CompoundFilter<T>
     /**
      * <p>The fully parameterized {@link CompoundFilter} constructor; all other constructors must either directly or indirectly use this constructor.</p>
      *
-     * @param filterType    The {@link CFType} enum defining how this {@link CompoundFilter} compares its {@link Filter Sub-Filters}.
+     * @param filterType    The {@link CFType} enum defining how this {@link CompoundFilter} compares its {@link Predicate Sub-Filters}.
      *                      If the specified value is {@code null}, the {@link CFType} defaults to {@link CFType#ANY}.
-     * @param checkMidLoop  Tells this {@link CompoundFilter} whether it should check if it can deduce a guaranteed return value after each individual {@link Filter Sub-Filter} is called.
-     * @param onEmptyResult Tells this {@link CompoundFilter} what result should be returned if this {@link CompoundFilter} has no {@link Filter Sub-Filters} added.
-     * @param filterList    The list of {@link Filter Sub-Filters} to be called by this {@link CompoundFilter} given the aforementioned {@link CFType}.
+     * @param checkMidLoop  Tells this {@link CompoundFilter} whether it should check if it can deduce a guaranteed return value after each individual {@link Predicate Sub-Filter} is called.
+     * @param onEmptyResult Tells this {@link CompoundFilter} what result should be returned if this {@link CompoundFilter} has no {@link Predicate Sub-Filters} added.
+     * @param filterList    The list of {@link Predicate Sub-Filters} to be called by this {@link CompoundFilter} given the aforementioned {@link CFType}.
      */
-    public CompoundFilter(CFType filterType, boolean checkMidLoop, boolean onEmptyResult, List<Filter<T>> filterList)
+    public CompoundFilter(CFType filterType, boolean checkMidLoop, boolean onEmptyResult, List<Predicate<T>> filterList)
     {
         if (filterList == null)
             throw new NullPointerException("Filters list cannot be null.");
@@ -68,14 +69,14 @@ public class CompoundFilter<T>
     //
     
     @Override
-    public final boolean filter(T t)
+    public final boolean test(T t)
     {
         // Lots of room for efficiency improvements here...
         // Also, definitely going to redesign some of this if you intend on using it asynchronously.
         
         if (filterListProperty() == null)
             throw new NullPointerException("Filter array cannot be null.");
-        for (Filter<T> filter: filterListProperty())
+        for (Predicate<T> filter: filterListProperty())
             if (filter == null)
                 throw new NullPointerException("All Sub Filters must be non-null.");
         
@@ -86,9 +87,9 @@ public class CompoundFilter<T>
         int countPassed = 0;
         int countFailed = 0;
         
-        for (Filter<T> subFilter: filterListProperty())
+        for (Predicate<T> subFilter: filterListProperty())
         {
-            final boolean passed = subFilter.filter(t);
+            final boolean passed = subFilter.test(t);
             if (passed)
                 countPassed++;
             else
@@ -194,7 +195,7 @@ public class CompoundFilter<T>
     
     //
     
-    public ReadOnlyListProperty<Filter<T>> filterListProperty()
+    public ReadOnlyListProperty<Predicate<T>> filterListProperty()
     {
         return filterListProperty.getReadOnlyProperty();
     }
