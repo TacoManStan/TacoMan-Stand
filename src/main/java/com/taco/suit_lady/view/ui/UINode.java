@@ -34,8 +34,8 @@ public class UINode
     private final ReadOnlyObjectWrapper<ImageButton> imageButtonProperty;
     private final ReadOnlyBooleanWrapper expandableProperty;
     
-    private final ObjectProperty<Runnable> onGroupChangeProperty;
-    private final ObjectProperty<Runnable> onGroupChangedProperty;
+    private final ObjectProperty<Runnable> onGroupChangeProperty; // Triggered at the start of the group change
+    private final ObjectProperty<Runnable> onGroupChangedProperty; // Triggered at the end of the group change
     
     public UINode(FxWeaver weaver, ConfigurableApplicationContext ctx, String name, String id, Function<UINode, UIPage<?>> coverPageFunction, Runnable onAction)
     {
@@ -223,7 +223,8 @@ public class UINode
     
     //<editor-fold desc="Implementation">
     
-    @Override public Pane getContent()
+    @Override
+    public Pane getContent()
     {
         return displayer.getDisplayContainer();
     }

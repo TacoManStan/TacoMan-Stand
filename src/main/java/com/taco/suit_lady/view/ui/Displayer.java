@@ -2,9 +2,9 @@ package com.taco.suit_lady.view.ui;
 
 import com.taco.suit_lady.util.ExceptionTools;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
+import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
-import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -112,44 +112,27 @@ public class Displayer<T extends Displayable>
     
     public void bind(ObservableValue<T> observable)
     {
-        ExceptionTools.nullCheck(observable, "Observable cannot be null");
-        lock.lock();
-        try
-        {
-            displayProperty.bind(observable);
-        }
-        finally
-        {
-            lock.unlock();
-        }
+        bind(observable, false);
     }
     
     public void bindAndInvalidate(ObservableValue<T> observable)
     {
-        ExceptionTools.nullCheck(observable, "Observable cannot be null");
-        lock.lock();
-        try
-        {
-            displayProperty.bind(observable);
-        }
-        finally
-        {
-            lock.unlock();
-        }
+        bind(observable, true);
     }
     
     private void bind(ObservableValue<T> observable, boolean invalidate)
     {
         ExceptionTools.nullCheck(observable, "Observable cannot be null");
+        
         lock.lock();
         try
         {
             displayProperty.bind(observable);
             if (invalidate)
-                if (observable instanceof ObjectBinding)
-                    ((ObjectBinding<T>) observable).invalidate();
+                if (observable instanceof Binding<T>)
+                    ((Binding<T>) observable).invalidate();
                 else
-                    throw ExceptionTools.unsupported("Observable must be instance of ObjectBinding to invalidate.");
+                    throw ExceptionTools.unsupported("Observable must be instance of Binding to invalidate.");
         }
         finally
         {

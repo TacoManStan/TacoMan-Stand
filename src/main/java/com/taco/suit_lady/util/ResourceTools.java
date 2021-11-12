@@ -44,6 +44,11 @@ public class ResourceTools
     
     // Resource Retrieval
     
+    public <V> V get(String lookupKey)
+    {
+        return get(null, lookupKey);
+    }
+    
     public <V> V get(String groupKey, String lookupKey)
     {
         return get(groupKey, lookupKey, () ->
@@ -52,15 +57,26 @@ public class ResourceTools
         });
     }
     
+    /**
+     * <p>Returns the cached object of type {@link V} from the specified {@code group} using the specified {@code UID}.</p>
+     * <p>
+     * This method is designed to work as an internal singleton lookup.
+     * Therefore, shortcomings of the singleton pattern apply and should always be considered.
+     * Memory leaks and stack/heap pollution are two problems that immediately come to mind.
+     * </p>
+     *
+     * @param groupKey             The cache group being accessed. If the {@code group key} is null, the {@code 'default'} group is used.
+     * @param lookupKey            The UID of the object being accessed.
+     * @param defaultValueSupplier A {@link Supplier} function that is run if no object exists given the specified {@code group key} and {@code uid key}.
+     * @param <V>                  The type of object being retrieved.
+     * @return The cached object retrieved using the specified cache reference keys.
+     */
     public <V> V get(String groupKey, String lookupKey, Supplier<V> defaultValueSupplier)
     {
-        ExceptionTools.nullCheck(groupKey, "Type Key");
-        ExceptionTools.nullCheck(lookupKey, "Lookup Key");
-        ExceptionTools.nullCheckMessage(defaultValueSupplier, "Default value returner is null for type \" + groupKey + \" using lookup key \" + lookupKey + \"");
+        groupKey = groupKey != null ? groupKey : "default";
         
-//        ConsoleBB.CONSOLE.print("Retrieving Resource: "
-//                                + "Group Key: " + groupKey + " | "
-//                                + "Lookup Key: " + lookupKey);
+        ExceptionTools.nullCheck(lookupKey, "UID Lookup Key");
+        ExceptionTools.nullCheckMessage(defaultValueSupplier, "Default value returner is null for type \" + groupKey + \" using lookup key \" + lookupKey + \"");
         
         final String tempTypeKey = groupKey.toLowerCase();
         final String tempLookupKey = lookupKey.toLowerCase();

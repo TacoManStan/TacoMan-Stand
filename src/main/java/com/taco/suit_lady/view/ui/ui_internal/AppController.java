@@ -254,17 +254,18 @@ public class AppController
         _generalSidebarGroup.getNodes().add(new UINode(
                 AppController.this.weaver, AppController.this.ctx,
                 "Clients", "clients",
-                _node -> TB.resources().get(
-                        "pages", _node.getID(),
-                        () -> new DummyInstancesPage(_node)
+                uiNode -> TB.resources().get(
+                        "pages",
+                        uiNode.getID(),
+                        () -> new DummyInstancesPage(uiNode)
                 ), null
         ));
         _generalSidebarGroup.getNodes().add(new UINode(
                 AppController.this.weaver, AppController.this.ctx,
                 "Development", "popout_sidebar",
-                _node -> TB.resources().get(
-                        "pages", _node.getID(),
-                        () -> new ExamplePage(_node, "green")
+                uiNode -> TB.resources().get(
+                        "pages", uiNode.getID(),
+                        () -> new ExamplePage(uiNode, "green")
                 ), null
         ));
         _generalSidebarGroup.getButtonViewGroup().selectFirst();
@@ -273,9 +274,9 @@ public class AppController
         _inDevelopmentSidebarNodeGroup.getNodes().add(new UINode(
                 AppController.this.weaver, AppController.this.ctx,
                 "Entity Debug", "entity_debug",
-                _node -> TB.resources().get(
-                        "pages", _node.getID(),
-                        () -> new EntityDebugPage(_node)
+                uiNode -> TB.resources().get(
+                        "pages", uiNode.getID(),
+                        () -> new EntityDebugPage(uiNode)
                 ), null
         ));
         _inDevelopmentSidebarNodeGroup.getButtonViewGroup().selectFirst();
@@ -284,17 +285,17 @@ public class AppController
         _nyiSidebarGroup.getNodes().add(new UINode(
                 AppController.this.weaver, AppController.this.ctx,
                 "Repository", "repository",
-                _node -> TB.resources().get(
-                        "pages", _node.getID(),
-                        () -> new ExamplePage(_node, "green")
+                uiNode -> TB.resources().get(
+                        "pages", uiNode.getID(),
+                        () -> new ExamplePage(uiNode, "green")
                 ), null
         ));
         _nyiSidebarGroup.getNodes().add(new UINode(
                 AppController.this.weaver, AppController.this.ctx,
                 "Social", "social",
-                _node -> TB.resources().get(
-                        "pages", _node.getID(),
-                        () -> new ExamplePage(_node, "blue")
+                uiNode -> TB.resources().get(
+                        "pages", uiNode.getID(),
+                        () -> new ExamplePage(uiNode, "blue")
                 ), null
         ));
         _nyiSidebarGroup.getButtonViewGroup().selectFirst();
