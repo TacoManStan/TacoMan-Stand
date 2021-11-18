@@ -208,7 +208,7 @@ public class UIPageHandler {
 	 * <ol>
 	 * <li>All pages that are after the specified page are removed from the {@link #getPages() page list}.</li>
 	 * <li>If the specified page is the {@link #coverPageProperty() cover page}, the page list is cleared.</li>
-	 * <li>If this {@code UIPageHandler} does not contain the specified  page, {@link #turnToNew(UIPage) next} is called.</li>
+	 * <li>If this {@code UIPageHandler} does not contain the specified  page, {@link #turnToNew(UIPage)} is called.</li>
 	 * </ol>
 	 * <p>
 	 * <i>Synchronized.</i>
@@ -257,7 +257,7 @@ public class UIPageHandler {
 	 *
 	 * @see #turnTo(UIPage)
 	 * @see #turnToNew(UIPage)
-	 * @see #goBack()
+	 * @see #backUnchecked()
 	 */
 	public void back() {
 		lock.lock();
@@ -280,7 +280,7 @@ public class UIPageHandler {
 	 * @see #turnToNew(UIPage)
 	 * @see #back()
 	 */
-	public void goBack() {
+	public void backUnchecked() {
 		lock.lock();
 		try {
 			pages.removeLast();

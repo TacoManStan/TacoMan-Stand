@@ -12,13 +12,13 @@ import java.util.function.BiFunction;
 public abstract class ContentPane<T> extends StackPane {
 
 	private final ObjectProperty<T> contentProperty;
-	private final BiFunction<T, T, Pane> onDisplaySwitch;
+	private final BiFunction<T, T, Pane> onDisplaySwitchListener;
 
 	private Pane currentContentPane;
 
-	public ContentPane(BiFunction<T, T, Pane> onDisplaySwitch) {
+	public ContentPane(BiFunction<T, T, Pane> onDisplaySwitchListener) {
 		this.contentProperty = new SimpleObjectProperty<>();
-		this.onDisplaySwitch = onDisplaySwitch;
+		this.onDisplaySwitchListener = onDisplaySwitchListener;
 
 		this.currentContentPane = null;
 
@@ -43,8 +43,8 @@ public abstract class ContentPane<T> extends StackPane {
 
 	//
 
-	public final BiFunction<T, T, Pane> getOnDisplaySwitch() {
-		return onDisplaySwitch;
+	public final BiFunction<T, T, Pane> getOnDisplaySwitchListener() {
+		return onDisplaySwitchListener;
 	}
 
 	//</editor-fold>
@@ -60,7 +60,7 @@ public abstract class ContentPane<T> extends StackPane {
 					currentContentPane.prefHeightProperty().unbind();
 				}
 
-				Pane newContentPane = onDisplaySwitch.apply(oldContent, newContent);
+				Pane newContentPane = onDisplaySwitchListener.apply(oldContent, newContent);
 				currentContentPane = newContentPane;
 				if (newContentPane != null) {
 					getChildren().add(newContentPane);

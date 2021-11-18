@@ -16,17 +16,23 @@ import javafx.scene.layout.StackPane;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-//TODO - Make read-only variation
+/**
+ * <b>--- To Format ---</b>
+ * <br><br>
+ * My best guess atm is that the Displayer class is meant to add basic functionality to a Displayable that defines how to display it.
+ * To me, it seems like this completely defeats the purpose of making Displayable in the first place, as it is an interface.
+ * It also doesn't make sense for Displayer to be typed, as it should be able to display any type of Displayable... right? I think? Maybe not...
+ * At the very least, the Displayable/Displayer system is going to need to be analyzed and documented at the very least, more likely heavily reworked.
+ */
 public class Displayer<T extends Displayable>
 {
-    
     private final ReentrantLock lock;
     
     private final StackPane displayContainer;
     private final ReadOnlyObjectWrapper<T> displayProperty;
     
-    private final BooleanProperty showingProperty;
-    private final BooleanBinding visibleBinding;
+    private final BooleanProperty shouldShowProperty;
+    private final BooleanBinding showingBinding;
     
     public Displayer(StackPane displayContainer)
     {
@@ -40,10 +46,10 @@ public class Displayer<T extends Displayable>
         this.displayContainer = displayContainer == null ? new StackPane() : displayContainer;
         this.displayProperty = new ReadOnlyObjectWrapper<>();
         
-        this.showingProperty = new SimpleBooleanProperty(true);
-        this.visibleBinding = Bindings.createBooleanBinding(
-                () -> isShowing() && getDisplay() != null && this.displayContainer.isVisible(),
-                this.showingProperty,
+        this.shouldShowProperty = new SimpleBooleanProperty(true);
+        this.showingBinding = Bindings.createBooleanBinding(
+                () -> shouldShow() && getDisplay() != null && this.displayContainer.isVisible(),
+                this.shouldShowProperty,
                 this.displayProperty(),
                 this.displayContainer.visibleProperty()
         );
@@ -79,48 +85,60 @@ public class Displayer<T extends Displayable>
     
     //
     
-    public BooleanProperty showingProperty()
+    /**
+     * <p>A {@link BooleanProperty} defining whether this {@link Displayer} <i>should</i> display its contents.</p>
+     * <p>
+     * Contrary to {@link #showingBinding() showingBinding}, the {@link #shouldShowProperty() shouldShowProperty} only defines whether or not the {@link Displayer}
+     * <i>should</i> display its contents.
+     * </p>
+     * <p>In other words, if the {@link Displayable} is invalid or otherwise cannot be displayed, the value of {@link #shouldShowProperty() shouldShowProperty} is irrelevant.</p>
+     *
+     * @return The {@link BooleanProperty} defining whether this {@link Displayer} <i>should</i> display its contents.
+     * @see #showingBinding()
+     */
+    public BooleanProperty shouldShowProperty()
     {
-        return showingProperty;
+        return shouldShowProperty;
     }
     
-    public boolean isShowing()
+    public boolean shouldShow()
     {
-        return showingProperty.get();
+        return shouldShowProperty.get();
     }
     
-    public void setShowing(boolean showing)
+    public void setShouldShow(boolean showing)
     {
-        showingProperty.set(showing);
+        shouldShowProperty.set(showing);
     }
     
     //
     
-    public BooleanBinding visibleBinding()
+    /**
+     * <p>A {@link BooleanBinding} defining whether this {@link Displayer} is currently displaying its contents.</p>
+     * <p>
+     * Contrary to {@link #shouldShowProperty() shouldShowProperty}, the {@link #showingBinding() showingBinding} is a calculated value that is bound to the actual display status of
+     * this {@link Displayer}.
+     * </p>
+     *
+     * @return The {@link BooleanBinding} defining whether this {@link Displayer} <i>is</i> displaying its contents.
+     */
+    public BooleanBinding showingBinding()
     {
-        return visibleBinding;
+        return showingBinding;
     }
     
-    public boolean isVisible()
+    public boolean isShowing()
     {
-        return visibleBinding.get();
+        return showingBinding.get();
     }
     
     //</editor-fold>
     
     //
     
+    //<editor-fold desc="--- INTERNAL ---">
+    
     public void bind(ObservableValue<T> observable)
-    {
-        bind(observable, false);
-    }
-    
-    public void bindAndInvalidate(ObservableValue<T> observable)
-    {
-        bind(observable, true);
-    }
-    
-    private void bind(ObservableValue<T> observable, boolean invalidate)
     {
         ExceptionTools.nullCheck(observable, "Observable cannot be null");
         
@@ -128,11 +146,10 @@ public class Displayer<T extends Displayable>
         try
         {
             displayProperty.bind(observable);
-            if (invalidate)
-                if (observable instanceof Binding<T>)
-                    ((Binding<T>) observable).invalidate();
-                else
-                    throw ExceptionTools.unsupported("Observable must be instance of Binding to invalidate.");
+            if (observable instanceof Binding<T>)
+                ((Binding<T>) observable).invalidate();
+            else
+                throw ExceptionTools.unsupported("Observable must be instance of Binding to invalidate.");
         }
         finally
         {
@@ -143,7 +160,6 @@ public class Displayer<T extends Displayable>
     //TODO - Synchronize actual displayContainer children
     private void onDisplaySwitch(T oldDisplayable, T newDisplayable)
     {
-        //		Printing.dev("On Display Switch (" + GeneralTools.getSimpleName(oldDisplayable) + " -> " + GeneralTools.getSimpleName(newDisplayable) + ")");
         lock.lock();
         try
         {
@@ -171,4 +187,6 @@ public class Displayer<T extends Displayable>
             lock.unlock();
         }
     }
+    
+    //</editor-fold>
 }

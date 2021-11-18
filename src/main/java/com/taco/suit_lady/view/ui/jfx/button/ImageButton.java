@@ -1,8 +1,8 @@
 package com.taco.suit_lady.view.ui.jfx.button;
 
-import com.taco.suit_lady.util.UndefinedRuntimeException;
 import com.taco.suit_lady.util.ResourceTools;
 import com.taco.suit_lady.util.TB;
+import com.taco.suit_lady.util.UndefinedRuntimeException;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
 import com.taco.suit_lady.view.ui.jfx.image.ImagePane;
 import com.taco.util.obj_traits.common.Nameable;
@@ -14,13 +14,22 @@ import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.geometry.Point2D;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import org.springframework.context.ApplicationContext;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
+/**
+ * Class that wraps an {@link ImageView} and {@link Button} into a single class.
+ * Note that {@link ImageButton} does <i>not</i> implement or extend any UI framework classes, but rather has methods that allow it to be used in JFX UI environments.
+ * At some point, it might be a good idea to change that, allowing {@link ImageButton ImageButtons} to be added directly to the JFX UI and have their functionality handled internally.
+ * Currently, the {@link ImageButton} is handled by passing a {@link ImagePane} object as a parameter that will be responsible for containing the {@link ImageButton}.
+ * In the future, combining those two classes would likely be preferred, with the image itself being controlled/switched via cache references.
+ */
 public class ImageButton
         implements Nameable
 {

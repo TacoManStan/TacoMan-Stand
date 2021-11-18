@@ -67,7 +67,7 @@ public class UINode
         
         //
         
-        displayer.bindAndInvalidate(pageHandler.visiblePageBinding());
+        displayer.bind(pageHandler.visiblePageBinding());
         
         group.addListener((observable, oldValue, newValue) ->
                           {

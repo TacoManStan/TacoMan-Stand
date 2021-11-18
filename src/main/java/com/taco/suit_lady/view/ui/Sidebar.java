@@ -4,6 +4,7 @@ import com.taco.suit_lady.util.BindingTools;
 import com.taco.suit_lady.view.ui.jfx.button.ImageButton;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
 import com.taco.suit_lady.view.ui.jfx.image.ImagePane;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -47,7 +48,7 @@ public class Sidebar
         this.backImageButton.getImagePane().visibleProperty().bind(
                 BindingTools.get().recursiveBinding(selectedNodeGroup -> {
                     if (selectedNodeGroup != null)
-                        return javafx.beans.binding.Bindings.and(selectedNodeGroup.hasPagedContentBinding(), selectedNodeGroup.getNodeDisplayer().visibleBinding());
+                        return Bindings.and(selectedNodeGroup.hasPagedContentBinding(), selectedNodeGroup.getNodeDisplayer().showingBinding());
                     return null;
                 }, selectedNodeGroupProperty));
         
