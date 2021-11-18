@@ -1,6 +1,6 @@
 package com.taco.suit_lady.util._new.functional;
 
-import com.taco.suit_lady.util._new.ValueChange;
+import com.taco.suit_lady.util._new.ValueGroup;
 
 /**
  * <p>Contains a single method, {@link #validate(boolean)}, that checks if the contents of the {@link SelfValidatable} are valid.</p>
@@ -12,9 +12,9 @@ import com.taco.suit_lady.util._new.ValueChange;
  *     <li>
  *          An object that has specific rules that are mistakenly broken by a future change.<br>
  *          For Example:<br>
- *          The {@link ValueChange} class requires both internal arrays — {@code values} and {@code keys} — to be of the same length.<br>
+ *          The {@link ValueGroup} class requires both internal arrays — {@code values} and {@code keys} — to be of the same length.<br>
  *          If a future change makes it possible for the internal arrays to have different lengths,
- *          any {@link ValueChange} instance that is created as such will be flagged as {@link #validate(boolean) invalid.}
+ *          any {@link ValueGroup} instance that is created as such will be flagged as {@link #validate(boolean) invalid.}
  *     </li>
  * </ol>
  */
