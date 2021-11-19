@@ -248,7 +248,7 @@ public class ValueGroup<T>
     //<editor-fold desc="--- VALIDATION ---">
     
     /**
-     * <p><b>Checks if any of the following methods indicate an invalid state:</b></p>
+     * <p>Checks if this {@link ValueGroup} is valid. Details below.</p>
      * <ol>
      *     <li>{@link #validateArrayNullity(boolean)}</li>
      *     <li>{@link #validateArrayLength(boolean)}</li>
@@ -297,7 +297,7 @@ public class ValueGroup<T>
      * <br>
      * Note that if {@code throwException} is set to {@code true}, this method can only ever return {@code true} or throw an {@link NullPointerException exception}.
      */
-    protected boolean validateArrayNullity(boolean throwException)
+    private boolean validateArrayNullity(boolean throwException)
     {
         if (values == null || keys == null)
             if (throwException)
@@ -315,7 +315,7 @@ public class ValueGroup<T>
      * <br>
      * Note that if {@code throwException} is set to {@code true}, this method can only ever return {@code true} or throw an {@link NullPointerException exception}.
      */
-    protected boolean validateArrayLength(boolean throwException)
+    private boolean validateArrayLength(boolean throwException)
     {
         if (values.length != keys.length)
             if (throwException)
@@ -333,7 +333,7 @@ public class ValueGroup<T>
      * <br>
      * Note that if {@code throwException} is set to {@code true}, this method can only ever return {@code true} or throw an {@link NullPointerException exception}.
      */
-    protected boolean validateDefaultValueSupplierNullity(boolean throwException)
+    private boolean validateDefaultValueSupplierNullity(boolean throwException)
     {
         if (defaultValueSupplier == null)
             if (throwException)
@@ -353,7 +353,7 @@ public class ValueGroup<T>
      * <br>
      * Note that if {@code throwException} is set to {@code true}, this method can only ever return {@code true} or throw an {@link NullPointerException exception}.
      */
-    protected boolean validateValueArrayContents(boolean throwException)
+    private boolean validateValueArrayContents(boolean throwException)
     {
         for (int i = 0; i < size(); i++)
         {
@@ -375,7 +375,7 @@ public class ValueGroup<T>
      * <br>
      * Note that if {@code throwException} is set to {@code true}, this method can only ever return {@code true} or throw an {@link NullPointerException exception}.
      */
-    protected boolean validateKeyArrayContents(boolean throwException)
+    private boolean validateKeyArrayContents(boolean throwException)
     {
         for (int i = 0; i < size(); i++)
         {
