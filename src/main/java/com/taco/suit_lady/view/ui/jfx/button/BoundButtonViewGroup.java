@@ -24,11 +24,9 @@ public class BoundButtonViewGroup<T extends ButtonViewable> extends ButtonViewGr
         //
         
         this.buttonViewables.addListener((ListChangeListener<T>) change -> {
-            while (change.next())
-            {
+            while (change.next()) {
                 change.getAddedSubList().forEach(buttonViewable -> {
-                    if (buttonViewable != null)
-                    {
+                    if (buttonViewable != null) {
                         ImageButton imageButton = buttonViewable.getButtonView();
                         if (imageButton != null)
                             this.buttons.add(imageButton);
@@ -36,8 +34,7 @@ public class BoundButtonViewGroup<T extends ButtonViewable> extends ButtonViewGr
                 });
                 
                 change.getRemoved().forEach(buttonViewable -> {
-                    if (buttonViewable != null)
-                    {
+                    if (buttonViewable != null) {
                         ImageButton imageButton = buttonViewable.getButtonView();
                         if (imageButton != null)
                             this.buttons.remove(imageButton);
@@ -60,18 +57,14 @@ public class BoundButtonViewGroup<T extends ButtonViewable> extends ButtonViewGr
     
     public T getViewableByButton(ImageButton button)
     {
-        if (button != null)
-        {
+        if (button != null) {
             lock.lock();
-            try
-            {
+            try {
                 List<T> buttonViewables = buttonViewables();
                 for (T buttonViewable: buttonViewables)
                     if (Objects.equals(button, buttonViewable.getButtonView()))
                         return buttonViewable;
-            }
-            finally
-            {
+            } finally {
                 lock.unlock();
             }
         }
