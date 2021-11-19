@@ -10,10 +10,10 @@ import java.util.function.Supplier;
 public class ValueGroup<T>
         implements SelfValidatable
 {
-    final T[] values;
-    final String[] keys;
+    private final T[] values;
+    private final String[] keys;
     
-    final Supplier<T> defaultValueSupplier;
+    private final Supplier<T> defaultValueSupplier;
     
     @SafeVarargs
     public ValueGroup(String[] keys, T... values)
@@ -118,8 +118,6 @@ public class ValueGroup<T>
     {
         return Arrays.copyOf(keys, size());
     }
-    
-    //
     
     /**
      * <p>Returns the default {@code value} for this {@link ValueGroup} object by calling the default value {@link Supplier supplier} for this {@link ValueGroup} instance.</p>
@@ -415,8 +413,6 @@ public class ValueGroup<T>
     }
     
     //</editor-fold>
-    
-    //
     
     //<editor-fold desc="--- STATIC FACTORY METHODS ---">
     
