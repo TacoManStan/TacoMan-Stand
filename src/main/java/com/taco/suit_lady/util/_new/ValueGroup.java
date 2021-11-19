@@ -38,7 +38,7 @@ public class ValueGroup<T>
      *     <li>Neither array can be empty.</li>
      *     <li>The arrays stored within a {@link ValueGroup} are <i>shallow copies</i>.</li>
      * </ol>
-     * <p>Default Supplier Details</p>
+     * <p><b>Default Supplier Details</b></p>
      * <ol>
      *     <li>If the specified {@link Supplier} is {@code null} or <i>default</i>, a fallback {@link Supplier} is automatically created instead.</li>
      *     <li>The fallback {@link Supplier} will cause the {@link #getDefaultValue() default value} to always be the first {@code value} in this {@link ValueGroup}.</li>
@@ -249,8 +249,29 @@ public class ValueGroup<T>
     
     //<editor-fold desc="--- VALIDATION ---">
     
+    /**
+     * <p><b>Checks if any of the following methods indicate an invalid state:</b></p>
+     * <ol>
+     *     <li>{@link #validateArrayNullity(boolean)}</li>
+     *     <li>{@link #validateArrayLength(boolean)}</li>
+     *     <li>{@link #validateDefaultValueSupplierNullity(boolean)}</li>
+     *     <li>{@link #validateValueArrayContents(boolean)}</li>
+     *     <li>{@link #validateKeyArrayContents(boolean)}</li>
+     * </ol>
+     *
+     * @param throwException True if a detailed {@link RuntimeException Exception} should be thrown if this {@link SelfValidatable} is {@code invalid},
+     *                       false if it should follow through with a {@code return value} depicting the validity instead.
+     * @return {@code True} if none of the aforementioned methods indicate an invalid state, {@code false} otherwise.
+     * <br>
+     * Note that if {@code throwException} is set to {@code true}, this method can only ever return {@code true} or throw an {@link NullPointerException exception}.
+     * @see #validateArrayNullity(boolean)
+     * @see #validateArrayLength(boolean)
+     * @see #validateDefaultValueSupplierNullity(boolean)
+     * @see #validateValueArrayContents(boolean)
+     * @see #validateKeyArrayContents(boolean)
+     */
     @Override
-    public boolean validate(boolean throwException)
+    public boolean isValid(boolean throwException)
     {
         if (!validateArrayNullity(throwException))
             return false;
@@ -270,7 +291,15 @@ public class ValueGroup<T>
     
     // --- HELPER METHODS --- //
     
-    private boolean validateArrayNullity(boolean throwException)
+    /**
+     * <p>Checks if the {@code values} and {@code keys} arrays are non-null.</p>
+     *
+     * @param throwException {@code True} if an {@link NullPointerException exception} should be thrown if the state is invalid, {@code false} if the method should {@code return} instead.
+     * @return {@code True} if both {@code values} and {@code keys} arrays are non-null, {@code false} otherwise.
+     * <br>
+     * Note that if {@code throwException} is set to {@code true}, this method can only ever return {@code true} or throw an {@link NullPointerException exception}.
+     */
+    protected boolean validateArrayNullity(boolean throwException)
     {
         if (values == null || keys == null)
             if (throwException)
@@ -280,7 +309,15 @@ public class ValueGroup<T>
         return true;
     }
     
-    private boolean validateArrayLength(boolean throwException)
+    /**
+     * <p>Checks if the {@code values} and {@code keys} arrays are of the same length.</p>
+     *
+     * @param throwException {@code True} if an {@link NullPointerException exception} should be thrown if the state is invalid, {@code false} if the method should {@code return} instead.
+     * @return {@code True} if {@code values} and {@code keys} arrays are the same size, {@code false} otherwise.
+     * <br>
+     * Note that if {@code throwException} is set to {@code true}, this method can only ever return {@code true} or throw an {@link NullPointerException exception}.
+     */
+    protected boolean validateArrayLength(boolean throwException)
     {
         if (values.length != keys.length)
             if (throwException)
@@ -290,20 +327,35 @@ public class ValueGroup<T>
         return true;
     }
     
-    private boolean validateDefaultValueSupplierNullity(boolean throwException)
+    /**
+     * <p>Checks if the {@link #getDefaultValue() default value} {@code supplier} is null.</p>
+     *
+     * @param throwException {@code True} if an {@link NullPointerException exception} should be thrown if the state is invalid, {@code false} if the method should return instead.
+     * @return {@code True} if the {@code default value supplier} is non-null, {@code false} otherwise.
+     * <br>
+     * Note that if {@code throwException} is set to {@code true}, this method can only ever return {@code true} or throw an {@link NullPointerException exception}.
+     */
+    protected boolean validateDefaultValueSupplierNullity(boolean throwException)
     {
         if (defaultValueSupplier == null)
             if (throwException)
                 throw new NullPointerException(
                         "Default supplier cannot be null." +
-                        " Note that this should never happen; if the provided supplier is null, one should be automatically created upon construction."
-                );
+                        " Note that this should never happen; if the provided supplier is null, one should be automatically created upon construction.");
             else
                 return false;
         return true;
     }
     
-    private boolean validateValueArrayContents(boolean throwException)
+    /**
+     * <p>Checks if there are any null elements in the {@code values} array.</p>
+     *
+     * @param throwException {@code True} if an {@link NullPointerException exception} should be thrown if the state is invalid, {@code false} if the method should return instead.
+     * @return {@code True} if all elements in the {@code values} array are non-null, {@code false} otherwise.
+     * <br>
+     * Note that if {@code throwException} is set to {@code true}, this method can only ever return {@code true} or throw an {@link NullPointerException exception}.
+     */
+    protected boolean validateValueArrayContents(boolean throwException)
     {
         for (int i = 0; i < size(); i++)
         {
@@ -317,7 +369,15 @@ public class ValueGroup<T>
         return true;
     }
     
-    private boolean validateKeyArrayContents(boolean throwException)
+    /**
+     * <p>Checks if there are any null elements in the {@code keys} array.</p>
+     *
+     * @param throwException {@code True} if an {@link NullPointerException exception} should be thrown if the state is invalid, {@code false} if the method should return instead.
+     * @return {@code True} if all elements in the {@code keys} array are non-null, {@code false} otherwise.
+     * <br>
+     * Note that if {@code throwException} is set to {@code true}, this method can only ever return {@code true} or throw an {@link NullPointerException exception}.
+     */
+    protected boolean validateKeyArrayContents(boolean throwException)
     {
         for (int i = 0; i < size(); i++)
         {
@@ -337,9 +397,9 @@ public class ValueGroup<T>
      * <p>Checks of the specified {@code index} is valid for this {@link ValueGroup} object.</p>
      * <br>
      * <p>
-     * <b>Note:</b> Despite the similar name, this method is <i>not</i> called by the <i>{@link #validate(boolean)}</i> method.
+     * <b>Note:</b> Despite the similar name, this method is <i>not</i> called by the <i>{@link #isValid(boolean)}</i> method.
      * <br>
-     * This is because this method is checking if an {@code index} is valid, whereas <i>{@link #validate(boolean)}</i> checks if the {@link ValueGroup} object itself is valid.
+     * This is because this method is checking if an {@code index} is valid, whereas <i>{@link #isValid(boolean)}</i> checks if the {@link ValueGroup} object itself is valid.
      * </p>
      * <br>
      *
