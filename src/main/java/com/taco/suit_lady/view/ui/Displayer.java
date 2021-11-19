@@ -14,15 +14,14 @@ import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
+import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * <b>--- To Format ---</b>
- * <br><br>
- * My best guess atm is that the Displayer class is meant to add basic functionality to a Displayable that defines how to display it.
- * To me, it seems like this completely defeats the purpose of making Displayable in the first place, as it is an interface.
- * It also doesn't make sense for Displayer to be typed, as it should be able to display any type of Displayable... right? I think? Maybe not...
- * At the very least, the Displayable/Displayer system is going to need to be analyzed and documented at the very least, more likely heavily reworked.
+ * <p>Contains logic for easily displaying {@link Displayable} objects.</p>
+ *
+ * @param <T> The type of {@link Displayable} displayed by this {@link Displayer}.
+ * @see Displayable
  */
 public class Displayer<T extends Displayable>
 {
@@ -34,11 +33,46 @@ public class Displayer<T extends Displayable>
     private final BooleanProperty shouldShowProperty;
     private final BooleanBinding showingBinding;
     
+    /**
+     * <p>Constructs a new {@link Displayer} that contains the logic and details pertaining to a particular {@link Displayable} implementation.</p>
+     * <ol>
+     *     <li><i>{@link #Displayer(StackPane) new Displayer()}</i> is identical to <i>{@link #Displayer(ReentrantLock, StackPane) new Displayer(null, null)}</i>.</li>
+     * </ol>
+     * <p>Refer to the {@link #Displayer(ReentrantLock, StackPane) fully parameterized constructor} for details.</p>
+     */
+    public Displayer()
+    {
+        this(null, null);
+    }
+    
+    /**
+     * <p>Constructs a new {@link Displayer} that contains the logic and details pertaining to a particular {@link Displayable} implementation.</p>
+     * <ol>
+     *     <li><i>{@link #Displayer(StackPane) new Displayer(displayContainer)}</i> is identical to <i>{@link #Displayer(ReentrantLock, StackPane) new Displayer(null, displayContainer)}</i>.</li>
+     * </ol>
+     * <p>Refer to the {@link #Displayer(ReentrantLock, StackPane) fully parameterized constructor} for details.</p>
+     *
+     * @param displayContainer A {@link StackPane} that the {@link Displayable#getContent() displayable content} will be displayed on.
+     */
     public Displayer(StackPane displayContainer)
     {
         this(null, displayContainer);
     }
     
+    /**
+     * <p>Constructs a new {@link Displayer} that contains the logic and details pertaining to a particular {@link Displayable} implementation.</p>
+     * <ol>
+     *     <li>The {@link Displayable} is added to the specified {@link StackPane}.</li>
+     *     <li>The {@link Displayable Displayable's} dimensions are automatically bound to the {@link StackPane StackPane's} dimensions.</li>
+     * </ol>
+     *
+     * @param lock             The {@link ReentrantLock} object that will be used to {@link Lock#lock() synchronize} this {@link Displayer} instance.
+     *                         <br>
+     *                         If the specified {@link ReentrantLock lock} is null, a new {@link ReentrantLock lock} instance will be created instead.
+     * @param displayContainer A {@link StackPane} that the {@link Displayable#getContent() displayable content} will be displayed on.
+     *                         <br>
+     *                         If the specified {@link StackPane} is null, a new {@link StackPane} instance will be created instead.
+     */
     public Displayer(ReentrantLock lock, StackPane displayContainer)
     {
         this.lock = lock == null ? new ReentrantLock() : lock;
@@ -61,6 +95,11 @@ public class Displayer<T extends Displayable>
     
     //<editor-fold desc="Properties">
     
+    /**
+     * <p>Returns the {@link StackPane} instance that this {@link Displayer} is displaying its {@link #displayProperty() contents} on.</p>
+     *
+     * @return The {@link StackPane} instance that this {@link Displayer} is displaying its {@link #displayProperty() contents} on.
+     */
     public StackPane getDisplayContainer()
     {
         return displayContainer;
@@ -68,16 +107,37 @@ public class Displayer<T extends Displayable>
     
     //
     
+    /**
+     * <p>Returns the {@link ReadOnlyObjectProperty Property} containing the {@link Displayable} object managed by this {@link Displayer} instance.</p>
+     *
+     * @return The {@link ReadOnlyObjectProperty Property} containing the {@link Displayable} object managed by this {@link Displayer} instance.
+     * @see #getDisplay()
+     * @see #setDisplay(Displayable)
+     */
     public ReadOnlyObjectProperty<T> displayProperty()
     {
         return displayProperty.getReadOnlyProperty();
     }
     
+    /**
+     * <p>Returns the {@link Displayable} object managed by this {@link Displayer} instance.</p>
+     *
+     * @return The {@link Displayable} object managed by this {@link Displayer} instance.
+     * @see #displayProperty()
+     * @see #setDisplay(Displayable)
+     */
     public T getDisplay()
     {
         return displayProperty.get();
     }
     
+    /**
+     * <p>Sets the {@link Displayable} object managed by this {@link Displayer} instance to the specified value.</p>
+     *
+     * @param displayable The {@link Displayable} object to be managed by this {@link Displayer} instance.
+     * @see #displayProperty()
+     * @see #getDisplay()
+     */
     public void setDisplay(T displayable)
     {
         displayProperty.set(displayable);
@@ -87,13 +147,14 @@ public class Displayer<T extends Displayable>
     
     /**
      * <p>A {@link BooleanProperty} defining whether this {@link Displayer} <i>should</i> display its contents.</p>
-     * <p>
-     * Contrary to {@link #showingBinding() showingBinding}, the {@link #shouldShowProperty() shouldShowProperty} only defines whether or not the {@link Displayer}
-     * <i>should</i> display its contents.
-     * </p>
-     * <p>In other words, if the {@link Displayable} is invalid or otherwise cannot be displayed, the value of {@link #shouldShowProperty() shouldShowProperty} is irrelevant.</p>
+     * <ol>
+     *     <li>Contrary to {@link #showingBinding()}, the {@link #shouldShowProperty()} only defines whether or not the {@link Displayer} <i>should</i> display its contents.</li>
+     *     <li>In other words, if the {@link Displayable} is invalid or otherwise cannot be displayed, the value of {@link #shouldShowProperty()} is irrelevant.</li>
+     * </ol>
      *
      * @return The {@link BooleanProperty} defining whether this {@link Displayer} <i>should</i> display its contents.
+     * @see #shouldShow()
+     * @see #setShouldShow(boolean)
      * @see #showingBinding()
      */
     public BooleanProperty shouldShowProperty()
@@ -101,11 +162,30 @@ public class Displayer<T extends Displayable>
         return shouldShowProperty;
     }
     
+    /**
+     * <p>Returns the value of {@link #shouldShowProperty()}.</p>
+     * <ol>
+     *     <li><i>{@link #shouldShow()}</i> is identical to <i>{@link #shouldShowProperty() shouldShowProperty().get()}</i>.</li>
+     * </ol>
+     *
+     * @return True if this {@link Displayer} instance is currently set to be {@link #shouldShowProperty() shown}, false if it is not.
+     * @see #shouldShowProperty()
+     * @see #setShouldShow(boolean)
+     * @see #showingBinding()
+     */
     public boolean shouldShow()
     {
         return shouldShowProperty.get();
     }
     
+    /**
+     * <p>Tells this {@link Displayer} instance whether it should display its {@link #getDisplay() contents} or not.</p>
+     *
+     * @param showing True if this {@link Displayer} instance should show its {@link #getDisplay() contents}, false if it should not.
+     * @see #shouldShowProperty()
+     * @see #shouldShow()
+     * @see #showingBinding()
+     */
     public void setShouldShow(boolean showing)
     {
         shouldShowProperty.set(showing);
@@ -114,22 +194,33 @@ public class Displayer<T extends Displayable>
     //
     
     /**
-     * <p>A {@link BooleanBinding} defining whether this {@link Displayer} is currently displaying its contents.</p>
+     * <p>A {@link BooleanBinding} bound to the logic that determines if this {@link Displayer} instance is currently displaying its {@link #getDisplay() contents} or not.</p>
      * <p>
-     * Contrary to {@link #shouldShowProperty() shouldShowProperty}, the {@link #showingBinding() showingBinding} is a calculated value that is bound to the actual display status of
-     * this {@link Displayer}.
+     * Contrary to {@link #shouldShowProperty()}, {@link #showingBinding()} is a calculated value that is bound to the actual display state of this {@link Displayer} instance.
      * </p>
      *
-     * @return The {@link BooleanBinding} defining whether this {@link Displayer} <i>is</i> displaying its contents.
+     * @return The {@link BooleanBinding} bound to the logic that determines if this {@link Displayer} instance is currently displaying its {@link #getDisplay() contents} or not.
+     * @see #isShowing()
+     * @see #shouldShowProperty()
      */
     public BooleanBinding showingBinding()
     {
         return showingBinding;
     }
     
+    /**
+     * <p>Checks if this {@link Displayer} instance is currently displaying its {@link #getDisplay() contents} or not.</p>
+     * <ol>
+     *     <li><i>{@link #isShowing()}</i> is identical to <i>{@link #showingBinding() showingBinding().get()}</i>.</li>
+     * </ol>
+     *
+     * @return True if this {@link Displayer} instance is currently displaying its {@link #getDisplay() contents}, false if it is not.
+     * @see #showingBinding()
+     * @see #shouldShowProperty()
+     */
     public boolean isShowing()
     {
-        return showingBinding.get();
+        return showingBinding().get();
     }
     
     //</editor-fold>
@@ -138,21 +229,24 @@ public class Displayer<T extends Displayable>
     
     //<editor-fold desc="--- INTERNAL ---">
     
+    /**
+     * <p>Binds the {@link #displayProperty() Displayable} managed by this {@link Displayer} to the specified {@link ObservableValue}.</p>
+     *
+     * @param observable The {@link ObservableValue} to define the {@link #displayProperty() Displayable} object managed by this {@link Displayer}
+     *                   via a {@link ReadOnlyObjectWrapper#bind(ObservableValue) binding}.
+     */
     public void bind(ObservableValue<T> observable)
     {
         ExceptionTools.nullCheck(observable, "Observable cannot be null");
         
         lock.lock();
-        try
-        {
+        try {
             displayProperty.bind(observable);
             if (observable instanceof Binding<T>)
                 ((Binding<T>) observable).invalidate();
             else
                 throw ExceptionTools.unsupported("Observable must be instance of Binding to invalidate.");
-        }
-        finally
-        {
+        } finally {
             lock.unlock();
         }
     }
@@ -161,29 +255,23 @@ public class Displayer<T extends Displayable>
     private void onDisplaySwitch(T oldDisplayable, T newDisplayable)
     {
         lock.lock();
-        try
-        {
+        try {
             //Remove old content
-            if (oldDisplayable != null)
-            {
+            if (oldDisplayable != null) {
                 Node oldContent = oldDisplayable.getContent();
                 if (oldContent != null)
                     displayContainer.getChildren().remove(oldContent);
             }
             
             //Add new content
-            if (newDisplayable != null)
-            {
+            if (newDisplayable != null) {
                 Pane newContent = newDisplayable.getContent();
-                if (newContent != null)
-                {
+                if (newContent != null) {
                     FXTools.get().bindToParent(newContent, displayContainer, FXTools.BindOrientation.BOTH, FXTools.BindType.BOTH);
                     displayContainer.getChildren().add(newContent);
                 }
             }
-        }
-        finally
-        {
+        } finally {
             lock.unlock();
         }
     }
