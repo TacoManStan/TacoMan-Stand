@@ -2,6 +2,7 @@ package com.taco.suit_lady.util._new;
 
 import com.taco.suit_lady.util._new.functional.SelfValidatable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.function.Supplier;
@@ -14,27 +15,56 @@ public class ValueGroup<T>
     
     final Supplier<T> defaultValueSupplier;
     
-    public ValueGroup(T[] values, String[] keys, Supplier<T> defaultValueSupplier)
+    @SafeVarargs
+    public ValueGroup(String[] keys, T... values)
     {
-        if (values == null || keys == null)
-            throw new NullPointerException("Value and Key arrays must both be non-null.");
-        if (values.length != keys.length)
-            throw new ArrayStoreException("Value and Key arrays must be the same length.");
-        
-        this.values = values;
-        this.keys = keys;
+        this((T) null, keys, values);
+    }
+    
+    @SafeVarargs
+    public ValueGroup(T defaultValue, String[] keys, T... values)
+    {
+        this(() -> defaultValue, keys, values);
+    }
+    
+    /**
+     * <p>
+     * Constructs a new {@link ValueGroup} instance containing the specified {@link #getKeys() keys} and corresponding {@link #getValues() values}
+     * and a {@link #getDefaultValue() default value} {@link Supplier supplier}.</p>
+     * <ol>
+     *     <li>Both arrays must be {@code non-null}.</li>
+     *     <li>The contents of both arrays must be {@code non-null}.</li>
+     *     <li>The {@code key array} and {@code value array} must be the same size.</li>
+     *     <li>Neither array can be empty.</li>
+     *     <li>The arrays stored within a {@link ValueGroup} are <i>shallow copies</i>.</li>
+     * </ol>
+     * <p>Default Supplier Details</p>
+     * <ol>
+     *     <li>If the specified {@link Supplier} is {@code null} or <i>default</i>, a fallback {@link Supplier} is automatically created instead.</li>
+     *     <li>The fallback {@link Supplier} will cause the {@link #getDefaultValue() default value} to always be the first {@code value} in this {@link ValueGroup}.</li>
+     *     <li>More specifically, the fallback {@link Supplier} is {@code () -> getValueAt(0)}.</li>
+     * </ol>
+     *
+     * @param defaultValueSupplier The {@link Supplier} that returns the {@link #getDefaultValue() default value} for this {@link ValueGroup} instance.
+     *                             <br>
+     * @param keys                 The array of {@link #getKeys() keys} mapped to the specified {@link #getValues() values}.
+     * @param values               The array of {@link #getValues() values} mapped by the specified {@link #getKeys() keys}.
+     */
+    @SafeVarargs
+    public ValueGroup(Supplier<T> defaultValueSupplier, String[] keys, T... values)
+    {
+        this.values = Arrays.copyOf(values, values.length);
+        this.keys = Arrays.copyOf(keys, keys.length);
         
         this.defaultValueSupplier = defaultValueSupplier != null ? defaultValueSupplier : () -> getValueAt(0);
     }
-    
-    //
     
     /**
      * <p>Returns the number of {@code values} stored within this {@link ValueGroup} object.</p>
      *
      * @return The number of {@code values} stored within this {@link ValueGroup} object.
      */
-    public int getSize()
+    public int size()
     {
         return values.length;
     }
@@ -61,7 +91,7 @@ public class ValueGroup<T>
      */
     public T[] getValues()
     {
-        return Arrays.copyOf(values, values.length);
+        return Arrays.copyOf(values, size());
     }
     
     /**
@@ -86,14 +116,21 @@ public class ValueGroup<T>
      */
     public String[] getKeys()
     {
-        return Arrays.copyOf(keys, keys.length);
+        return Arrays.copyOf(keys, size());
     }
     
+    //
+    
     /**
-     * <p>Returns the {@code default value} for this {@link ValueGroup} object.</p>
-     * <p>If the {@code default value} assigned to this {@link ValueGroup} is null, <i>{@link #getValueAt(int) getValueAt(0)}</i> is returned instead.</p>
-     * <br>
-     * <p>Note that the above logic is located in the {@link ValueGroup} constructor.</p>
+     * <p>Returns the default {@code value} for this {@link ValueGroup} object by calling the default value {@link Supplier supplier} for this {@link ValueGroup} instance.</p>
+     * <ol>
+     *     <li>If the default value {@link Supplier supplier} assigned to this {@link ValueGroup} is null, then <i>{@link #getValueAt(int) getValueAt(0)}</i> is returned instead.</li>
+     *     <li>
+     *         The {@code value} returned by the default value {@link Supplier supplier} is <i>not</i> cached,
+     *         therefore, the default value {@link Supplier supplier} is executed every time <i>{@link #getDefaultValue()}</i> is called.
+     *     </li>
+     * </ol>
+     * <p><b>Note:</b> The logic detailed above is located/handled in/by the {@link #ValueGroup(Supplier, String[], Object[]) constructor}, <i>not</i> in/by this or any other method.</p>
      *
      * @return The {@code default value} for this {@link ValueGroup} object.
      */
@@ -101,8 +138,6 @@ public class ValueGroup<T>
     {
         return defaultValueSupplier.get();
     }
-    
-    //
     
     /**
      * <p>Returns the {@code value} at the specified {@code index}.</p>
@@ -118,7 +153,7 @@ public class ValueGroup<T>
      */
     public T getValueAt(int index)
     {
-        indexCheck(index);
+        validateIndex(index);
         return values[index];
     }
     
@@ -128,7 +163,7 @@ public class ValueGroup<T>
      *     <li>If the specified {@code key} is {@code null}, the {@link #getDefaultValue() default} value is returned.</li>
      *     <li>If the specified {@code key} is <i>default</i>, the {@link #getDefaultValue() default} value is returned.</li>
      *     <li>If the specified {@code key} does not exist in this {@link ValueGroup} object, a {@link NoSuchElementException} is thrown.</li>
-     *     <li>For all non-default {@code keys}, <i>{@link #getValueFor(String) getValueFor(key)}</i> is identical to <i>{@link #getValueAt(int) getValueAt(getIndexOf(key))}</i>.</li>
+     *     <li>For all non-default {@code keys}, <i>{@link #get(String) getValueFor(key)}</i> is identical to <i>{@link #getValueAt(int) getValueAt(getIndexOf(key))}</i>.</li>
      * </ol>
      *
      * @param key The {@link String} to be used as the {@code key}.
@@ -136,7 +171,7 @@ public class ValueGroup<T>
      *            A {@code null} or <i>default</i> {@code key} will return the result of <i>{@link #getDefaultValue()}</i>.
      * @return The {@code value} mapped to the specified {@code key} in this {@link ValueGroup} object.
      */
-    public T getValueFor(String key)
+    public T get(String key)
     {
         if (key == null || key.equalsIgnoreCase("default"))
             return getDefaultValue();
@@ -157,7 +192,7 @@ public class ValueGroup<T>
      */
     public String getKeyAt(int index)
     {
-        indexCheck(index);
+        validateIndex(index);
         return keys[index];
     }
     
@@ -183,7 +218,34 @@ public class ValueGroup<T>
         return -1;
     }
     
-    //
+    /**
+     * <p>Constructs a new {@link ValuePair} containing the {@link #getKeyAt(int) key} and {@link #getValueAt(int) value} located at the specified {@code index}.</p>
+     *
+     * @param index The {@code index} of the {@link ValuePair} being retrieved.
+     * @return The newly created {@link ValuePair} containing the {@code key} and {@code value} located at the specified {@code index}.
+     * @see #getKeyAt(int)
+     * @see #getValueAt(int)
+     * @see #getValuePairs()
+     */
+    public ValuePair<String, T> getValuePairAt(int index)
+    {
+        validateIndex(index);
+        return new ValuePair<>(getKeyAt(index), getValueAt(index));
+    }
+    
+    /**
+     * <p>Constructs a new {@link ArrayList} and then populates it with all {@link ValuePair ValuePairs} represented by this {@link ValueGroup}.</p>
+     *
+     * @return The newly constructed {@link ArrayList} containing all {@link ValuePair ValuePairs} represented by this {@link ValueGroup}.
+     * @see #getValuePairAt(int)
+     */
+    public ArrayList<ValuePair<String, T>> getValuePairs()
+    {
+        final ArrayList<ValuePair<String, T>> valuePairs = new ArrayList<>();
+        for (int i = 0; i < size(); i++)
+            valuePairs.add(getValuePairAt(i));
+        return valuePairs;
+    }
     
     //<editor-fold desc="--- VALIDATION ---">
     
@@ -243,7 +305,7 @@ public class ValueGroup<T>
     
     private boolean validateValueArrayContents(boolean throwException)
     {
-        for (int i = 0; i < getSize(); i++)
+        for (int i = 0; i < size(); i++)
         {
             final T value = getValueAt(i);
             if (value == null)
@@ -257,7 +319,7 @@ public class ValueGroup<T>
     
     private boolean validateKeyArrayContents(boolean throwException)
     {
-        for (int i = 0; i < getSize(); i++)
+        for (int i = 0; i < size(); i++)
         {
             final String key = getKeyAt(i);
             if (key == null)
@@ -269,17 +331,62 @@ public class ValueGroup<T>
         return true;
     }
     
-    //</editor-fold>
+    //
     
-    //<editor-fold desc="--- HELPER METHODS ---">
-    
-    private void indexCheck(int index)
+    /**
+     * <p>Checks of the specified {@code index} is valid for this {@link ValueGroup} object.</p>
+     * <br>
+     * <p>
+     * <b>Note:</b> Despite the similar name, this method is <i>not</i> called by the <i>{@link #validate(boolean)}</i> method.
+     * <br>
+     * This is because this method is checking if an {@code index} is valid, whereas <i>{@link #validate(boolean)}</i> checks if the {@link ValueGroup} object itself is valid.
+     * </p>
+     * <br>
+     *
+     * @param index The {@code index} being validated.
+     */
+    public void validateIndex(int index)
     {
         if (index < 0) // Ensure the index is non-negative
             throw new IndexOutOfBoundsException("Index must be non-negative.");
         
         if (index >= values.length) // Ensure the index exists in the values array
             throw new IndexOutOfBoundsException("Index " + index + " does not exist.");
+    }
+    
+    //</editor-fold>
+    
+    //
+    
+    //<editor-fold desc="--- STATIC FACTORY METHODS ---">
+    
+    /**
+     * <p>Constructs a new {@link ValueGroup} object containing the specified {@code values}.</p>
+     * <ol>
+     *      <li>The {@code keys} assigned to the specified {@code values} are <i>old</i> and <i>new</i>, respectively.</li>
+     *      <li>A {@code default value} is <i>not</i> provided.</li>
+     *      <li>
+     *          The {@link ValueGroup} created by this factory method is designed to be used with {@code keys} to improve readability when used.
+     *          <br><br>
+     *          All of the following examples are valid, but readability is obviously improved when using {@code keys}.
+     *          <ol>
+     *              <li><i>{@code get("old")}</i> - Correct</li>
+     *              <li><i>{@code get("new")}</i> - Correct</li>
+     *              <li><i>{@code getValueAt(0)}</i> - Incorrect</li>
+     *              <li><i>{@code getValueAt(1)}</i> - Incorrect</li>
+     *              <li><i>{@code getDefaultValue()}</i> - Incorrect</li>
+     *          </ol>
+     *      </li>
+     * </ol>
+     *
+     * @param oldValue The {@code value} to be stored as the {@code old value}.
+     * @param newValue The {@code value} to be stored as the {@code new value}.
+     * @param <T>      The type of {@code values} to be stored in the newly constructed {@link ValueGroup}.
+     * @return The newly constructed {@link ValueGroup} containing the specified {@code values}.
+     */
+    public static <T> ValueGroup<T> newValueChangeGroup(T oldValue, T newValue)
+    {
+        return new ValueGroup<>(new String[]{"old", "new"}, oldValue, newValue);
     }
     
     //</editor-fold>
