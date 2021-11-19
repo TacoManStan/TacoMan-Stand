@@ -111,10 +111,10 @@ public class ImageButton
             {
                 selectedProperty.unbind();
                 if (oldButtonGroup != null)
-                    oldButtonGroup.buttonViews().remove(this);
+                    oldButtonGroup.buttons().remove(this);
                 if (newButtonGroup != null)
                 {
-                    newButtonGroup.buttonViews().add(this);
+                    newButtonGroup.buttons().add(this);
                     selectedProperty.addListener((observable1, oldValue, selected) -> {
                         if (selected)
                             newButtonGroup.setSelectedButton(this);

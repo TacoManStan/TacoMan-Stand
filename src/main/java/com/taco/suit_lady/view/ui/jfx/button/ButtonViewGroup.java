@@ -7,7 +7,6 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 
 import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
@@ -15,7 +14,6 @@ import java.util.concurrent.locks.ReentrantLock;
 // TODO - Fix synchronization issues with selecting an element as the elements list is being modified
 public class ButtonViewGroup
 {
-    
     protected final ReentrantLock lock;
     
     protected final ListProperty<ImageButton> buttons;
@@ -37,16 +35,12 @@ public class ButtonViewGroup
         
         this.buttons.addListener((ListChangeListener<ImageButton>) change -> {
             this.lock.lock();
-            try
-            {
-                while (change.next())
-                {
+            try {
+                while (change.next()) {
                     change.getAddedSubList().forEach(button -> button.setButtonGroup(this));
                     change.getRemoved().forEach(button -> button.setButtonGroup(null));
                 }
-            }
-            finally
-            {
+            } finally {
                 this.lock.unlock();
             }
         });
@@ -59,30 +53,76 @@ public class ButtonViewGroup
         });
     }
     
-    //<editor-fold desc="Properties">
+    //<editor-fold desc="--- PROPERTIES ---">
     
-    protected ObservableList<ImageButton> buttonViews()
+    /**
+     * <p>Returns the {@link ListProperty} containing the {@link ImageButton buttons} in this {@link ButtonViewGroup}.</p>
+     * <ol>
+     *     <li>The {@link ListProperty list} returned by this method is <i>not</i> a copy</li>
+     *     <li>All changes made to the {@link ListProperty list} returned by this method will be reflected in this {@link ButtonViewGroup}.</li>
+     * </ol>
+     *
+     * @return The {@link ListProperty} containing the {@link ImageButton buttons} in this {@link ButtonViewGroup}.
+     */
+    protected ListProperty<ImageButton> buttons()
     {
         return buttons;
     }
     
-    //
-    
+    /**
+     * <p>Returns the {@link ReadOnlyObjectProperty} representing the {@link #getSelectedButton() selected} {@link ImageButton button} in this {@link ButtonViewGroup}.</p>
+     *
+     * @return The {@link ReadOnlyObjectProperty} representing the {@link #getSelectedButton() selected} {@link ImageButton button} in this {@link ButtonViewGroup}.
+     */
     public ReadOnlyObjectProperty<ImageButton> selectedButtonProperty()
     {
         return selectedButtonProperty.getReadOnlyProperty();
     }
     
+    /**
+     * <p>Returns the {@link #getSelectedButton() selected} {@link ImageButton button} in this {@link ButtonViewGroup}.</p>
+     * <ol>
+     *     <li><i>{@link #getSelectedButton()}</i> is identical to <i>{@link #selectedButtonProperty() selectedButtonProperty().get()}</i>.</li>
+     * </ol>
+     *
+     * @return The {@link #getSelectedButton() selected} {@link ImageButton button} in this {@link ButtonViewGroup}.
+     * @see #selectedButtonProperty()
+     * @see #setSelectedButton(ImageButton)
+     * @see #isButtonSelected(ImageButton)
+     */
     public ImageButton getSelectedButton()
     {
         return selectedButtonProperty.get();
     }
     
+    /**
+     * <p>Checks if the specified {@link ImageButton} is {@link #getSelectedButton() selected}.</p>
+     * <ol>
+     *     <li>If the specified {@link ImageButton} is {@code null}, this method returns false.</li>
+     * </ol>
+     *
+     * @param button The {@link ImageButton} being checked.
+     * @return True if the specified {@link ImageButton} is {@link #getSelectedButton() selected}, false otherwise.
+     * @see #selectedButtonProperty()
+     * @see #getSelectedButton()
+     * @see #setSelectedButton(ImageButton)
+     */
     public boolean isButtonSelected(ImageButton button)
     {
         return button != null && Objects.equals(button, getSelectedButton());
     }
     
+    /**
+     * <p>Sets the {@link #getSelectedButton() selected} {@link ImageButton button} to the specified value.</p>
+     *
+     * @param button The {@link ImageButton} to be {@link #getSelectedButton() selected}.
+     * @return The previously {@link #getSelectedButton() selected} {@link ImageButton button}.
+     * <br>
+     * If no {@link ImageButton button} was {@link #getSelectedButton() selected}, this method returns {@code null}.
+     * @see #selectedButtonProperty()
+     * @see #getSelectedButton()
+     * @see #isButtonSelected(ImageButton)
+     */
     public ImageButton setSelectedButton(ImageButton button)
     {
         ImageButton oldSelection = getSelectedButton();
@@ -90,41 +130,77 @@ public class ButtonViewGroup
         return oldSelection;
     }
     
-    public ImageButton clearSelection()
-    {
-        return setSelectedButton(null);
-    }
-    
+    /**
+     * <p>If the {@link #getSelectedButton() selected} {@link ImageButton button} equals any of the specified values,
+     * the {@link #getSelectedButton() selected} {@link ImageButton button} is cleared.</p>
+     * <ol>
+     *     <li>If the specified {@link ImageButton} {@code array} is {@code null}, a {@link NullPointerException} is thrown.</li>
+     *     <li>If the specified {@link ImageButton} {@code array} is {@code empty}, the {@link #getSelectedButton() selected} {@link ImageButton button} is always cleared.</li>
+     *     <li>
+     *         {@link #clearSelection(ImageButton...) Clearing} the {@link #getSelectedButton() selected} {@link ImageButton button}
+     *         is identical to <i>{@link #setSelectedButton(ImageButton) setSelectedButton(null)}</i>.
+     *     </li>
+     * </ol>
+     *
+     * @param buttons The {@code array} of {@link ImageButton buttons} to be compared for clearing.
+     * @return True if the selection was successfully cleared, false if it was not.
+     * @see #selectedButtonProperty()
+     * @see #getSelectedButton()
+     * @see #setSelectedButton(ImageButton)
+     */
     public boolean clearSelection(ImageButton... buttons)
     {
-        if (TB.general().equalsAny(getSelectedButton(), (Object[]) buttons))
-        {
+        if (buttons == null)
+            throw new NullPointerException("Button array cannot be null.");
+        
+        if (buttons.length == 0)
+            setSelectedButton(null);
+        
+        if (TB.general().equalsAny(getSelectedButton(), (Object[]) buttons)) {
             setSelectedButton(null);
             return true;
-        }
-        return false;
+        } else
+            return false;
     }
     
+    /**
+     * <p>{@link #setSelectedButton(ImageButton) Selects} the {@code first} {@link ImageButton button} in this {@link ButtonViewGroup}, then returns the previous {@link #getSelectedButton() selection.}</p>
+     * <ol>
+     *     <li>If there are no {@link ImageButton buttons} in this {@link ButtonViewGroup}, return {@code null}.</li>
+     * </ol>
+     *
+     * @return The previously selected {@link ImageButton button}, or {@code null} if there are no {@link ImageButton buttons} in this {@link ButtonViewGroup}.
+     * @see #selectLast()
+     * @see #selectedButtonProperty()
+     * @see #getSelectedButton()
+     * @see #setSelectedButton(ImageButton)
+     */
     public ImageButton selectFirst()
     {
-        try
-        {
-            return setSelectedButton(buttonViews().get(0));
-        }
-        catch (IndexOutOfBoundsException e)
-        {
+        try {
+            return setSelectedButton(buttons().get(0));
+        } catch (IndexOutOfBoundsException e) {
             return null;
         }
     }
     
+    /**
+     * <p>{@link #setSelectedButton(ImageButton) Selects} the {@code last} {@link ImageButton button} in this {@link ButtonViewGroup}, then returns the previous {@link #getSelectedButton() selection.}</p>
+     * <ol>
+     *     <li>If there are no {@link ImageButton buttons} in this {@link ButtonViewGroup}, return {@code null}.</li>
+     * </ol>
+     *
+     * @return The previously selected {@link ImageButton button}, or {@code null} if there are no {@link ImageButton buttons} in this {@link ButtonViewGroup}.
+     * @see #selectFirst()
+     * @see #selectedButtonProperty()
+     * @see #getSelectedButton()
+     * @see #setSelectedButton(ImageButton)
+     */
     public ImageButton selectLast()
     {
-        try
-        {
-            return setSelectedButton(buttonViews().get(buttonViews().size() - 1));
-        }
-        catch (IndexOutOfBoundsException e)
-        {
+        try {
+            return setSelectedButton(buttons().get(buttons().size() - 1));
+        } catch (IndexOutOfBoundsException e) {
             return null;
         }
     }
