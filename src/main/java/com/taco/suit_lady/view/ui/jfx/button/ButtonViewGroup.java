@@ -37,8 +37,8 @@ public class ButtonViewGroup
             this.lock.lock();
             try {
                 while (change.next()) {
-                    change.getAddedSubList().forEach(button -> button.setButtonGroup(this));
-                    change.getRemoved().forEach(button -> button.setButtonGroup(null));
+                    change.getAddedSubList().forEach(button -> onButtonAdded(button));
+                    change.getRemoved().forEach(button -> onButtonRemoved(button));
                 }
             } finally {
                 this.lock.unlock();
@@ -51,6 +51,16 @@ public class ButtonViewGroup
             if (newButton != null)
                 newButton.setSelected(true);
         });
+    }
+    
+    private void onButtonAdded(ImageButton button)
+    {
+        button.setButtonGroup(this);
+    }
+    
+    private void onButtonRemoved(ImageButton button)
+    {
+        button.setButtonGroup(null);
     }
     
     //<editor-fold desc="--- PROPERTIES ---">

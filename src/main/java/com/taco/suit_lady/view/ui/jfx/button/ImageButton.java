@@ -133,6 +133,7 @@ public class ImageButton
         this.buttonGroupProperty.addListener((observable, oldButtonGroup, newButtonGroup) -> {
             if (!Objects.equals(oldButtonGroup, newButtonGroup)) {
                 selectedProperty.unbind();
+                // TODO - Issue here where old listeners are not removed if the button group changes multiple times.
                 if (oldButtonGroup != null)
                     oldButtonGroup.buttons().remove(this);
                 if (newButtonGroup != null) {
@@ -212,7 +213,7 @@ public class ImageButton
     
     //</editor-fold>
     
-    //<editor-fold desc="Properties">
+    //<editor-fold desc="--- PROPERTIES ---">
     
     public ImagePane getImagePane()
     {
@@ -226,7 +227,8 @@ public class ImageButton
         return nameProperty;
     }
     
-    @Override public String getName()
+    @Override
+    public String getName()
     {
         return nameProperty.get();
     }

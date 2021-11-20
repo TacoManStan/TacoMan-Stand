@@ -26,15 +26,10 @@ public class UINode
     private final ReadOnlyStringWrapper buttonIDProperty;
     private final ReadOnlyStringWrapper nameProperty;
     
-    private final ObjectProperty<UINodeGroup> group; //e.g., owner
-    
     private final Displayer<UIPage<?>> displayer;
     private final UIPageHandler pageHandler;
     
-    private final ReadOnlyObjectWrapper<ImageButton> imageButtonProperty;
-    
-    private final ObjectProperty<Runnable> onGroupChangeProperty; // Triggered at the start of the group change
-    private final ObjectProperty<Runnable> onGroupChangedProperty; // Triggered at the end of the group change
+    private final ReadOnlyObjectWrapper<ImageButton> buttonViewProperty;
     
     public UINode(FxWeaver weaver, ConfigurableApplicationContext ctx, String name, String buttonID, Function<UINode, UIPage<?>> coverPageFunction, Runnable onAction)
     {
@@ -52,12 +47,7 @@ public class UINode
         
         this.displayer = new Displayer<>(this.lock, contentPane);
         
-        this.group = new ReadOnlyObjectWrapper<>();
-        
-        this.imageButtonProperty = new ReadOnlyObjectWrapper<>();
-        
-        this.onGroupChangeProperty = new SimpleObjectProperty<>();
-        this.onGroupChangedProperty = new SimpleObjectProperty<>();
+        this.buttonViewProperty = new ReadOnlyObjectWrapper<>();
         
         this.pageHandler = new UIPageHandler(this.lock, this, coverPageFunction != null ? coverPageFunction.apply(this) : new DummyPage(this));
         
@@ -65,16 +55,8 @@ public class UINode
         
         displayer.bind(pageHandler.visiblePageBinding());
         
-        group.addListener((observable, oldValue, newValue) ->
-                          {
-                              groupChangeResponse(true); // TODO - This doesn't work quite correctly.
-                              if (getButtonID() == null)
-                                  buttonIDProperty.set("missingno");
-                              groupChangeResponse(false);
-                          });
-        
-        imageButtonProperty.addListener((observable, oldValue, newValue) -> newValue.initialize());
-        imageButtonProperty.set(new ImageButton(null, buttonIDProperty, () -> onAction(onAction), true, true, ImageButton.SMALL));
+        buttonViewProperty.addListener((observable, oldValue, newValue) -> newValue.initialize());
+        buttonViewProperty.set(new ImageButton(null, buttonIDProperty, () -> onAction(onAction), true, true, ImageButton.SMALL));
     }
     
     
@@ -84,6 +66,7 @@ public class UINode
      * <p>Returns the {@link ReadOnlyStringProperty property} defining the {@link ImageButton#nameProperty() file name} of the {@link ImageButton button} for this {@link UINode}.</p>
      *
      * @return The {@link ReadOnlyStringProperty property} defining the {@link ImageButton#nameProperty() file name} of the {@link ImageButton button} for this {@link UINode}.
+     * @see #getButtonID()
      */
     public ReadOnlyStringProperty buttonIDProperty()
     {
@@ -95,6 +78,7 @@ public class UINode
      * <p>See <i>{@link #buttonIDProperty()}</i> for details.</p>
      *
      * @return The {@link ImageButton#nameProperty() file name} of the {@link ImageButton button} for this {@link UINode}.
+     * @see #buttonIDProperty()
      */
     public String getButtonID()
     {
@@ -106,11 +90,12 @@ public class UINode
     /**
      * <p>Returns the {@link ReadOnlyStringProperty property} containing the {@link #getName() name} of this {@link UINode}.</p>
      * <ol>
-     *     <li>The {@link #getName() name} is only used for UI purposes, such as being displayed in a tooltip upon a user hovering over the {@link #imageButtonProperty() button} for this {@link UINode}.</li>
+     *     <li>The {@link #getName() name} is only used for UI purposes, such as being displayed in a tooltip upon a user hovering over the {@link #buttonViewProperty() button} for this {@link UINode}.</li>
      *     <li>To change the actual {@link ImageButton button} for this {@link UINode}, see <i>{@link #buttonIDProperty()}</i>.</li>
      * </ol>
      *
      * @return The {@link ReadOnlyStringProperty property} containing the {@link #getName() name} of this {@link UINode}.
+     * @see #getName()
      */
     public ReadOnlyStringProperty nameProperty()
     {
@@ -122,6 +107,7 @@ public class UINode
      * <p>See <i>{@link #nameProperty()}</i> for details.</p>
      *
      * @return The {@link #nameProperty() name} of this {@link UINode}.
+     * @see #nameProperty()
      */
     public String getName()
     {
@@ -142,6 +128,11 @@ public class UINode
     
     //
     
+    /**
+     * <p>Returns the {@link UIPageHandler page handler} wrapping {@link UIPage page} functionality for this {@link UINode}.</p>
+     *
+     * @return The {@link UIPageHandler page handler} wrapping {@link UIPage page} functionality for this {@link UINode}.
+     */
     public UIPageHandler getPageHandler()
     {
         return pageHandler;
@@ -149,67 +140,26 @@ public class UINode
     
     //
     
+    /**
+     * <p>Returns the {@link ReadOnlyObjectProperty property} containing the {@link ImageButton} for selecting this {@link UINode}.</p>
+     *
+     * @return The {@link ReadOnlyObjectProperty property} containing the {@link ImageButton} for selecting this {@link UINode}.
+     */
     public ReadOnlyObjectProperty<ImageButton> buttonViewProperty()
     {
-        return imageButtonProperty.getReadOnlyProperty();
+        return buttonViewProperty.getReadOnlyProperty();
     }
     
+    /**
+     * <p>Returns the {@link ImageButton} for selecting this {@link UINode}.</p>
+     *
+     * @return The {@link ImageButton} for selecting this {@link UINode}.
+     */
+    @Override
     public ImageButton getButtonView()
     {
-        return imageButtonProperty.get();
+        return buttonViewProperty().get();
     }
-    
-    //
-    
-    public ReadOnlyObjectProperty<ImageButton> imageButtonProperty()
-    {
-        return imageButtonProperty.getReadOnlyProperty();
-    }
-    
-    public ImageButton getImageButton()
-    {
-        return imageButtonProperty().get();
-    }
-    
-    //<editor-fold desc="--- EVENT RESPONDERS ---">
-    
-    //
-    
-    public ObjectProperty<Runnable> onGroupChangeProperty()
-    {
-        return onGroupChangeProperty;
-    }
-    
-    public Runnable getOnGroupChangeResponder()
-    {
-        return onGroupChangeProperty.get();
-    }
-    
-    public void setOnGroupChangeResponder(Runnable responder)
-    {
-        onGroupChangeProperty.set(responder);
-    }
-    
-    //
-    
-    public ObjectProperty<Runnable> onGroupChangedProperty()
-    {
-        return onGroupChangedProperty;
-    }
-    
-    public Runnable getOnGroupChangedResponder()
-    {
-        return onGroupChangedProperty.get();
-    }
-    
-    public void setOnGroupChangedResponder(Runnable responder)
-    {
-        onGroupChangedProperty.set(responder);
-    }
-    
-    //
-    
-    //</editor-fold>
     
     //</editor-fold>
     
@@ -241,13 +191,6 @@ public class UINode
     {
         if (onAction != null)
             onAction.run();
-    }
-    
-    private void groupChangeResponse(boolean pre)
-    {
-        Runnable responder = pre ? getOnGroupChangeResponder() : getOnGroupChangedResponder();
-        if (responder != null)
-            responder.run();
     }
     
     //</editor-fold>
