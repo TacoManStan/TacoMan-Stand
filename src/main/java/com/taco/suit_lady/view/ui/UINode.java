@@ -1,13 +1,19 @@
 package com.taco.suit_lady.view.ui;
 
+import com.taco.suit_lady.util.ResourceTools;
 import com.taco.suit_lady.util.Springable;
 import com.taco.suit_lady.view.ui.jfx.button.ButtonViewable;
 import com.taco.suit_lady.view.ui.jfx.button.ImageButton;
 import com.taco.suit_lady.view.ui.ui_internal.pages.DummyPage;
-import javafx.beans.property.*;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.ReadOnlyStringProperty;
+import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import net.rgielen.fxweaver.core.FxWeaver;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.concurrent.locks.ReentrantLock;
@@ -36,6 +42,37 @@ public class UINode
         this(weaver, ctx, name, buttonID, coverPageFunction, onAction, null);
     }
     
+    /**
+     * <p><b>Fully parameterized constructor for {@link UINode} objects.</b></p>
+     * <br>
+     *
+     * @param weaver            The {@link FxWeaver} instance to be used for linking {@link UINode} {@code JavaFX} attributes to {@code Spring}.
+     *                          <ul>
+     *                              <li>See <i>{@link Springable#weaver()}</i></li>
+     *                          </ul>
+     * @param ctx               The {@link ApplicationContext} that allows easy access to {@code Spring-related} functionality for this {@link UINode}.
+     *                          <ul>
+     *                              <li>See <i>{@link Springable#ctx()}</i></li>
+     *                          </ul>
+     * @param name              The {@link #getName() name} to be assigned to this {@link UINode}.
+     *                          <ul>
+     *                              <li>See <i>{@link #nameProperty()}</i></li>
+     *                          </ul>
+     * @param buttonID          The {@link #getButtonID() ID} mapped to the {@link ResourceTools#getImage(String, String, String) cached} {@link Image image} to be used as the {@link #buttonViewProperty() button} for this {@link UINode}.
+     *                          <p>
+     * @param coverPageFunction The {@link Function} that will retrieve the {@link UIPage} to be used as the {@link UIPageHandler#coverPageProperty() cover page} of this {@link UINode}.
+     *                          <ul>
+     *                              <li>If the specified {@link Function} is {@code null}, a {@link DummyPage} will be used as the {@link UIPageHandler#coverPageProperty() cover page} instead.</li>
+     *                          </ul>
+     * @param onAction          A {@link Runnable} that will be {@link Runnable#run() executed} when the {@link #buttonViewProperty() button} for this {@link UINode} is pressed.
+     *                          <ul>
+     *                              <li>See <i>{@link ImageButton#initialize()}</i> for exact implementation.</li>
+     *                          </ul>
+     * @param contentPane       The {@link StackPane} in which the contents ({@link UIPage pages}) of this {@link UINode} are displayed.
+     *                          <ul>
+     *                              <li>Accessed via <i>{@link #getContent() getContent()}<b>.</b>{@link Displayer#getDisplayContainer() getDisplayContainer()}</i></li>
+     *                          </ul>
+     */
     public UINode(FxWeaver weaver, ConfigurableApplicationContext ctx, String name, String buttonID, Function<UINode, UIPage<?>> coverPageFunction, Runnable onAction, StackPane contentPane)
     {
         this.weaver = weaver;
@@ -58,7 +95,6 @@ public class UINode
         buttonViewProperty.addListener((observable, oldValue, newValue) -> newValue.initialize());
         buttonViewProperty.set(new ImageButton(null, buttonIDProperty, () -> onAction(onAction), true, true, ImageButton.SMALL));
     }
-    
     
     //<editor-fold desc="--- PROPERTIES ---">
     
