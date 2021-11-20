@@ -48,9 +48,9 @@ public class TaskTools
     //<editor-fold desc="Synchronization">
     
     /**
-     * Synchronizes the execution of the specified {@link Runnable}.
-     * <p>
-     * Example Usage:
+     * <p>Synchronizes the execution of the specified {@link Runnable}.</p>
+     * <hr>
+     * <p><b>Example Usage</b></p>
      * <blockquote><pre>
      * <code>String s = ThreadTools.run(lock, (){@code ->} sampleObject.sampleAction());</code></pre></blockquote>
      *
@@ -76,9 +76,9 @@ public class TaskTools
     }
     
     /**
-     * Synchronizes the execution of the specified {@link Runnable}.
-     * <p>
-     * Example Usage:
+     * <p>Synchronizes the execution of the specified {@link Runnable}.</p>
+     * <br>
+     * <p><b>Example Usage</b></p>
      * <blockquote><pre>
      * <code>String s = ThreadTools.run(lock, (){@code ->} sampleObject.sampleAction(), true);</code></pre></blockquote>
      *
@@ -112,9 +112,9 @@ public class TaskTools
     }
     
     /**
-     * Synchronizes the execution of the specified {@link Supplier}.
-     * <p>
-     * Example Usage:
+     * <p>Synchronizes the execution of the specified {@link Supplier}.</p>
+     * <hr>
+     * <p><b>Example Usage</b></p>
      * <blockquote><pre>
      * <code>String s = ThreadTools.run(lock, (){@code ->} sampleObject.calculateName(), true);</code></pre></blockquote>
      *
@@ -180,15 +180,14 @@ public class TaskTools
      * Synchronizes the execution of the specified {@link Function runnableFunction} using the value returned by the specified {@link Supplier functionInputSupplier} as the function's input.
      * <p>
      *
-     * <b>Note that...</b>
+     * <b>Note That...</b>
      * <ol>
      * <li>If the {@code onFinally} array is not empty, any thrown {@code Exception} is expected to be handled by the specified {@code onFinally} array.</li>
      * <li>If the {@code onFinally} array is empty, any {@code Exception} thrown during the execution of the specified {@code Supplier} will be internally caught and re-thrown.</li>
-     * <li></li>
      * </ol>
      * <p>
      *
-     * <b>Example Usage:</b>
+     * <b>Example Usage</b>
      * <blockquote><pre>
      * <code>public static double distanceToCursor(Point2D point) {
      *      {@link ExceptionTools#nullCheck(Object, String) ExceptionTools.check}(point, "Point cannot be null.");
@@ -283,11 +282,10 @@ public class TaskTools
     }
     
     /**
-     * Locks the specified {@link ReentrantLock}.
-     * <p>
-     * If this method returns true, {@link Lock#unlock()} <i>must</i> be called afterwards.
-     * <p>
-     * Example Usage:
+     * <p>Locks the specified {@link ReentrantLock}.</p>
+     * <p>If this method returns true, {@link Lock#unlock()} <i>must</i> be called afterwards.</p>
+     * <hr>
+     * <p><b>Example Usage</b></p>
      * <blockquote><pre>
      * <code>//If lock is null and allowNull is false, this will throw a {@link NullPointerException}.
      * if (ThreadTools.lock(lock, allowNull)) {
