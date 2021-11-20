@@ -299,7 +299,8 @@ public class Displayer<T extends Displayable>
      *             <li>The binding {@link FXTools.BindType type} is set to {@link FXTools.BindType#BOTH BOTH}.</li>
      *         </ol>
      *     </li>
-     *     <li>If either {@link Displayable} parameter is non-null but contains null {@link Displayable#getContent() contents}, a {@link NullPointerException} is thrown.</li>
+     *     <li>If the {@link Displayable oldDisplayable} parameter is non-null but contains null {@link Displayable#getContent() contents}, a {@link NullPointerException} is thrown.</li>
+     *     <li>If the {@link Displayable newDisplayable} parameter is non-null but contains null {@link Displayable#getContent() contents}, no special actions are taken and this method returns silently.</li>
      * </ol>
      * <p><b>Implementation & Usage Details</b></p>
      * <ol>
@@ -333,8 +334,7 @@ public class Displayer<T extends Displayable>
                 if (newContent != null) {
                     FXTools.get().bindToParent(newContent, displayContainer, FXTools.BindOrientation.BOTH, FXTools.BindType.BOTH);
                     displayContainer.getChildren().add(newContent);
-                } else
-                    throw new NullPointerException("Displayable contents (new) cannot be null.");
+                }
             }
         } finally {
             lock.unlock();
