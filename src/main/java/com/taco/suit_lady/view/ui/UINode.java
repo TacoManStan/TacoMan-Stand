@@ -142,23 +142,6 @@ public class UINode
     
     //
     
-    public ObjectProperty<UINodeGroup> groupProperty()
-    {
-        return group;
-    }
-    
-    public UINodeGroup getGroup()
-    {
-        return group.get();
-    }
-    
-    public void setGroup(UINodeGroup group)
-    {
-        this.group.set(group);
-    }
-    
-    //
-    
     public UIPageHandler getPageHandler()
     {
         return pageHandler;

@@ -58,7 +58,7 @@ public class SidebarNodeGroup extends UINodeGroup {
 				ImageButton imageButton = node.getButtonView();
 				if (imageButton != null)
 					buttonBox.getChildren().add(imageButton.getImagePane());
-				node.setGroup(this);
+//				node.setGroup(this);
 				buttonBox.setSpacing(1.0);
 				buttonBox.setAlignment(Pos.TOP_LEFT);
 			}
