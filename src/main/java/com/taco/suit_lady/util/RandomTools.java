@@ -193,9 +193,9 @@ public class RandomTools
      *
      * @param min  The minimum value (inclusive).
      * @param max  The maximum value (inclusive).
-     * @param mean The mean (>= min and <= max).
+     * @param mean The mean ({@code >=} min and {@code <=} max).
      * @param sd   The standard deviation.
-     * @return The random integer (>= min and <= max).
+     * @return The random integer ({@code >=} min and {@code <=} max).
      */
     public double nextGaussian(final double min, final double max, final double mean, final double sd)
     {
@@ -224,7 +224,7 @@ public class RandomTools
      * @param min The minimum value (inclusive).
      * @param max The maximum value (inclusive).
      * @param sd  The standard deviation.
-     * @return The random integer (>= min and <= max).
+     * @return The random integer ({@code >=} min and {@code <=} max).
      */
     public double nextGaussian(final double min, final double max, final double sd)
     {
@@ -237,9 +237,9 @@ public class RandomTools
      * Generates a pseudo-random, normally distributed {@code double} about the
      * specified {@code mean} with the specified standard deviation, {@code sd}.
      *
-     * @param mean The mean (>= min and <= max).
+     * @param mean The mean ({@code <=} min and {@code <=} max).
      * @param sd   The standard deviation.
-     * @return The random integer (>= min and <= max).
+     * @return The random integer ({@code >=} min and {@code <=} max).
      */
     public double nextGaussian(final double mean, final double sd)
     {

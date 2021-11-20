@@ -299,8 +299,6 @@ public class ObservableLinkedList<E> extends ObservableListBase<E>
 
 	/**
 	 * {@inheritDoc}
-	 *
-	 * @return {@inheritDoc}
 	 */
 	@Override public void push(E e) {
 		addFirst(e);

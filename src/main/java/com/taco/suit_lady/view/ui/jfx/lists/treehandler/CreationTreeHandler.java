@@ -6,7 +6,6 @@ import javafx.scene.control.TreeView;
  * Used to easily put elements into a {@link TreeView}, or to store elements for easy retrieval (or both).
  *
  * @param <T> The type of elements in the {@link CreationTreeHandler}.
- * @param <V> The type of {@link TreeItemValidator} for this {@link CreationTreeHandler}.
  */
 public class CreationTreeHandler<T> {
 

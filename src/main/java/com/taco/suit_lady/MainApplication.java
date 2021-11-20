@@ -23,8 +23,7 @@ public class MainApplication
     }
     
     /**
-     * <p><b>Creates a <i>{@link Bean Singleton Bean}</i> of type <i>{@link FxWeaver}</i> using the specified <i>{@link ConfigurableApplicationContext ApplicationContext}</i>
-     * .<b/></p>
+     * <p><b>Creates a <i>{@link Bean Singleton Bean}</i> of type <i>{@link FxWeaver}</i> using the specified <i>{@link ConfigurableApplicationContext ApplicationContext}</i></b></p>
      * <br>
      * <hr>
      * <ul>

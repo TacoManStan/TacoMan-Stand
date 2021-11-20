@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
  * <hr>
  * <p><i><b>Note:</b> There should only ever be a single instance of {@link FxWeaverInitializer} per JVM instance.</i></p>
  * <p><i>The {@link FxWeaverInitializer} instance is loaded and managed by the {@code SpringFramework} and should not be created manually using the {@code new} keyword.</i></p>
- * <p><i><i><b>Note:</b> {@link Bean Spring Bean} definition instructions are located in {@link MainApplication#fxweaver(ConfigurableApplicationContext) MainApplication}.</i></p>
+ * <p><i><b>Note:</b> {@link Bean Spring Bean} definition instructions are located in {@link MainApplication#fxweaver(ConfigurableApplicationContext) MainApplication}.</i></p>
  * <hr>
  * <br>
  *

@@ -139,10 +139,10 @@ public class BindingTools
      * <blockquote><pre>
      * <code>public static class ExampleClass1 {
      *
-     *      private final {@link ObjectProperty}{@code <ExampleClass2>} selectedExampleProperty;
+     *      private final {@link ObjectProperty}{@literal ExampleClass2} selectedExampleProperty;
      *
      *      public ExampleClass1(ExampleClass2 selectedExampleClass2) {
-     *          this.selectedExampleProperty = new {@link SimpleObjectProperty}{@code <>}(selectedExampleClass2);}
+     *          this.selectedExampleProperty = new {@link SimpleObjectProperty}{@literal <>}selectedExampleClass2);}
      *      }
      *
      *      ... Assumed to have standard Property methods ...
@@ -165,8 +165,8 @@ public class BindingTools
      * <code>ExampleClass2 example1 = new ExampleClass2("Example 1");
      * ExampleClass2 example2 = new ExampleClass2("Example 2");
      * ExampleClass1 exampleClass1 = new ExampleClass1(example1);
-     * {@link Binding}{@code <String>} recursiveNameBinding = Properties.recursiveBinding(ExampleClass2::nameProperty, exampleClass1.selectedExampleProperty());
-     * recursiveNameBinding.addListener((observable, oldValue, newValue){@code ->} System.out.println("Changing Value - [" + oldValue + "{@code ->} " + newValue + "]"));
+     * {@link Binding}{@literal String} recursiveNameBinding = Properties.recursiveBinding(ExampleClass2::nameProperty, exampleClass1.selectedExampleProperty());
+     * recursiveNameBinding.addListener((observable, oldValue, newValue)-> System.out.println("Changing Value - [" + oldValue + "-> " + newValue + "]"));
      * example1.setName("New Name (Example 1)");
      * exampleClass1.setSelectedExample(example2);
      * example1.setName("Another New Name (Example 1)");

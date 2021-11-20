@@ -368,11 +368,11 @@ public class FXTools
     /**
      * Adds the specified {@link Object} to the specified {@link ArrayList} of {@link Node Nodes}.
      * <p>
-     * This method should only be called by {@link #combineToFlow(Object...);
+     * This method should only be called by {@link #combineToFlow(Object...)}
      *
      * @param obj      The {@link Object} being added.
      * @param children The {@link ArrayList} of {@link Node Nodes} that is being added to.
-     * @see ##combineToFlow(Object...)
+     * @see #combineToFlow(Object...)
      */
     private void addFlowObj(Object obj, ArrayList<Node> children)
     {

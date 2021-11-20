@@ -285,13 +285,13 @@ public class TaskTools
     /**
      * Locks the specified {@link ReentrantLock}.
      * <p>
-     * If this method returns true, {@link Lock#unlock() <i>must</i> be called afterwards.
+     * If this method returns true, {@link Lock#unlock()} <i>must</i> be called afterwards.
      * <p>
      * Example Usage:
      * <blockquote><pre>
      * <code>//If lock is null and allowNull is false, this will throw a {@link NullPointerException}.
      * if (ThreadTools.lock(lock, allowNull)) {
-     *      //Use a try-finally block to ensure that the {@link ReentrantLock} is always {@link #unlock(Lock) unlocked}.
+     *      //Use a try-finally block to ensure that the {@link ReentrantLock} is always unlocked}.
      *      try {
      *          //Synchronized code
      *      } finally {

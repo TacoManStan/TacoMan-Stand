@@ -10,7 +10,6 @@ public interface Validatable<T>
 	 * <br><br>
 	 * This method is oftentimes executed inside of a loop.
 	 * It is therefore recommended to avoid the following when using this method (when possible):
-	 * <code>
 	 * <ol>
 	 * <li>Lengthy operations</li>
 	 * <li>CPU intensive operations</li>

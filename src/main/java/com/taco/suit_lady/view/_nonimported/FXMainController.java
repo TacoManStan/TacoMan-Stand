@@ -118,15 +118,14 @@ public class FXMainController
     //<editor-fold desc="— BaW Initialization —">
     
     /**
-     * <p><b>Contains BaW (Bell & Whistle) initialization code.</b></p>
+     * <p><b>Contains BaW (Bell and Whistle) initialization code.</b></p>
      * <br>
      * <hr>
-     * <p><i><b>Note:</b> This method should <i>NOT</i> contain...</i>
+     * <p><i><b>Note:</b> This method should NOT contain...</i></p>
      * <ul>
      *     <li><i>test initialization implementation. Instead, see {@link #initialize_BaWT()}.</i></li>
      *     <li><i>content that is unlikely to be used upon actual usage of this application.</i></li>
      * </ul>
-     * </p>
      * <hr>
      * <br>
      */
@@ -138,7 +137,7 @@ public class FXMainController
     }
     
     /**
-     * <p><b>Contains BaWT (Bell & Whistle Test) initialization code.</b></p>
+     * <p><b>Contains BaWT (Bell and Whistle Test) initialization code.</b></p>
      * <br><hr>
      * <p><i><b>Note:</b> Production-level runtime functionality should *never* depend on BaWT code.
      * <br>In other words, production-level functionality should be unaffected should all BaWT implementation be removed.</i></p>

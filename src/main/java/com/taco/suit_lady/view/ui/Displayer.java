@@ -302,7 +302,7 @@ public class Displayer<T extends Displayable>
      *     <li>If the {@link Displayable oldDisplayable} parameter is non-null but contains null {@link Displayable#getContent() contents}, a {@link NullPointerException} is thrown.</li>
      *     <li>If the {@link Displayable newDisplayable} parameter is non-null but contains null {@link Displayable#getContent() contents}, no special actions are taken and this method returns silently.</li>
      * </ol>
-     * <p><b>Implementation & Usage Details</b></p>
+     * <p><b>Implementation and Usage Details</b></p>
      * <ol>
      *     <li>This method is called {@link #Displayer(ReentrantLock, StackPane) internally} via a {@link ObjectPropertyBase#addListener(ChangeListener) ChangeListener}.</li>
      *     <li>This method should <i>never</i> be called manually or otherwise outside of the {@link ObjectPropertyBase#addListener(ChangeListener) ChangeListener}.</li>

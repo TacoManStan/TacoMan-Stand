@@ -23,7 +23,6 @@ public final class StartupUtil
              * <p><b>Returns the names of all {@code XML Configuration Files} to be injected by the {@link ConfigurableApplicationContext Root Application Context}.</b></p>
              * <br>
              * <hr>
-             * <br>
              * <p><b>Details</b></p>
              * <ul>
              *     <li>
@@ -42,7 +41,6 @@ public final class StartupUtil
              *     </li>
              * </ul>
              * <hr>
-             * <br>
              * <p><b>XML Configuration Integration Options</b></p>
              * <ul>
              *     <li>Pass XML {@link ClassPathXmlApplicationContext#setConfigLocations(String...) File Names} to an {@link ClassPathXmlApplicationContext XML Context}.</li>
@@ -55,7 +53,7 @@ public final class StartupUtil
              *             <li>{@link XmlReaderContext} does *NOT* implement {@link ApplicationContext}.</li>
              *             <li>i.e., {@link XmlReaderContext} can *NOT* be used as an {@link ApplicationContext}.</li>
              *             <li>{@link XmlReaderContext Reader Context} *DOES* offer additional {@code functionality} and {@code flexibility} to {@link XmlBeanDefinitionReader XML Reader}.</li>
-             *             <li>{@link XmlReaderContext}, in turn, *DOES* grant improved control over parsing {@code Raw XML} into an {@link ApplicationContext}.</li></li>
+             *             <li>{@link XmlReaderContext}, in turn, *DOES* grant improved control over parsing {@code Raw XML} into an {@link ApplicationContext}.</li>
              *         </ul>
              *     </li>
              * </ul>
