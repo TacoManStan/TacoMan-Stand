@@ -256,7 +256,7 @@ public class AppController
                 "Clients", "clients",
                 uiNode -> TB.resources().get(
                         "pages",
-                        uiNode.getID(),
+                        uiNode.getButtonID(),
                         () -> new DummyInstancesPage(uiNode)
                 ), null
         ));
@@ -264,7 +264,7 @@ public class AppController
                 AppController.this.weaver, AppController.this.ctx,
                 "Development", "popout_sidebar",
                 uiNode -> TB.resources().get(
-                        "pages", uiNode.getID(),
+                        "pages", uiNode.getButtonID(),
                         () -> new ExamplePage(uiNode, "green")
                 ), null
         ));
@@ -275,7 +275,7 @@ public class AppController
                 AppController.this.weaver, AppController.this.ctx,
                 "Entity Debug", "entity_debug",
                 uiNode -> TB.resources().get(
-                        "pages", uiNode.getID(),
+                        "pages", uiNode.getButtonID(),
                         () -> new EntityDebugPage(uiNode)
                 ), null
         ));
@@ -286,7 +286,7 @@ public class AppController
                 AppController.this.weaver, AppController.this.ctx,
                 "Repository", "repository",
                 uiNode -> TB.resources().get(
-                        "pages", uiNode.getID(),
+                        "pages", uiNode.getButtonID(),
                         () -> new ExamplePage(uiNode, "green")
                 ), null
         ));
@@ -294,7 +294,7 @@ public class AppController
                 AppController.this.weaver, AppController.this.ctx,
                 "Social", "social",
                 uiNode -> TB.resources().get(
-                        "pages", uiNode.getID(),
+                        "pages", uiNode.getButtonID(),
                         () -> new ExamplePage(uiNode, "blue")
                 ), null
         ));

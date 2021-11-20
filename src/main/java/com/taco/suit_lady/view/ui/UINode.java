@@ -23,34 +23,31 @@ public class UINode
     
     private final ReentrantLock lock;
     
-    private final ReadOnlyStringWrapper idProperty;
+    private final ReadOnlyStringWrapper buttonIDProperty;
     private final ReadOnlyStringWrapper nameProperty;
     
-    private final ReadOnlyObjectWrapper<UINodeGroup> group; //e.g., owner
+    private final ObjectProperty<UINodeGroup> group; //e.g., owner
     
     private final Displayer<UIPage<?>> displayer;
     private final UIPageHandler pageHandler;
     
     private final ReadOnlyObjectWrapper<ImageButton> imageButtonProperty;
-    private final ReadOnlyBooleanWrapper expandableProperty;
     
     private final ObjectProperty<Runnable> onGroupChangeProperty; // Triggered at the start of the group change
     private final ObjectProperty<Runnable> onGroupChangedProperty; // Triggered at the end of the group change
     
-    public UINode(FxWeaver weaver, ConfigurableApplicationContext ctx, String name, String id, Function<UINode, UIPage<?>> coverPageFunction, Runnable onAction)
+    public UINode(FxWeaver weaver, ConfigurableApplicationContext ctx, String name, String buttonID, Function<UINode, UIPage<?>> coverPageFunction, Runnable onAction)
     {
-        this(weaver, ctx, name, id, coverPageFunction, onAction, null);
+        this(weaver, ctx, name, buttonID, coverPageFunction, onAction, null);
     }
     
-    public UINode(FxWeaver weaver, ConfigurableApplicationContext ctx, String name, String id, Function<UINode, UIPage<?>> coverPageFunction, Runnable onAction, StackPane contentPane)
+    public UINode(FxWeaver weaver, ConfigurableApplicationContext ctx, String name, String buttonID, Function<UINode, UIPage<?>> coverPageFunction, Runnable onAction, StackPane contentPane)
     {
         this.weaver = weaver;
         this.ctx = ctx;
         
-        id = id == null ? "missingno" : id;
-        
         this.lock = new ReentrantLock();
-        this.idProperty = new ReadOnlyStringWrapper(id);
+        this.buttonIDProperty = new ReadOnlyStringWrapper(buttonID != null ? buttonID : "missingno");
         this.nameProperty = new ReadOnlyStringWrapper(name);
         
         this.displayer = new Displayer<>(this.lock, contentPane);
@@ -58,7 +55,6 @@ public class UINode
         this.group = new ReadOnlyObjectWrapper<>();
         
         this.imageButtonProperty = new ReadOnlyObjectWrapper<>();
-        this.expandableProperty = new ReadOnlyBooleanWrapper();
         
         this.onGroupChangeProperty = new SimpleObjectProperty<>();
         this.onGroupChangedProperty = new SimpleObjectProperty<>();
@@ -72,46 +68,61 @@ public class UINode
         group.addListener((observable, oldValue, newValue) ->
                           {
                               groupChangeResponse(true); // TODO - This doesn't work quite correctly.
-                              if (getID() == null)
-                                  idProperty.set("missingno");
+                              if (getButtonID() == null)
+                                  buttonIDProperty.set("missingno");
                               groupChangeResponse(false);
                           });
         
         imageButtonProperty.addListener((observable, oldValue, newValue) -> newValue.initialize());
-        imageButtonProperty.set(new ImageButton(null, idProperty, () -> onAction(onAction), true, true, ImageButton.SMALL));
+        imageButtonProperty.set(new ImageButton(null, buttonIDProperty, () -> onAction(onAction), true, true, ImageButton.SMALL));
     }
     
-    @Override
-    public FxWeaver weaver()
+    
+    //<editor-fold desc="--- PROPERTIES ---">
+    
+    /**
+     * <p>Returns the {@link ReadOnlyStringProperty property} defining the {@link ImageButton#nameProperty() file name} of the {@link ImageButton button} for this {@link UINode}.</p>
+     *
+     * @return The {@link ReadOnlyStringProperty property} defining the {@link ImageButton#nameProperty() file name} of the {@link ImageButton button} for this {@link UINode}.
+     */
+    public ReadOnlyStringProperty buttonIDProperty()
     {
-        return this.weaver;
+        return buttonIDProperty.getReadOnlyProperty();
     }
     
-    @Override
-    public ConfigurableApplicationContext ctx()
+    /**
+     * <p>Returns the {@link ImageButton#nameProperty() file name} of the {@link ImageButton button} for this {@link UINode}.</p>
+     * <p>See <i>{@link #buttonIDProperty()}</i> for details.</p>
+     *
+     * @return The {@link ImageButton#nameProperty() file name} of the {@link ImageButton button} for this {@link UINode}.
+     */
+    public String getButtonID()
     {
-        return this.ctx;
-    }
-    
-    //<editor-fold desc="Properties">
-    
-    public ReadOnlyStringProperty idProperty()
-    {
-        return idProperty.getReadOnlyProperty();
-    }
-    
-    public String getID()
-    {
-        return idProperty.get();
+        return buttonIDProperty.get();
     }
     
     //
     
+    /**
+     * <p>Returns the {@link ReadOnlyStringProperty property} containing the {@link #getName() name} of this {@link UINode}.</p>
+     * <ol>
+     *     <li>The {@link #getName() name} is only used for UI purposes, such as being displayed in a tooltip upon a user hovering over the {@link #imageButtonProperty() button} for this {@link UINode}.</li>
+     *     <li>To change the actual {@link ImageButton button} for this {@link UINode}, see <i>{@link #buttonIDProperty()}</i>.</li>
+     * </ol>
+     *
+     * @return The {@link ReadOnlyStringProperty property} containing the {@link #getName() name} of this {@link UINode}.
+     */
     public ReadOnlyStringProperty nameProperty()
     {
         return nameProperty.getReadOnlyProperty();
     }
     
+    /**
+     * <p>Returns the {@link #nameProperty() name} of this {@link UINode}.</p>
+     * <p>See <i>{@link #nameProperty()}</i> for details.</p>
+     *
+     * @return The {@link #nameProperty() name} of this {@link UINode}.
+     */
     public String getName()
     {
         return nameProperty.get();
@@ -119,6 +130,11 @@ public class UINode
     
     //
     
+    /**
+     * <p>Returns the {@link Displayer} responsible for {@link Displayable displaying} currently-visible {@link UIPage pages} attached to this {@link UINode}.</p>
+     *
+     * @return The {@link Displayer} responsible for {@link Displayable displaying} currently-visible {@link UIPage pages} attached to this {@link UINode}.
+     */
     public Displayer<UIPage<?>> getDisplayer()
     {
         return displayer;
@@ -126,9 +142,9 @@ public class UINode
     
     //
     
-    public ReadOnlyObjectProperty<UINodeGroup> groupProperty()
+    public ObjectProperty<UINodeGroup> groupProperty()
     {
-        return group.getReadOnlyProperty();
+        return group;
     }
     
     public UINodeGroup getGroup()
@@ -136,9 +152,9 @@ public class UINode
         return group.get();
     }
     
-    public void setGroup(UINodeGroup nodeGroup)
+    public void setGroup(UINodeGroup group)
     {
-        this.group.set(nodeGroup);
+        this.group.set(group);
     }
     
     //
@@ -162,24 +178,17 @@ public class UINode
     
     //
     
-    public ReadOnlyBooleanProperty expandableProperty()
+    public ReadOnlyObjectProperty<ImageButton> imageButtonProperty()
     {
-        return expandableProperty.getReadOnlyProperty();
+        return imageButtonProperty.getReadOnlyProperty();
     }
     
-    public boolean isExpandable()
+    public ImageButton getImageButton()
     {
-        return expandableProperty.get();
+        return imageButtonProperty().get();
     }
     
-    protected void setExpandable(boolean expandable)
-    {
-        expandableProperty.set(expandable);
-    }
-    
-    //
-    
-    //<editor-fold desc="Event Responders">
+    //<editor-fold desc="--- EVENT RESPONDERS ---">
     
     //
     
@@ -221,7 +230,7 @@ public class UINode
     
     //</editor-fold>
     
-    //<editor-fold desc="Implementation">
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override
     public Pane getContent()
@@ -229,9 +238,21 @@ public class UINode
         return displayer.getDisplayContainer();
     }
     
+    @Override
+    public FxWeaver weaver()
+    {
+        return this.weaver;
+    }
+    
+    @Override
+    public ConfigurableApplicationContext ctx()
+    {
+        return this.ctx;
+    }
+    
     //</editor-fold>
     
-    //<editor-fold desc="Helpers">
+    //<editor-fold desc="--- HELPER METHODS ---">
     
     private void onAction(Runnable onAction)
     {
