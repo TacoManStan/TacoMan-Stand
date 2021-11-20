@@ -59,6 +59,31 @@ public class ImageButton
     
     //
     
+    public ImageButton(String name)
+    {
+        this(null, name, null, false, true, null);
+    }
+    
+    public ImageButton(String name, Point2D size)
+    {
+        this(null, name, null, false, true, size);
+    }
+    
+    public ImageButton(String name, Runnable actionResponder)
+    {
+        this(null, name, actionResponder, false, true, null);
+    }
+    
+    public ImageButton(String name, Runnable actionResponder, Point2D size)
+    {
+        this(null, name, actionResponder, false, true, size);
+    }
+    
+    public ImageButton(String name, Runnable actionResponder, boolean toggleable, boolean isTheme, Point2D size)
+    {
+        this(null, name, actionResponder, toggleable, isTheme, size);
+    }
+    
     public ImageButton(ImagePane imagePane, String name, Runnable actionResponder, boolean toggleable, boolean isTheme, Point2D size)
     {
         this(imagePane, new SimpleStringProperty(name), false, actionResponder, toggleable, isTheme, size);
@@ -73,8 +98,7 @@ public class ImageButton
     {
         this.imagePane = imagePane == null ? new ImagePane() : imagePane;
         
-        if (size != null)
-        {
+        if (size != null) {
             this.imagePane.setPrefSize(size.getX(), size.getY());
             this.imagePane.setMaxSize(size.getX(), size.getY());
         }
@@ -107,13 +131,11 @@ public class ImageButton
         //
         
         this.buttonGroupProperty.addListener((observable, oldButtonGroup, newButtonGroup) -> {
-            if (!Objects.equals(oldButtonGroup, newButtonGroup))
-            {
+            if (!Objects.equals(oldButtonGroup, newButtonGroup)) {
                 selectedProperty.unbind();
                 if (oldButtonGroup != null)
                     oldButtonGroup.buttons().remove(this);
-                if (newButtonGroup != null)
-                {
+                if (newButtonGroup != null) {
                     newButtonGroup.buttons().add(this);
                     selectedProperty.addListener((observable1, oldValue, selected) -> {
                         if (selected)
@@ -133,13 +155,10 @@ public class ImageButton
         if (!this.lockName)
             setName(this.nameProperty.getValue());
         
-        try
-        {
+        try {
             this.hoveredProperty.bind(this.imagePane.hoverProperty());
             this.pressedProperty.bind(this.imagePane.pressedProperty());
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
         
@@ -183,8 +202,7 @@ public class ImageButton
         imagePane.setOnMousePressed(Event::consume);
         imagePane.setOnMouseReleased(event -> {
             if (Objects.equals(event.getSource(), imagePane) && FXTools.get().isMouseOnEventSource(event))
-                if (!isDisabled())
-                {
+                if (!isDisabled()) {
                     toggleSelected();
                     onAction();
                 }
@@ -413,9 +431,8 @@ public class ImageButton
     
     private void onAction()
     {
-        Runnable actionResponder = getActionResponder();
-        if (actionResponder != null)
-        {
+        final Runnable actionResponder = getActionResponder();
+        if (actionResponder != null) {
             TB.executor().execute(new Task<>()
             {
                 @Override
