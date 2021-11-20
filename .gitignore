@@ -18,6 +18,7 @@ target/
 *.iws
 *.iml
 *.ipr
+*.jar
 
 ### NetBeans ###
 /nbproject/private/
@@ -31,6 +32,4 @@ build/
 
 ### VS Code ###
 .vscode/
-*.jar
-out/artifacts/gg/gg.jar
 *.jar
