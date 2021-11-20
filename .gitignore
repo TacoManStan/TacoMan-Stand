@@ -33,3 +33,4 @@ build/
 ### VS Code ###
 .vscode/
 *.jar
+src/jdocs/com/taco/suit_lady/view/ui/ui_internal/contents/ReadOnlySelectedDummyInstanceWrapper.ReadOnlySelectedDummyInstancePropertyImpl.html
