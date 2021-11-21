@@ -281,7 +281,7 @@ public class BindingTools
             updateObservable.addListener((observable, oldValue, newValue) -> update(oldValue, newValue));
             binding = Bindings.createObjectBinding(
                     backingBindingProperty::get,
-                    TB.arrays().concat(new Observable[]{backingBindingProperty}, updateBindings)
+                    ArrayTools.concat(new Observable[]{backingBindingProperty}, updateBindings)
             );
             binding.invalidate();
             update(updateObservable.getValue(), updateObservable.getValue());

@@ -1,6 +1,5 @@
 package com.taco.suit_lady.util;
 
-import com.taco.util.quick.ConsoleBB;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 
@@ -17,13 +16,6 @@ import java.util.stream.Stream;
 // TODO - Convert to non-static
 public class ArrayTools
 {
-    public static ArrayTools get()
-    {
-        return TB.arrays();
-    }
-    
-    ArrayTools() { }
-    
     /**
      * Checks if the specified {@code array} is empty.
      * <p>

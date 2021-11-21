@@ -1,6 +1,6 @@
 package com.taco.suit_lady.view.ui.jfx.dialog;
 
-import com.taco.suit_lady.util.TB;
+import com.taco.suit_lady.util.ObjectTools;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
@@ -86,7 +86,7 @@ public class DialogCallback<R>
         {
             ButtonBar.ButtonData[] data = acceptableData != null && acceptableData.length > 0 ? acceptableData : new ButtonBar.ButtonData[]{ButtonBar.ButtonData.OK_DONE, ButtonBar.ButtonData.YES};
             if (param.getButtonData() != null)
-                if (TB.comparing().equalsAny(param.getButtonData(), (Object[]) data))
+                if (ObjectTools.equalsAny(param.getButtonData(), (Object[]) data))
                     return callback.call(param);
                 else if (param.getButtonData() != ButtonBar.ButtonData.CANCEL_CLOSE)
                     return defaultSupplier.get();

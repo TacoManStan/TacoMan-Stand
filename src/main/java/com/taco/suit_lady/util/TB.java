@@ -13,15 +13,6 @@ public class TB // Stands for ToolBox
 {
     //<editor-fold desc="--- STATIC INITIALIZATIONS ---">
     
-    // --- SELF --- //
-    
-    private static final TB SELF;
-    
-    // --- INTERNAL --- //
-    
-    private static final ArrayTools ARRAY_TOOLS;
-    private static final ObjectTools COMPARING_TOOLS;
-    
     // --- EXTERNAL --- //
     
     private static final ResourceTools RESOURCE_TOOLS;
@@ -45,14 +36,8 @@ public class TB // Stands for ToolBox
     
     static
     {
-        // --- SELF --- //
-        
-        SELF = new TB();
-    
         // --- TOOL MODULES --- //
         
-        ARRAY_TOOLS = new ArrayTools();
-        COMPARING_TOOLS = new ObjectTools();
         RESOURCE_TOOLS = new ResourceTools();
         GENERAL_TOOLS = new GeneralTools();
         FX_TOOLS = new FXTools();
@@ -73,24 +58,7 @@ public class TB // Stands for ToolBox
     
     //
     
-    // --- SELF --- //
-    
-    public static TB get()
-    {
-        return SELF;
-    }
-    
     // --- TOOL MODULES --- //
-    
-    public static ArrayTools arrays()
-    {
-        return ARRAY_TOOLS;
-    }
-    
-    public static ObjectTools comparing()
-    {
-        return COMPARING_TOOLS;
-    }
     
     public static ResourceTools resources()
     {

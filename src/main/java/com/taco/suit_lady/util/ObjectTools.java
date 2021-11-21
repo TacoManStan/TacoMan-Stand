@@ -4,31 +4,29 @@ import java.util.Objects;
 
 public class ObjectTools
 {
-    ObjectTools() { }
-    
-    public boolean equals(Object obj1, Object obj2)
+    public static boolean equals(Object obj1, Object obj2)
     {
         return Objects.equals(obj1, obj2);
     }
     
-    public boolean equalsExcludeNull(Object obj1, Object obj2)
+    public static boolean equalsExcludeNull(Object obj1, Object obj2)
     {
         return obj1 != null && obj2 != null && Objects.equals(obj1, obj2);
     }
     
     //
     
-    public boolean equalsAny(Object obj, Object... objs)
+    public static boolean equalsAny(Object obj, Object... objs)
     {
         return equals(obj, false, true, false, objs);
     }
     
-    public boolean equalsAll(Object obj, Object... objs)
+    public static boolean equalsAll(Object obj, Object... objs)
     {
         return equals(obj, true, true, false, objs);
     }
     
-    public boolean equals(Object obj, boolean requireAll, boolean allowNull, boolean deep, Object... objs)
+    public static boolean equals(Object obj, boolean requireAll, boolean allowNull, boolean deep, Object... objs)
     {
         if (objs == null || (!allowNull && obj == null))
             return false;
@@ -51,7 +49,7 @@ public class ObjectTools
         }
     }
     
-    private boolean equalsImpl(Object obj1, Object obj2, boolean allowNull, boolean deep)
+    private static boolean equalsImpl(Object obj1, Object obj2, boolean allowNull, boolean deep)
     {
         if (allowNull && obj1 == null && obj2 == null)
             return true;

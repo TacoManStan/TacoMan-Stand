@@ -182,7 +182,7 @@ public class StringTools
         {
             String simpleName = GeneralTools.get().getSimpleName(aClass);
             ArrayList<Integer> indexes = new ArrayList<>();
-            ArrayList<Character> characters = new ArrayList<>(Arrays.asList(ArrayTools.get().toArray(simpleName.toCharArray())));
+            ArrayList<Character> characters = new ArrayList<>(Arrays.asList(ArrayTools.toArray(simpleName.toCharArray())));
             if (characters.size() > 1)
             {
                 boolean succeeded = false;
