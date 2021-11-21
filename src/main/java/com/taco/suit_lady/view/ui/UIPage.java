@@ -9,62 +9,74 @@ import net.rgielen.fxweaver.core.FxWeaver;
 import org.springframework.context.ConfigurableApplicationContext;
 
 public abstract class UIPage<U extends UIPageController<?>>
-		implements Displayable, Springable
+        implements Displayable, Springable
 {
-
-	private final ReadOnlyObjectWrapper<UINode> ownerProperty;
-	private final ReadOnlyObjectWrapper<U> controllerProperty;
-
-	public UIPage(UINode owner) {
-		this.ownerProperty = new ReadOnlyObjectWrapper<>(owner);
-		this.controllerProperty = new ReadOnlyObjectWrapper<>();
-	}
-	
-	@Override
-	public FxWeaver weaver()
-	{
-		return getOwner().weaver();
-	}
-	
-	@Override
-	public ConfigurableApplicationContext ctx()
-	{
-		return getOwner().ctx();
-	}
-	
-	@Override
-	public Pane getContent()
-	{
-		return getController().root();
-	}
-	
-	//<editor-fold desc="Properties">
-
-	public ReadOnlyObjectProperty<UINode> ownerProperty() {
-		return ownerProperty.getReadOnlyProperty();
-	}
-
-	public UINode getOwner() {
-		return ownerProperty.get();
-	}
-
-	//
-
-	public ReadOnlyObjectProperty<U> controllerProperty() {
-		return controllerProperty.getReadOnlyProperty();
-	}
-
-	public U getController() {
-		return controllerProperty.get();
-	}
-
-	protected void setController(U controller) {
-		controllerProperty.set(controller);
-	}
-
-	//</editor-fold>
-
-	//<editor-fold desc="Abstract">
-
-	//</editor-fold>
+    private FxWeaver weaver;
+    private ConfigurableApplicationContext ctx;
+    
+    private final ReadOnlyObjectWrapper<U> controllerProperty;
+    
+    public UIPage(Springable springableParent)
+    {
+        this(springableParent.weaver(), springableParent.ctx());
+    }
+    
+    public UIPage(FxWeaver weaver, ConfigurableApplicationContext ctx)
+    {
+        this.weaver = weaver;
+        this.ctx = ctx;
+        
+        this.controllerProperty = new ReadOnlyObjectWrapper<>();
+    }
+    
+    //<editor-fold desc="--- PROPERTIES ---">
+    
+    public ReadOnlyObjectProperty<U> controllerProperty()
+    {
+        return controllerProperty.getReadOnlyProperty();
+    }
+    
+    public U getController()
+    {
+        return controllerProperty.get();
+    }
+    
+    protected void setController(U controller)
+    {
+        controllerProperty.set(controller);
+    }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+    @Override
+    public FxWeaver weaver()
+    {
+        return weaver;
+    }
+    
+    public void setWeaver(FxWeaver weaver)
+    {
+        this.weaver = weaver;
+    }
+    
+    @Override
+    public ConfigurableApplicationContext ctx()
+    {
+        return ctx;
+    }
+    
+    public void setCtx(ConfigurableApplicationContext ctx)
+    {
+        this.ctx = ctx;
+    }
+    
+    @Override
+    public Pane getContent()
+    {
+        return getController().root();
+    }
+    
+    //</editor-fold>
 }
