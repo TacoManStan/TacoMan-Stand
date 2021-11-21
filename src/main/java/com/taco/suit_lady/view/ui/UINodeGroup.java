@@ -21,9 +21,14 @@ public abstract class UINodeGroup
     
     private final BooleanBinding hasPagedContentBinding;
     
+    public UINodeGroup()
+    {
+        this(null);
+    }
+    
     public UINodeGroup(StackPane contentPane)
     {
-        this.nodeDisplayer = new Displayer<>(contentPane);
+        this.nodeDisplayer = new Displayer<>(contentPane != null ? contentPane : new StackPane());
         
         this.nodes = FXCollections.observableArrayList();
         
