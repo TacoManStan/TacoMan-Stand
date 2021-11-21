@@ -144,7 +144,7 @@ public class Sidebar
         }, true);
     }
     
-    //<editor-fold desc="Properties">
+    //<editor-fold desc="--- PROPERTIES ---">
     
     /**
      * <p>Returns the {@link ReentrantLock lock} assigned to handle the {@code synchronization} of this {@link Sidebar} instance.</p>
@@ -169,7 +169,7 @@ public class Sidebar
     {
         return childButtonPane;
     }
-    
+
     public StackPane getContentPane()
     {
         return contentPane;
