@@ -1,6 +1,7 @@
 package com.taco.suit_lady.view.ui;
 
 import com.taco.suit_lady.util.BindingTools;
+import com.taco.suit_lady.util.ObjectTools;
 import com.taco.suit_lady.view.ui.jfx.button.ImageButton;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
 import com.taco.suit_lady.view.ui.jfx.image.ImagePane;
@@ -166,10 +167,14 @@ public class Sidebar
      *
      * @param menu The {@link SidebarNodeGroup} being checked.
      * @return True if the specified {@link SidebarNodeGroup} is currently {@link #selectedNodeGroupProperty() selected}, false if it is not.
+     * @see #selectedNodeGroupProperty()
+     * @see #getSelectedNodeGroup()
+     * @see #setSelectedNodeGroup(SidebarNodeGroup)
+     * @see ObjectTools#equalsExcludeNull(Object, Object) 
      */
     public boolean isNodeGroupSelected(SidebarNodeGroup menu)
     {
-        return Objects.equals(menu, getSelectedNodeGroup());
+        return ObjectTools.equalsExcludeNull(menu, getSelectedNodeGroup());
     }
     
     //</editor-fold>
