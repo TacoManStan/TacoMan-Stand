@@ -2,6 +2,7 @@ package com.taco.suit_lady.view.ui;
 
 import com.taco.suit_lady.util.BindingTools;
 import com.taco.suit_lady.util.ObjectTools;
+import com.taco.suit_lady.view.ui.jfx.button.ButtonViewGroup;
 import com.taco.suit_lady.view.ui.jfx.button.ImageButton;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
 import com.taco.suit_lady.view.ui.jfx.image.ImagePane;
@@ -26,7 +27,7 @@ public class Sidebar
     private final StackPane contentPane;
     private final ImageButton backImageButton;
     
-    private final ObservableList<SidebarNodeGroup> nodeGroupProperty;
+    private final ObservableList<SidebarNodeGroup> nodeGroupsProperty;
     private final ReadOnlyObjectWrapper<SidebarNodeGroup> selectedNodeGroupProperty;
     
     public Sidebar(StackPane childButtonPane, StackPane contentPane, ImagePane backImagePane)
@@ -41,7 +42,7 @@ public class Sidebar
                 false, true, ImageButton.SMALL
         );
         
-        this.nodeGroupProperty = FXCollections.observableArrayList();
+        this.nodeGroupsProperty = FXCollections.observableArrayList();
         this.selectedNodeGroupProperty = new ReadOnlyObjectWrapper<>();
         
         //
@@ -78,8 +79,8 @@ public class Sidebar
         FXTools.get().runFX(() -> {
             backImageButton.initialize();
             childButtonPane.setAlignment(Pos.TOP_LEFT);
-            nodeGroupProperty().forEach(SidebarNodeGroup::initialize);
-            SidebarNodeGroup firstNodeGroup = nodeGroupProperty.get(0); // CHANGE-HERE
+            nodeGroupsProperty().forEach(SidebarNodeGroup::initialize);
+            SidebarNodeGroup firstNodeGroup = nodeGroupsProperty.get(0); // CHANGE-HERE
             if (firstNodeGroup != null)
                 setSelectedNodeGroup(firstNodeGroup);
         }, true);
@@ -87,6 +88,11 @@ public class Sidebar
     
     //<editor-fold desc="Properties">
     
+    /**
+     * <p>Returns the {@link ReentrantLock lock} assigned to handle the {@code synchronization} of this {@link Sidebar} instance.</p>
+     *
+     * @return The {@link ReentrantLock lock} assigned to handle the {@code synchronization} of this {@link Sidebar} instance.
+     */
     protected final ReentrantLock getLock()
     {
         return lock;
@@ -94,17 +100,24 @@ public class Sidebar
     
     //
     
-    protected final StackPane getChildButtonPane()
+    /**
+     * <p>Returns the {@link StackPane} whose {@link StackPane#getChildren() contents} are bound to the {@link SidebarNodeGroup#getButtonBox() Button Box} that contains the {@link ImageButton ImageButtons}
+     * corresponding to each {@link UINode} child in the parent {@link SidebarNodeGroup} that is currently {@link #selectedNodeGroupProperty() selected} by this {@link Sidebar} instance.</p>
+     *
+     * @return The {@link StackPane} whose {@link StackPane#getChildren() contents} are bound to the {@link SidebarNodeGroup#getButtonBox() Button Box} that contains the {@link ImageButton ImageButtons}
+     * corresponding to each {@link UINode} child in the parent {@link SidebarNodeGroup} that is currently {@link #selectedNodeGroupProperty() selected} by this {@link Sidebar} instance.
+     */
+    public final StackPane getChildButtonPane()
     {
         return childButtonPane;
     }
     
-    protected final StackPane getContentPane()
+    public final StackPane getContentPane()
     {
         return contentPane;
     }
     
-    protected final ImageButton getBackImageButton()
+    public final ImageButton getBackImageButton()
     {
         return backImageButton;
     }
@@ -116,9 +129,9 @@ public class Sidebar
      *
      * @return The {@link ObservableList} containing the {@link SidebarNodeGroup NodeGroups} in this {@link Sidebar}.
      */
-    public ObservableList<SidebarNodeGroup> nodeGroupProperty()
+    public ObservableList<SidebarNodeGroup> nodeGroupsProperty()
     {
-        return nodeGroupProperty;
+        return nodeGroupsProperty;
     }
     
     //
@@ -170,7 +183,7 @@ public class Sidebar
      * @see #selectedNodeGroupProperty()
      * @see #getSelectedNodeGroup()
      * @see #setSelectedNodeGroup(SidebarNodeGroup)
-     * @see ObjectTools#equalsExcludeNull(Object, Object) 
+     * @see ObjectTools#equalsExcludeNull(Object, Object)
      */
     public boolean isNodeGroupSelected(SidebarNodeGroup menu)
     {
@@ -181,19 +194,25 @@ public class Sidebar
     
     //
     
+    /**
+     * <p>{@link SidebarNodeGroup#clearSelection() Clears} the {@link ButtonViewGroup#selectedButtonProperty() selection} of every {@link SidebarNodeGroup SidebarNodeGroups} in this {@link Sidebar}.</p>
+     *
+     * @see SidebarNodeGroup#clearSelection()
+     * @see SidebarNodeGroup#getButtonViewGroup()
+     * @see ButtonViewGroup#selectedButtonProperty()
+     * @see ButtonViewGroup#clearSelection(ImageButton...)
+     */
     protected void clearAllSelections()
     {
-        nodeGroupProperty().forEach(this::clearSelection);
-    }
-    
-    protected void clearSelection(SidebarNodeGroup menu)
-    {
-        menu.clearSelection();
+        nodeGroupsProperty().forEach(menu -> menu.clearSelection());
     }
     
     //
     
-    private void back()
+    /**
+     * <p>{@link UIPageHandler#turnTo(UIPage) Turns} the {@link UINode} that is currently {@link UINodeGroup#getNodeDisplayer() selected} by the {@link UINodeGroup} that is currently {@link #selectedNodeGroupProperty() selected} by this {@link Sidebar} instance {@link UIPageHandler#back() back} one {@link UIPage page}.</p>
+     */
+    public void back()
     {
         UINodeGroup selectedNodeGroup = getSelectedNodeGroup();
         if (selectedNodeGroup != null) {

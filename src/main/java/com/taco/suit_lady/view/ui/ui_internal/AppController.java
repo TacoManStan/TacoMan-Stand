@@ -300,7 +300,7 @@ public class AppController
         ));
         _nyiSidebarGroup.getButtonViewGroup().selectFirst();
         
-        _sidebar.nodeGroupProperty().addAll(_generalSidebarGroup, _inDevelopmentSidebarNodeGroup, _nyiSidebarGroup);
+        _sidebar.nodeGroupsProperty().addAll(_generalSidebarGroup, _inDevelopmentSidebarNodeGroup, _nyiSidebarGroup);
         _sidebar.onInitialize();
     }
     
