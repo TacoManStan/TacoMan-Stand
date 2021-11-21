@@ -1,6 +1,7 @@
 package com.taco.suit_lady.view.ui;
 
 import com.taco.suit_lady.util.BindingTools;
+import com.taco.suit_lady.util.ExceptionTools;
 import com.taco.suit_lady.util.ObjectTools;
 import com.taco.suit_lady.view.ui.jfx.button.ButtonViewGroup;
 import com.taco.suit_lady.view.ui.jfx.button.ImageButton;
@@ -12,6 +13,8 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -20,7 +23,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class Sidebar
 {
-    
     private final ReentrantLock lock;
     
     private final StackPane childButtonPane;
@@ -30,9 +32,49 @@ public class Sidebar
     private final ObservableList<SidebarNodeGroup> nodeGroupsProperty;
     private final ReadOnlyObjectWrapper<SidebarNodeGroup> selectedNodeGroupProperty;
     
+    /**
+     * <p>Refer to {@link #Sidebar(StackPane, StackPane, ImagePane) Fully-Parameterized Constructor} for details.</p>
+     * <p>Identical to...</p>
+     * <blockquote>
+     *     <code>
+     *         {@link #Sidebar(StackPane, StackPane, ImagePane) new Sidebar(childButtonPane, contentPane, <u><b>null</b></u>)}
+     *     </code>
+     * </blockquote>
+     */
+    public Sidebar(StackPane childButtonPane, StackPane contentPane)
+    {
+        this(childButtonPane, contentPane, null);
+    }
+    
+    /**
+     * <p><b>Fully-Parameterized Constructor</b></p>
+     *
+     * @param childButtonPane The {@link StackPane} that the {@link ImageButton ImageButtons} linked to each {@link UINode} in the currently selected {@link SidebarNodeGroup} are displayed on.
+     *                        <ol>
+     *                              <li>Cannot be {@code null}.</li>
+     *                        </ol>
+     * @param contentPane     The {@link StackPane} that the {@link UINode#getContent() contents} of the currently displayed {@link UINode} based on the currently selected {@link SidebarNodeGroup} are displayed on.
+     *                        <ol>
+     *                              <li>Cannot be {@code null}.</li>
+     *                        </ol>
+     * @param backImagePane   The {@link ImagePane} on which the {@link #back() Back} {@link ImageButton Button} is displayed on.
+     *                        <ol>
+     *                              <li>If the specified value is {@code null}, a new {@link ImagePane} is automatically constructed.</li>
+     *                              <li>
+     *                                  To access the aforementioned automatically-constructed {@link ImagePane}, call <i>{@link ImageButton#getImagePane() getImagePane()}</i> on the {@link #back() Back} {@link ImageButton Button}.
+     *                              </li>
+     *                              <li>The {@link ImagePane} can then be added to a {@link Region  JavaFX Region} and the {@link #back() Back} {@link ImageButton Button} will work as intended. No additional setup is required.</li>
+     *                              <li>Note that every {@link Node JavaFX Node} instance can have a maximum of <u>one</u> parent at any given time.</li>
+     *                        </ol>
+     * @throws NullPointerException If the {@code childButtonPane} parameter is {@code null}.
+     * @throws NullPointerException If the {@code contentPane} parameter is {@code null}.
+     */
     public Sidebar(StackPane childButtonPane, StackPane contentPane, ImagePane backImagePane)
     {
         this.lock = new ReentrantLock();
+        
+        ExceptionTools.nullCheck(childButtonPane, "Sidebar Child Button Pane");
+        ExceptionTools.nullCheck(contentPane, "Sidebar Content Pane");
         
         this.childButtonPane = childButtonPane;
         this.contentPane = contentPane;
@@ -74,7 +116,7 @@ public class Sidebar
         });
     }
     
-    public void onInitialize()
+    public void initialize()
     {
         FXTools.get().runFX(() -> {
             backImageButton.initialize();
@@ -107,17 +149,17 @@ public class Sidebar
      * @return The {@link StackPane} whose {@link StackPane#getChildren() contents} are bound to the {@link SidebarNodeGroup#getButtonBox() Button Box} that contains the {@link ImageButton ImageButtons}
      * corresponding to each {@link UINode} child in the parent {@link SidebarNodeGroup} that is currently {@link #selectedNodeGroupProperty() selected} by this {@link Sidebar} instance.
      */
-    public final StackPane getChildButtonPane()
+    public StackPane getChildButtonPane()
     {
         return childButtonPane;
     }
     
-    public final StackPane getContentPane()
+    public StackPane getContentPane()
     {
         return contentPane;
     }
     
-    public final ImageButton getBackImageButton()
+    public ImageButton getBackButton()
     {
         return backImageButton;
     }
