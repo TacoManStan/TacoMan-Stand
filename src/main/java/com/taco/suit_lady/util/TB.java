@@ -20,7 +20,7 @@ public class TB // Stands for ToolBox
     // --- INTERNAL --- //
     
     private static final ArrayTools ARRAY_TOOLS;
-    private static final ComparingTools COMPARING_TOOLS;
+    private static final ObjectTools COMPARING_TOOLS;
     
     // --- EXTERNAL --- //
     
@@ -52,7 +52,7 @@ public class TB // Stands for ToolBox
         // --- TOOL MODULES --- //
         
         ARRAY_TOOLS = new ArrayTools();
-        COMPARING_TOOLS = new ComparingTools();
+        COMPARING_TOOLS = new ObjectTools();
         RESOURCE_TOOLS = new ResourceTools();
         GENERAL_TOOLS = new GeneralTools();
         FX_TOOLS = new FXTools();
@@ -87,7 +87,7 @@ public class TB // Stands for ToolBox
         return ARRAY_TOOLS;
     }
     
-    public static ComparingTools comparing()
+    public static ObjectTools comparing()
     {
         return COMPARING_TOOLS;
     }

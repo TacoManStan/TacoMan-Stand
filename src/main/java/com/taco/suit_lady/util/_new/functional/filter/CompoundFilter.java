@@ -1,5 +1,6 @@
 package com.taco.suit_lady.util._new.functional.filter;
 
+import com.taco.suit_lady.util._new.CompareType;
 import com.taco.util.numbers.Numbers;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
@@ -13,7 +14,7 @@ public class CompoundFilter<T>
 {
     private final BooleanProperty checkMidLoopProperty;
     private final BooleanProperty onEmptyResultProperty;
-    private final ObjectProperty<CFType> filterTypeProperty;
+    private final ObjectProperty<CompareType> filterTypeProperty;
     
     private final ReadOnlyListWrapper<Predicate<T>> filterListProperty;
     
@@ -29,18 +30,18 @@ public class CompoundFilter<T>
     }
     
     @SafeVarargs
-    public CompoundFilter(CFType filterType, Predicate<T>... filters)
+    public CompoundFilter(CompareType filterType, Predicate<T>... filters)
     {
         this(filterType, Arrays.asList(filters));
     }
     
-    public CompoundFilter(CFType filterType, List<Predicate<T>> filterList)
+    public CompoundFilter(CompareType filterType, List<Predicate<T>> filterList)
     {
         this(filterType, true, true, filterList);
     }
     
     @SafeVarargs
-    public CompoundFilter(CFType filterType, boolean checkMidLoop, boolean onEmptyResult, Predicate<T>... filters)
+    public CompoundFilter(CompareType filterType, boolean checkMidLoop, boolean onEmptyResult, Predicate<T>... filters)
     {
         this(filterType, checkMidLoop, onEmptyResult, Arrays.asList(filters));
     }
@@ -48,20 +49,20 @@ public class CompoundFilter<T>
     /**
      * <p>The fully parameterized {@link CompoundFilter} constructor; all other constructors must either directly or indirectly use this constructor.</p>
      *
-     * @param filterType    The {@link CFType} enum defining how this {@link CompoundFilter} compares its {@link Predicate Sub-Filters}.
-     *                      If the specified value is {@code null}, the {@link CFType} defaults to {@link CFType#ANY}.
+     * @param filterType    The {@link CompareType} enum defining how this {@link CompoundFilter} compares its {@link Predicate Sub-Filters}.
+     *                      If the specified value is {@code null}, the {@link CompareType} defaults to {@link CompareType#ANY}.
      * @param checkMidLoop  Tells this {@link CompoundFilter} whether it should check if it can deduce a guaranteed return value after each individual {@link Predicate Sub-Filter} is called.
      * @param onEmptyResult Tells this {@link CompoundFilter} what result should be returned if this {@link CompoundFilter} has no {@link Predicate Sub-Filters} added.
-     * @param filterList    The list of {@link Predicate Sub-Filters} to be called by this {@link CompoundFilter} given the aforementioned {@link CFType}.
+     * @param filterList    The list of {@link Predicate Sub-Filters} to be called by this {@link CompoundFilter} given the aforementioned {@link CompareType}.
      */
-    public CompoundFilter(CFType filterType, boolean checkMidLoop, boolean onEmptyResult, List<Predicate<T>> filterList)
+    public CompoundFilter(CompareType filterType, boolean checkMidLoop, boolean onEmptyResult, List<Predicate<T>> filterList)
     {
         if (filterList == null)
             throw new NullPointerException("Filters list cannot be null.");
         
         this.checkMidLoopProperty = new SimpleBooleanProperty(checkMidLoop);
         this.onEmptyResultProperty = new SimpleBooleanProperty(onEmptyResult);
-        this.filterTypeProperty = new SimpleObjectProperty<>(filterType != null ? filterType : CFType.ANY);
+        this.filterTypeProperty = new SimpleObjectProperty<>(filterType != null ? filterType : CompareType.ANY);
         
         this.filterListProperty = new ReadOnlyListWrapper<>(FXCollections.observableArrayList(filterList));
     }
@@ -178,17 +179,17 @@ public class CompoundFilter<T>
     
     //
     
-    public ObjectProperty<CFType> filterTypeProperty()
+    public ObjectProperty<CompareType> filterTypeProperty()
     {
         return filterTypeProperty;
     }
     
-    public CFType getFilterType()
+    public CompareType getFilterType()
     {
         return filterTypeProperty.get();
     }
     
-    public void setFilterType(CFType filterType)
+    public void setFilterType(CompareType filterType)
     {
         filterTypeProperty.set(filterType);
     }

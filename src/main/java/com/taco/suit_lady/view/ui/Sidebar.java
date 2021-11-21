@@ -55,16 +55,13 @@ public class Sidebar
         this.backImageButton.getImagePane().managedProperty().bind(this.backImageButton.getImagePane().visibleProperty());
         
         this.selectedNodeGroupProperty.addListener((observable, oldNodeGroup, newNodeGroup) -> {
-            if (!Objects.equals(oldNodeGroup, newNodeGroup))
-            { //If the menu base is already selected, return silently and do nothing.
-                if (oldNodeGroup != null)
-                {
+            if (!Objects.equals(oldNodeGroup, newNodeGroup)) { //If the menu base is already selected, return silently and do nothing.
+                if (oldNodeGroup != null) {
                     final VBox oldButtonBox = oldNodeGroup.getButtonBox();
                     if (oldButtonBox != null)
                         this.childButtonPane.getChildren().remove(oldButtonBox);
                 }
-                if (newNodeGroup != null)
-                {
+                if (newNodeGroup != null) {
                     final VBox buttonBox = newNodeGroup.getButtonBox();
                     
                     this.childButtonPane.getChildren().add(buttonBox);
@@ -113,6 +110,11 @@ public class Sidebar
     
     //
     
+    /**
+     * <p>Returns the {@link ObservableList} containing the {@link SidebarNodeGroup NodeGroups} in this {@link Sidebar}.</p>
+     *
+     * @return The {@link ObservableList} containing the {@link SidebarNodeGroup NodeGroups} in this {@link Sidebar}.
+     */
     public ObservableList<SidebarNodeGroup> nodeGroupProperty()
     {
         return nodeGroupProperty;
@@ -120,21 +122,51 @@ public class Sidebar
     
     //
     
+    /**
+     * <p>Returns the {@link ReadOnlyObjectProperty property} containing the {@link #getSelectedNodeGroup() selected} {@link SidebarNodeGroup}.</p>
+     *
+     * @return The {@link ReadOnlyObjectProperty property} containing the {@link #getSelectedNodeGroup() selected} {@link SidebarNodeGroup}.
+     * @see #getSelectedNodeGroup()
+     * @see #setSelectedNodeGroup(SidebarNodeGroup)
+     * @see #isNodeGroupSelected(SidebarNodeGroup)
+     */
     public ReadOnlyObjectProperty<SidebarNodeGroup> selectedNodeGroupProperty()
     {
         return selectedNodeGroupProperty.getReadOnlyProperty();
     }
     
+    /**
+     * <p>Returns the {@link #selectedNodeGroupProperty() selected} {@link SidebarNodeGroup}.</p>
+     *
+     * @return The {@link #selectedNodeGroupProperty() selected} {@link SidebarNodeGroup}.
+     * @see #selectedNodeGroupProperty()
+     * @see #setSelectedNodeGroup(SidebarNodeGroup)
+     * @see #isNodeGroupSelected(SidebarNodeGroup)
+     */
     public SidebarNodeGroup getSelectedNodeGroup()
     {
         return selectedNodeGroupProperty.get();
     }
     
+    /**
+     * <p>Sets the {@link #selectedNodeGroupProperty() selected} {@link SidebarNodeGroup} to the specified value.</p>
+     *
+     * @param menu The {@link SidebarNodeGroup} to be {@link #selectedNodeGroupProperty() selected}.
+     * @see #selectedNodeGroupProperty()
+     * @see #getSelectedNodeGroup()
+     * @see #isNodeGroupSelected(SidebarNodeGroup)
+     */
     protected void setSelectedNodeGroup(SidebarNodeGroup menu)
     {
         selectedNodeGroupProperty.set(menu);
     }
     
+    /**
+     * <p>Checks if the specified {@link SidebarNodeGroup} is currently {@link #selectedNodeGroupProperty() selected} or not.</p>
+     *
+     * @param menu The {@link SidebarNodeGroup} being checked.
+     * @return True if the specified {@link SidebarNodeGroup} is currently {@link #selectedNodeGroupProperty() selected}, false if it is not.
+     */
     public boolean isNodeGroupSelected(SidebarNodeGroup menu)
     {
         return Objects.equals(menu, getSelectedNodeGroup());
@@ -159,8 +191,7 @@ public class Sidebar
     private void back()
     {
         UINodeGroup selectedNodeGroup = getSelectedNodeGroup();
-        if (selectedNodeGroup != null)
-        {
+        if (selectedNodeGroup != null) {
             UINode selectedNode = selectedNodeGroup.getNodeDisplayer().getDisplay();
             if (selectedNode != null)
                 selectedNode.getPageHandler().back();

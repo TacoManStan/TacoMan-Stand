@@ -2,16 +2,16 @@ package com.taco.suit_lady.util;
 
 import java.util.Objects;
 
-public class ComparingTools
+public class ObjectTools
 {
-    ComparingTools() { }
+    ObjectTools() { }
     
     public boolean equals(Object obj1, Object obj2)
     {
         return Objects.equals(obj1, obj2);
     }
     
-    public boolean equalsUnsafe(Object obj1, Object obj2)
+    public boolean equalsExcludeNull(Object obj1, Object obj2)
     {
         return obj1 != null && obj2 != null && Objects.equals(obj1, obj2);
     }
