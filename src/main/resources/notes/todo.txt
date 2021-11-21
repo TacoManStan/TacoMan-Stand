@@ -2,9 +2,19 @@
 TODO - Code
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     > Add fully-formatted code examples to applicable Javadocs comments.
+    > Move .txt note files such as this one into .java files that can be viewed via JFX UI Frame (and/or website?).
+    > Look into annotation flags, such as @NotNull.
+        > On that note, look into how you can create your own custom annotations (e.g., @PassthroughMethod).
 
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 TODO - PC General
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     > Start assigning frequently-used compound hotkeys to G15 keypad for convenience.
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+INFORMATION - Terms etc.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    > Passthrough Method
+        > A method, created strictly for convenience, that wraps a single chained method call into a single method call, usually with an extremely intuitive name and null-checks included.
