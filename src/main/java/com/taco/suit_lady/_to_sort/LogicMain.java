@@ -1,4 +1,4 @@
-package com.taco.suit_lady.logic;
+package com.taco.suit_lady._to_sort;
 
 import org.springframework.stereotype.Component;
 

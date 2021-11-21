@@ -1,0 +1,2 @@
+- Houses classes that are a work in progress, a placeholder, sidelined in favor of other priorities, etc.
+- While it isn't required, classes flagged as back_burner should be non-essential in the current build of the project if possible.

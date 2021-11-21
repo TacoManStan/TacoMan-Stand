@@ -1,6 +1,6 @@
 package com.taco.suit_lady.view._nonimported.generic;
 
-import com.taco.suit_lady._expr.spring.beans.BaWT;
+import com.taco.suit_lady._to_sort._expr.spring.beans.BaWT;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;

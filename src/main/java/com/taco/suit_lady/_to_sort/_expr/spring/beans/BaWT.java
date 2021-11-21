@@ -1,4 +1,4 @@
-package com.taco.suit_lady._expr.spring.beans;
+package com.taco.suit_lady._to_sort._expr.spring.beans;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;

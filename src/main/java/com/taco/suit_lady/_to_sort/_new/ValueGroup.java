@@ -1,6 +1,6 @@
-package com.taco.suit_lady.util._new;
+package com.taco.suit_lady._to_sort._new;
 
-import com.taco.suit_lady.util._new.functional.SelfValidatable;
+import com.taco.suit_lady._to_sort._new.functional.SelfValidatable;
 
 import java.util.ArrayList;
 import java.util.Arrays;

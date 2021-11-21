@@ -1,4 +1,4 @@
-package com.taco.suit_lady._expr.spring.beans.demo;
+package com.taco.suit_lady._to_sort._expr.spring.beans.demo;
 
 import com.taco.util.obj_traits.common.Testable;
 import org.springframework.context.ApplicationContext;

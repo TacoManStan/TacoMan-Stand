@@ -2,7 +2,7 @@ package com.taco.suit_lady.view._nonimported;
 
 import com.mongodb.client.MongoDatabase;
 import com.taco.suit_lady.MainApplication;
-import com.taco.suit_lady._expr.spring.beans.demo.BeansDemo;
+import com.taco.suit_lady._to_sort._expr.spring.beans.demo.BeansDemo;
 import com.taco.suit_lady.uncategorized.spring.config.StartupUtil;
 import javafx.application.Application;
 import javafx.application.Platform;

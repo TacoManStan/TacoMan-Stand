@@ -1,4 +1,4 @@
-package com.taco.suit_lady.util._new;
+package com.taco.suit_lady._to_sort._new;
 
 public class ValuePair<T1, T2>
 {

@@ -1,6 +1,6 @@
-package com.taco.suit_lady.util._new.functional;
+package com.taco.suit_lady._to_sort._new.functional;
 
-import com.taco.suit_lady.util._new.ValueGroup;
+import com.taco.suit_lady._to_sort._new.ValueGroup;
 
 /**
  * <p>Contains a single method, {@link #isValid(boolean)}, that checks if the contents of the {@link SelfValidatable} are valid.</p>

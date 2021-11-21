@@ -36,9 +36,9 @@ public class Sidebar
      * <p>Refer to {@link #Sidebar(StackPane, StackPane, ImagePane) Fully-Parameterized Constructor} for details.</p>
      * <p>Identical to...</p>
      * <blockquote>
-     *     <code>
-     *         {@link #Sidebar(StackPane, StackPane, ImagePane) new Sidebar(childButtonPane, contentPane, <u><b>null</b></u>)}
-     *     </code>
+     * <code>
+     * {@link #Sidebar(StackPane, StackPane, ImagePane) new Sidebar(childButtonPane, contentPane, <u><b>null</b></u>)}
+     * </code>
      * </blockquote>
      */
     public Sidebar(StackPane childButtonPane, StackPane contentPane)
@@ -57,13 +57,13 @@ public class Sidebar
      *                        <ol>
      *                              <li>Cannot be {@code null}.</li>
      *                        </ol>
-     * @param backImagePane   The {@link ImagePane} on which the {@link #back() Back} {@link ImageButton Button} is displayed on.
+     * @param backImagePane   The {@link ImagePane} on which the {@link #back() Back} {@link #getBackButton() Button} is displayed on.
      *                        <ol>
      *                              <li>If the specified value is {@code null}, a new {@link ImagePane} is automatically constructed.</li>
      *                              <li>
      *                                  To access the aforementioned automatically-constructed {@link ImagePane}, call <i>{@link ImageButton#getImagePane() getImagePane()}</i> on the {@link #back() Back} {@link ImageButton Button}.
      *                              </li>
-     *                              <li>The {@link ImagePane} can then be added to a {@link Region  JavaFX Region} and the {@link #back() Back} {@link ImageButton Button} will work as intended. No additional setup is required.</li>
+     *                              <li>The {@link ImagePane} can then be added to a {@link Region  JavaFX Region} and the {@link #back() Back} {@link #getBackButton() Button} will work as intended. No additional setup is required.</li>
      *                              <li>Note that every {@link Node JavaFX Node} instance can have a maximum of <u>one</u> parent at any given time.</li>
      *                        </ol>
      * @throws NullPointerException If the {@code childButtonPane} parameter is {@code null}.
@@ -116,13 +116,29 @@ public class Sidebar
         });
     }
     
+    /**
+     * <p>Initializes this {@link Sidebar} and associated components and functionality..</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>Executed on the {@link FXTools#runFX(Runnable, boolean) JavaFX Thread}.</li>
+     *     <li>The calling {@link Thread} blocks until initialization process is complete.</li>
+     *     <li><code><i>{@link #initialize()}</i></code> can <u>only</u> be called <u>once</u>.</li>
+     *     <li>Calling <code><i>{@link #initialize()}</i></code> more than once on a single {@link Sidebar} instance can (and likely will) result in unexpected and/or unpredictable runtime functionality.</li>
+     * </ol>
+     * <p><b>Initialization</b></p>
+     * <ol>
+     *     <li><code><i>{@link #getBackButton()}<b>.</b>{@link ImageButton#initialize() initialize()}</i></<code> to initialize the {@link #back() Back} {@link #getBackButton() Button} assigned to this {@link Sidebar}.</li>
+     *     <li><code><i>{@link #nodeGroupsProperty()}<b>.forEach(</b>{@link SidebarNodeGroup#initialize() initialize()}<b>)</b></i></code> to initialize all {@link SidebarNodeGroup SidebarNodeGroups} in this {@link Sidebar}.</li>
+     *     <li>{@link #selectedNodeGroupProperty() Selects} the first (<code><i>{@link #nodeGroupsProperty() nodeGroupsProperty().get(0)}</i></code>) {@link SidebarNodeGroup} in this {@link Sidebar}.</li>
+     * </ol>
+     */
     public void initialize()
     {
         FXTools.get().runFX(() -> {
             backImageButton.initialize();
             childButtonPane.setAlignment(Pos.TOP_LEFT);
             nodeGroupsProperty().forEach(SidebarNodeGroup::initialize);
-            SidebarNodeGroup firstNodeGroup = nodeGroupsProperty.get(0); // CHANGE-HERE
+            SidebarNodeGroup firstNodeGroup = nodeGroupsProperty().get(0);
             if (firstNodeGroup != null)
                 setSelectedNodeGroup(firstNodeGroup);
         }, true);
