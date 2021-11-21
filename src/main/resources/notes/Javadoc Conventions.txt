@@ -1,2 +1,3 @@
 READONLYPROPERTY:
 <p>Returns the {@link ReadOnlyStringProperty property} containing the {@link #getName() name} of this {@link ObjectName}.</p>
+
