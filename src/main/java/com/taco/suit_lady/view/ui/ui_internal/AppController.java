@@ -311,7 +311,6 @@ public class AppController
                 "settings",
                 this::openSettings,
                 false,
-                true,
                 ImageButton.SMALL
         ).initialize();
         
@@ -320,7 +319,6 @@ public class AppController
                 "hide_sidebar",
                 this::toggleSidebar,
                 false,
-                true,
                 ImageButton.SMALL
         ).initialize();
         
@@ -329,7 +327,6 @@ public class AppController
                 "minimize",
                 () -> FXTools.get().runFX(() -> stage.setIconified(!stage.isIconified()), false),
                 false,
-                true,
                 ImageButton.SMALL
         ).initialize();
         
@@ -338,7 +335,6 @@ public class AppController
                 Bindings.createStringBinding(() -> stage.isMaximized() ? "maximize_both" : "maximize", stage.maximizedProperty()),
                 () -> FXTools.get().runFX(() -> stage.setMaximized(!stage.isMaximized()), false),
                 false,
-                true,
                 ImageButton.SMALL
         ).initialize();
         
@@ -347,7 +343,6 @@ public class AppController
                 "close",
                 () -> FXTools.get().runFX(stage::close, false),
                 false,
-                true,
                 ImageButton.SMALL
         ).initialize();
         
@@ -355,7 +350,6 @@ public class AppController
                 logoImagePane,
                 "logo",
                 () -> TB.web().browse("google", true),
-                false,
                 false,
                 new Point2D(20.0, 20.0)
         ).initialize();
