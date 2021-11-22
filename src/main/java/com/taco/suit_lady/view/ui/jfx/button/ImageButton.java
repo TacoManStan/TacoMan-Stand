@@ -28,6 +28,7 @@ import org.springframework.context.ApplicationContext;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * Class that wraps an {@link ImageView} and {@link Button} into a single class.
@@ -52,6 +53,7 @@ public class ImageButton
     private final ReadOnlyObjectWrapper<Image> disabledImageProperty;
     
     private final ObjectProperty<Runnable> actionResponderProperty;
+    private final ObjectProperty<Runnable> actionResponderFXProperty;
     
     private final BooleanBinding hoveredBinding;
     private final BooleanBinding pressedBinding;
@@ -61,12 +63,12 @@ public class ImageButton
     
     private final boolean toggleable;
     
-    public ImageButton(ImagePane imagePane, String name, Runnable actionResponder, boolean toggleable, Point2D size)
+    public ImageButton(ImagePane imagePane, String name, Runnable actionResponder, Runnable actionResponderFX, boolean toggleable, Point2D size)
     {
-        this(imagePane, BindingTools.createStringBinding(name), actionResponder, toggleable, size);
+        this(imagePane, BindingTools.createStringBinding(name), actionResponder, actionResponderFX, toggleable, size);
     }
     
-    public ImageButton(ImagePane imagePane, ObservableStringValue nameBinding, Runnable actionResponder, boolean toggleable, Point2D size)
+    public ImageButton(ImagePane imagePane, ObservableStringValue nameBinding, Runnable actionResponder, Runnable actionResponderFX, boolean toggleable, Point2D size)
     {
         this.imagePane = imagePane == null ? new ImagePane() : imagePane;
         
@@ -88,6 +90,7 @@ public class ImageButton
         this.disabledImageProperty = new ReadOnlyObjectWrapper<>();
         
         this.actionResponderProperty = new SimpleObjectProperty<>(actionResponder);
+        this.actionResponderFXProperty = new SimpleObjectProperty<>(actionResponderFX);
         
         this.selectedProperty = new ReadOnlyBooleanWrapper();
         this.disabledProperty = new SimpleBooleanProperty();
@@ -259,7 +262,7 @@ public class ImageButton
      * <p><b>Details</b></p>
      * <ol>
      *     <li>All logic related to adding or removing an {@link ImageButton} from a {@link ImageButtonGroup} is done via a {@link ChangeListener} that observes the {@link ObjectProperty} returned by {@link #buttonGroupProperty() this method}.</li>
-     *     <li>The aforementioned {@link ChangeListener} is configured in the {@link ImageButton} {@link #ImageButton(ImagePane, ObservableStringValue, Runnable, boolean, Point2D) constructor}.</li>
+     *     <li>The aforementioned {@link ChangeListener} is configured in the {@link ImageButton} {@link #ImageButton(ImagePane, ObservableStringValue, Runnable, Runnable, boolean, Point2D) constructor}.</li>
      * </ol>
      *
      * @return The {@link ObjectProperty} containing the {@link ImageButtonGroup} that this {@link ImageButton} is in, or {@code null} if this {@link ImageButton} is not in a {@link ImageButtonGroup}.
@@ -299,10 +302,21 @@ public class ImageButton
         return getButtonGroup() != null;
     }
     
+    //<editor-fold desc="--- ACTION RESPONDING ---">
+    
     /**
-     * <p>Returns the {@link ObjectProperty} containing the {@link Runnable} that is executed when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.</p>
+     * <p>Returns the {@link ObjectProperty} containing the {@link Runnable} that is executed in a {@link Task Background Task} when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.</p>
+     * <p><b>Execution Details</b></p>
+     * <ol>
+     *     <li>The {@link Runnable} is executed in a {@link Task Background Task} by the core {@link TB#executor() Executor} for the entire application instance.</li>
+     *     <li>The {@link Task} {@link ThreadPoolExecutor#execute(Runnable) execution} is non-blocking.</li>
+     *     <li>To execute a {@link Runnable} on the {@link FXTools#isFXThread() JavaFX Thread}, refer to <code><i>{@link #actionResponderFXProperty()}</i></code>.</li>
+     *     <li>If the {@link Runnable value} contained by the {@link ObjectProperty} is {@code null}, no action response will be executed.</li>
+     * </ol>
      *
-     * @return The {@link ObjectProperty} containing the {@link Runnable} that is executed when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.
+     * @return The {@link ObjectProperty} containing the {@link Runnable} that is executed in a {@link Task Background Task} when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.
+     *
+     * @see #actionResponderFXProperty()
      */
     public @NotNull ObjectProperty<Runnable> actionResponderProperty()
     {
@@ -310,9 +324,11 @@ public class ImageButton
     }
     
     /**
-     * <p>Returns the {@link Runnable} that is executed when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.</p>
+     * <p>Returns the {@link Runnable} that is executed in a {@link Task Background Task} when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.</p>
      *
-     * @return The {@link Runnable} that is executed when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.
+     * @return The {@link Runnable} that is executed in a {@link Task Background Task} when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.
+     *
+     * @see #actionResponderProperty()
      */
     public @Nullable Runnable getActionResponder()
     {
@@ -322,22 +338,105 @@ public class ImageButton
     /**
      * <p>Sets the {@link Runnable} to be executed when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.</p>
      *
-     * @param actionResponder The {@link Runnable} to be executed when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.
+     * @param actionResponder The {@link Runnable} to be executed in a {@link Task Background Task} when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.
+     *
+     * @see #actionResponderProperty()
      */
     public void setActionResponder(@Nullable Runnable actionResponder)
     {
         actionResponderProperty.set(actionResponder);
     }
     
+    
     /**
-     * <p>Checks if this {@link ImageButton} is toggleable or not.</p>
+     * <p>Returns the {@link ObjectProperty} containing the {@link Runnable} that is executed on the {@link FXTools#isFXThread() JavaFX Thread} when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.</p>
+     * <p><b>Execution Details</b></p>
+     * <ol>
+     *     <li>The {@link Runnable} is executed on the {@link FXTools#isFXThread() JavaFX Thread}.</li>
+     *     <li>The {@link Task} {@link FXTools#runFX(Runnable, boolean) execution} is blocking.</li>
+     *     <li>To execute a {@link Runnable} in a {@link Task Background Task}, refer to <code><i>{@link #actionResponderProperty()}</i></code>.</li>
+     *     <li>If the {@link Runnable value} contained by the {@link ObjectProperty} is {@code null}, no action response will be executed.</li>
+     * </ol>
      *
-     * @return True if this {@link ImageButton} is toggleable, false if it is not.
+     * @return The {@link ObjectProperty} containing the {@link Runnable} that is executed on the {@link FXTools#isFXThread() JavaFX Thread} when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.
+     *
+     * @see #actionResponderProperty()
      */
-    public boolean isToggleable()
+    public @NotNull ObjectProperty<Runnable> actionResponderFXProperty()
     {
-        return toggleable;
+        return actionResponderProperty;
     }
+    
+    /**
+     * <p>Returns the {@link Runnable} that is executed on the {@link FXTools#isFXThread() JavaFX Thread} when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.</p>
+     *
+     * @return The {@link Runnable} that is executed on the {@link FXTools#isFXThread() JavaFX Thread} when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.
+     *
+     * @see #actionResponderFXProperty()
+     */
+    public @Nullable Runnable getActionResponderFX()
+    {
+        return actionResponderProperty.get();
+    }
+    
+    /**
+     * <p>Sets the {@link Runnable} to be executed on the {@link FXTools#isFXThread() JavaFX Thread} when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.</p>
+     *
+     * @param actionResponder The {@link Runnable} to be executed on the {@link FXTools#isFXThread() JavaFX Thread} when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.
+     *
+     * @see #actionResponderFXProperty()
+     */
+    public void setActionResponderFX(@Nullable Runnable actionResponder)
+    {
+        actionResponderProperty.set(actionResponder);
+    }
+    
+    /**
+     * <p>Executes the {@link #actionResponderProperty() Background Action Responder} and {@link #actionResponderFXProperty() FX Action Responder} {@link Runnable Runnables}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>Executed automatically when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.</li>
+     *     <li>
+     *         <b>Background Execution</b>
+     *         <ol>
+     *             <li>If the {@link #actionResponderProperty() Background Responder} for this {@link ImageButton} is {@code non-null}, it is {@link ThreadPoolExecutor#execute(Runnable) executed} in a {@link Task Background Task}.</li>
+     *             <li>The {@link #actionResponderProperty() Background Responder} execution is <u>non-blocking</u>.</li>
+     *             <li>Refer to <code><i>{@link #actionResponderProperty()}</i></code> for additional information.</li>
+     *         </ol>
+     *     </li>
+     *     <li>
+     *         <b>FX Execution</b>
+     *         <ol>
+     *             <li>If the {@link #actionResponderFXProperty() FX Responder} for this {@link ImageButton} is {@code non-null}, it is {@link FXTools#runFX(Runnable, boolean) executed} on the {@link FXTools#isFXThread() JavaFX Thread}.</li>
+     *             <li>The {@link #actionResponderFXProperty() FX Responder} execution is <u>blocking</u>.</li>
+     *             <li>Refer to <code><i>{@link #actionResponderFXProperty()}</i></code> for additional information.</li>
+     *         </ol>
+     *     </li>
+     * </ol>
+     *
+     * @see #actionResponderProperty()
+     * @see #actionResponderFXProperty()
+     */
+    private void onAction()
+    {
+        final Runnable actionResponder = getActionResponder();
+        if (actionResponder != null) {
+            TB.executor().execute(new Task<>()
+            {
+                @Override
+                protected Object call()
+                {
+                    actionResponder.run();
+                    return null;
+                }
+            });
+        }
+        final Runnable actionResponderFX = getActionResponderFX();
+        if (actionResponderFX != null)
+            FXTools.get().runFX(actionResponderFX, true);
+    }
+    
+    //</editor-fold>
     
     //<editor-fold desc="Image Properties">
     
@@ -473,6 +572,17 @@ public class ImageButton
         return pressedBinding;
     }
     
+    
+    /**
+     * <p>Checks if this {@link ImageButton} is toggleable or not.</p>
+     *
+     * @return True if this {@link ImageButton} is toggleable, false if it is not.
+     */
+    public boolean isToggleable()
+    {
+        return toggleable;
+    }
+    
     /**
      * <p>Checks if this {@link ImageButton} is in a {@link ButtonState#PRESSED PRESSED} state.</p>
      *
@@ -558,16 +668,37 @@ public class ImageButton
         return setSelected(!isSelected());
     }
     
+    /**
+     * <p>Returns the {@link BooleanProperty} reflecting if this {@link ImageButton} is {@link ButtonState#DISABLED disabled} or not.</p>
+     *
+     * @return The {@link BooleanProperty} reflecting if this {@link ImageButton} is {@link ButtonState#DISABLED disabled} or not.
+     *
+     * @see ButtonState#DISABLED
+     */
     public final BooleanProperty disabledProperty()
     {
         return disabledProperty;
     }
     
+    /**
+     * <p>Checks if this {@link ImageButton} is currently in a {@link #disabledProperty() disabled} {@link ButtonState#DISABLED state} or not.</p>
+     *
+     * @return True if this {@link ImageButton} is currently in a {@link #disabledProperty() disabled} {@link ButtonState#DISABLED state}, false if it is not (i.e., if it is enabled).
+     *
+     * @see #disabledProperty()
+     */
     public final boolean isDisabled()
     {
         return disabledProperty.get();
     }
     
+    /**
+     * <p>Sets the {@link #disabledProperty() disabled} {@link ButtonState#DISABLED state} of this {@link ImageButton} to the specified value.</p>
+     *
+     * @param disabled True to disable this {@link ImageButton}, false to enable it.
+     *
+     * @see #disabledProperty()
+     */
     public final void setDisabled(boolean disabled)
     {
         disabledProperty.set(disabled);
@@ -576,22 +707,6 @@ public class ImageButton
     //</editor-fold>
     
     //</editor-fold>
-    
-    private void onAction()
-    {
-        final Runnable actionResponder = getActionResponder();
-        if (actionResponder != null) {
-            TB.executor().execute(new Task<>()
-            {
-                @Override
-                protected Object call()
-                {
-                    actionResponder.run();
-                    return null;
-                }
-            });
-        }
-    }
     
     private ObjectBinding<Image> createImageBinding(String suffix)
     {
