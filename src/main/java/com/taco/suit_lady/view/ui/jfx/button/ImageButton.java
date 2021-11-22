@@ -10,6 +10,7 @@ import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.ObjectBinding;
+import javafx.beans.binding.StringBinding;
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableStringValue;
 import javafx.concurrent.Task;
@@ -38,7 +39,7 @@ public class ImageButton
     
     private final ImagePane imagePane;
     
-    private final ObservableStringValue nameBinding;
+    private final StringBinding nameBinding;
     private final ObjectProperty<ButtonViewGroup> buttonGroupProperty;
     
     private final ReadOnlyObjectWrapper<Image> imageProperty;
@@ -98,7 +99,7 @@ public class ImageButton
             this.imagePane.setMaxSize(size.getX(), size.getY());
         }
         
-        this.nameBinding = nameBinding;
+        this.nameBinding = BindingTools.createStringBinding(nameBinding);
         
         this.buttonGroupProperty = new ReadOnlyObjectWrapper<>();
         
@@ -208,7 +209,7 @@ public class ImageButton
         return imagePane;
     }
     
-    public ObservableStringValue nameBinding()
+    public StringBinding nameBinding()
     {
         return nameBinding;
     }
