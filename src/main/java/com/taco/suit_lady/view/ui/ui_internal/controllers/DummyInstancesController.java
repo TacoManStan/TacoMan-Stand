@@ -88,7 +88,14 @@ public final class DummyInstancesController extends SidebarNodeGroupController<D
     
     private void initButtonViews()
     {
-        this.addInstanceImageButton = new ImageButton(addInstanceImagePane, "plus", this::addInstance, false, ImageButton.SMALL);
+        this.addInstanceImageButton = new ImageButton(
+                addInstanceImagePane,
+                "plus",
+                this::addInstance,
+                null,
+                false,
+                ImageButton.SMALL
+        );
         
         //
         
@@ -100,12 +107,9 @@ public final class DummyInstancesController extends SidebarNodeGroupController<D
     public BooleanProperty playingProperty()
     {
         lock.lock();
-        try
-        {
+        try {
             return playingProperty;
-        }
-        finally
-        {
+        } finally {
             lock.unlock();
         }
     }
@@ -123,12 +127,9 @@ public final class DummyInstancesController extends SidebarNodeGroupController<D
     public void togglePlaying()
     {
         lock.lock();
-        try
-        {
+        try {
             setPlaying(!isPlaying());
-        }
-        finally
-        {
+        } finally {
             lock.unlock();
         }
     }
@@ -162,6 +163,6 @@ public final class DummyInstancesController extends SidebarNodeGroupController<D
     
     private void addInstance()
     {
-        TB.executor().execute(() -> TB.handler().newInstance());
+        TB.handler().newInstance();
     }
 }

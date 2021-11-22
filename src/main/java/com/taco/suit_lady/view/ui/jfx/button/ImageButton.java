@@ -364,7 +364,7 @@ public class ImageButton
      */
     public @NotNull ObjectProperty<Runnable> actionResponderFXProperty()
     {
-        return actionResponderProperty;
+        return actionResponderFXProperty;
     }
     
     /**
@@ -376,7 +376,7 @@ public class ImageButton
      */
     public @Nullable Runnable getActionResponderFX()
     {
-        return actionResponderProperty.get();
+        return actionResponderFXProperty.get();
     }
     
     /**
@@ -388,7 +388,7 @@ public class ImageButton
      */
     public void setActionResponderFX(@Nullable Runnable actionResponder)
     {
-        actionResponderProperty.set(actionResponder);
+        actionResponderFXProperty.set(actionResponder);
     }
     
     /**
@@ -433,7 +433,7 @@ public class ImageButton
         }
         final Runnable actionResponderFX = getActionResponderFX();
         if (actionResponderFX != null)
-            FXTools.get().runFX(actionResponderFX, true);
+            FXTools.get().runFX(actionResponderFX, false);
     }
     
     //</editor-fold>

@@ -93,7 +93,14 @@ public class UINode
         displayer.bind(pageHandler.visiblePageBinding());
         
         buttonViewProperty.addListener((observable, oldValue, newValue) -> newValue.initialize());
-        buttonViewProperty.set(new ImageButton(null, buttonIDProperty, () -> onAction(onAction), true, ImageButton.SMALL));
+        buttonViewProperty.set(new ImageButton(
+                null,
+                buttonIDProperty,
+                () -> onAction(onAction),
+                null,
+                true,
+                ImageButton.SMALL
+        ));
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
@@ -102,6 +109,7 @@ public class UINode
      * <p>Returns the {@link ReadOnlyStringProperty property} defining the {@link ImageButton#nameBinding() file name} of the {@link ImageButton button} for this {@link UINode}.</p>
      *
      * @return The {@link ReadOnlyStringProperty property} defining the {@link ImageButton#nameBinding() file name} of the {@link ImageButton button} for this {@link UINode}.
+     *
      * @see #getButtonID()
      */
     public ReadOnlyStringProperty buttonIDProperty()
@@ -114,6 +122,7 @@ public class UINode
      * <p>See <i>{@link #buttonIDProperty()}</i> for details.</p>
      *
      * @return The {@link ImageButton#nameBinding() file name} of the {@link ImageButton button} for this {@link UINode}.
+     *
      * @see #buttonIDProperty()
      */
     public String getButtonID()
@@ -131,6 +140,7 @@ public class UINode
      * </ol>
      *
      * @return The {@link ReadOnlyStringProperty property} containing the {@link #getName() name} of this {@link UINode}.
+     *
      * @see #getName()
      */
     public ReadOnlyStringProperty nameProperty()
@@ -143,6 +153,7 @@ public class UINode
      * <p>See <i>{@link #nameProperty()}</i> for details.</p>
      *
      * @return The {@link #nameProperty() name} of this {@link UINode}.
+     *
      * @see #nameProperty()
      */
     public String getName()

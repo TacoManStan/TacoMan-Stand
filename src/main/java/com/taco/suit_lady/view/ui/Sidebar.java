@@ -66,6 +66,7 @@ public class Sidebar
      *                              <li>The {@link ImagePane} can then be added to a {@link Region  JavaFX Region} and the {@link #back() Back} {@link #getBackButton() Button} will work as intended. No additional setup is required.</li>
      *                              <li>Note that every {@link Node JavaFX Node} instance can have a maximum of <u>one</u> parent at any given time.</li>
      *                        </ol>
+     *
      * @throws NullPointerException If the {@code childButtonPane} parameter is {@code null}.
      * @throws NullPointerException If the {@code contentPane} parameter is {@code null}.
      */
@@ -80,8 +81,10 @@ public class Sidebar
         this.contentPane = contentPane;
         this.backImageButton = new ImageButton(
                 backImagePane, "back_arrow",
-                () -> FXTools.get().runFX(this::back, false),
-                false, ImageButton.SMALL
+                null,
+                this::back,
+                false,
+                ImageButton.SMALL
         );
         
         this.nodeGroupsProperty = FXCollections.observableArrayList();
@@ -169,7 +172,7 @@ public class Sidebar
     {
         return childButtonPane;
     }
-
+    
     public StackPane getContentPane()
     {
         return contentPane;
@@ -198,6 +201,7 @@ public class Sidebar
      * <p>Returns the {@link ReadOnlyObjectProperty property} containing the {@link #getSelectedNodeGroup() selected} {@link SidebarNodeGroup}.</p>
      *
      * @return The {@link ReadOnlyObjectProperty property} containing the {@link #getSelectedNodeGroup() selected} {@link SidebarNodeGroup}.
+     *
      * @see #getSelectedNodeGroup()
      * @see #setSelectedNodeGroup(SidebarNodeGroup)
      * @see #isNodeGroupSelected(SidebarNodeGroup)
@@ -211,6 +215,7 @@ public class Sidebar
      * <p>Returns the {@link #selectedNodeGroupProperty() selected} {@link SidebarNodeGroup}.</p>
      *
      * @return The {@link #selectedNodeGroupProperty() selected} {@link SidebarNodeGroup}.
+     *
      * @see #selectedNodeGroupProperty()
      * @see #setSelectedNodeGroup(SidebarNodeGroup)
      * @see #isNodeGroupSelected(SidebarNodeGroup)
@@ -224,6 +229,7 @@ public class Sidebar
      * <p>Sets the {@link #selectedNodeGroupProperty() selected} {@link SidebarNodeGroup} to the specified value.</p>
      *
      * @param menu The {@link SidebarNodeGroup} to be {@link #selectedNodeGroupProperty() selected}.
+     *
      * @see #selectedNodeGroupProperty()
      * @see #getSelectedNodeGroup()
      * @see #isNodeGroupSelected(SidebarNodeGroup)
@@ -237,7 +243,9 @@ public class Sidebar
      * <p>Checks if the specified {@link SidebarNodeGroup} is currently {@link #selectedNodeGroupProperty() selected} or not.</p>
      *
      * @param menu The {@link SidebarNodeGroup} being checked.
+     *
      * @return True if the specified {@link SidebarNodeGroup} is currently {@link #selectedNodeGroupProperty() selected}, false if it is not.
+     *
      * @see #selectedNodeGroupProperty()
      * @see #getSelectedNodeGroup()
      * @see #setSelectedNodeGroup(SidebarNodeGroup)

@@ -309,6 +309,7 @@ public class AppController
         new ImageButton(
                 settingsImagePane,
                 "settings",
+                null,
                 this::openSettings,
                 false,
                 ImageButton.SMALL
@@ -317,6 +318,7 @@ public class AppController
         new ImageButton(
                 sidebarImagePane,
                 "hide_sidebar",
+                null,
                 this::toggleSidebar,
                 false,
                 ImageButton.SMALL
@@ -325,7 +327,8 @@ public class AppController
         new ImageButton(
                 minimizeImagePane,
                 "minimize",
-                () -> FXTools.get().runFX(() -> stage.setIconified(!stage.isIconified()), false),
+                null,
+                () -> stage.setIconified(!stage.isIconified()),
                 false,
                 ImageButton.SMALL
         ).initialize();
@@ -333,7 +336,8 @@ public class AppController
         new ImageButton(
                 maximizeImagePane,
                 Bindings.createStringBinding(() -> stage.isMaximized() ? "maximize_both" : "maximize", stage.maximizedProperty()),
-                () -> FXTools.get().runFX(() -> stage.setMaximized(!stage.isMaximized()), false),
+                null,
+                () -> stage.setMaximized(!stage.isMaximized()),
                 false,
                 ImageButton.SMALL
         ).initialize();
@@ -341,7 +345,8 @@ public class AppController
         new ImageButton(
                 closeImagePane,
                 "close",
-                () -> FXTools.get().runFX(stage::close, false),
+                null,
+                stage::close,
                 false,
                 ImageButton.SMALL
         ).initialize();
@@ -350,6 +355,7 @@ public class AppController
                 logoImagePane,
                 "logo",
                 () -> TB.web().browse("google", true),
+                null,
                 false,
                 new Point2D(20.0, 20.0)
         ).initialize();
@@ -395,81 +401,75 @@ public class AppController
     
     private void toggleSidebar()
     {
-        FXTools.get().runFX(() -> {
-            Stage stage = getStage();
-            
-            boolean hiding = sidebarPaneAnchor.isVisible();
-            double stage_start_width = stage.getWidth();
-            double end_rotation = !hiding ? 0.0 : 180.0;
-            double end_pui_width = !hiding ? PUI_WIDTH : 0.0;
-            double end_stage_width = stage_start_width + (PUI_WIDTH * (hiding ? -1 : 1));
-            double end_stage_pref_width = STAGE_MIN_WIDTH + (PUI_WIDTH * (hiding ? 0 : 1));
-            
-            if (hiding)
-                stage.setMinWidth(end_stage_pref_width);
-            else
+        Stage stage = getStage();
+        
+        boolean hiding = sidebarPaneAnchor.isVisible();
+        double stage_start_width = stage.getWidth();
+        double end_rotation = !hiding ? 0.0 : 180.0;
+        double end_pui_width = !hiding ? PUI_WIDTH : 0.0;
+        double end_stage_width = stage_start_width + (PUI_WIDTH * (hiding ? -1 : 1));
+        double end_stage_pref_width = STAGE_MIN_WIDTH + (PUI_WIDTH * (hiding ? 0 : 1));
+        
+        if (hiding)
+            stage.setMinWidth(end_stage_pref_width);
+        else {
+            sidebarPaneAnchor.setPrefWidth(0);
+            sidebarPaneAnchor.setMinWidth(0);
+            sidebarPaneAnchor.setVisible(true);
+        }
+        
+        BooleanProperty readyProperty = new SimpleBooleanProperty(false);
+        DoubleProperty puiPanePrefWidthProperty = new SimpleDoubleProperty(sidebarPaneAnchor.getPrefWidth());
+        DoubleProperty stageWidthProperty = new SimpleDoubleProperty(stage.getWidth());
+        ChangeListener<Number> stageWidthChangeListener = (observable, oldValue, newValue) -> {
+            if (Math.abs(stage.getWidth() - newValue.intValue()) > FRAME_WIDTH_STEP)
+                readyProperty.set(true);
+        };
+        stageWidthProperty.addListener(stageWidthChangeListener);
+        
+        AnimationTimer animationTimer = new AnimationTimer()
+        {
+            @Override public void handle(long currentTime)
             {
-                sidebarPaneAnchor.setPrefWidth(0);
-                sidebarPaneAnchor.setMinWidth(0);
-                sidebarPaneAnchor.setVisible(true);
-            }
-            
-            BooleanProperty readyProperty = new SimpleBooleanProperty(false);
-            DoubleProperty puiPanePrefWidthProperty = new SimpleDoubleProperty(sidebarPaneAnchor.getPrefWidth());
-            DoubleProperty stageWidthProperty = new SimpleDoubleProperty(stage.getWidth());
-            ChangeListener<Number> stageWidthChangeListener = (observable, oldValue, newValue) -> {
-                if (Math.abs(stage.getWidth() - newValue.intValue()) > FRAME_WIDTH_STEP)
-                    readyProperty.set(true);
-            };
-            stageWidthProperty.addListener(stageWidthChangeListener);
-            
-            AnimationTimer animationTimer = new AnimationTimer()
-            {
-                @Override public void handle(long currentTime)
-                {
-                    if (readyProperty.get())
-                    {
-                        readyProperty.set(false);
-                        stage.setWidth(stageWidthProperty.intValue());
-                        sidebarPaneAnchor.setPrefWidth(puiPanePrefWidthProperty.intValue());
-                    }
+                if (readyProperty.get()) {
+                    readyProperty.set(false);
+                    stage.setWidth(stageWidthProperty.intValue());
+                    sidebarPaneAnchor.setPrefWidth(puiPanePrefWidthProperty.intValue());
                 }
-            };
+            }
+        };
+        
+        Timeline animation = new Timeline(new KeyFrame(
+                Duration.millis(MICRO_TRANSITION_TIME),
+                new KeyValue(sidebarImagePane.rotateProperty(), end_rotation),
+                new KeyValue(puiPanePrefWidthProperty, end_pui_width),
+                new KeyValue(stageWidthProperty, end_stage_width)
+        ));
+        
+        animation.setOnFinished(animationEvent -> {
+            animationTimer.stop();
             
-            Timeline animation = new Timeline(new KeyFrame(
-                    Duration.millis(MICRO_TRANSITION_TIME),
-                    new KeyValue(sidebarImagePane.rotateProperty(), end_rotation),
-                    new KeyValue(puiPanePrefWidthProperty, end_pui_width),
-                    new KeyValue(stageWidthProperty, end_stage_width)
-            ));
+            stageWidthProperty.removeListener(stageWidthChangeListener);
+            stage.setWidth(end_stage_width);
+            FXTools.get().lockSize(stage, end_stage_pref_width, FXTools.get().NO_CHANGE_SIZE_LOCK);
             
-            animation.setOnFinished(animationEvent -> {
-                animationTimer.stop();
-                
-                stageWidthProperty.removeListener(stageWidthChangeListener);
-                stage.setWidth(end_stage_width);
-                FXTools.get().lockSize(stage, end_stage_pref_width, FXTools.get().NO_CHANGE_SIZE_LOCK);
-                
-                sidebarPaneAnchor.setVisible(!hiding);
-                sidebarPaneAnchor.setPrefWidth(PUI_WIDTH);
-            });
-            
-            animationTimer.start();
-            animation.play();
-        }, false);
+            sidebarPaneAnchor.setVisible(!hiding);
+            sidebarPaneAnchor.setPrefWidth(PUI_WIDTH);
+        });
+        
+        animationTimer.start();
+        animation.play();
     }
     
     private void openSettings()
     {
-        FXTools.get().runFX(
-                () -> FXDialogTools.showControllableDialog(
-                        "Settings",
-                        null,
-                        0.0,
-                        FXDialogTools.OK,
-                        true,
-                        weaver.loadController(SettingsController.class)
-                ), false
+        FXDialogTools.showControllableDialog(
+                "Settings",
+                null,
+                0.0,
+                FXDialogTools.OK,
+                true,
+                weaver.loadController(SettingsController.class)
         );
     }
     

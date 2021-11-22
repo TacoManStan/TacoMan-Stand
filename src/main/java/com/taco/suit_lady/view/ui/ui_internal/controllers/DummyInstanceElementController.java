@@ -58,12 +58,12 @@ public final class DummyInstanceElementController extends CellController<DummyIn
     @Override
     public void initialize()
     {
-        (this.iconButton = new ImageButton(iconImagePane, "logo", this::icon, false, null)).initialize();
-        (this.closeButton = new ImageButton(closeImagePane, "close", this::close, false, new Point2D(15, 15))).initialize();
+        (this.iconButton = new ImageButton(iconImagePane, "logo", this::icon, null, false, null)).initialize();
+        (this.closeButton = new ImageButton(closeImagePane, "close", this::close, null, false, new Point2D(15, 15))).initialize();
         
-        (this.playButton = new ImageButton(playImagePane, "play", this::runScript, false, ImageButton.SMALL)).initialize();
-        (this.stopButton = new ImageButton(stopImagePane, "stop", this::stopScript, false, ImageButton.SMALL)).initialize();
-        (this.rerunButton = new ImageButton(rerunImagePane, "rerun", this::rerunScript, false, ImageButton.SMALL)).initialize();
+        (this.playButton = new ImageButton(playImagePane, "play", this::runScript, null, false, ImageButton.SMALL)).initialize();
+        (this.stopButton = new ImageButton(stopImagePane, "stop", this::stopScript, null, false, ImageButton.SMALL)).initialize();
+        (this.rerunButton = new ImageButton(rerunImagePane, "rerun", this::rerunScript, null, false, ImageButton.SMALL)).initialize();
     }
     
     /* *************************************************************************** *
@@ -108,8 +108,7 @@ public final class DummyInstanceElementController extends CellController<DummyIn
     protected void onContentChange(DummyInstance oldInstance, DummyInstance newInstance)
     {
         // CHANGE-HERE
-        if (newInstance == null)
-        {
+        if (newInstance == null) {
             playButton.disabledProperty().unbind();
             playButton.setDisabled(true);
             stopButton.disabledProperty().unbind();
