@@ -16,9 +16,11 @@ import javafx.beans.value.ObservableStringValue;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationContext;
 
 import java.util.ArrayList;
@@ -42,7 +44,7 @@ public class ImageButton
     private final StringBinding nameBinding;
     private final ObjectProperty<ButtonViewGroup> buttonGroupProperty;
     
-    private final ReadOnlyObjectWrapper<Image> imageProperty;
+    private final ReadOnlyObjectWrapper<Image> standardImageProperty;
     private final ReadOnlyObjectWrapper<Image> hoveredImageProperty;
     private final ReadOnlyObjectWrapper<Image> pressedImageProperty;
     private final ReadOnlyObjectWrapper<Image> disabledImageProperty;
@@ -72,11 +74,14 @@ public class ImageButton
             this.imagePane.setMaxSize(size.getX(), size.getY());
         }
         
-        this.nameBinding = BindingTools.createStringBinding(nameBinding);
+        this.nameBinding = Bindings.createStringBinding(() -> {
+            final String name = nameBinding.get();
+            return name != null ? name : "missingno";
+        }, nameBinding);
         
         this.buttonGroupProperty = new ReadOnlyObjectWrapper<>();
         
-        this.imageProperty = new ReadOnlyObjectWrapper<>();
+        this.standardImageProperty = new ReadOnlyObjectWrapper<>();
         this.hoveredImageProperty = new ReadOnlyObjectWrapper<>();
         this.pressedImageProperty = new ReadOnlyObjectWrapper<>();
         this.disabledImageProperty = new ReadOnlyObjectWrapper<>();
@@ -109,25 +114,27 @@ public class ImageButton
             }
         });
         
-        this.imageProperty.bind(createImageBinding(""));
+        this.standardImageProperty.bind(createImageBinding(""));
         this.hoveredImageProperty.bind(createImageBinding("_hovered"));
         this.pressedImageProperty.bind(createImageBinding("_pressed"));
         this.disabledImageProperty.bind(createImageBinding("_disabled"));
         
-        try {
-            this.hoveredBinding = BindingTools.createBooleanBinding(this.imagePane.hoverProperty());
-            this.pressedBinding = BindingTools.createBooleanBinding(this.imagePane.pressedProperty());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        this.hoveredBinding = BindingTools.createBooleanBinding(this.imagePane.hoverProperty());
+        this.pressedBinding = BindingTools.createBooleanBinding(this.imagePane.pressedProperty());
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">
     
     public void initialize()
     {
+        Objects.requireNonNull(standardImageProperty, "Standard property cannot be null");
+        
+        initializeImagePane();
+    }
+    
+    private void initializeImagePane()
+    {
         Objects.requireNonNull(imagePane, "Image view cannot be null");
-        Objects.requireNonNull(imageProperty, "Standard property cannot be null");
         
         ArrayList<Observable> observables = new ArrayList<>(Arrays.asList(
                 nameBinding,
@@ -135,30 +142,18 @@ public class ImageButton
                 pressedBinding,
                 selectedProperty,
                 disabledProperty,
-                imageProperty
+                standardImageProperty
         ));
         
-        imagePane.imageProperty().bind(Bindings.createObjectBinding(() -> {
-            Image standardImage = getImage();
-            Image pressedImage = getPressedImage();
-            Image hoveredImage = getHoveredImage();
-            Image disabledImage = getDisabledImage();
-            if (disabledImage != null && isDisabled())
-                return disabledImage;
-            else if (pressedImage != null && isHovered() && isPressed())
-                return pressedImage;
-            else if (hoveredImage != null && isHovered())
-                return hoveredImage;
-            else if (pressedImage != null && isToggleable() && isSelected())
-                return pressedImage;
-            return standardImage;
-        }, observables.toArray(new Observable[0])));
+        imagePane.imageProperty().bind(Bindings.createObjectBinding(
+                () -> getImage(), observables.toArray(new Observable[0])));
         
         imagePane.setPickOnBounds(true);
         imagePane.setOnMouseClicked(Event::consume);
         imagePane.setOnMousePressed(Event::consume);
         imagePane.setOnMouseReleased(event -> {
             if (Objects.equals(event.getSource(), imagePane) && FXTools.get().isMouseOnEventSource(event))
+                // Ignore event if this ImageButton is disabled
                 if (!isDisabled()) {
                     toggle();
                     onAction();
@@ -173,37 +168,88 @@ public class ImageButton
     
     /**
      * <p>Returns the {@link ImagePane} object containing this {@link ImageButton}.</p>
-     * <p></p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>Required because {@link ImageButton ImageButtons} are not actually {@link Node UI elements}.</li>
+     * </ol>
      *
-     * @return
+     * @return The {@link ImagePane} object containing this {@link ImageButton}.
      */
-    public ImagePane getImagePane()
+    public @NotNull ImagePane getImagePane()
     {
         return imagePane;
     }
     
-    public StringBinding nameBinding()
+    /**
+     * <p>Returns the {@link StringBinding} bound to the {@link #getName() name} of this {@link ImageButton}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>The {@link #getName() name} is used to load references to the {@link ResourceTools#getImage(String, String, String) Cached} {@link Image Images}.</li>
+     *     <li>Each {@link ButtonState state} results in a different variation of the same {@link Image} referenced by the {@link ImageButton} {@link #nameBinding() name}.</li>
+     *     <li>The <code><i>{@link #getImage()}</i></code> method returns the current {@link Image} variation displayed by this {@link ImageButton} based on its current {@link #getState() state}.</li>
+     *     <li>The {@link Image} variations are essentially each a different styling of the same original image.</li> // TODO - Eventually have styling be done via code automatically.
+     *     <li>The {@link StringBinding} returned by this method can never return {@code null} and will instead return {@code "missingno"} if the {@link #nameBinding() name} is undefined.</li>
+     * </ol>
+     * <p><b>Cache ID</b></p>
+     * <ol>
+     *     <li>To get the cache ID, refer to the <code><i>{@link #getID()}</i></code> method.</li>
+     *     <li>To get the full cache path ID, refer to the <code><i>{@link #getPathID()}</i></code> method.</li>
+     * </ol>
+     *
+     * @return The {@link StringBinding} bound to the {@link #getName() name} of this {@link ImageButton}.
+     *
+     * @see #getName()
+     * @see #getState()
+     * @see #getImage()
+     * @see #getID()
+     * @see #getPathID()
+     */
+    public @NotNull StringBinding nameBinding()
     {
         // TODO - Dunno how and it isn't necessary yet but you should somehow make it possible to change the name after construction
         return nameBinding;
     }
     
+    /**
+     * <p>Returns the {@link #nameBinding() name} of this {@link ImageButton}.</p>
+     * <blockquote>Refer to the <code><i>{@link #nameBinding()}</i></code> docs for additional information.</blockquote>
+     *
+     * @return The {@link #nameBinding() name} of this {@link ImageButton}.
+     *
+     * @see #nameBinding()
+     */
     @Override
-    public String getName()
+    public @NotNull String getName()
     {
         return nameBinding.get();
     }
     
-    private String getID()
+    /**
+     * <p>Returns the {@link ButtonState#STANDARD vanilla} cache ID for this {@link ImageButton}.</p>
+     * <blockquote>Refer to the <code><i>{@link #nameBinding()}</i></code> docs for additional information.</blockquote>
+     *
+     * @return The {@link ButtonState#STANDARD vanilla} cache ID for this {@link ImageButton}.
+     *
+     * @see #nameBinding()
+     * @see #getPathID()
+     * @see ResourceTools#getImage(String, String, String)
+     */
+    private @NotNull String getID()
     {
-        String name = getName();
-        if (name != null)
-            return name.replace(" ", "_").toLowerCase();
-        else
-            return "missingno";
+        return getName().replace(" ", "_").toLowerCase();
     }
     
-    private String getPathID()
+    /**
+     * <p>Returns the full {@link ButtonState#STANDARD vanilla} cache path ID for this {@link ImageButton}.</p>
+     * <blockquote>Refer to the <code><i>{@link #nameBinding()}</i></code> docs for additional information.</blockquote>
+     *
+     * @return The full {@link ButtonState#STANDARD vanilla} cache path ID for this {@link ImageButton}.
+     *
+     * @see #nameBinding()
+     * @see #getID()
+     * @see ResourceTools#getImage(String, String, String)
+     */
+    private @NotNull String getPathID()
     {
         return "buttons/" + getID() + "/";
     }
@@ -257,14 +303,14 @@ public class ImageButton
     
     //<editor-fold desc="Image Properties">
     
-    public ReadOnlyObjectProperty<Image> imageProperty()
+    public ReadOnlyObjectProperty<Image> standardImageProperty()
     {
-        return imageProperty.getReadOnlyProperty();
+        return standardImageProperty.getReadOnlyProperty();
     }
     
-    public Image getImage()
+    public Image getStandardImage()
     {
-        return imageProperty.get();
+        return standardImageProperty.get();
     }
     
     public ReadOnlyObjectProperty<Image> hoveredImageProperty()
@@ -418,6 +464,124 @@ public class ImageButton
         else if (size.equals(LARGE_BOX))
             return "large_box";
         return "default";
+    }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- BUTTON STATE ---">
+    
+    /**
+     * An {@code enum} defining the current {@code state} of this {@link ImageButton}.
+     */
+    public enum ButtonState
+    {
+        /**
+         * <p>Represents the standard {@link ImageButton} state.</p>
+         * <p><b>Details</b></p>
+         * <ol>
+         *     <li>If the {@link ImageButton} is not {@link #disabledProperty() disabled} or otherwise being interacted with, the {@link ImageButton} state will be {@link ButtonState#STANDARD}.</li>
+         *     <li>
+         *         An {@link ImageButton} is in a {@code standard} state if...
+         *         <ol>
+         *             <li>The mouse cursor is not {@link #hoveredBinding() hovering} over the {@link ImageButton}.</li>
+         *             <li>The {@link ImageButton} is not {@link #disabledProperty() disabled}.</li>
+         *         </ol>
+         *     </li>
+         *     <li>Analogous to default/vanilla.</li>
+         * </ol>
+         */
+        STANDARD,
+        
+        /**
+         * <p>Represents the {@link #hoveredBinding() hovered} {@link ImageButton} state.</p>
+         * <p><b>Details</b></p>
+         * <ol>
+         *     <li>
+         *         An {@link ImageButton} is in a {@link #hoveredBinding() hovered} state if...
+         *         <ol>
+         *             <li>The mouse cursor is {@link #hoveredBinding() hovering} over the {@link ImageButton}.</li>
+         *             <li>The {@link ImageButton} is not {@link #disabledProperty() disabled}.</li>
+         *         </ol>
+         *     </li>
+         * </ol>
+         */
+        HOVERED,
+        
+        /**
+         * <p>Represents the {@link #pressedBinding() pressed} {@link ImageButton} state.</p>
+         * <p><b>Details</b></p>
+         * <ol>
+         *     <li>
+         *         An {@link ImageButton} is in a {@link #pressedBinding() pressed} state if...
+         *         <ol>
+         *             <li>The mouse cursor is currently pressed.</li>
+         *             <li>The mouse cursor is currently within the bounds of the {@link ImageButton}.</li>
+         *             <lI>The {@link ImageButton} is not {@link #disabledProperty() disabled}.</lI>
+         *         </ol>
+         *     </li>
+         *     <li>If the mouse cursor is pressed while {@link #hoveredBinding() hovering} over the {@link ImageButton} but is moved outside the {@link ImageButton} bounds, the {@link ButtonState ButtonState} reverts to {@link ButtonState#STANDARD}.</li>
+         * </ol>
+         */
+        PRESSED,
+        
+        /**
+         * <p>Represents the {@link #disabledProperty() disabled} {@link ImageButton} state.</p>
+         * <p><b>Details</b></p>
+         * <ol>
+         *     <li>
+         *         An {@link ImageButton} is in a {@link #disabledProperty() disabled} state if...
+         *         <ol>
+         *             <li>The {@link ImageButton} is {@link #disabledProperty() disabled}.</li>
+         *             <li>In other words, if an {@link ImageButton} is {@link #disabledProperty() disabled}, the {@link ButtonState ButtonState} will always be {@link ButtonState#DISABLED}.</li>
+         *         </ol>
+         *     </li>
+         * </ol>
+         */
+        DISABLED
+    }
+    
+    /**
+     * <p>Returns the current {@link ButtonState Button State} of this {@link ImageButton}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>The {@link ButtonState Button State} defines the {@link Image} that is currently displayed by this {@link ImageButton}.</li>
+     * </ol>
+     *
+     * @return The current {@link ButtonState state} of this {@link ImageButton}.
+     *
+     * @see ButtonState
+     */
+    public ButtonState getState()
+    {
+        final Image standardImage = getStandardImage();
+        final Image pressedImage = getPressedImage();
+        final Image hoveredImage = getHoveredImage();
+        final Image disabledImage = getDisabledImage();
+        
+        if (disabledImage != null && isDisabled())
+            return ButtonState.DISABLED;
+        else if (pressedImage != null && isHovered() && isPressed())
+            return ButtonState.PRESSED;
+        else if (hoveredImage != null && isHovered())
+            return ButtonState.HOVERED;
+        else if (pressedImage != null && isToggleable() && isSelected())
+            return ButtonState.PRESSED;
+        return ButtonState.STANDARD;
+    }
+    
+    /**
+     * <p>Returns the {@link Image} matching the current {@link ButtonState state} of this {@link ImageButton}.</p>
+     *
+     * @return The {@link Image} matching the current {@link ButtonState state} of this {@link ImageButton}.
+     */
+    public Image getImage()
+    {
+        return switch (getState()) {
+            case HOVERED -> getHoveredImage();
+            case PRESSED -> getPressedImage();
+            case DISABLED -> getDisabledImage();
+            default -> getStandardImage();
+        };
     }
     
     //</editor-fold>
