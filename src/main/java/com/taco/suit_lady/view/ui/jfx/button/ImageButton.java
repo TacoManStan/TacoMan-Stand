@@ -153,9 +153,6 @@ public class ImageButton
         this.pressedImageProperty.bind(createImageBinding("_pressed"));
         this.disabledImageProperty.bind(createImageBinding("_disabled"));
         
-        if (!this.lockName)
-            setName(this.nameProperty.getValue());
-        
         try {
             this.hoveredProperty.bind(this.imagePane.hoverProperty());
             this.pressedProperty.bind(this.imagePane.pressedProperty());
