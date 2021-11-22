@@ -62,7 +62,7 @@ public final class ConsoleElementController extends CellController<WrappingTreeC
     @Override
     public void initialize()
     {
-        (this.settingsButton = new ImageButton(settingsImagePane, "details", this::onDetails, false, false, null)).initialize();
+        (this.settingsButton = new ImageButton(settingsImagePane, "details", this::onDetails, false, null)).initialize();
         this.settingsImagePane.setMinSize(settingsImagePane.getImage().getWidth(), settingsImagePane.getImage().getHeight());
         
         this.addLabel(this.timestampLabel = new Label());

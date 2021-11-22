@@ -58,12 +58,12 @@ public final class DummyInstanceElementController extends CellController<DummyIn
     @Override
     public void initialize()
     {
-        (this.iconButton = new ImageButton(iconImagePane, "logo", this::icon, false, false, null)).initialize();
-        (this.closeButton = new ImageButton(closeImagePane, "close", this::close, false, false, new Point2D(15, 15))).initialize();
+        (this.iconButton = new ImageButton(iconImagePane, "logo", this::icon, false, null)).initialize();
+        (this.closeButton = new ImageButton(closeImagePane, "close", this::close, false, new Point2D(15, 15))).initialize();
         
-        (this.playButton = new ImageButton(playImagePane, "play", this::runScript, false, true, ImageButton.SMALL)).initialize();
-        (this.stopButton = new ImageButton(stopImagePane, "stop", this::stopScript, false, true, ImageButton.SMALL)).initialize();
-        (this.rerunButton = new ImageButton(rerunImagePane, "rerun", this::rerunScript, false, true, ImageButton.SMALL)).initialize();
+        (this.playButton = new ImageButton(playImagePane, "play", this::runScript, false, ImageButton.SMALL)).initialize();
+        (this.stopButton = new ImageButton(stopImagePane, "stop", this::stopScript, false, ImageButton.SMALL)).initialize();
+        (this.rerunButton = new ImageButton(rerunImagePane, "rerun", this::rerunScript, false, ImageButton.SMALL)).initialize();
     }
     
     /* *************************************************************************** *

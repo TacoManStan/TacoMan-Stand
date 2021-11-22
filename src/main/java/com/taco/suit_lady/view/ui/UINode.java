@@ -93,7 +93,7 @@ public class UINode
         displayer.bind(pageHandler.visiblePageBinding());
         
         buttonViewProperty.addListener((observable, oldValue, newValue) -> newValue.initialize());
-        buttonViewProperty.set(new ImageButton(null, buttonIDProperty, () -> onAction(onAction), true, true, ImageButton.SMALL));
+        buttonViewProperty.set(new ImageButton(null, buttonIDProperty, () -> onAction(onAction), true, ImageButton.SMALL));
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
