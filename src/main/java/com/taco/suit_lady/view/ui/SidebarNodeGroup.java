@@ -1,5 +1,6 @@
 package com.taco.suit_lady.view.ui;
 
+import com.taco.suit_lady.util.ExceptionTools;
 import com.taco.suit_lady.view.ui.jfx.button.BoundButtonViewGroup;
 import com.taco.suit_lady.view.ui.jfx.button.ButtonViewGroup;
 import com.taco.suit_lady.view.ui.jfx.button.ButtonViewable;
@@ -9,6 +10,7 @@ import javafx.beans.property.StringProperty;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -19,7 +21,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class SidebarNodeGroup extends UINodeGroup
 {
     private final ReentrantLock lock;
-    private final StringProperty nameProperty;
+    private final StringProperty nameProperty; // Currently Unused
     
     private final Sidebar owner;
     private final VBox buttonBox;
@@ -27,14 +29,45 @@ public class SidebarNodeGroup extends UINodeGroup
     
     private final BoundButtonViewGroup<UINode> nodeButtonGroup;
     
+    /**
+     * <p>Refer to {@link #SidebarNodeGroup(Sidebar, Button, StackPane) Fully-Parameterized Constructor} for details.</p>
+     * <p>Identical to...</p>
+     * <blockquote>
+     * <code>
+     * {@link #SidebarNodeGroup(Sidebar, Button, StackPane) SidebarNodeGroup(owner, menuButton, <u><b>null</b></u>)}
+     * </code>
+     * </blockquote>
+     */
     public SidebarNodeGroup(Sidebar owner, Button menuButton)
     {
         this(owner, menuButton, null);
     }
     
+    /**
+     * <p><b>Fully-Parameterized Constructor</b></p>
+     *
+     * @param owner       The {@link Sidebar} object in charge of managing this {@link SidebarNodeGroup}.
+     *                    <ul>
+     *                          <li>Cannot be {@code null}.</li>
+     *                    </ul>
+     * @param menuButton  The {@link Button} that {@link #select() selects} this {@link SidebarNodeGroup} when {@link Button#onActionProperty() pressed}.
+     *                    <ul>
+     *                          <li>Cannot be {@code null}.</li>
+     *                    </ul>
+     * @param contentPane The {@link StackPane} on which the {@link #getContent() contents} of this {@link SidebarNodeGroup} are displayed.
+     *                    <ul>
+     *                          <li>Cannot be {@code null}.</li>
+     *                    </ul>
+     * @throws NullPointerException If the {@code owner} parameter is {@code null}.
+     * @throws NullPointerException If the {@code menuButton} parameter is {@code null}.
+     * @see UINodeGroup#UINodeGroup(StackPane)
+     */
     public SidebarNodeGroup(Sidebar owner, Button menuButton, StackPane contentPane)
     {
         super(contentPane);
+        
+        ExceptionTools.nullCheck(owner, "Sidebar (Owner/Parent)");
+        ExceptionTools.nullCheck(menuButton, "Menu Button");
         
         this.lock = owner.getLock();
         this.nameProperty = new SimpleStringProperty();
@@ -49,6 +82,8 @@ public class SidebarNodeGroup extends UINodeGroup
         
         this.nodeButtonGroup.selectedButtonProperty().addListener((observable, oldButton, newButton) -> getNodeDisplayer().setDisplay(this.nodeButtonGroup.getViewableByButton(newButton)));
     }
+    
+    //<editor-fold desc="--- INITIALIZATION ---">
     
     /**
      * <p>Initializes this {@link Sidebar} and associated components and functionality..</p>
@@ -80,7 +115,9 @@ public class SidebarNodeGroup extends UINodeGroup
         }
     }
     
-    //<editor-fold desc="Properties">
+    //</editor-fold>
+    
+    //<editor-fold desc="--- PROPERTIES ---">
     
     /**
      * <p>Returns the {@link StringProperty} containing the {@link #getName() name} of this {@link SidebarNodeGroup}.</p>
@@ -104,7 +141,7 @@ public class SidebarNodeGroup extends UINodeGroup
     /**
      * <p>Returns the {@link #nameProperty() name} of this {@link SidebarNodeGroup}.</p>
      *
-     * @return The {@link #nameProperty() name} of this {@link SidebarNodeGroup}.\
+     * @return The {@link #nameProperty() name} of this {@link SidebarNodeGroup}.
      * @see #nameProperty()
      * @see #setName(String)
      */
@@ -125,8 +162,6 @@ public class SidebarNodeGroup extends UINodeGroup
         nameProperty().set(name);
     }
     
-    //
-    
     /**
      * <p>Returns the {@link Sidebar} object containing this {@link SidebarNodeGroup} instance.</p>
      *
@@ -137,8 +172,25 @@ public class SidebarNodeGroup extends UINodeGroup
         return owner;
     }
     
+    /**
+     * <p>Returns the {@link VBox} {@link Region container} housing all {@link UINode#buttonViewProperty() selection buttons} mapped to all {@link UINode UINodes} in this {@link SidebarNodeGroup}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>The {@link VBox} returned by {@link #getButtonBox() this method} is created automatically in the {@link SidebarNodeGroup} {@link #SidebarNodeGroup(Sidebar, Button, StackPane) constructor}.</li>
+     * </ol>
+     * <p><b>Usage in {@link Sidebar}</b></p>
+     * <ol>
+     *     <li>The {@link #getOwner() Sidebar} class automatically sets the {@link #getButtonBox() button box} that is displayed on the UI at any given time to always reflect the {@link Sidebar#selectedNodeGroupProperty() selected} {@link SidebarNodeGroup}.</li>
+     *     <li>Therefore, the {@link VBox#parentProperty() parent} of the {@link VBox} returned by {@link #getButtonBox() this method} must <i>never</i> be directly modified, changed, or otherwise manipulated.</li>
+     *     <li>{@link #getButtonBox() This method} previously had {@code protected access} for that very reason, and was only changed to permit universal <i>read access</i> to the {@link VBox button box}.</li>
+     * </ol>
+     *
+     * @return The {@link VBox} {@link Region container} housing all {@link UINode#buttonViewProperty() selection buttons} mapped to all {@link UINode UINodes} in this {@link SidebarNodeGroup}.
+     * @see Sidebar#selectedNodeGroupProperty()
+     */
     public VBox getButtonBox()
     {
+        // TODO - In cases such as this — where an object type is of an external source, is not read-only, but needs to be read-only — an inner class containing bindings or read-only properties bound to the internal default properties might be a good solution.
         return buttonBox;
     }
     
@@ -146,8 +198,7 @@ public class SidebarNodeGroup extends UINodeGroup
      * <p>Returns the {@link Button} assigned to this {@link SidebarNodeGroup} instance.</p>
      * <p><b>Details</b></p>
      * <ol>
-     *     <li>When {@link Button#onActionProperty() pressed}, {@link #select()} is called on this {@link SidebarNodeGroup} instance.</li>
-     *     <li>Refer to <code><i>{@link #select()}</i></code> for additional information.</li>
+     *     <li>When {@link Button#onActionProperty() pressed}, the <code><i>{@link #select()}</i></code> method is called on this {@link SidebarNodeGroup} instance.</li>
      * </ol>
      *
      * @return The {@link Button} assigned to this {@link SidebarNodeGroup} instance.
@@ -157,8 +208,6 @@ public class SidebarNodeGroup extends UINodeGroup
     {
         return button;
     }
-    
-    //
     
     /**
      * <p>Returns the {@link BoundButtonViewGroup} responsible for containing and managing the {@link ImageButton ImageButtons} used to switch between {@link ButtonViewGroup#selectedButtonProperty() selected} {@link UINode UINodes} in this {@link SidebarNodeGroup}.</p>
@@ -180,8 +229,6 @@ public class SidebarNodeGroup extends UINodeGroup
         return nodeButtonGroup;
     }
     
-    //
-    
     /**
      * <p>{@link ButtonViewGroup#clearSelection(ImageButton...) Clears} the {@link UINode} currently {@link ButtonViewGroup#selectedButtonProperty() selected} for this {@link SidebarNodeGroup}.</p>
      * <p><b>Details</b></p>
@@ -196,10 +243,8 @@ public class SidebarNodeGroup extends UINodeGroup
         getButtonViewGroup().clearSelection();
     }
     
-    //</editor-fold>
-    
     /**
-     * <p>Sets the {@link Sidebar#selectedNodeGroupProperty() selection} of the {@link Sidebar} {@link #getOwner() owner} to this {@link SidebarNodeGroup} instance.</p>
+     * <p>Sets the {@link Sidebar#selectedNodeGroupProperty() selection} of the {@link #getOwner() Sidebar} containing this {@link SidebarNodeGroup} instance to this {@link SidebarNodeGroup}.</p>
      * <p><b>Details</b></p>
      * <ol>
      *     <li>{@code Passthrough Definition:} <i><code>{@link #getOwner()}<b>.</b>{@link Sidebar#setSelectedNodeGroup(SidebarNodeGroup) setSelectedNodeGroup(this)}</code></i></li>
@@ -209,4 +254,6 @@ public class SidebarNodeGroup extends UINodeGroup
     {
         getOwner().setSelectedNodeGroup(this);
     }
+    
+    //</editor-fold>
 }

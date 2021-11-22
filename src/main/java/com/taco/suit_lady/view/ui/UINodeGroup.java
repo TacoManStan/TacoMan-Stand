@@ -50,7 +50,7 @@ public abstract class UINodeGroup
         }, temp_binding);
     }
     
-    //<editor-fold desc="Properties">
+    //<editor-fold desc="--- PROPERTIES ---">
     
     public Displayer<UINode> getNodeDisplayer()
     {
