@@ -148,7 +148,7 @@ public class Console {
 			// treeView.setShowRoot(false); // Disabled temporarily because for some reason hiding the root causes messages to be truncated.
 
 			// The below binding is used to trigger a refresh whenever a console display checkbox is toggled.
-			final IntegerBinding incrementingBinding = BindingTools.get().incrementingBinding(
+			final IntegerBinding incrementingBinding = BindingTools.incrementingBinding(
 					consoleContainer.showTRiBotProperty(),
 					consoleContainer.showClientProperty(),
 					consoleContainer.showScriptProperty(),

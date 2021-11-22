@@ -67,10 +67,10 @@ public class SettingsController extends DialogController<Void>
         this.contentView = new TransitionContentView(contentPane);
         
         this.selectedPaneBinding = Bindings.createObjectBinding(this::getExpandedPane, categoryAccordion.expandedPaneProperty());
-        this.selectedGroupBinding = BindingTools.get().recursiveBinding(
+        this.selectedGroupBinding = BindingTools.createRecursiveBinding(
                 (TitledPane pane) -> pane != null
                         ? ((SettingsTitledPane) pane).selectedGroupProperty()
-                        : BindingTools.get().objBinding(null),
+                        : BindingTools.createObjectBinding(null),
                 expandedPaneProperty()
         );
         

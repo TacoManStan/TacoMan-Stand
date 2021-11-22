@@ -4,9 +4,9 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.binding.*;
 import javafx.beans.property.*;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.beans.value.*;
 import javafx.collections.ObservableList;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
@@ -18,88 +18,255 @@ import java.util.function.Function;
  */
 public class BindingTools
 {
-    public static BindingTools get()
-    {
-        return TB.bindings();
-    }
-    
-    BindingTools() { }
+    //<editor-fold desc="--- BASIC BINDINGS ---">
     
     /**
-     * Constructs and then returns a {@link BooleanBinding} that always returns the value of {@code value}.
+     * <p>Constructs and then returns a {@link BooleanBinding} that always returns the value of {@code value}.</p>
      *
      * @return A newly constructed {@link BooleanBinding} that always returns the value of {@code value}.
      */
-    public BooleanBinding booleanBinding(final boolean value)
+    public static @NotNull BooleanBinding createBooleanBinding(boolean value)
     {
         return Bindings.createBooleanBinding(() -> value);
     }
     
     /**
-     * Constructs and then returns an {@link IntegerBinding} that always returns the value of {@code value}.
+     * <p>Constructs a new {@link BooleanBinding} that always reflects the {@link ObservableBooleanValue#get() value} of the specified {@link ObservableBooleanValue}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>If the specified {@code value} is {@code null}, the {@link BooleanBinding returned binding} always {@link BooleanBinding#get() returns} {@code false}.</li>
+     * </ol>
+     *
+     * @param observable The {@link ObservableBooleanValue} to be reflected by the returned {@link BooleanBinding}.
+     *
+     * @return A new {@link BooleanBinding} that always reflects the {@link ObservableBooleanValue#get() value} of the specified {@code value}.
+     */
+    public static @NotNull BooleanBinding createBooleanBinding(ObservableBooleanValue observable)
+    {
+        if (observable == null)
+            return createBooleanBinding(false);
+        return Bindings.createBooleanBinding(() -> observable.get(), observable);
+    }
+    
+    /**
+     * <p>Constructs and then returns an {@link IntegerBinding} that always returns the value of {@code value}.</p>
      *
      * @return A newly constructed {@link IntegerBinding} that always returns the value of {@code value}.
      */
-    public IntegerBinding integerBinding(final int value)
+    public static @NotNull IntegerBinding createIntegerBinding(int value)
     {
         return Bindings.createIntegerBinding(() -> value);
     }
     
     /**
-     * Constructs and then returns a {@link LongBinding} that always returns the value of {@code value}.
+     * <p>Constructs a new {@link IntegerBinding} that always reflects the {@link ObservableIntegerValue#get() value} of the specified {@link ObservableIntegerValue}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>If the specified {@code value} is {@code null}, the {@link IntegerBinding returned binding} always {@link IntegerBinding#get() returns} {@code 0}.</li>
+     * </ol>
+     *
+     * @param observable The {@link ObservableIntegerValue} to be reflected by the returned {@link IntegerBinding}.
+     *
+     * @return A new {@link IntegerBinding} that always reflects the {@link ObservableIntegerValue#get() value} of the specified {@code value}.
+     */
+    public static @NotNull IntegerBinding createIntegerBinding(ObservableIntegerValue observable)
+    {
+        if (observable == null)
+            return createIntegerBinding(0);
+        return Bindings.createIntegerBinding(() -> observable.get(), observable);
+    }
+    
+    /**
+     * <p>Constructs and then returns a {@link LongBinding} that always returns the value of {@code value}.</p>
      *
      * @return A newly constructed {@link LongBinding} that always returns the value of {@code value}.
      */
-    public LongBinding longBinding(final long value)
+    public static @NotNull LongBinding createLongBinding(long value)
     {
         return Bindings.createLongBinding(() -> value);
     }
     
     /**
-     * Constructs and then returns a {@link FloatBinding} that always returns the value of {@code value}.
+     * <p>Constructs a new {@link LongBinding} that always reflects the {@link ObservableLongValue#get() value} of the specified {@link ObservableLongValue}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>If the specified {@code value} is {@code null}, the {@link LongBinding returned binding} always {@link LongBinding#get() returns} {@code 0}.</li>
+     * </ol>
+     *
+     * @param observable The {@link ObservableLongValue} to be reflected by the returned {@link LongBinding}.
+     *
+     * @return A new {@link LongBinding} that always reflects the {@link ObservableLongValue#get() value} of the specified {@code value}.
+     */
+    public static @NotNull LongBinding createLongBinding(ObservableLongValue observable)
+    {
+        if (observable == null)
+            return createLongBinding(0);
+        return Bindings.createLongBinding(() -> observable.get(), observable);
+    }
+    
+    /**
+     * <p>Constructs and then returns a {@link FloatBinding} that always returns the value of {@code value}.</p>
      *
      * @return A newly constructed {@link FloatBinding} that always returns the value of {@code value}.
      */
-    public FloatBinding floatBinding(final float value)
+    public static @NotNull FloatBinding createFloatBinding(float value)
     {
         return Bindings.createFloatBinding(() -> value);
     }
     
     /**
-     * Constructs and then returns a {@link DoubleBinding} that always returns the value of {@code value}.
+     * <p>Constructs a new {@link FloatBinding} that always reflects the {@link ObservableFloatValue#get() value} of the specified {@link ObservableFloatValue}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>If the specified {@code value} is {@code null}, the {@link FloatBinding returned binding} always {@link FloatBinding#get() returns} {@code 0}.</li>
+     * </ol>
+     *
+     * @param observable The {@link ObservableFloatValue} to be reflected by the returned {@link FloatBinding}.
+     *
+     * @return A new {@link FloatBinding} that always reflects the {@link ObservableFloatValue#get() value} of the specified {@code value}.
+     */
+    public static @NotNull FloatBinding createFloatBinding(ObservableFloatValue observable)
+    {
+        if (observable == null)
+            return createFloatBinding(0);
+        return Bindings.createFloatBinding(() -> observable.get(), observable);
+    }
+    
+    /**
+     * <p>Constructs and then returns a {@link DoubleBinding} that always returns the value of {@code value}.</p>
      *
      * @return A newly constructed {@link DoubleBinding} that always returns the value of {@code value}.
      */
-    public DoubleBinding doubleBinding(final double value)
+    public static @NotNull DoubleBinding createDoubleBinding(double value)
     {
         return Bindings.createDoubleBinding(() -> value);
     }
     
     /**
-     * Constructs and then returns a {@link StringBinding} that always returns the value of {@code value}.
+     * <p>Constructs a new {@link DoubleBinding} that always reflects the {@link ObservableDoubleValue#get() value} of the specified {@link ObservableDoubleValue}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>If the specified {@code value} is {@code null}, the {@link DoubleBinding returned binding} always {@link DoubleBinding#get() returns} {@code 0}.</li>
+     * </ol>
+     *
+     * @param observable The {@link ObservableDoubleValue} to be reflected by the returned {@link DoubleBinding}.
+     *
+     * @return A new {@link DoubleBinding} that always reflects the {@link ObservableDoubleValue#get() value} of the specified {@code value}.
+     */
+    public static @NotNull DoubleBinding createDoubleBinding(ObservableDoubleValue observable)
+    {
+        if (observable == null)
+            return createDoubleBinding(0);
+        return Bindings.createDoubleBinding(() -> observable.get(), observable);
+    }
+    
+    /**
+     * <p>Constructs and then returns a {@link StringBinding} that always returns the value of {@code value}.</p>
      *
      * @return A newly constructed {@link StringBinding} that always returns the value of {@code value}.
      */
-    public StringBinding stringBinding(final String value)
+    public static @NotNull StringBinding createStringBinding(String value)
     {
         return Bindings.createStringBinding(() -> value);
     }
     
     /**
-     * Constructs and then returns a {@link ObjectBinding} that always returns the value of {@code value}.
+     * <p>Constructs a new {@link StringBinding} that always reflects the {@link ObservableStringValue#get() value} of the specified {@link ObservableStringValue}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>If the specified {@code value} is {@code null}, the {@link StringBinding returned binding} always {@link StringBinding#get() returns} an empty {@link String}.</li>
+     * </ol>
+     *
+     * @param observable The {@link ObservableStringValue} to be reflected by the returned {@link StringBinding}.
+     *
+     * @return A new {@link StringBinding} that always reflects the {@link ObservableStringValue#get() value} of the specified {@code value}.
+     */
+    public static @NotNull StringBinding createStringBinding(ObservableStringValue observable)
+    {
+        if (observable == null)
+            return createStringBinding("");
+        return Bindings.createStringBinding(() -> observable.get(), observable);
+    }
+    
+    /**
+     * <p>Constructs and then returns a {@link ObjectBinding} that always returns the value of {@code value}.</p>
      *
      * @return A newly constructed {@link ObjectBinding} that always returns the value of {@code value}.
      */
-    public <T> ObjectBinding<T> objBinding(final T value)
+    public static <T> @NotNull ObjectBinding<T> createObjectBinding(T value)
     {
         return Bindings.createObjectBinding(() -> value);
     }
     
-    /* *************************************************************************** *
-     *                                                                             *
-     * Recursive Bindings                                                          *
-     *                                                                             *
-     * *************************************************************************** */
+    /**
+     * <p>Constructs a new {@link ObjectBinding} that always reflects the {@link ObservableObjectValue#get() value} of the specified {@link ObservableObjectValue}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>If the specified {@code value} is {@code null}, the {@link ObjectBinding returned binding} always {@link ObjectBinding#get() returns} {@code null}.</li>
+     * </ol>
+     *
+     * @param observable The {@link ObservableObjectValue} to be reflected by the returned {@link ObjectBinding}.
+     *
+     * @return A new {@link ObjectBinding} that always reflects the {@link ObservableObjectValue#get() value} of the specified {@code value}.
+     */
+    public static <T> @NotNull ObjectBinding<T> createObjectBinding(ObservableObjectValue<T> observable)
+    {
+        if (observable == null)
+            return createObjectBinding((T) null);
+        return Bindings.createObjectBinding(() -> observable.get(), observable);
+    }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- CONVENIENCE BINDINGS ---">
+    
+    /**
+     * Creates a {@link BooleanBinding} that is bound to the null status of the specified {@code Binding}.
+     *
+     * @param binding The {@code Binding} who's value is to be null-checked.
+     *
+     * @return The newly created {@code BooleanBinding} bound to the null status of the specified {@code Binding}.
+     */
+    public static BooleanBinding createNullCheckBinding(Binding<?> binding)
+    {
+        ExceptionTools.nullCheck(binding, "Binding");
+        return Bindings.createBooleanBinding(() -> binding.getValue() != null, binding);
+    }
+    
+    /**
+     * Creates and then returns an {@link IntegerBinding} that increments by 1 every time any of the specified {@link Observable Observables} is updated.
+     *
+     * @param obs The {@code Observables}.
+     *
+     * @return An {@link IntegerBinding} that increments by 1 every time any of the specified {@link Observable Observables} is updated.
+     */
+    public static IntegerBinding incrementingBinding(Observable... obs)
+    {
+        AtomicInteger _int = new AtomicInteger(0);
+        return Bindings.createIntegerBinding(_int::incrementAndGet, obs);
+    }
+    
+    /**
+     * Binds the specified {@link Property} to the specified {@link ObservableValue}, ensuring that the update process is done on the FX thread.
+     *
+     * @param property        The {@code Property} being bound.
+     * @param observableValue The {@code ObservableValue} the specified {@code Property} is being bound to.
+     * @param <T>             The type of {@code Object} wrapped by the specified values.
+     */
+    public static <T> void bindFX(Property<T> property, ObservableValue<T> observableValue, Lock lock)
+    {
+        observableValue.addListener(
+                (observable, oldValue, newValue) ->
+                {
+                    if (property.isBound())
+                        throw ExceptionTools.ex("Property is already bound (" + property + ")");
+                    TB.fx().runFX(() -> property.setValue(newValue), true);
+                });
+    }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- RECURSIVE BINDINGS ---">
     
     /**
      * Constructs a new {@link RecursiveBinding} with a new {@link ReentrantLock}.
@@ -107,12 +274,14 @@ public class BindingTools
      * @param function         The {@code Function}. //TODO - Expand
      * @param updateObservable The {@code ObservableValue}. //TODO - Expand
      * @param updateBindings   The array of {@code Observables}. //TODO - Expand
+     *
      * @return A new {@link RecursiveBinding}.
+     *
      * @see RecursiveBinding
      */
-    public <U, V> RecursiveBinding<U, V> recursiveBinding(Function<U, ObservableValue<V>> function, ObservableValue<U> updateObservable, Observable... updateBindings)
+    public static <U, V> RecursiveBinding<U, V> createRecursiveBinding(Function<U, ObservableValue<V>> function, ObservableValue<U> updateObservable, Observable... updateBindings)
     {
-        return recursiveBinding(new ReentrantLock(), function, updateObservable, updateBindings);
+        return createRecursiveBinding(new ReentrantLock(), function, updateObservable, updateBindings);
     }
     
     /**
@@ -122,15 +291,15 @@ public class BindingTools
      * @param function         The {@code Function}. //TODO - Expand
      * @param updateObservable The {@code ObservableValue}. //TODO - Expand
      * @param updateBindings   The array of {@code Observables}. //TODO - Expand
+     *
      * @return A new {@code RecursiveBinding}.
+     *
      * @see RecursiveBinding
      */
-    public <U, V> RecursiveBinding<U, V> recursiveBinding(Lock lock, Function<U, ObservableValue<V>> function, ObservableValue<U> updateObservable, Observable... updateBindings)
+    public static <U, V> RecursiveBinding<U, V> createRecursiveBinding(Lock lock, Function<U, ObservableValue<V>> function, ObservableValue<U> updateObservable, Observable... updateBindings)
     {
         return new RecursiveBinding<>(lock, function, updateObservable, updateBindings);
     }
-    
-    //<editor-fold desc="Recursive Binding Class">
     
     /**
      * Allows you to bind an {@link ObservableValue} to a dynamic {@link Binding}.
@@ -182,7 +351,7 @@ public class BindingTools
         
         private final Lock lock;
         
-        private ObjectProperty<Function<U, ObservableValue<V>>> functionProperty;
+        private final ObjectProperty<Function<U, ObservableValue<V>>> functionProperty;
         
         private final ObjectProperty<V> backingBindingProperty;
         private final ObservableValue<U> updateObservable;
@@ -199,8 +368,9 @@ public class BindingTools
          * @param updateObservable The {@code ObservableValue} that calls the {@code Function} upon changing.
          * @param updateBindings   Any additional {@code Observables} that should trigger an update (call to the {@code Function}) upon changing.
          *                         <i>Optional</i>.
-         * @see BindingTools#recursiveBinding(Function, ObservableValue, Observable...)}
-         * @see BindingTools#recursiveBinding(Lock, Function, ObservableValue, Observable...)}
+         *
+         * @see BindingTools#createRecursiveBinding(Function, ObservableValue, Observable...)}
+         * @see BindingTools#createRecursiveBinding(Lock, Function, ObservableValue, Observable...)}
          */
         protected RecursiveBinding(Lock lock, Function<U, ObservableValue<V>> function, ObservableValue<U> updateObservable, Observable[] updateBindings)
         {
@@ -215,7 +385,7 @@ public class BindingTools
             this.initialize();
         }
         
-        //<editor-fold desc="Properties">
+        //<editor-fold desc="--- PROPERTIES ---">
         
         //
         
@@ -223,6 +393,7 @@ public class BindingTools
          * Returns the {@link ObjectProperty} for this {@code RecursiveBinding}.
          *
          * @return The {@code ObjectProperty} for this {@code RecursiveBinding}.
+         *
          * @see #getFunction()
          * @see #setFunction(Function)
          */
@@ -235,6 +406,7 @@ public class BindingTools
          * Returns the {@link Function} for this {@code RecursiveBinding}.
          *
          * @return The {@code Function} for this {@code RecursiveBinding}.
+         *
          * @see #functionProperty()
          */
         public Function<U, ObservableValue<V>> getFunction()
@@ -248,6 +420,7 @@ public class BindingTools
          * Calling this method causes this {@code RecursiveBinding} to update.
          *
          * @param function The new {@code Function}.
+         *
          * @see #functionProperty()
          */
         public void setFunction(Function<U, ObservableValue<V>> function)
@@ -271,41 +444,7 @@ public class BindingTools
         
         //</editor-fold>
         
-        /**
-         * Initializes this {@code RecursiveBinding}.
-         * <p>
-         * Calling this method more than once will result in an {@code RuntimeException} being thrown.
-         */
-        private void initialize()
-        {
-            updateObservable.addListener((observable, oldValue, newValue) -> update(oldValue, newValue));
-            binding = Bindings.createObjectBinding(
-                    backingBindingProperty::get,
-                    ArrayTools.concat(new Observable[]{backingBindingProperty}, updateBindings)
-            );
-            binding.invalidate();
-            update(updateObservable.getValue(), updateObservable.getValue());
-        }
-        
-        /**
-         * Updates this {@code RecursiveBinding} based on the {@link #getFunction() Function}.
-         *
-         * @param oldValue The old value. <i>Currently unused.</i>
-         * @param newValue The new value.
-         */
-        private void update(U oldValue, U newValue)
-        {
-            Function<U, ObservableValue<V>> function = getFunction();
-            ExceptionTools.nullCheck(function, "Function");
-            ObservableValue<V> observableValue = function.apply(newValue);
-            if (observableValue != null)
-                backingBindingProperty.bind(observableValue);
-            else
-                backingBindingProperty.unbind();
-            invalidate();
-        }
-        
-        //<editor-fold desc="Binding Methods">
+        //<editor-fold desc="--- BINDINGS ---">
         
         /**
          * Calls the {@link Binding#isValid() isValid()} method of the {@code backing Binding}.
@@ -395,67 +534,41 @@ public class BindingTools
         }
         
         //</editor-fold>
+        
+        /**
+         * Initializes this {@code RecursiveBinding}.
+         * <p>
+         * Calling this method more than once will result in an {@code RuntimeException} being thrown.
+         */
+        private void initialize()
+        {
+            updateObservable.addListener((observable, oldValue, newValue) -> update(oldValue, newValue));
+            binding = Bindings.createObjectBinding(
+                    backingBindingProperty::get,
+                    ArrayTools.concat(new Observable[]{backingBindingProperty}, updateBindings)
+            );
+            binding.invalidate();
+            update(updateObservable.getValue(), updateObservable.getValue());
+        }
+        
+        /**
+         * Updates this {@code RecursiveBinding} based on the {@link #getFunction() Function}.
+         *
+         * @param oldValue The old value. <i>Currently unused.</i>
+         * @param newValue The new value.
+         */
+        private void update(U oldValue, U newValue)
+        {
+            Function<U, ObservableValue<V>> function = getFunction();
+            ExceptionTools.nullCheck(function, "Function");
+            ObservableValue<V> observableValue = function.apply(newValue);
+            if (observableValue != null)
+                backingBindingProperty.bind(observableValue);
+            else
+                backingBindingProperty.unbind();
+            invalidate();
+        }
     }
     
     //</editor-fold>
-    
-    /* *************************************************************************** *
-     *                                                                             *
-     * General                                                                     *
-     *                                                                             *
-     * *************************************************************************** */
-    
-    /**
-     * Creates and then returns an {@link IntegerBinding} that increments by 1 every time any of the specified {@link Observable Observables} is updated.
-     *
-     * @param obs The {@code Observables}.
-     * @return An {@link IntegerBinding} that increments by 1 every time any of the specified {@link Observable Observables} is updated.
-     */
-    public IntegerBinding incrementingBinding(Observable... obs)
-    {
-        AtomicInteger _int = new AtomicInteger(0);
-        return Bindings.createIntegerBinding(_int::incrementAndGet, obs);
-    }
-    
-    /* *************************************************************************** *
-     *                                                                             *
-     * EDT/FX Bindings                                                             *
-     *                                                                             *
-     * *************************************************************************** */
-    
-    /**
-     * Binds the specified {@link Property} to the specified {@link ObservableValue}, ensuring that the update process is done on the FX thread.
-     *
-     * @param property        The {@code Property} being bound.
-     * @param observableValue The {@code ObservableValue} the specified {@code Property} is being bound to.
-     * @param <T>             The type of {@code Object} wrapped by the specified values.
-     */
-    public <T> void bindFX(Property<T> property, ObservableValue<T> observableValue, Lock lock)
-    {
-        observableValue.addListener(
-                (observable, oldValue, newValue) ->
-                {
-                    if (property.isBound())
-                        throw ExceptionTools.ex("Property is already bound (" + property + ")");
-                    TB.fx().runFX(() -> property.setValue(newValue), true);
-                });
-    }
-    
-    /* *************************************************************************** *
-     *                                                                             *
-     * Checking Bindings                                                           *
-     *                                                                             *
-     * *************************************************************************** */
-    
-    /**
-     * Creates a {@link BooleanBinding} that is bound to the null status of the specified {@code Binding}.
-     *
-     * @param binding The {@code Binding} who's value is to be null-checked.
-     * @return The newly created {@code BooleanBinding} bound to the null status of the specified {@code Binding}.
-     */
-    public BooleanBinding nullCheckBinding(Binding binding)
-    {
-        ExceptionTools.nullCheck(binding, "Binding");
-        return Bindings.createBooleanBinding(() -> binding.getValue() != null, binding);
-    }
 }

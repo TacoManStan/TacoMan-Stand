@@ -1,5 +1,6 @@
 package com.taco.suit_lady.view.ui.jfx.button;
 
+import com.taco.suit_lady.util.BindingTools;
 import com.taco.suit_lady.util.ResourceTools;
 import com.taco.suit_lady.util.TB;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
@@ -7,6 +8,7 @@ import com.taco.suit_lady.view.ui.jfx.image.ImagePane;
 import com.taco.util.obj_traits.common.Nameable;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableStringValue;
@@ -46,8 +48,9 @@ public class ImageButton
     
     private final ObjectProperty<Runnable> actionResponderProperty;
     
-    private final ReadOnlyBooleanWrapper hoveredProperty;
-    private final ReadOnlyBooleanWrapper pressedProperty;
+	private final BooleanBinding hoveredBinding;
+    private final BooleanBinding pressedBinding;
+    
     private final ReadOnlyBooleanWrapper selectedProperty;
     private final BooleanProperty disabledProperty;
     
@@ -106,9 +109,6 @@ public class ImageButton
         
         this.actionResponderProperty = new SimpleObjectProperty<>(actionResponder);
         
-        this.hoveredProperty = new ReadOnlyBooleanWrapper();
-        this.pressedProperty = new ReadOnlyBooleanWrapper();
-        
         this.selectedProperty = new ReadOnlyBooleanWrapper();
         this.disabledProperty = new SimpleBooleanProperty();
         
@@ -141,13 +141,11 @@ public class ImageButton
         this.disabledImageProperty.bind(createImageBinding("_disabled"));
         
         try {
-            this.hoveredProperty.bind(this.imagePane.hoverProperty());
-            this.pressedProperty.bind(this.imagePane.pressedProperty());
+			this.hoveredBinding = BindingTools.createBooleanBinding(this.imagePane.hoverProperty());
+            this.pressedBinding = BindingTools.createBooleanBinding(this.imagePane.pressedProperty());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        
-        //		this.selectedProperty.addListener((observable, oldValue, newValue) -> onAction());
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">
@@ -159,8 +157,8 @@ public class ImageButton
         
         ArrayList<Observable> observables = new ArrayList<>(Arrays.asList(
                 nameBinding,
-                hoveredProperty,
-                pressedProperty,
+                hoveredBinding,
+                pressedBinding,
                 selectedProperty,
                 disabledProperty,
                 imageProperty
@@ -328,24 +326,24 @@ public class ImageButton
     
     //<editor-fold desc="Button Status Properties">
     
-    public ReadOnlyBooleanProperty hoveredProperty()
+    public BooleanBinding hoveredBinding()
     {
-        return hoveredProperty.getReadOnlyProperty();
+        return hoveredBinding;
     }
     
     public boolean isHovered()
     {
-        return hoveredProperty.get();
+        return hoveredBinding.get();
     }
     
-    public ReadOnlyBooleanProperty pressedProperty()
+    public BooleanBinding pressedBinding()
     {
-        return pressedProperty.getReadOnlyProperty();
+        return pressedBinding;
     }
     
     public boolean isPressed()
     {
-        return pressedProperty.get();
+        return pressedBinding.get();
     }
     
     public final ReadOnlyBooleanProperty selectedProperty()

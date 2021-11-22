@@ -40,8 +40,8 @@ public class TreeCellFX<T, C extends CellController<T>> extends TreeCell<T>
     
     private void initVisibleBinding()
     {
-        BindingTools.RecursiveBinding<TreeItemFX<T>, Boolean> _visibleBinding = BindingTools.get().recursiveBinding(
-                treeItemFX -> treeItemFX != null ? treeItemFX.visibleProperty() : BindingTools.get().booleanBinding(false), treeItemFXBinding());
+        BindingTools.RecursiveBinding<TreeItemFX<T>, Boolean> _visibleBinding = BindingTools.createRecursiveBinding(
+                treeItemFX -> treeItemFX != null ? treeItemFX.visibleProperty() : BindingTools.createBooleanBinding(false), treeItemFXBinding());
         
         _visibleBinding.addListener(observable -> setDisable(!_visibleBinding.getValue()));
     }

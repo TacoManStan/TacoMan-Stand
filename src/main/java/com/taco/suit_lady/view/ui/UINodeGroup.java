@@ -34,7 +34,7 @@ public abstract class UINodeGroup
         
         //
         
-        Binding<Boolean> temp_binding = BindingTools.get().recursiveBinding((UINode uiNode) -> {
+        Binding<Boolean> temp_binding = BindingTools.createRecursiveBinding((UINode uiNode) -> {
             if (uiNode != null)
             {
                 UIPageHandler pageHandler = uiNode.getPageHandler();
