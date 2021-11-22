@@ -49,7 +49,7 @@ public class ImageButton
     
     private final ObjectProperty<Runnable> actionResponderProperty;
     
-	private final BooleanBinding hoveredBinding;
+    private final BooleanBinding hoveredBinding;
     private final BooleanBinding pressedBinding;
     
     private final ReadOnlyBooleanWrapper selectedProperty;
@@ -58,36 +58,9 @@ public class ImageButton
     private final boolean isTheme;
     private final boolean toggleable;
     
-    //
-    
-    public ImageButton(String name)
-    {
-        this(null, name, null, false, true, null);
-    }
-    
-    public ImageButton(String name, Point2D size)
-    {
-        this(null, name, null, false, true, size);
-    }
-    
-    public ImageButton(String name, Runnable actionResponder)
-    {
-        this(null, name, actionResponder, false, true, null);
-    }
-    
-    public ImageButton(String name, Runnable actionResponder, Point2D size)
-    {
-        this(null, name, actionResponder, false, true, size);
-    }
-    
-    public ImageButton(String name, Runnable actionResponder, boolean toggleable, boolean isTheme, Point2D size)
-    {
-        this(null, name, actionResponder, toggleable, isTheme, size);
-    }
-    
     public ImageButton(ImagePane imagePane, String name, Runnable actionResponder, boolean toggleable, boolean isTheme, Point2D size)
     {
-        this(imagePane, Bindings.createStringBinding(() -> name), actionResponder, toggleable, isTheme, size);
+        this(imagePane, BindingTools.createStringBinding(name), actionResponder, toggleable, isTheme, size);
     }
     
     public ImageButton(ImagePane imagePane, ObservableStringValue nameBinding, Runnable actionResponder, boolean toggleable, boolean isTheme, Point2D size)
@@ -142,7 +115,7 @@ public class ImageButton
         this.disabledImageProperty.bind(createImageBinding("_disabled"));
         
         try {
-			this.hoveredBinding = BindingTools.createBooleanBinding(this.imagePane.hoverProperty());
+            this.hoveredBinding = BindingTools.createBooleanBinding(this.imagePane.hoverProperty());
             this.pressedBinding = BindingTools.createBooleanBinding(this.imagePane.pressedProperty());
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -211,13 +184,14 @@ public class ImageButton
     
     public StringBinding nameBinding()
     {
+        // TODO - Dunno how and it isn't necessary yet but you should somehow make it possible to change the name after construction
         return nameBinding;
     }
     
     @Override
     public String getName()
     {
-        return nameBinding().get();
+        return nameBinding.get();
     }
     
     private String getID()
