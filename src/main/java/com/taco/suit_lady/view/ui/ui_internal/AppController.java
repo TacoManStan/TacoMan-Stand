@@ -268,7 +268,7 @@ public class AppController
                         () -> new ExamplePage(uiNode, "green")
                 ), null
         ));
-        _generalSidebarGroup.getButtonViewGroup().selectFirst();
+        _generalSidebarGroup.getButtonGroup().selectFirst();
         
         SidebarNodeGroup _inDevelopmentSidebarNodeGroup = new SidebarNodeGroup(_sidebar, inDevelopmentSidebarButton);
         _inDevelopmentSidebarNodeGroup.getNodes().add(new UINode(
@@ -279,7 +279,7 @@ public class AppController
                         () -> new EntityDebugPage(uiNode)
                 ), null
         ));
-        _inDevelopmentSidebarNodeGroup.getButtonViewGroup().selectFirst();
+        _inDevelopmentSidebarNodeGroup.getButtonGroup().selectFirst();
         
         SidebarNodeGroup _nyiSidebarGroup = new SidebarNodeGroup(_sidebar, nyiSidebarButton);
         _nyiSidebarGroup.getNodes().add(new UINode(
@@ -298,7 +298,7 @@ public class AppController
                         () -> new ExamplePage(uiNode, "blue")
                 ), null
         ));
-        _nyiSidebarGroup.getButtonViewGroup().selectFirst();
+        _nyiSidebarGroup.getButtonGroup().selectFirst();
         
         _sidebar.nodeGroupsProperty().addAll(_generalSidebarGroup, _inDevelopmentSidebarNodeGroup, _nyiSidebarGroup);
         _sidebar.initialize();

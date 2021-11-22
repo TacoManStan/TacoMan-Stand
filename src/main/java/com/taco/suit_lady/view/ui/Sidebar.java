@@ -3,7 +3,7 @@ package com.taco.suit_lady.view.ui;
 import com.taco.suit_lady.util.BindingTools;
 import com.taco.suit_lady.util.ExceptionTools;
 import com.taco.suit_lady.util.ObjectTools;
-import com.taco.suit_lady.view.ui.jfx.button.ButtonViewGroup;
+import com.taco.suit_lady.view.ui.jfx.button.ImageButtonGroup;
 import com.taco.suit_lady.view.ui.jfx.button.ImageButton;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
 import com.taco.suit_lady.view.ui.jfx.image.ImagePane;
@@ -253,12 +253,12 @@ public class Sidebar
     //
     
     /**
-     * <p>{@link SidebarNodeGroup#clearSelection() Clears} the {@link ButtonViewGroup#selectedButtonProperty() selection} of every {@link SidebarNodeGroup SidebarNodeGroups} in this {@link Sidebar}.</p>
+     * <p>{@link SidebarNodeGroup#clearSelection() Clears} the {@link ImageButtonGroup#selectedButtonProperty() selection} of every {@link SidebarNodeGroup SidebarNodeGroups} in this {@link Sidebar}.</p>
      *
      * @see SidebarNodeGroup#clearSelection()
-     * @see SidebarNodeGroup#getButtonViewGroup()
-     * @see ButtonViewGroup#selectedButtonProperty()
-     * @see ButtonViewGroup#clearSelection(ImageButton...)
+     * @see SidebarNodeGroup#getButtonGroup()
+     * @see ImageButtonGroup#selectedButtonProperty()
+     * @see ImageButtonGroup#clearSelection(ImageButton...)
      */
     protected void clearAllSelections()
     {

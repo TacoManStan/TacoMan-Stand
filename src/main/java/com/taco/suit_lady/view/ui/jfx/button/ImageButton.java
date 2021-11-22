@@ -12,6 +12,7 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.*;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableStringValue;
 import javafx.concurrent.Task;
 import javafx.event.Event;
@@ -21,6 +22,7 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.context.ApplicationContext;
 
 import java.util.ArrayList;
@@ -42,7 +44,7 @@ public class ImageButton
     private final ImagePane imagePane;
     
     private final StringBinding nameBinding;
-    private final ObjectProperty<ButtonViewGroup> buttonGroupProperty;
+    private final ObjectProperty<ImageButtonGroup> buttonGroupProperty;
     
     private final ReadOnlyObjectWrapper<Image> standardImageProperty;
     private final ReadOnlyObjectWrapper<Image> hoveredImageProperty;
@@ -57,15 +59,14 @@ public class ImageButton
     private final ReadOnlyBooleanWrapper selectedProperty;
     private final BooleanProperty disabledProperty;
     
-    private final boolean isTheme;
     private final boolean toggleable;
     
-    public ImageButton(ImagePane imagePane, String name, Runnable actionResponder, boolean toggleable, boolean isTheme, Point2D size)
+    public ImageButton(ImagePane imagePane, String name, Runnable actionResponder, boolean toggleable, Point2D size)
     {
-        this(imagePane, BindingTools.createStringBinding(name), actionResponder, toggleable, isTheme, size);
+        this(imagePane, BindingTools.createStringBinding(name), actionResponder, toggleable, size);
     }
     
-    public ImageButton(ImagePane imagePane, ObservableStringValue nameBinding, Runnable actionResponder, boolean toggleable, boolean isTheme, Point2D size)
+    public ImageButton(ImagePane imagePane, ObservableStringValue nameBinding, Runnable actionResponder, boolean toggleable, Point2D size)
     {
         this.imagePane = imagePane == null ? new ImagePane() : imagePane;
         
@@ -91,7 +92,6 @@ public class ImageButton
         this.selectedProperty = new ReadOnlyBooleanWrapper();
         this.disabledProperty = new SimpleBooleanProperty();
         
-        this.isTheme = isTheme;
         this.toggleable = toggleable;
         
         //
@@ -254,90 +254,178 @@ public class ImageButton
         return "buttons/" + getID() + "/";
     }
     
-    public ObjectProperty<ButtonViewGroup> buttonGroupProperty()
+    /**
+     * <P>Returns the {@link ObjectProperty} containing the {@link ImageButtonGroup} that this {@link ImageButton} is in, or {@code null} if this {@link ImageButton} is not in a {@link ImageButtonGroup}.</P>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>All logic related to adding or removing an {@link ImageButton} from a {@link ImageButtonGroup} is done via a {@link ChangeListener} that observes the {@link ObjectProperty} returned by {@link #buttonGroupProperty() this method}.</li>
+     *     <li>The aforementioned {@link ChangeListener} is configured in the {@link ImageButton} {@link #ImageButton(ImagePane, ObservableStringValue, Runnable, boolean, Point2D) constructor}.</li>
+     * </ol>
+     *
+     * @return The {@link ObjectProperty} containing the {@link ImageButtonGroup} that this {@link ImageButton} is in, or {@code null} if this {@link ImageButton} is not in a {@link ImageButtonGroup}.
+     */
+    public @NotNull ObjectProperty<ImageButtonGroup> buttonGroupProperty()
     {
         return buttonGroupProperty;
     }
     
-    public ButtonViewGroup getButtonGroup()
+    /**
+     * <p>Returns the {@link ImageButtonGroup} that this {@link ImageButton} is in, or {@code null} if this {@link ImageButton} is not in a {@link ImageButtonGroup}.</p>
+     *
+     * @return The {@link ImageButtonGroup} that this {@link ImageButton} is in, or {@code null} if this {@link ImageButton} is not in a {@link ImageButtonGroup}.
+     */
+    public @Nullable ImageButtonGroup getButtonGroup()
     {
         return buttonGroupProperty.get();
     }
     
-    public void setButtonGroup(ButtonViewGroup buttonGroup)
+    /**
+     * <p>Sets the {@link ImageButtonGroup} that this {@link ImageButton} is in to the specified {@code value}.</p>
+     *
+     * @param buttonGroup The {@link ImageButtonGroup} that this {@link ImageButton} is being added to.
+     */
+    public void setButtonGroup(@Nullable ImageButtonGroup buttonGroup)
     {
         buttonGroupProperty.set(buttonGroup);
     }
     
+    /**
+     * <p>Checks if this {@link ImageButton} is in a {@link ImageButtonGroup} or not.</p>
+     *
+     * @return True  if this {@link ImageButton} is in a {@link ImageButtonGroup}, false if it is not.
+     */
     public boolean isInButtonGroup()
     {
         return getButtonGroup() != null;
     }
     
-    public ObjectProperty<Runnable> actionResponderProperty()
+    /**
+     * <p>Returns the {@link ObjectProperty} containing the {@link Runnable} that is executed when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.</p>
+     *
+     * @return The {@link ObjectProperty} containing the {@link Runnable} that is executed when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.
+     */
+    public @NotNull ObjectProperty<Runnable> actionResponderProperty()
     {
         return actionResponderProperty;
     }
     
-    public Runnable getActionResponder()
+    /**
+     * <p>Returns the {@link Runnable} that is executed when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.</p>
+     *
+     * @return The {@link Runnable} that is executed when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.
+     */
+    public @Nullable Runnable getActionResponder()
     {
         return actionResponderProperty.get();
     }
     
-    public void setActionResponder(Runnable actionResponder)
+    /**
+     * <p>Sets the {@link Runnable} to be executed when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.</p>
+     *
+     * @param actionResponder The {@link Runnable} to be executed when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.
+     */
+    public void setActionResponder(@Nullable Runnable actionResponder)
     {
         actionResponderProperty.set(actionResponder);
     }
     
+    /**
+     * <p>Checks if this {@link ImageButton} is toggleable or not.</p>
+     *
+     * @return True if this {@link ImageButton} is toggleable, false if it is not.
+     */
     public boolean isToggleable()
     {
         return toggleable;
-    }
-    
-    public boolean isTheme()
-    {
-        return isTheme;
     }
     
     //
     
     //<editor-fold desc="Image Properties">
     
+    /**
+     * <p>Returns the {@link ReadOnlyObjectProperty property} containing the {@link Image} to be displayed when this {@link ImageButton} is in a {@link ButtonState#STANDARD} state.</p>
+     *
+     * @return The {@link ReadOnlyObjectProperty property} containing the {@link Image} to be displayed when this {@link ImageButton} is in a {@link ButtonState#STANDARD} state.
+     */
     public ReadOnlyObjectProperty<Image> standardImageProperty()
     {
         return standardImageProperty.getReadOnlyProperty();
     }
     
+    /**
+     * <p>Returns the {@link Image} to be displayed when this {@link ImageButton} is in a {@link ButtonState#STANDARD} state.</p>
+     *
+     * @return The {@link Image} to be displayed when this {@link ImageButton} is in a {@link ButtonState#STANDARD} state.
+     *
+     * @see #standardImageProperty()
+     */
     public Image getStandardImage()
     {
         return standardImageProperty.get();
     }
     
+    /**
+     * <p>Returns the {@link ReadOnlyObjectProperty property} containing the {@link Image} to be displayed when this {@link ImageButton} is in a {@link ButtonState#HOVERED} state.</p>
+     *
+     * @return The {@link ReadOnlyObjectProperty property} containing the {@link Image} to be displayed when this {@link ImageButton} is in a {@link ButtonState#HOVERED} state.
+     */
     public ReadOnlyObjectProperty<Image> hoveredImageProperty()
     {
         return hoveredImageProperty.getReadOnlyProperty();
     }
     
+    /**
+     * <p>Returns the {@link Image} to be displayed when this {@link ImageButton} is in a {@link ButtonState#HOVERED} state.</p>
+     *
+     * @return The {@link Image} to be displayed when this {@link ImageButton} is in a {@link ButtonState#HOVERED} state.
+     *
+     * @see #hoveredImageProperty()
+     */
     public Image getHoveredImage()
     {
         return hoveredImageProperty.get();
     }
     
+    /**
+     * <p>Returns the {@link ReadOnlyObjectProperty property} containing the {@link Image} to be displayed when this {@link ImageButton} is in a {@link ButtonState#PRESSED} state.</p>
+     *
+     * @return The {@link ReadOnlyObjectProperty property} containing the {@link Image} to be displayed when this {@link ImageButton} is in a {@link ButtonState#PRESSED} state.
+     */
     public ReadOnlyObjectProperty<Image> pressedImageProperty()
     {
         return pressedImageProperty.getReadOnlyProperty();
     }
     
+    /**
+     * <p>Returns the {@link Image} to be displayed when this {@link ImageButton} is in a {@link ButtonState#PRESSED} state.</p>
+     *
+     * @return The {@link Image} to be displayed when this {@link ImageButton} is in a {@link ButtonState#PRESSED} state.
+     *
+     * @see #pressedImageProperty()
+     */
     public Image getPressedImage()
     {
         return pressedImageProperty.get();
     }
     
+    /**
+     * <p>Returns the {@link ReadOnlyObjectProperty property} containing the {@link Image} to be displayed when this {@link ImageButton} is in a {@link ButtonState#DISABLED} state.</p>
+     *
+     * @return The {@link ReadOnlyObjectProperty property} containing the {@link Image} to be displayed when this {@link ImageButton} is in a {@link ButtonState#DISABLED} state.
+     */
     public ReadOnlyObjectProperty<Image> disabledImageProperty()
     {
         return disabledImageProperty.getReadOnlyProperty();
     }
     
+    /**
+     * <p>Returns the {@link Image} to be displayed when this {@link ImageButton} is in a {@link ButtonState#DISABLED} state.</p>
+     *
+     * @return The {@link Image} to be displayed when this {@link ImageButton} is in a {@link ButtonState#DISABLED} state.
+     *
+     * @see #disabledImageProperty()
+     */
     public Image getDisabledImage()
     {
         return disabledImageProperty.get();
@@ -347,26 +435,70 @@ public class ImageButton
     
     //<editor-fold desc="Button Status Properties">
     
+    /**
+     * <p>Returns a {@link BooleanBinding binding} that reflects if this {@link ImageButton} is in a {@link ButtonState#HOVERED} state.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>Specifically, the returned {@link BooleanBinding binding} is bound to <code><i>{@link #getImagePane()}<b>.</b>{@link ImagePane#hoverProperty() hoverProperty()}.</i></code></li>
+     * </ol>
+     *
+     * @return A {@link BooleanBinding binding} bound to reflect if this {@link ImageButton} is in a {@link ButtonState#HOVERED HOVERED} state.
+     */
     public BooleanBinding hoveredBinding()
     {
         return hoveredBinding;
     }
     
+    /**
+     * <p>Checks if this {@link ImageButton} is in a {@link ButtonState#HOVERED HOVERED} state.</p>
+     *
+     * @return True if this {@link ImageButton} is in a {@link ButtonState#HOVERED HOVERED} state, false if it is in any other {@link ButtonState ButtonState}.
+     *
+     * @see #hoveredBinding()
+     */
     public boolean isHovered()
     {
         return hoveredBinding.get();
     }
     
+    /**
+     * <p>Returns a {@link BooleanBinding binding} that reflects if this {@link ImageButton} is in a {@link ButtonState#PRESSED} state.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>Specifically, the returned {@link BooleanBinding binding} is bound to <code><i>{@link #getImagePane()}<b>.</b>{@link ImagePane#pressedProperty() pressedProperty()}.</i></code></li>
+     * </ol>
+     *
+     * @return A {@link BooleanBinding binding} bound to reflect if this {@link ImageButton} is in a {@link ButtonState#PRESSED PRESSED} state.
+     */
     public BooleanBinding pressedBinding()
     {
         return pressedBinding;
     }
     
+    /**
+     * <p>Checks if this {@link ImageButton} is in a {@link ButtonState#PRESSED PRESSED} state.</p>
+     *
+     * @return True if this {@link ImageButton} is in a {@link ButtonState#PRESSED PRESSED} state, false if it is in any other {@link ButtonState ButtonState}.
+     *
+     * @see #pressedBinding()
+     */
     public boolean isPressed()
     {
         return pressedBinding.get();
     }
     
+    /**
+     * <p>Returns the {@link ReadOnlyBooleanProperty property} containing a boolean that reflects if this {@link ImageButton} is currently selected or not.</p>
+     * <p><b>Changing the Value</b></p>
+     * <ol>
+     *     <li>To modify the value of the returned {@link ReadOnlyBooleanProperty property}, refer to {@link #setSelected(boolean)}.</li>
+     *     <li>Modifications to the returned {@link ReadOnlyBooleanProperty property} can only be modified via the {@link #setSelected(boolean)} method because the value can only be changed if this {@link ImageButton} is {@link #isToggleable() toggleable}.</li>
+     *     <li>Refer to <code><i>{@link #setSelected(boolean)}</i></code> documentation for additional information.</li>
+     *     <li>The {@link #getButtonGroup() ImageButtonGroup} {@link ImageButtonGroup#selectedButtonProperty() selection} is automatically updated via listener when this value is changed.</li>
+     * </ol>
+     *
+     * @return The {@link ReadOnlyBooleanProperty property} containing a boolean that reflects if this {@link ImageButton} is currently selected or not.
+     */
     public final ReadOnlyBooleanProperty selectedProperty()
     {
         return selectedProperty.getReadOnlyProperty();
@@ -516,7 +648,8 @@ public class ImageButton
          *         <ol>
          *             <li>The mouse cursor is currently pressed.</li>
          *             <li>The mouse cursor is currently within the bounds of the {@link ImageButton}.</li>
-         *             <lI>The {@link ImageButton} is not {@link #disabledProperty() disabled}.</lI>
+         *             <li>The {@link ImageButton} is not {@link #disabledProperty() disabled}.</li>
+         *             <li>The {@link ImageButton} is {@link #isToggleable() toggleable} and has been {@link #toggle() toggled} on.</li>
          *         </ol>
          *     </li>
          *     <li>If the mouse cursor is pressed while {@link #hoveredBinding() hovering} over the {@link ImageButton} but is moved outside the {@link ImageButton} bounds, the {@link ButtonState ButtonState} reverts to {@link ButtonState#STANDARD}.</li>

@@ -1,8 +1,8 @@
 package com.taco.suit_lady.view.ui;
 
 import com.taco.suit_lady.util.ExceptionTools;
-import com.taco.suit_lady.view.ui.jfx.button.BoundButtonViewGroup;
-import com.taco.suit_lady.view.ui.jfx.button.ButtonViewGroup;
+import com.taco.suit_lady.view.ui.jfx.button.BoundImageButtonGroup;
+import com.taco.suit_lady.view.ui.jfx.button.ImageButtonGroup;
 import com.taco.suit_lady.view.ui.jfx.button.ButtonViewable;
 import com.taco.suit_lady.view.ui.jfx.button.ImageButton;
 import javafx.beans.property.SimpleStringProperty;
@@ -27,7 +27,7 @@ public class SidebarNodeGroup extends UINodeGroup
     private final VBox buttonBox;
     private final Button button;
     
-    private final BoundButtonViewGroup<UINode> nodeButtonGroup;
+    private final BoundImageButtonGroup<UINode> nodeButtonGroup;
     
     /**
      * <p>Refer to {@link #SidebarNodeGroup(Sidebar, Button, StackPane) Fully-Parameterized Constructor} for details.</p>
@@ -76,7 +76,7 @@ public class SidebarNodeGroup extends UINodeGroup
         this.buttonBox = new VBox();
         this.button = menuButton;
         
-        this.nodeButtonGroup = new BoundButtonViewGroup<>(getNodes(), lock);
+        this.nodeButtonGroup = new BoundImageButtonGroup<>(getNodes(), lock);
         
         //
         
@@ -210,37 +210,37 @@ public class SidebarNodeGroup extends UINodeGroup
     }
     
     /**
-     * <p>Returns the {@link BoundButtonViewGroup} responsible for containing and managing the {@link ImageButton ImageButtons} used to switch between {@link ButtonViewGroup#selectedButtonProperty() selected} {@link UINode UINodes} in this {@link SidebarNodeGroup}.</p>
+     * <p>Returns the {@link BoundImageButtonGroup} responsible for containing and managing the {@link ImageButton ImageButtons} used to switch between {@link ImageButtonGroup#selectedButtonProperty() selected} {@link UINode UINodes} in this {@link SidebarNodeGroup}.</p>
      * <p><b>Details</b></p>
      * <ol>
-     *     <li>The {@link BoundButtonViewGroup} returned by this method is used for managing {@link UINode} {@link ButtonViewGroup#selectedButtonProperty() selection}.</li>
+     *     <li>The {@link BoundImageButtonGroup} returned by this method is used for managing {@link UINode} {@link ImageButtonGroup#selectedButtonProperty() selection}.</li>
      *     <li>The above works because {@link UINode} implements {@link ButtonViewable}.</li>
-     *     <li>{@link BoundButtonViewGroup BoundButtonViewGroups} add functionality that allows you to {@link BoundButtonViewGroup#getViewableByButton(ImageButton) retrieve} the {@link ButtonViewable} (in this case, {@link UINode}) the specified {@link ImageButton} is assigned to.</li>
-     *     <li>The {@link BoundButtonViewGroup value} returned by this method is guaranteed to be {@code non-null}.</li>
+     *     <li>{@link BoundImageButtonGroup BoundButtonViewGroups} add functionality that allows you to {@link BoundImageButtonGroup#getViewableByButton(ImageButton) retrieve} the {@link ButtonViewable} (in this case, {@link UINode}) the specified {@link ImageButton} is assigned to.</li>
+     *     <li>The {@link BoundImageButtonGroup value} returned by this method is guaranteed to be {@code non-null}.</li>
      * </ol>
      *
-     * @return The {@link ButtonViewGroup} responsible for containing and managing the {@link ImageButton ImageButtons} used to switch between {@link ButtonViewGroup#selectedButtonProperty() selected} {@link UINode UINodes} in this {@link SidebarNodeGroup}.
+     * @return The {@link ImageButtonGroup} responsible for containing and managing the {@link ImageButton ImageButtons} used to switch between {@link ImageButtonGroup#selectedButtonProperty() selected} {@link UINode UINodes} in this {@link SidebarNodeGroup}.
      * <ol>
      *       <li>Guaranteed to be {@code non-null}.</li>
      * </ol>
      */
-    public BoundButtonViewGroup<UINode> getButtonViewGroup()
+    public BoundImageButtonGroup<UINode> getButtonGroup()
     {
         return nodeButtonGroup;
     }
     
     /**
-     * <p>{@link ButtonViewGroup#clearSelection(ImageButton...) Clears} the {@link UINode} currently {@link ButtonViewGroup#selectedButtonProperty() selected} for this {@link SidebarNodeGroup}.</p>
+     * <p>{@link ImageButtonGroup#clearSelection(ImageButton...) Clears} the {@link UINode} currently {@link ImageButtonGroup#selectedButtonProperty() selected} for this {@link SidebarNodeGroup}.</p>
      * <p><b>Details</b></p>
      * <ol>
-     *     <li>{@code Passthrough Definition:} <i><code>{@link #getButtonViewGroup()}<b>.</b>{@link ButtonViewGroup#clearSelection(ImageButton...) clearSelection()}</code></i></li>
+     *     <li>{@code Passthrough Definition:} <i><code>{@link #getButtonGroup()}<b>.</b>{@link ImageButtonGroup#clearSelection(ImageButton...) clearSelection()}</code></i></li>
      * </ol>
      *
-     * @see ButtonViewGroup#clearSelection(ImageButton...)
+     * @see ImageButtonGroup#clearSelection(ImageButton...)
      */
     public void clearSelection()
     {
-        getButtonViewGroup().clearSelection();
+        getButtonGroup().clearSelection();
     }
     
     /**

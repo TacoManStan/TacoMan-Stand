@@ -12,19 +12,19 @@ import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
 
 // TODO - Fix synchronization issues with selecting an element as the elements list is being modified
-public class ButtonViewGroup
+public class ImageButtonGroup
 {
     protected final ReentrantLock lock;
     
     protected final ListProperty<ImageButton> buttons;
     private final ReadOnlyObjectWrapper<ImageButton> selectedButtonProperty;
     
-    public ButtonViewGroup()
+    public ImageButtonGroup()
     {
         this(null);
     }
     
-    public ButtonViewGroup(ReentrantLock lock)
+    public ImageButtonGroup(ReentrantLock lock)
     {
         this.lock = lock != null ? lock : new ReentrantLock();
         
@@ -66,13 +66,13 @@ public class ButtonViewGroup
     //<editor-fold desc="--- PROPERTIES ---">
     
     /**
-     * <p>Returns the {@link ListProperty} containing the {@link ImageButton buttons} in this {@link ButtonViewGroup}.</p>
+     * <p>Returns the {@link ListProperty} containing the {@link ImageButton buttons} in this {@link ImageButtonGroup}.</p>
      * <ol>
      *     <li>The {@link ListProperty list} returned by this method is <i>not</i> a copy</li>
-     *     <li>All changes made to the {@link ListProperty list} returned by this method will be reflected in this {@link ButtonViewGroup}.</li>
+     *     <li>All changes made to the {@link ListProperty list} returned by this method will be reflected in this {@link ImageButtonGroup}.</li>
      * </ol>
      *
-     * @return The {@link ListProperty} containing the {@link ImageButton buttons} in this {@link ButtonViewGroup}.
+     * @return The {@link ListProperty} containing the {@link ImageButton buttons} in this {@link ImageButtonGroup}.
      */
     protected ListProperty<ImageButton> buttons()
     {
@@ -80,9 +80,9 @@ public class ButtonViewGroup
     }
     
     /**
-     * <p>Returns the {@link ReadOnlyObjectProperty} representing the {@link #getSelectedButton() selected} {@link ImageButton button} in this {@link ButtonViewGroup}.</p>
+     * <p>Returns the {@link ReadOnlyObjectProperty} representing the {@link #getSelectedButton() selected} {@link ImageButton button} in this {@link ImageButtonGroup}.</p>
      *
-     * @return The {@link ReadOnlyObjectProperty} representing the {@link #getSelectedButton() selected} {@link ImageButton button} in this {@link ButtonViewGroup}.
+     * @return The {@link ReadOnlyObjectProperty} representing the {@link #getSelectedButton() selected} {@link ImageButton button} in this {@link ImageButtonGroup}.
      */
     public ReadOnlyObjectProperty<ImageButton> selectedButtonProperty()
     {
@@ -90,12 +90,12 @@ public class ButtonViewGroup
     }
     
     /**
-     * <p>Returns the {@link #getSelectedButton() selected} {@link ImageButton button} in this {@link ButtonViewGroup}.</p>
+     * <p>Returns the {@link #getSelectedButton() selected} {@link ImageButton button} in this {@link ImageButtonGroup}.</p>
      * <ol>
      *     <li><i>{@link #getSelectedButton()}</i> is identical to <i>{@link #selectedButtonProperty() selectedButtonProperty().get()}</i>.</li>
      * </ol>
      *
-     * @return The {@link #getSelectedButton() selected} {@link ImageButton button} in this {@link ButtonViewGroup}.
+     * @return The {@link #getSelectedButton() selected} {@link ImageButton button} in this {@link ImageButtonGroup}.
      * @see #selectedButtonProperty()
      * @see #setSelectedButton(ImageButton)
      * @see #isButtonSelected(ImageButton)
@@ -174,12 +174,12 @@ public class ButtonViewGroup
     }
     
     /**
-     * <p>{@link #setSelectedButton(ImageButton) Selects} the {@code first} {@link ImageButton button} in this {@link ButtonViewGroup}, then returns the previous {@link #getSelectedButton() selection.}</p>
+     * <p>{@link #setSelectedButton(ImageButton) Selects} the {@code first} {@link ImageButton button} in this {@link ImageButtonGroup}, then returns the previous {@link #getSelectedButton() selection.}</p>
      * <ol>
-     *     <li>If there are no {@link ImageButton buttons} in this {@link ButtonViewGroup}, return {@code null}.</li>
+     *     <li>If there are no {@link ImageButton buttons} in this {@link ImageButtonGroup}, return {@code null}.</li>
      * </ol>
      *
-     * @return The previously selected {@link ImageButton button}, or {@code null} if there are no {@link ImageButton buttons} in this {@link ButtonViewGroup}.
+     * @return The previously selected {@link ImageButton button}, or {@code null} if there are no {@link ImageButton buttons} in this {@link ImageButtonGroup}.
      * @see #selectLast()
      * @see #selectedButtonProperty()
      * @see #getSelectedButton()
@@ -195,12 +195,12 @@ public class ButtonViewGroup
     }
     
     /**
-     * <p>{@link #setSelectedButton(ImageButton) Selects} the {@code last} {@link ImageButton button} in this {@link ButtonViewGroup}, then returns the previous {@link #getSelectedButton() selection.}</p>
+     * <p>{@link #setSelectedButton(ImageButton) Selects} the {@code last} {@link ImageButton button} in this {@link ImageButtonGroup}, then returns the previous {@link #getSelectedButton() selection.}</p>
      * <ol>
-     *     <li>If there are no {@link ImageButton buttons} in this {@link ButtonViewGroup}, return {@code null}.</li>
+     *     <li>If there are no {@link ImageButton buttons} in this {@link ImageButtonGroup}, return {@code null}.</li>
      * </ol>
      *
-     * @return The previously selected {@link ImageButton button}, or {@code null} if there are no {@link ImageButton buttons} in this {@link ButtonViewGroup}.
+     * @return The previously selected {@link ImageButton button}, or {@code null} if there are no {@link ImageButton buttons} in this {@link ImageButtonGroup}.
      * @see #selectFirst()
      * @see #selectedButtonProperty()
      * @see #getSelectedButton()

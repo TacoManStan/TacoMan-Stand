@@ -11,27 +11,27 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * <b>--- To Format ---</b>
  * <br><br>
- * <p>{@link BoundButtonViewGroup} is identical to its parent, {@link ButtonViewGroup}, except...</p>
+ * <p>{@link BoundImageButtonGroup} is identical to its parent, {@link ImageButtonGroup}, except...</p>
  * <ol>
- *     <li>{@link BoundButtonViewGroup} contains an {@link #buttonViewables() List} of {@link ButtonViewable ButtonViewables} rather than the parent {@link #buttons() List} of {@link ImageButton ImageButtons}.</li>
- *     <li>The parent {@link #buttons() contents} are bound to the {@link #buttonViewables() ButtonViewables} in this {@link BoundButtonViewGroup}.</li>
+ *     <li>{@link BoundImageButtonGroup} contains an {@link #buttonViewables() List} of {@link ButtonViewable ButtonViewables} rather than the parent {@link #buttons() List} of {@link ImageButton ImageButtons}.</li>
+ *     <li>The parent {@link #buttons() contents} are bound to the {@link #buttonViewables() ButtonViewables} in this {@link BoundImageButtonGroup}.</li>
  * </ol>
  */
-public class BoundButtonViewGroup<T extends ButtonViewable> extends ButtonViewGroup
+public class BoundImageButtonGroup<T extends ButtonViewable> extends ImageButtonGroup
 {
     private final ObservableList<T> buttonViewables;
     
-    public BoundButtonViewGroup()
+    public BoundImageButtonGroup()
     {
         this(null, null);
     }
     
-    public BoundButtonViewGroup(ObservableList<T> buttonViewables)
+    public BoundImageButtonGroup(ObservableList<T> buttonViewables)
     {
         this(buttonViewables, null);
     }
     
-    public BoundButtonViewGroup(ObservableList<T> buttonViewables, ReentrantLock lock)
+    public BoundImageButtonGroup(ObservableList<T> buttonViewables, ReentrantLock lock)
     {
         super(lock);
         this.buttonViewables = buttonViewables != null ? buttonViewables : FXCollections.observableArrayList();
@@ -68,13 +68,13 @@ public class BoundButtonViewGroup<T extends ButtonViewable> extends ButtonViewGr
     //<editor-fold desc="--- PROPERTIES ---">
     
     /**
-     * <p>Returns the {@link ObservableList} containing all {@link ButtonViewable ButtonViewables} in this {@link BoundButtonViewGroup}.</p>
+     * <p>Returns the {@link ObservableList} containing all {@link ButtonViewable ButtonViewables} in this {@link BoundImageButtonGroup}.</p>
      * <ol>
      *     <li>Changes made to the returned {@link ObservableList} are reflected in the parent {@link ImageButton} {@link #buttons() List}.</li>
      *     <li>Currently, the internal {@link ListChangeListener binding} linking <i>{@link #buttonViewables()}</i> to the parent <i>{@link #buttons()}</i> is <i>not</i> synchronized, and is therefore <i>not</i> thread safe.</li>
      * </ol>
      *
-     * @return The {@link ObservableList} containing all {@link ButtonViewable ButtonViewables} in this {@link BoundButtonViewGroup}.
+     * @return The {@link ObservableList} containing all {@link ButtonViewable ButtonViewables} in this {@link BoundImageButtonGroup}.
      */
     public ObservableList<T> buttonViewables()
     {
@@ -87,7 +87,7 @@ public class BoundButtonViewGroup<T extends ButtonViewable> extends ButtonViewGr
      * <p>Returns the {@link ButtonViewable} object the specified {@link ImageButton} is assigned to.</p>
      * <ol>
      *     <li>If the specified {@link ImageButton button} is {@code null}, return {@code null}.</li>
-     *     <li>If the specified {@link ImageButton button} has not been assigned to any of the {@link ButtonViewable ButtonViewables} in this {@link BoundButtonViewGroup group}, return {@code null}.</li>
+     *     <li>If the specified {@link ImageButton button} has not been assigned to any of the {@link ButtonViewable ButtonViewables} in this {@link BoundImageButtonGroup group}, return {@code null}.</li>
      *     <li>This method is necessary because {@link ImageButton} objects are unaware if they are assigned to a {@link ButtonViewable}.</li>
      * </ol>
      *
