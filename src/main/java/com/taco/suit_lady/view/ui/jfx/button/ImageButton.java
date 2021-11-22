@@ -339,8 +339,6 @@ public class ImageButton
         return toggleable;
     }
     
-    //
-    
     //<editor-fold desc="Image Properties">
     
     /**
@@ -504,18 +502,57 @@ public class ImageButton
         return selectedProperty.getReadOnlyProperty();
     }
     
+    /**
+     * <p>Checks if this {@link ImageButton} is currently {@link #selectedProperty() selected} or not.</p>
+     *
+     * @return If this {@link ImageButton} is currently {@link #selectedProperty() selected} or not.
+     *
+     * @see #selectedProperty()
+     */
     public final boolean isSelected()
     {
         return selectedProperty.get();
     }
     
+    /**
+     * <p>Set the {@link #selectedProperty() selection} state of this {@link ImageButton} to the specified value.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>
+     *         The {@link BooleanProperty property} returned by <code><i>{@link #selectedProperty()}</i></code> is {@code read-only}.
+     *         Therefore, the {@link #selectedProperty() selection} state of this {@link ImageButton} can only be changed via this method.
+     *         <ol>
+     *             <li>This is because the {@link #selectedProperty() selection} state can only be modified if the {@link ImageButton} is {@link #isToggleable() toggleable}.</li>
+     *         </ol>
+     *     </li>
+     *     <li>If this method is called but this {@link ImageButton} is not {@link #isToggleable() toggleable}, {@link #setSelected(boolean) this method} silently returns false.</li>
+     *     <li>Refer to <code><i>{@link #selectedProperty()}</i></code> for additional information.</li>
+     * </ol>
+     *
+     * @param selected True if this {@link ImageButton} is being selected, false if it is being deselected.
+     *
+     * @return True if the {@link #selectedProperty() selection} state of this {@link ImageButton} was successfully changed to the specified value, false if it was not.
+     */
     public final boolean setSelected(boolean selected)
     {
-        if (isToggleable())
+        if (isToggleable()) {
             selectedProperty.set(selected);
+            return true;
+        }
         return false;
     }
     
+    /**
+     * <p>Toggles the {@link #selectedProperty() selection} state of this {@link ImageButton} by setting it to the opposite of its {@link #isSelected() current} state.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>{@code Passthrough Definition:} <i><code>{@link #setSelected(boolean) setSelected}<b>(!</b>{@link #isSelected()}<b>)</b></code></i></li>
+     * </ol>
+     *
+     * @return True if the {@link #setSelected(boolean) toggle} operation was successful, false if it was not.
+     *
+     * @see #setSelected(boolean)
+     */
     public boolean toggle()
     {
         return setSelected(!isSelected());

@@ -81,7 +81,7 @@ public class Sidebar
         this.backImageButton = new ImageButton(
                 backImagePane, "back_arrow",
                 () -> FXTools.get().runFX(this::back, false),
-                false, true, ImageButton.SMALL
+                false, ImageButton.SMALL
         );
         
         this.nodeGroupsProperty = FXCollections.observableArrayList();
