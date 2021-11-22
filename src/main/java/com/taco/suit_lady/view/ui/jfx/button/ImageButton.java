@@ -2,7 +2,6 @@ package com.taco.suit_lady.view.ui.jfx.button;
 
 import com.taco.suit_lady.util.ResourceTools;
 import com.taco.suit_lady.util.TB;
-import com.taco.suit_lady.util.UndefinedRuntimeException;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
 import com.taco.suit_lady.view.ui.jfx.image.ImagePane;
 import com.taco.util.obj_traits.common.Nameable;
@@ -10,7 +9,7 @@ import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;
-import javafx.beans.value.ObservableValue;
+import javafx.beans.value.ObservableStringValue;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.geometry.Point2D;
@@ -37,7 +36,7 @@ public class ImageButton
     
     private final ImagePane imagePane;
     
-    private final StringProperty nameProperty;
+    private final ObservableStringValue nameBinding;
     private final ObjectProperty<ButtonViewGroup> buttonGroupProperty;
     
     private final ReadOnlyObjectWrapper<Image> imageProperty;
@@ -54,8 +53,6 @@ public class ImageButton
     
     private final boolean isTheme;
     private final boolean toggleable;
-    
-    private final boolean lockName;
     
     //
     
@@ -86,15 +83,10 @@ public class ImageButton
     
     public ImageButton(ImagePane imagePane, String name, Runnable actionResponder, boolean toggleable, boolean isTheme, Point2D size)
     {
-        this(imagePane, new SimpleStringProperty(name), false, actionResponder, toggleable, isTheme, size);
+        this(imagePane, Bindings.createStringBinding(() -> name), actionResponder, toggleable, isTheme, size);
     }
     
-    public ImageButton(ImagePane imagePane, ObservableValue<String> nameProperty, Runnable actionResponder, boolean toggleable, boolean isTheme, Point2D size)
-    {
-        this(imagePane, nameProperty, true, actionResponder, toggleable, isTheme, size);
-    }
-    
-    private ImageButton(ImagePane imagePane, ObservableValue<String> nameProperty, boolean lockName, Runnable actionResponder, boolean toggleable, boolean isTheme, Point2D size)
+    public ImageButton(ImagePane imagePane, ObservableStringValue nameBinding, Runnable actionResponder, boolean toggleable, boolean isTheme, Point2D size)
     {
         this.imagePane = imagePane == null ? new ImagePane() : imagePane;
         
@@ -103,12 +95,7 @@ public class ImageButton
             this.imagePane.setMaxSize(size.getX(), size.getY());
         }
         
-        this.lockName = lockName;
-        this.nameProperty = new SimpleStringProperty();
-        if (this.lockName)
-            this.nameProperty.bind(nameProperty);
-        else
-            this.setName(nameProperty.getValue());
+        this.nameBinding = nameBinding;
         
         this.buttonGroupProperty = new ReadOnlyObjectWrapper<>();
         
@@ -171,7 +158,7 @@ public class ImageButton
         Objects.requireNonNull(imageProperty, "Standard property cannot be null");
         
         ArrayList<Observable> observables = new ArrayList<>(Arrays.asList(
-                nameProperty,
+                nameBinding,
                 hoveredProperty,
                 pressedProperty,
                 selectedProperty,
@@ -219,22 +206,15 @@ public class ImageButton
     
     //
     
-    public StringProperty nameProperty()
+    public ObservableStringValue nameBinding()
     {
-        return nameProperty;
+        return nameBinding;
     }
     
     @Override
     public String getName()
     {
-        return nameProperty.get();
-    }
-    
-    public void setName(String id)
-    {
-        if (lockName)
-            throw new UndefinedRuntimeException("A bound ButtonView cannot be set.");
-        nameProperty.set(id);
+        return nameBinding().get();
     }
     
     private String getID()
@@ -300,11 +280,6 @@ public class ImageButton
     public boolean isTheme()
     {
         return isTheme;
-    }
-    
-    protected boolean getLockName()
-    {
-        return lockName;
     }
     
     //
@@ -449,7 +424,7 @@ public class ImageButton
         return Bindings.createObjectBinding(() -> {
             Image image = ResourceTools.get().getImage(getPathID(), getID() + suffix, "png");
             return image == null ? missingno(suffix) : image;
-        }, nameProperty);
+        }, nameBinding);
     }
     
     private Image missingno(String suffix)

@@ -99,9 +99,9 @@ public class UINode
     //<editor-fold desc="--- PROPERTIES ---">
     
     /**
-     * <p>Returns the {@link ReadOnlyStringProperty property} defining the {@link ImageButton#nameProperty() file name} of the {@link ImageButton button} for this {@link UINode}.</p>
+     * <p>Returns the {@link ReadOnlyStringProperty property} defining the {@link ImageButton#nameBinding() file name} of the {@link ImageButton button} for this {@link UINode}.</p>
      *
-     * @return The {@link ReadOnlyStringProperty property} defining the {@link ImageButton#nameProperty() file name} of the {@link ImageButton button} for this {@link UINode}.
+     * @return The {@link ReadOnlyStringProperty property} defining the {@link ImageButton#nameBinding() file name} of the {@link ImageButton button} for this {@link UINode}.
      * @see #getButtonID()
      */
     public ReadOnlyStringProperty buttonIDProperty()
@@ -110,10 +110,10 @@ public class UINode
     }
     
     /**
-     * <p>Returns the {@link ImageButton#nameProperty() file name} of the {@link ImageButton button} for this {@link UINode}.</p>
+     * <p>Returns the {@link ImageButton#nameBinding() file name} of the {@link ImageButton button} for this {@link UINode}.</p>
      * <p>See <i>{@link #buttonIDProperty()}</i> for details.</p>
      *
-     * @return The {@link ImageButton#nameProperty() file name} of the {@link ImageButton button} for this {@link UINode}.
+     * @return The {@link ImageButton#nameBinding() file name} of the {@link ImageButton button} for this {@link UINode}.
      * @see #buttonIDProperty()
      */
     public String getButtonID()

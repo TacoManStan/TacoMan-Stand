@@ -335,7 +335,7 @@ public class AppController
         
         new ImageButton(
                 maximizeImagePane,
-                Bindings.createObjectBinding(() -> stage.isMaximized() ? "maximize_both" : "maximize", stage.maximizedProperty()),
+                Bindings.createStringBinding(() -> stage.isMaximized() ? "maximize_both" : "maximize", stage.maximizedProperty()),
                 () -> FXTools.get().runFX(() -> stage.setMaximized(!stage.isMaximized()), false),
                 false,
                 true,
