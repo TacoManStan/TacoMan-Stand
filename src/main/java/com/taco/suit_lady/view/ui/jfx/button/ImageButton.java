@@ -30,422 +30,422 @@ import java.util.Objects;
  * In the future, combining those two classes would likely be preferred, with the image itself being controlled/switched via cache references.
  */
 public class ImageButton
-		implements Nameable
+        implements Nameable
 {
-	private ApplicationContext ctx;
-	
-	private final ImagePane imagePane;
-	
-	private final ObservableStringValue nameBinding;
-	private final ObjectProperty<ButtonViewGroup> buttonGroupProperty;
-	
-	private final ReadOnlyObjectWrapper<Image> imageProperty;
-	private final ReadOnlyObjectWrapper<Image> hoveredImageProperty;
-	private final ReadOnlyObjectWrapper<Image> pressedImageProperty;
-	private final ReadOnlyObjectWrapper<Image> disabledImageProperty;
-	
-	private final ObjectProperty<Runnable> actionResponderProperty;
-	
-	private final ReadOnlyBooleanWrapper hoveredProperty;
-	private final ReadOnlyBooleanWrapper pressedProperty;
-	private final ReadOnlyBooleanWrapper selectedProperty;
-	private final BooleanProperty disabledProperty;
-	
-	private final boolean isTheme;
-	private final boolean toggleable;
-	
-	//
-	
-	public ImageButton(String name)
-	{
-		this(null, name, null, false, true, null);
-	}
-	
-	public ImageButton(String name, Point2D size)
-	{
-		this(null, name, null, false, true, size);
-	}
-	
-	public ImageButton(String name, Runnable actionResponder)
-	{
-		this(null, name, actionResponder, false, true, null);
-	}
-	
-	public ImageButton(String name, Runnable actionResponder, Point2D size)
-	{
-		this(null, name, actionResponder, false, true, size);
-	}
-	
-	public ImageButton(String name, Runnable actionResponder, boolean toggleable, boolean isTheme, Point2D size)
-	{
-		this(null, name, actionResponder, toggleable, isTheme, size);
-	}
-	
-	public ImageButton(ImagePane imagePane, String name, Runnable actionResponder, boolean toggleable, boolean isTheme, Point2D size)
-	{
-		this(imagePane, Bindings.createStringBinding(() -> name), actionResponder, toggleable, isTheme, size);
-	}
-	
-	public ImageButton(ImagePane imagePane, ObservableStringValue nameBinding, Runnable actionResponder, boolean toggleable, boolean isTheme, Point2D size)
-	{
-		this.imagePane = imagePane == null ? new ImagePane() : imagePane;
-		
-		if (size != null) {
-			this.imagePane.setPrefSize(size.getX(), size.getY());
-			this.imagePane.setMaxSize(size.getX(), size.getY());
-		}
-		
-		this.nameBinding = nameBinding;
-		
-		this.buttonGroupProperty = new ReadOnlyObjectWrapper<>();
-		
-		this.imageProperty = new ReadOnlyObjectWrapper<>();
-		this.hoveredImageProperty = new ReadOnlyObjectWrapper<>();
-		this.pressedImageProperty = new ReadOnlyObjectWrapper<>();
-		this.disabledImageProperty = new ReadOnlyObjectWrapper<>();
-		
-		this.actionResponderProperty = new SimpleObjectProperty<>(actionResponder);
-		
-		this.hoveredProperty = new ReadOnlyBooleanWrapper();
-		this.pressedProperty = new ReadOnlyBooleanWrapper();
-		
-		this.selectedProperty = new ReadOnlyBooleanWrapper();
-		this.disabledProperty = new SimpleBooleanProperty();
-		
-		this.isTheme = isTheme;
-		this.toggleable = toggleable;
-		
-		//
-		
-		this.buttonGroupProperty.addListener((observable, oldButtonGroup, newButtonGroup) -> {
-			if (!Objects.equals(oldButtonGroup, newButtonGroup)) {
-				selectedProperty.unbind();
-				// TODO - Issue here where old listeners are not removed if the button group changes multiple times.
-				if (oldButtonGroup != null)
-					oldButtonGroup.buttons().remove(this);
-				if (newButtonGroup != null) {
-					newButtonGroup.buttons().add(this);
-					selectedProperty.addListener((observable1, oldValue, selected) -> {
-						if (selected)
-							newButtonGroup.setSelectedButton(this);
-						else
-							newButtonGroup.clearSelection(this); // Only clear the selection if the selection is this ImageButton
-					});
-				}
-			}
-		});
-		
-		this.imageProperty.bind(createImageBinding(""));
-		this.hoveredImageProperty.bind(createImageBinding("_hovered"));
-		this.pressedImageProperty.bind(createImageBinding("_pressed"));
-		this.disabledImageProperty.bind(createImageBinding("_disabled"));
-		
-		try {
-			this.hoveredProperty.bind(this.imagePane.hoverProperty());
-			this.pressedProperty.bind(this.imagePane.pressedProperty());
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-		
-		//		this.selectedProperty.addListener((observable, oldValue, newValue) -> onAction());
-	}
-	
-	//<editor-fold desc="--- INITIALIZATION ---">
-	
-	public void initialize()
-	{
-		Objects.requireNonNull(imagePane, "Image view cannot be null");
-		Objects.requireNonNull(imageProperty, "Standard property cannot be null");
-		
-		ArrayList<Observable> observables = new ArrayList<>(Arrays.asList(
-				nameBinding,
-				hoveredProperty,
-				pressedProperty,
-				selectedProperty,
-				disabledProperty,
-				imageProperty
-		));
-		
-		imagePane.imageProperty().bind(Bindings.createObjectBinding(() -> {
-			Image standardImage = getImage();
-			Image pressedImage = getPressedImage();
-			Image hoveredImage = getHoveredImage();
-			Image disabledImage = getDisabledImage();
-			if (disabledImage != null && isDisabled())
-				return disabledImage;
-			else if (pressedImage != null && isHovered() && isPressed())
-				return pressedImage;
-			else if (hoveredImage != null && isHovered())
-				return hoveredImage;
-			else if (pressedImage != null && isToggleable() && isSelected())
-				return pressedImage;
-			return standardImage;
-		}, observables.toArray(new Observable[0])));
-		
-		imagePane.setPickOnBounds(true);
-		imagePane.setOnMouseClicked(Event::consume);
-		imagePane.setOnMousePressed(Event::consume);
-		imagePane.setOnMouseReleased(event -> {
-			if (Objects.equals(event.getSource(), imagePane) && FXTools.get().isMouseOnEventSource(event))
-				if (!isDisabled()) {
-					toggle();
-					onAction();
-				}
-			event.consume();
-		});
-	}
-	
-	//</editor-fold>
-	
-	//<editor-fold desc="--- PROPERTIES ---">
-	
-	/**
-	 * <p>Returns the {@link ImagePane} object containing this {@link ImageButton}.</p>
-	 * <p></p>
-	 *
-	 * @return
-	 */
-	public ImagePane getImagePane()
-	{
-		return imagePane;
-	}
-	
-	public ObservableStringValue nameBinding()
-	{
-		return nameBinding;
-	}
-	
-	@Override
-	public String getName()
-	{
-		return nameBinding().get();
-	}
-	
-	private String getID()
-	{
-		String name = getName();
-		if (name != null)
-			return name.replace(" ", "_").toLowerCase();
-		else
-			return "missingno";
-	}
-	
-	private String getPathID()
-	{
-		return "buttons/" + getID() + "/";
-	}
-	
-	public ObjectProperty<ButtonViewGroup> buttonGroupProperty()
-	{
-		return buttonGroupProperty;
-	}
-	
-	public ButtonViewGroup getButtonGroup()
-	{
-		return buttonGroupProperty.get();
-	}
-	
-	public void setButtonGroup(ButtonViewGroup buttonGroup)
-	{
-		buttonGroupProperty.set(buttonGroup);
-	}
-	
-	public boolean isInButtonGroup()
-	{
-		return getButtonGroup() != null;
-	}
-	
-	public ObjectProperty<Runnable> actionResponderProperty()
-	{
-		return actionResponderProperty;
-	}
-	
-	public Runnable getActionResponder()
-	{
-		return actionResponderProperty.get();
-	}
-	
-	public void setActionResponder(Runnable actionResponder)
-	{
-		actionResponderProperty.set(actionResponder);
-	}
-	
-	public boolean isToggleable()
-	{
-		return toggleable;
-	}
-	
-	public boolean isTheme()
-	{
-		return isTheme;
-	}
-	
-	//
-	
-	//<editor-fold desc="Image Properties">
-	
-	public ReadOnlyObjectProperty<Image> imageProperty()
-	{
-		return imageProperty.getReadOnlyProperty();
-	}
-	
-	public Image getImage()
-	{
-		return imageProperty.get();
-	}
-	
-	public ReadOnlyObjectProperty<Image> hoveredImageProperty()
-	{
-		return hoveredImageProperty.getReadOnlyProperty();
-	}
-	
-	public Image getHoveredImage()
-	{
-		return hoveredImageProperty.get();
-	}
-	
-	public ReadOnlyObjectProperty<Image> pressedImageProperty()
-	{
-		return pressedImageProperty.getReadOnlyProperty();
-	}
-	
-	public Image getPressedImage()
-	{
-		return pressedImageProperty.get();
-	}
-	
-	public ReadOnlyObjectProperty<Image> disabledImageProperty()
-	{
-		return disabledImageProperty.getReadOnlyProperty();
-	}
-	
-	public Image getDisabledImage()
-	{
-		return disabledImageProperty.get();
-	}
-	
-	//</editor-fold>
-	
-	//<editor-fold desc="Button Status Properties">
-	
-	public ReadOnlyBooleanProperty hoveredProperty()
-	{
-		return hoveredProperty.getReadOnlyProperty();
-	}
-	
-	public boolean isHovered()
-	{
-		return hoveredProperty.get();
-	}
-	
-	public ReadOnlyBooleanProperty pressedProperty()
-	{
-		return pressedProperty.getReadOnlyProperty();
-	}
-	
-	public boolean isPressed()
-	{
-		return pressedProperty.get();
-	}
-	
-	public final ReadOnlyBooleanProperty selectedProperty()
-	{
-		return selectedProperty.getReadOnlyProperty();
-	}
-	
-	public final boolean isSelected()
-	{
-		return selectedProperty.get();
-	}
-	
-	public final boolean setSelected(boolean selected)
-	{
-		if (isToggleable())
-			selectedProperty.set(selected);
-		return false;
-	}
-	
-	public boolean toggle()
-	{
-		return setSelected(!isSelected());
-	}
-	
-	public final BooleanProperty disabledProperty()
-	{
-		return disabledProperty;
-	}
-	
-	public final boolean isDisabled()
-	{
-		return disabledProperty.get();
-	}
-	
-	public final void setDisabled(boolean disabled)
-	{
-		disabledProperty.set(disabled);
-	}
-	
-	//</editor-fold>
-	
-	//</editor-fold>
-	
-	private void onAction()
-	{
-		final Runnable actionResponder = getActionResponder();
-		if (actionResponder != null) {
-			TB.executor().execute(new Task<>()
-			{
-				@Override
-				protected Object call()
-				{
-					actionResponder.run();
-					return null;
-				}
-			});
-		}
-	}
-	
-	private ObjectBinding<Image> createImageBinding(String suffix)
-	{
-		return Bindings.createObjectBinding(() -> {
-			Image image = ResourceTools.get().getImage(getPathID(), getID() + suffix, "png");
-			return image == null ? missingno(suffix) : image;
-		}, nameBinding());
-	}
-	
-	private Image missingno(String suffix)
-	{
-		return ResourceTools.get().getImage("buttons/missingno/", "missingno" + suffix, "png");
-	}
-	
-	//<editor-fold desc="--- SIZE ---">
-	
-	public static final Point2D SMALL = new Point2D(30.0, 25.0);
-	public static final Point2D SMALL_BOX = new Point2D(30.0, 30.0);
-	
-	public static final Point2D MEDIUM = new Point2D(60.0, 50.0);
-	public static final Point2D MEDIUM_BOX = new Point2D(60.0, 60.0);
-	
-	public static final Point2D LARGE = new Point2D(120.0, 100.0);
-	public static final Point2D LARGE_BOX = new Point2D(120.0, 120.0);
-	
-	public String getSizeID()
-	{
-		Point2D size = new Point2D(imagePane.getWidth(), imagePane.getHeight());
-		if (size.equals(SMALL))
-			return "small";
-		else if (size.equals(SMALL_BOX))
-			return "small_box";
-		else if (size.equals(MEDIUM))
-			return "medium";
-		else if (size.equals(MEDIUM_BOX))
-			return "medium_box";
-		else if (size.equals(LARGE))
-			return "large";
-		else if (size.equals(LARGE_BOX))
-			return "large_box";
-		return "default";
-	}
-	
-	//</editor-fold>
+    private ApplicationContext ctx;
+    
+    private final ImagePane imagePane;
+    
+    private final ObservableStringValue nameBinding;
+    private final ObjectProperty<ButtonViewGroup> buttonGroupProperty;
+    
+    private final ReadOnlyObjectWrapper<Image> imageProperty;
+    private final ReadOnlyObjectWrapper<Image> hoveredImageProperty;
+    private final ReadOnlyObjectWrapper<Image> pressedImageProperty;
+    private final ReadOnlyObjectWrapper<Image> disabledImageProperty;
+    
+    private final ObjectProperty<Runnable> actionResponderProperty;
+    
+    private final ReadOnlyBooleanWrapper hoveredProperty;
+    private final ReadOnlyBooleanWrapper pressedProperty;
+    private final ReadOnlyBooleanWrapper selectedProperty;
+    private final BooleanProperty disabledProperty;
+    
+    private final boolean isTheme;
+    private final boolean toggleable;
+    
+    //
+    
+    public ImageButton(String name)
+    {
+        this(null, name, null, false, true, null);
+    }
+    
+    public ImageButton(String name, Point2D size)
+    {
+        this(null, name, null, false, true, size);
+    }
+    
+    public ImageButton(String name, Runnable actionResponder)
+    {
+        this(null, name, actionResponder, false, true, null);
+    }
+    
+    public ImageButton(String name, Runnable actionResponder, Point2D size)
+    {
+        this(null, name, actionResponder, false, true, size);
+    }
+    
+    public ImageButton(String name, Runnable actionResponder, boolean toggleable, boolean isTheme, Point2D size)
+    {
+        this(null, name, actionResponder, toggleable, isTheme, size);
+    }
+    
+    public ImageButton(ImagePane imagePane, String name, Runnable actionResponder, boolean toggleable, boolean isTheme, Point2D size)
+    {
+        this(imagePane, Bindings.createStringBinding(() -> name), actionResponder, toggleable, isTheme, size);
+    }
+    
+    public ImageButton(ImagePane imagePane, ObservableStringValue nameBinding, Runnable actionResponder, boolean toggleable, boolean isTheme, Point2D size)
+    {
+        this.imagePane = imagePane == null ? new ImagePane() : imagePane;
+        
+        if (size != null) {
+            this.imagePane.setPrefSize(size.getX(), size.getY());
+            this.imagePane.setMaxSize(size.getX(), size.getY());
+        }
+        
+        this.nameBinding = nameBinding;
+        
+        this.buttonGroupProperty = new ReadOnlyObjectWrapper<>();
+        
+        this.imageProperty = new ReadOnlyObjectWrapper<>();
+        this.hoveredImageProperty = new ReadOnlyObjectWrapper<>();
+        this.pressedImageProperty = new ReadOnlyObjectWrapper<>();
+        this.disabledImageProperty = new ReadOnlyObjectWrapper<>();
+        
+        this.actionResponderProperty = new SimpleObjectProperty<>(actionResponder);
+        
+        this.hoveredProperty = new ReadOnlyBooleanWrapper();
+        this.pressedProperty = new ReadOnlyBooleanWrapper();
+        
+        this.selectedProperty = new ReadOnlyBooleanWrapper();
+        this.disabledProperty = new SimpleBooleanProperty();
+        
+        this.isTheme = isTheme;
+        this.toggleable = toggleable;
+        
+        //
+        
+        this.buttonGroupProperty.addListener((observable, oldButtonGroup, newButtonGroup) -> {
+            if (!Objects.equals(oldButtonGroup, newButtonGroup)) {
+                selectedProperty.unbind();
+                // TODO - Issue here where old listeners are not removed if the button group changes multiple times.
+                if (oldButtonGroup != null)
+                    oldButtonGroup.buttons().remove(this);
+                if (newButtonGroup != null) {
+                    newButtonGroup.buttons().add(this);
+                    selectedProperty.addListener((observable1, oldValue, selected) -> {
+                        if (selected)
+                            newButtonGroup.setSelectedButton(this);
+                        else
+                            newButtonGroup.clearSelection(this); // Only clear the selection if the selection is this ImageButton
+                    });
+                }
+            }
+        });
+        
+        this.imageProperty.bind(createImageBinding(""));
+        this.hoveredImageProperty.bind(createImageBinding("_hovered"));
+        this.pressedImageProperty.bind(createImageBinding("_pressed"));
+        this.disabledImageProperty.bind(createImageBinding("_disabled"));
+        
+        try {
+            this.hoveredProperty.bind(this.imagePane.hoverProperty());
+            this.pressedProperty.bind(this.imagePane.pressedProperty());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        
+        //		this.selectedProperty.addListener((observable, oldValue, newValue) -> onAction());
+    }
+    
+    //<editor-fold desc="--- INITIALIZATION ---">
+    
+    public void initialize()
+    {
+        Objects.requireNonNull(imagePane, "Image view cannot be null");
+        Objects.requireNonNull(imageProperty, "Standard property cannot be null");
+        
+        ArrayList<Observable> observables = new ArrayList<>(Arrays.asList(
+                nameBinding,
+                hoveredProperty,
+                pressedProperty,
+                selectedProperty,
+                disabledProperty,
+                imageProperty
+        ));
+        
+        imagePane.imageProperty().bind(Bindings.createObjectBinding(() -> {
+            Image standardImage = getImage();
+            Image pressedImage = getPressedImage();
+            Image hoveredImage = getHoveredImage();
+            Image disabledImage = getDisabledImage();
+            if (disabledImage != null && isDisabled())
+                return disabledImage;
+            else if (pressedImage != null && isHovered() && isPressed())
+                return pressedImage;
+            else if (hoveredImage != null && isHovered())
+                return hoveredImage;
+            else if (pressedImage != null && isToggleable() && isSelected())
+                return pressedImage;
+            return standardImage;
+        }, observables.toArray(new Observable[0])));
+        
+        imagePane.setPickOnBounds(true);
+        imagePane.setOnMouseClicked(Event::consume);
+        imagePane.setOnMousePressed(Event::consume);
+        imagePane.setOnMouseReleased(event -> {
+            if (Objects.equals(event.getSource(), imagePane) && FXTools.get().isMouseOnEventSource(event))
+                if (!isDisabled()) {
+                    toggle();
+                    onAction();
+                }
+            event.consume();
+        });
+    }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- PROPERTIES ---">
+    
+    /**
+     * <p>Returns the {@link ImagePane} object containing this {@link ImageButton}.</p>
+     * <p></p>
+     *
+     * @return
+     */
+    public ImagePane getImagePane()
+    {
+        return imagePane;
+    }
+    
+    public ObservableStringValue nameBinding()
+    {
+        return nameBinding;
+    }
+    
+    @Override
+    public String getName()
+    {
+        return nameBinding().get();
+    }
+    
+    private String getID()
+    {
+        String name = getName();
+        if (name != null)
+            return name.replace(" ", "_").toLowerCase();
+        else
+            return "missingno";
+    }
+    
+    private String getPathID()
+    {
+        return "buttons/" + getID() + "/";
+    }
+    
+    public ObjectProperty<ButtonViewGroup> buttonGroupProperty()
+    {
+        return buttonGroupProperty;
+    }
+    
+    public ButtonViewGroup getButtonGroup()
+    {
+        return buttonGroupProperty.get();
+    }
+    
+    public void setButtonGroup(ButtonViewGroup buttonGroup)
+    {
+        buttonGroupProperty.set(buttonGroup);
+    }
+    
+    public boolean isInButtonGroup()
+    {
+        return getButtonGroup() != null;
+    }
+    
+    public ObjectProperty<Runnable> actionResponderProperty()
+    {
+        return actionResponderProperty;
+    }
+    
+    public Runnable getActionResponder()
+    {
+        return actionResponderProperty.get();
+    }
+    
+    public void setActionResponder(Runnable actionResponder)
+    {
+        actionResponderProperty.set(actionResponder);
+    }
+    
+    public boolean isToggleable()
+    {
+        return toggleable;
+    }
+    
+    public boolean isTheme()
+    {
+        return isTheme;
+    }
+    
+    //
+    
+    //<editor-fold desc="Image Properties">
+    
+    public ReadOnlyObjectProperty<Image> imageProperty()
+    {
+        return imageProperty.getReadOnlyProperty();
+    }
+    
+    public Image getImage()
+    {
+        return imageProperty.get();
+    }
+    
+    public ReadOnlyObjectProperty<Image> hoveredImageProperty()
+    {
+        return hoveredImageProperty.getReadOnlyProperty();
+    }
+    
+    public Image getHoveredImage()
+    {
+        return hoveredImageProperty.get();
+    }
+    
+    public ReadOnlyObjectProperty<Image> pressedImageProperty()
+    {
+        return pressedImageProperty.getReadOnlyProperty();
+    }
+    
+    public Image getPressedImage()
+    {
+        return pressedImageProperty.get();
+    }
+    
+    public ReadOnlyObjectProperty<Image> disabledImageProperty()
+    {
+        return disabledImageProperty.getReadOnlyProperty();
+    }
+    
+    public Image getDisabledImage()
+    {
+        return disabledImageProperty.get();
+    }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="Button Status Properties">
+    
+    public ReadOnlyBooleanProperty hoveredProperty()
+    {
+        return hoveredProperty.getReadOnlyProperty();
+    }
+    
+    public boolean isHovered()
+    {
+        return hoveredProperty.get();
+    }
+    
+    public ReadOnlyBooleanProperty pressedProperty()
+    {
+        return pressedProperty.getReadOnlyProperty();
+    }
+    
+    public boolean isPressed()
+    {
+        return pressedProperty.get();
+    }
+    
+    public final ReadOnlyBooleanProperty selectedProperty()
+    {
+        return selectedProperty.getReadOnlyProperty();
+    }
+    
+    public final boolean isSelected()
+    {
+        return selectedProperty.get();
+    }
+    
+    public final boolean setSelected(boolean selected)
+    {
+        if (isToggleable())
+            selectedProperty.set(selected);
+        return false;
+    }
+    
+    public boolean toggle()
+    {
+        return setSelected(!isSelected());
+    }
+    
+    public final BooleanProperty disabledProperty()
+    {
+        return disabledProperty;
+    }
+    
+    public final boolean isDisabled()
+    {
+        return disabledProperty.get();
+    }
+    
+    public final void setDisabled(boolean disabled)
+    {
+        disabledProperty.set(disabled);
+    }
+    
+    //</editor-fold>
+    
+    //</editor-fold>
+    
+    private void onAction()
+    {
+        final Runnable actionResponder = getActionResponder();
+        if (actionResponder != null) {
+            TB.executor().execute(new Task<>()
+            {
+                @Override
+                protected Object call()
+                {
+                    actionResponder.run();
+                    return null;
+                }
+            });
+        }
+    }
+    
+    private ObjectBinding<Image> createImageBinding(String suffix)
+    {
+        return Bindings.createObjectBinding(() -> {
+            Image image = ResourceTools.get().getImage(getPathID(), getID() + suffix, "png");
+            return image == null ? missingno(suffix) : image;
+        }, nameBinding());
+    }
+    
+    private Image missingno(String suffix)
+    {
+        return ResourceTools.get().getImage("buttons/missingno/", "missingno" + suffix, "png");
+    }
+    
+    //<editor-fold desc="--- SIZE ---">
+    
+    public static final Point2D SMALL = new Point2D(30.0, 25.0);
+    public static final Point2D SMALL_BOX = new Point2D(30.0, 30.0);
+    
+    public static final Point2D MEDIUM = new Point2D(60.0, 50.0);
+    public static final Point2D MEDIUM_BOX = new Point2D(60.0, 60.0);
+    
+    public static final Point2D LARGE = new Point2D(120.0, 100.0);
+    public static final Point2D LARGE_BOX = new Point2D(120.0, 120.0);
+    
+    public String getSizeID()
+    {
+        Point2D size = new Point2D(imagePane.getWidth(), imagePane.getHeight());
+        if (size.equals(SMALL))
+            return "small";
+        else if (size.equals(SMALL_BOX))
+            return "small_box";
+        else if (size.equals(MEDIUM))
+            return "medium";
+        else if (size.equals(MEDIUM_BOX))
+            return "medium_box";
+        else if (size.equals(LARGE))
+            return "large";
+        else if (size.equals(LARGE_BOX))
+            return "large_box";
+        return "default";
+    }
+    
+    //</editor-fold>
 }
