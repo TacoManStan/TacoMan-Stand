@@ -98,7 +98,7 @@ public class ImagePane extends AnchorPane
      *     <li>To construct an {@link ImagePane} that must be {@link WritableImage writable}, refer to <code><i>{@link #requiresWritableContentProperty()}</i></code>.</li>
      *     <li>If the {@link #getImage() Image} displayed by this {@link ImagePane} is a {@link WritableImage}, the {@link #writableImageBinding() Writable Image Binding} can be used to easily access it.</li>
      *     <li>If the {@link #getImage() Image} displayed by this {@link ImagePane} is <i>not</i> a {@link WritableImage}, the {@link #writableImageBinding() WritableImage Binding} will contain {@code null}.</li>
-     *     <li>The {@link #isWritableBinding() Is Writable Binding} is a convenience {@link BooleanBinding binding} that reflects if this {@link ImagePane} is {@link WritableImage writable}.</li>
+     *     <li>The {@link #isWritableBinding() Is Writable Binding} is a convenience {@link BooleanBinding binding} that reflects if the {@link #getImage() contents} of this {@link ImagePane} are currently {@link WritableImage writable}.</li>
      * </ol>
      * <p><b>Parameter Details: Input</b></p>
      * <ol>
@@ -110,7 +110,7 @@ public class ImagePane extends AnchorPane
      *             <li><b>null: </b>The fallback option that results in the {@link ImageView} that is wrapped by this {@link ImagePane} to be {@link ImageView#ImageView() empty}.</li>
      *         </ol>
      *     </li>
-     *     <li>If the {@code input} passed to {@link #init(Object) this method} is anything not listed above, an {@link RuntimeException exception} is thrown.</li>
+     *     <li>Throws an {@link RuntimeException exception} if the type of {@code input} passed to {@link #init(Object) this method} is not listed above.</li>
      * </ol>
      *
      * @param
