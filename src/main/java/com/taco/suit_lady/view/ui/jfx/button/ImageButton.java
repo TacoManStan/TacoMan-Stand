@@ -1,6 +1,7 @@
 package com.taco.suit_lady.view.ui.jfx.button;
 
 import com.taco.suit_lady.util.BindingTools;
+import com.taco.suit_lady.util.ExceptionTools;
 import com.taco.suit_lady.util.ResourceTools;
 import com.taco.suit_lady.util.TB;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
@@ -40,6 +41,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 public class ImageButton
         implements Nameable
 {
+    //<editor-fold desc="--- FIELDS ---">
+    
     private ApplicationContext ctx;
     
     private final ImagePane imagePane;
@@ -63,12 +66,89 @@ public class ImageButton
     
     private final boolean toggleable;
     
-    public ImageButton(ImagePane imagePane, String name, Runnable actionResponder, Runnable actionResponderFX, boolean toggleable, Point2D size)
+    //</editor-fold>
+    
+    /**
+     * <p>Refer to {@link #ImageButton(ImagePane, ObservableStringValue, Runnable, Runnable, boolean, Point2D) Fully-Parameterized Constructor} for details.</p>
+     * <p>Identical to...</p>
+     * <blockquote><code>new ImageButton(imagePane, <u>BindingTools.createStringBinding(name)</u>, actionResponder, actionResponderFX, toggleable, size)</code></blockquote>
+     */
+    public ImageButton(
+            ImagePane imagePane,
+            String name,
+            Runnable actionResponder,
+            Runnable actionResponderFX,
+            boolean toggleable,
+            Point2D size)
     {
         this(imagePane, BindingTools.createStringBinding(name), actionResponder, actionResponderFX, toggleable, size);
     }
     
-    public ImageButton(ImagePane imagePane, ObservableStringValue nameBinding, Runnable actionResponder, Runnable actionResponderFX, boolean toggleable, Point2D size)
+    /**
+     * <p><b>Fully-Parameterized Constructor</b></p>
+     * <p>
+     * <hr>
+     * <p><b>Parameter Details</b></p>
+     * <ol>
+     *     <li>
+     *         Image Pane
+     *         <ol>
+     *             <li>Refer to <code><i>{@link #getImagePane()}</i></code> for additional information.</li>
+     *             <li>If the specified {@link ImagePane} is {@code null}, a new {@link ImagePane} is constructed.</li>
+     *         </ol>
+     *     </li>
+     *     <li>
+     *         Name Binding
+     *         <ol>
+     *             <li>Refer to <code><i>{@link #nameBinding()}</i></code> for additional information.</li>
+     *             <li>If the specified {@link ObservableStringValue nameBinding} is {@code null}, a {@link NullPointerException} is thrown.</li>
+     *         </ol>
+     *     </li>
+     *     <li>
+     *         Action Responder
+     *         <ol>
+     *             <li>Refer to <code><i>{@link #actionResponderProperty()}</i></code> for additional information.</li>
+     *         </ol>
+     *     </li>
+     *     <li>
+     *         FX Action Responder
+     *         <ol>
+     *             <li>Refer to <code><i>{@link #actionResponderFXProperty()}</i></code> for additional information.</li>
+     *         </ol>
+     *     </li>
+     *     <li>
+     *         Toggleable
+     *         <ol>
+     *             <li>Refer to <code><i>{@link #isToggleable()}</i></code> for additional information.</li>
+     *         </ol>
+     *     </li>
+     *     <li>
+     *         Size
+     *         <ol>
+     *             <li>Defines the dimensions of this {@link ImageButton}.</li>
+     *             <li>More specifically, {@link Point2D size} defines the dimensions of the {@link #getImagePane() Image Pane} containing this {@link ImageButton}.</li>
+     *             <li>If the specified value is {@code null}, no size adjustments will be made to the {@link #getImagePane() Image Pane}, which could result in a distorted image display.</li>
+     *             <li>In the future, the {@link Point2D size} will also be used to load the {@link #getImage() Image} of the correct {@link #getSize() size} using the corresponding {@link #getSizeID() size ID}.</li>
+     *             <li>After being used to set the size of the {@link ImagePane}, the {@link Point2D size} is not stored or otherwise used again.</li>
+     *             <li>The <code><i>{@link #getSize()}</i></code> method returns the current dimensions of the {@link #getImagePane() Image Pane} containing this {@link ImageButton}.</li>
+     *         </ol>
+     *     </li>
+     * </ol>
+     *
+     * @param imagePane         The {@link ImagePane} this {@link ImageButton} will be displayed on.
+     * @param nameBinding       The {@link ObservableStringValue} containing the {@link String name} of this {@link ImageButton}.
+     * @param actionResponder   The {@link Runnable} that is executed in a {@link Task Background Task} when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.
+     * @param actionResponderFX The {@link Runnable} that is executed on the {@link FXTools#isFXThread() JavaFX Thread} when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.
+     * @param toggleable        True if this {@link ImageButton} is {@link #isToggleable() toggleable}, false if it is not.
+     * @param size              A {@link Point2D} representing the {@link ImagePane#widthProperty() width} and {@link ImagePane#heightProperty() height} of this {@link ImageButton}.
+     */
+    public ImageButton(
+            @Nullable ImagePane imagePane,
+            @NotNull ObservableStringValue nameBinding,
+            @Nullable Runnable actionResponder,
+            @Nullable Runnable actionResponderFX,
+            boolean toggleable,
+            @Nullable Point2D size)
     {
         this.imagePane = imagePane == null ? new ImagePane() : imagePane;
         
@@ -169,140 +249,7 @@ public class ImageButton
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    /**
-     * <p>Returns the {@link ImagePane} object containing this {@link ImageButton}.</p>
-     * <p><b>Details</b></p>
-     * <ol>
-     *     <li>Required because {@link ImageButton ImageButtons} are not actually {@link Node UI elements}.</li>
-     * </ol>
-     *
-     * @return The {@link ImagePane} object containing this {@link ImageButton}.
-     */
-    public @NotNull ImagePane getImagePane()
-    {
-        return imagePane;
-    }
-    
-    /**
-     * <p>Returns the {@link StringBinding} bound to the {@link #getName() name} of this {@link ImageButton}.</p>
-     * <p><b>Details</b></p>
-     * <ol>
-     *     <li>The {@link #getName() name} is used to load references to the {@link ResourceTools#getImage(String, String, String) Cached} {@link Image Images}.</li>
-     *     <li>Each {@link ButtonState state} results in a different variation of the same {@link Image} referenced by the {@link ImageButton} {@link #nameBinding() name}.</li>
-     *     <li>The <code><i>{@link #getImage()}</i></code> method returns the current {@link Image} variation displayed by this {@link ImageButton} based on its current {@link #getState() state}.</li>
-     *     <li>The {@link Image} variations are essentially each a different styling of the same original image.</li> // TODO - Eventually have styling be done via code automatically.
-     *     <li>The {@link StringBinding} returned by this method can never return {@code null} and will instead return {@code "missingno"} if the {@link #nameBinding() name} is undefined.</li>
-     * </ol>
-     * <p><b>Cache ID</b></p>
-     * <ol>
-     *     <li>To get the cache ID, refer to the <code><i>{@link #getID()}</i></code> method.</li>
-     *     <li>To get the full cache path ID, refer to the <code><i>{@link #getPathID()}</i></code> method.</li>
-     * </ol>
-     *
-     * @return The {@link StringBinding} bound to the {@link #getName() name} of this {@link ImageButton}.
-     *
-     * @see #getName()
-     * @see #getState()
-     * @see #getImage()
-     * @see #getID()
-     * @see #getPathID()
-     */
-    public @NotNull StringBinding nameBinding()
-    {
-        // TODO - Dunno how and it isn't necessary yet but you should somehow make it possible to change the name after construction
-        return nameBinding;
-    }
-    
-    /**
-     * <p>Returns the {@link #nameBinding() name} of this {@link ImageButton}.</p>
-     * <blockquote>Refer to the <code><i>{@link #nameBinding()}</i></code> docs for additional information.</blockquote>
-     *
-     * @return The {@link #nameBinding() name} of this {@link ImageButton}.
-     *
-     * @see #nameBinding()
-     */
-    @Override
-    public @NotNull String getName()
-    {
-        return nameBinding.get();
-    }
-    
-    /**
-     * <p>Returns the {@link ButtonState#STANDARD vanilla} cache ID for this {@link ImageButton}.</p>
-     * <blockquote>Refer to the <code><i>{@link #nameBinding()}</i></code> docs for additional information.</blockquote>
-     *
-     * @return The {@link ButtonState#STANDARD vanilla} cache ID for this {@link ImageButton}.
-     *
-     * @see #nameBinding()
-     * @see #getPathID()
-     * @see ResourceTools#getImage(String, String, String)
-     */
-    private @NotNull String getID()
-    {
-        return getName().replace(" ", "_").toLowerCase();
-    }
-    
-    /**
-     * <p>Returns the full {@link ButtonState#STANDARD vanilla} cache path ID for this {@link ImageButton}.</p>
-     * <blockquote>Refer to the <code><i>{@link #nameBinding()}</i></code> docs for additional information.</blockquote>
-     *
-     * @return The full {@link ButtonState#STANDARD vanilla} cache path ID for this {@link ImageButton}.
-     *
-     * @see #nameBinding()
-     * @see #getID()
-     * @see ResourceTools#getImage(String, String, String)
-     */
-    private @NotNull String getPathID()
-    {
-        return "buttons/" + getID() + "/";
-    }
-    
-    /**
-     * <P>Returns the {@link ObjectProperty} containing the {@link ImageButtonGroup} that this {@link ImageButton} is in, or {@code null} if this {@link ImageButton} is not in a {@link ImageButtonGroup}.</P>
-     * <p><b>Details</b></p>
-     * <ol>
-     *     <li>All logic related to adding or removing an {@link ImageButton} from a {@link ImageButtonGroup} is done via a {@link ChangeListener} that observes the {@link ObjectProperty} returned by {@link #buttonGroupProperty() this method}.</li>
-     *     <li>The aforementioned {@link ChangeListener} is configured in the {@link ImageButton} {@link #ImageButton(ImagePane, ObservableStringValue, Runnable, Runnable, boolean, Point2D) constructor}.</li>
-     * </ol>
-     *
-     * @return The {@link ObjectProperty} containing the {@link ImageButtonGroup} that this {@link ImageButton} is in, or {@code null} if this {@link ImageButton} is not in a {@link ImageButtonGroup}.
-     */
-    public @NotNull ObjectProperty<ImageButtonGroup> buttonGroupProperty()
-    {
-        return buttonGroupProperty;
-    }
-    
-    /**
-     * <p>Returns the {@link ImageButtonGroup} that this {@link ImageButton} is in, or {@code null} if this {@link ImageButton} is not in a {@link ImageButtonGroup}.</p>
-     *
-     * @return The {@link ImageButtonGroup} that this {@link ImageButton} is in, or {@code null} if this {@link ImageButton} is not in a {@link ImageButtonGroup}.
-     */
-    public @Nullable ImageButtonGroup getButtonGroup()
-    {
-        return buttonGroupProperty.get();
-    }
-    
-    /**
-     * <p>Sets the {@link ImageButtonGroup} that this {@link ImageButton} is in to the specified {@code value}.</p>
-     *
-     * @param buttonGroup The {@link ImageButtonGroup} that this {@link ImageButton} is being added to.
-     */
-    public void setButtonGroup(@Nullable ImageButtonGroup buttonGroup)
-    {
-        buttonGroupProperty.set(buttonGroup);
-    }
-    
-    /**
-     * <p>Checks if this {@link ImageButton} is in a {@link ImageButtonGroup} or not.</p>
-     *
-     * @return True  if this {@link ImageButton} is in a {@link ImageButtonGroup}, false if it is not.
-     */
-    public boolean isInButtonGroup()
-    {
-        return getButtonGroup() != null;
-    }
-    
-    //<editor-fold desc="--- ACTION RESPONDING ---">
+    //<editor-fold desc="Action Responding Properties">
     
     /**
      * <p>Returns the {@link ObjectProperty} containing the {@link Runnable} that is executed in a {@link Task Background Task} when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.</p>
@@ -346,7 +293,6 @@ public class ImageButton
     {
         actionResponderProperty.set(actionResponder);
     }
-    
     
     /**
      * <p>Returns the {@link ObjectProperty} containing the {@link Runnable} that is executed on the {@link FXTools#isFXThread() JavaFX Thread} when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.</p>
@@ -572,7 +518,6 @@ public class ImageButton
         return pressedBinding;
     }
     
-    
     /**
      * <p>Checks if this {@link ImageButton} is toggleable or not.</p>
      *
@@ -706,48 +651,137 @@ public class ImageButton
     
     //</editor-fold>
     
-    //</editor-fold>
-    
-    private ObjectBinding<Image> createImageBinding(String suffix)
+    /**
+     * <p>Returns the {@link ImagePane} object containing this {@link ImageButton}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>Required because {@link ImageButton ImageButtons} are not actually {@link Node UI elements}.</li>
+     * </ol>
+     *
+     * @return The {@link ImagePane} object containing this {@link ImageButton}.
+     */
+    public @NotNull ImagePane getImagePane()
     {
-        return Bindings.createObjectBinding(() -> {
-            Image image = ResourceTools.get().getImage(getPathID(), getID() + suffix, "png");
-            return image == null ? missingno(suffix) : image;
-        }, nameBinding());
+        return imagePane;
     }
     
-    private Image missingno(String suffix)
+    /**
+     * <p>Returns the {@link StringBinding} bound to the {@link #getName() name} of this {@link ImageButton}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>The {@link #getName() name} is used to load references to the {@link ResourceTools#getImage(String, String, String) Cached} {@link Image Images}.</li>
+     *     <li>Each {@link ButtonState state} results in a different variation of the same {@link Image} referenced by the {@link ImageButton} {@link #nameBinding() name}.</li>
+     *     <li>The <code><i>{@link #getImage()}</i></code> method returns the current {@link Image} variation displayed by this {@link ImageButton} based on its current {@link #getState() state}.</li>
+     *     <li>The {@link Image} variations are essentially each a different styling of the same original image.</li> // TODO - Eventually have styling be done via code automatically.
+     *     <li>The {@link StringBinding} returned by this method can never return {@code null} and will instead return {@code "missingno"} if the {@link #nameBinding() name} is undefined.</li>
+     * </ol>
+     * <p><b>Cache ID</b></p>
+     * <ol>
+     *     <li>To get the cache ID, refer to the <code><i>{@link #getID()}</i></code> method.</li>
+     *     <li>To get the full cache path ID, refer to the <code><i>{@link #getPathID()}</i></code> method.</li>
+     * </ol>
+     *
+     * @return The {@link StringBinding} bound to the {@link #getName() name} of this {@link ImageButton}.
+     *
+     * @see #getName()
+     * @see #getState()
+     * @see #getImage()
+     * @see #getID()
+     * @see #getPathID()
+     */
+    public @NotNull StringBinding nameBinding()
     {
-        return ResourceTools.get().getImage("buttons/missingno/", "missingno" + suffix, "png");
+        // TODO - Dunno how and it isn't necessary yet but you should somehow make it possible to change the name after construction
+        return nameBinding;
     }
     
-    //<editor-fold desc="--- SIZE ---">
-    
-    public static final Point2D SMALL = new Point2D(30.0, 25.0);
-    public static final Point2D SMALL_BOX = new Point2D(30.0, 30.0);
-    
-    public static final Point2D MEDIUM = new Point2D(60.0, 50.0);
-    public static final Point2D MEDIUM_BOX = new Point2D(60.0, 60.0);
-    
-    public static final Point2D LARGE = new Point2D(120.0, 100.0);
-    public static final Point2D LARGE_BOX = new Point2D(120.0, 120.0);
-    
-    public String getSizeID()
+    /**
+     * <p>Returns the {@link #nameBinding() name} of this {@link ImageButton}.</p>
+     * <blockquote>Refer to the <code><i>{@link #nameBinding()}</i></code> docs for additional information.</blockquote>
+     *
+     * @return The {@link #nameBinding() name} of this {@link ImageButton}.
+     *
+     * @see #nameBinding()
+     */
+    @Override
+    public @NotNull String getName()
     {
-        Point2D size = new Point2D(imagePane.getWidth(), imagePane.getHeight());
-        if (size.equals(SMALL))
-            return "small";
-        else if (size.equals(SMALL_BOX))
-            return "small_box";
-        else if (size.equals(MEDIUM))
-            return "medium";
-        else if (size.equals(MEDIUM_BOX))
-            return "medium_box";
-        else if (size.equals(LARGE))
-            return "large";
-        else if (size.equals(LARGE_BOX))
-            return "large_box";
-        return "default";
+        return nameBinding.get();
+    }
+    
+    /**
+     * <p>Returns the {@link ButtonState#STANDARD vanilla} cache ID for this {@link ImageButton}.</p>
+     * <blockquote>Refer to the <code><i>{@link #nameBinding()}</i></code> docs for additional information.</blockquote>
+     *
+     * @return The {@link ButtonState#STANDARD vanilla} cache ID for this {@link ImageButton}.
+     *
+     * @see #nameBinding()
+     * @see #getPathID()
+     * @see ResourceTools#getImage(String, String, String)
+     */
+    private @NotNull String getID()
+    {
+        return getName().replace(" ", "_").toLowerCase();
+    }
+    
+    /**
+     * <p>Returns the full {@link ButtonState#STANDARD vanilla} cache path ID for this {@link ImageButton}.</p>
+     * <blockquote>Refer to the <code><i>{@link #nameBinding()}</i></code> docs for additional information.</blockquote>
+     *
+     * @return The full {@link ButtonState#STANDARD vanilla} cache path ID for this {@link ImageButton}.
+     *
+     * @see #nameBinding()
+     * @see #getID()
+     * @see ResourceTools#getImage(String, String, String)
+     */
+    private @NotNull String getPathID()
+    {
+        return "buttons/" + getID() + "/";
+    }
+    
+    /**
+     * <P>Returns the {@link ObjectProperty} containing the {@link ImageButtonGroup} that this {@link ImageButton} is in, or {@code null} if this {@link ImageButton} is not in a {@link ImageButtonGroup}.</P>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>All logic related to adding or removing an {@link ImageButton} from a {@link ImageButtonGroup} is done via a {@link ChangeListener} that observes the {@link ObjectProperty} returned by {@link #buttonGroupProperty() this method}.</li>
+     *     <li>The aforementioned {@link ChangeListener} is configured in the {@link ImageButton} {@link #ImageButton(ImagePane, ObservableStringValue, Runnable, Runnable, boolean, Point2D) constructor}.</li>
+     * </ol>
+     *
+     * @return The {@link ObjectProperty} containing the {@link ImageButtonGroup} that this {@link ImageButton} is in, or {@code null} if this {@link ImageButton} is not in a {@link ImageButtonGroup}.
+     */
+    public @NotNull ObjectProperty<ImageButtonGroup> buttonGroupProperty()
+    {
+        return buttonGroupProperty;
+    }
+    
+    /**
+     * <p>Returns the {@link ImageButtonGroup} that this {@link ImageButton} is in, or {@code null} if this {@link ImageButton} is not in a {@link ImageButtonGroup}.</p>
+     *
+     * @return The {@link ImageButtonGroup} that this {@link ImageButton} is in, or {@code null} if this {@link ImageButton} is not in a {@link ImageButtonGroup}.
+     */
+    public @Nullable ImageButtonGroup getButtonGroup()
+    {
+        return buttonGroupProperty.get();
+    }
+    
+    /**
+     * <p>Sets the {@link ImageButtonGroup} that this {@link ImageButton} is in to the specified {@code value}.</p>
+     *
+     * @param buttonGroup The {@link ImageButtonGroup} that this {@link ImageButton} is being added to.
+     */
+    public void setButtonGroup(@Nullable ImageButtonGroup buttonGroup)
+    {
+        buttonGroupProperty.set(buttonGroup);
+    }
+    
+    /**
+     * <p>Checks if this {@link ImageButton} is in a {@link ImageButtonGroup} or not.</p>
+     *
+     * @return True  if this {@link ImageButton} is in a {@link ImageButtonGroup}, false if it is not.
+     */
+    public boolean isInButtonGroup()
+    {
+        return getButtonGroup() != null;
     }
     
     //</editor-fold>
@@ -867,6 +901,107 @@ public class ImageButton
             case DISABLED -> getDisabledImage();
             default -> getStandardImage();
         };
+    }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- SIZE  :  [ UNUSED ] ---">
+    
+    public static final Point2D SMALL = new Point2D(30.0, 25.0);
+    public static final Point2D SMALL_BOX = new Point2D(30.0, 30.0);
+    
+    public static final Point2D MEDIUM = new Point2D(60.0, 50.0);
+    public static final Point2D MEDIUM_BOX = new Point2D(60.0, 60.0);
+    
+    public static final Point2D LARGE = new Point2D(120.0, 100.0);
+    public static final Point2D LARGE_BOX = new Point2D(120.0, 120.0);
+    
+    public Point2D getSize()
+    {
+        return new Point2D(getImagePane().getWidth(), getImagePane().getHeight());
+    }
+    
+    /**
+     * <p>Returns the {@link String Size ID} for the current {@link #getSize() size} of this {@link ImageButton}.</p>
+     *
+     * @return The {@link String Size ID} for the current {@link #getSize() size} of this {@link ImageButton}.
+     *
+     * @see #getSize()
+     */
+    public String getSizeID()
+    {
+        // TODO - Eventually, different size parameters of the same image will be created, and this will allow access to the correct image.
+        // The purpose of multiple identical image files of different sizes will provide additional size options that are guaranteed to provide a non-warped image.
+        // This is because images can (and usually do) become warped/fuzzy when they are automatically resized.
+        // e.g., displaying a 60x60 image as 30x30, or worse, a 30x30 image as 60x60, or even worse than that, a 30x30 image as 30x25 (yikes).
+        // For now though, this is not a priority.
+        Point2D size = getSize();
+        if (size.equals(SMALL))
+            return "small";
+        else if (size.equals(SMALL_BOX))
+            return "small_box";
+        else if (size.equals(MEDIUM))
+            return "medium";
+        else if (size.equals(MEDIUM_BOX))
+            return "medium_box";
+        else if (size.equals(LARGE))
+            return "large";
+        else if (size.equals(LARGE_BOX))
+            return "large_box";
+        throw ExceptionTools.ex("Invalid Image Size: [" + ((int) size.getX()) + ", " + ((int) size.getY()) + "]");
+    }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- HELPER METHODS ---">
+    
+    /**
+     * <p>Constructs a new {@link ObjectBinding} bound to the {@link Image} variation represented by the specified {@link String suffix}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>The {@link Image} bound to the returned {@link ObjectBinding} is automatically updated when the {@link #nameBinding() name} of this {@link ImageButton} changes.</li>
+     *     <li>If the {@link Image} variation with the specified {@link String suffix} does not exist at the file location defined by the {@link Image} {@link #getPathID() mapping} for this {@link ImageButton}, {@link #missingno(String) missingno} is used instead.</li>
+     * </ol>
+     * <p><b>Missingno</b></p>
+     * <ol>
+     *     <li>The {@link #missingno(String) missingno} {@link Image images} are universal files displaying an icon indicating the intended {@link Image} could not be found.</li>
+     *     <li>The name {@link #missingno(String) "missingno"} comes from the bugged Pokemon that would appear in the 1st Generation games due to a bug where in specific circumstances, a player could encounter a null Pokemon.</li>
+     *     <li>{@link #missingno(String) "missingno"} stands for {@code Missing Number}.</li>
+     * </ol>
+     *
+     * @param suffix The {@link String} representing the {@link Image} variation to be bound to the {@link ObjectProperty} returned by {@link #createImageBinding(String) this method}.
+     *
+     * @return A new {@link ObjectBinding} bound to the {@link Image} variation represented by the specified {@link String suffix}.
+     *
+     * @throws NullPointerException If the specified {@link String suffix} is {@code null}.
+     * @see #missingno(String)
+     */
+    private @NotNull ObjectBinding<Image> createImageBinding(@NotNull String suffix)
+    {
+        ExceptionTools.nullCheck(suffix, "Suffix");
+        
+        return Bindings.createObjectBinding(() -> {
+            final Image image = ResourceTools.get().getImage(getPathID(), getID() + suffix, "png");
+            return image != null ? image : missingno(suffix);
+        }, nameBinding());
+    }
+    
+    /**
+     * <p>Returns the {@code missingno} {@link Image variation} based on the specified {@link String suffix}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>Refer to <code><i>{@link #createImageBinding(String)}</i></code> for additional information.</li>
+     * </ol>
+     *
+     * @param suffix The {@link String} representing the {@link Image} variation to be bound to the {@link ObjectProperty} returned by {@link #missingno(String) this method}.
+     *
+     * @return The {@code missingno} {@link Image} variation based on the specified {@link String suffix}.
+     *
+     * @see #createImageBinding(String)
+     */
+    private Image missingno(String suffix)
+    {
+        return ResourceTools.get().getImage("buttons/missingno/", "missingno" + suffix, "png");
     }
     
     //</editor-fold>
