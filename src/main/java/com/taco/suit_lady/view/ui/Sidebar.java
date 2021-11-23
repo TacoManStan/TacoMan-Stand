@@ -17,6 +17,8 @@ import javafx.scene.Node;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
@@ -34,39 +36,49 @@ public class Sidebar
     
     /**
      * <p>Refer to {@link #Sidebar(StackPane, StackPane, ImagePane) Fully-Parameterized Constructor} for details.</p>
-     * <p>Identical to...</p>
+     * <p><b>Identical to...</b></p>
      * <blockquote><code>new Sidebar(childButtonPane, contentPane, <u>null</u>)</code></blockquote>
      */
-    public Sidebar(StackPane childButtonPane, StackPane contentPane)
+    public Sidebar(
+            @NotNull StackPane childButtonPane,
+            @NotNull StackPane contentPane)
     {
         this(childButtonPane, contentPane, null);
     }
     
     /**
      * <p><b>Fully-Parameterized Constructor</b></p>
+     * <p><hr>
+     * <p><b>Parameter Details</b></p>
+     * <ol>
+     *     <li>
+     *         <b>Child Button Pane</b> — Refer to <code><i>{@link #getChildButtonPane()}</i></code> for additional information.
+     *     </li>
+     *     <li>
+     *         <b>Content Pane</b> — Refer to <code><i>{@link #getContentPane()}</i></code> for additional information.
+     *     </li>
+     *     <li>
+     *         <b>Back Image Pane</b> — Refer to <code><i>{@link #getBackButton()}</i></code> for additional information.
+     *         <ol>
+     *             <li>If the specified value is {@code null}, a new {@link ImagePane} is automatically constructed.</li>
+     *             <li>To access the aforementioned automatically-constructed {@link ImagePane}, call <i>{@link ImageButton#getImagePane() getImagePane()}</i> on the {@link #back() Back} {@link ImageButton Button}.</li>
+     *             <li>The {@link ImagePane} can then be added to a {@link Region  JavaFX Region} and the {@link #back() Back} {@link #getBackButton() Button} will work as intended. No additional setup is required.</li>
+     *             <li>Note that every {@link Node JavaFX Node} instance can have a maximum of <u>one</u> parent at any given time.</li>
+     *         </ol>
+     *     </li>
+     * </ol>
      *
      * @param childButtonPane The {@link StackPane} that the {@link ImageButton ImageButtons} linked to each {@link UINode} in the currently selected {@link SidebarNodeGroup} are displayed on.
-     *                        <ol>
-     *                              <li>Cannot be {@code null}.</li>
-     *                        </ol>
      * @param contentPane     The {@link StackPane} that the {@link UINode#getContent() contents} of the currently displayed {@link UINode} based on the currently selected {@link SidebarNodeGroup} are displayed on.
-     *                        <ol>
-     *                              <li>Cannot be {@code null}.</li>
-     *                        </ol>
      * @param backImagePane   The {@link ImagePane} on which the {@link #back() Back} {@link #getBackButton() Button} is displayed on.
-     *                        <ol>
-     *                              <li>If the specified value is {@code null}, a new {@link ImagePane} is automatically constructed.</li>
-     *                              <li>
-     *                                  To access the aforementioned automatically-constructed {@link ImagePane}, call <i>{@link ImageButton#getImagePane() getImagePane()}</i> on the {@link #back() Back} {@link ImageButton Button}.
-     *                              </li>
-     *                              <li>The {@link ImagePane} can then be added to a {@link Region  JavaFX Region} and the {@link #back() Back} {@link #getBackButton() Button} will work as intended. No additional setup is required.</li>
-     *                              <li>Note that every {@link Node JavaFX Node} instance can have a maximum of <u>one</u> parent at any given time.</li>
-     *                        </ol>
      *
      * @throws NullPointerException If the {@code childButtonPane} parameter is {@code null}.
      * @throws NullPointerException If the {@code contentPane} parameter is {@code null}.
      */
-    public Sidebar(StackPane childButtonPane, StackPane contentPane, ImagePane backImagePane)
+    public Sidebar(
+            @NotNull StackPane childButtonPane,
+            @NotNull StackPane contentPane,
+            @Nullable ImagePane backImagePane)
     {
         this.lock = new ReentrantLock();
         
@@ -115,6 +127,8 @@ public class Sidebar
         });
     }
     
+    //<editor-fold desc="--- INITIALIZATION ---">
+    
     /**
      * <p>Initializes this {@link Sidebar} and associated components and functionality..</p>
      * <p><b>Details</b></p>
@@ -143,6 +157,8 @@ public class Sidebar
         }, true);
     }
     
+    //</editor-fold>
+    
     //<editor-fold desc="--- PROPERTIES ---">
     
     /**
@@ -154,8 +170,6 @@ public class Sidebar
     {
         return lock;
     }
-    
-    //
     
     /**
      * <p>Returns the {@link StackPane} whose {@link StackPane#getChildren() contents} are bound to the {@link SidebarNodeGroup#getButtonBox() Button Box} that contains the {@link ImageButton ImageButtons}
@@ -179,8 +193,6 @@ public class Sidebar
         return backImageButton;
     }
     
-    //
-    
     /**
      * <p>Returns the {@link ObservableList} containing the {@link SidebarNodeGroup NodeGroups} in this {@link Sidebar}.</p>
      *
@@ -190,8 +202,6 @@ public class Sidebar
     {
         return nodeGroupsProperty;
     }
-    
-    //
     
     /**
      * <p>Returns the {@link ReadOnlyObjectProperty property} containing the {@link #getSelectedNodeGroup() selected} {@link SidebarNodeGroup}.</p>
@@ -254,8 +264,6 @@ public class Sidebar
     
     //</editor-fold>
     
-    //
-    
     /**
      * <p>{@link SidebarNodeGroup#clearSelection() Clears} the {@link ImageButtonGroup#selectedButtonProperty() selection} of every {@link SidebarNodeGroup SidebarNodeGroups} in this {@link Sidebar}.</p>
      *
@@ -268,8 +276,6 @@ public class Sidebar
     {
         nodeGroupsProperty().forEach(menu -> menu.clearSelection());
     }
-    
-    //
     
     /**
      * <p>{@link UIPageHandler#turnTo(UIPage) Turns} the {@link UINode} that is currently {@link UINodeGroup#getNodeDisplayer() selected} by the {@link UINodeGroup} that is currently {@link #selectedNodeGroupProperty() selected} by this {@link Sidebar} instance {@link UIPageHandler#back() back} one {@link UIPage page}.</p>

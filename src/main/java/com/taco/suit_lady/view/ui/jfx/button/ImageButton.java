@@ -62,7 +62,7 @@ public class ImageButton
     
     /**
      * <p>Refer to {@link #ImageButton(ImagePane, ObservableStringValue, Runnable, Runnable, boolean, Point2D) Fully-Parameterized Constructor} for details.</p>
-     * <p>Identical to...</p>
+     * <p><b>Identical to...</b></p>
      * <blockquote><code>new ImageButton(imagePane, <u>BindingTools.createStringBinding(name)</u>, actionResponder, actionResponderFX, toggleable, size)</code></blockquote>
      */
     public ImageButton(
@@ -78,44 +78,32 @@ public class ImageButton
     
     /**
      * <p><b>Fully-Parameterized Constructor</b></p>
-     * <p>
-     * <hr>
+     * <p><hr>
      * <p><b>Parameter Details</b></p>
      * <ol>
      *     <li>
-     *         Image Pane
+     *         <b>Image Pane</b> — Refer to <code><i>{@link #getImagePane()}</i></code> for additional information.
      *         <ol>
-     *             <li>Refer to <code><i>{@link #getImagePane()}</i></code> for additional information.</li>
      *             <li>If the specified {@link ImagePane} is {@code null}, a new {@link ImagePane} is constructed.</li>
      *         </ol>
      *     </li>
      *     <li>
-     *         Name Binding
+     *         <b>Name Binding</b> — Refer to <code><i>{@link #nameBinding()}</i></code> for additional information.
      *         <ol>
-     *             <li>Refer to <code><i>{@link #nameBinding()}</i></code> for additional information.</li>
      *             <li>If the specified {@link ObservableStringValue nameBinding} is {@code null}, a {@link NullPointerException} is thrown.</li>
      *         </ol>
      *     </li>
      *     <li>
-     *         Action Responder
-     *         <ol>
-     *             <li>Refer to <code><i>{@link #actionResponderProperty()}</i></code> for additional information.</li>
-     *         </ol>
+     *         <b>Action Responder</b> — Refer to <code><i>{@link #actionResponderProperty()}</i></code> for additional information.
      *     </li>
      *     <li>
-     *         FX Action Responder
-     *         <ol>
-     *             <li>Refer to <code><i>{@link #actionResponderFXProperty()}</i></code> for additional information.</li>
-     *         </ol>
+     *         <b>FX Action Responder</b> — Refer to <code><i>{@link #actionResponderFXProperty()}</i></code> for additional information.
      *     </li>
      *     <li>
-     *         Toggleable
-     *         <ol>
-     *             <li>Refer to <code><i>{@link #isToggleable()}</i></code> for additional information.</li>
-     *         </ol>
+     *         <b>Toggleable</b> — Refer to <code><i>{@link #isToggleable()}</i></code> for additional information.
      *     </li>
      *     <li>
-     *         Size
+     *         <b>Size</b>
      *         <ol>
      *             <li>Defines the dimensions of this {@link ImageButton}.</li>
      *             <li>More specifically, {@link Point2D size} defines the dimensions of the {@link #getImagePane() Image Pane} containing this {@link ImageButton}.</li>
@@ -649,7 +637,7 @@ public class ImageButton
      * <p>Returns the {@link ImagePane} object containing this {@link ImageButton}.</p>
      * <p><b>Details</b></p>
      * <ol>
-     *     <li>Required because {@link ImageButton ImageButtons} are not actually {@link Node UI elements}.</li>
+     *     <li>Required because {@link ImageButton ImageButtons} are not actually {@link Node UI elements} (*cough* yet *cough*).</li>
      * </ol>
      *
      * @return The {@link ImagePane} object containing this {@link ImageButton}.
@@ -691,7 +679,7 @@ public class ImageButton
     
     /**
      * <p>Returns the {@link #nameBinding() name} of this {@link ImageButton}.</p>
-     * <blockquote>Refer to the <code><i>{@link #nameBinding()}</i></code> docs for additional information.</blockquote>
+     * <blockquote>Refer to <code><i>{@link #nameBinding()}</i></code> for additional information.</blockquote>
      *
      * @return The {@link #nameBinding() name} of this {@link ImageButton}.
      *
