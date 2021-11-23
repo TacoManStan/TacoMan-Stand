@@ -212,16 +212,22 @@ public class UINode
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
+    /**
+     * <p>Returns the {@link Pane content} of this {@link UINode}.</p>
+     * <blockquote>{@code Passthrough Definition:} <i><code>{@link #getDisplayer()}<b>.</b>{@link Displayer#getDisplayContainer() getDisplayContainer()}</code></i></blockquote>
+     *
+     * @return The {@link Pane content} of this {@link UINode}.
+     */
     @Override
     public Pane getContent()
     {
-        return displayer.getDisplayContainer();
+        return getDisplayer().getDisplayContainer();
     }
     
     @Override
     public FxWeaver weaver()
     {
-        return this.weaver;
+        return weaver;
     }
     
     @Override
