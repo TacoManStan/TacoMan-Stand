@@ -1,10 +1,18 @@
 package com.taco.suit_lady.view.ui.jfx.image;
 
 import com.taco.suit_lady.util.ExceptionTools;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.binding.ObjectBinding;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ObservableObjectValue;
+import javafx.beans.value.WritableObjectValue;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,6 +28,10 @@ public class ImagePane extends AnchorPane
      * <p>The {@link ImageView} that is {@link WrappedImageView wrapped} by this {@link ImagePane}.</p>
      */
     private ImageView imageView;
+    
+    private ObjectBinding<WritableImage> writableImageBinding;
+    private BooleanBinding isWritableBinding;
+    private BooleanProperty requiresWritableContentProperty;
     
     /**
      * <p>Refer to {@link #init(Object) Univeral Initialization Method} for details.</p>
@@ -60,6 +72,8 @@ public class ImagePane extends AnchorPane
         init(url);
     }
     
+    //<editor-fold desc="--- INITIALIZATION ---">
+    
     /**
      * <p><b>Universal Initialization Method</b></p>
      * <p>Initializes this {@link ImagePane} based on the specified {@code input}.</p>
@@ -79,6 +93,13 @@ public class ImagePane extends AnchorPane
      *     </li>
      *     <li>Finally, the {@link ImageView} that is wrapped by this {@link ImagePane} is {@link List#add(Object) added} as a {@link #getChildren() child} of this {@link ImagePane}.</li>
      * </ol>
+     * <p><b>Use as Writable ImagePane</b></p>
+     * <ol>
+     *     <li>To construct an {@link ImagePane} that must be {@link WritableImage writable}, refer to <code><i>{@link #requiresWritableContentProperty()}</i></code>.</li>
+     *     <li>If the {@link #getImage() Image} displayed by this {@link ImagePane} is a {@link WritableImage}, the {@link #writableImageBinding() Writable Image Binding} can be used to easily access it.</li>
+     *     <li>If the {@link #getImage() Image} displayed by this {@link ImagePane} is <i>not</i> a {@link WritableImage}, the {@link #writableImageBinding() WritableImage Binding} will contain {@code null}.</li>
+     *     <li>The {@link #isWritableBinding() Is Writable Binding} is a convenience {@link BooleanBinding binding} that reflects if this {@link ImagePane} is {@link WritableImage writable}.</li>
+     * </ol>
      * <p><b>Parameter Details: Input</b></p>
      * <ol>
      *     <li>
@@ -96,26 +117,52 @@ public class ImagePane extends AnchorPane
      *
      * @throws RuntimeException If the specified value is of an invalid type.
      */
-    private void init(@Nullable Object input)
+    void init(@Nullable Object input)
     {
         if (input == null)
-            imageView = new ImageView();
+            this.imageView = new ImageView();
         else if (input instanceof String)
-            imageView = new ImageView((String) input);
+            this.imageView = new ImageView((String) input);
         else if (input instanceof Image)
-            imageView = new ImageView((Image) input);
+            this.imageView = new ImageView((Image) input);
         else
             throw ExceptionTools.ex("Input Must be an Image, a String, or null [" + input.getClass() + "]");
         
-        imageView.setFocusTraversable(false);
+        this.imageView.setFocusTraversable(false);
         
-        AnchorPane.setTopAnchor(imageView, 0.0);
-        AnchorPane.setBottomAnchor(imageView, 0.0);
-        AnchorPane.setLeftAnchor(imageView, 0.0);
-        AnchorPane.setRightAnchor(imageView, 0.0);
+        AnchorPane.setTopAnchor(this.imageView, 0.0);
+        AnchorPane.setBottomAnchor(this.imageView, 0.0);
+        AnchorPane.setLeftAnchor(this.imageView, 0.0);
+        AnchorPane.setRightAnchor(this.imageView, 0.0);
         
-        getChildren().add(imageView);
+        this.getChildren().add(this.imageView);
+        
+        this.initWritableProperties();
     }
+    
+    private void initWritableProperties()
+    {
+        // Throw exception if this ImagePane is set to Require Writable but contains an Image that is not a WritableImage.
+        this.imageProperty().addListener((observable, oldImage, newImage) -> {
+            if (requiresWritableContent() && newImage != null && !(newImage instanceof WritableImage))
+                throw new UnsupportedOperationException("Attempting to set writable image to a non-writable image type.");
+        });
+        
+        this.requiresWritableContentProperty = new SimpleBooleanProperty(false);
+        this.writableImageBinding = Bindings.createObjectBinding(
+                () -> {
+                    final Image image = getImage();
+                    if (isWritable())
+                        return (WritableImage) image;
+                    return null;
+                }, imageProperty(), requiresWritableContentProperty());
+        this.isWritableBinding = Bindings.createBooleanBinding(
+                () -> getImage() instanceof WritableImage,
+                imageProperty(), requiresWritableContentProperty()
+        );
+    }
+    
+    //</editor-fold>
     
     //<editor-fold desc="--- PROPERTIES ---">
     
@@ -131,6 +178,7 @@ public class ImagePane extends AnchorPane
     
     /**
      * <p>Returns the {@link Image} that is displayed by the {@link ImageView} that is {@link WrappedImageView wrapped} by this {@link ImagePane}.</p>
+     * <blockquote><b>Passthrough Definition:</b> <i><code>this<b>.</b>{@link #imageView}<b>.</b>{@link ImageView#imageProperty() imageProperty()}<b>.</b>{@link ObservableObjectValue#get() get()}</code></i></blockquote>
      *
      * @return The {@link Image} that is displayed by the {@link ImageView} that is {@link WrappedImageView wrapped} by this {@link ImagePane}.
      *
@@ -143,6 +191,7 @@ public class ImagePane extends AnchorPane
     
     /**
      * <p>Sets the {@link Image} that is displayed by the {@link ImageView} that is {@link WrappedImageView wrapped} by this {@link ImagePane} to the specified value.</p>
+     * <blockquote><b>Passthrough Definition:</b> <i><code>this<b>.</b>{@link #imageView}<b>.</b>{@link ImageView#imageProperty() imageProperty()}<b>.</b>{@link WritableObjectValue#set(Object) set}<b>(</b>image<b>)</b></code></i></blockquote>
      *
      * @param image The {@link Image} to be displayed by the {@link ImageView} that is {@link WrappedImageView wrapped} by this {@link ImagePane}.
      *
@@ -151,6 +200,101 @@ public class ImagePane extends AnchorPane
     public void setImage(@Nullable Image image)
     {
         imageView.imageProperty().set(image);
+    }
+    
+    //
+    
+    /**
+     * <p>Returns an {@link ObjectBinding} bound to the {@link #getImage() Image} displayed by this {@link ImagePane}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>If the {@link #getImage() Image} displayed by this {@link ImagePane} is not {@link WritableImage writable}, the {@link ObjectBinding binmding} returned by {@link #writableImageBinding() this method} will {@link ObjectBinding#get() contain} {@code null}.</li>
+     * </ol>
+     *
+     * @return An {@link ObjectBinding} bound to the {@link #getImage() Image} displayed by this {@link ImagePane}.
+     */
+    public ObjectBinding<WritableImage> writableImageBinding()
+    {
+        return writableImageBinding;
+    }
+    
+    /**
+     * <p>Returns the {@link #getImage() Image} displayed by this {@link ImagePane}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>Returns {@code null} if the {@link #getImage() Image} displayed by this {@link ImagePane} is not {@link WritableImage writable}.</li>
+     * </ol>
+     * <p>Refer to <code><i>{@link #writableImageBinding()}</i></code> for additional information.</p>
+     *
+     * @return The {@link #getImage() Image} displayed by this {@link ImagePane}. Returns {@code null} if the {@link #getImage() Image} displayed by this {@link ImagePane} is not {@link WritableImage writable}.
+     *
+     * @see #writableImageBinding()
+     * @see #isWritableBinding()
+     */
+    public WritableImage getWritableImage()
+    {
+        return writableImageBinding.get();
+    }
+    
+    /**
+     * <p>Returns a {@link BooleanBinding} that reflects if this {@link ImagePane} is currently {@link WritableImage writable} or not.</p>
+     *
+     * @return A {@link BooleanBinding} that reflects if this {@link ImagePane} is currently {@link WritableImage writable} or not.
+     */
+    public BooleanBinding isWritableBinding()
+    {
+        return isWritableBinding;
+    }
+    
+    /**
+     * <p>Checks if this {@link ImagePane} is currently {@link WritableImage writable} or not.</p>
+     *
+     * @return True if this {@link ImagePane} is currently {@link WritableImage writable}, false if it is not.
+     *
+     * @see #isWritableBinding()
+     */
+    public boolean isWritable()
+    {
+        return isWritableBinding.get();
+    }
+    
+    /**
+     * <p>A {@link BooleanProperty} defining whether this {@link ImagePane} is required to be {@link WritableImage writable} or not.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>By default, {@link ImagePane ImagePanes} are <i>not</i> required to be {@link WritableImage writable}.</li>
+     *     <li>Setting this {@link ImagePane} to {@link #setRequireWritableContent(boolean) Require Writable} will cause an {@link RuntimeException exception} to be thrown if its {@link #getImage() content} is ever changed to a non-writable {@link Image} type.</li>
+     *     <li>Setting this {@link ImagePane} to {@link #setRequireWritableContent(boolean) Require Writable} still allows its {@link #getImage() content} to be {@code null}.</li>
+     * </ol>
+     * <p>Refer to the {@link #init(Object) Universal Initialization Method} for additional information.</p>
+     *
+     * @return A {@link BooleanProperty} defining whether this {@link ImagePane} is required to be {@link WritableImage writable} or not.
+     */
+    public BooleanProperty requiresWritableContentProperty()
+    {
+        return requiresWritableContentProperty;
+    }
+    
+    /**
+     * <p>Checks if this {@link ImagePane} has been set to require its {@link #getImage() content} to be {@link WritableImage writable} or not.</p>
+     * <blockquote>Refer to <code><i>{@link #requiresWritableContentProperty()}</i></code> for additional information.</blockquote>
+     *
+     * @return True if this {@link ImagePane} has been set to require its {@link #getImage() content} to be {@link WritableImage writable}, false if it has not.
+     */
+    public boolean requiresWritableContent()
+    {
+        return requiresWritableContentProperty.get();
+    }
+    
+    /**
+     * <p>Sets the {@link #requiresWritableContent() Requires Writable} flag for this {@link ImagePane} to the specified value.</p>
+     * <blockquote>Refer to <code><i>{@link #requiresWritableContentProperty()}</i></code> for additional information.</blockquote>
+     *
+     * @param requireWritableContent True if this {@link ImagePane} should require its {@link #getImage() content} to be {@link WritableImage writable}, false if it should not.
+     */
+    public void setRequireWritableContent(boolean requireWritableContent)
+    {
+        requiresWritableContentProperty.set(requireWritableContent);
     }
     
     //</editor-fold>

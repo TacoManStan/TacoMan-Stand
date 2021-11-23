@@ -1,36 +1,36 @@
 package com.taco.suit_lady.view.ui.content;
 
 import com.taco.suit_lady.util.UndefinedRuntimeException;
-import com.taco.suit_lady.view.ui.jfx.image.WritableImagePane;
+import com.taco.suit_lady.view.ui.jfx.image.ImagePane;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 
 /**
- * A {@link ContentView} that displays a {@link WritableImagePane} as its content.
+ * A {@link ContentView} that displays a {@link ImagePane} as its content.
  */
-public class PaintableContentView extends ContentView<WritableImagePane> {
+public class PaintableContentView extends ContentView<ImagePane> {
 
 	public PaintableContentView() {
-		this(new WritableImagePane());
+		this(new ImagePane());
 	}
 
 	public PaintableContentView(WritableImage image) {
-		this(new WritableImagePane(image));
+		this(new ImagePane(image));
 	}
 
-	public PaintableContentView(WritableImagePane content) {
+	public PaintableContentView(ImagePane content) {
 		super(content);
 		init();
 	}
 
 	@Override
-	protected void onContentChange(WritableImagePane oldContent, WritableImagePane newContent) {
+	protected void onContentChange(ImagePane oldContent, ImagePane newContent) {
 		throw new UndefinedRuntimeException("NYI");
 	} // TODO
 
 	private void init() {
-
+		this.getContent().setRequireWritableContent(true);
 	}
 
 	//<editor-fold desc="Properties">
@@ -38,7 +38,7 @@ public class PaintableContentView extends ContentView<WritableImagePane> {
 	/**
 	 * Returns the {@link WritableImage} being displayed by this {@code PaintableContentView}.
 	 * <p>
-	 * Calling this method is identical to calling {@link WritableImagePane#getWritableImage() getContent().getWritableImage()}.
+	 * Calling this method is identical to calling {@link ImagePane#getWritableImage() getContent().getWritableImage()}.
 	 *
 	 * @return The {@code WritableImage} being displayed by this {@code PaintableContentView}.
 	 */
@@ -49,7 +49,7 @@ public class PaintableContentView extends ContentView<WritableImagePane> {
 	/**
 	 * Sets the {@link WritableImage} to be displayed by this {@code PaintableContentView} to the specified value.
 	 * <p>
-	 * Calling this method is identical to calling {@link WritableImagePane#setImage(Image) getContent().getWritableImage()}.
+	 * Calling this method is identical to calling {@link ImagePane#setImage(Image) getContent().getWritableImage()}.
 	 *
 	 * @param image The {@code WritableImage} to be displayed by this {@code PaintableContentView}.
 	 */
