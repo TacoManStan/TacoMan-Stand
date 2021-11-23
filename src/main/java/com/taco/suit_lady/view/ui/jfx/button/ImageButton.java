@@ -66,12 +66,12 @@ public class ImageButton
      * <blockquote><code>new ImageButton(imagePane, <u>BindingTools.createStringBinding(name)</u>, actionResponder, actionResponderFX, toggleable, size)</code></blockquote>
      */
     public ImageButton(
-            ImagePane imagePane,
-            String name,
-            Runnable actionResponder,
-            Runnable actionResponderFX,
+            @Nullable ImagePane imagePane,
+            @Nullable String name,
+            @Nullable Runnable actionResponder,
+            @Nullable Runnable actionResponderFX,
             boolean toggleable,
-            Point2D size)
+            @Nullable Point2D size)
     {
         this(imagePane, BindingTools.createStringBinding(name), actionResponder, actionResponderFX, toggleable, size);
     }
