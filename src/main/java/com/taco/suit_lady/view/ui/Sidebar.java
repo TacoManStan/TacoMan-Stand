@@ -35,11 +35,7 @@ public class Sidebar
     /**
      * <p>Refer to {@link #Sidebar(StackPane, StackPane, ImagePane) Fully-Parameterized Constructor} for details.</p>
      * <p>Identical to...</p>
-     * <blockquote>
-     * <code>
-     * {@link #Sidebar(StackPane, StackPane, ImagePane) new Sidebar(childButtonPane, contentPane, <u><b>null</b></u>)}
-     * </code>
-     * </blockquote>
+     * <blockquote><code>new Sidebar(childButtonPane, contentPane, <u>null</u>)</code></blockquote>
      */
     public Sidebar(StackPane childButtonPane, StackPane contentPane)
     {
