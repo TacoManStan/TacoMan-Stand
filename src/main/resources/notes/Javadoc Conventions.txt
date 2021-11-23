@@ -1,5 +1,5 @@
 READ ONLY PROPERTY GETTER:
-<p>Returns the {@link ReadOnlyStringProperty property} containing the {@link #getName() name} of this {@link ObjectName}.</p>
+    <p>Returns the {@link ReadOnlyStringProperty property} containing the {@link #getName() name} of this {@link ObjectName}.</p>
 
 PASSTHROUGH CONSTRUCTOR:
      * <p>Identical to...</p>
@@ -8,3 +8,6 @@ PASSTHROUGH CONSTRUCTOR:
      * {@link #Sidebar(StackPane, StackPane, ImagePane) new Sidebar(childButtonPane, contentPane, <u><b>null</b></u>)}
      * </code>
      * </blockquote>
+
+ PASSTHROUGH METHOD:
+    <blockquote><b>Passthrough Definition:</b> <i><code></code></i></blockquote>
