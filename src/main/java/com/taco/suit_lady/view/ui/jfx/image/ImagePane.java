@@ -6,6 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -95,7 +96,7 @@ public class ImagePane extends AnchorPane
      *
      * @throws RuntimeException If the specified value is of an invalid type.
      */
-    private void init(Object input)
+    private void init(@Nullable Object input)
     {
         if (input == null)
             imageView = new ImageView();
@@ -119,35 +120,35 @@ public class ImagePane extends AnchorPane
     //<editor-fold desc="--- PROPERTIES ---">
     
     /**
-     * <p>Returns the {@link ObjectProperty property} containing the {@link Image} that is wrapped by this {@link ImagePane} instance.</p>
+     * <p>Returns the {@link ObjectProperty property} containing the {@link Image} that is displayed by the {@link ImageView} that is {@link WrappedImageView wrapped} by this {@link ImagePane}.</p>
      *
-     * @return The {@link ObjectProperty property} containing the {@link Image} that is wrapped by this {@link ImagePane} instance.
+     * @return The {@link ObjectProperty property} containing the {@link Image} that is displayed by the {@link ImageView} that is {@link WrappedImageView wrapped} by this {@link ImagePane}.
      */
-    public ObjectProperty<Image> imageProperty()
+    public @NotNull ObjectProperty<Image> imageProperty()
     {
         return imageView.imageProperty();
     }
     
     /**
-     * <p>Returns the {@link Image} that is wrapped by this {@link ImagePane} instance.</p>
+     * <p>Returns the {@link Image} that is displayed by the {@link ImageView} that is {@link WrappedImageView wrapped} by this {@link ImagePane}.</p>
      *
-     * @return The {@link Image} that is wrapped by this {@link ImagePane} instance.
+     * @return The {@link Image} that is displayed by the {@link ImageView} that is {@link WrappedImageView wrapped} by this {@link ImagePane}.
      *
      * @see #imageProperty()
      */
-    public Image getImage()
+    public @Nullable Image getImage()
     {
         return imageView.imageProperty().get();
     }
     
     /**
-     * <p>Sets the {@link Image} that is wrapped by this {@link ImagePane} to the specified value.</p>
+     * <p>Sets the {@link Image} that is displayed by the {@link ImageView} that is {@link WrappedImageView wrapped} by this {@link ImagePane} to the specified value.</p>
      *
-     * @param image The value to be set as the new {@link Image} wrapped by this {@link ImagePane}.
+     * @param image The {@link Image} to be displayed by the {@link ImageView} that is {@link WrappedImageView wrapped} by this {@link ImagePane}.
      *
      * @see #imageProperty()
      */
-    public void setImage(Image image)
+    public void setImage(@Nullable Image image)
     {
         imageView.imageProperty().set(image);
     }
