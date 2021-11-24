@@ -17,7 +17,7 @@ import org.springframework.context.ConfigurableApplicationContext;
  * @see Springable
  * @see StrictSpringable
  */
-public record SimpleSpringable(FxWeaver weaver, ConfigurableApplicationContext ctx)
+public record SimpleSpringable(@Nullable FxWeaver weaver, @Nullable ConfigurableApplicationContext ctx)
         implements Springable
 {
     /**
