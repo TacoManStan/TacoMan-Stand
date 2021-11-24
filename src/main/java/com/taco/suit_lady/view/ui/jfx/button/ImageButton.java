@@ -924,25 +924,26 @@ public class ImageButton
      */
     public String getSizeID()
     {
-        // TODO - Eventually, different size parameters of the same image will be created, and this will allow access to the correct image.
-        // The purpose of multiple identical image files of different sizes will provide additional size options that are guaranteed to provide a non-warped image.
-        // This is because images can (and usually do) become warped/fuzzy when they are automatically resized.
-        // e.g., displaying a 60x60 image as 30x30, or worse, a 30x30 image as 60x60, or even worse than that, a 30x30 image as 30x25 (yikes).
-        // For now though, this is not a priority.
-        Point2D size = getSize();
-        if (size.equals(SMALL))
-            return "small";
-        else if (size.equals(SMALL_BOX))
-            return "small_box";
-        else if (size.equals(MEDIUM))
-            return "medium";
-        else if (size.equals(MEDIUM_BOX))
-            return "medium_box";
-        else if (size.equals(LARGE))
-            return "large";
-        else if (size.equals(LARGE_BOX))
-            return "large_box";
-        throw ExceptionTools.ex("Invalid Image Size: [" + ((int) size.getX()) + ", " + ((int) size.getY()) + "]");
+        throw ExceptionTools.nyi();
+        //        // TODO - Eventually, different size parameters of the same image will be created, and this will allow access to the correct image.
+        //        // The purpose of multiple identical image files of different sizes will provide additional size options that are guaranteed to provide a non-warped image.
+        //        // This is because images can (and usually do) become warped/fuzzy when they are automatically resized.
+        //        // e.g., displaying a 60x60 image as 30x30, or worse, a 30x30 image as 60x60, or even worse than that, a 30x30 image as 30x25 (yikes).
+        //        // For now though, this is not a priority.
+        //        Point2D size = getSize();
+        //        if (size.equals(SMALL))
+        //            return "small";
+        //        else if (size.equals(SMALL_BOX))
+        //            return "small_box";
+        //        else if (size.equals(MEDIUM))
+        //            return "medium";
+        //        else if (size.equals(MEDIUM_BOX))
+        //            return "medium_box";
+        //        else if (size.equals(LARGE))
+        //            return "large";
+        //        else if (size.equals(LARGE_BOX))
+        //            return "large_box";
+        //        throw ExceptionTools.ex("Invalid Image Size: [" + ((int) size.getX()) + ", " + ((int) size.getY()) + "]");
     }
     
     //</editor-fold>
