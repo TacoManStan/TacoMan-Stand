@@ -2,22 +2,38 @@ package com.taco.suit_lady.util.springable;
 
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.context.ConfigurableApplicationContext;
 
 /**
- * <b>--- To Format ---</b>
- * <br>
- * <p>An interface that guarantees all implementations will have direct and public access to...</p>
+ * <p>Guarantees that all implementing classes will have direct access to...</p>
  * <ol>
- *     <li>Application Context Instance</li>
- *     <li>FxWeaver Instance
+ *     <li>The appropriate {@link ConfigurableApplicationContext} instance, ideally global scope if available.</li>
+ *     <li>An {@link FxWeaver} instance.
+ * </ol>
+ * <p><b>Details</b></p>
+ * <ol>
+ *     <li>By default, both <code><i>{@link #weaver()}</i></code> and <code><i>{@link #ctx()}</i></code> methods are permitted to return {@code null}.</li>
+ *     <li>Annotating implemented methods as either {@link Nullable} or {@link NotNull} to reflect nullity is strongly recommended.</li>
  * </ol>
  */
 public interface Springable
 {
+    /**
+     * <p>Grants access to the appropriate {@link FxWeaver} instance for use in this {@link Springable} implementation.</p>
+     *
+     * @return The {@link FxWeaver} to be used by this {@link Springable} implementation when necessary.
+     */
     FxWeaver weaver();
     
+    /**
+     * <p>Grants access to the appropriate {@link ConfigurableApplicationContext Application Context} for use in this {@link Springable} implementation.</p>
+     *
+     * @return The {@link ConfigurableApplicationContext Application Context} to be used by this {@link Springable} implementation when necessary.
+     */
     ConfigurableApplicationContext ctx();
+    
+    //<editor-fold desc="--- DEFAULT METHODS ---">
     
     /**
      * <p>Constructs a new {@link SimpleSpringable} instance wrapping the contents of this {@link Springable}.</p>
@@ -44,4 +60,6 @@ public interface Springable
     {
         return new StrictSpringable(weaver(), ctx());
     }
+    
+    //</editor-fold>
 }
