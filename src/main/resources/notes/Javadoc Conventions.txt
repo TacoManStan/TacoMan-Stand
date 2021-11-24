@@ -14,4 +14,5 @@ PASSTHROUGH CONSTRUCTOR:
 
 
 TAGS:
-    > TOP-DC: Used to flag undocumented classes, constructors, methods, etc. that are members of a partially-documented class.
+    > TOP-DC: Flag for undocumented members of a partially-documented class.
+    > TO-EXPAND: Flag for documented members that require additional documentation details.
