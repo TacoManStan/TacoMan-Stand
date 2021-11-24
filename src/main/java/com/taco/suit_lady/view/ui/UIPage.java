@@ -17,13 +17,23 @@ public abstract class UIPage<U extends UIPageController<?>>
     
     private final U controller;
     
-    public UIPage(Springable springableParent)
+    /**
+     * <p>Constructs a new {@link UIPage} using the specified {@link Springable} parameter.</p>
+     * <p><b>Construction Process</b></p>
+     * <ol>
+     *     <li>Configures the {@link #weaver()} and {@link #ctx()} implementations of this {@link UIPage} to return the values of the specified {@link Springable}.</li>
+     *     <li></li>
+     * </ol>
+     *
+     * @param springable The {@link Springable} containing the {@link FxWeaver} and {@link ConfigurableApplicationContext Application Context} required to construct and configure this {@link UIPage}.
+     */
+    public UIPage(@NotNull Springable springable)
     {
-        ExceptionTools.nullCheck(springableParent, "Springable Parent");
+        ExceptionTools.nullCheck(springable, "Springable Parent");
         
-        this.weaver = ExceptionTools.nullCheck(springableParent.weaver(), "FxWeaver");
-        this.ctx = ExceptionTools.nullCheck(springableParent.ctx(), "ApplicationContext");
-    
+        this.weaver = ExceptionTools.nullCheck(springable.weaver(), "FxWeaver");
+        this.ctx = ExceptionTools.nullCheck(springable.ctx(), "ApplicationContext");
+        
         // Compound expression containing null checks for both the controller definition and the resulting constructor instance itself
         this.controller = ExceptionTools.nullCheckMessage(
                 weaver().loadController(ExceptionTools.nullCheck(controllerDefinition(), "Controller Definition Class")),
