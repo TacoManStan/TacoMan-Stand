@@ -889,14 +889,26 @@ public class ImageButton
     
     //<editor-fold desc="--- SIZE  :  [ UNUSED ] ---">
     
+    public static final Point2D VERY_SMALL = new Point2D(15.0, 12.5);
+    public static final Point2D VERY_SMALL_BOX = new Point2D(15.0, 15.0);
+    
     public static final Point2D SMALL = new Point2D(30.0, 25.0);
     public static final Point2D SMALL_BOX = new Point2D(30.0, 30.0);
     
-    public static final Point2D MEDIUM = new Point2D(60.0, 50.0);
-    public static final Point2D MEDIUM_BOX = new Point2D(60.0, 60.0);
+    public static final Point2D MEDIUM_SMALL = new Point2D(45.0, 45.0);
+    public static final Point2D MEDIUM_SMALL_BOX = new Point2D(45.0, 37.5);
+    
+    public static final Point2D MEDIUM = new Point2D(60.0, 60.0);
+    public static final Point2D MEDIUM_BOX = new Point2D(60.0, 50.0);
+    
+    public static final Point2D MEDIUM_LARGE = new Point2D(90.0, 75.0);
+    public static final Point2D MEDIUM_LARGE_BOX = new Point2D(90.0, 90.0);
     
     public static final Point2D LARGE = new Point2D(120.0, 100.0);
     public static final Point2D LARGE_BOX = new Point2D(120.0, 120.0);
+    
+    public static final Point2D VERY_LARGE = new Point2D(150.0, 125.0);
+    public static final Point2D VERY_LARGE_BOX = new Point2D(150.0, 150.0);
     
     public Point2D getSize()
     {
