@@ -1,4 +1,4 @@
-package com.taco.suit_lady.util;
+package com.taco.suit_lady.util.tools;
 
 import com.taco.suit_lady.view.ui.console.Console;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;

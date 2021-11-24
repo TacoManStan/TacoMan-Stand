@@ -1,4 +1,6 @@
-package com.taco.suit_lady.util;
+package com.taco.suit_lady.util.tools;
+
+import com.taco.suit_lady.util.UndefinedRuntimeException;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;

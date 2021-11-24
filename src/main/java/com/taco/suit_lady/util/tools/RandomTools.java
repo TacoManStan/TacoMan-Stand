@@ -1,4 +1,4 @@
-package com.taco.suit_lady.util;
+package com.taco.suit_lady.util.tools;
 
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;

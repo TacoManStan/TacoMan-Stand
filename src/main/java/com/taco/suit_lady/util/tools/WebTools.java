@@ -1,4 +1,4 @@
-package com.taco.suit_lady.util;
+package com.taco.suit_lady.util.tools;
 
 import java.awt.*;
 import java.io.IOException;

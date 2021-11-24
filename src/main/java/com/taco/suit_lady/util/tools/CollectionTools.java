@@ -1,4 +1,4 @@
-package com.taco.suit_lady.util;
+package com.taco.suit_lady.util.tools;
 
 import com.taco.suit_lady.util.collections.ReadOnlySelectionList;
 import com.taco.suit_lady.util.collections.SelectionList;

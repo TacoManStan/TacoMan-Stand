@@ -1,5 +1,6 @@
-package com.taco.suit_lady.util;
+package com.taco.suit_lady.util.tools;
 
+import com.taco.suit_lady.util.UID;
 import com.taco.util.quick.ConsoleBB;
 import javafx.scene.image.Image;
 
