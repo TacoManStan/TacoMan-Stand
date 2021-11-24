@@ -1,6 +1,7 @@
 package com.taco.suit_lady.view.ui.ui_internal.settings;
 
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
+import com.taco.suit_lady.view.ui.ui_internal.controllers.SettingGroupController;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.collections.ListChangeListener;
 import javafx.scene.control.ListView;
@@ -10,7 +11,7 @@ public class SettingsTitledPane extends TitledPane
 {
     
     private final SettingContainer settingContainer;
-    private ListView<SettingGroup> settingGroupListView;
+    private ListView<SettingGroup<? extends SettingGroupController>> settingGroupListView;
     
     public SettingsTitledPane(SettingContainer settingContainer)
     {
@@ -18,9 +19,9 @@ public class SettingsTitledPane extends TitledPane
         
         //
         
-        settingContainer.settingGroups().addListener(new ListChangeListener<SettingGroup>()
+        settingContainer.settingGroups().addListener(new ListChangeListener<SettingGroup<? extends SettingGroupController>>()
         {
-            @Override public void onChanged(Change<? extends SettingGroup> change)
+            @Override public void onChanged(Change<? extends SettingGroup<? extends SettingGroupController>> change)
             {
                 FXTools.get().runFX(() -> {
                     while (change.next())
@@ -62,12 +63,12 @@ public class SettingsTitledPane extends TitledPane
     
     //
     
-    public final ReadOnlyObjectProperty<SettingGroup> selectedGroupProperty()
+    public final ReadOnlyObjectProperty<SettingGroup<? extends SettingGroupController>> selectedGroupProperty()
     {
         return settingGroupListView.getSelectionModel().selectedItemProperty();
     }
     
-    public final SettingGroup getSelectedGroup()
+    public final SettingGroup<? extends SettingGroupController> getSelectedGroup()
     {
         return selectedGroupProperty().get();
     }

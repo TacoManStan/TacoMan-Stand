@@ -15,7 +15,7 @@ import javafx.util.Duration;
  * A {@link ContentView} that only displays a single content at any given time.
  * The only time in which more than one content can ever be displayed is during a transition.
  */
-public class TransitionContentView extends ContentView
+public class TransitionContentView<P extends Pane> extends ContentView<P>
 {
     
     //<editor-fold desc="Static">
@@ -41,12 +41,12 @@ public class TransitionContentView extends ContentView
         this(rootPane, null, transitionTime);
     }
     
-    public TransitionContentView(StackPane rootPane, Pane contentPane)
+    public TransitionContentView(StackPane rootPane, P contentPane)
     {
         this(rootPane, contentPane, DEFAULT_TRANSITION_TIME);
     }
     
-    public TransitionContentView(StackPane rootPane, Pane contentPane, Number transitionTime)
+    public TransitionContentView(StackPane rootPane, P contentPane, Number transitionTime)
     {
         super(contentPane);
         this.rootPane = rootPane;
@@ -123,47 +123,41 @@ public class TransitionContentView extends ContentView
     //
     
     @Override
-    protected final void onContentChange(Pane oldContent, Pane newContent)
+    protected final void onContentChange(P oldContent, P newContent)
     {
-        if (isAnimated())
-        {
+        if (isAnimated()) {
             Duration _transitionDuration = Duration.millis(getTransitionTime());
-            EventHandler<ActionEvent> _onShownHandler = getOnShownHandler();
+            EventHandler<ActionEvent> onShownHandler = getOnShownHandler();
             
-            Timeline _animation = new Timeline();
-            if (newContent != null)
-            {
+            final Timeline animation = new Timeline();
+            if (newContent != null) {
                 newContent.setOpacity(0.0);
-                _animation.getKeyFrames().add(new KeyFrame(_transitionDuration, new KeyValue(newContent.opacityProperty(), 1.0)));
+                animation.getKeyFrames().add(new KeyFrame(_transitionDuration, new KeyValue(newContent.opacityProperty(), 1.0)));
             }
             
             if (oldContent != null)
-                _animation.getKeyFrames().add(new KeyFrame(_transitionDuration, new KeyValue(oldContent.opacityProperty(), 0.0)));
+                animation.getKeyFrames().add(new KeyFrame(_transitionDuration, new KeyValue(oldContent.opacityProperty(), 0.0)));
             
-            _animation.setOnFinished(event -> {
+            animation.setOnFinished(event -> {
                 if (oldContent != null)
                     rootPane.getChildren().remove(oldContent);
-                if (_onShownHandler != null)
-                    _onShownHandler.handle(event);
+                if (onShownHandler != null)
+                    onShownHandler.handle(event);
             });
             
             FXTools.get().runFX(() -> {
-                if (newContent != null)
-                {
+                if (newContent != null) {
                     newContent.maxWidthProperty().bind(rootPane.widthProperty());
                     newContent.maxHeightProperty().bind(rootPane.heightProperty());
                     // Ignore exception for now - Doesn't cause any functionality problems.
                     try { rootPane.getChildren().add(newContent); } catch (Exception ignored) { }
                 }
-                _animation.play();
+                animation.play();
             }, false);
-        }
-        else
-        {
+        } else {
             if (oldContent != null)
                 rootPane.getChildren().remove(oldContent);
-            if (newContent != null)
-            {
+            if (newContent != null) {
                 newContent.maxWidthProperty().bind(rootPane.widthProperty());
                 newContent.maxHeightProperty().bind(rootPane.heightProperty());
                 rootPane.getChildren().add(newContent);
@@ -171,8 +165,3 @@ public class TransitionContentView extends ContentView
         }
     }
 }
-
-/*
- * TODO LIST:
- * [S] Fix issue where an Exception is thrown if the content is changed while a previous content change animation is still active.
- */

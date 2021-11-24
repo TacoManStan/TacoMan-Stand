@@ -1,5 +1,6 @@
 package com.taco.suit_lady.view.ui.ui_internal.settings;
 
+import com.taco.suit_lady.view.ui.ui_internal.controllers.SettingGroupController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -12,7 +13,7 @@ public class SettingContainer {
 	private final ReentrantLock lock;
 
 	private final StringProperty nameProperty;
-	private final ObservableList<SettingGroup> groups;
+	private final ObservableList<SettingGroup<? extends SettingGroupController>> groups;
 
 	public SettingContainer(String name) {
 		this.lock = new ReentrantLock();
@@ -27,7 +28,7 @@ public class SettingContainer {
 		return nameProperty;
 	}
 
-	public final ObservableList<SettingGroup> settingGroups() {
+	public final ObservableList<SettingGroup<? extends SettingGroupController>> settingGroups() {
 		return groups;
 	}
 

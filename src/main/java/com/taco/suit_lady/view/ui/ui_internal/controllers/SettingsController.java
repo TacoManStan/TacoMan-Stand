@@ -44,9 +44,9 @@ public class SettingsController extends DialogController<Void>
     private final ReentrantLock lock;
     
     private Binding<SettingsTitledPane> selectedPaneBinding;
-    private Binding<SettingGroup> selectedGroupBinding;
+    private Binding<SettingGroup<? extends SettingGroupController>> selectedGroupBinding;
     
-    private TransitionContentView contentView;
+    private TransitionContentView<Pane> contentView;
     
     public SettingsController(FxWeaver weaver, ConfigurableApplicationContext ctx)
     {
@@ -64,7 +64,7 @@ public class SettingsController extends DialogController<Void>
     
     @Override public void initialize()
     {
-        this.contentView = new TransitionContentView(contentPane);
+        this.contentView = new TransitionContentView<>(contentPane);
         
         this.selectedPaneBinding = Bindings.createObjectBinding(this::getExpandedPane, categoryAccordion.expandedPaneProperty());
         this.selectedGroupBinding = BindingTools.createRecursiveBinding(
