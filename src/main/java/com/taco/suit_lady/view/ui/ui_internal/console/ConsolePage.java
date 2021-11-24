@@ -13,13 +13,11 @@ public class ConsolePage extends UIPage<ConsoleController>
         
         final ConsoleController pageController = this.weaver().loadController(ConsoleController.class);
         ConsoleBB.CONSOLE.print("Console Page Controller: " + pageController);
-        pageController.setPage(this);
-        setController(pageController);
     }
     
-    //<editor-fold desc="Classes">
-    
-
-    
-    //</editor-fold>
+    @Override
+    protected Class<ConsoleController> controllerDefinition()
+    {
+        return ConsoleController.class;
+    }
 }

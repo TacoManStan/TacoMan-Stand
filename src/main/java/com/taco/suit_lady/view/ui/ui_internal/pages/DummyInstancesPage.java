@@ -9,10 +9,11 @@ public class DummyInstancesPage extends UIPage<DummyInstancesController>
     public DummyInstancesPage(UINode owner)
     {
         super(owner);
-        
-        // TODO - Replace with bi-directional binding property?
-        final DummyInstancesController pageController = this.weaver().loadController(DummyInstancesController.class);
-        pageController.setPage(this);
-        setController(pageController);
+    }
+    
+    @Override
+    protected Class<DummyInstancesController> controllerDefinition()
+    {
+        return DummyInstancesController.class;
     }
 }

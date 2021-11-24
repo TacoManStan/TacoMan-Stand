@@ -13,14 +13,16 @@ public class ExamplePage extends UIPage<ExampleSidebarController>
 		super(owner);
 		
 		this.color = color;
-		
-		final ExampleSidebarController pageController = this.weaver().loadController(ExampleSidebarController.class);
-		pageController.setPage(this);
-		setController(pageController);
 	}
 	
 	public String getColor()
 	{
 		return this.color;
+	}
+	
+	@Override
+	protected Class<ExampleSidebarController> controllerDefinition()
+	{
+		return ExampleSidebarController.class;
 	}
 }

@@ -9,9 +9,11 @@ public class DummyPage extends UIPage<DummySidebarController>
     public DummyPage(UINode owner)
     {
         super(owner);
+    }
     
-        final DummySidebarController pageController = this.weaver().loadController(DummySidebarController.class);
-        pageController.setPage(this);
-        setController(pageController);
+    @Override
+    protected Class<DummySidebarController> controllerDefinition()
+    {
+        return DummySidebarController.class;
     }
 }
