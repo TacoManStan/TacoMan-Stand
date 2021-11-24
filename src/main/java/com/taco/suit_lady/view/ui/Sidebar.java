@@ -48,6 +48,7 @@ public class Sidebar
     
     /**
      * <p><b>Fully-Parameterized Constructor</b></p>
+     * <p>Constructs a new {@link Sidebar} instance used to contain {@link SidebarNodeGroup SidebarNodeGroups}.</p>
      * <p><hr>
      * <p><b>Parameter Details</b></p>
      * <ol>
@@ -66,6 +67,12 @@ public class Sidebar
      *             <li>Note that every {@link Node JavaFX Node} instance can have a maximum of <u>one</u> parent at any given time.</li>
      *         </ol>
      *     </li>
+     * </ol>
+     * <p><b>Sidebar Contents Pattern</b></p>
+     * <ol>
+     *     <li><b>{@link Sidebar}: </b>Contains and manages a group of {@link UINodeGroup UINodeGroups} in the form of {@link SidebarNodeGroup SidebarNodeGroups}.</li>
+     *     <li><b>{@link SidebarNodeGroup}: </b>Contains and manages a group of {@link UINode UINodes}.</li>
+     *     <li><b>{@link UINode}: </b>{@link Displayable} implementations that contain, manage, and display the {@link UIPage#getContent() contents} of {@link UIPage UIPages}.</li>
      * </ol>
      *
      * @param childButtonPane The {@link StackPane} that the {@link ImageButton ImageButtons} linked to each {@link UINode} in the currently selected {@link SidebarNodeGroup} are displayed on.

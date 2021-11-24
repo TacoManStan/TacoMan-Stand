@@ -122,7 +122,8 @@ public class TransitionContentView extends ContentView
     
     //
     
-    @Override protected final void onContentChange(Pane oldContent, Pane newContent)
+    @Override
+    protected final void onContentChange(Pane oldContent, Pane newContent)
     {
         if (isAnimated())
         {
