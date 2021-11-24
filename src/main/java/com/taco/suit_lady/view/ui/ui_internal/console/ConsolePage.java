@@ -4,6 +4,7 @@ import com.taco.suit_lady.view.ui.UINode;
 import com.taco.suit_lady.view.ui.UIPage;
 import com.taco.suit_lady.view.ui.ui_internal.controllers.ConsoleController;
 import com.taco.util.quick.ConsoleBB;
+import org.jetbrains.annotations.NotNull;
 
 public class ConsolePage extends UIPage<ConsoleController>
 {
@@ -16,7 +17,7 @@ public class ConsolePage extends UIPage<ConsoleController>
     }
     
     @Override
-    protected Class<ConsoleController> controllerDefinition()
+    protected @NotNull Class<ConsoleController> controllerDefinition()
     {
         return ConsoleController.class;
     }
