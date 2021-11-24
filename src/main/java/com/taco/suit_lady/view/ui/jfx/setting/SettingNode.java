@@ -1,6 +1,6 @@
 package com.taco.suit_lady.view.ui.jfx.setting;
 
-import com.taco.suit_lady.util.ExceptionTools;
+import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.settings.SavableSetting;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
 import com.taco.util.obj_traits.common.Nameable;

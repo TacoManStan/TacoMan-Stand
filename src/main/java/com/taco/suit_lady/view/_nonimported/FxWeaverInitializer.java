@@ -1,7 +1,7 @@
 package com.taco.suit_lady.view._nonimported;
 
 import com.taco.suit_lady.MainApplication;
-import com.taco.suit_lady.util.TB;
+import com.taco.suit_lady.util.tools.TB;
 import com.taco.suit_lady.view.ui.ui_internal.AppController;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;

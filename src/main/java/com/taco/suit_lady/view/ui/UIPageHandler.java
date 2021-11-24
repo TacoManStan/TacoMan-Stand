@@ -1,6 +1,6 @@
 package com.taco.suit_lady.view.ui;
 
-import com.taco.suit_lady.util.ExceptionTools;
+import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.collections.ObservableLinkedList;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;

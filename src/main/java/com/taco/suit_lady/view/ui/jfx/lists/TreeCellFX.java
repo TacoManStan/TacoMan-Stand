@@ -1,7 +1,7 @@
 package com.taco.suit_lady.view.ui.jfx.lists;
 
-import com.taco.suit_lady.util.BindingTools;
-import com.taco.suit_lady.util.ExceptionTools;
+import com.taco.suit_lady.util.tools.BindingTools;
+import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.view.ui.jfx.lists.treehandler.TreeItemFX;
 import com.taco.suit_lady.view.ui.ui_internal.controllers.CellController;
 import javafx.beans.binding.Bindings;

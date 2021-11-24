@@ -1,8 +1,8 @@
 package com.taco.suit_lady.view.ui.jfx.fxtools;
 
-import com.taco.suit_lady.util.EnumTools;
-import com.taco.suit_lady.util.StringTools;
-import com.taco.suit_lady.util.TB;
+import com.taco.suit_lady.util.tools.EnumTools;
+import com.taco.suit_lady.util.tools.StringTools;
+import com.taco.suit_lady.util.tools.TB;
 import com.taco.suit_lady.view.ui.jfx.dialog.DialogCallback;
 import com.taco.suit_lady.view.ui.jfx.dialog.DialogController;
 import javafx.scene.Node;

@@ -1,7 +1,7 @@
 package com.taco.suit_lady.view.ui;
 
-import com.taco.suit_lady.util.ExceptionTools;
-import com.taco.suit_lady.util.Springable;
+import com.taco.suit_lady.util.tools.ExceptionTools;
+import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.view.ui.ui_internal.controllers.Controller;
 import com.taco.suit_lady.view.ui.ui_internal.controllers.UIPageController;
 import javafx.scene.layout.Pane;

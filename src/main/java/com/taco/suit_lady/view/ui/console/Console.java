@@ -1,8 +1,8 @@
 package com.taco.suit_lady.view.ui.console;
 
-import com.taco.suit_lady.util.BindingTools;
-import com.taco.suit_lady.util.ExceptionTools;
-import com.taco.suit_lady.util.TB;
+import com.taco.suit_lady.util.tools.BindingTools;
+import com.taco.suit_lady.util.tools.ExceptionTools;
+import com.taco.suit_lady.util.tools.TB;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
 import com.taco.suit_lady.view.ui.jfx.lists.treehandler.WrappingTreeLoader;
 import com.taco.suit_lady.view.ui.ui_internal.console.ConsolePage;

@@ -1,7 +1,7 @@
 package com.taco.suit_lady.view.ui;
 
-import com.taco.suit_lady.util.ResourceTools;
-import com.taco.suit_lady.util.Springable;
+import com.taco.suit_lady.util.tools.ResourceTools;
+import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.view.ui.jfx.button.ButtonViewable;
 import com.taco.suit_lady.view.ui.jfx.button.ImageButton;
 import com.taco.suit_lady.view.ui.ui_internal.pages.DummyPage;

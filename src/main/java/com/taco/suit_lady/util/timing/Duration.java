@@ -1,6 +1,6 @@
 package com.taco.suit_lady.util.timing;
 
-import com.taco.suit_lady.util.ExceptionTools;
+import com.taco.suit_lady.util.tools.ExceptionTools;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.ReadOnlyLongWrapper;
 import javafx.beans.property.ReadOnlyProperty;

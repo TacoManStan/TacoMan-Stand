@@ -1,8 +1,8 @@
 package com.taco.suit_lady.util.timing;
 
-import com.taco.suit_lady.util.ExceptionTools;
+import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.SimplePredicate;
-import com.taco.suit_lady.util.TB;
+import com.taco.suit_lady.util.tools.TB;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

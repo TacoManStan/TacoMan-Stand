@@ -1,6 +1,6 @@
 package com.taco.suit_lady.util.timing;
 
-import com.taco.suit_lady.util.CalculationTools;
+import com.taco.suit_lady.util.tools.CalculationTools;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;

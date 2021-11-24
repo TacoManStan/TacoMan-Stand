@@ -1,7 +1,7 @@
 package com.taco.suit_lady.view.ui.ui_internal.controllers;
 
-import com.taco.suit_lady.util.ArrayTools;
-import com.taco.suit_lady.util.TB;
+import com.taco.suit_lady.util.tools.ArrayTools;
+import com.taco.suit_lady.util.tools.TB;
 import com.taco.suit_lady.view.ui.jfx.button.ImageButton;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
 import com.taco.suit_lady.view.ui.jfx.image.ImagePane;

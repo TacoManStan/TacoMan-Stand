@@ -1,6 +1,6 @@
 package com.taco.suit_lady.view.ui.ui_internal.settings;
 
-import com.taco.suit_lady.util.ExceptionTools;
+import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.settings.SavableSetting;
 import com.taco.suit_lady.view.ui.jfx.lists.Listable;
 import com.taco.suit_lady.view.ui.ui_internal.controllers.SettingGroupController;

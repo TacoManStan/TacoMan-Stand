@@ -1,6 +1,6 @@
 package com.taco.suit_lady.view.ui.jfx.button;
 
-import com.taco.suit_lady.util.TB;
+import com.taco.suit_lady.util.tools.TB;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;

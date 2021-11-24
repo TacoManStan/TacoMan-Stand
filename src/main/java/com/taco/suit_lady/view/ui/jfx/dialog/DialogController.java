@@ -1,6 +1,6 @@
 package com.taco.suit_lady.view.ui.jfx.dialog;
 
-import com.taco.suit_lady.util.ArrayTools;
+import com.taco.suit_lady.util.tools.ArrayTools;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXDialogTools;
 import com.taco.suit_lady.view.ui.ui_internal.controllers.Controller;
 import javafx.beans.property.ReadOnlyObjectProperty;

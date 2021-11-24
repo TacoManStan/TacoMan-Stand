@@ -1,6 +1,6 @@
 package com.taco.suit_lady.util.collections;
 
-import com.taco.suit_lady.util.ExceptionTools;
+import com.taco.suit_lady.util.tools.ExceptionTools;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableListBase;
 

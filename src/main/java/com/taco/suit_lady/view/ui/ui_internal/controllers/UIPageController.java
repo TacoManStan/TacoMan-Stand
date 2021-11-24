@@ -1,6 +1,6 @@
 package com.taco.suit_lady.view.ui.ui_internal.controllers;
 
-import com.taco.suit_lady.util.ExceptionTools;
+import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.view.ui.UIPage;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;

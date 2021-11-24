@@ -1,6 +1,6 @@
 package com.taco.suit_lady.view.ui.ui_internal.console;
 
-import com.taco.suit_lady.util.BindingTools;
+import com.taco.suit_lady.util.tools.BindingTools;
 import com.taco.suit_lady.util.Validatable;
 import com.taco.suit_lady.view.ui.jfx.lists.treehandler.WrappingTreeCellData;
 import com.taco.suit_lady.view.ui.console.ConsoleMessageable;

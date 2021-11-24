@@ -1,6 +1,6 @@
 package com.taco.suit_lady.view.ui.jfx.dialog;
 
-import com.taco.suit_lady.util.ObjectTools;
+import com.taco.suit_lady.util.tools.ObjectTools;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;

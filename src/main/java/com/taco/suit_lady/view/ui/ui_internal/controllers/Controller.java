@@ -1,6 +1,6 @@
 package com.taco.suit_lady.view.ui.ui_internal.controllers;
 
-import com.taco.suit_lady.util.Springable;
+import com.taco.suit_lady.util.springable.Springable;
 import javafx.scene.layout.Pane;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.springframework.context.ConfigurableApplicationContext;

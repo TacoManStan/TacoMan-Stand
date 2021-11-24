@@ -1,6 +1,6 @@
 package com.taco.suit_lady.view.ui;
 
-import com.taco.suit_lady.util.BindingTools;
+import com.taco.suit_lady.util.tools.BindingTools;
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;

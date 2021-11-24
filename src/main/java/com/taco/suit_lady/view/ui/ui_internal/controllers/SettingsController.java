@@ -1,7 +1,7 @@
 package com.taco.suit_lady.view.ui.ui_internal.controllers;
 
-import com.taco.suit_lady.util.BindingTools;
-import com.taco.suit_lady.util.ExceptionTools;
+import com.taco.suit_lady.util.tools.BindingTools;
+import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.view.ui.jfx.dialog.DialogController;
 import com.taco.suit_lady.view.ui.content.TransitionContentView;
 import com.taco.suit_lady.view.ui.ui_internal.settings.SettingContainer;
