@@ -21,7 +21,7 @@ public class PaintableContentView extends ContentView<ImagePane> {
 
 	public PaintableContentView(ImagePane content) {
 		super(content);
-		init();
+		this.init();
 	}
 
 	@Override

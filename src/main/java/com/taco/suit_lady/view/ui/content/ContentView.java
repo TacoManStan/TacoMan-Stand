@@ -21,6 +21,10 @@ public abstract class ContentView<P extends Pane>
     {
         this.lock = new ReentrantLock();
         this.contentProperty = new ReadOnlyObjectWrapper<>(content);
+        
+        //
+        
+        this.contentProperty.addListener((observable, oldValue, newValue) -> onContentChange(oldValue, newValue));
     }
     
     //<editor-fold desc="Properties">
@@ -37,9 +41,7 @@ public abstract class ContentView<P extends Pane>
     
     public final void setContent(P content)
     {
-        P _oldContent = getContent();
         contentProperty.set(content);
-        onContentChange(_oldContent, content);
     }
     
     //</editor-fold>

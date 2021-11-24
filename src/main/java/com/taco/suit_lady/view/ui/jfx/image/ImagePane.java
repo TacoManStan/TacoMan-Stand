@@ -92,13 +92,7 @@ public class ImagePane extends AnchorPane
      *         </ol>
      *     </li>
      *     <li>Finally, the {@link ImageView} that is wrapped by this {@link ImagePane} is {@link List#add(Object) added} as a {@link #getChildren() child} of this {@link ImagePane}.</li>
-     * </ol>
-     * <p><b>Use as Writable ImagePane</b></p>
-     * <ol>
-     *     <li>To construct an {@link ImagePane} that must be {@link WritableImage writable}, refer to <code><i>{@link #requiresWritableContentProperty()}</i></code>.</li>
-     *     <li>If the {@link #getImage() Image} displayed by this {@link ImagePane} is a {@link WritableImage}, the {@link #writableImageBinding() Writable Image Binding} can be used to easily access it.</li>
-     *     <li>If the {@link #getImage() Image} displayed by this {@link ImagePane} is <i>not</i> a {@link WritableImage}, the {@link #writableImageBinding() WritableImage Binding} will contain {@code null}.</li>
-     *     <li>The {@link #isWritableBinding() Is Writable Binding} is a convenience {@link BooleanBinding binding} that reflects if the {@link #getImage() contents} of this {@link ImagePane} are currently {@link WritableImage writable}.</li>
+     *     <li>Use as Writable ImagePane: Refer to <code><i>{@link #initWritableProperties()}</i></code>.</li>
      * </ol>
      * <p><b>Parameter Details: Input</b></p>
      * <ol>
@@ -140,6 +134,16 @@ public class ImagePane extends AnchorPane
         this.initWritableProperties();
     }
     
+    /**
+     * <p>Initializes properties that allow this {@link ImagePane} to be {@link WritableImage writable}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>To construct an {@link ImagePane} that must be {@link WritableImage writable}, refer to <code><i>{@link #requiresWritableContentProperty()}</i></code>.</li>
+     *     <li>If the {@link #getImage() Image} displayed by this {@link ImagePane} is a {@link WritableImage}, the {@link #writableImageBinding() Writable Image Binding} can be used to easily access it.</li>
+     *     <li>If the {@link #getImage() Image} displayed by this {@link ImagePane} is <i>not</i> a {@link WritableImage}, the {@link #writableImageBinding() WritableImage Binding} will contain {@code null}.</li>
+     *     <li>The {@link #isWritableBinding() Is Writable Binding} is a convenience {@link BooleanBinding binding} that reflects if the {@link #getImage() contents} of this {@link ImagePane} are currently {@link WritableImage writable}.</li>
+     * </ol>
+     */
     private void initWritableProperties()
     {
         // Throw exception if this ImagePane is set to Require Writable but contains an Image that is not a WritableImage.
@@ -201,8 +205,6 @@ public class ImagePane extends AnchorPane
     {
         imageView.imageProperty().set(image);
     }
-    
-    //
     
     /**
      * <p>Returns an {@link ObjectBinding} bound to the {@link #getImage() Image} displayed by this {@link ImagePane}.</p>
