@@ -110,7 +110,7 @@ public class Sidebar
         this.backImageButton.getImagePane().visibleProperty().bind(
                 BindingTools.createRecursiveBinding(selectedNodeGroup -> {
                     if (selectedNodeGroup != null)
-                        return Bindings.and(selectedNodeGroup.hasPagedContentBinding(), selectedNodeGroup.getNodeDisplayer().visibleBinding());
+                        return Bindings.and(Bindings.not(selectedNodeGroup.isEmptyBinding()), selectedNodeGroup.getNodeDisplayer().visibleBinding());
                     return null;
                 }, selectedNodeGroupProperty));
         

@@ -5,6 +5,7 @@ import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.value.ObservableBooleanValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.Pane;
@@ -18,7 +19,7 @@ public abstract class UINodeGroup
     private final Displayer<UINode> nodeDisplayer;
     private final ObservableList<UINode> nodes;
     
-    private final BooleanBinding hasPagedContentBinding;
+    private final BooleanBinding isEmptyBinding;
     
     public UINodeGroup()
     {
@@ -34,23 +35,23 @@ public abstract class UINodeGroup
         
         //
         
-        final Binding<Boolean> temp_binding = BindingTools.createRecursiveBinding((UINode uiNode) -> {
+        final Binding<Boolean> innerBinding = BindingTools.createRecursiveBinding((UINode uiNode) -> {
             if (uiNode != null) {
-                UIPageHandler pageHandler = uiNode.getPageHandler();
+                final UIPageHandler pageHandler = uiNode.getPageHandler();
                 if (pageHandler != null)
-                    return pageHandler.hasPagedContentBinding();
+                    return Bindings.not(pageHandler.isEmptyBinding());
             }
             return null;
         }, nodeDisplayer.displayProperty());
         
-        this.hasPagedContentBinding = Bindings.createBooleanBinding(() -> {
-            final Boolean hasPagedContent = temp_binding.getValue();
+        this.isEmptyBinding = Bindings.createBooleanBinding(() -> {
+            final Boolean hasPagedContent = innerBinding.getValue();
             return hasPagedContent != null && hasPagedContent;
         }, BindingTools.createRecursiveBinding((UINode uiNode) -> {
             if (uiNode != null) {
                 final UIPageHandler pageHandler = uiNode.getPageHandler();
                 if (pageHandler != null)
-                    return pageHandler.hasPagedContentBinding();
+                    return Bindings.not(pageHandler.isEmptyBinding());
             }
             return null;
         }, nodeDisplayer.displayProperty()));
@@ -66,6 +67,17 @@ public abstract class UINodeGroup
     public Displayer<UINode> getNodeDisplayer()
     {
         return nodeDisplayer;
+    }
+    
+    
+    /**
+     * <p>Returns the {@link ObservableList} containing the {@link UINode UINodes} in this {@link UINodeGroup}.</p>
+     *
+     * @return The {@link ObservableList} containing the {@link UINode UINodes} in this {@link UINodeGroup}.
+     */
+    public ObservableList<UINode> getNodes()
+    {
+        return nodes;
     }
     
     /**
@@ -94,37 +106,28 @@ public abstract class UINodeGroup
     }
     
     /**
-     * <p>Returns the {@link ObservableList} containing the {@link UINode UINodes} in this {@link UINodeGroup}.</p>
+     * <p>Returns a {@link BooleanBinding} that reflects if this {@link UINodeGroup} is {@link UIPageHandler#isEmptyBinding() empty}.</p>
+     * <blockquote><b>Bound Passthrough Definition:</b> <i><code>{@link Bindings#not(ObservableBooleanValue) Bindings.not}<b>(</b>{@link #getNodeDisplayer()}<b>.</b>{@link Displayer#getDisplay() getDisplay()}<b>.</b>{@link UINode#getPageHandler() getPageHandler()}<b>.</b>{@link UIPageHandler#isEmptyBinding() isEmptyBinding()}<b>)</b></code></i></blockquote>
      *
-     * @return The {@link ObservableList} containing the {@link UINode UINodes} in this {@link UINodeGroup}.
+     * @return A {@link BooleanBinding} that reflects if this {@link UINodeGroup} is {@link UIPageHandler#isEmptyBinding() empty}.
      */
-    public ObservableList<UINode> getNodes()
+    public BooleanBinding isEmptyBinding()
     {
-        return nodes;
+        return isEmptyBinding;
     }
     
     /**
-     * <p>Returns a {@link BooleanBinding} that reflects if this {@link UINodeGroup} has {@link UIPageHandler#hasPagedContentBinding() paged content}.</p>
-     * <blockquote><b>Bound Passthrough Definition:</b> <i><code>{@link #getNodeDisplayer()}<b>.</b>{@link Displayer#getDisplay() getDisplay()}<b>.</b>{@link UINode#getPageHandler() getPageHandler()}<b>.</b>{@link UIPageHandler#hasPagedContentBinding() hasPagedContentBinding()}</code></i></blockquote>
+     * <p>Checks if the {@link #getContent() content} of this {@link UINodeGroup} is {@link UIPageHandler#isEmptyBinding() empty}.</p>
+     * <blockquote><b>Passthrough Definition:</b> <i><code><b>!</b>{@link #getNodeDisplayer()}<b>.</b>{@link Displayer#getDisplay() getDisplay()}<b>.</b>{@link UINode#getPageHandler() getPageHandler()}<b>.</b>{@link UIPageHandler#isEmpty() isEmpty()}</code></i></blockquote>
      *
-     * @return A {@link BooleanBinding} that reflects if this {@link UINodeGroup} has {@link UIPageHandler#hasPagedContentBinding() paged content}.
+     * @return True if the {@link #getContent() content} of this {@link UINodeGroup} is {@link UIPageHandler#isEmpty() empty}, false if it is not.
+     *
+     * @see #isEmptyBinding()
+     * @see UIPageHandler#isEmpty()
      */
-    public BooleanBinding hasPagedContentBinding()
+    public boolean isEmpty()
     {
-        return hasPagedContentBinding;
-    }
-    
-    /**
-     * <p>Checks if the {@link #getContent() content} of this {@link UINodeGroup} has {@link UIPageHandler#hasPagedContentBinding() paged content} or not.</p>
-     * <blockquote><b>Passthrough Definition:</b> <i><code>{@link #getNodeDisplayer()}<b>.</b>{@link Displayer#getDisplay() getDisplay()}<b>.</b>{@link UINode#getPageHandler() getPageHandler()}<b>.</b>{@link UIPageHandler#hasPagedContent() hasPagedContent()}</code></i></blockquote>
-     *
-     * @return True if the {@link #getContent() content} of this {@link UINodeGroup} has {@link UIPageHandler#hasPagedContentBinding() paged content}, false if it does not.
-     *
-     * @see #hasPagedContent()
-     */
-    public boolean hasPagedContent()
-    {
-        return hasPagedContentBinding.get();
+        return isEmptyBinding.get();
     }
     
     //</editor-fold>

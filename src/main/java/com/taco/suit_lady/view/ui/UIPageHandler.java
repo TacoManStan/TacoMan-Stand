@@ -1,43 +1,73 @@
 package com.taco.suit_lady.view.ui;
 
-import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.collections.ObservableLinkedList;
+import com.taco.suit_lady.util.tools.ExceptionTools;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.layout.StackPane;
+import net.rgielen.fxweaver.core.FxWeaver;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Function;
 
 // TODO - All Javadocs require rewriting/reformatting to match current conventions.
 
-/**
- * Contains and handles all {@link UIPage pages} for a {@link UINode}.
- */
+// TO-DOC
 public class UIPageHandler
 {
-    
     private final ReentrantLock lock;
     private final UINode owner;
     
     private final ObjectProperty<UIPage<?>> coverPageProperty;
     private final ObservableLinkedList<UIPage<?>> pages;
     
+    
     private final ObjectBinding<UIPage<?>> visiblePageBinding;
-    private final BooleanBinding hasPagedContentBinding;
+    private final BooleanBinding isEmptyBinding;
     
     /**
-     * Creates a new {@code UIPageHandler} with the specified {@code owner} and {@link #coverPageProperty() cover page}, using the specified {@link ReentrantLock lock} for synchronization.
+     * <p>Constructs a new {@link UIPageHandler} instance.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>Construction is done internally in the {@link UINode} {@link UINode#UINode(FxWeaver, ConfigurableApplicationContext, String, String, Function, Runnable, StackPane) constructor}.</li>
+     * </ol>
+     * <p><b>Parameter Details</b></p>
+     * <ol>
+     *     <li>
+     *         <b>Lock</b>
+     *         <ol>
+     *             <li>Used to synchronize all operations performed by this {@link UIPageHandler} instance.</li>
+     *             <li>If {@code null}, no synchronization is performed.</li>
+     *         </ol>
+     *     </li>
+     *     <li>
+     *         <b>Owner</b> — Refer to <code><i>{@link #getOwner()}</i></code> for additional information.
+     *         <ol>
+     *             <li>A backwards reference to the {@link UINode} containing this {@link UIPageHandler} instance.</li>
+     *             <li>In the {@link UINode} {@link UINode#UINode(FxWeaver, ConfigurableApplicationContext, String, String, Function, Runnable, StackPane) constructor}, the {@link #getOwner() owner} is always set to {@code this}.</li>
+     *         </ol>
+     *     </li>
+     *     <li>
+     *         <b>Cover Page</b> — Refer to <code><i>{@link #coverPageProperty()}</i></code> for additional information.
+     *         <ol>
+     *             <li>The {@link UIPage} that is {@link UINode#getDisplayer() displayed} if no {@link UIPage pages} have been added to this {@link UIPageHandler}.</li>
+     *             <li>A {@link UIPageHandler} is considered {@link #isEmptyBinding() empty} when its {@link #getPages() Page List} is {@link ObservableLinkedList#isEmpty() empty}.</li>
+     *         </ol>
+     *     </li>
+     * </ol>
      *
-     * @param lock      The {@code ReentrantLock} to be used for synchronization. Specify null for no synchronization.
-     *                  <br>Typically the same lock used by the {@code owner}.
-     * @param owner     The {@code UINode} in which this {@code UIPageHandler} belongs to.
-     * @param coverPage The {@code UIPage} to be displayed as the cover page.
-     *                  See {@link #coverPageProperty()} for details.
+     * @param lock      The {@link ReentrantLock} used to synchronize functionality of this {@link UIPageHandler}.
+     * @param owner     The {@link UINode owner} of this {@link UIPageHandler}.
+     * @param coverPage The {@link #getCoverPage() Cover Page} of this {@link UIPageHandler}.
      */
-    public UIPageHandler(ReentrantLock lock, UINode owner, UIPage<?> coverPage)
+    UIPageHandler(ReentrantLock lock, UINode owner, UIPage<?> coverPage)
     {
         this.lock = lock;
         this.owner = owner;
@@ -46,166 +76,142 @@ public class UIPageHandler
         this.pages = new ObservableLinkedList<>();
         
         this.visiblePageBinding = Bindings.createObjectBinding(this::calcVisiblePage, pages);
-        this.hasPagedContentBinding = Bindings.createBooleanBinding(() -> !pages.isEmpty(), pages);
+        this.isEmptyBinding = Bindings.createBooleanBinding(() -> pages.isEmpty(), pages);
     }
     
-    //<editor-fold desc="Properties">
+    //<editor-fold desc="--- PROPERTIES ---">
     
     /**
-     * Returns the owner of this {@code UIPageHandler}.
+     * <p>Returns the {@link UINode} containing this {@link UIPage}.</p>
      *
-     * @return The owner of this {@code UIPageHandler}.
+     * @return The {@link UINode} containing this {@link UIPage}.
      */
     public UINode getOwner()
     {
         return owner;
     }
     
-    //
-    
     /**
-     * Returns the cover page property for this {@code UIPageHandler}.
-     * <p>
-     * The cover page is displayed when no additional pages have been added to this {@code UIPageHandler} (specifically, when the page list is empty).
+     * <p>Returns the {@link ObjectProperty property} containing the {@link UIPage Cover Page} assigned to this {@link UIPageHandler}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>The {@link UIPage} that is {@link UINode#getDisplayer() displayed} if no {@link UIPage pages} have been added to this {@link UIPageHandler}.</li>
+     *     <li>A {@link UIPageHandler} is considered {@link #isEmptyBinding() empty} when its {@link #getPages() Page List} is {@link ObservableLinkedList#isEmpty() empty}.</li>
+     *     <li>If this {@link UIPageHandler} does not have a {@link #coverPageProperty() Cover Page}, the returned {@link ObjectProperty property} will contain {@code null}.</li>
+     * </ol>
      *
-     * @return The cover page property for this {@code UIPageHandler}.
-     *
-     * @see #getCoverPage()
-     * @see #setCoverPage(UIPage)
+     * @return The {@link ObjectProperty property} containing the {@link UIPage Cover Page} assigned to this {@link UIPageHandler}.
      */
-    public ObjectProperty<UIPage<?>> coverPageProperty()
+    public @NotNull ObjectProperty<UIPage<?>> coverPageProperty()
     {
         return coverPageProperty;
     }
     
     /**
-     * Returns the cover page of this {@code UIPageHandler}.
+     * <p>Returns the {@link UIPage Cover Page} assigned to this {@link UIPageHandler}.</p>
+     * <blockquote><b>Passthrough Definition:</b> <i><code>{@link #coverPageProperty()}<b>.</b>{@link ObjectProperty#get() get()}</code></i></blockquote>
      *
-     * @return The cover page of this {@code UIPageHandler}.
-     *
-     * @see #coverPageProperty()
+     * @return The {@link UIPage Cover Page} assigned to this {@link UIPageHandler}.
      */
-    public UIPage<?> getCoverPage()
+    public @Nullable UIPage<?> getCoverPage()
     {
         return coverPageProperty.get();
     }
     
     /**
-     * Sets the cover page of this {@code UIPageHandler} to the specified value.
+     * <p>Sets the {@link UIPage Cover Page} assigned to this {@link UIPageHandler} to the specified value.</p>
+     * <blockquote><b>Passthrough Definition:</b> <i><code>{@link #coverPageProperty()}<b>.</b>{@link ObjectProperty#set(Object) set}<b>(</b>coverPage<b>)</b></code></i></blockquote>
      *
-     * @param coverPage The {@code UIPage} to be set as the cover page.
-     *
-     * @see #coverPageProperty()
+     * @param coverPage The {@link UIPage} to be the new {@link #coverPageProperty() Cover Page} assigned to this {@link UIPageHandler}.
      */
     public void setCoverPage(UIPage<?> coverPage)
     {
         coverPageProperty.set(coverPage);
     }
     
-    //
-    
     /**
-     * Returns the list of pages that represent this {@code UIPageHandler}. Does not include the {@link #coverPageProperty() cover page}.
-     * <p>
-     * The last element of the page list is the page to be displayed by this {@code UIPageHandler}.
-     * If the page list is empty, the cover page is displayed instead.
+     * <p>Returns the {@link ObservableLinkedList Observable List} of {@link UIPage UIPages} managed and displayed by this {@link UIPageHandler}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>The {@link ObservableLinkedList list} returned by {@link #getPages() this method} is functionally {@code read-only} and must <i>not</i> be modified by external sources. // TODO - Make Read-Only</li>
+     * </ol>
      *
-     * @return All pages that are part of this {@code UIPageHandler}, excluding the cover page.
+     * @return The {@link ObservableLinkedList Observable List} of {@link UIPage UIPages} managed and displayed by this {@link UIPageHandler}.
      */
     public ObservableLinkedList<UIPage<?>> getPages()
     {
         return pages;
-    } //TODO - Make read-only
-    
-    //
+    }
     
     /**
-     * Returns an {@code ObjectBinding} bound to the currently displayed page of this {@code UIPageHandler}.
-     * <p>
-     * The visible page is determined by the following:
+     * <p>Returns a convenience {@link ObjectBinding binding} containing the {@link UIPage} that is currently displayed by this {@link UIPageHandler}.</p>
+     * <p><b>Details</b></p>
      * <ol>
-     * <li>If the {@link #getPages() page list} is not empty, the last page in the page list is returned.</li>
-     * <li>If the page list is empty, the {@link #coverPageProperty() cover page} is returned.</li>
+     *     <li>If available, the {@link ObservableLinkedList#getLast() last} {@link UIPage page} in this {@link UIPageHandler UIPageHandlers} {@link #getPages() Page List} is displayed.</li>
+     *     <li>If this {@link UIPageHandler UIPageHandlers} {@link #getPages() Page List} is {@link #isEmpty() empty}, the {@link #getCoverPage() Cover Page} is displayed instead.</li>
+     *     <li>If this {@link UIPageHandler UIPageHandlers} {@link ObservableLinkedList Page List} is {@link #isEmptyBinding() empty} <u>AND</u> this {@link UIPageHandler} has no {@link #getCoverPage() Cover Page}, then no {@link UIPage page} is displayed, and the {@link ObjectBinding} returned by {@link #visiblePageBinding() this method} will contain {@code null}.</li>
+     *     <li>The logic for calculating the contents of the {@link BooleanBinding} returned by {@link #visiblePageBinding() this method} is contained within <code><i>{@link #calcVisiblePage()}</i></code>.</li>
      * </ol>
      *
-     * @return An {@code ObjectBinding} bound to the currently displayed {@code UIPage} of this {@code UIPageHandler}.
-     *
-     * @see #getVisiblePage()
+     * @return A convenience {@link ObjectBinding binding} containing the {@link UIPage} that is currently displayed by this {@link UIPageHandler}.
      */
-    public ObjectBinding<UIPage<?>> visiblePageBinding()
+    public @NotNull ObjectBinding<UIPage<?>> visiblePageBinding()
     {
         return visiblePageBinding;
     }
     
     /**
-     * Returns the page currently being displayed by this UIPageHandler.
-     * <p>
-     * The visible page is determined by the following:
-     * <ol>
-     * <li>If the {@link #getPages() page list} is not empty, the last page in the page list is returned.</li>
-     * <li>If the page list is empty, the {@link #coverPageProperty() cover page} is returned.</li>
-     * </ol>
+     * <p>Returns the {@link UIPage} that is currently displayed by this {@link UIPageHandler}.</p>
+     * <blockquote><b>Passthrough Definition:</b> <i><code>{@link #visiblePageBinding()}<b>.</b>{@link ObjectBinding#get() get()}</code></i></blockquote>
      *
-     * @return The {@code UIPage} currently being displayed by this {@code UIPageHandler}.
-     *
-     * @see #visiblePageBinding()
+     * @return The {@link UIPage} that is currently displayed by this {@link UIPageHandler}.</p>
      */
-    public UIPage<?> getVisiblePage()
+    public @Nullable UIPage<?> getVisiblePage()
     {
         return visiblePageBinding.get();
     }
     
-    //
-    
     /**
-     * Returns a {@code BooleanBinding} that checks if this {@code UIPageHandler} has paged content.
-     * <p>
-     * {@code Paged content} is defined as a page that is part of this {@code UIPageHandler}, but is not currently being displayed.
-     * <br>
-     * The value of {@code pageData.hasPagedContentBinding().get()} will always be equal to {@code getPages().isEmpty()}.
+     * <p>A {@link BooleanBinding} that reflects whether this {@link UIPageHandler} is {@link ObservableLinkedList#isEmpty() empty} or not.</p>
+     * <blockquote><b>Binding Passthrough Definition:</b> <i><code>{@link #getPages()}<b>.</b>{@link ObservableLinkedList#isEmpty() isEmpty()}</code></i></blockquote>
      *
-     * @return A {@code BooleanBinding} that checks if this {@code UIPageHandler} has paged content.
-     *
-     * @see #hasPagedContent()
+     * @return A {@link BooleanBinding} that reflects whether this {@link UIPageHandler} is {@link ObservableLinkedList#isEmpty() empty} or not.
      */
-    public BooleanBinding hasPagedContentBinding()
+    public BooleanBinding isEmptyBinding()
     {
-        return hasPagedContentBinding;
+        return isEmptyBinding;
     }
     
     /**
-     * Returns true if this {@code UIPageHandler} has paged content, false if it does not.
+     * <p>Checks if this {@link UIPageHandler} is {@link ObservableLinkedList#isEmpty() empty} or not.</p>
+     * <blockquote><b>Passthrough Definition:</b> <i><code>{@link #isEmptyBinding()}<b>.</b>{@link BooleanBinding#get() get()}</code></i></blockquote>
      *
-     * @return True if this {@code UIPageHandler} has paged content, false if it does not.
-     *
-     * @see #hasPagedContentBinding()
+     * @return True if this {@link UIPageHandler} is {@link ObservableLinkedList#isEmpty() empty}, false if it is not.
      */
-    public boolean hasPagedContent()
+    public boolean isEmpty()
     {
-        return hasPagedContentBinding.get();
+        return isEmptyBinding.get();
     }
     
     //</editor-fold>
     
-    //
-    
     /**
-     * Checks if this {@code UIPageHandler} contains the specified page.
-     * <p>
-     * A page is defined as being contained within a {@code UIPageHandler} if any of the following conditions are true:
+     * <p>Checks if this {@link UIPageHandler} contains the specified {@link UIPage} or not.</p>
+     * <p><b>Details</b></p>
      * <ol>
-     * <li>The page is contained within the {@link #getPages() page list}.</li>
-     * <li>The page is the {@link #coverPageProperty() cover page}.
+     *     <li>This method is synchronized.</li>
      * </ol>
-     * <p>
-     * <i>Synchronized.</i>
+     * <p><b>Return Definition</b></p>
+     * <ol>
+     *     <li>If the specified {@link UIPage} is {@code null}, return {@code false}.</li>
+     *     <li>If this {@link UIPageHandler UIPageHandlers} {@link #getPages() Page List} contains the specified {@link UIPage}, return {@code true}.</li>
+     *     <li>If the specified {@link UIPage} is this {@link UIPageHandler UIPageHandlers} {@link #coverPageProperty() Cover Page}, return {@code true}.</li>
+     *     <li>Otherwise, return {@code false}.</li>
+     * </ol>
      *
-     * @param page The {@code UIPage} being searched for.
+     * @param page The {@link UIPage} being checked.
      *
-     * @return True if this {@code UIPageHandler} contains the specified page, false otherwise.
-     *
-     * @see #coverPageProperty()
-     * @see #getPages()
+     * @return True if this {@link UIPageHandler} contains the specified {@link UIPage}, false if it does not.
      */
     public boolean containsPage(UIPage<?> page)
     {
@@ -217,42 +223,39 @@ public class UIPageHandler
         }
     }
     
-    //
-    
     /**
-     * Turns this {@code UIPageHandler} to the specified page.
+     * <p>Turns this {@link UIPageHandler} to the specified {@link UIPage}.</p>
+     * <p><b>Details</b></p>
      * <ol>
-     * <li>All pages that are after the specified page are removed from the {@link #getPages() page list}.</li>
-     * <li>If the specified page is the {@link #coverPageProperty() cover page}, the page list is cleared.</li>
-     * <li>If this {@code UIPageHandler} does not contain the specified  page, {@link #turnToNew(UIPage)} is called.</li>
+     *     <li>If the specified {@link UIPage} is {@code null}, this method does nothing and returns silently.</li>
+     *     <li>If the specified {@link UIPage} is in the {@link #getPages() Page List}, all {@link UIPage pages} <i>after</i> the specified {@link UIPage} are {@link ObservableLinkedList#remove(Object) removed}.</li>
+     *     <li>If the specified {@link UIPage} is the {@link #getCoverPage() Cover Page}, the {@link #getPages() Page List} is {@link ObservableLinkedList#clear() cleared}.</li>
+     *     <li>Otherwise, the specified {@link UIPage} is instead passed to <code><i>{@link #turnToNew(UIPage)}</i></code>.</li>
      * </ol>
-     * <p>
-     * <i>Synchronized.</i>
      *
-     * @param page The {@code UIPage} being made the next page in the page list (that is, the page being turned to).
+     * @param page The {@link UIPage} being turned to.
      *
-     * @throws NullPointerException If the specified page is null.
-     * @see #turnToNew(UIPage)
+     * @return True if the specified {@link UIPage} was successfully turned to, false if it was not.
      */
-    public void turnTo(UIPage<?> page)
+    public boolean turnTo(@Nullable UIPage<?> page)
     {
         throw ExceptionTools.nyi();
-    } //TODO
+    } // TODO
     
     /**
-     * Adds the specified page to this {@code UIPageHandler}, and then turns to that {@code UIPageHandler}.
-     * <p>
-     * Unlike {@link #turnTo(UIPage) turnTo}, this method throws an {@code UnsupportedOperationException} if this {@code UIPageHandler} already contains the specified page.
-     * <p>
-     * <i>Synchronized.</i>
+     * <p>Adds the specified {@link UIPage} to this {@link UIPageHandler}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>If the specified {@link UIPage} is {@code null}, a {@link NullPointerException} is thrown.</li>
+     *     <li>If the specified {@link UIPage} is the {@link #getCoverPage() Cover Page}, an {@link UnsupportedOperationException} is thrown.</li>
+     *     <li>If the specified {@link UIPage} has already been added to the {@link #getPages() Page List}, an {@link UnsupportedOperationException} is thrown.</li>
+     *     <li>Otherwise, the specified {@link UIPage} is {@link ObservableLinkedList#addLast(Object) added} to the {@link #getPages() Page List}.</li>
+     * </ol>
      *
-     * @param page The {@code UIPage} being turned to.
-     *
-     * @throws NullPointerException          If the specified page is null.
-     * @throws UnsupportedOperationException If this {@code UIPageHandler} already contains the specified page (see {@link #containsPage(UIPage) containsPage}).
-     * @see #turnTo(UIPage)
+     * @param page
      */
-    public void turnToNew(UIPage<?> page)
+    // TO-UPDATE
+    public void turnToNew(@NotNull UIPage<?> page)
     {
         lock.lock();
         try {
@@ -261,7 +264,6 @@ public class UIPageHandler
                 throw ExceptionTools.unsupported("Cannot add the cover page to the page list.");
             else if (pages.contains(page))
                 throw ExceptionTools.unsupported("Page has already been added to this PageHandler.");
-            //			ConsoleBB.CONSOLE.dev("Setting paged item: " + page);
             pages.addLast(page);
         } finally {
             lock.unlock();
@@ -269,63 +271,37 @@ public class UIPageHandler
     }
     
     /**
-     * Turns this {@code UIPageHandler} back one page.
-     * <p>
-     * Equivalent to {@code getPages().pollLast()}.
-     * <p>
-     * <i>Synchronized.</i>
+     * <p>{@link #turnTo(UIPage) Turns} this {@link UIPageHandler} back one {@link UIPage page}.</p>
+     * <blockquote><b>Passthrough Definition:</b> <i><code>{@link #getPages()}<b>.</b>{@link ObservableLinkedList#pollLast() pollLast()}</code></i></blockquote>
      *
-     * @see #turnTo(UIPage)
-     * @see #turnToNew(UIPage)
-     * @see #backUnchecked()
+     * @return The {@link UIPage} that was previously displayed before this {@link UIPageHandler} was {@link #turnTo(UIPage) turned} {@link #back() back}.
      */
-    public void back()
+    public UIPage<?> back()
     {
         lock.lock();
         try {
-            pages.pollLast();
+            return pages.pollLast();
         } finally {
             lock.unlock();
         }
     }
     
     /**
-     * Turns this {@code UIPageHandler} back one page.
-     * <p>
-     * Equivalent to {@code getPages().getLast()}.
-     * This method differs from {@link #back()} only in that it throws an exception if the page list is empty.
-     * <p>
-     * <i>Synchronized.</i>
-     *
-     * @see #turnTo(UIPage)
-     * @see #turnToNew(UIPage)
-     * @see #back()
+     * <p>Identical to <code><i>{@link #back()}</i></code>, except an {@link RuntimeException exception} is thrown if the {@link #getPages() Page List} is {@link #isEmpty() empty}.</p>
+     * <blockquote><b>Passthrough Definition:</b> <i><code>{@link #getPages()}<b>.</b>{@link ObservableLinkedList#removeLast() pollLast()}</code></i></blockquote>
+     * @return The {@link UIPage} that was previously displayed before this {@link UIPageHandler} was {@link #turnTo(UIPage) turned} {@link #backUnchecked() back}.
      */
-    public void backUnchecked()
+    public UIPage<?> backUnchecked()
     {
         lock.lock();
         try {
-            pages.removeLast();
+            return pages.removeLast();
         } finally {
             lock.unlock();
         }
     }
     
-    //
-    
-    /**
-     * Calculates the currently visible page.
-     * <p>
-     * The visible page is determined by the following:
-     * <ol>
-     * <li>If the {@link #getPages() page list} is not empty, the last page in the page list is returned.</li>
-     * <li>If the page list is empty, the {@link #coverPageProperty() cover page} is returned.</li>
-     * </ol>
-     * <p>
-     * <i>Synchronized.</i>
-     *
-     * @return The currently visible {@code UIPage}.
-     */
+    // TO-DOC
     private UIPage<?> calcVisiblePage()
     {
         lock.lock();
