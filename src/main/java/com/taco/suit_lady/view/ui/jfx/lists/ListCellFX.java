@@ -34,7 +34,8 @@ public class ListCellFX<T, U extends CellController<T>> extends ListCell<T>
     
     //
     
-    @Override protected void updateItem(T item, boolean empty)
+    @Override
+    protected void updateItem(T item, boolean empty)
     {
         super.updateItem(item, empty);
         wrapper.doUpdateItem(item, empty);

@@ -74,7 +74,8 @@ public class TreeCellFX<T, C extends CellController<T>> extends TreeCell<T>
     
     //
     
-    @Override protected void updateItem(T item, boolean empty)
+    @Override
+    protected void updateItem(T item, boolean empty)
     {
         super.updateItem(item, empty);
         wrappingCell.doUpdateItem(item, empty);

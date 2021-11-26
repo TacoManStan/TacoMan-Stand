@@ -32,7 +32,8 @@ public abstract class TreeCellData<T>
 	 *
 	 * @return The name of this {@code TreeCellData}.
 	 */
-	@Override public final String getName() {
+	@Override
+	public final String getName() {
 		return name;
 	}
 

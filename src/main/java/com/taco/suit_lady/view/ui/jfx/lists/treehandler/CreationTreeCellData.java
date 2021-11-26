@@ -51,10 +51,6 @@ public class CreationTreeCellData<T> extends TreeCellData<T>
 		this.valueProvider = valueProvider;
 	}
 
-	//<editor-fold desc="Properties">
-
-	//</editor-fold>
-
 	//<editor-fold desc="Implementation">
 
 	/**

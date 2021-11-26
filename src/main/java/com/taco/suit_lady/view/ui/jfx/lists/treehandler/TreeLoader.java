@@ -53,7 +53,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
     private final ReadOnlyMapWrapper<String, TreeItemFX<E>> folders; // TODO [S]: Make observable.
     private final ReadOnlyListWrapper<TreeItemFX<E>> items;
     
-    private final ReadOnlyObjectWrapper<Function<E, C>> controllerSupplierProperty;
+    private final ReadOnlyObjectWrapper<Function<E, C>> cellControllerFactoryProperty;
     
     private final Validatable<T> validator; // TODO [S]: Change into property, then reload the TreeView when the property value changes?
     
@@ -65,19 +65,19 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
         this(treeView, null);
     }
     
-    public TreeLoader(TreeView<E> treeView, Function<E, C> controllerSupplier)
+    public TreeLoader(TreeView<E> treeView, Function<E, C> cellControllerFactory)
     {
-        this(treeView, controllerSupplier, null);
+        this(treeView, cellControllerFactory, null);
     }
     
-    public TreeLoader(TreeView<E> treeView, Function<E, C> controllerSupplier, Validatable<T> validator)
+    public TreeLoader(TreeView<E> treeView, Function<E, C> cellControllerFactory, Validatable<T> validator)
     {
-        this(treeView, controllerSupplier, validator, null);
+        this(treeView, cellControllerFactory, validator, null);
     }
     
-    public TreeLoader(TreeView<E> treeView, Function<E, C> controllerSupplier, Validatable<T> validator, String rootName)
+    public TreeLoader(TreeView<E> treeView, Function<E, C> cellControllerFactory, Validatable<T> validator, String rootName)
     {
-        this(treeView, controllerSupplier, validator, null, rootName);
+        this(treeView, cellControllerFactory, validator, null, rootName);
     }
     
     public TreeLoader(TreeView<E> treeView, Function<E, C> controllerSupplier, Validatable<T> validator, Consumer<TreeItem<E>> settingsApplier, String rootName)
@@ -91,7 +91,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
         this.folders = new ReadOnlyMapWrapper<>(FXCollections.observableHashMap());
         this.items = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
         
-        this.controllerSupplierProperty = new ReadOnlyObjectWrapper<>(controllerSupplier);
+        this.cellControllerFactoryProperty = new ReadOnlyObjectWrapper<>(controllerSupplier);
         
         this.validator = validator;
         
@@ -142,19 +142,19 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
     
     //
     
-    public final ReadOnlyObjectProperty<Function<E, C>> controllerSupplierProperty()
+    public final ReadOnlyObjectProperty<Function<E, C>> cellControllerFactoryProperty()
     {
-        return controllerSupplierProperty.getReadOnlyProperty();
+        return cellControllerFactoryProperty.getReadOnlyProperty();
     }
     
-    public final Function<E, C> getControllerSupplier()
+    public final Function<E, C> getCellControllerFactory()
     {
-        return controllerSupplierProperty.get();
+        return cellControllerFactoryProperty.get();
     }
     
-    public final void setControllerSupplier(Function<E, C> controllerSupplier)
+    public final void setCellControllerFactory(Function<E, C> controllerSupplier)
     {
-        controllerSupplierProperty.set(controllerSupplier);
+        cellControllerFactoryProperty.set(controllerSupplier);
     }
     
     //</editor-fold>
@@ -344,7 +344,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
     {
         // TODO [S]: Make sure resources are cleared when the cell is destroyed.
         // NOTE [S]: This might not be applicable for CreationTreeHandlers?
-        Function<E, C> _controllerSupplier = getControllerSupplier();
+        Function<E, C> _controllerSupplier = getCellControllerFactory();
         treeView.setCellFactory(_treeView -> new TreeCellFX<>(
                 _wrappedIndexedCell -> new WrappingCell<>(
                         _treeView,

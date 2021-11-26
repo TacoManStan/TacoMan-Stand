@@ -42,7 +42,8 @@ public class WrappingTreeLoader<T, C extends CellController<WrappingTreeCellData
     
     //<editor-fold desc="Implementation">
     
-    @Override protected WrappingTreeCellData<T> createTreeCellData(String name, String parentName, boolean isFolder, Function<Object[], T> provider)
+    @Override
+    protected WrappingTreeCellData<T> createTreeCellData(String name, String parentName, boolean isFolder, Function<Object[], T> provider)
     {
         T _obj = provider != null ? provider.apply(new Object[0]) : null;
         return new WrappingTreeCellData<>(name, parentName, isFolder, _obj);
