@@ -7,7 +7,6 @@ package com.taco.suit_lady.view.ui.jfx.lists.treehandler;
  */
 public class WrappingTreeCellData<T> extends TreeCellData<T>
 {
-    
     /**
      * Constructs a new WrappingTreeCellData with the specified name, parent name, and folder value.
      *

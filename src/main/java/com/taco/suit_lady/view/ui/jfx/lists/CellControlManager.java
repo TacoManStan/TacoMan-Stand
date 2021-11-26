@@ -13,29 +13,30 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
 
-public class WrappingCell<T, C extends CellController<T>>
+public class CellControlManager<T, C extends CellController<T>>
 {
     
     private final Lock lock;
     
     private final TreeView<T> treeView;
     private final ListView<T> listView;
+    
     private final IndexedCell<T> wrappedCell;
     
     private final Function<T, C> controllerFactory;
     private final ReadOnlyObjectWrapper<C> controllerProperty;
     
-    public WrappingCell(TreeView<T> treeView, IndexedCell<T> wrappedCell, Function<T, C> controllerFactory)
+    public CellControlManager(TreeView<T> treeView, IndexedCell<T> wrappedCell, Function<T, C> controllerFactory)
     {
         this(treeView, null, wrappedCell, controllerFactory);
     }
     
-    public WrappingCell(ListView<T> listView, IndexedCell<T> wrappedCell, Function<T, C> controllerFactory)
+    public CellControlManager(ListView<T> listView, IndexedCell<T> wrappedCell, Function<T, C> controllerFactory)
     {
         this(null, listView, wrappedCell, controllerFactory);
     }
     
-    private WrappingCell(TreeView<T> treeView, ListView<T> listView, IndexedCell<T> wrappedCell, Function<T, C> controllerFactory)
+    private CellControlManager(TreeView<T> treeView, ListView<T> listView, IndexedCell<T> wrappedCell, Function<T, C> controllerFactory)
     {
         this.lock = new ReentrantLock();
         
@@ -47,21 +48,17 @@ public class WrappingCell<T, C extends CellController<T>>
         this.controllerProperty = new ReadOnlyObjectWrapper<>();
     }
     
-    //<editor-fold desc="Properties">
+    //<editor-fold desc="--- PROPERTIES ---">
     
     protected final Lock getLock()
     {
         return lock;
     }
     
-    //
-    
     public final IndexedCell<T> getWrappedCell()
     {
         return wrappedCell;
     }
-    
-    //
     
     public final ReadOnlyObjectProperty<C> controllerProperty()
     {
@@ -80,25 +77,11 @@ public class WrappingCell<T, C extends CellController<T>>
     
     //</editor-fold>
     
-    //
-    
-    private C updateController(T item)
-    {
-        final C controller = controllerFactory.apply(item);
-        
-        controller.setContents(item);
-        setController(controller);
-        
-        return controller;
-    }
-    
     protected void doUpdateItem(T item, boolean empty)
     {
         FXTools.get().runFX(() -> {
-            if (!empty)
-            {
-                if (item != null)
-                {
+            if (!empty) {
+                if (item != null) {
                     final C controller = updateController(item);
                     
                     // TODO - Add support for setting/changing cell text in addition to graphic
@@ -109,12 +92,20 @@ public class WrappingCell<T, C extends CellController<T>>
                     wrappedCell.setOpaqueInsets(Insets.EMPTY);
                     wrappedCell.setPadding(Insets.EMPTY);
                 }
-            }
-            else
-            {
+            } else {
                 wrappedCell.setGraphic(null);
                 wrappedCell.setText(null);
             }
         }, true);
+    }
+    
+    private C updateController(T item)
+    {
+        final C controller = controllerFactory.apply(item);
+        
+        controller.setContents(item);
+        setController(controller);
+        
+        return controller;
     }
 }

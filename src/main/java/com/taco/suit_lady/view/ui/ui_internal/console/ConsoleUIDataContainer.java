@@ -11,7 +11,6 @@ import java.util.Objects;
 
 public class ConsoleUIDataContainer
 {
-    
     private final TreeView<WrappingTreeCellData<ConsoleMessageable<?>>> treeView;
     private final Validatable<ConsoleMessageable<?>> validator;
     
@@ -40,7 +39,7 @@ public class ConsoleUIDataContainer
         this.showSelectedInstanceOnlyProperty = hlpr_getObservable(showSelectedInstanceOnlyProperty);
         
         //
-        this.validator = Objects::nonNull; // CHANGE-HERE
+        this.validator = obj -> Objects.nonNull(obj); // CHANGE-HERE
     }
     
     //<editor-fold desc="Properties">

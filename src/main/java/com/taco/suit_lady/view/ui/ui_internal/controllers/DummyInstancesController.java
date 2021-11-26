@@ -6,7 +6,7 @@ import com.taco.suit_lady.view.ui.jfx.button.ImageButton;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
 import com.taco.suit_lady.view.ui.jfx.image.ImagePane;
 import com.taco.suit_lady.view.ui.jfx.lists.ListCellFX;
-import com.taco.suit_lady.view.ui.jfx.lists.WrappingCell;
+import com.taco.suit_lady.view.ui.jfx.lists.CellControlManager;
 import com.taco.suit_lady.view.ui.ui_internal.contents.DummyInstance;
 import com.taco.suit_lady.view.ui.ui_internal.pages.DummyInstancesPage;
 import javafx.beans.property.BooleanProperty;
@@ -72,7 +72,7 @@ public final class DummyInstancesController extends SidebarNodeGroupController<D
         initButtonViews();
         
         instanceListView.setCellFactory(listView -> new ListCellFX<>(
-                listCellFX -> new WrappingCell<>(
+                listCellFX -> new CellControlManager<>(
                         listView, listCellFX,
                         element -> this.weaver().loadController(DummyInstanceElementController.class)
                 )));

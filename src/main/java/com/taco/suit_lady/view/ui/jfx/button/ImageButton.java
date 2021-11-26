@@ -83,25 +83,30 @@ public class ImageButton
      * <p><b>Parameter Details</b></p>
      * <ol>
      *     <li>
-     *         <b>Image Pane</b> — Refer to <code><i>{@link #getImagePane()}</i></code> for additional information.
+     *         <p><b>Image Pane:</b> {@literal ImagePane}</p>
+     *         <blockquote><i>Refer to <code>{@link #getImagePane()}</code> for additional information.</i></blockquote>
      *         <ol>
      *             <li>If the specified {@link ImagePane} is {@code null}, a new {@link ImagePane} is constructed.</li>
      *         </ol>
      *     </li>
      *     <li>
-     *         <b>Name Binding</b> — Refer to <code><i>{@link #nameBinding()}</i></code> for additional information.
+     *         <b>Name Binding:</b> {@literal ObservableStringValue}
+     *         <blockquote><i>Refer to <code><i>{@link #nameBinding()}</i></code> for additional information.</i></blockquote>
      *         <ol>
      *             <li>If the specified {@link ObservableStringValue nameBinding} is {@code null}, a {@link NullPointerException} is thrown.</li>
      *         </ol>
      *     </li>
      *     <li>
-     *         <b>Action Responder</b> — Refer to <code><i>{@link #actionResponderProperty()}</i></code> for additional information.
+     *         <b>Action Responder:</b> {@literal Runnable}
+     *         <blockquote><i>Refer to <code><i>{@link #actionResponderProperty()}</i></code> for additional information.</i></blockquote>
      *     </li>
      *     <li>
-     *         <b>FX Action Responder</b> — Refer to <code><i>{@link #actionResponderFXProperty()}</i></code> for additional information.
+     *         <b>FX Action Responder:</b> Runnable
+     *         <blockquote><i>Refer to <code><i>{@link #actionResponderFXProperty()}</i></code> for additional information.</i></blockquote>
      *     </li>
      *     <li>
-     *         <b>Toggleable</b> — Refer to <code><i>{@link #isToggleable()}</i></code> for additional information.
+     *         <b>Toggleable:</b> boolean
+     *         <blockquote><i>Refer to <code><i>{@link #isToggleable()}</i></code> for additional information.</i></blockquote>
      *     </li>
      *     <li>
      *         <b>Size</b>

@@ -10,9 +10,9 @@ public class ListCellFX<T, U extends CellController<T>> extends ListCell<T>
 {
     
     private final Lock lock;
-    private final WrappingCell<T, U> wrapper;
+    private final CellControlManager<T, U> wrapper;
     
-    public ListCellFX(Function<ListCellFX<T, U>, WrappingCell<T, U>> wrappedCellFactory)
+    public ListCellFX(Function<ListCellFX<T, U>, CellControlManager<T, U>> wrappedCellFactory)
     {
         this.wrapper = wrappedCellFactory.apply(this);
         this.lock = this.wrapper.getLock();
@@ -25,7 +25,7 @@ public class ListCellFX<T, U extends CellController<T>> extends ListCell<T>
         return lock;
     }
     
-    protected final WrappingCell<T, U> getCellWrapper()
+    protected final CellControlManager<T, U> getCellWrapper()
     {
         return wrapper;
     }
