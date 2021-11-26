@@ -227,7 +227,7 @@ public class UIPageHandler
      * <p>Turns this {@link UIPageHandler} to the specified {@link UIPage}.</p>
      * <p><b>Details</b></p>
      * <ol>
-     *     <li>If the specified {@link UIPage} is {@code null}, this method does nothing and returns silently.</li>
+     *     <li>If the specified {@link UIPage} is {@code null}, this method does nothing and returns {@code false} silently.</li>
      *     <li>If the specified {@link UIPage} is in the {@link #getPages() Page List}, all {@link UIPage pages} <i>after</i> the specified {@link UIPage} are {@link ObservableLinkedList#remove(Object) removed}.</li>
      *     <li>If the specified {@link UIPage} is the {@link #getCoverPage() Cover Page}, the {@link #getPages() Page List} is {@link ObservableLinkedList#clear() cleared}.</li>
      *     <li>Otherwise, the specified {@link UIPage} is instead passed to <code><i>{@link #turnToNew(UIPage)}</i></code>.</li>
@@ -237,10 +237,26 @@ public class UIPageHandler
      *
      * @return True if the specified {@link UIPage} was successfully turned to, false if it was not.
      */
+    // TO-TEST
     public boolean turnTo(@Nullable UIPage<?> page)
     {
-        throw ExceptionTools.nyi();
-    } // TODO
+        lock.lock();
+        try {
+            if (page != null) {
+                if (getPages().contains(page)) {
+                    while (!getVisiblePage().equals(page))
+                        back();
+                    if (getVisiblePage().equals(page))
+                        return true;
+                    else
+                        throw ExceptionTools.ex("Visible page should equal the specified page given prior loop, but it does not. This should not be possible; extensive debugging is necessary.");
+                }
+            }
+        } finally {
+            lock.unlock();
+        }
+        return false;
+    }
     
     /**
      * <p>Adds the specified {@link UIPage} to this {@link UIPageHandler}.</p>
@@ -252,7 +268,7 @@ public class UIPageHandler
      *     <li>Otherwise, the specified {@link UIPage} is {@link ObservableLinkedList#addLast(Object) added} to the {@link #getPages() Page List}.</li>
      * </ol>
      *
-     * @param page
+     * @param page The {@link UIPage} being turned to.
      */
     // TO-UPDATE
     public void turnToNew(@NotNull UIPage<?> page)
@@ -289,6 +305,7 @@ public class UIPageHandler
     /**
      * <p>Identical to <code><i>{@link #back()}</i></code>, except an {@link RuntimeException exception} is thrown if the {@link #getPages() Page List} is {@link #isEmpty() empty}.</p>
      * <blockquote><b>Passthrough Definition:</b> <i><code>{@link #getPages()}<b>.</b>{@link ObservableLinkedList#removeLast() pollLast()}</code></i></blockquote>
+     *
      * @return The {@link UIPage} that was previously displayed before this {@link UIPageHandler} was {@link #turnTo(UIPage) turned} {@link #backUnchecked() back}.
      */
     public UIPage<?> backUnchecked()
