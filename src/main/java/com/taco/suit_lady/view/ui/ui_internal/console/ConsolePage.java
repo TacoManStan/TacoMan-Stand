@@ -10,10 +10,10 @@ public class ConsolePage extends UIPage<ConsoleController>
     public ConsolePage(UINode owner)
     {
         super(owner);
-        
-        final ConsoleController pageController = this.weaver().loadController(ConsoleController.class);
-//        ConsoleBB.CONSOLE.print("Console Page Controller: " + pageController);
     }
+    
+    @Override
+    protected void initializePage(Object[] constructorParams) { }
     
     @Override
     protected @NotNull Class<ConsoleController> controllerDefinition()

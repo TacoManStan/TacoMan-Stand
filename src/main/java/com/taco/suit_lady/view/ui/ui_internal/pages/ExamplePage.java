@@ -7,20 +7,21 @@ import org.jetbrains.annotations.NotNull;
 
 public class ExamplePage extends UIPage<ExampleSidebarController>
 {
-
-	private final String color;
+	private String color;
 
 	public ExamplePage(UINode owner, String color) {
-		super(owner);
-		
-		this.color = color;
-		
-		this.getController().setPage(this);
+		super(owner, color);
 	}
 	
 	public String getColor()
 	{
 		return this.color;
+	}
+	
+	@Override
+	protected void initializePage(Object[] constructorParams)
+	{
+		this.color = (String) constructorParams[0];
 	}
 	
 	@Override

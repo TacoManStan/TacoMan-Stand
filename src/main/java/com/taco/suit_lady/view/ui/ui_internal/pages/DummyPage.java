@@ -10,8 +10,9 @@ public class DummyPage extends UIPage<DummySidebarController>
     public DummyPage(UINode owner)
     {
         super(owner);
-        this.getController().setPage(this);
     }
+    
+    @Override protected void initializePage(Object[] constructorParams) { }
     
     @Override
     protected @NotNull Class<DummySidebarController> controllerDefinition()

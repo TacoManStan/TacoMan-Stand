@@ -1,7 +1,6 @@
 package com.taco.suit_lady.view.ui.ui_internal.controllers;
 
 import com.taco.suit_lady.view.ui.ui_internal.pages.ExamplePage;
-import com.taco.util.quick.ConsoleBB;
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -34,7 +33,6 @@ public class ExampleSidebarController extends SidebarNodeGroupController<Example
     @Override
     protected void onPageBindingComplete()
     {
-        ConsoleBB.CONSOLE.print("Setting Background Color To..." + getPage().getColor());
         root().setStyle("-fx-background-color: " + getPage().getColor());
     }
 }

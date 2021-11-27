@@ -10,9 +10,10 @@ public class DummyInstancesPage extends UIPage<DummyInstancesController>
     public DummyInstancesPage(UINode owner)
     {
         super(owner);
-        
-        this.getController().setPage(this);
     }
+    
+    @Override
+    protected void initializePage(Object[] constructorParams) { }
     
     @Override
     protected @NotNull Class<DummyInstancesController> controllerDefinition()
