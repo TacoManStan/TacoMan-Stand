@@ -20,7 +20,47 @@ import java.util.stream.Stream;
 public class ArrayTools
 {
     /**
-     * <p>Returns the {@link T element} at the specified {@code index} with optional fallbacks provided.</p>
+     * <p>Returns the {@link T element} at the specified {@code index} using <i>{@code () -> null}</i> as the {@link Supplier Fallback Supplier}.</p>
+     * <p><b>Passthrough Definition</b></p>
+     * <blockquote><i><code>
+     * {@link ArrayTools}<b>.</b>{@link ArrayTools#getAt(int, List, Supplier) getAt}<b>(</b>{@code index}<b>,</b> {@code list}<b>,</b> <u>{@code () -> null)}</u><b>)</b>
+     *
+     * @param index The {@code index} to {@link List#get(int) retrieve} the desired {@link T element} from.
+     * @param list  he {@link List} from which the returned {@link T element} is {@link List#get(int) retrieved}.
+     * @param <T>   The type of element contained in the specified {@link List}.
+     *              <p>Also the type of {@link Object} returned by {@link #getAt(int, List, Supplier, Supplier) this method}.
+     *
+     * @return The {@link T element} at the specified {@code index} in the specified {@link List}.
+     */
+    public static <T> T getAt(@NonNegative int index, @NotNull List<T> list)
+    {
+        return getAt(index, list, () -> null);
+    }
+    
+    /**
+     * <p>Returns the {@link T element} at the specified {@code index} using optional {@link Supplier Fallback Supplier} to handle all types of invalid queries.</p>
+     * <p><b>Passthrough Definition</b></p>
+     * <blockquote><i><code>
+     * {@link ArrayTools}<b>.</b>{@link ArrayTools#getAt(int, List, Supplier, Supplier) getAt}<b>(</b>{@code index}<b>,</b> {@code list}<b>,</b> {@code fallbackSupplier}<b>,</b> {@code fallbackSupplier}<b>)</b>
+     * </code></i></blockquote>
+     *
+     * @param index            The {@code index} to {@link List#get(int) retrieve} the desired {@link T element} from.
+     * @param list             The {@link List} from which the returned {@link T element} is {@link List#get(int) retrieved}.
+     * @param fallbackSupplier An optional {@link Supplier} that is called if the specified {@code index} is invalid for any reason or if the {@link T element} at the specified {@code index} is {@code null}.
+     * @param <T>              The type of element contained in the specified {@link List}.
+     *                         <p>Also the type of {@link Object} returned by {@link #getAt(int, List, Supplier, Supplier) this method}.
+     *
+     * @return The {@link T element} at the specified {@code index} in the specified {@link List}.
+     *
+     * @see #getAt(int, List, Supplier, Supplier)
+     */
+    public static <T> T getAt(@NonNegative int index, @NotNull List<T> list, @Nullable Supplier<T> fallbackSupplier)
+    {
+        return getAt(index, list, fallbackSupplier, fallbackSupplier);
+    }
+    
+    /**
+     * <p>Returns the {@link T element} at the specified {@code index} using optional {@link Supplier Fallback Suppliers} to handle various types of invalid queries.</p>
      * <p><b>LOGIC OVERVIEW</b></p>
      * <ol>
      *     <li>
