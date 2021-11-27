@@ -2,6 +2,9 @@ package com.taco.suit_lady.util.tools;
 
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import org.checkerframework.checker.index.qual.NonNegative;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.lang.reflect.Array;
@@ -17,11 +20,90 @@ import java.util.stream.Stream;
 public class ArrayTools
 {
     /**
+     * <p>Returns the {@link T element} at the specified {@code index} with optional fallbacks provided.</p>
+     * <p><b>LOGIC OVERVIEW</b></p>
+     * <ol>
+     *     <li>
+     *         <b>List is <u>Null</u></b>
+     *         <ul>
+     *             <li>Throw a {@link NullPointerException}.</li>
+     *         </ul>
+     *     </li>
+     *     <li>
+     *         <b>Index is <u>Valid</u></b>
+     *         <ul>
+     *             <li>
+     *                 Retrieve the {@link T element} at the specified {@code index}.
+     *                 <ol>
+     *                     <li>
+     *                         <b>Element is <u>Not Null</u></b>
+     *                         <ul>
+     *                             <li>Return the {@link T element}.</li>
+     *                         </ul>
+     *                     </li>
+     *                     <li>
+     *                         <b>Element is <u>Null</u></b>
+     *                         <ul>
+     *                             <li>If the {@link Supplier ifNullFallbackSupplier} is {@code non-null}, return its {@link Supplier#get() value}.</li>
+     *                             <li>If the {@link Supplier ifNullFallbackSupplier} is {@code null}, throw a new {@link NullPointerException}.</li>
+     *                         </ul>
+     *                     </li>
+     *                 </ol>
+     *             </li>
+     *         </ul>
+     *     </li>
+     *     <li>
+     *         <b>Index is <u>Invalid</u></b>
+     *         <ul>
+     *             <li>If the {@link Supplier ifInvalidIndexFallbackSupplier} is {@code non-null}, return its {@link Supplier#get() value}.</li>
+     *             <li>If the {@link Supplier ifInvalidIndexFallbackSupplier} is {@code null}, throw a new {@link IndexOutOfBoundsException}.</li>
+     *         </ul>
+     *     </li>
+     * </ol>
+     *
+     * @param index                          The {@code index} to {@link List#get(int) retrieve} the desired {@link T element} from.
+     * @param list                           The {@link List} from which the returned {@link T element} is {@link List#get(int) retrieved}.
+     * @param ifInvalidIndexFallbackSupplier An optional {@link Supplier} that is called if the specified {@code index} is invalid for any reason.
+     * @param ifNullFallbackSupplier         An optional {@link Supplier} that is called if the {@link T element} at the specified {@code index} is {@code null}.
+     * @param <T>                            The type of element contained in the specified {@link List}.
+     *                                       <p>Also the type of {@link Object} returned by {@link #getAt(int, List, Supplier, Supplier) this method}.
+     *
+     * @return The {@link T element} at the specified {@code index} in the specified {@link List}.
+     * <p>See documentation body for details.
+     *
+     * @throws IndexOutOfBoundsException If the specified {@code index} is a negative value.
+     * @throws NullPointerException      If the specified {@link List} is {@code null}.
+     * @throws IndexOutOfBoundsException If the specified {@code index} is not within the {@link List#size() bounds} of the specified {@link List} and the {@link Supplier ifInvalidIndexFallbackSupplier} was not specified.
+     * @throws NullPointerException      If the {@link T element} at the specified {@code index} is {@code null} and the {@link Supplier ifNullFallbackSupplier} was not specified.
+     */
+    public static <T> T getAt(@NonNegative int index, @NotNull List<T> list, @Nullable Supplier<T> ifInvalidIndexFallbackSupplier, @Nullable Supplier<T> ifNullFallbackSupplier)
+    {
+        ExceptionTools.nullCheck(list, "List cannot be null.");
+        
+        T value;
+        
+        if (index >= 0 && index < list.size()) {
+            value = list.get(index);
+            if (value == null)
+                if (ifNullFallbackSupplier != null)
+                    value = ifNullFallbackSupplier.get();
+                else
+                    throw ExceptionTools.ex(new NullPointerException(), "Value at index [" + index + "] is null, but ifNull fallback Supplier was not provided.");
+        } else if (ifInvalidIndexFallbackSupplier != null)
+            value = ifInvalidIndexFallbackSupplier.get();
+        else
+            throw ExceptionTools.ex(new IndexOutOfBoundsException(), "Index value [" + index + "] is not valid for List:  " + list);
+        
+        return value;
+    }
+    
+    /**
      * Checks if the specified {@code array} is empty.
      * <p>
      * An array is considered empty when it has a length of {@code 0}.
      *
      * @param arr The {@code array}.
+     *
      * @return True if the specified {@code array} is empty, false otherwise.
      */
     public static boolean isEmpty(Object[] arr)
@@ -38,6 +120,7 @@ public class ArrayTools
      * arguments.
      *
      * @param arr The {@code array}.
+     *
      * @return True if the specified {@code array} is null or empty, false
      * otherwise.
      */
@@ -55,6 +138,7 @@ public class ArrayTools
      *
      * @param <T> The object type of the array.
      * @param arr The array to filter.
+     *
      * @return An array with the duplicates filtered out.
      */
     @SuppressWarnings("unchecked")
@@ -75,6 +159,7 @@ public class ArrayTools
      *
      * @param <T> The object type of the ArrayList.
      * @param arr The ArrayList to filter.
+     *
      * @return An ArrayList with the duplicates filtered out.
      */
     public static <T> ArrayList<T> filterDuplicatesList(T[] arr)
@@ -89,6 +174,7 @@ public class ArrayTools
      * @param array The array to check.
      * @param i     The x value to be retrieved from the 2D array.
      * @param j     The y value to be retrieved from the 2D array.
+     *
      * @return True if the specified values can be retrieved from the specified
      * array, false otherwise.
      */
@@ -103,12 +189,12 @@ public class ArrayTools
      * @param index The index.
      * @param list  The {@link List}.
      * @param <T>   The type of elements in the specified {@link List}.
+     *
      * @return The element at the specified index of the specified {@link List}.
      */
     public static <T> T getElementAt(int index, List<T> list)
     {
-        if (list.size() > index && index >= 0)
-        {
+        if (list.size() > index && index >= 0) {
             final T element = list.get(index);
             if (element != null)
                 return element;
@@ -122,6 +208,7 @@ public class ArrayTools
      * @param index The index.
      * @param arr   The array.
      * @param <T>   The type of elements in the specified array.
+     *
      * @return The element at the specified index of the specified array.
      */
     public static <T> T getElementAt(int index, T[] arr)
@@ -137,6 +224,7 @@ public class ArrayTools
      * @param <T>     The type of element.
      * @param element The element.
      * @param arr     The ArrayList.
+     *
      * @return The element that is contained within the specified ArrayList that
      * is equal to the specified element, or null if an Object that is
      * equal to the specified element is not contained within the
@@ -159,6 +247,7 @@ public class ArrayTools
      * @param <T>     The type of element.
      * @param element The element.
      * @param arr     The ArrayList.
+     *
      * @return The element that is contained within the specified array that is
      * equal to the specified element, or null if an Object that is
      * equal to the specified element is not contained within the
@@ -177,6 +266,7 @@ public class ArrayTools
      *
      * @param <T>  The type of elements in the specified List.
      * @param list The ArrayList.
+     *
      * @return The first non-null element in the specified List. If none exists,
      * returns null.
      */
@@ -195,6 +285,7 @@ public class ArrayTools
      *
      * @param <T> The type of elements in the specified array.
      * @param arr The array.
+     *
      * @return The first non-null element in the specified array. If none
      * exists, returns null.
      */
@@ -216,6 +307,7 @@ public class ArrayTools
      * @param <T>    The type of the ArrayLists
      * @param arr    The base ArrayList.
      * @param subArr The ArrayList that is being searched for.
+     *
      * @return A point representing the location of the sub array. The x
      * coordinate of the point is the index of the first matching
      * element in the base array that was found, the y coordinate is the
@@ -232,10 +324,8 @@ public class ArrayTools
         int tempIndex = -1;
         for (int index: possibleIndexes)
             for (int i = 0; i < subArr.size(); i++)
-                if (i + index >= arr.size() || !subArr.get(i).equals(arr.get(i + index)))
-                {
-                    if (tempIndex == -1 || i >= longest)
-                    {
+                if (i + index >= arr.size() || !subArr.get(i).equals(arr.get(i + index))) {
+                    if (tempIndex == -1 || i >= longest) {
                         longest = i;
                         tempIndex = index;
                     }
@@ -253,6 +343,7 @@ public class ArrayTools
      *
      * @param <T>  The generic type of the array.
      * @param arrs The arrays.
+     *
      * @return The result of the second array being concatenated onto the first
      * array.
      */
@@ -260,22 +351,19 @@ public class ArrayTools
     public static <T> T[] concat(T[]... arrs)
     {
         if (arrs != null)
-            if (arrs.length > 1)
-            {
+            if (arrs.length > 1) {
                 int totalLength = 0;
                 for (T[] arr: arrs)
                     if (arr != null)
                         totalLength += arr.length;
                 T[] arr = (T[]) Array.newInstance(arrs[0].getClass().getComponentType(), totalLength);
                 int currentIndex = 0;
-                for (T[] arr2: arrs)
-                {
+                for (T[] arr2: arrs) {
                     System.arraycopy(arr2, 0, arr, currentIndex, arr2.length);
                     currentIndex += arr2.length;
                 }
                 return arr;
-            }
-            else
+            } else
                 return arrs[0];
         return null;
     }
@@ -286,6 +374,7 @@ public class ArrayTools
      *
      * @param arr1 The first array.
      * @param arr2 The second array.
+     *
      * @return The result of the second array being concatenated onto the first
      * array.
      */
@@ -303,6 +392,7 @@ public class ArrayTools
      * @param arr    The array of ints.
      * @param offset The offset of the median. -1 is default (.50). The higher the
      *               offset, the higher the "median" value will be.
+     *
      * @return The median of the specified array of ints. Returns -1 if the
      * offset is invalid.
      */
@@ -320,14 +410,12 @@ public class ArrayTools
             return sortedArr[0];
         else if ((int) (sortedArr.length * offset) >= sortedArr.length)
             return sortedArr[sortedArr.length - 1];
-        if (sortedArr.length % 2d == 0)
-        {
+        if (sortedArr.length % 2d == 0) {
             int length = (int) (sortedArr.length * offset);
             if (length > 0)
                 return (sortedArr[(int) (sortedArr.length * offset)]
                         + sortedArr[((int) (sortedArr.length * offset)) - 1]) / 2;
-        }
-        else
+        } else
             return sortedArr[(int) (sortedArr.length * offset)];
         return -1;
     }
@@ -336,6 +424,7 @@ public class ArrayTools
      * Converts the List of Integers to an array of ints.
      *
      * @param arr The List of Integers.
+     *
      * @return An array of ints the same as the specified List of Integers.
      */
     public static int[] convertIntegers(List<Integer> arr)
@@ -353,6 +442,7 @@ public class ArrayTools
      * @param <T>   The type of elements inside the array.
      * @param value The value being searched for.
      * @param arr   The array being searched.
+     *
      * @return The index of the specified value in the specified array.
      */
     @SafeVarargs
@@ -375,8 +465,7 @@ public class ArrayTools
     
     public static <T> void reverse(T[] arr)
     {
-        if (arr != null)
-        {
+        if (arr != null) {
             final T[] clone = arr.clone();
             for (int i = 0; i < arr.length; i++)
                 arr[i] = clone[arr.length - (i + 1)];
@@ -387,12 +476,9 @@ public class ArrayTools
     {
         if (list != null && editer != null)
             for (int i = 0; i < list.size(); i++)
-                try
-                {
+                try {
                     list.set(i, editer.copy(i, list.get(i)));
-                }
-                catch (Exception ignore)
-                {
+                } catch (Exception ignore) {
                 }
     }
     
@@ -406,6 +492,7 @@ public class ArrayTools
      *                 otherwise.
      * @param arr      The array.
      * @param <T>      The type of elements inside the array.
+     *
      * @return The furthest left point between the specified min and max indexes
      * of the specified array, or -1 if no elements were found.
      */
@@ -413,12 +500,10 @@ public class ArrayTools
     {
         boolean reached = false;
         for (int i = min; i < max; i++)
-            if ((arr[i] == null) == lookNull)
-            {
+            if ((arr[i] == null) == lookNull) {
                 if (reached || lookNull)
                     return i;
-            }
-            else
+            } else
                 reached = true;
         return -1;
     }
@@ -427,8 +512,7 @@ public class ArrayTools
     {
         T[] arr = createArray((Class<T[]>) GeneralTools.get().getArrayClass(clazz), list.size());
         if (arr != null)
-            for (int i = 0; i < list.size(); i++)
-            {
+            for (int i = 0; i < list.size(); i++) {
                 T element = list.get(i);
                 if (element != null)
                     arr[i] = element;
@@ -448,7 +532,9 @@ public class ArrayTools
      *
      * @param map The {@code Map}.
      * @param <V> The type of values stored within the specified {@code Map}.
+     *
      * @return The values of the specified {@code Map} as a new {@code List}.
+     *
      * @throws NullPointerException if the specified {@code Map} is null.
      * @see #getMapValues(Map, List)
      */
@@ -466,7 +552,9 @@ public class ArrayTools
      * @param targetList The {@code List} the values are being appended onto.
      *                   <br>Specify null to create a new {@code ArrayList}.
      * @param <V>        The type of values stored within the specified {@code Map}.
+     *
      * @return The specified {@code List} with all values of the specified {@code Map} appended onto it.
+     *
      * @throws NullPointerException if the specified {@code Map} is null.
      * @see #getMapValues(Map)
      */
@@ -494,8 +582,7 @@ public class ArrayTools
     {
         ExceptionTools.nullCheck(list, "Observable List");
         list.addListener((ListChangeListener<? super T>) change -> {
-            while (change.next())
-            {
+            while (change.next()) {
                 if (change.wasAdded())
                     change.getAddedSubList().forEach(addHandler);
                 if (change.wasRemoved())
@@ -519,6 +606,7 @@ public class ArrayTools
      * @param obj  The element being added to the specified {@code List}.
      * @param <T>  The type of elements contained within the specified
      *             {@code List}.
+     *
      * @throws NullPointerException if the specified {@code List} is null.
      */
     public static <T> void add(List<T> list, T obj)
@@ -539,6 +627,7 @@ public class ArrayTools
      * @param obj       The element being added to the specified {@code List}.
      * @param <T>       The type of elements contained within the specified
      *                  {@code List}.
+     *
      * @throws NullPointerException If the {@code List} or {@code Predicate} is {@code null}.
      */
     public static <T> void addIf(List<T> list, Predicate<T> condition, T obj)
@@ -560,6 +649,7 @@ public class ArrayTools
      * @param objs      The elements being added to the specified {@code List}.
      * @param <T>       The type of elements contained within the specified
      *                  {@code List}.
+     *
      * @throws NullPointerException If the {@code List}, {@code Predicate}, or array of elements
      *                              is {@code null}.
      */
@@ -595,8 +685,10 @@ public class ArrayTools
      *                      {@code List}.
      * @param <T>           The type of {@code objects} contained within the specified
      *                      {@code List}.
+     *
      * @return True if the specified {@code object} was inserted correctly,
      * false if it was not.
+     *
      * @throws NullPointerException If the specified {@code List} is {@code null}.
      */
     public static <T> boolean insertAfter(List<T> list, T searchElement, T objToInsert)
@@ -620,8 +712,10 @@ public class ArrayTools
      *                      {@code List}.
      * @param <T>           The type of {@code objects} contained within the specified
      *                      {@code List}.
+     *
      * @return True if the specified {@code object} was inserted correctly,
      * false if it was not.
+     *
      * @throws NullPointerException If the specified {@code List} is {@code null}.
      */
     public static <T> boolean insertBefore(List<T> list, T searchElement, T objToInsert)
@@ -668,8 +762,7 @@ public class ArrayTools
      */
     public static <T> List<T> removeNull(T[] sourceArr)
     {
-        if (sourceArr != null)
-        {
+        if (sourceArr != null) {
             final ArrayList<T> list = new ArrayList<>(sourceArr.length);
             
             for (T t: sourceArr)
@@ -688,7 +781,7 @@ public class ArrayTools
     {
         ExceptionTools.nullCheck(map, "Map");
         ExceptionTools.nullCheck(obj, "Object to Remove");
-//        ConsoleBB.CONSOLE.dev("Removing \"" + obj + "\" from \"" + map + "\"");
+        //        ConsoleBB.CONSOLE.dev("Removing \"" + obj + "\" from \"" + map + "\"");
         
         // DO NOT SIMPLIFY: removeAll(obj) would only remove the first instance.
         return map.values().removeAll(Collections.singleton(obj));
@@ -714,6 +807,7 @@ public class ArrayTools
      *
      * @param value The value.
      * @param array The array.
+     *
      * @return True if the array contains the value, false otherwise.
      */
     public static boolean contains(int value, int... array)
@@ -730,6 +824,7 @@ public class ArrayTools
      *
      * @param value The key.
      * @param array The array.
+     *
      * @return True if the array contains the key, false otherwise.
      */
     public static boolean contains(short value, short... array)
@@ -746,6 +841,7 @@ public class ArrayTools
      *
      * @param value The key.
      * @param array The array.
+     *
      * @return True if the array contains the key, false otherwise.
      */
     public static boolean contains(char value, char... array)
@@ -764,6 +860,7 @@ public class ArrayTools
      * @param <T>    The type of array.
      * @param object The object.
      * @param array  The array.
+     *
      * @return True if the array contains the object, false otherwise.
      */
     @SafeVarargs
@@ -780,6 +877,7 @@ public class ArrayTools
      * @param filter The {@link Predicate filter}.
      * @param array  The array.
      * @param <T>    The type of elements in the specified array.
+     *
      * @return True if the specified object array contains the specified object
      * based on the specified {@link Predicate}, false otherwise.
      */
@@ -788,12 +886,10 @@ public class ArrayTools
     {
         if (array != null)
             for (T obj: array)
-                try
-                {
+                try {
                     if (obj != null && (filter == null || filter.test(obj)))
                         return true;
-                }
-                catch (Exception ignore) { }
+                } catch (Exception ignore) { }
         return false;
     }
     
@@ -809,6 +905,7 @@ public class ArrayTools
      * @param comparator The {@link Comparator} being used to compare the elements of
      *                   the array..
      * @param array      The array.
+     *
      * @return True if the array contains the object, false otherwise.
      */
     @SafeVarargs
@@ -829,6 +926,7 @@ public class ArrayTools
      *
      * @param array The array.
      * @param <T>   The type of elements in the array.
+     *
      * @return True if the specified array contains any null elements, false otherwise.
      */
     @SafeVarargs
@@ -846,6 +944,7 @@ public class ArrayTools
      * @param array    The array.
      * @param elements The elements.
      * @param <T>      The type of elements in both arrays.
+     *
      * @return True if the specified array contains <i>ANY</i> of the specified
      * elements, false otherwise.
      */
@@ -863,6 +962,7 @@ public class ArrayTools
      * @param collection The {@link Collection}.
      * @param elements   The elements.
      * @param <T>        The type of elements in both the {@link Collection} and array.
+     *
      * @return True if the specified {@link Collection} contains <i>ANY</i> of
      * the specified elements, false otherwise.
      */
@@ -882,6 +982,7 @@ public class ArrayTools
      * @param array  The array.
      * @param filter The {@link Predicate} being used as the filter.
      * @param <T>    The type of elements in the specified {@link Collection}.
+     *
      * @return True if any of the specified array's contents matches the
      * specified {@link Predicate}, false otherwise.
      */
@@ -898,6 +999,7 @@ public class ArrayTools
      * @param collection The {@link Collection}.
      * @param filter     The {@link Predicate} being used as the filter.
      * @param <T>        The type of elements in the specified {@link Collection}.
+     *
      * @return True if any of the specified {@link Collection Collection's}
      * contents matches the specified {@link Predicate}, false
      * otherwise.
@@ -914,6 +1016,7 @@ public class ArrayTools
      * @param array    The array.
      * @param elements The elements.
      * @param <T>      The type of elements in both arrays.
+     *
      * @return True if the specified array contains <i>ALL</i> of the specified
      * elements, false otherwise.
      */
@@ -931,8 +1034,10 @@ public class ArrayTools
      * @param collection The {@link Collection}.
      * @param elements   The elements.
      * @param <T>        The type of elements in both the {@link Collection} and array.
+     *
      * @return True if the specified {@link Collection} contains <i>ALL</i> of
      * the specified elements, false otherwise.
+     *
      * @deprecated Because this method is inefficient - O(n^2)
      */
     @SafeVarargs
@@ -947,6 +1052,7 @@ public class ArrayTools
      *
      * @param string The string.
      * @param array  The array of strings.
+     *
      * @return True if the specified array of strings contains the specified
      * string (ignoring case), false otherwise.
      */
@@ -965,6 +1071,7 @@ public class ArrayTools
      *
      * @param string The String that is being checked.
      * @param arr    The ArrayList that is being checked.
+     *
      * @return Whether the specified String is contained within any String that
      * is contained within the specified ArrayList of Strings.
      */
@@ -986,9 +1093,11 @@ public class ArrayTools
      *
      * @param strings The array being tested.
      * @param arr     The array of Strings to be searched for.
+     *
      * @return True if any of the String elements contained in the specified
      * array of Strings contains any of the Strings in the specified
      * array of Strings, false otherwise.
+     *
      * @deprecated Because this method is inefficient - O(n^n)
      */
     public static boolean containsStringPart(String[] strings, String... arr)
@@ -1006,9 +1115,11 @@ public class ArrayTools
      *
      * @param strings The ArrayList being tested.
      * @param arr     The array of Strings to be searched for.
+     *
      * @return True if any of the String elements contained in the specified
      * ArrayList of Strings contains any of the Strings in the specified
      * varargs of Strings, false otherwise.
+     *
      * @deprecated Because this method is inefficient - O(n^n)
      */
     public static boolean containsStringPart(ArrayList<String> strings, String... arr)
@@ -1023,6 +1134,7 @@ public class ArrayTools
      *
      * @param value The value that is being tested.
      * @param arr   The array that is being searched through.
+     *
      * @return true if the specified name is contained in the specified array of
      * Enums.
      */
@@ -1043,7 +1155,9 @@ public class ArrayTools
      *
      * @param collection The {@code Collection} being copied.
      * @param <V>        The type of elements in the specified {@code Collection}.
+     *
      * @return A shallow copy of the specified {@code Collection}.
+     *
      * @throws NullPointerException If the specified {@code Collection} is null.
      */
     public static <V> ArrayList<V> copy(Collection<V> collection)
@@ -1058,7 +1172,9 @@ public class ArrayTools
      *
      * @param map The {@code Map} being copied.
      * @param <V> The type of elements in the specified {@code Collection}.
+     *
      * @return A shallow copy of the specified {@code Map}.
+     *
      * @throws NullPointerException If the specified {@code Map} is null.
      */
     public static <K, V> Map<K, V> copy(Map<K, V> map)
@@ -1078,6 +1194,7 @@ public class ArrayTools
      * If the list is null, this method returns an empty array of strings.
      *
      * @param list The list to convert.
+     *
      * @return An array representing the list.
      */
     public static String[] toArrayString(List<String> list)
@@ -1094,14 +1211,14 @@ public class ArrayTools
      * If the list is null, this method returns an empty array of ints.
      *
      * @param list The list to convert.
+     *
      * @return An array representing the list.
      */
     public static int[] toArrayInt(List<Integer> list)
     {
         if (list == null)
             return new int[0];
-        else
-        {
+        else {
             int[] arr = new int[list.size()];
             for (int i = 0; i < list.size(); i++)
                 arr[i] = list.get(i);
@@ -1115,14 +1232,14 @@ public class ArrayTools
      * If the list is null, this method returns an empty array of doubles.
      *
      * @param list The list to convert.
+     *
      * @return An array representing the list.
      */
     public static double[] toArrayDouble(List<Double> list)
     {
         if (list == null)
             return new double[0];
-        else
-        {
+        else {
             final double[] arr = new double[list.size()];
             for (int i = 0; i < list.size(); i++)
                 arr[i] = list.get(i);
@@ -1136,14 +1253,14 @@ public class ArrayTools
      * If the list is null, this method returns an empty array of longs.
      *
      * @param list The list to convert.
+     *
      * @return An array representing the list.
      */
     public static long[] toArrayLong(List<Long> list)
     {
         if (list == null)
             return new long[0];
-        else
-        {
+        else {
             final long[] arr = new long[list.size()];
             for (int i = 0; i < list.size(); i++)
                 arr[i] = list.get(i);
@@ -1157,6 +1274,7 @@ public class ArrayTools
      * If the list is null, this method returns an empty array of booleans.
      *
      * @param list The list to convert.
+     *
      * @return An array representing the list.
      */
     public static boolean[] toArrayBoolean(List<Boolean> list)
@@ -1174,6 +1292,7 @@ public class ArrayTools
      * primitive form.
      *
      * @param arr The array of wrapper objects.
+     *
      * @return The converted array.
      */
     public static int[] toArray(Integer[] arr)
@@ -1181,8 +1300,7 @@ public class ArrayTools
         if (arr == null)
             return null;
         final int[] primArr = new int[arr.length];
-        for (int i = 0; i < arr.length; i++)
-        {
+        for (int i = 0; i < arr.length; i++) {
             Integer value = arr[i];
             if (value != null)
                 primArr[i] = value;
@@ -1197,6 +1315,7 @@ public class ArrayTools
      * primitive form.
      *
      * @param arr The array of wrapper objects.
+     *
      * @return The converted array.
      */
     public static long[] toArray(Long[] arr)
@@ -1204,8 +1323,7 @@ public class ArrayTools
         if (arr == null)
             return null;
         final long[] primArr = new long[arr.length];
-        for (int i = 0; i < arr.length; i++)
-        {
+        for (int i = 0; i < arr.length; i++) {
             Long value = arr[i];
             if (value != null)
                 primArr[i] = value;
@@ -1220,6 +1338,7 @@ public class ArrayTools
      * primitive form.
      *
      * @param arr The array of wrapper objects.
+     *
      * @return The converted array.
      */
     public static double[] toArray(Double[] arr)
@@ -1227,8 +1346,7 @@ public class ArrayTools
         if (arr == null)
             return null;
         final double[] primArr = new double[arr.length];
-        for (int i = 0; i < arr.length; i++)
-        {
+        for (int i = 0; i < arr.length; i++) {
             Double value = arr[i];
             if (value != null)
                 primArr[i] = value;
@@ -1243,6 +1361,7 @@ public class ArrayTools
      * primitive form.
      *
      * @param arr The array of wrapper objects.
+     *
      * @return The converted array.
      */
     public static boolean[] toArray(Boolean[] arr)
@@ -1250,8 +1369,7 @@ public class ArrayTools
         if (arr == null)
             return null;
         final boolean[] primArr = new boolean[arr.length];
-        for (int i = 0; i < arr.length; i++)
-        {
+        for (int i = 0; i < arr.length; i++) {
             Boolean value = arr[i];
             if (value != null)
                 primArr[i] = value;
@@ -1266,6 +1384,7 @@ public class ArrayTools
      * primitive form.
      *
      * @param arr The array of wrapper objects.
+     *
      * @return The converted array.
      */
     public static char[] toArray(Character[] arr)
@@ -1273,8 +1392,7 @@ public class ArrayTools
         if (arr == null)
             return null;
         final char[] primArr = new char[arr.length];
-        for (int i = 0; i < arr.length; i++)
-        {
+        for (int i = 0; i < arr.length; i++) {
             Character value = arr[i];
             if (value != null)
                 primArr[i] = value;
@@ -1289,6 +1407,7 @@ public class ArrayTools
      * wrapper form.
      *
      * @param primArr The array of primitive objects.
+     *
      * @return The converted array.
      */
     public static Integer[] toArray(int[] primArr)
@@ -1306,6 +1425,7 @@ public class ArrayTools
      * wrapper form.
      *
      * @param primArr The array of primitive objects.
+     *
      * @return The converted array.
      */
     public static Long[] toArray(long[] primArr)
@@ -1323,6 +1443,7 @@ public class ArrayTools
      * wrapper form.
      *
      * @param primArr The array of primitive objects.
+     *
      * @return The converted array.
      */
     public static Double[] toArray(double[] primArr)
@@ -1340,6 +1461,7 @@ public class ArrayTools
      * wrapper form.
      *
      * @param primArr The array of primitive objects.
+     *
      * @return The converted array.
      */
     public static Character[] toArray(char[] primArr)
@@ -1362,6 +1484,7 @@ public class ArrayTools
      * toString method of {@link List}.
      *
      * @param arr The {@link List}.
+     *
      * @return A String representation of the {@link Class#getSimpleName()
      * simple class name} of each element of the array, using the
      * default toString method of {@link List}.
@@ -1377,6 +1500,7 @@ public class ArrayTools
      * toString method of {@link List}.
      *
      * @param list The {@link List}.
+     *
      * @return A String representation of the {@link Class#getSimpleName()
      * simple class name} of each element of the list, using the default
      * toString method of {@link List}.
@@ -1387,8 +1511,7 @@ public class ArrayTools
         if (!it.hasNext())
             return "";
         StringBuilder stringBuilder = new StringBuilder();
-        for (; ; )
-        {
+        for (; ; ) {
             T e = it.next();
             if (e == list)
                 stringBuilder.append("this Collection");
@@ -1406,6 +1529,7 @@ public class ArrayTools
      * toString method of {@link List}.
      *
      * @param arr The {@link List}.
+     *
      * @return A String representation of the {@link Class#getSimpleName()
      * simple class name} of each element of the array, using the
      * default toString method of {@link List}.
@@ -1421,14 +1545,14 @@ public class ArrayTools
      * toString method of {@link List}.
      *
      * @param list The {@link List}.
+     *
      * @return A String representation of the {@link Class#getSimpleName()
      * simple class name} of each element of the list, using the default
      * toString method of {@link List}.
      */
     public static String toClassString(List list)
     {
-        if (list != null)
-        {
+        if (list != null) {
             ArrayList<String> stringArr = new ArrayList<>(list.size());
             for (Object obj: list)
                 stringArr.add(obj == null ? "null" : GeneralTools.get().getSimpleName(obj.getClass()));
@@ -1502,22 +1626,18 @@ public class ArrayTools
          */
         public static <T> void shift(T[] arr, int... stopPoints)
         {
-            if (arr != null && stopPoints != null && stopPoints.length > 0)
-            {
+            if (arr != null && stopPoints != null && stopPoints.length > 0) {
                 Arrays.sort(stopPoints);
                 stopPoints = concat(concat(new int[]{0}, stopPoints), new int[]{arr.length});
-                for (int i = stopPoints.length - 1; i > 0; i--)
-                {
+                for (int i = stopPoints.length - 1; i > 0; i--) {
                     int currentStopPoint = stopPoints[i];
                     int nextStopPoint = stopPoints[i - 1];
-                    for (int j = currentStopPoint; j >= (i > 0 ? nextStopPoint : 0); j--)
-                    {
+                    for (int j = currentStopPoint; j >= (i > 0 ? nextStopPoint : 0); j--) {
                         int furthestLeftNull;
                         int furthestLeftNonNull;
                         while ((furthestLeftNull = getFurthestLeft(nextStopPoint, j, true,
                                                                    arr
-                        )) < (furthestLeftNonNull = getFurthestLeft(nextStopPoint, j, false, arr)))
-                        {
+                        )) < (furthestLeftNonNull = getFurthestLeft(nextStopPoint, j, false, arr))) {
                             arr[furthestLeftNull] = arr[furthestLeftNonNull];
                             arr[furthestLeftNonNull] = null;
                         }
@@ -1539,19 +1659,18 @@ public class ArrayTools
          *                 can be safely completed without overwriting any non-null
          *                 elements, false otherwise.
          * @param <T>      The type of elements inside the array.
+         *
          * @return True if the shift was successful, false otherwise.
          */
         public static <T> boolean shiftExact(T[] arr, int minIndex, int maxIndex, int spaces, boolean safe)
         {
             maxIndex = maxIndex == -1 ? arr.length : maxIndex;
             if (safe)
-                for (int i = minIndex - spaces; i < minIndex; i++)
-                {
+                for (int i = minIndex - spaces; i < minIndex; i++) {
                     if (i < 0 || arr[i] != null)
                         return false;
                 }
-            for (int i = minIndex; i < maxIndex; i++)
-            {
+            for (int i = minIndex; i < maxIndex; i++) {
                 arr[i - spaces] = arr[i];
                 arr[i] = null;
             }
@@ -1570,6 +1689,7 @@ public class ArrayTools
          *               can be safely completed without overwriting any non-null
          *               elements, false otherwise.
          * @param <T>    The type of elements inside the array.
+         *
          * @return True if the space was made, false otherwise.
          */
         public static <T> boolean spread(T[] arr, int index, int spaces, boolean safe)
@@ -1581,8 +1701,7 @@ public class ArrayTools
             for (int i = arr.length - 1; i >= index; i--)
                 if (i - spaces >= 0)
                     arr[i] = arr[i - spaces];
-            for (int i = 0; i < spaces; i++)
-            {
+            for (int i = 0; i < spaces; i++) {
                 if (i + index < arr.length)
                     arr[i + index] = null;
             }
@@ -1615,8 +1734,7 @@ public class ArrayTools
         @SafeVarargs
         public static <T> void place(T[] arr, PlaceElement<T>... elements)
         {
-            for (int i = 0; i < elements.length; i++)
-            {
+            for (int i = 0; i < elements.length; i++) {
                 PlaceElement<T> currentElement = elements[i];
                 int currentIndex = currentElement.index;
                 int nextIndex;
@@ -1643,13 +1761,13 @@ public class ArrayTools
          *                can be safely completed without overwriting any non-null
          *                elements, false otherwise.
          * @param <T>     The type of elements inside the array.
+         *
          * @return True if the element was inserted successfully, false
          * otherwise.
          */
         public static <T> boolean insert(T[] arr, T element, int index, boolean safe)
         {
-            if (spread(arr, index, 1, safe))
-            {
+            if (spread(arr, index, 1, safe)) {
                 arr[index] = element;
                 return true;
             }
@@ -1673,13 +1791,13 @@ public class ArrayTools
          *                    can be safely completed without overwriting any non-null
          *                    elements, false otherwise.
          * @param <T>         The type of elements inside the array.
+         *
          * @return True if the element was successfully moved, false otherwise.
          */
         public static <T> boolean move(T[] arr1, T[] arr2, int index1, int index2, int stopShiftAt, boolean safe)
         {
             T obj = arr1[index1];
-            if (insert(arr2, obj, index2, safe))
-            {
+            if (insert(arr2, obj, index2, safe)) {
                 arr1[index1] = null;
                 if (stopShiftAt == 0 || shiftExact(arr1, index1 + 1, stopShiftAt, 1, safe))
                     return true;
@@ -1706,6 +1824,7 @@ public class ArrayTools
          *                    can be safely completed without overwriting any non-null
          *                    elements, false otherwise.
          * @param <T>         The type of elements inside the array.
+         *
          * @return True if the element was successfully moved, false otherwise.
          */
         public static <T> boolean move(T[] arr1, T[] arr2, T obj, int index, int stopShiftAt, boolean safe)
@@ -1722,6 +1841,7 @@ public class ArrayTools
          * @param copier    The {@link ElementCopier}.
          * @param <T>       The type of elements inside of the source array.
          * @param <Z>       The type of elements inside of the target array.
+         *
          * @return The target array after the elements from the source array
          * have been copied into it. Note that this method does
          * <i>not</i> create a new array.
@@ -1742,6 +1862,7 @@ public class ArrayTools
          *                  to keep all null elements as null.
          * @param <T>       The type of elements inside of the source array.
          * @param <Z>       The type of elements inside of the target array.
+         *
          * @return The target array after the elements from the source array
          * have been copied into it. Note that this method does
          * <i>not</i> create a new array.
@@ -1759,15 +1880,11 @@ public class ArrayTools
             else if (sourceArr.length != targetArr.length)
                 throw ExceptionTools
                         .ex(new IndexOutOfBoundsException("Source array length must equal target array length"));
-            for (int i = 0; i < sourceArr.length; i++)
-            {
+            for (int i = 0; i < sourceArr.length; i++) {
                 if (sourceArr[i] != null)
-                    try
-                    {
+                    try {
                         targetArr[i] = copier.copy(i, sourceArr[i]);
-                    }
-                    catch (Exception ignore)
-                    {
+                    } catch (Exception ignore) {
                     }
                 else
                     targetArr[i] = (onNull != null ? onNull.get() : null);
