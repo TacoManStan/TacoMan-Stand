@@ -39,7 +39,7 @@ public abstract class UINodeGroup
             if (uiNode != null) {
                 final UIPageHandler pageHandler = uiNode.getPageHandler();
                 if (pageHandler != null)
-                    return Bindings.not(pageHandler.isEmptyBinding());
+                    return pageHandler.isEmptyBinding();
             }
             return null;
         }, nodeDisplayer.displayProperty());
@@ -51,7 +51,7 @@ public abstract class UINodeGroup
             if (uiNode != null) {
                 final UIPageHandler pageHandler = uiNode.getPageHandler();
                 if (pageHandler != null)
-                    return Bindings.not(pageHandler.isEmptyBinding());
+                    return pageHandler.isEmptyBinding();
             }
             return null;
         }, nodeDisplayer.displayProperty()));
