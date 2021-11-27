@@ -165,10 +165,41 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
         return isFinishedConstructing;
     }
     
+    /**
+     * <p>Returns the {@link ObjectProperty} containing the {@link Function} used to construct a {@link CellController} for a provided {@link TreeCellData} input.</p>
+     *
+     * @return The {@link ObjectProperty} containing the {@link Function} used to construct a {@link CellController} for a provided {@link TreeCellData} input.
+     */
+    public final ReadOnlyObjectProperty<Function<E, C>> cellControllerFactoryProperty()
+    {
+        return cellControllerFactoryProperty.getReadOnlyProperty();
+    }
+    
+    /**
+     * <p>Returns the {@link Function} used to construct a {@link CellController} for a provided {@link TreeCellData} input.</p>
+     *
+     * @return The {@link Function} used to construct a {@link CellController} for a provided {@link TreeCellData} input.
+     */
+    public final Function<E, C> getCellControllerFactory()
+    {
+        return cellControllerFactoryProperty.get();
+    }
+    
+    /**
+     * <p>Sets the {@link Function} used to construct a {@link CellController} for a provided {@link TreeCellData} input to the specified {@code value}./p>
+     *
+     * @param controllerSupplier The new {@link Function} to be set as the {@link Function} used to construct a {@link CellController} for a provided {@link TreeCellData} input
+     */
+    public final void setCellControllerFactory(Function<E, C> controllerSupplier)
+    {
+        cellControllerFactoryProperty.set(controllerSupplier);
+    }
+    
     //</editor-fold>
     
     //<editor-fold desc="--- INITIALIZATION ---">
     
+    // TO-DOC
     public void initialize()
     {
         treeView.setRoot(rootItem);
@@ -179,11 +210,14 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
         applyCellFactory();
     }
     
+    // TO-DOC
     public <Z extends TreeLoader<E, T, C>> Z initializeAndGet()
     {
         initialize();
         return (Z) this;
     }
+    
+    //
     
     /**
      * <p>Recursively clears all empty folders, starting from the specified {@link TreeItem}.</p>
@@ -211,6 +245,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
         return totalRemoved;
     }
     
+    // TO-DOC
     private void applyCellFactory()
     {
         // TODO [S]: Make sure resources are cleared when the cell is destroyed.
@@ -366,6 +401,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
     
     //
     
+    // TO-DOC
     private boolean testTreeItem(int maxSize, @NotNull ArrayList<T> list, @NotNull Predicate<T> filter, @NotNull TreeItem<E> treeItem, @NotNull Object[] wrappedObjConstructorParams)
     {
         final E childCell = treeItem.getValue();
@@ -383,65 +419,34 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
     
     //<editor-fold desc="--- CELL DATA ---">
     
-    public boolean addCellData(E cellData, Consumer<TreeItem<E>> settingsApplier)
-    {
-        // TODO [S]: Add synchronization here?
-        if (cellData != null) {
-            TreeItemFX<E> treeItem;
-            if (!cellData.isFolder()) {
-                treeItem = new TreeItemFX<>(cellData);
-                if (settingsApplier != null)
-                    settingsApplier.accept(treeItem);
-            } else
-                treeItem = putFolder(cellData);
-            try {
-                final boolean added = getFolderFor(cellData).getChildren().add(treeItem);
-                items.add(revalidate(treeItem));
-                return added;
-            } catch (Exception e) {
-                throw ExceptionTools.ex(e, cellData.getParentName() + " has not yet been added as a parent.");
-            }
-        }
-        return false;
-    }
-    
-    /**
-     * <p>Returns the {@link E TreeCellData} for the {@link TreeItemFX} matching the specified parameters.</p>
-     *
-     * @param name       The name of the
-     * @param parentName
-     * @param isFolder
-     * @param provider
-     *
-     * @return
-     */
+    //TO-DOC
     protected abstract E createTreeCellData(String name, String parentName, boolean isFolder, Function<Object[], T> provider);
     
-    //<editor-fold desc="Generate CellData">
-    
+    //TO-DOC
     public E generateCellData(String folder, Function<Object[], T> provider)
     {
         return generateCellData(null, folder, provider, null, false);
     }
     
+    //TO-DOC
     public E generateCellData(String folder, Function<Object[], T> provider, Consumer<TreeItem<E>> settingsApplier)
     {
         return generateCellData(null, folder, provider, settingsApplier, false);
     }
     
-    // TODO [S]: Figure out why there is a validator parameter and a validator instance variable.
-    // TODO [S]: The name of a cell should only be a thing for the CreationTreeHandler.
-    
+    //TO-DOC
     public E generateCellData(String name, String folder, Function<Object[], T> provider)
     {
         return generateCellData(name, folder, provider, null, false);
     }
     
+    //TO-DOC
     public E generateCellData(String name, String folder, Function<Object[], T> provider, Consumer<TreeItem<E>> settingsApplier)
     {
         return generateCellData(name, folder, provider, settingsApplier, false);
     }
     
+    //TO-DOC
     public E generateFolderCellData(String name, String folder, Consumer<TreeItem<E>> settingsApplier)
     {
         return generateCellData(name, folder, null, settingsApplier, true);
@@ -493,6 +498,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
      *
      * @return
      */
+    // TO-EXPAND
     private E generateCellData(String name, String folder, Function<Object[], T> provider, Consumer<TreeItem<E>> settingsApplier, boolean isFolder)
     {
         // TODO [S]: Add synchronization here?
@@ -516,12 +522,36 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
         return cellData;
     }
     
-    //</editor-fold>
+    //
+    
+    //TO-DOC
+    private boolean addCellData(E cellData, Consumer<TreeItem<E>> settingsApplier)
+    {
+        // TODO [S]: Add synchronization here?
+        if (cellData != null) {
+            TreeItemFX<E> treeItem;
+            if (!cellData.isFolder()) {
+                treeItem = new TreeItemFX<>(cellData);
+                if (settingsApplier != null)
+                    settingsApplier.accept(treeItem);
+            } else
+                treeItem = putFolder(cellData);
+            try {
+                final boolean added = getFolderFor(cellData).getChildren().add(treeItem);
+                items.add(revalidate(treeItem));
+                return added;
+            } catch (Exception e) {
+                throw ExceptionTools.ex(e, cellData.getParentName() + " has not yet been added as a parent.");
+            }
+        }
+        return false;
+    }
     
     //</editor-fold>
     
     //<editor-fold desc="--- FOLDERS ---">
     
+    //TO-DOC
     public TreeItemFX<E> getFolderFor(E element)
     {
         final String parentName = ExceptionTools.nullCheck(ExceptionTools.nullCheck(element, "Element").getParentName(), "Parent Name");
@@ -535,45 +565,12 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
      *
      * @return The {@link TreeItem} folder that was created by this method.
      */
+    // TO-EXPAND
     private TreeItemFX<E> putFolder(E element)
     {
         final TreeItemFX<E> item = new TreeItemFX<>(element);
         folders.put(element.getName(), item);
         return item;
-    }
-    
-    //</editor-fold>
-    
-    //<editor-fold desc="--- CELL FACTORY ---">
-    
-    /**
-     * <p>Returns the {@link ObjectProperty} containing the {@link Function} used to construct a {@link CellController} for a provided {@link TreeCellData} input.</p>
-     *
-     * @return The {@link ObjectProperty} containing the {@link Function} used to construct a {@link CellController} for a provided {@link TreeCellData} input.
-     */
-    public final ReadOnlyObjectProperty<Function<E, C>> cellControllerFactoryProperty()
-    {
-        return cellControllerFactoryProperty.getReadOnlyProperty();
-    }
-    
-    /**
-     * <p>Returns the {@link Function} used to construct a {@link CellController} for a provided {@link TreeCellData} input.</p>
-     *
-     * @return The {@link Function} used to construct a {@link CellController} for a provided {@link TreeCellData} input.
-     */
-    public final Function<E, C> getCellControllerFactory()
-    {
-        return cellControllerFactoryProperty.get();
-    }
-    
-    /**
-     * <p>Sets the {@link Function} used to construct a {@link CellController} for a provided {@link TreeCellData} input to the specified {@code value}./p>
-     *
-     * @param controllerSupplier The new {@link Function} to be set as the {@link Function} used to construct a {@link CellController} for a provided {@link TreeCellData} input
-     */
-    public final void setCellControllerFactory(Function<E, C> controllerSupplier)
-    {
-        cellControllerFactoryProperty.set(controllerSupplier);
     }
     
     //</editor-fold>
@@ -595,11 +592,13 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
         return validator;
     }
     
+    //TO-DOC
     public void revalidate()
     {
         FXTools.get().runFX(() -> items.forEach(this::revalidate), true);
     }
     
+    //TO-DOC
     private TreeItemFX<E> revalidate(TreeItemFX<E> item)
     {
         final Validatable<T> tempValidator = getValidator();
@@ -612,50 +611,4 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
     }
     
     //</editor-fold>
-    
-    //
-    
-    //<editor-fold desc="Old">
-    
-    //	/**
-    //	 * Generates a new {@link TreeCellData}, checks the generated element's validity, and then adds it to the specified {@link TreeLoader} if the element is valid.
-    //	 *
-    //	 * @param <T>            The type of element contained within the {@link TreeCellData}.
-    //	 * @param <T>            The type of {@link TreeItemValidator}.
-    //	 * @param parentName     The parent name.
-    //	 * @param loader         The {@link TreeLoader} that is doing the loading.
-    //	 * @param validator      The {@link TreeItemValidator} that is validating each element being added to the {@link TreeView}.
-    //	 * @param treeItemLoader The {@link TreeItemSettingsApplier} that is being used to apply any needed settings to the generated {@link TreeCell}. Null if no settings need to be applied.
-    //	 * @return A generated {@link TreeCellData} given the specified values.
-    //	 */
-    //	public E generateCell(TreeLoader appendingLoader, String parentName, T validator, TreeItemSettingsApplier<T> treeItemLoader) {
-    //		final TreeItem<E> tempRoot = appendingLoader.getRootItem();
-    //		final E data = tempRoot.getValue();
-    //		if (hasSetRoot())
-    //			addCellData(data, treeItemLoader);
-    //		return data;
-    //	} // TODO [S]: Figure out what this is.
-    
-    //</editor-fold>
 }
-
-
-/*
- * TODO LIST:
- * [S] Make as many properties observable as possible. e.g.:
- *     [S] folders - HashMap
- *     [S] root - TreeItem
- *     [S] showRoot - boolean
- *     [S] etc.
- * [S] Make a method that retrieves a (String?) representation of the tree's structure.
- *     [S] Most likely going to need to make an information wrapper class for this that keeps track of its children.
- * [S] Write another way of retrieving elements specifically for WrappingTreeHandlers.
- *     [S] UID?
- *     [S] Nameable?
- * [S] Potentially have a mirrored data structure that allows for elements to be retrieved more easily based on a key?
- *     [S] At least for CreationTreeHandlers, I'm thinking nested ObservableHashMaps that uses the TreeCellData names as keys?
- * [S] Potentially make custom Iterable?
- * [S] Remove items from observable list when they are removed from the TreeView.
- * [S] Make validation process internal and automated using properties.
- *     [S] Maybe also keep the revalidate() method for things that don't use properties?
- */
