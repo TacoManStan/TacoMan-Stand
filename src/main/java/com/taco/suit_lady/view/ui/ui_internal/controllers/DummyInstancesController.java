@@ -73,9 +73,7 @@ public final class DummyInstancesController extends SidebarNodeGroupController<D
         
         instanceListView.setCellFactory(listView -> new ListCellFX<>(
                 listCellFX -> new CellControlManager<>(
-                        listView, listCellFX,
-                        element -> this.weaver().loadController(DummyInstanceElementController.class)
-                )));
+                        listCellFX, element -> this.weaver().loadController(DummyInstanceElementController.class))));
         
         ArrayTools.applyChangeHandler(TB.handler().instances(), this::onAdded, this::onRemoved);
         

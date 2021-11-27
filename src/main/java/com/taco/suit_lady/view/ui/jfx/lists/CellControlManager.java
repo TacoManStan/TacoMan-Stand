@@ -6,8 +6,6 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.geometry.Insets;
 import javafx.scene.control.IndexedCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TreeView;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -15,33 +13,17 @@ import java.util.function.Function;
 
 public class CellControlManager<T, C extends CellController<T>>
 {
-    
     private final Lock lock;
-    
-    private final TreeView<T> treeView;
-    private final ListView<T> listView;
     
     private final IndexedCell<T> wrappedCell;
     
     private final Function<T, C> controllerFactory;
     private final ReadOnlyObjectWrapper<C> controllerProperty;
     
-    public CellControlManager(TreeView<T> treeView, IndexedCell<T> wrappedCell, Function<T, C> controllerFactory)
-    {
-        this(treeView, null, wrappedCell, controllerFactory);
-    }
-    
-    public CellControlManager(ListView<T> listView, IndexedCell<T> wrappedCell, Function<T, C> controllerFactory)
-    {
-        this(null, listView, wrappedCell, controllerFactory);
-    }
-    
-    private CellControlManager(TreeView<T> treeView, ListView<T> listView, IndexedCell<T> wrappedCell, Function<T, C> controllerFactory)
+    public CellControlManager(IndexedCell<T> wrappedCell, Function<T, C> controllerFactory)
     {
         this.lock = new ReentrantLock();
         
-        this.treeView = treeView;
-        this.listView = listView;
         this.wrappedCell = wrappedCell;
         
         this.controllerFactory = controllerFactory;
@@ -83,11 +65,7 @@ public class CellControlManager<T, C extends CellController<T>>
             if (!empty) {
                 if (item != null) {
                     final C controller = updateController(item);
-                    
-                    // TODO - Add support for setting/changing cell text in addition to graphic
-                    // The main reason for this is that cell editing is natively supported via cell text
                     wrappedCell.setMaxWidth(Integer.MAX_VALUE);
-                    
                     wrappedCell.setGraphic(controller.root());
                     wrappedCell.setOpaqueInsets(Insets.EMPTY);
                     wrappedCell.setPadding(Insets.EMPTY);

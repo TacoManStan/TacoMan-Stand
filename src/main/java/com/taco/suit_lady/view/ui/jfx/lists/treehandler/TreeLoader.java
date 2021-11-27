@@ -258,7 +258,6 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
         final Function<E, C> controllerSupplier = getCellControllerFactory();
         treeView.setCellFactory(treeView -> new TreeCellFX<>(
                 treeCellFX -> new CellControlManager<>(
-                        treeView,
                         treeCellFX,
                         cellData -> TB.resources().get(
                                 cellData,
