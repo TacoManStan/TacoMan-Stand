@@ -146,7 +146,6 @@ public class ImageButton
         
         ConsoleBB.CONSOLE.print("Size for Button [" + getName() + "]: " + size);
         if (size != null) {
-            ConsoleBB.CONSOLE.print("aksdfj;aksdf");
             this.imagePane.setPrefSize(size.getX(), size.getY());
             this.imagePane.setMaxSize(size.getX(), size.getY());
         }

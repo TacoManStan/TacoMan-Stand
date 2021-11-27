@@ -1,6 +1,7 @@
 package com.taco.suit_lady.view.ui.jfx.image;
 
 import com.taco.suit_lady.util.tools.ExceptionTools;
+import com.taco.util.quick.ConsoleBB;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.ObjectBinding;
@@ -114,12 +115,13 @@ public class ImagePane extends AnchorPane
     // TO-EXPAND
     void init(@Nullable Object input)
     {
+        ConsoleBB.CONSOLE.print("Input: " + input);
         if (input == null)
-            this.imageView = new ImageView();
+            this.imageView = new WrappedImageView();
         else if (input instanceof String)
-            this.imageView = new ImageView((String) input);
+            this.imageView = new WrappedImageView((String) input);
         else if (input instanceof Image)
-            this.imageView = new ImageView((Image) input);
+            this.imageView = new WrappedImageView((Image) input);
         else
             throw ExceptionTools.ex("Input Must be an Image, a String, or null [" + input.getClass() + "]");
         
@@ -154,17 +156,13 @@ public class ImagePane extends AnchorPane
         });
         
         this.requiresWritableContentProperty = new SimpleBooleanProperty(false);
-        this.writableImageBinding = Bindings.createObjectBinding(
-                () -> {
-                    final Image image = getImage();
-                    if (isWritable())
-                        return (WritableImage) image;
-                    return null;
-                }, imageProperty(), requiresWritableContentProperty());
-        this.isWritableBinding = Bindings.createBooleanBinding(
-                () -> getImage() instanceof WritableImage,
-                imageProperty(), requiresWritableContentProperty()
-        );
+        this.writableImageBinding = Bindings.createObjectBinding(() -> {
+            final Image image = getImage();
+            if (isWritable())
+                return (WritableImage) image;
+            return null;
+        }, imageProperty(), requiresWritableContentProperty());
+        this.isWritableBinding = Bindings.createBooleanBinding(() -> getImage() instanceof WritableImage, imageProperty(), requiresWritableContentProperty());
     }
     
     //</editor-fold>
