@@ -28,7 +28,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * TODO [S]: Write documentation.
+ * TO-EXPAND
  *
  * @param <E> The type of {@link TreeCellData} objects contained within the {@link TreeView} managed by this {@code TreeLoader}.
  * @param <T> The type of elements wrapped by the {@code TreeCellData} objects contained within the {@code TreeView} managed by this {@code TreeLoader}.
@@ -62,26 +62,31 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
     private final String rootName;
     private boolean isFinishedConstructing;
     
+    // TO-DOC
     public TreeLoader(TreeView<E> treeView)
     {
         this(treeView, null);
     }
     
+    // TO-DOC
     public TreeLoader(TreeView<E> treeView, Function<E, C> cellControllerFactory)
     {
         this(treeView, cellControllerFactory, null);
     }
     
+    // TO-DOC
     public TreeLoader(TreeView<E> treeView, Function<E, C> cellControllerFactory, Validatable<T> validator)
     {
         this(treeView, cellControllerFactory, validator, null);
     }
     
+    // TO-DOC
     public TreeLoader(TreeView<E> treeView, Function<E, C> cellControllerFactory, Validatable<T> validator, String rootName)
     {
         this(treeView, cellControllerFactory, validator, null, rootName);
     }
     
+    // TO-DOC
     public TreeLoader(TreeView<E> treeView, Function<E, C> controllerSupplier, Validatable<T> validator, Consumer<TreeItem<E>> settingsApplier, String rootName)
     {
         this.lock = new ReentrantLock();
