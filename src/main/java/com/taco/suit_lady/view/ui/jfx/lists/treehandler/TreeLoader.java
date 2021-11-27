@@ -175,24 +175,14 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
         
         while (clearEmptyFolders(rootItem) > 0)
             TB.general().sleepLoop();
-        clearUnnecessaryFolders(rootItem);
         
         applyCellFactory();
     }
     
-    /**
-     * <p>A recursive helper method used in {@link TreeLoader} {@link #initialize() initialization}.</p>
-     *
-     * @param newRootItem The {@link TreeItem} being iterated.
-     */
-    private void clearUnnecessaryFolders(TreeItemFX<E> newRootItem)
+    public <Z extends TreeLoader<E, T, C>> Z initializeAndGet()
     {
-        if (newRootItem.getChildren().size() == 1) {
-            final TreeItemFX<E> childItemFX = (TreeItemFX<E>) newRootItem.getChildren().get(0);
-            rootItem = newRootItem;
-            clearUnnecessaryFolders(childItemFX);
-            initializeRoot();
-        }
+        initialize();
+        return (Z) this;
     }
     
     /**
@@ -221,15 +211,21 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
         return totalRemoved;
     }
     
-    public <Z extends TreeLoader<E, T, C>> Z initializeAndGet()
+    private void applyCellFactory()
     {
-        initialize();
-        return (Z) this;
-    }
-    
-    private void initializeRoot()
-    {
-        treeView.setRoot(rootItem);
+        // TODO [S]: Make sure resources are cleared when the cell is destroyed.
+        // NOTE [S]: This might not be applicable for CreationTreeHandlers?
+        final Function<E, C> controllerSupplier = getCellControllerFactory();
+        treeView.setCellFactory(treeView -> new TreeCellFX<>(
+                treeCellFX -> new CellControlManager<>(
+                        treeView,
+                        treeCellFX,
+                        cellData -> TB.resources().get(
+                                cellData,
+                                () -> controllerSupplier.apply(cellData), // CHANGE-HERE
+                                treeView.hashCode()
+                        )
+                )));
     }
     
     //</editor-fold>
@@ -578,23 +574,6 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
     public final void setCellControllerFactory(Function<E, C> controllerSupplier)
     {
         cellControllerFactoryProperty.set(controllerSupplier);
-    }
-    
-    private void applyCellFactory()
-    {
-        // TODO [S]: Make sure resources are cleared when the cell is destroyed.
-        // NOTE [S]: This might not be applicable for CreationTreeHandlers?
-        final Function<E, C> controllerSupplier = getCellControllerFactory();
-        treeView.setCellFactory(treeView -> new TreeCellFX<>(
-                treeCellFX -> new CellControlManager<>(
-                        treeView,
-                        treeCellFX,
-                        cellData -> TB.resources().get(
-                                cellData,
-                                () -> controllerSupplier.apply(cellData), // CHANGE-HERE
-                                treeView.hashCode()
-                        )
-                )));
     }
     
     //</editor-fold>
