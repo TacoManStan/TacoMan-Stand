@@ -37,7 +37,7 @@ import java.util.function.Predicate;
 public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellController<E>>
         implements Serializable
 {
-    //<editor-fold desc="Static">
+    //<editor-fold desc="--- STATIC ---">
     
     private static final String DEFAULT_ROOT_NAME;
     
@@ -171,21 +171,60 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
     
     public void initialize()
     {
-        initializeRoot();
-        apply();
+        treeView.setRoot(rootItem);
+        
+        while (clearEmptyFolders(rootItem) > 0)
+            TB.general().sleepLoop();
+        clearUnnecessaryFolders(rootItem);
+        
         applyCellFactory();
+    }
+    
+    /**
+     * <p>A recursive helper method used in {@link TreeLoader} {@link #initialize() initialization}.</p>
+     *
+     * @param newRootItem The {@link TreeItem} being iterated.
+     */
+    private void clearUnnecessaryFolders(TreeItemFX<E> newRootItem)
+    {
+        if (newRootItem.getChildren().size() == 1) {
+            final TreeItemFX<E> childItemFX = (TreeItemFX<E>) newRootItem.getChildren().get(0);
+            rootItem = newRootItem;
+            clearUnnecessaryFolders(childItemFX);
+            initializeRoot();
+        }
+    }
+    
+    /**
+     * <p>Recursively clears all empty folders, starting from the specified {@link TreeItem}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>Used in {@link TreeLoader} {@link #initialize() initialization}.</li>
+     * </ol>
+     *
+     * @param item The {@link TreeItem} to iterate from.
+     *
+     * @return The total number of {@link TreeItem TreeItems} removed, including those removed by recursive calls.
+     */
+    private int clearEmptyFolders(TreeItem<E> item)
+    {
+        final ArrayList<TreeItem<E>> toRemove = new ArrayList<>();
+        int totalRemoved = 0;
+        for (TreeItem<E> child: item.getChildren())
+            if (child.getValue().isFolder())
+                if (child.getChildren().isEmpty())
+                    toRemove.add(child);
+                else
+                    totalRemoved += clearEmptyFolders(child);
+        if (item.getChildren().removeAll(toRemove))
+            totalRemoved += toRemove.size();
+        return totalRemoved;
     }
     
     public <Z extends TreeLoader<E, T, C>> Z initializeAndGet()
     {
         initialize();
         return (Z) this;
-    }
-    
-    public void apply()
-    {
-        clearEmptyFolders();
-        clearUnnecessaryFolders();
     }
     
     private void initializeRoot()
@@ -486,50 +525,6 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
     //</editor-fold>
     
     //<editor-fold desc="--- FOLDERS ---">
-    
-    private void clearEmptyFolders()
-    {
-        while (clearEmptyFolders(rootItem) > 0)
-            TB.general().sleepLoop();
-    }
-    
-    private int clearEmptyFolders(TreeItem<E> item)
-    {
-        ArrayList<TreeItem<E>> toRemove = new ArrayList<>();
-        int totalRemoved = 0;
-        for (TreeItem<E> child: item.getChildren())
-            if (child.getValue().isFolder())
-                if (child.getChildren().isEmpty())
-                    toRemove.add(child);
-                else
-                    totalRemoved += clearEmptyFolders(child);
-        if (item.getChildren().removeAll(toRemove))
-            totalRemoved += toRemove.size();
-        return totalRemoved;
-    }
-    
-    /**
-     * Clears away all parent folders that only have a single child until a parent folder with more than one child is found.
-     */
-    private void clearUnnecessaryFolders()
-    {
-        clearUnnecessaryFolders(rootItem);
-    }
-    
-    /**
-     * A recursive helper method used by {@link #clearUnnecessaryFolders()}.
-     *
-     * @param newRootItem The {@link TreeItem}.
-     */
-    private void clearUnnecessaryFolders(TreeItemFX<E> newRootItem)
-    {
-        if (newRootItem.getChildren().size() == 1) {
-            final TreeItemFX<E> childItemFX = (TreeItemFX<E>) newRootItem.getChildren().get(0);
-            rootItem = newRootItem;
-            clearUnnecessaryFolders(childItemFX);
-            initializeRoot();
-        }
-    }
     
     public TreeItemFX<E> getFolderFor(E element)
     {

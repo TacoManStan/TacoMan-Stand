@@ -11,6 +11,10 @@ import java.io.Serializable;
 
 /**
  * <p>A wrapper class that contains an {@link #wrappedObjectProperty() ObjectProperty} containing an object of type {@link T} to be displayed in a {@link TreeView}.</p>
+ * <p><b>Details</b></p>
+ * <ol>
+ *     <li>{@link TreeCellData} is immutable.</li>
+ * </ol>
  *
  * @param <T>
  */
@@ -33,8 +37,13 @@ public abstract class TreeCellData<T>
         this.wrappedObjectProperty = new ReadOnlyObjectWrapper<>();
     }
     
-    //<editor-fold desc="Properties">
+    //<editor-fold desc="--- PROPERTIES ---">
     
+    /**
+     * <p>Returns the {@link String name} of this {@link TreeCellData}.</p>
+     *
+     * @return The {@link String name} of this {@link TreeCellData}.
+     */
     @Override
     public final String getName()
     {
@@ -87,23 +96,4 @@ public abstract class TreeCellData<T>
     public abstract T createWrappedInstance(Object... creationParams);
     
     //</editor-fold>
-    
-    /**
-     * Returns the {@link Class} that is to be used to compare elements for this {@link CreationTreeCellData}.
-     *
-     * @return The {@link Class} that is to be used to compare elements for this {@link CreationTreeCellData}.
-     */
-    public Class<T> getWrappedClass(Object... creationParams)
-    {
-        T wrappedObject = getWrappedObject();
-        if (wrappedObject != null)
-            return (Class<T>) wrappedObject.getClass();
-        return null;
-    }
 }
-
-/*
- * TODO LIST:
- * [S] Make the name into a property.
- *     [S] For this to work properly, you're going to need to rebuild the folders HashMap in the TreeLoader that owns this TreeCellData.
- */

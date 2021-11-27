@@ -63,15 +63,6 @@ public class CreationTreeCellData<T> extends TreeCellData<T>
 		return valueProvider != null ? valueProvider.apply(objs) : null;
 	}
 
-	@Override public Class<T> getWrappedClass(Object... creationParams) {
-		// TODO [S]: Make "createDummy(..)" method?
-		// NOTE [S]: Adding synchronization would be too slow, so make sure this method is never called in a multi-threaded context
-		// unless it is synchronized externally.
-		if (wrappedClass == null)
-			wrappedClass = (Class<T>) createWrappedInstance(creationParams).getClass();
-		return wrappedClass;
-	}
-
 	//</editor-fold>
 
 	//
