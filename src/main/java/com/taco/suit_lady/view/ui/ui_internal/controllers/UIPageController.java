@@ -1,7 +1,9 @@
 package com.taco.suit_lady.view.ui.ui_internal.controllers;
 
 import com.taco.suit_lady.util.tools.ExceptionTools;
+import com.taco.suit_lady.view.ui.UINode;
 import com.taco.suit_lady.view.ui.UIPage;
+import com.taco.suit_lady.view.ui.ui_internal.pages.ExamplePage;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -29,12 +31,9 @@ public abstract class UIPageController<T extends UIPage<?>> extends Controller
      * <p>Sets the {@link UIPage} whose UI is controlled by this {@link UIPageController} to the specified value.</p>
      * <p><b>Details</b></p>
      * <ol>
-     *     <li>This method is automatically internally called upon the construction of any {@link UIPage} instance.</li>
-     *     <li>
-     *         TODO - The page setting operation should be done in the {@link UIPage} constructor.
-     *         <p>
-     *         The only reason it currently is not is because you need additional experience with Spring.
-     *     </li>
+     *     <li>{@link #setPage(UIPage) This method} should be called as <code><i>{@link UIPage#getController() getController()}<b>.</b>{@link #setPage(UIPage) setPage}<b>(</b>this<b>)</b></i></code> at the end of every {@link UIPage} implementations constructor.</li>
+     *     <li>This method should <i>never</i> be used except for as described above.</li>
+     *     <li>Refer to <code><i>{@link ExamplePage#ExamplePage(UINode, String) ExamplePage(UINode, String)}</i></code> for example usage.</li>
      * </ol>
      *
      * @param page The {@link UIPage} this {@link UIPageController} is to control.
