@@ -24,9 +24,10 @@ public class ArrayTools
      * <p><b>Passthrough Definition</b></p>
      * <blockquote><i><code>
      * {@link ArrayTools}<b>.</b>{@link ArrayTools#getAt(int, List, Supplier, Supplier) getAt}<b>(</b>{@code index}<b>,</b> {@code list}<b>,</b> <u>{@code () -> null)}</u><b>,</b> <u>{@code () -> null)}</u><b>)</b>
+     * </code></i></blockquote>
      *
      * @param index The {@code index} to {@link List#get(int) retrieve} the desired {@link T element} from.
-     * @param list  he {@link List} from which the returned {@link T element} is {@link List#get(int) retrieved}.
+     * @param list  The {@link List} from which the returned {@link T element} is {@link List#get(int) retrieved}.
      * @param <T>   The type of element contained in the specified {@link List}.
      *              <p>Also the type of {@link Object} returned by {@link #getAt(int, List, Supplier, Supplier) this method}.
      *

@@ -164,7 +164,7 @@ public class UIPageHandler
      * <p>Returns the {@link UIPage} that is currently displayed by this {@link UIPageHandler}.</p>
      * <blockquote><b>Passthrough Definition:</b> <i><code>{@link #visiblePageBinding()}<b>.</b>{@link ObjectBinding#get() get()}</code></i></blockquote>
      *
-     * @return The {@link UIPage} that is currently displayed by this {@link UIPageHandler}.</p>
+     * @return The {@link UIPage} that is currently displayed by this {@link UIPageHandler}.
      */
     public @Nullable UIPage<?> getVisiblePage()
     {

@@ -122,7 +122,7 @@ public class Console
      *     <li>
      *         Adds a {@link ListChangeListener} to the {@link #getMessages() Message List}:
      *         <ol>
-     *             <li>{@link TreeLoader#generateCell(String, String, Function, Consumer) Generates} a new {@link TreeCellData} object for each {@link ConsoleMessageable} that was {@link ListChangeListener.Change#getAddedSubList() added} in the {@link ListChangeListener.Change Change} object.</li>
+     *             <li>{@link TreeLoader#generateCellData(String, String, Function, Consumer) Generates} a new {@link TreeCellData} object for each {@link ConsoleMessageable} that was {@link ListChangeListener.Change#getAddedSubList() added} in the {@link ListChangeListener.Change Change} object.</li>
      *             <li>Clears the {@link #getMessages() Pending Messages List} after they have been added to the {@link Console} — as the last operation in the {@link ListChangeListener.Change List Change Response}.</li>
      *         </ol>
      *     </li>
@@ -146,7 +146,7 @@ public class Console
                     if (change.wasAdded())
                         activeConsoleHandlers.forEach(treeHandler -> FXTools.get().runFX(
                                 () -> change.getAddedSubList().forEach(
-                                        message -> treeHandler.generateCell(
+                                        message -> treeHandler.generateCellData(
                                                 CONSOLE_ROOT_NAME,
                                                 objs -> message
                                         )), true));

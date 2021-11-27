@@ -98,13 +98,13 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
         this.validator = validator;
         
         this.rootName = rootName != null ? rootName : TreeLoader.DEFAULT_ROOT_NAME;
-        this.rootItem = new TreeItemFX<>(generateFolderCell(this.rootName, null, settingsApplier));
+        this.rootItem = new TreeItemFX<>(generateFolderCellData(this.rootName, null, settingsApplier));
         
         this.rootItem.setExpanded(true);
         this.isFinishedConstructing = true;
     }
     
-    //<editor-fold desc="Properties">
+    //<editor-fold desc="--- PROPERTIES ---">
     
     /**
      * <p>Returns the {@link TreeView} loaded by this {@link TreeLoader}.</p>
@@ -124,21 +124,6 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
     public final TreeItemFX<E> getRootItem()
     {
         return rootItem;
-    }
-    
-    /**
-     * <p>Returns whether this {@link TreeLoader} has finished {@link #TreeLoader(TreeView, Function, Validatable, Consumer, String) construction} or not.</p>
-     * <p><b>Details</b></p>
-     * <ol>
-     *     <li>Used to ensure this {@link TreeLoader} is not asynchronously accessed prior to being fully {@link #TreeLoader(TreeView, Function, Validatable, Consumer, String) constructed}.</li>
-     *     <li>TODO - Eventually, the functionality of this method should be done via actual synchronization.</li>
-     * </ol>
-     *
-     * @return True if this {@link TreeLoader} has finished {@link TreeLoader#TreeLoader(TreeView, Function, Validatable, Consumer, String) construction}, false if it has not.
-     */
-    private boolean isFinishedConstructing()
-    {
-        return isFinishedConstructing;
     }
     
     /**
@@ -166,38 +151,23 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
     }
     
     /**
-     * <p>Returns the {@link Validatable validator} used to ensure all {@link TreeItemFX items} added to the {@link #getTreeView() TreeView} that is loaded by this {@link TreeLoader} adhere to the conditions set by the {@link Validatable validator}.</p>
+     * <p>Returns whether this {@link TreeLoader} has finished {@link #TreeLoader(TreeView, Function, Validatable, Consumer, String) construction} or not.</p>
      * <p><b>Details</b></p>
      * <ol>
-     *     <li>The {@link Validatable validator} is automatically called when a new {@link TreeItemFX item} is {@link #addCellData(TreeCellData, Consumer)  added} to the {@link #getTreeView() TreeView} that is loaded by this {@link TreeLoader}.</li>
-     *     <li>The primary usage of the {@link Validatable validator} is located in the <code><i>{@link #revalidate(TreeItemFX)}</i></code> method.</li>
+     *     <li>Used to ensure this {@link TreeLoader} is not asynchronously accessed prior to being fully {@link #TreeLoader(TreeView, Function, Validatable, Consumer, String) constructed}.</li>
+     *     <li>TODO - Eventually, the functionality of this method should be done via actual synchronization.</li>
      * </ol>
      *
-     * @return The {@link Validatable validator} used to ensure all {@link TreeItemFX items} added to the {@link #getTreeView() TreeView} that is loaded by this {@link TreeLoader} adhere to the conditions set by the {@link Validatable validator}.
+     * @return True if this {@link TreeLoader} has finished {@link TreeLoader#TreeLoader(TreeView, Function, Validatable, Consumer, String) construction}, false if it has not.
      */
-    public final Validatable<T> getValidator()
+    private boolean isFinishedConstructing()
     {
-        return validator;
-    }
-    
-    public final ReadOnlyObjectProperty<Function<E, C>> cellControllerFactoryProperty()
-    {
-        return cellControllerFactoryProperty.getReadOnlyProperty();
-    }
-    
-    public final Function<E, C> getCellControllerFactory()
-    {
-        return cellControllerFactoryProperty.get();
-    }
-    
-    public final void setCellControllerFactory(Function<E, C> controllerSupplier)
-    {
-        cellControllerFactoryProperty.set(controllerSupplier);
+        return isFinishedConstructing;
     }
     
     //</editor-fold>
     
-    //<editor-fold desc="Initialize">
+    //<editor-fold desc="--- INITIALIZATION ---">
     
     public void initialize()
     {
@@ -225,13 +195,23 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
     
     //</editor-fold>
     
-    //<editor-fold desc="Helpers">
+    //<editor-fold desc="--- GET OBJS ---">
     
-    // Cell/Value Helpers
-    
-    public final T getObj(Predicate<T> filter, Object... objs)
+    /**
+     * <p>Returns the first {@link TreeCellData#getWrappedObject() Wrapped Value} in the {@link TreeView} loaded by this {@link TreeLoader} -- starting with the {@link #getRootItem() Root Item} as the iteration {@code root} -- that matches the specified {@link Predicate filter}.</p>
+     * <p><b>Passthrough Definition</b></p>
+     * <blockquote><i><code>
+     * {@link #getObj(Predicate, TreeItem, Object...) getObj}<b>(</b>filter<b>,</b> {@link #getRootItem()}<b>,</b> wrappedObjConstructorParams<b>)</b>
+     * </code></i></blockquote>
+     *
+     * @param filter                      The {@link Predicate filter} used to filter through the {@link TreeItemFX items} in this {@link TreeLoader}.
+     * @param wrappedObjConstructorParams Passed to the <code><i>{@link TreeCellData#createWrappedInstance(Object...)}</i></code> as the optional parameters to use upon {@link T item} construction.
+     *
+     * @return The first {@link TreeCellData#getWrappedObject() Wrapped Value} in the {@link TreeView} loaded by this {@link TreeLoader} -- starting with the {@link #getRootItem() Root Item} as the iteration {@code root} -- that matches the specified {@link Predicate filter}.
+     */
+    public final T getObj(Predicate<T> filter, Object... wrappedObjConstructorParams)
     {
-        return getObj(filter, rootItem, objs);
+        return getObj(filter, getRootItem(), wrappedObjConstructorParams);
     }
     
     /**
@@ -252,8 +232,6 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
         return ArrayTools.getAt(0, getObjs(filter, treeItem, null, 1, wrappedObjConstructorParams));
     }
     
-    //
-    
     /**
      * <p>Returns all {@link TreeCellData#getWrappedObject() Wrapped Values} in the {@link TreeView} loaded by this {@link TreeLoader}.</p>
      * <p><b>Passthrough Definition</b></p>
@@ -261,7 +239,6 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
      * {@link #getObjs(Predicate, Object...) getObjs}<b>(</b><u>{@code null}</u><b>,</b> wrappedObjConstructorParams<b>)</b>
      * </code></i></blockquote>
      *
-     * @param filter                      The {@link Predicate filter} used to filter through the {@link TreeItemFX items} in this {@link TreeLoader}.
      * @param wrappedObjConstructorParams Passed to the <code><i>{@link TreeCellData#createWrappedInstance(Object...)}</i></code> as the optional parameters to use upon {@link T item} construction.
      *
      * @return All {@link TreeCellData#getWrappedObject() Wrapped Values} in the {@link TreeView} loaded by this {@link TreeLoader} -- starting with the {@link #getRootItem() Root Item} as the iteration {@code root} -- that match the specified {@link Predicate filter}.
@@ -352,6 +329,8 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
         return tempList;
     }
     
+    //
+    
     private boolean testTreeItem(int maxSize, @NotNull ArrayList<T> list, @NotNull Predicate<T> filter, @NotNull TreeItem<E> treeItem, @NotNull Object[] wrappedObjConstructorParams)
     {
         final E childCell = treeItem.getValue();
@@ -365,36 +344,148 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
         return maxSize != -1 && list.size() >= maxSize;
     }
     
-    //
+    //</editor-fold>
     
-    private ArrayList<E> getCells(Predicate<E> filter, TreeItem<E> treeItem, ArrayList<E> list)
-    {
-        if (treeItem != null) {
-            final E cellData = treeItem.getValue();
-            if (cellData != null && !cellData.isFolder() && (filter == null || filter.test(cellData)))
-                list.add(cellData);
-            for (TreeItem<E> child: treeItem.getChildren())
-                getCells(filter, child, list);
-        }
-        return list;
-    }
+    //<editor-fold desc="--- CELL DATA ---">
     
-    private E getCell(Predicate<E> filter, TreeItem<E> treeItem)
+    public boolean addCellData(E cellData, Consumer<TreeItem<E>> settingsApplier)
     {
-        if (treeItem != null) {
-            final E cellData = treeItem.getValue();
-            if (cellData != null && (filter == null || filter.test(cellData)))
-                return cellData;
-            for (TreeItem<E> child: treeItem.getChildren()) {
-                final E childValue = getCell(filter, child);
-                if (childValue != null)
-                    return childValue;
+        // TODO [S]: Add synchronization here?
+        if (cellData != null) {
+            TreeItemFX<E> treeItem;
+            if (!cellData.isFolder()) {
+                treeItem = new TreeItemFX<>(cellData);
+                if (settingsApplier != null)
+                    settingsApplier.accept(treeItem);
+            } else
+                treeItem = putFolder(cellData);
+            try {
+                final boolean added = getFolderFor(cellData).getChildren().add(treeItem);
+                items.add(revalidate(treeItem));
+                return added;
+            } catch (Exception e) {
+                throw ExceptionTools.ex(e, cellData.getParentName() + " has not yet been added as a parent.");
             }
         }
-        return null;
+        return false;
     }
     
-    // Clear Folders Helpers
+    /**
+     * <p>Returns the {@link E TreeCellData} for the {@link TreeItemFX} matching the specified parameters.</p>
+     *
+     * @param name       The name of the
+     * @param parentName
+     * @param isFolder
+     * @param provider
+     *
+     * @return
+     */
+    protected abstract E createTreeCellData(String name, String parentName, boolean isFolder, Function<Object[], T> provider);
+    
+    //<editor-fold desc="Generate CellData">
+    
+    public E generateCellData(String folder, Function<Object[], T> provider)
+    {
+        return generateCellData(null, folder, provider, null, false);
+    }
+    
+    public E generateCellData(String folder, Function<Object[], T> provider, Consumer<TreeItem<E>> settingsApplier)
+    {
+        return generateCellData(null, folder, provider, settingsApplier, false);
+    }
+    
+    // TODO [S]: Figure out why there is a validator parameter and a validator instance variable.
+    // TODO [S]: The name of a cell should only be a thing for the CreationTreeHandler.
+    
+    public E generateCellData(String name, String folder, Function<Object[], T> provider)
+    {
+        return generateCellData(name, folder, provider, null, false);
+    }
+    
+    public E generateCellData(String name, String folder, Function<Object[], T> provider, Consumer<TreeItem<E>> settingsApplier)
+    {
+        return generateCellData(name, folder, provider, settingsApplier, false);
+    }
+    
+    public E generateFolderCellData(String name, String folder, Consumer<TreeItem<E>> settingsApplier)
+    {
+        return generateCellData(name, folder, null, settingsApplier, true);
+    }
+    
+    /**
+     * <p>Generates a new {@link TreeCellData} instance of implementation-type {@link E}.</p>
+     * <p><b>Parameter Details</b></p>
+     * <ol>
+     *     <li>
+     *         <b>Name:</b> {@literal String}
+     *         <ol>
+     *             <li>The {@code name} of the generated {@link TreeCellData} object.</li>
+     *         </ol>
+     *     </li>
+     *     <li>
+     *         <b>Folder:</b> String
+     *         <ol>
+     *             <li>The {@code name} of the {@link #folders() folder} the generated {@link TreeCellData} object is added to.</li>
+     *         </ol>
+     *     </li>
+     *     <li>
+     *         <b>Provider:</b> {@literal Function<Object[], T>}
+     *         <ol>
+     *             <li>The {@link Function} used to provide the {@link T object} contained in the generated {@link TreeCellData} object.</li>
+     *             <li>An optional {@link Object} {@link Array} can be used to provide additional parameter data that is required to retrieve the {@link T object}.</li>
+     *         </ol>
+     *     </li>
+     *     <li>
+     *         <b>Settings Applier:</b> {@literal Consumer<TreeItem<E>>}
+     *         <ol>
+     *             <li>An optional {@link Consumer} that allows additional operations to be performed on the {@link TreeItem} for the generated {@link TreeCellData} object.</li>
+     *             <li>If the {@link Consumer} is {@code null}, no additional operations will be performed.</li>
+     *         </ol>
+     *     </li>
+     *     <li>
+     *         <b>Is Folder:</b> {@literal boolean}
+     *         <ol>
+     *             <li>Indicates whether the generated {@link TreeCellData} object represents a {@code folder} or a standard {@code element}.</li>
+     *         </ol>
+     *     </li>
+     * </ol>
+     *
+     * @param name
+     * @param folder
+     * @param provider
+     * @param settingsApplier
+     * @param isFolder
+     *
+     * @return
+     */
+    private E generateCellData(String name, String folder, Function<Object[], T> provider, Consumer<TreeItem<E>> settingsApplier, boolean isFolder)
+    {
+        // TODO [S]: Add synchronization here?
+        if (!isFolder) {
+            // If isFolder is false, ensure that there is a non-null TreeItemValueProvider specified.
+            ExceptionTools.nullCheck(provider, "Provider", "Provider cannot be null when isFolder is false");
+            //			Validatable<T> _validator = getValidator(); // Create temp variable in case the validator is ever turned into a property.
+            //			if (_validator != null) {
+            //				// If the TreeItemValidator is non-null, validate an instance returned by the specified TreeItemValueProvider.
+            //				T _instance = provider.apply(new Object[0]); // TODO [S]: Figure out what creation parameters aren't necessary here.
+            //				if (!_validator.validate(_instance))
+            //					// If the instance returned by the specified TreeItemValueProvider is not valid, return null.
+            //					return null;
+            //			}
+        }
+        
+        final E cellData = createTreeCellData(name, folder, isFolder, provider);
+        //TODO [S]: Figure out what happens when the root hasn't been set.
+        if (isFinishedConstructing())
+            addCellData(cellData, settingsApplier);
+        return cellData;
+    }
+    
+    //</editor-fold>
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- FOLDERS ---">
     
     private void clearEmptyFolders()
     {
@@ -440,11 +531,10 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
         }
     }
     
-    // Get/Put Folder Helpers
-    
-    private TreeItemFX<E> getFolderFor(E element)
+    public TreeItemFX<E> getFolderFor(E element)
     {
-        return element.getParentName().equalsIgnoreCase(rootName) ? rootItem : folders.get(element.getParentName());
+        final String parentName = ExceptionTools.nullCheck(ExceptionTools.nullCheck(element, "Element").getParentName(), "Parent Name");
+        return parentName.equalsIgnoreCase(rootName) ? rootItem : folders.get(element.getParentName());
     }
     
     /**
@@ -461,7 +551,39 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
         return item;
     }
     
-    // Misc. Helpers
+    //</editor-fold>
+    
+    //<editor-fold desc="--- CELL FACTORY ---">
+    
+    /**
+     * <p>Returns the {@link ObjectProperty} containing the {@link Function} used to construct a {@link CellController} for a provided {@link TreeCellData} input.</p>
+     *
+     * @return The {@link ObjectProperty} containing the {@link Function} used to construct a {@link CellController} for a provided {@link TreeCellData} input.
+     */
+    public final ReadOnlyObjectProperty<Function<E, C>> cellControllerFactoryProperty()
+    {
+        return cellControllerFactoryProperty.getReadOnlyProperty();
+    }
+    
+    /**
+     * <p>Returns the {@link Function} used to construct a {@link CellController} for a provided {@link TreeCellData} input.</p>
+     *
+     * @return The {@link Function} used to construct a {@link CellController} for a provided {@link TreeCellData} input.
+     */
+    public final Function<E, C> getCellControllerFactory()
+    {
+        return cellControllerFactoryProperty.get();
+    }
+    
+    /**
+     * <p>Sets the {@link Function} used to construct a {@link CellController} for a provided {@link TreeCellData} input to the specified {@code value}./p>
+     *
+     * @param controllerSupplier The new {@link Function} to be set as the {@link Function} used to construct a {@link CellController} for a provided {@link TreeCellData} input
+     */
+    public final void setCellControllerFactory(Function<E, C> controllerSupplier)
+    {
+        cellControllerFactoryProperty.set(controllerSupplier);
+    }
     
     private void applyCellFactory()
     {
@@ -482,161 +604,21 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
     
     //</editor-fold>
     
-    // Generate Cell
-    
-    public E generateCell(String folder, Function<Object[], T> provider)
-    {
-        return generateCell(null, folder, provider, null, false);
-    }
-    
-    public E generateCell(String folder, Function<Object[], T> provider, Consumer<TreeItem<E>> settingsApplier)
-    {
-        return generateCell(null, folder, provider, settingsApplier, false);
-    }
-    
-    // TODO [S]: Figure out why there is a validator parameter and a validator instance variable.
-    // TODO [S]: The name of a cell should only be a thing for the CreationTreeHandler.
-    
-    public E generateCell(String name, String folder, Function<Object[], T> provider)
-    {
-        return generateCell(name, folder, provider, null, false);
-    }
-    
-    public E generateCell(String name, String folder, Function<Object[], T> provider, Consumer<TreeItem<E>> settingsApplier)
-    {
-        return generateCell(name, folder, provider, settingsApplier, false);
-    }
-    
-    public E generateFolderCell(String name, String folder, Consumer<TreeItem<E>> settingsApplier)
-    {
-        return generateCell(name, folder, null, settingsApplier, true);
-    }
+    //<editor-fold desc="--- VALIDATION ---">
     
     /**
-     * <p>Generates a new {@link TreeCellData} instance of implementation-type {@link E}.</p>
-     * <p><b>Parameter Details</b></p>
+     * <p>Returns the {@link Validatable validator} used to ensure all {@link TreeItemFX items} added to the {@link #getTreeView() TreeView} that is loaded by this {@link TreeLoader} adhere to the conditions set by the {@link Validatable validator}.</p>
+     * <p><b>Details</b></p>
      * <ol>
-     *     <li>
-     *         <b>Name:</b> {@literal String}
-     *         <ol>
-     *             <li>The {@code name} of the generated {@link TreeCellData} object.</li>
-     *         </ol>
-     *     </li>
-     *     <li>
-     *         <b>Folder:</b> String
-     *         <ol>
-     *             <li>The {@code name} of the {@link #folders() folder} the generated {@link TreeCellData} object is added to.</li>
-     *         </ol>
-     *     </li>
-     *     <li>
-     *         <b>Provider:</b> {@literal Function<Object[], T>}
-     *         <ol>
-     *             <li>The {@link Function} used to provide the {@link T object} contained in the generated {@link TreeCellData} object.</li>
-     *             <li>An optional {@link Object} {@link Array} can be used to provide additional parameter data that is required to retrieve the {@link T object}.</li>
-     *         </ol>
-     *     </li>
-     *     <li>
-     *         <b>Settings Applier:</b> {@literal Consumer<TreeItem<E>>}
-     *         <ol>
-     *             <li>An optional {@link Consumer} that allows additional operations to be performed on the {@link TreeItem} for the generated {@link TreeCellData} object.</li>
-     *             <li>If the {@link Consumer} is {@code null}, no additional operations will be performed.</li>
-     *         </ol>
-     *     </li>
-     *     <li>
-     *         <b>Is Folder:</b> {@literal boolean}</b>
-     *         <ol>
-     *             <li>Indicates whether the generated {@link TreeCellData} object represents a {@code folder} or a standard {@code element}.</li>
-     *         </ol>
-     *     </li>
+     *     <li>The {@link Validatable validator} is automatically called when a new {@link TreeItemFX item} is {@link #addCellData(TreeCellData, Consumer)  added} to the {@link #getTreeView() TreeView} that is loaded by this {@link TreeLoader}.</li>
+     *     <li>The primary usage of the {@link Validatable validator} is located in the <code><i>{@link #revalidate(TreeItemFX)}</i></code> method.</li>
      * </ol>
      *
-     * @param name
-     * @param folder
-     * @param provider
-     * @param settingsApplier
-     * @param isFolder
-     *
-     * @return
+     * @return The {@link Validatable validator} used to ensure all {@link TreeItemFX items} added to the {@link #getTreeView() TreeView} that is loaded by this {@link TreeLoader} adhere to the conditions set by the {@link Validatable validator}.
      */
-    private E generateCell(String name, String folder, Function<Object[], T> provider, Consumer<TreeItem<E>> settingsApplier, boolean isFolder)
+    public final Validatable<T> getValidator()
     {
-        // TODO [S]: Add synchronization here?
-        if (!isFolder) {
-            // If isFolder is false, ensure that there is a non-null TreeItemValueProvider specified.
-            ExceptionTools.nullCheck(provider, "Provider", "Provider cannot be null when isFolder is false");
-            //			Validatable<T> _validator = getValidator(); // Create temp variable in case the validator is ever turned into a property.
-            //			if (_validator != null) {
-            //				// If the TreeItemValidator is non-null, validate an instance returned by the specified TreeItemValueProvider.
-            //				T _instance = provider.apply(new Object[0]); // TODO [S]: Figure out what creation parameters aren't necessary here.
-            //				if (!_validator.validate(_instance))
-            //					// If the instance returned by the specified TreeItemValueProvider is not valid, return null.
-            //					return null;
-            //			}
-        }
-        
-        final E cellData = createTreeCellData(name, folder, isFolder, provider);
-        //TODO [S]: Figure out what happens when the root hasn't been set.
-        if (isFinishedConstructing())
-            addCellData(cellData, settingsApplier);
-        return cellData;
-    }
-    
-    // Get Item
-    
-    // Get Cell
-    
-    /**
-     * <p>Returns the first {@link TreeCellData} contained within this {@link TreeLoader} that matches the specified {@link Predicate filter}.</p>
-     *
-     * @param filter The {@link Predicate} used to filter the {@link TreeCellData} objects within this {@link TreeLoader}.
-     *
-     * @return The first {@link TreeCellData} contained within this {@link TreeLoader} that matches the specified {@link Predicate filter}.
-     */
-    public final E getCell(Predicate<E> filter)
-    {
-        return getCell(filter, rootItem);
-    }
-    
-    public final ArrayList<E> getAllCells()
-    {
-        return getAllCells(null);
-    }
-    
-    public final ArrayList<E> getAllCells(Predicate<E> filter)
-    {
-        return getCells(filter, rootItem, new ArrayList<>());
-    }
-    
-    public E getCellByClass(String className)
-    {
-        return getCell(cell -> {
-            final Class<T> clazz = cell.getWrappedClass();
-            return clazz != null && clazz.getSimpleName().equalsIgnoreCase(className);
-        });
-    }
-    
-    // Misc.
-    
-    public boolean addCellData(E cellData, Consumer<TreeItem<E>> settingsApplier)
-    {
-        // TODO [S]: Add synchronization here?
-        if (cellData != null) {
-            TreeItemFX<E> treeItem;
-            if (!cellData.isFolder()) {
-                treeItem = new TreeItemFX<>(cellData);
-                if (settingsApplier != null)
-                    settingsApplier.accept(treeItem);
-            } else
-                treeItem = putFolder(cellData);
-            try {
-                final boolean added = getFolderFor(cellData).getChildren().add(treeItem);
-                items.add(revalidate(treeItem));
-                return added;
-            } catch (Exception e) {
-                throw ExceptionTools.ex(e, cellData.getParentName() + " has not yet been added as a parent.");
-            }
-        }
-        return false;
+        return validator;
     }
     
     public void revalidate()
@@ -655,11 +637,9 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
         return item;
     }
     
-    // Abstract
+    //</editor-fold>
     
-    protected abstract E createTreeCellData(String name, String parentName, boolean isFolder, Function<Object[], T> provider);
-    
-    // Old
+    //
     
     //<editor-fold desc="Old">
     

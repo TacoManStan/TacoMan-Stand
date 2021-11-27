@@ -107,10 +107,11 @@ public class ImagePane extends AnchorPane
      *     <li>Throws an {@link RuntimeException exception} if the type of {@code input} passed to {@link #init(Object) this method} is not listed above.</li>
      * </ol>
      *
-     * @param
+     * @param input
      *
      * @throws RuntimeException If the specified value is of an invalid type.
      */
+    // TO-EXPAND
     void init(@Nullable Object input)
     {
         if (input == null)

@@ -147,7 +147,7 @@ public class Sidebar
      * </ol>
      * <p><b>Initialization</b></p>
      * <ol>
-     *     <li><code><i>{@link #getBackButton()}<b>.</b>{@link ImageButton#initialize() initialize()}</i></<code> to initialize the {@link #back() Back} {@link #getBackButton() Button} assigned to this {@link Sidebar}.</li>
+     *     <li><code><i>{@link #getBackButton()}<b>.</b>{@link ImageButton#initialize() initialize()}</i></code> to initialize the {@link #back() Back} {@link #getBackButton() Button} assigned to this {@link Sidebar}.</li>
      *     <li><code><i>{@link #nodeGroupsProperty()}<b>.forEach(</b>{@link SidebarNodeGroup#initialize() initialize()}<b>)</b></i></code> to initialize all {@link SidebarNodeGroup SidebarNodeGroups} in this {@link Sidebar}.</li>
      *     <li>{@link #selectedNodeGroupProperty() Selects} the first (<code><i>{@link #nodeGroupsProperty() nodeGroupsProperty().get(0)}</i></code>) {@link SidebarNodeGroup} in this {@link Sidebar}.</li>
      * </ol>

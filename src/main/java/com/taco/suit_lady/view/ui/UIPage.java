@@ -25,7 +25,10 @@ public abstract class UIPage<U extends UIPageController<?>>
      * <ol>
      *     <li>Configures <i>{@link #weaver()}</i> and <i>{@link #ctx()}</i> implementations of this {@link UIPage} to return the values of the specified {@link Springable}.</li>
      *     <li>Uses the {@link #weaver() FxWeaver} to {@link FxWeaver#loadController(Class) load} the {@link UIPageController controller} for this {@link UIPage} using the {@link #controllerDefinition() definition} defined by this {@link UIPage} implementation.</li>
-     *     <li>{@link UIPageController#setPage(UIPage) Sets} the {@link UIPage} of the newly-created {@link UIPageController} to this {@link UIPage} object.</li> // TO-UPDATE - Move to internals
+     *     <li>
+     *         {@link UIPageController#setPage(UIPage) Sets} the {@link UIPage} of the newly-created {@link UIPageController} to this {@link UIPage} object.
+     *         // TO-UPDATE - Move to internals
+     *     </li>
      * </ol>
      *
      * @param springable The {@link Springable} containing the {@link FxWeaver} and {@link ConfigurableApplicationContext Application Context} required to construct and configure this {@link UIPage}.

@@ -660,7 +660,10 @@ public class ImageButton
      *     <li>The {@link #getName() name} is used to load references to the {@link ResourceTools#getImage(String, String, String) Cached} {@link Image Images}.</li>
      *     <li>Each {@link ButtonState state} results in a different variation of the same {@link Image} referenced by the {@link ImageButton} {@link #nameBinding() name}.</li>
      *     <li>The <code><i>{@link #getImage()}</i></code> method returns the current {@link Image} variation displayed by this {@link ImageButton} based on its current {@link #getState() state}.</li>
-     *     <li>The {@link Image} variations are essentially each a different styling of the same original image.</li> // TODO - Eventually have styling be done via code automatically.
+     *     <li>
+     *         The {@link Image} variations are essentially each a different styling of the same original image.
+     *         // TODO - Eventually have styling be done via code automatically.
+     *     </li>
      *     <li>The {@link StringBinding} returned by this method can never return {@code null} and will instead return {@code "missingno"} if the {@link #nameBinding() name} is undefined.</li>
      * </ol>
      * <p><b>Cache ID</b></p>
