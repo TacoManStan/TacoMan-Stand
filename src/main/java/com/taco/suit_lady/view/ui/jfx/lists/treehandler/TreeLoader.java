@@ -20,6 +20,7 @@ import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
@@ -234,34 +235,80 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
     }
     
     /**
-     * <p>Returns the {@link TreeCellData value} of the first {@link TreeItemFX} in this {@link TreeLoader} -- starting with the specified {@link TreeItem} as the iteration {@code root} -- matching the specified {@link Predicate filter}.</p>
-     * <p><b>Details</b></p>
-     * <ol>
-     *     <li>The {@link T Object} is determined by the abstract <code><i>{@link TreeCellData#createWrappedInstance(Object...)}</i></code> method.</li>
-     *     <li>The {@link TreeItem#getChildren() children} of the specified {@link TreeItem} as well as the {@link TreeItem item} itself are {@link Predicate#test(Object) tested} -- no other {@link TreeItem items} are tested.</li>
-     *     <li>If {@code wrappedObjConstructorParams} is {@code null}, an empty array is used instead.</li>
-     *     <li>If the specified {@link Predicate filter} is {@code null}, <code><i>wrappedInstance -> true</i></code> is used instead.</li>
-     *     <li>If the specified {@link TreeItem item} is {@code null}, {@link #getObj(Predicate, TreeItem, Object...) this method} does nothing and silently returns {@code null}.</li>
-     * </ol>
+     * <p>Returns the first {@link TreeCellData#getWrappedObject() Wrapped Value} in the {@link TreeView} loaded by this {@link TreeLoader} -- starting with the specified {@link TreeItem} as the iteration {@code root} -- that matches the specified {@link Predicate filter}.</p>
+     * <p><b>Passthrough Definition</b></p>
+     * <blockquote><i><code>
+     * {@link ArrayTools}<b>.</b>{@link ArrayTools#getAt(int, List) getAt}<b>(</b><u>{@code 0}</u><b>,</b> {@link #getObjs(Predicate, TreeItem, ArrayList, int, Object...) getObjs}<b>(</b>filter<b>,</b> treeItem<b>,</b> <u>{@code null}</u><b>,</b> <u>{@code 1}</u><b>,</b> wrappedObjConstructorParams<b>))</b>
+     * </code></i></blockquote>
      *
      * @param filter                      The {@link Predicate filter} used to filter through the {@link TreeItemFX items} in this {@link TreeLoader}.
      * @param treeItem                    The {@link TreeItem} to be used as the starting point of the iteration.
      * @param wrappedObjConstructorParams Passed to the <code><i>{@link TreeCellData#createWrappedInstance(Object...)}</i></code> as the optional parameters to use upon {@link T item} construction.
      *
-     * @return The first {@link TreeCellData} in the iteration whose {@link TreeCellData#getWrappedObject() Wrapped Object (T)} passes the specified {@link Predicate filter}.
+     * @return The first {@link TreeCellData#getWrappedObject() Wrapped Value} in the {@link TreeView} loaded by this {@link TreeLoader} -- starting with the specified {@link TreeItem} as the iteration {@code root} -- that matches the specified {@link Predicate filter}.
      */
     public T getObj(@Nullable Predicate<T> filter, @Nullable TreeItem<E> treeItem, @Nullable Object... wrappedObjConstructorParams)
     {
         return ArrayTools.getAt(0, getObjs(filter, treeItem, null, 1, wrappedObjConstructorParams));
     }
     
+    //
+    
+    /**
+     * <p>Returns all {@link TreeCellData#getWrappedObject() Wrapped Values} in the {@link TreeView} loaded by this {@link TreeLoader}.</p>
+     * <p><b>Passthrough Definition</b></p>
+     * <blockquote><i><code>
+     * {@link #getObjs(Predicate, Object...) getObjs}<b>(</b><u>{@code null}</u><b>,</b> wrappedObjConstructorParams<b>)</b>
+     * </code></i></blockquote>
+     *
+     * @param filter                      The {@link Predicate filter} used to filter through the {@link TreeItemFX items} in this {@link TreeLoader}.
+     * @param wrappedObjConstructorParams Passed to the <code><i>{@link TreeCellData#createWrappedInstance(Object...)}</i></code> as the optional parameters to use upon {@link T item} construction.
+     *
+     * @return All {@link TreeCellData#getWrappedObject() Wrapped Values} in the {@link TreeView} loaded by this {@link TreeLoader} -- starting with the {@link #getRootItem() Root Item} as the iteration {@code root} -- that match the specified {@link Predicate filter}.
+     */
+    public final ArrayList<T> getAllObjs(Object... wrappedObjConstructorParams)
+    {
+        return getObjs(null, wrappedObjConstructorParams);
+    }
+    
+    /**
+     * <p>Returns all {@link TreeCellData#getWrappedObject() Wrapped Values} in the {@link TreeView} loaded by this {@link TreeLoader} -- starting with the {@link #getRootItem() Root Item} as the iteration {@code root} -- that match the specified {@link Predicate filter}.</p>
+     * <p><b>Passthrough Definition</b></p>
+     * <blockquote><i><code>
+     * {@link #getObjs(Predicate, TreeItem, ArrayList, Object...) getObjs}<b>(</b>filter<b>,</b> <u>{@link #getRootItem()}</u><b>,</b> <u>{@code null}</u><b>,</b> wrappedObjConstructorParams<b>)</b>
+     * </code></i></blockquote>
+     *
+     * @param filter                      The {@link Predicate filter} used to filter through the {@link TreeItemFX items} in this {@link TreeLoader}.
+     * @param wrappedObjConstructorParams Passed to the <code><i>{@link TreeCellData#createWrappedInstance(Object...)}</i></code> as the optional parameters to use upon {@link T item} construction.
+     *
+     * @return All {@link TreeCellData#getWrappedObject() Wrapped Values} in the {@link TreeView} loaded by this {@link TreeLoader} -- starting with the {@link #getRootItem() Root Item} as the iteration {@code root} -- that match the specified {@link Predicate filter}.
+     */
+    public final ArrayList<T> getObjs(Predicate<T> filter, Object... wrappedObjConstructorParams)
+    {
+        return getObjs(filter, getRootItem(), null, wrappedObjConstructorParams);
+    }
+    
+    /**
+     * <p>Returns all {@link TreeCellData#getWrappedObject() Wrapped Values} in the {@link TreeView} loaded by this {@link TreeLoader} -- starting with the specified {@link TreeItem} as the iteration {@code root} -- that match the specified {@link Predicate filter}.</p>
+     * <p><b>Passthrough Definition</b></p>
+     * <blockquote><i><code>
+     * {@link #getObjs(Predicate, TreeItem, ArrayList, int, Object...) getObjs}<b>(</b>filter<b>,</b> treeItem<b>,</b> list<b>,</b> <u>{@code -1}</u><b>,</b> wrappedObjConstructorParams<b>)</b>
+     * </code></i></blockquote>
+     *
+     * @param filter                      The {@link Predicate filter} used to filter through the {@link TreeItemFX items} in this {@link TreeLoader}.
+     * @param treeItem                    The {@link TreeItem} to be used as the starting point of the iteration.
+     * @param list                        The {@link ArrayList} the {@link Predicate filtered} {@link TreeCellData#getWrappedObject() Values} are added to.
+     * @param wrappedObjConstructorParams Passed to the <code><i>{@link TreeCellData#createWrappedInstance(Object...)}</i></code> as the optional parameters to use upon {@link T item} construction.
+     *
+     * @return All {@link TreeCellData#getWrappedObject() Wrapped Values} in the {@link TreeView} loaded by this {@link TreeLoader} -- starting with the specified {@link TreeItem} as the iteration {@code root} -- that match the specified {@link Predicate filter}.
+     */
     public @NotNull ArrayList<T> getObjs(@Nullable Predicate<T> filter, @Nullable TreeItem<E> treeItem, @Nullable ArrayList<T> list, @Nullable Object... wrappedObjConstructorParams)
     {
         return getObjs(filter, treeItem, list, -1, wrappedObjConstructorParams);
     }
     
     /**
-     * <p>Returns all {@link TreeCellData#getWrappedObject() Wrapped Values} in the {@link TreeView} loaded by this {@link TreeLoader} -- starting with the specified {@link TreeItem} as the iteration {@code root} -- matching the specified {@link Predicate filter}.</p>
+     * <p>Returns all {@link TreeCellData#getWrappedObject() Wrapped Values} in the {@link TreeView} loaded by this {@link TreeLoader} -- starting with the specified {@link TreeItem} as the iteration {@code root} -- that match the specified {@link Predicate filter}.</p>
      * <p><b>Details</b></p>
      * <ol>
      *     <li>Each tested {@link T Wrapped Value} is retrieved by <code><i>{@link TreeCellData#createWrappedInstance(Object...)}</i></code>.</li>
@@ -284,7 +331,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
      * @param maxSize                     The maximum {@link ArrayList#size() size} of the returned {@link ArrayList}
      * @param wrappedObjConstructorParams Passed to the <code><i>{@link TreeCellData#createWrappedInstance(Object...)}</i></code> as the optional parameters to use upon {@link T item} construction.
      *
-     * @return The specified {@link ArrayList} with all {@link TreeCellData#getWrappedObject() Wrapped Values} in the {@link TreeView} loaded by this {@link TreeLoader} matching the specified {@link Predicate filter} {@link ArrayList#add(Object) added} to it.
+     * @return The specified {@link ArrayList} with all {@link TreeCellData#getWrappedObject() Wrapped Values} in the {@link TreeView} loaded by this {@link TreeLoader} that match the specified {@link Predicate filter} {@link ArrayList#add(Object) added} to it.
      */
     public @NotNull ArrayList<T> getObjs(@Nullable Predicate<T> filter, @Nullable TreeItem<E> treeItem, @Nullable ArrayList<T> list, int maxSize, @Nullable Object... wrappedObjConstructorParams)
     {
@@ -536,24 +583,6 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
     
     // Get Item
     
-    public final ArrayList<T> getObjs(Object... objs)
-    {
-        return getObjs(null, objs);
-    }
-    
-    public final ArrayList<T> getObjs(Predicate<T> filter, Object... objs)
-    {
-        return getObjs(filter, rootItem, new ArrayList<>(), objs);
-    }
-    
-    public T getItemByClass(String className, Object... objs)
-    {
-        E _cellData = getCellByClass(className);
-        if (_cellData != null)
-            return _cellData.createWrappedInstance(objs);
-        return null;
-    }
-    
     // Get Cell
     
     /**
@@ -580,8 +609,8 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
     
     public E getCellByClass(String className)
     {
-        return getCell(_cell -> {
-            final Class<T> clazz = _cell.getWrappedClass();
+        return getCell(cell -> {
+            final Class<T> clazz = cell.getWrappedClass();
             return clazz != null && clazz.getSimpleName().equalsIgnoreCase(className);
         });
     }
