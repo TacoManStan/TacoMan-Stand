@@ -3,11 +3,10 @@ package com.taco.suit_lady.view.ui;
 import com.taco.suit_lady.util.tools.BindingTools;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.ObjectTools;
-import com.taco.suit_lady.view.ui.jfx.button.ImageButtonGroup;
 import com.taco.suit_lady.view.ui.jfx.button.ImageButton;
+import com.taco.suit_lady.view.ui.jfx.button.ImageButtonGroup;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
 import com.taco.suit_lady.view.ui.jfx.image.ImagePane;
-import com.taco.util.quick.ConsoleBB;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -93,8 +92,6 @@ public class Sidebar
         ExceptionTools.nullCheck(childButtonPane, "Sidebar Child Button Pane");
         ExceptionTools.nullCheck(contentPane, "Sidebar Content Pane");
     
-        ConsoleBB.CONSOLE.print("Back Image Pane: " + backImagePane);
-        
         this.childButtonPane = childButtonPane;
         this.contentPane = contentPane;
         this.backImageButton = new ImageButton(

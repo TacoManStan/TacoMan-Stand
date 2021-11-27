@@ -7,7 +7,6 @@ import com.taco.suit_lady.util.tools.TB;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
 import com.taco.suit_lady.view.ui.jfx.image.ImagePane;
 import com.taco.util.obj_traits.common.Nameable;
-import com.taco.util.quick.ConsoleBB;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
@@ -144,12 +143,12 @@ public class ImageButton
             return name != null ? name : "missingno";
         }, nameBinding);
         
-        ConsoleBB.CONSOLE.print("Size for Button [" + getName() + "]: " + size);
+//        ConsoleBB.CONSOLE.print("Size for Button [" + getName() + "]: " + size);
         if (size != null) {
             this.imagePane.setPrefSize(size.getX(), size.getY());
             this.imagePane.setMaxSize(size.getX(), size.getY());
         }
-        ConsoleBB.CONSOLE.print("Actual Size for Button \"" + getName() + "\": " + "[" + this.imagePane.getWidth() + ", " + this.imagePane.getHeight() + "]");
+//        ConsoleBB.CONSOLE.print("Actual Size for Button \"" + getName() + "\": " + "[" + this.imagePane.getWidth() + ", " + this.imagePane.getHeight() + "]");
         
         this.buttonGroupProperty = new ReadOnlyObjectWrapper<>();
         

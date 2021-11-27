@@ -11,6 +11,7 @@ public class EntityDebugPage extends UIPage<EntityDebugController>
     public EntityDebugPage(UINode owner)
     {
         super(owner);
+        this.getController().setPage(this);
     }
     
     @Override

@@ -51,7 +51,6 @@ public abstract class UIPage<U extends UIPageController<?>>
                 weaver().loadController(ExceptionTools.nullCheck(controllerDefinition(), "Controller Definition Class")),
                 "Error Loading Controller of Type [" + controllerDefinition() + "] — Ensure controller class is defined in FXML file."
         );
-        this.controller.setPage(this);
     }
     
     //<editor-fold desc="--- PROPERTIES ---">

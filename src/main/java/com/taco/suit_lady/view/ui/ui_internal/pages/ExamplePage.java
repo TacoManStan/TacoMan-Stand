@@ -14,6 +14,8 @@ public class ExamplePage extends UIPage<ExampleSidebarController>
 		super(owner);
 		
 		this.color = color;
+		
+		this.getController().setPage(this);
 	}
 	
 	public String getColor()

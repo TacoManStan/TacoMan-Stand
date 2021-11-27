@@ -115,7 +115,6 @@ public class ImagePane extends AnchorPane
     // TO-EXPAND
     void init(@Nullable Object input)
     {
-        ConsoleBB.CONSOLE.print("Input: " + input);
         if (input == null)
             this.imageView = new WrappedImageView();
         else if (input instanceof String)

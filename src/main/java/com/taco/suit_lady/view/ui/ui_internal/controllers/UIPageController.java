@@ -51,7 +51,7 @@ public abstract class UIPageController<T extends UIPage<?>> extends Controller
         }
         
         // TODO - This is smelly af, move it somewhere else and properly abstract it.
-        this.onPageBindingComplete();
+        onPageBindingComplete();
     }
     
     /**
