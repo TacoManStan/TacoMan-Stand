@@ -1,4 +1,4 @@
-package com.taco.suit_lady.uncategorized.spring.config;
+package com.taco.suit_lady._to_sort.spring.config;
 
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.beans.factory.xml.XmlReaderContext;
