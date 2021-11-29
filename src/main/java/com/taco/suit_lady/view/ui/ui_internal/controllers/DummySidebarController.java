@@ -1,6 +1,6 @@
 package com.taco.suit_lady.view.ui.ui_internal.controllers;
 
-import com.taco.suit_lady.view.ui.ui_internal.pages.DummyPage;
+import com.taco.suit_lady.view.ui.ui_internal.pages.FallbackPage;
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 @FxmlView("/fxml/sidebar/dummy_sidebar.fxml")
 @Scope("prototype")
-public class DummySidebarController extends UIPageController<DummyPage>
+public class DummySidebarController extends UIPageController<FallbackPage>
 {
     @FXML private BorderPane root;
     

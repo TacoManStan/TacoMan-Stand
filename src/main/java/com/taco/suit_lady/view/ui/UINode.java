@@ -4,7 +4,7 @@ import com.taco.suit_lady.util.tools.ResourceTools;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.view.ui.jfx.button.ButtonViewable;
 import com.taco.suit_lady.view.ui.jfx.button.ImageButton;
-import com.taco.suit_lady.view.ui.ui_internal.pages.DummyPage;
+import com.taco.suit_lady.view.ui.ui_internal.pages.FallbackPage;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
@@ -62,7 +62,7 @@ public class UINode
      *                          <p>
      * @param coverPageFunction The {@link Function} that will retrieve the {@link UIPage} to be used as the {@link UIPageHandler#coverPageProperty() cover page} of this {@link UINode}.
      *                          <ul>
-     *                              <li>If the specified {@link Function} is {@code null}, a {@link DummyPage} will be used as the {@link UIPageHandler#coverPageProperty() cover page} instead.</li>
+     *                              <li>If the specified {@link Function} is {@code null}, a {@link FallbackPage} will be used as the {@link UIPageHandler#coverPageProperty() cover page} instead.</li>
      *                          </ul>
      * @param onAction          A {@link Runnable} that will be {@link Runnable#run() executed} when the {@link #buttonViewProperty() button} for this {@link UINode} is pressed.
      *                          <ul>
@@ -86,7 +86,7 @@ public class UINode
         
         this.buttonViewProperty = new ReadOnlyObjectWrapper<>();
         
-        this.pageHandler = new UIPageHandler(this.lock, this, coverPageFunction != null ? coverPageFunction.apply(this) : new DummyPage(this));
+        this.pageHandler = new UIPageHandler(this.lock, this, coverPageFunction != null ? coverPageFunction.apply(this) : new FallbackPage(this));
         
         //
         
