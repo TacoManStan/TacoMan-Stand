@@ -37,14 +37,12 @@ public class DummyContentsHandler
     
     //
     
-    // <editor-fold desc="Properties">
+    // <editor-fold desc="--- PROPERTIES ---">
     
     public final ReadOnlyListProperty<DummyInstance> instances()
     {
         return instances.getReadOnlyProperty();
     }
-    
-    // <editor-fold desc="Selected Client">
     
     /**
      * <p>The {@link ReadOnlySelectedDummyInstanceWrapper} containing the currently selected {@link DummyInstance}.</p>
@@ -101,9 +99,19 @@ public class DummyContentsHandler
     
     // </editor-fold>
     
-    // </editor-fold>
+    // <editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    // <editor-fold desc="Implementation">
+    @Override
+    public FxWeaver weaver()
+    {
+        return weaver;
+    }
+    
+    @Override
+    public ConfigurableApplicationContext ctx()
+    {
+        return ctx;
+    }
     
     // </editor-fold>
     
@@ -119,8 +127,6 @@ public class DummyContentsHandler
         return instance;
     }
     
-    //
-    
     // TODO: Stop exceptions from preventing a full shut-down
     public void shutdown()
     {
@@ -132,20 +138,8 @@ public class DummyContentsHandler
     
     public boolean shutdown(DummyInstance instance)
     {
-        instances.remove(instance);
+        final boolean removed = instances.remove(instance);
         instance.shutdownInstanceEngine();
-        return true; // TODO: This should actually return the proper value.
-    }
-    
-    @Override
-    public FxWeaver weaver()
-    {
-        return weaver;
-    }
-    
-    @Override
-    public ConfigurableApplicationContext ctx()
-    {
-        return ctx;
+        return removed; // TODO: This should actually return the proper value.
     }
 }
