@@ -12,7 +12,7 @@ public class DummyPage extends UIPage<DummySidebarController>
         super(owner);
     }
     
-    @Override protected void initializePage(Object[] constructorParams) { }
+    @Override protected void initializePage(@NotNull Object[] constructorParams) { }
     
     @Override
     protected @NotNull Class<DummySidebarController> controllerDefinition()

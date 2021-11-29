@@ -19,7 +19,7 @@ public class ExamplePage extends UIPage<ExampleSidebarController>
 	}
 	
 	@Override
-	protected void initializePage(Object[] constructorParams)
+	protected void initializePage(@NotNull Object[] constructorParams)
 	{
 		this.color = (String) constructorParams[0];
 	}
