@@ -30,10 +30,11 @@ public class DummyInstance
         return ctx().getBean(DummyContentsHandler.class).shutdown(this);
     }
     
-    protected final void shutdownInstanceEngine()
+    protected final boolean shutdownInstanceEngine()
     {
         // CHANGE-HERE
         // This used to be where the thread executor system would be wrapped up and then shutdown when used in TRiBotFX.
+        return true;
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">

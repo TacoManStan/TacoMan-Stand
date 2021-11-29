@@ -9,10 +9,12 @@ import net.rgielen.fxweaver.core.FxWeaver;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
  * <p>Class used to manage and display {@link DummyInstance DummyInsstances}.</p>
+ * <p>{@link DummyContentsHandler} singleton instance is managed by the {@code Spring Framework}.</p>
  */
 @Component
 public class DummyContentsHandler
@@ -34,8 +36,6 @@ public class DummyContentsHandler
     }
     
     public final void initialize() { }
-    
-    //
     
     // <editor-fold desc="--- PROPERTIES ---">
     
@@ -119,27 +119,59 @@ public class DummyContentsHandler
      * <p>Constructs a new {@link DummyInstance}, adds it to the {@link #instances() Instance List}, then returns the newly-constructed {@link DummyInstance object}.</p>
      *
      * @return The newly-constructed {@link DummyInstance}.
+     *
+     * @throws RuntimeException If call to <code><i>{@link ReadOnlyListWrapper#add(Object) instances.add(instance)}</i></code> fails (returns {@code false}).
      */
     public DummyInstance newInstance()
     {
         final DummyInstance instance = new DummyInstance(this);
-        instances.add(instance);
+        if (!instances.add(instance))
+            throw ExceptionTools.ex("Could not add instance: " + instance);
         return instance;
     }
     
+    /**
+     * <p>Shuts down this {@link DummyContentsHandler} and all {@link DummyInstance DummyInstances} it {@link #instances() contains}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>More specifically, <code><i>{@link #shutdown(DummyInstance)}</i></code> is called on every {@link DummyInstance} in this {@link DummyContentsHandler ContentsHandler's} {@link #instances() Instance List}.</li>
+     * </ol>
+     *
+     * @throws RuntimeException If the shutdown operation was unsuccessful.
+     * @see #shutdown(DummyInstance)
+     */
     // TODO: Stop exceptions from preventing a full shut-down
     public void shutdown()
     {
-        // CHANGE-HERE (BELOW)
-        instances.forEach(this::shutdown);
+        final ArrayList<DummyInstance> shutdownFailures = new ArrayList<>();
+        instances.forEach(instance -> {
+            if (!shutdown(instance))
+                shutdownFailures.add(instance);
+        });
+        
+        if (!shutdownFailures.isEmpty())
+            throw ExceptionTools.ex("Some shutdown operations have failed! " + shutdownFailures);
         if (!instances.isEmpty())
-            throw ExceptionTools.ex("Client List should be empty! (" + instances + ")");
+            throw ExceptionTools.ex("Instance List is not empty after shutdown operation! " + instances);
     }
     
+    /**
+     * <p>Shuts down the specified {@link DummyInstance}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>First, the specified {@link DummyInstance} is removed from the {@link #instances() Instance List}.</li>
+     *     <li>Second, <code><i>{@link DummyInstance#shutdownInstanceEngine()}</i></code> is called on the specified {@link DummyInstance}.</li>
+     *     <li>For {@link #shutdown(DummyInstance) this method} to return {@code true}, both of the aforementioned operations must have been successful.</li>
+     *     <li>Note that both operations are always attempted, even if the first is unsuccessful.</li>
+     * </ol>
+     *
+     * @param instance The {@link DummyInstance} being shutdown.
+     *
+     * @return True if the specified {@link DummyInstance} was successfully shutdown, false if it was not.
+     */
     public boolean shutdown(DummyInstance instance)
     {
         final boolean removed = instances.remove(instance);
-        instance.shutdownInstanceEngine();
-        return removed; // TODO: This should actually return the proper value.
+        return instance.shutdownInstanceEngine() && removed;
     }
 }
