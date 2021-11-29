@@ -156,7 +156,6 @@ public final class DummyInstancesController extends SidebarNodeGroupController<D
     private void onRemoved(DummyInstance instance)
     {
         FXTools.get().runFX(() -> instanceListView.getItems().remove(instance), true);
-        // TODO - Select next most relevant element
     }
     
     //

@@ -217,7 +217,7 @@ public class Console
                     consoleContainer.showClientProperty(),
                     consoleContainer.showScriptProperty(),
                     consoleContainer.showSelectedInstanceOnlyProperty(),
-                    ctx.getBean(DummyContentsHandler.class).selectedInstanceProperty()
+                    ctx.getBean(DummyContentsHandler.class).readOnlySelectedClientProperty()
             );
             
             final WrappingTreeLoader<ConsoleMessageable<?>, ConsoleElementController> treeLoader = new WrappingTreeLoader<>(
