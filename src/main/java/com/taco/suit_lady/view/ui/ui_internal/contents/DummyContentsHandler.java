@@ -7,6 +7,9 @@ import javafx.collections.FXCollections;
 
 import java.util.Objects;
 
+/**
+ * <p>Class used to manage and display {@link DummyInstance DummyInsstances}.</p>
+ */
 public class DummyContentsHandler
 {
     
@@ -19,7 +22,7 @@ public class DummyContentsHandler
         this.selectedInstanceProperty = new ReadOnlySelectedDummyInstanceWrapper();
     }
     
-    public final void initialize() { } // TODO (if needed)
+    public final void initialize() { }
     
     //
     
@@ -30,10 +33,13 @@ public class DummyContentsHandler
         return instances.getReadOnlyProperty();
     }
     
-    //
-    
     // <editor-fold desc="Selected Client">
     
+    /**
+     * <p>The {@link ReadOnlySelectedDummyInstanceWrapper} containing the currently selected {@link DummyInstance}.</p>
+     *
+     * @return The {@link ReadOnlySelectedDummyInstanceWrapper} containing the currently selected {@link DummyInstance}.
+     */
     public final ReadOnlySelectedDummyInstanceWrapper selectedInstanceProperty()
     {
         return selectedInstanceProperty;
@@ -44,26 +50,42 @@ public class DummyContentsHandler
         return selectedInstanceProperty.getReadOnlyProperty();
     } // Handled by security manager
     
-    public final DummyInstance getSelected()
+    public final DummyInstance getSelectedInstance()
     {
         return selectedInstanceProperty.get();
     }
     
     //
     
+    /**
+     * <p>{@link #selectedInstanceProperty() Selects} the specified {@link DummyInstance}.</p>
+     *
+     * @param instance The {@link DummyInstance} being {@link #selectedInstanceProperty() selected}.
+     */
     public void select(DummyInstance instance)
     {
         selectedInstanceProperty.set(instance);
     }
     
+    /**
+     * <p>Clears the currently {@link #selectedInstanceProperty() selected} {@link DummyInstance}.</p>
+     * <blockquote><b>Passthrough Definition:</b> <i><code>{@link #select(DummyInstance) select}<b>(</b>null<b>)</b></code></i></blockquote>
+     */
     public void clearSelection()
     {
         select(null);
     }
     
+    /**
+     * <p>Checks if the specified {@link DummyInstance} object is currently {@link #selectedInstanceProperty() selected}.</p>
+     *
+     * @param instance The {@link DummyInstance} being checked.
+     *
+     * @return True if the specified {@link DummyInstance} is currently {@link #selectedInstanceProperty() selected}, false if it is not.
+     */
     public boolean isSelected(DummyInstance instance)
     {
-        return Objects.equals(instance, getSelected());
+        return Objects.equals(instance, getSelectedInstance());
     }
     
     // </editor-fold>
@@ -74,34 +96,14 @@ public class DummyContentsHandler
     
     // </editor-fold>
     
-    //    // CHANGE-HERE (BELOW)
-    //
-    //    public DummyInstance getByThread()
-    //    {
-    //        return getByThread(Thread.currentThread().getThreadGroup());
-    //    }
-    //
-    //    public DummyInstance getByThread(ThreadGroup threadGroup)
-    //    {
-    //        if (threadGroup != null)
-    //        {
-    //            if (threadGroup instanceof ScriptThreadable)
-    //            {
-    //                ExecutorThreadFactory<ScriptContext, ScriptThreadGroup> _threadFactory = ((ScriptThreadGroup) threadGroup).getThreadFactory();
-    //                if (_threadFactory != null)
-    //                {
-    //                    ScriptContext _ctx = _threadFactory.getBean();
-    //                    if (_ctx != null)
-    //                        return _ctx.client();
-    //                }
-    //            }
-    //        }
-    //        return null;
-    //    }
-    
+    /**
+     * <p>Constructs a new {@link DummyInstance}, adds it to the {@link #instances() Instance List}, then returns the newly-constructed {@link DummyInstance object}.</p>
+     *
+     * @return The newly-constructed {@link DummyInstance}.
+     */
     public DummyInstance newInstance()
     {
-        DummyInstance instance = new DummyInstance();
+        final DummyInstance instance = new DummyInstance();
         instances.add(instance);
         return instance;
     }
