@@ -13,7 +13,7 @@ public class ConsolePage extends UIPage<ConsoleController>
     }
     
     @Override
-    protected void initializePage(Object[] constructorParams) { }
+    protected void initializePage(@NotNull Object[] constructorParams) { }
     
     @Override
     protected @NotNull Class<ConsoleController> controllerDefinition()

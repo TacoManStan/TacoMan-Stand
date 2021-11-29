@@ -121,11 +121,12 @@ public abstract class UIPage<U extends UIPageController<?>>
      *     <li>Called <i>after</i> {@link UIPageController} construction.</li>
      *     <li>Called <i>prior to</i> the {@link UIPageController controllers} {@link UIPage} being {@link UIPageController#setPage(UIPage) set}.</li>
      *     <li>Called <i>prior to</i> <code><i>{@link UIPageController#onPageBindingComplete()}</i></code></li>
+     *     <li>Parameter array should never be {@code null}.</li>
      * </ol>
      *
      * @param constructorParams The array of {@link Object Objects} passed to the {@link UIPage} {@link UIPage#UIPage(Springable, Object...) constructor} to be used to initialize/construct {@link UIPage} implementations.
      */
-    protected abstract void initializePage(Object[] constructorParams);
+    protected abstract void initializePage(@NotNull Object[] constructorParams);
     
     /**
      * <p>Abstract method that is to define the {@link Class} representing the {@link UIPageController} implementation to be used to define and manage the UI of this {@link UIPage} implementation.</p>

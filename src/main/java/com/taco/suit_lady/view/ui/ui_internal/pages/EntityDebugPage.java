@@ -14,7 +14,7 @@ public class EntityDebugPage extends UIPage<EntityDebugController>
     }
     
     @Override
-    protected void initializePage(Object[] constructorParams) { }
+    protected void initializePage(@NotNull Object[] constructorParams) { }
     
     @Override
     protected @NotNull Class<EntityDebugController> controllerDefinition()

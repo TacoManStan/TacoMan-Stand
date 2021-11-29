@@ -13,7 +13,7 @@ public class DummyInstancesPage extends UIPage<DummyInstancesController>
     }
     
     @Override
-    protected void initializePage(Object[] constructorParams) { }
+    protected void initializePage(@NotNull Object[] constructorParams) { }
     
     @Override
     protected @NotNull Class<DummyInstancesController> controllerDefinition()
