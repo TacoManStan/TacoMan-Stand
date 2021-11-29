@@ -12,11 +12,13 @@ import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
 import com.taco.suit_lady.view.ui.jfx.image.ImagePane;
 import com.taco.suit_lady.view.ui.jfx.lists.treehandler.WrappingTreeCellData;
 import com.taco.suit_lady.view.ui.ui_internal.console.ConsoleUIDataContainer;
+import com.taco.suit_lady.view.ui.ui_internal.contents.DummyContentsHandler;
 import com.taco.suit_lady.view.ui.ui_internal.contents.DummyContentsInstancePane;
 import com.taco.suit_lady.view.ui.ui_internal.controllers.SettingsController;
 import com.taco.suit_lady.view.ui.ui_internal.pages.DummyInstancesPage;
 import com.taco.suit_lady.view.ui.ui_internal.pages.EntityDebugPage;
 import com.taco.suit_lady.view.ui.ui_internal.pages.ExamplePage;
+import com.taco.util.quick.ConsoleBB;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -192,13 +194,20 @@ public class AppController
     
     // Called automatically by FXML loader.
     // As some properties may not yet be finished loading, all actual UI initialization should be done in the initialize(Stage) method.
-    @FXML public final void initialize()
+    @FXML
+    public final void initialize()
     {
         AppUI ui = TB.ui();
         
         ui.setController(this);
         ui.setContainerPane(stackPaneRoot);
         ui.setSidebar(new Sidebar(sidebarChildButtonsPane, sidebarContentPane, backImagePane));
+  
+        final DummyContentsHandler contentsHandler = ctx.getBean(DummyContentsHandler.class);
+        ConsoleBB.CONSOLE.print("Contents Handler: " + contentsHandler);
+        
+//        final AppUI u12 = ctx.getBean(AppUI.class);
+//        ConsoleBB.CONSOLE.print("AppUI 2: " + u12);
     }
     
     public final void initialize(Stage stage)
@@ -218,7 +227,7 @@ public class AppController
         AppUI ui = TB.ui();
         ui.init();
         
-        contentPane.contentProperty().bind(TB.handler().selectedInstanceProperty());
+        contentPane.contentProperty().bind(ctx.getBean(DummyContentsHandler.class).selectedInstanceProperty());
         contentStackPane.getChildren().add(contentPane);
         
         initImageButtons();

@@ -1,23 +1,34 @@
 package com.taco.suit_lady.view.ui.ui_internal.contents;
 
+import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.collections.FXCollections;
+import net.rgielen.fxweaver.core.FxWeaver;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
 /**
  * <p>Class used to manage and display {@link DummyInstance DummyInsstances}.</p>
  */
+@Component
 public class DummyContentsHandler
+        implements Springable
 {
+    private final ConfigurableApplicationContext ctx;
+    private final FxWeaver weaver;
     
     private final ReadOnlyListWrapper<DummyInstance> instances;
     private final ReadOnlySelectedDummyInstanceWrapper selectedInstanceProperty;
     
-    public DummyContentsHandler()
+    public DummyContentsHandler(ConfigurableApplicationContext ctx, FxWeaver weaver)
     {
+        this.ctx = ctx;
+        this.weaver = weaver;
+        
         this.instances = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
         this.selectedInstanceProperty = new ReadOnlySelectedDummyInstanceWrapper();
     }
@@ -103,7 +114,7 @@ public class DummyContentsHandler
      */
     public DummyInstance newInstance()
     {
-        final DummyInstance instance = new DummyInstance();
+        final DummyInstance instance = new DummyInstance(this);
         instances.add(instance);
         return instance;
     }
@@ -124,5 +135,17 @@ public class DummyContentsHandler
         instances.remove(instance);
         instance.shutdownInstanceEngine();
         return true; // TODO: This should actually return the proper value.
+    }
+    
+    @Override
+    public FxWeaver weaver()
+    {
+        return weaver;
+    }
+    
+    @Override
+    public ConfigurableApplicationContext ctx()
+    {
+        return ctx;
     }
 }

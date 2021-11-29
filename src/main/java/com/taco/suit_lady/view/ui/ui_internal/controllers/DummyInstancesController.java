@@ -1,12 +1,12 @@
 package com.taco.suit_lady.view.ui.ui_internal.controllers;
 
 import com.taco.suit_lady.util.tools.ArrayTools;
-import com.taco.suit_lady.util.tools.TB;
 import com.taco.suit_lady.view.ui.jfx.button.ImageButton;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
 import com.taco.suit_lady.view.ui.jfx.image.ImagePane;
-import com.taco.suit_lady.view.ui.jfx.lists.ListCellFX;
 import com.taco.suit_lady.view.ui.jfx.lists.CellControlManager;
+import com.taco.suit_lady.view.ui.jfx.lists.ListCellFX;
+import com.taco.suit_lady.view.ui.ui_internal.contents.DummyContentsHandler;
 import com.taco.suit_lady.view.ui.ui_internal.contents.DummyInstance;
 import com.taco.suit_lady.view.ui.ui_internal.pages.DummyInstancesPage;
 import javafx.beans.property.BooleanProperty;
@@ -75,13 +75,15 @@ public final class DummyInstancesController extends SidebarNodeGroupController<D
                 listCellFX -> new CellControlManager<>(
                         listCellFX, element -> this.weaver().loadController(DummyInstanceElementController.class))));
         
-        ArrayTools.applyChangeHandler(TB.handler().instances(), this::onAdded, this::onRemoved);
+        final DummyContentsHandler handler = ctx().getBean(DummyContentsHandler.class);
+        
+        ArrayTools.applyChangeHandler(handler.instances(), this::onAdded, this::onRemoved);
         
         // TODO - Instead of using a MM property, create a contentChangeRequest(...) method in either AppEngine or ClientHandler.
         selectedInstanceMMProperty.addListener((observable, oldClient, newClient) -> instanceListView.getSelectionModel().select(newClient));
         instanceListView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldClient, newClient) -> selectedInstanceMMProperty.set(newClient));
-        TB.handler().selectedInstanceProperty().bindBidirectional(selectedInstanceMMProperty); // Bind "middle-man" property
+        handler.selectedInstanceProperty().bindBidirectional(selectedInstanceMMProperty); // Bind "middle-man" property
     }
     
     private void initButtonViews()
@@ -161,6 +163,6 @@ public final class DummyInstancesController extends SidebarNodeGroupController<D
     
     private void addInstance()
     {
-        TB.handler().newInstance();
+        ctx().getBean(DummyContentsHandler.class).newInstance();
     }
 }

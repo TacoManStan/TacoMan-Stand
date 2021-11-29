@@ -10,6 +10,7 @@ import com.taco.suit_lady.view.ui.jfx.lists.treehandler.WrappingTreeLoader;
 import com.taco.suit_lady.view.ui.ui_internal.AppUI;
 import com.taco.suit_lady.view.ui.ui_internal.console.ConsolePage;
 import com.taco.suit_lady.view.ui.ui_internal.console.ConsoleUIDataContainer;
+import com.taco.suit_lady.view.ui.ui_internal.contents.DummyContentsHandler;
 import com.taco.suit_lady.view.ui.ui_internal.controllers.ConsoleElementController;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.ReadOnlyListProperty;
@@ -216,7 +217,7 @@ public class Console
                     consoleContainer.showClientProperty(),
                     consoleContainer.showScriptProperty(),
                     consoleContainer.showSelectedInstanceOnlyProperty(),
-                    TB.handler().selectedInstanceProperty()
+                    ctx.getBean(DummyContentsHandler.class).selectedInstanceProperty()
             );
             
             final WrappingTreeLoader<ConsoleMessageable<?>, ConsoleElementController> treeLoader = new WrappingTreeLoader<>(

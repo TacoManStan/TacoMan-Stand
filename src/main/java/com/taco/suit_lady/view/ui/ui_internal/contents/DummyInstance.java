@@ -1,16 +1,22 @@
 package com.taco.suit_lady.view.ui.ui_internal.contents;
 
-import com.taco.suit_lady.util.tools.TB;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
+import com.taco.suit_lady.util.springable.Springable;
+import net.rgielen.fxweaver.core.FxWeaver;
+import org.springframework.context.ConfigurableApplicationContext;
 
 public class DummyInstance
-        implements UIDProcessable
+        implements UIDProcessable, Springable
 {
+    private final Springable springable;
+    
     private final DummyContentsInstanceUI ui;
     
-    public DummyInstance()
+    public DummyInstance(Springable springable)
     {
+        this.springable = springable.asStrict();
+        
         this.ui = new DummyContentsInstanceUI(this);
     }
     
@@ -21,7 +27,7 @@ public class DummyInstance
     
     public boolean shutdown()
     {
-        return TB.handler().shutdown(this);
+        return ctx().getBean(DummyContentsHandler.class).shutdown(this);
     }
     
     protected final void shutdownInstanceEngine()
@@ -29,6 +35,8 @@ public class DummyInstance
         // CHANGE-HERE
         // This used to be where the thread executor system would be wrapped up and then shutdown when used in TRiBotFX.
     }
+    
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     private UIDProcessor uidProcessor;
     
@@ -39,4 +47,18 @@ public class DummyInstance
             uidProcessor = new UIDProcessor("dummy-instance");
         return uidProcessor;
     }
+    
+    @Override
+    public FxWeaver weaver()
+    {
+        return springable.weaver();
+    }
+    
+    @Override
+    public ConfigurableApplicationContext ctx()
+    {
+        return springable.ctx();
+    }
+    
+    //</editor-fold>
 }
