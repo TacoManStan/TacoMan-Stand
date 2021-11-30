@@ -63,14 +63,10 @@ public class FxWeaverInitializer
     @Override
     public void onApplicationEvent(StageReadyEvent event)
     {
-        System.out.println("ApplicationEvent Triggered...");
         final Stage stage = event.getStage();
-        System.out.println("ApplicationEvent Post-Stage: " + stage);
         if (!weave(stage))
             throw new RuntimeException("Weaving Failed");
-        System.out.println("Post-Weaving... Showing Stage...: " + stage);
         stage.show();
-        System.out.println("Post-Show...");
     }
     
     //
@@ -101,22 +97,15 @@ public class FxWeaverInitializer
      */
     boolean weave(Stage stage)
     {
-        System.out.println("Weaving Stage...: " + stage);
-        
         if (stage == null)
             return false;
         
         try {
             stage.initStyle(StageStyle.UNDECORATED);
             
-            Parent parent = weaver.loadView(MAIN_CONTROLLER);
-            
-            System.out.println("Weaving Parent...: " + parent);
+            final Parent parent = weaver.loadView(MAIN_CONTROLLER);
             
             final Scene scene = new Scene(parent);
-            
-            System.out.println("Weaving Scene...: " + scene);
-            System.out.println("Setting Stage Scene...");
             
             stage.setScene(scene);
             stage.setOnHidden(event -> {
@@ -176,7 +165,6 @@ public class FxWeaverInitializer
         public StageReadyEvent(Stage stage)
         {
             super(stage);
-            System.out.println("Constructing Stage Ready Event....");
         }
         
         /**
@@ -186,11 +174,10 @@ public class FxWeaverInitializer
          */
         public Stage getStage()
         {
-            System.out.println("Getting Stage...");
             try {
                 return (Stage) getSource();
             } catch (ClassCastException e) {
-                System.out.println("Stage is of wrong type: " + getSource().getClass().getName());
+                System.err.println("Stage is of wrong type: " + getSource().getClass().getName());
                 return null;
             }
         }
