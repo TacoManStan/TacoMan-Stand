@@ -42,7 +42,7 @@ public class AppUI
     protected void init() {
         ctx().getBean(Console.class).initialize();
         
-        this.contentManager = new ContentManagerNew(getContentStackPane());
+        this.contentManager = new ContentManagerNew(weaver(), ctx(), getContentStackPane());
         this.contentManager.setContent(new TestControllableContentNew(this));
     }
     

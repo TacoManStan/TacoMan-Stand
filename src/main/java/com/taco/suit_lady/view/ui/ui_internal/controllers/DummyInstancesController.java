@@ -89,6 +89,7 @@ public final class DummyInstancesController extends SidebarNodeGroupController<D
     private void initButtonViews()
     {
         this.addInstanceImageButton = new ImageButton(
+                weaver(), ctx(),
                 addInstanceImagePane,
                 "plus",
                 this::addInstance,

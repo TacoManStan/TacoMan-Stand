@@ -94,6 +94,7 @@ public class UINode
         
         buttonViewProperty.addListener((observable, oldValue, newValue) -> newValue.initialize());
         buttonViewProperty.set(new ImageButton(
+                weaver(), ctx(),
                 null,
                 buttonIDProperty,
                 () -> onAction(onAction),

@@ -204,7 +204,7 @@ public class AppController
         
         ui.setContentStackPane(contentStackPane);
         
-        ui.setSidebar(new Sidebar(sidebarChildButtonsPane, sidebarContentPane, backImagePane));
+        ui.setSidebar(new Sidebar(weaver(), ctx(), sidebarChildButtonsPane, sidebarContentPane, backImagePane));
     }
     
     public final void initialize(Stage stage)
@@ -312,6 +312,7 @@ public class AppController
     private void initImageButtons()
     {
         new ImageButton(
+                weaver(), ctx(),
                 settingsImagePane,
                 "settings",
                 null,
@@ -321,6 +322,7 @@ public class AppController
         ).initialize();
         
         new ImageButton(
+                weaver(), ctx(),
                 sidebarImagePane,
                 "hide_sidebar",
                 null,
@@ -330,6 +332,7 @@ public class AppController
         ).initialize();
         
         new ImageButton(
+                weaver(), ctx(),
                 minimizeImagePane,
                 "minimize",
                 null,
@@ -339,6 +342,7 @@ public class AppController
         ).initialize();
         
         new ImageButton(
+                weaver(), ctx(),
                 maximizeImagePane,
                 Bindings.createStringBinding(() -> stage.isMaximized() ? "maximize_both" : "maximize", stage.maximizedProperty()),
                 null,
@@ -348,6 +352,7 @@ public class AppController
         ).initialize();
         
         new ImageButton(
+                weaver(), ctx(),
                 closeImagePane,
                 "close",
                 null,
@@ -357,6 +362,7 @@ public class AppController
         ).initialize();
         
         new ImageButton(
+                weaver(), ctx(),
                 logoImagePane,
                 "logo",
                 () -> TB.web().browse("google", true),

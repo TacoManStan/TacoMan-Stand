@@ -1,5 +1,6 @@
 package com.taco.suit_lady.view.ui;
 
+import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.BindingTools;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.ObjectTools;
@@ -17,14 +18,20 @@ import javafx.scene.Node;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Sidebar
+        implements Springable
 {
+    private final FxWeaver weaver;
+    private final ConfigurableApplicationContext ctx;
+    
     private final ReentrantLock lock;
     
     private final StackPane childButtonPane;
@@ -35,15 +42,17 @@ public class Sidebar
     private final ReadOnlyObjectWrapper<SidebarNodeGroup> selectedNodeGroupProperty;
     
     /**
-     * <p>Refer to {@link #Sidebar(StackPane, StackPane, ImagePane) Fully-Parameterized Constructor} for details.</p>
+     * <p>Refer to {@link #Sidebar(FxWeaver, ConfigurableApplicationContext, StackPane, StackPane, ImagePane) Fully-Parameterized Constructor} for details.</p>
      * <p><b>Identical to...</b></p>
      * <blockquote><code>new Sidebar(childButtonPane, contentPane, <u>null</u>)</code></blockquote>
      */
     public Sidebar(
+            @NotNull FxWeaver weaver,
+            @NotNull ConfigurableApplicationContext ctx,
             @NotNull StackPane childButtonPane,
             @NotNull StackPane contentPane)
     {
-        this(childButtonPane, contentPane, null);
+        this(weaver, ctx, childButtonPane, contentPane, null);
     }
     
     /**
@@ -83,10 +92,15 @@ public class Sidebar
      * @throws NullPointerException If the {@code contentPane} parameter is {@code null}.
      */
     public Sidebar(
+            @NotNull FxWeaver weaver,
+            @NotNull ConfigurableApplicationContext ctx,
             @NotNull StackPane childButtonPane,
             @NotNull StackPane contentPane,
             @Nullable ImagePane backImagePane)
     {
+        this.weaver = ExceptionTools.nullCheck(weaver, "FxWeaver");
+        this.ctx = ExceptionTools.nullCheck(ctx, "Application Context");
+        
         this.lock = new ReentrantLock();
         
         ExceptionTools.nullCheck(childButtonPane, "Sidebar Child Button Pane");
@@ -95,6 +109,7 @@ public class Sidebar
         this.childButtonPane = childButtonPane;
         this.contentPane = contentPane;
         this.backImageButton = new ImageButton(
+                weaver(), ctx(),
                 backImagePane, "back_arrow",
                 null,
                 this::back,
@@ -267,6 +282,22 @@ public class Sidebar
     public boolean isNodeGroupSelected(SidebarNodeGroup menu)
     {
         return ObjectTools.equalsExcludeNull(menu, getSelectedNodeGroup());
+    }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+    @Override
+    public FxWeaver weaver()
+    {
+        return weaver;
+    }
+    
+    @Override
+    public ConfigurableApplicationContext ctx()
+    {
+        return ctx;
     }
     
     //</editor-fold>

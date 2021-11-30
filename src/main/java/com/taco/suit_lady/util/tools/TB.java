@@ -2,10 +2,6 @@ package com.taco.suit_lady.util.tools;
 
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
 
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
 public class TB // Stands for ToolBox
 {
     //<editor-fold desc="--- STATIC INITIALIZATIONS ---">
@@ -21,13 +17,6 @@ public class TB // Stands for ToolBox
     private static final WebTools WEB_TOOLS;
     private static final RandomTools RANDOM_TOOLS;
     
-    // --- OTHER SINGLETON OBJECTS --- //
-    
-    private static final ThreadPoolExecutor EXECUTOR;
-//    private static final DummyContentsHandler DUMMY_CONTENTS_HANDLER; // TODO - Not sure where this should go
-    
-    //
-    
     static
     {
         // --- TOOL MODULES --- //
@@ -40,14 +29,7 @@ public class TB // Stands for ToolBox
         COLLECTION_TOOLS = new CollectionTools();
         WEB_TOOLS = new WebTools();
         RANDOM_TOOLS = new RandomTools();
-    
-        // --- OTHER SINGLETON OBJECTS --- //
-        
-        EXECUTOR = new ThreadPoolExecutor(1, 1, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
-//        DUMMY_CONTENTS_HANDLER = new DummyContentsHandler();
     }
-    
-    //
     
     // --- TOOL MODULES --- //
     
@@ -91,21 +73,5 @@ public class TB // Stands for ToolBox
         return RANDOM_TOOLS;
     }
     
-    // --- OTHER SINGLETON OBJECTS --- //
-    
-    public static ThreadPoolExecutor executor()
-    {
-        return EXECUTOR;
-    }
-    
-//    public static DummyContentsHandler handler()
-//    {
-//        return DUMMY_CONTENTS_HANDLER;
-//    }
-    
     //</editor-fold>
-    
-    //
-    
-
 }

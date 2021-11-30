@@ -1,9 +1,10 @@
 package com.taco.suit_lady.view.ui.jfx.button;
 
+import com.taco.suit_lady.logic.LogiCore;
+import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.BindingTools;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.ResourceTools;
-import com.taco.suit_lady.util.tools.TB;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
 import com.taco.suit_lady.view.ui.jfx.image.ImagePane;
 import com.taco.util.obj_traits.common.Nameable;
@@ -21,9 +22,10 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,11 +34,12 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 // TO-DOC
 public class ImageButton
-        implements Nameable
+        implements Nameable, Springable
 {
     //<editor-fold desc="--- FIELDS ---">
     
-    private ApplicationContext ctx;
+    private final FxWeaver weaver;
+    private final ConfigurableApplicationContext ctx;
     
     private final ImagePane imagePane;
     
@@ -62,11 +65,13 @@ public class ImageButton
     //</editor-fold>
     
     /**
-     * <p>Refer to {@link #ImageButton(ImagePane, ObservableStringValue, Runnable, Runnable, boolean, Point2D) Fully-Parameterized Constructor} for details.</p>
+     * <p>Refer to {@link #ImageButton(FxWeaver, ConfigurableApplicationContext, ImagePane, ObservableStringValue, Runnable, Runnable, boolean, Point2D) Fully-Parameterized Constructor} for details.</p>
      * <p><b>Identical to...</b></p>
      * <blockquote><code>new ImageButton(imagePane, <u>BindingTools.createStringBinding(name)</u>, actionResponder, actionResponderFX, toggleable, size)</code></blockquote>
      */
     public ImageButton(
+            @NotNull FxWeaver weaver,
+            @NotNull ConfigurableApplicationContext ctx,
             @Nullable ImagePane imagePane,
             @Nullable String name,
             @Nullable Runnable actionResponder,
@@ -74,7 +79,7 @@ public class ImageButton
             boolean toggleable,
             @Nullable Point2D size)
     {
-        this(imagePane, BindingTools.createStringBinding(name), actionResponder, actionResponderFX, toggleable, size);
+        this(weaver, ctx, imagePane, BindingTools.createStringBinding(name), actionResponder, actionResponderFX, toggleable, size);
     }
     
     /**
@@ -129,6 +134,8 @@ public class ImageButton
      * @param size              A {@link Point2D} representing the {@link ImagePane#widthProperty() width} and {@link ImagePane#heightProperty() height} of this {@link ImageButton}.
      */
     public ImageButton(
+            @NotNull FxWeaver weaver,
+            @NotNull ConfigurableApplicationContext ctx,
             @Nullable ImagePane imagePane,
             @NotNull ObservableStringValue nameBinding,
             @Nullable Runnable actionResponder,
@@ -136,19 +143,22 @@ public class ImageButton
             boolean toggleable,
             @Nullable Point2D size)
     {
+        this.weaver = weaver;
+        this.ctx = ctx;
+        
         this.imagePane = imagePane != null ? imagePane : new ImagePane();
-    
+        
         this.nameBinding = Bindings.createStringBinding(() -> {
             final String name = nameBinding.get();
             return name != null ? name : "missingno";
         }, nameBinding);
         
-//        ConsoleBB.CONSOLE.print("Size for Button [" + getName() + "]: " + size);
+        //        ConsoleBB.CONSOLE.print("Size for Button [" + getName() + "]: " + size);
         if (size != null) {
             this.imagePane.setPrefSize(size.getX(), size.getY());
             this.imagePane.setMaxSize(size.getX(), size.getY());
         }
-//        ConsoleBB.CONSOLE.print("Actual Size for Button \"" + getName() + "\": " + "[" + this.imagePane.getWidth() + ", " + this.imagePane.getHeight() + "]");
+        //        ConsoleBB.CONSOLE.print("Actual Size for Button \"" + getName() + "\": " + "[" + this.imagePane.getWidth() + ", " + this.imagePane.getHeight() + "]");
         
         this.buttonGroupProperty = new ReadOnlyObjectWrapper<>();
         
@@ -245,7 +255,7 @@ public class ImageButton
      * <p>Returns the {@link ObjectProperty} containing the {@link Runnable} that is executed in a {@link Task Background Task} when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.</p>
      * <p><b>Execution Details</b></p>
      * <ol>
-     *     <li>The {@link Runnable} is executed in a {@link Task Background Task} by the core {@link TB#executor() Executor} for the entire application instance.</li>
+     *     <li>The {@link Runnable} is executed in a {@link Task Background Task} by the core {@link ThreadPoolExecutor Executor} for the entire application instance.</li>
      *     <li>The {@link Task} {@link ThreadPoolExecutor#execute(Runnable) execution} is non-blocking.</li>
      *     <li>To execute a {@link Runnable} on the {@link FXTools#isFXThread() JavaFX Thread}, refer to <code><i>{@link #actionResponderFXProperty()}</i></code>.</li>
      *     <li>If the {@link Runnable value} contained by the {@link ObjectProperty} is {@code null}, no action response will be executed.</li>
@@ -356,17 +366,18 @@ public class ImageButton
     private void onAction()
     {
         final Runnable actionResponder = getActionResponder();
-        if (actionResponder != null) {
-            TB.executor().execute(new Task<>()
-            {
-                @Override
-                protected Object call()
-                {
-                    actionResponder.run();
-                    return null;
-                }
-            });
-        }
+        if (actionResponder != null)
+            ctx().getBean(LogiCore.class).execute(
+                    new Task<>()
+                    {
+                        @Override
+                        protected Object call()
+                        {
+                            actionResponder.run();
+                            return null;
+                        }
+                    });
+        
         final Runnable actionResponderFX = getActionResponderFX();
         if (actionResponderFX != null)
             FXTools.get().runFX(actionResponderFX, false);
@@ -775,6 +786,22 @@ public class ImageButton
     public boolean isInButtonGroup()
     {
         return getButtonGroup() != null;
+    }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+    @Override
+    public FxWeaver weaver()
+    {
+        return weaver;
+    }
+    
+    @Override
+    public ConfigurableApplicationContext ctx()
+    {
+        return ctx;
     }
     
     //</editor-fold>
