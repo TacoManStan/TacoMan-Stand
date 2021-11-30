@@ -13,7 +13,7 @@ PASSTHROUGH METHOD:
     <blockquote><b>Passthrough Definition:</b> <i><code></code></i></blockquote>
 
 TAGS:
-    > TOP-DC: Flag for undocumented members of a partially-documented class.
+    > TOP-DOC: Flag for undocumented members of a partially-documented class.
     > TO-EXPAND: Flag for documented members that require additional documentation details.
     > TO-UPDATE: Flag for documented members whose functionality is likely (or certain) to change in the future, and therefore will require a documentation update.
         > Oftentimes, members flagged with TO-UPDATE will contain details about future improvement intentions in its documentation, usually flagged by TODO.
