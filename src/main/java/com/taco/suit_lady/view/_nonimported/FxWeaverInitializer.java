@@ -41,6 +41,7 @@ public class FxWeaverInitializer
      * <hr>
      *
      * @param weaver The {@link FxWeaver} to be initialized by this {@link FxWeaverInitializer}.
+     *
      * @see FXApplication#start(Stage)
      */
     public FxWeaverInitializer(FxWeaver weaver, ConfigurableApplicationContext ctx)
@@ -105,8 +106,7 @@ public class FxWeaverInitializer
         if (stage == null)
             return false;
         
-        try
-        {
+        try {
             stage.initStyle(StageStyle.UNDECORATED);
             
             Parent parent = weaver.loadView(MAIN_CONTROLLER);
@@ -122,11 +122,9 @@ public class FxWeaverInitializer
             stage.setOnHidden(event -> {
                 System.exit(0);
             });
-    
+            
             ctx().getBean(AppUI.class).getController().initialize(stage);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -189,12 +187,9 @@ public class FxWeaverInitializer
         public Stage getStage()
         {
             System.out.println("Getting Stage...");
-            try
-            {
+            try {
                 return (Stage) getSource();
-            }
-            catch (ClassCastException e)
-            {
+            } catch (ClassCastException e) {
                 System.out.println("Stage is of wrong type: " + getSource().getClass().getName());
                 return null;
             }
