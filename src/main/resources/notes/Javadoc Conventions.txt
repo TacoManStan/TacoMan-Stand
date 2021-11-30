@@ -18,3 +18,9 @@ TAGS:
     > TO-UPDATE: Flag for documented members whose functionality is likely (or certain) to change in the future, and therefore will require a documentation update.
         > Oftentimes, members flagged with TO-UPDATE will contain details about future improvement intentions in its documentation, usually flagged by TODO.
     > TO-TEST: Flag for a method that still needs to be tested
+
+COPY/PASTE:
+    1.
+        this.weaver = ExceptionTools.nullCheck(weaver, "FxWeaver");
+        this.ctx = ExceptionTools.nullCheck(ctx, "Application Context");
+    2.
