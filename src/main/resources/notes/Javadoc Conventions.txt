@@ -9,9 +9,8 @@ PASSTHROUGH CONSTRUCTOR:
      * </code>
      * </blockquote>
 
- PASSTHROUGH METHOD:
+PASSTHROUGH METHOD:
     <blockquote><b>Passthrough Definition:</b> <i><code></code></i></blockquote>
-
 
 TAGS:
     > TOP-DC: Flag for undocumented members of a partially-documented class.
