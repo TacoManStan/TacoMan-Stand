@@ -2,6 +2,7 @@ package com.taco.suit_lady.view.ui.jfx.lists;
 
 import com.taco.suit_lady.util.tools.BindingTools;
 import com.taco.suit_lady.util.tools.ExceptionTools;
+import com.taco.suit_lady.view.ui.jfx.lists.treehandler.IndexedCellFXable;
 import com.taco.suit_lady.view.ui.jfx.lists.treehandler.TreeItemFX;
 import com.taco.suit_lady.view.ui.ui_internal.controllers.CellController;
 import javafx.beans.binding.Bindings;
@@ -23,6 +24,7 @@ import java.util.function.Function;
  */
 // TO-EXPAND
 public class TreeCellFX<T, C extends CellController<T>> extends TreeCell<T>
+        implements IndexedCellFXable<T, C>
 {
     private final Lock lock;
     
@@ -68,19 +70,9 @@ public class TreeCellFX<T, C extends CellController<T>> extends TreeCell<T>
      *
      * @return The {@link Lock} object used to provide synchronization to this {@link TreeCellFX} object.
      */
-    protected final Lock getLock()
+    protected Lock getLock()
     {
         return lock;
-    }
-    
-    /**
-     * <p>Returns the {@link CellControlManager} used by this {@link TreeCellFX} to manage the {@link CellController} used to display and manage the {@link #getItemFX() content} of this {@link TreeCellFX}.</p>
-     *
-     * @return The {@link CellControlManager} used by this {@link TreeCellFX} to manage the {@link CellController} used to display and manage the {@link #getItemFX() content} of this {@link TreeCellFX}.
-     */
-    protected final CellControlManager<T, C> getCellControlManager()
-    {
-        return cellControlManager;
     }
     
     /**
@@ -94,7 +86,7 @@ public class TreeCellFX<T, C extends CellController<T>> extends TreeCell<T>
      *
      * @return An {@link ObjectBinding} that reflects the parent {@link #itemProperty() Item Property} cast to {@link TreeItemFX}.
      */
-    public final ObjectBinding<TreeItemFX<T>> treeItemFXBinding()
+    public ObjectBinding<TreeItemFX<T>> treeItemFXBinding()
     {
         return treeItemFXBinding;
     }
@@ -105,7 +97,7 @@ public class TreeCellFX<T, C extends CellController<T>> extends TreeCell<T>
      *
      * @return The {@link #getItem() content} of this {@link TreeCellFX} pre-cast to a {@link TreeItemFX}.
      */
-    public final TreeItemFX<T> getItemFX()
+    public TreeItemFX<T> getItemFX()
     {
         return treeItemFXBinding.get();
     }
@@ -121,7 +113,7 @@ public class TreeCellFX<T, C extends CellController<T>> extends TreeCell<T>
      *
      * @return A {@link BooleanBinding} that reflects whether the current {@link #getItemFX() content} of this {@link TreeCellFX} is currently {@link TreeItemFX#visibleProperty() visible} or not.
      */
-    public final BooleanBinding contentVisibleBinding()
+    public BooleanBinding contentVisibleBinding()
     {
         return contentVisibleBinding;
     }
@@ -129,9 +121,10 @@ public class TreeCellFX<T, C extends CellController<T>> extends TreeCell<T>
     /**
      * <p>Returns whether the current {@link #getItemFX() content} of this {@link TreeCellFX} is currently {@link TreeItemFX#visibleProperty() visible} or not.</p>
      * <blockquote><b>Passthrough Definition:</b> <i><code>{@link #contentVisibleBinding()}<b>.</b>{@link }</code></i></blockquote>
+     *
      * @return Whether the current {@link #getItemFX() content} of this {@link TreeCellFX} is currently {@link TreeItemFX#visibleProperty() visible} or not.
      */
-    public final boolean isContentVisible()
+    public boolean isContentVisible()
     {
         return contentVisibleBinding.get();
     }
@@ -139,6 +132,18 @@ public class TreeCellFX<T, C extends CellController<T>> extends TreeCell<T>
     //</editor-fold>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+    
+    /**
+     * <p>Returns the {@link CellControlManager} used by this {@link TreeCellFX} to manage the {@link CellController} used to display and manage the {@link #getItemFX() content} of this {@link TreeCellFX}.</p>
+     *
+     * @return The {@link CellControlManager} used by this {@link TreeCellFX} to manage the {@link CellController} used to display and manage the {@link #getItemFX() content} of this {@link TreeCellFX}.
+     */
+    @Override
+    public CellControlManager<T, C> getCellControlManager()
+    {
+        return cellControlManager;
+    }
     
     /**
      * <p>Overridden implementation of <code><i>{@link Cell#updateItem(Object, boolean)}</i></code>.</p>
