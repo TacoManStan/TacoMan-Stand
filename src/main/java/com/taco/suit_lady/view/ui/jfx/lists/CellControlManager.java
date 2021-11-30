@@ -6,16 +6,24 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.geometry.Insets;
 import javafx.scene.control.IndexedCell;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.TreeCell;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
 
 /**
- * <p>Used by an {@link IndexedCell} to help create, update, manage, and use a {@link CellController} to display its {@link IndexedCell#getItem() content}.</p>
+ * <p>Used by an {@link IndexedCell FX IndexedCell} to help create, update, manage, and use a {@link CellController} to display its {@link IndexedCell#getItem() content}.</p>
  * <p><b>Details</b></p>
  * <ol>
  *     <li>{@link CellControlManager CellControlManagers} are always immutable.</li>
+ *     <li>
+ *         {@link CellControlManager} is used to manage properties and functionality that is present in both {@link ListCellFX} and {@link TreeCellFX}.
+ *         <ul>
+ *             <li>{@link CellControlManager} cannot be abstracted out into parent because {@link ListCellFX} must extend {@link ListCell}, and {@link TreeCellFX} must extend {@link TreeCell}.</li>
+ *         </ul>
+ *     </li>
  * </ol>
  *
  * @param <T> The type of element contained in the {@link IndexedCell}.

@@ -1,43 +1,44 @@
 package com.taco.suit_lady.view.ui.jfx.lists;
 
+import com.taco.suit_lady.view.ui.jfx.lists.treehandler.IndexedCellFXable;
 import com.taco.suit_lady.view.ui.ui_internal.controllers.CellController;
 import javafx.scene.control.ListCell;
 
 import java.util.concurrent.locks.Lock;
 import java.util.function.Function;
 
-public class ListCellFX<T, U extends CellController<T>> extends ListCell<T>
+public class ListCellFX<T, C extends CellController<T>> extends ListCell<T>
+        implements IndexedCellFXable<T, C>
 {
     
     private final Lock lock;
-    private final CellControlManager<T, U> wrapper;
+    private final CellControlManager<T, C> cellControlManager;
     
-    public ListCellFX(Function<ListCellFX<T, U>, CellControlManager<T, U>> wrappedCellFactory)
+    public ListCellFX(Function<ListCellFX<T, C>, CellControlManager<T, C>> wrappedCellFactory)
     {
-        this.wrapper = wrappedCellFactory.apply(this);
-        this.lock = this.wrapper.getLock();
+        this.cellControlManager = wrappedCellFactory.apply(this);
+        this.lock = this.cellControlManager.getLock();
     }
     
-    //<editor-fold desc="Properties">
+    //<editor-fold desc="--- PROPERTIES ---">
     
     protected final Lock getLock()
     {
         return lock;
     }
     
-    protected final CellControlManager<T, U> getCellWrapper()
-    {
-        return wrapper;
-    }
-    
     //</editor-fold>
-    
-    //
     
     @Override
     protected void updateItem(T item, boolean empty)
     {
         super.updateItem(item, empty);
-        wrapper.doUpdateItem(item, empty);
+        cellControlManager.doUpdateItem(item, empty);
+    }
+    
+    @Override
+    public CellControlManager<T, C> getCellControlManager()
+    {
+        return cellControlManager;
     }
 }
