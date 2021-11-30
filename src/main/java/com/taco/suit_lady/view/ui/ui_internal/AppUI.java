@@ -3,6 +3,8 @@ package com.taco.suit_lady.view.ui.ui_internal;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.view.ui.Sidebar;
 import com.taco.suit_lady.view.ui.console.Console;
+import com.taco.suit_lady.view.ui.ui_internal.contents_new.ContentManagerNew;
+import com.taco.suit_lady.view.ui.ui_internal.contents_new.TestControllableContentNew;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.layout.StackPane;
@@ -22,6 +24,8 @@ public class AppUI
     
     private final ReadOnlyObjectWrapper<StackPane> contentStackPaneProperty;
     
+    private ContentManagerNew contentManager;
+    
     public AppUI(FxWeaver weaver, ConfigurableApplicationContext ctx)
     {
         this.weaver = weaver;
@@ -37,6 +41,9 @@ public class AppUI
     
     protected void init() {
         ctx().getBean(Console.class).initialize();
+        
+        this.contentManager = new ContentManagerNew(getContentStackPane());
+        this.contentManager.setContent(new TestControllableContentNew(this));
     }
     
     //</editor-fold>

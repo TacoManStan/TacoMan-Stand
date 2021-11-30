@@ -7,7 +7,7 @@ import com.taco.suit_lady.view.ui.UINode;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.collections.FXCollections;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.Region;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -19,8 +19,6 @@ public abstract class ContentNew
 {
     private final Springable strictSpringable;
     
-    private final StackPane contentRoot;
-    
     private final ReadOnlyListWrapper<UINode> books;
     
     public ContentNew(@NotNull Springable springable)
@@ -28,14 +26,7 @@ public abstract class ContentNew
         ExceptionTools.nullCheck(springable, "Springable Parent");
         this.strictSpringable = springable.asStrict();
         
-        this.contentRoot = new StackPane();
-        
         this.books = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
-    }
-    
-    public @NotNull StackPane getContentRoot()
-    {
-        return contentRoot;
     }
     
     public @NotNull ReadOnlyListProperty<UINode> books()
@@ -60,6 +51,8 @@ public abstract class ContentNew
     //</editor-fold>
     
     //<editor-fold desc="--- ABSTRACT ---">
+    
+    protected abstract Region getRoot();
     
     /**
      * <p>Abstract method that is executed <i>after</i> this {@link ContentNew} is {@link ContentManagerNew#setContent(ContentNew) set} as the active {@link ContentNew contnet}.</p>

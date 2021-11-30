@@ -13,8 +13,8 @@ import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
 import com.taco.suit_lady.view.ui.jfx.image.ImagePane;
 import com.taco.suit_lady.view.ui.jfx.lists.treehandler.WrappingTreeCellData;
 import com.taco.suit_lady.view.ui.ui_internal.console.ConsoleUIDataContainer;
-import com.taco.suit_lady.view.ui.ui_internal.contents.DummyContentsHandler;
 import com.taco.suit_lady.view.ui.ui_internal.contents.DummyContentsInstancePane;
+import com.taco.suit_lady.view.ui.ui_internal.contents_new.ContentManagerNew;
 import com.taco.suit_lady.view.ui.ui_internal.controllers.SettingsController;
 import com.taco.suit_lady.view.ui.ui_internal.pages.DummyInstancesPage;
 import com.taco.suit_lady.view.ui.ui_internal.pages.EntityDebugPage;
@@ -189,6 +189,8 @@ public class AppController
         this.ctx = ctx;
     }
     
+    private ContentManagerNew contentManager;
+    
     // <editor-fold desc="--- INITIALIZATION ---">
     
     // Called automatically by FXML loader.
@@ -208,7 +210,7 @@ public class AppController
     public final void initialize(Stage stage)
     {
         this.stage = stage;
-        this.contentPane = new DummyContentsInstancePane();
+//        this.contentPane = new DummyContentsInstancePane();
         
         // TODO: Synchronize with the actual title of the application.
         this.stage.titleProperty().set("Suit Lady");
@@ -221,8 +223,9 @@ public class AppController
         final AppUI ui = ctx().getBean(AppUI.class);
         ui.init();
         
-        contentPane.contentProperty().bind(ctx.getBean(DummyContentsHandler.class).selectedInstanceProperty());
-        contentStackPane.getChildren().add(contentPane);
+//        contentPane.contentProperty().bind(ctx.getBean(DummyContentsHandler.class).selectedInstanceProperty());
+//        contentStackPane.getChildren().add(contentPane);
+        
         
         initImageButtons();
         initSidebar();

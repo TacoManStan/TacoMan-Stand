@@ -1,7 +1,9 @@
 package com.taco.suit_lady.view.ui.ui_internal.contents_new;
 
+import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.TB;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
+import com.taco.util.quick.ConsoleBB;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.layout.StackPane;
@@ -11,13 +13,11 @@ import org.jetbrains.annotations.Nullable;
 public class ContentManagerNew
 {
     private final StackPane contentBase;
-    
     private final ReadOnlyObjectWrapper<ContentNew> contentProperty;
     
     public ContentManagerNew(@NotNull StackPane contentBase)
     {
-        this.contentBase = contentBase;
-        
+        this.contentBase = ExceptionTools.nullCheck(contentBase, "Content Base");
         this.contentProperty = new ReadOnlyObjectWrapper<>();
         
         //
@@ -52,26 +52,25 @@ public class ContentManagerNew
     
     //</editor-fold>
     
-    //
-    
     private void onChange(@Nullable ContentNew oldContent, @Nullable ContentNew newContent)
     {
         // TODO - Execute onRemoved() and onSet via a JavaFX Task implementation. For now, though, this will work.
         // When the above is completed, don't forget to update the onRemoved() and onSet() Javadocs as well.
         FXTools.get().runFX(() -> {
             if (oldContent != null) {
-                contentBase.getChildren().remove(oldContent.getContentRoot());
+                contentBase.getChildren().remove(oldContent.getRoot());
                 
-                oldContent.getContentRoot().prefWidthProperty().unbind();
-                oldContent.getContentRoot().prefHeightProperty().unbind();
+                oldContent.getRoot().prefWidthProperty().unbind();
+                oldContent.getRoot().prefHeightProperty().unbind();
     
                 TB.executor().execute(() -> oldContent.onRemoved());
             }
             if (newContent != null) {
-                contentBase.getChildren().add(newContent.getContentRoot());
+                ConsoleBB.CONSOLE.print("Adding new content");
+                contentBase.getChildren().add(newContent.getRoot());
                 
-                newContent.getContentRoot().prefWidthProperty().bind(contentBase.widthProperty());
-                newContent.getContentRoot().prefHeightProperty().bind(contentBase.heightProperty());
+                newContent.getRoot().prefWidthProperty().bind(contentBase.widthProperty());
+                newContent.getRoot().prefHeightProperty().bind(contentBase.heightProperty());
                 
                 TB.executor().execute(() -> newContent.onSet());
             }
