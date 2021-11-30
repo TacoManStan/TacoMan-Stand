@@ -58,12 +58,12 @@ public abstract class ContentNew
      * <p>Abstract method that is executed <i>after</i> this {@link ContentNew} is {@link ContentManagerNew#setContent(ContentNew) set} as the active {@link ContentNew contnet}.</p>
      * <p><b>Details</b></p>
      * <ol>
-     *     <li>{@link #onSet() This method} is {@link ThreadPoolExecutor#execute(Runnable) executed} by the {@link TB Toolbox} {@link TB#executor() Executor}.</li>
+     *     <li>{@link #onSet() This method} is {@link ThreadPoolExecutor#execute(Runnable) executed} by the {@link TB Toolbox} {@link ThreadPoolExecutor Executor}.</li>
      *     <li>
      *         The <code><i>{@link #onRemoved()}</i></code> implementation of the <i>{@link ContentManagerNew#getContent() previous content}</i> is executed <i>prior to</i> {@link #onSet() this method}.
      *         <ul>
      *             <li>That said, because both operations are executed in a separate {@link ThreadPoolExecutor#execute(Runnable) execution}, the operations are very likely to occur concurrently.</li>
-     *             <li>The only exception to this rule is if the {@link TB#executor() Executor} is limited to a single background thread.</li>
+     *             <li>The only exception to this rule is if the {@link ThreadPoolExecutor Executor} is limited to a single background thread.</li>
      *             <li>However, even then, both operations will always be executed concurrently with remaining {@code JavaFX} operations taking place in the <code><i>{@link ContentManagerNew#onChange(ContentNew, ContentNew)}</i></code> method.</li>
      *         </ul>
      *     </li>

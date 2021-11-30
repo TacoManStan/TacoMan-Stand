@@ -748,7 +748,7 @@ public class ImageButton
      * <p><b>Details</b></p>
      * <ol>
      *     <li>All logic related to adding or removing an {@link ImageButton} from a {@link ImageButtonGroup} is done via a {@link ChangeListener} that observes the {@link ObjectProperty} returned by {@link #buttonGroupProperty() this method}.</li>
-     *     <li>The aforementioned {@link ChangeListener} is configured in the {@link ImageButton} {@link #ImageButton(ImagePane, ObservableStringValue, Runnable, Runnable, boolean, Point2D) constructor}.</li>
+     *     <li>The aforementioned {@link ChangeListener} is configured in the {@link ImageButton} {@link #ImageButton(FxWeaver, ConfigurableApplicationContext, ImagePane, ObservableStringValue, Runnable, Runnable, boolean, Point2D) constructor}.</li>
      * </ol>
      *
      * @return The {@link ObjectProperty} containing the {@link ImageButtonGroup} that this {@link ImageButton} is in, or {@code null} if this {@link ImageButton} is not in a {@link ImageButtonGroup}.
