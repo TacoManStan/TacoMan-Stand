@@ -1956,7 +1956,7 @@ public class FXTools
             this.resizingLeft = new ReadOnlyBooleanWrapper();
             this.resizingRight = new ReadOnlyBooleanWrapper();
             
-            this.excludeNodes = excludeNodes != null ? excludeNodes : null;
+            this.excludeNodes = excludeNodes;
             
             this.anchorProperty = new SimpleObjectProperty<>();
             this.stageWidthProperty = new SimpleDoubleProperty();

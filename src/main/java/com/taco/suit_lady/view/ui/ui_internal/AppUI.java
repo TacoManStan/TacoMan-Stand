@@ -17,6 +17,7 @@ public class AppUI
     private final ReadOnlyObjectWrapper<Sidebar> sidebarProperty;
     
     private final ReadOnlyObjectWrapper<StackPane> containerPaneProperty;
+    private final ReadOnlyObjectWrapper<StackPane> contentStackPaneProperty;
     
     public AppUI()
     {
@@ -24,6 +25,7 @@ public class AppUI
         this.sidebarProperty = new ReadOnlyObjectWrapper<>();
         
         this.containerPaneProperty = new ReadOnlyObjectWrapper<>();
+        this.contentStackPaneProperty = new ReadOnlyObjectWrapper<>();
     }
     
     protected void init() {
@@ -79,6 +81,23 @@ public class AppUI
     protected final void setContainerPane(StackPane containerPane)
     {
         containerPaneProperty.set(containerPane);
+    }
+    
+    //
+    
+    public final ReadOnlyObjectProperty<StackPane> contentStackPaneProperty()
+    {
+        return contentStackPaneProperty.getReadOnlyProperty();
+    }
+    
+    public final StackPane getContentStackPane()
+    {
+        return contentStackPaneProperty.get();
+    }
+    
+    public final void setContentStackPane(StackPane contentStackPane)
+    {
+        contentStackPaneProperty.set(contentStackPane);
     }
     
     // </editor-fold>

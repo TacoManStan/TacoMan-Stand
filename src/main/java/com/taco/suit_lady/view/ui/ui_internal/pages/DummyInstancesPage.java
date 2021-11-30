@@ -22,8 +22,6 @@ public class DummyInstancesPage extends UIPage<DummyInstancesController>
     protected void initializePage(@NotNull Object[] constructorParams) {
         final DummyContentsHandler handler = getHandler();
         final DummyInstancesController controller = getController();
-        
-        
     }
     
     @Override

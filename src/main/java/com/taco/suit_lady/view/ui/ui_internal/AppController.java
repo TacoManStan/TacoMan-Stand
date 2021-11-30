@@ -18,7 +18,6 @@ import com.taco.suit_lady.view.ui.ui_internal.controllers.SettingsController;
 import com.taco.suit_lady.view.ui.ui_internal.pages.DummyInstancesPage;
 import com.taco.suit_lady.view.ui.ui_internal.pages.EntityDebugPage;
 import com.taco.suit_lady.view.ui.ui_internal.pages.ExamplePage;
-import com.taco.util.quick.ConsoleBB;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -59,7 +58,6 @@ import org.springframework.stereotype.Component;
 @FxmlView("/fxml/main.fxml")
 public class AppController
 {
-    
     // <editor-fold desc="Static Constants">
     
     private static final long TRANSITION_TIME = 350;
@@ -193,21 +191,18 @@ public class AppController
     // <editor-fold desc="Initialize">
     
     // Called automatically by FXML loader.
-    // As some properties may not yet be finished loading, all actual UI initialization should be done in the initialize(Stage) method.
+    // As some properties may not yet be finished loading, all actual UI initialization should be done in initialize(Stage).
     @FXML
     public final void initialize()
     {
-        AppUI ui = TB.ui();
+        final AppUI ui = TB.ui();
         
         ui.setController(this);
-        ui.setContainerPane(stackPaneRoot);
-        ui.setSidebar(new Sidebar(sidebarChildButtonsPane, sidebarContentPane, backImagePane));
-  
-        final DummyContentsHandler contentsHandler = ctx.getBean(DummyContentsHandler.class);
-        ConsoleBB.CONSOLE.print("Contents Handler: " + contentsHandler);
         
-//        final AppUI u12 = ctx.getBean(AppUI.class);
-//        ConsoleBB.CONSOLE.print("AppUI 2: " + u12);
+        ui.setContainerPane(stackPaneRoot);
+        ui.setContentStackPane(contentStackPane);
+        
+        ui.setSidebar(new Sidebar(sidebarChildButtonsPane, sidebarContentPane, backImagePane));
     }
     
     public final void initialize(Stage stage)
@@ -216,15 +211,14 @@ public class AppController
         this.contentPane = new DummyContentsInstancePane();
         
         // TODO: Synchronize with the actual title of the application.
-        this.stage.titleProperty().set("TRiBot FX");
+        this.stage.titleProperty().set("Suit Lady");
         
-        // TODO: Have 16x16, 32x32, and 64x64 icon images
         this.stage.getIcons().add(TB.resources().getImage("buttons/logo/", "logo", "png"));
         
         sidebarImagePane.setRotationAxis(Rotate.Y_AXIS);
         sidebarPaneAnchor.managedProperty().bind(sidebarPaneAnchor.visibleProperty());
         
-        AppUI ui = TB.ui();
+        final AppUI ui = TB.ui();
         ui.init();
         
         contentPane.contentProperty().bind(ctx.getBean(DummyContentsHandler.class).selectedInstanceProperty());
