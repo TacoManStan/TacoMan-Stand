@@ -1,8 +1,9 @@
 package com.taco.suit_lady.view._nonimported;
 
 import com.taco.suit_lady.MainApplication;
-import com.taco.suit_lady.util.tools.TB;
+import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.view.ui.ui_internal.AppController;
+import com.taco.suit_lady.view.ui.ui_internal.AppUI;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -29,9 +30,10 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class FxWeaverInitializer
-        implements ApplicationListener<FxWeaverInitializer.StageReadyEvent>
+        implements ApplicationListener<FxWeaverInitializer.StageReadyEvent>, Springable
 {
     private final FxWeaver weaver;
+    private final ConfigurableApplicationContext ctx;
     
     /**
      * <p><b>Constructs a new <i>{@link FxWeaverInitializer}</i> object for the specified <i>{@link FxWeaver}</i> instance.</b></p>
@@ -41,12 +43,13 @@ public class FxWeaverInitializer
      * @param weaver The {@link FxWeaver} to be initialized by this {@link FxWeaverInitializer}.
      * @see FXApplication#start(Stage)
      */
-    public FxWeaverInitializer(FxWeaver weaver)
+    public FxWeaverInitializer(FxWeaver weaver, ConfigurableApplicationContext ctx)
     {
         this.weaver = weaver;
+        this.ctx = ctx;
     }
     
-    //<editor-fold desc="— Weaving —">
+    //<editor-fold desc="--- WEAVING ---">
     
     /**
      * <p><b>Handles <i>{@link FxWeaver}</i> initialization <i>{@link FXApplication#start(Stage) starting}</i> the
@@ -120,7 +123,7 @@ public class FxWeaverInitializer
                 System.exit(0);
             });
     
-            TB.ui().getController().initialize(stage);
+            ctx().getBean(AppUI.class).getController().initialize(stage);
         }
         catch (Exception e)
         {
@@ -128,6 +131,22 @@ public class FxWeaverInitializer
             return false;
         }
         return true;
+    }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+    @Override
+    public FxWeaver weaver()
+    {
+        return weaver;
+    }
+    
+    @Override
+    public ConfigurableApplicationContext ctx()
+    {
+        return ctx;
     }
     
     //</editor-fold>

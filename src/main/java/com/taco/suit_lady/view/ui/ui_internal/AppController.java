@@ -196,7 +196,7 @@ public class AppController
     @FXML
     public final void initialize()
     {
-        final AppUI ui = TB.ui();
+        final AppUI ui = ctx().getBean(AppUI.class);
         
         ui.setController(this);
         
@@ -218,7 +218,7 @@ public class AppController
         sidebarImagePane.setRotationAxis(Rotate.Y_AXIS);
         sidebarPaneAnchor.managedProperty().bind(sidebarPaneAnchor.visibleProperty());
         
-        final AppUI ui = TB.ui();
+        final AppUI ui = ctx().getBean(AppUI.class);
         ui.init();
         
         contentPane.contentProperty().bind(ctx.getBean(DummyContentsHandler.class).selectedInstanceProperty());
@@ -251,7 +251,7 @@ public class AppController
     
     private void initSidebar()
     {
-        final Sidebar sidebar = AppUI.get().getSidebar();
+        final Sidebar sidebar = ctx().getBean(AppUI.class).getSidebar();
         
         final SidebarNodeGroup generalSidebarGroup = new SidebarNodeGroup(sidebar, generalSidebarButton);
         generalSidebarGroup.getNodes().add(new UINode(

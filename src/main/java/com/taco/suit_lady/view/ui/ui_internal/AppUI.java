@@ -5,14 +5,11 @@ import com.taco.suit_lady.view.ui.Sidebar;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.layout.StackPane;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AppUI
 {
-    public static AppUI get()
-    {
-        return TB.ui();
-    }
-    
     private final ReadOnlyObjectWrapper<AppController> controllerProperty;
     private final ReadOnlyObjectWrapper<Sidebar> sidebarProperty;
     
