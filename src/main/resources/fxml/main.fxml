@@ -37,14 +37,7 @@
                         <RowConstraints />
                     </rowConstraints>
                     <children>
-                        <StackPane fx:id="stackPaneRoot" minHeight="0.0" minWidth="0.0" style="-fx-border-color: border-color; -fx-border-width: 0 0 0 0;" GridPane.columnSpan="1" GridPane.rowIndex="1">
-                            <children>
-                                <BorderPane minHeight="0.0" minWidth="0.0" StackPane.alignment="CENTER">
-                                    <center>
-                                        <StackPane fx:id="contentStackPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="1000.0" BorderPane.alignment="CENTER" />
-                                    </center>
-                                </BorderPane>
-                            </children>
+                        <StackPane fx:id="contentStackPane" prefHeight="500.0" prefWidth="1000.0" style="-fx-border-color: border-color; -fx-border-width: 0 0 0 0;" GridPane.columnSpan="1" GridPane.rowIndex="1">
                             <GridPane.margin>
                                 <Insets />
                             </GridPane.margin>

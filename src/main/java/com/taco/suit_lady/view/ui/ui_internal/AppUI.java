@@ -16,7 +16,6 @@ public class AppUI
     private final ReadOnlyObjectWrapper<AppController> controllerProperty;
     private final ReadOnlyObjectWrapper<Sidebar> sidebarProperty;
     
-    private final ReadOnlyObjectWrapper<StackPane> containerPaneProperty;
     private final ReadOnlyObjectWrapper<StackPane> contentStackPaneProperty;
     
     public AppUI()
@@ -24,7 +23,6 @@ public class AppUI
         this.controllerProperty = new ReadOnlyObjectWrapper<>();
         this.sidebarProperty = new ReadOnlyObjectWrapper<>();
         
-        this.containerPaneProperty = new ReadOnlyObjectWrapper<>();
         this.contentStackPaneProperty = new ReadOnlyObjectWrapper<>();
     }
     
@@ -64,23 +62,6 @@ public class AppUI
     protected final void setSidebar(Sidebar sidebar)
     {
         sidebarProperty.set(sidebar);
-    }
-    
-    //
-    
-    public final ReadOnlyObjectProperty<StackPane> containerPaneProperty()
-    {
-        return containerPaneProperty.getReadOnlyProperty();
-    }
-    
-    public final StackPane getContainerPane()
-    {
-        return containerPaneProperty.get();
-    }
-    
-    protected final void setContainerPane(StackPane containerPane)
-    {
-        containerPaneProperty.set(containerPane);
     }
     
     //

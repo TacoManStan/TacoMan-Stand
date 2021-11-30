@@ -58,7 +58,7 @@ import org.springframework.stereotype.Component;
 @FxmlView("/fxml/main.fxml")
 public class AppController
 {
-    // <editor-fold desc="Static Constants">
+    // <editor-fold desc="--- STATIC CONSTANTS ---">
     
     private static final long TRANSITION_TIME = 350;
     private static final long MICRO_TRANSITION_TIME = 150;
@@ -113,7 +113,7 @@ public class AppController
     
     // </editor-fold>
     
-    // <editor-fold desc="FXML">
+    // <editor-fold desc="--- FXML FIELDS ---">
     
     @FXML private StackPane root;
     
@@ -122,7 +122,6 @@ public class AppController
     
     @FXML private GridPane gridPane;
     @FXML private StackPane contentStackPane;
-    @FXML private StackPane stackPaneRoot;
     
     @FXML private TreeView<WrappingTreeCellData<ConsoleMessageable<?>>> consoleTree;
     
@@ -199,7 +198,6 @@ public class AppController
         
         ui.setController(this);
         
-        ui.setContainerPane(stackPaneRoot);
         ui.setContentStackPane(contentStackPane);
         
         ui.setSidebar(new Sidebar(sidebarChildButtonsPane, sidebarContentPane, backImagePane));
