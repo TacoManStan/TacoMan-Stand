@@ -7,6 +7,7 @@ import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.collections.FXCollections;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -15,6 +16,7 @@ import java.util.Objects;
  * <p>Class used to manage and display {@link DummyInstance DummyInsstances}.</p>
  * <p>{@link DummyContentsHandler} singleton instance is managed by the {@code Spring Framework}.</p>
  */
+@Component
 public class DummyContentsHandler
         implements Springable
 {

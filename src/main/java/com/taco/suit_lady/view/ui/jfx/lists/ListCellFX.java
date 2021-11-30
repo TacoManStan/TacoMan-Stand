@@ -14,9 +14,9 @@ public class ListCellFX<T, C extends CellController<T>> extends ListCell<T>
     private final Lock lock;
     private final CellControlManager<T, C> cellControlManager;
     
-    public ListCellFX(Function<ListCellFX<T, C>, CellControlManager<T, C>> wrappedCellFactory)
+    public ListCellFX(Function<ListCellFX<T, C>, CellControlManager<T, C>> cellControlManagerFactory)
     {
-        this.cellControlManager = wrappedCellFactory.apply(this);
+        this.cellControlManager = cellControlManagerFactory.apply(this);
         this.lock = this.cellControlManager.getLock();
     }
     

@@ -2,9 +2,9 @@ package com.taco.suit_lady.view.ui;
 
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.view.ui.jfx.button.BoundImageButtonGroup;
-import com.taco.suit_lady.view.ui.jfx.button.ImageButtonGroup;
 import com.taco.suit_lady.view.ui.jfx.button.ButtonViewable;
 import com.taco.suit_lady.view.ui.jfx.button.ImageButton;
+import com.taco.suit_lady.view.ui.jfx.button.ImageButtonGroup;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.EventHandler;
@@ -13,6 +13,8 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
@@ -30,15 +32,12 @@ public class SidebarNodeGroup extends UINodeGroup
     private final BoundImageButtonGroup<UINode> nodeButtonGroup;
     
     /**
-     * <p>Refer to {@link #SidebarNodeGroup(Sidebar, Button, StackPane) Fully-Parameterized Constructor} for details.</p>
-     * <p>Identical to...</p>
-     * <blockquote>
-     * <code>
-     * {@link #SidebarNodeGroup(Sidebar, Button, StackPane) SidebarNodeGroup(owner, menuButton, <u><b>null</b></u>)}
-     * </code>
-     * </blockquote>
+     * <p>Refer to {@link #SidebarNodeGroup(Sidebar, Button, StackPane) Fully-Parameterized Constructor} for additional information.</p>
+     * <blockquote><b>Passthrough Definition:</b> <i><code>
+     * new {@link #SidebarNodeGroup(Sidebar, Button, StackPane) SidebarNodeGroup}<b>(</b>owner<b>,</b> menuButton<b>,</b> <u>null</u><b>)</b>
+     * </code></i></blockquote>
      */
-    public SidebarNodeGroup(Sidebar owner, Button menuButton)
+    public SidebarNodeGroup(@NotNull Sidebar owner, @NotNull Button menuButton)
     {
         this(owner, menuButton, null);
     }
@@ -58,11 +57,12 @@ public class SidebarNodeGroup extends UINodeGroup
      *                    <ul>
      *                          <li>Cannot be {@code null}.</li>
      *                    </ul>
+     *
      * @throws NullPointerException If the {@code owner} parameter is {@code null}.
      * @throws NullPointerException If the {@code menuButton} parameter is {@code null}.
      * @see UINodeGroup#UINodeGroup(StackPane)
      */
-    public SidebarNodeGroup(Sidebar owner, Button menuButton, StackPane contentPane)
+    public SidebarNodeGroup(@NotNull Sidebar owner, @NotNull Button menuButton, @Nullable StackPane contentPane)
     {
         super(contentPane);
         
@@ -120,6 +120,7 @@ public class SidebarNodeGroup extends UINodeGroup
     //<editor-fold desc="--- PROPERTIES ---">
     
     /**
+     * <b>— Not Yet Implemented —</b>
      * <p>Returns the {@link StringProperty} containing the {@link #getName() name} of this {@link SidebarNodeGroup}.</p>
      * <p><b>Details</b></p>
      * <ol>
@@ -127,39 +128,43 @@ public class SidebarNodeGroup extends UINodeGroup
      *     <li>An example usage would be as the {@link #getButton() button's} {@link Button#tooltipProperty() tooltip}.</li>
      *     <li>Can be {@code null}.</li>
      * </ol>
-     * <blockquote>— Currently Unused —</blockquote>
      *
      * @return The {@link StringProperty} containing the {@link #getName() name} of this {@link SidebarNodeGroup}.
+     *
      * @see #getName()
      * @see #setName(String)
      */
-    public StringProperty nameProperty()
+    public @NotNull StringProperty nameProperty()
     {
         return nameProperty;
     }
     
     /**
      * <p>Returns the {@link #nameProperty() name} of this {@link SidebarNodeGroup}.</p>
+     * <blockquote><b>Passthrough Definition:</b> <i><code>{@link #nameProperty()}<b>.</b>{@link StringProperty#get() get()}</code></i></blockquote>
      *
      * @return The {@link #nameProperty() name} of this {@link SidebarNodeGroup}.
+     *
      * @see #nameProperty()
      * @see #setName(String)
      */
-    public String getName()
+    public @Nullable String getName()
     {
-        return nameProperty().get();
+        return nameProperty.get();
     }
     
     /**
      * <p>Sets the {@link #nameProperty() name} of this {@link SidebarNodeGroup} to the specified value.</p>
+     * <blockquote><b>Passthrough Definition:</b> <i><code>{@link #nameProperty()}<b>.</b>{@link StringProperty#set(Object) set}<b>(</b>name<b>)</b></code></i></blockquote>
      *
      * @param name The value to be set as the new {@link #nameProperty() name} of this {@link SidebarNodeGroup}.
+     *
      * @see #nameProperty()
      * @see #getName()
      */
-    public void setName(String name)
+    public void setName(@Nullable String name)
     {
-        nameProperty().set(name);
+        nameProperty.set(name);
     }
     
     /**
@@ -167,7 +172,7 @@ public class SidebarNodeGroup extends UINodeGroup
      *
      * @return The {@link Sidebar} object containing this {@link SidebarNodeGroup} instance.
      */
-    public Sidebar getOwner()
+    public @NotNull Sidebar getOwner()
     {
         return owner;
     }
@@ -186,9 +191,10 @@ public class SidebarNodeGroup extends UINodeGroup
      * </ol>
      *
      * @return The {@link VBox} {@link Region container} housing all {@link UINode#buttonViewProperty() selection buttons} mapped to all {@link UINode UINodes} in this {@link SidebarNodeGroup}.
+     *
      * @see Sidebar#selectedNodeGroupProperty()
      */
-    public VBox getButtonBox()
+    public @NotNull VBox getButtonBox()
     {
         // TODO - In cases such as this — where an object type is of an external source, is not read-only, but needs to be read-only — an inner class containing bindings or read-only properties bound to the internal default properties might be a good solution.
         return buttonBox;
@@ -198,13 +204,13 @@ public class SidebarNodeGroup extends UINodeGroup
      * <p>Returns the {@link Button} assigned to this {@link SidebarNodeGroup} instance.</p>
      * <p><b>Details</b></p>
      * <ol>
-     *     <li>When {@link Button#onActionProperty() pressed}, the <code><i>{@link #select()}</i></code> method is called on this {@link SidebarNodeGroup} instance.</li>
+     *     <li>When the {@link Button} is {@link Button#onActionProperty() pressed}, the <code><i>{@link #select()}</i></code> method is called on this {@link SidebarNodeGroup} instance.</li>
+     *     <li>Refer to <code><i>{@link #initialize()}</i></code> for {@link Button} implementation.</li>
      * </ol>
      *
      * @return The {@link Button} assigned to this {@link SidebarNodeGroup} instance.
-     * @see #select()
      */
-    public Button getButton()
+    public @NotNull Button getButton()
     {
         return button;
     }
@@ -220,35 +226,26 @@ public class SidebarNodeGroup extends UINodeGroup
      * </ol>
      *
      * @return The {@link ImageButtonGroup} responsible for containing and managing the {@link ImageButton ImageButtons} used to switch between {@link ImageButtonGroup#selectedButtonProperty() selected} {@link UINode UINodes} in this {@link SidebarNodeGroup}.
-     * <ol>
-     *       <li>Guaranteed to be {@code non-null}.</li>
-     * </ol>
      */
-    public BoundImageButtonGroup<UINode> getButtonGroup()
+    public @NotNull BoundImageButtonGroup<UINode> getButtonGroup()
     {
         return nodeButtonGroup;
     }
     
     /**
      * <p>{@link ImageButtonGroup#clearSelection(ImageButton...) Clears} the {@link UINode} currently {@link ImageButtonGroup#selectedButtonProperty() selected} for this {@link SidebarNodeGroup}.</p>
-     * <p><b>Details</b></p>
-     * <ol>
-     *     <li>{@code Passthrough Definition:} <i><code>{@link #getButtonGroup()}<b>.</b>{@link ImageButtonGroup#clearSelection(ImageButton...) clearSelection()}</code></i></li>
-     * </ol>
+     * <blockquote><b>Passthrough Definition:</b> <i><code>{@link #getButtonGroup()}<b>.</b>{@link BoundImageButtonGroup#clearSelection(ImageButton...) clearSelection()}</code></i></blockquote>
      *
-     * @see ImageButtonGroup#clearSelection(ImageButton...)
+     * @return True if the selection was successfully cleared, false if it was not.
      */
-    public void clearSelection()
+    public boolean clearSelection()
     {
-        getButtonGroup().clearSelection();
+        return getButtonGroup().clearSelection();
     }
     
     /**
      * <p>Sets the {@link Sidebar#selectedNodeGroupProperty() selection} of the {@link #getOwner() Sidebar} containing this {@link SidebarNodeGroup} instance to this {@link SidebarNodeGroup}.</p>
-     * <p><b>Details</b></p>
-     * <ol>
-     *     <li>{@code Passthrough Definition:} <i><code>{@link #getOwner()}<b>.</b>{@link Sidebar#setSelectedNodeGroup(SidebarNodeGroup) setSelectedNodeGroup(this)}</code></i></li>
-     * </ol>
+     * <blockquote><b>Passthrough Definition:</b> <i><code>{@link #getOwner()}<b>.</b>{@link Sidebar#setSelectedNodeGroup(SidebarNodeGroup) setSelectedNodeGroup}<b>(</b>this<b>)</b></code></i></blockquote>
      */
     public void select()
     {

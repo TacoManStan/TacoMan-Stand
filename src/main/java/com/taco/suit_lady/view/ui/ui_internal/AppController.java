@@ -251,10 +251,10 @@ public class AppController
     
     private void initSidebar()
     {
-        Sidebar _sidebar = AppUI.get().getSidebar();
+        final Sidebar sidebar = AppUI.get().getSidebar();
         
-        SidebarNodeGroup _generalSidebarGroup = new SidebarNodeGroup(_sidebar, generalSidebarButton);
-        _generalSidebarGroup.getNodes().add(new UINode(
+        final SidebarNodeGroup generalSidebarGroup = new SidebarNodeGroup(sidebar, generalSidebarButton);
+        generalSidebarGroup.getNodes().add(new UINode(
                 AppController.this.weaver, AppController.this.ctx,
                 "Clients", "clients",
                 uiNode -> TB.resources().get(
@@ -263,7 +263,7 @@ public class AppController
                         () -> new DummyInstancesPage(uiNode)
                 ), null
         ));
-        _generalSidebarGroup.getNodes().add(new UINode(
+        generalSidebarGroup.getNodes().add(new UINode(
                 AppController.this.weaver, AppController.this.ctx,
                 "Development", "popout_sidebar",
                 uiNode -> TB.resources().get(
@@ -271,10 +271,10 @@ public class AppController
                         () -> new ExamplePage(uiNode, "green")
                 ), null
         ));
-        _generalSidebarGroup.getButtonGroup().selectFirst();
+        generalSidebarGroup.getButtonGroup().selectFirst();
         
-        SidebarNodeGroup _inDevelopmentSidebarNodeGroup = new SidebarNodeGroup(_sidebar, inDevelopmentSidebarButton);
-        _inDevelopmentSidebarNodeGroup.getNodes().add(new UINode(
+        final SidebarNodeGroup inDevelopmentSidebarNodeGroup = new SidebarNodeGroup(sidebar, inDevelopmentSidebarButton);
+        inDevelopmentSidebarNodeGroup.getNodes().add(new UINode(
                 AppController.this.weaver, AppController.this.ctx,
                 "Entity Debug", "entity_debug",
                 uiNode -> TB.resources().get(
@@ -282,10 +282,10 @@ public class AppController
                         () -> new EntityDebugPage(uiNode)
                 ), null
         ));
-        _inDevelopmentSidebarNodeGroup.getButtonGroup().selectFirst();
+        inDevelopmentSidebarNodeGroup.getButtonGroup().selectFirst();
         
-        SidebarNodeGroup _nyiSidebarGroup = new SidebarNodeGroup(_sidebar, nyiSidebarButton);
-        _nyiSidebarGroup.getNodes().add(new UINode(
+        final SidebarNodeGroup nyiSidebarGroup = new SidebarNodeGroup(sidebar, nyiSidebarButton);
+        nyiSidebarGroup.getNodes().add(new UINode(
                 AppController.this.weaver, AppController.this.ctx,
                 "Repository", "repository",
                 uiNode -> TB.resources().get(
@@ -293,7 +293,7 @@ public class AppController
                         () -> new ExamplePage(uiNode, "green")
                 ), null
         ));
-        _nyiSidebarGroup.getNodes().add(new UINode(
+        nyiSidebarGroup.getNodes().add(new UINode(
                 AppController.this.weaver, AppController.this.ctx,
                 "Social", "social",
                 uiNode -> TB.resources().get(
@@ -301,10 +301,10 @@ public class AppController
                         () -> new ExamplePage(uiNode, "blue")
                 ), null
         ));
-        _nyiSidebarGroup.getButtonGroup().selectFirst();
+        nyiSidebarGroup.getButtonGroup().selectFirst();
         
-        _sidebar.nodeGroupsProperty().addAll(_generalSidebarGroup, _inDevelopmentSidebarNodeGroup, _nyiSidebarGroup);
-        _sidebar.initialize();
+        sidebar.nodeGroupsProperty().addAll(generalSidebarGroup, inDevelopmentSidebarNodeGroup, nyiSidebarGroup);
+        sidebar.initialize();
     }
     
     private void initImageButtons()
