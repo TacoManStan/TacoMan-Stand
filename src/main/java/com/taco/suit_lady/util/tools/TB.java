@@ -1,6 +1,5 @@
 package com.taco.suit_lady.util.tools;
 
-import com.taco.suit_lady.view.ui.console.Console;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
 
 import java.util.concurrent.LinkedBlockingQueue;
@@ -25,7 +24,6 @@ public class TB // Stands for ToolBox
     // --- OTHER SINGLETON OBJECTS --- //
     
     private static final ThreadPoolExecutor EXECUTOR;
-    private static final Console CONSOLE;
 //    private static final DummyContentsHandler DUMMY_CONTENTS_HANDLER; // TODO - Not sure where this should go
     
     //
@@ -46,7 +44,6 @@ public class TB // Stands for ToolBox
         // --- OTHER SINGLETON OBJECTS --- //
         
         EXECUTOR = new ThreadPoolExecutor(1, 1, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
-        CONSOLE = new Console();
 //        DUMMY_CONTENTS_HANDLER = new DummyContentsHandler();
     }
     
@@ -99,11 +96,6 @@ public class TB // Stands for ToolBox
     public static ThreadPoolExecutor executor()
     {
         return EXECUTOR;
-    }
-    
-    public static Console console()
-    {
-        return CONSOLE;
     }
     
 //    public static DummyContentsHandler handler()

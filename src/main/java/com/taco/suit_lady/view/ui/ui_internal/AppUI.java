@@ -1,33 +1,47 @@
 package com.taco.suit_lady.view.ui.ui_internal;
 
-import com.taco.suit_lady.util.tools.TB;
+import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.view.ui.Sidebar;
+import com.taco.suit_lady.view.ui.console.Console;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.layout.StackPane;
+import net.rgielen.fxweaver.core.FxWeaver;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AppUI
+        implements Springable
 {
+    private final FxWeaver weaver;
+    private final ConfigurableApplicationContext ctx;
+    
     private final ReadOnlyObjectWrapper<AppController> controllerProperty;
     private final ReadOnlyObjectWrapper<Sidebar> sidebarProperty;
     
     private final ReadOnlyObjectWrapper<StackPane> contentStackPaneProperty;
     
-    public AppUI()
+    public AppUI(FxWeaver weaver, ConfigurableApplicationContext ctx)
     {
+        this.weaver = weaver;
+        this.ctx = ctx;
+        
         this.controllerProperty = new ReadOnlyObjectWrapper<>();
         this.sidebarProperty = new ReadOnlyObjectWrapper<>();
         
         this.contentStackPaneProperty = new ReadOnlyObjectWrapper<>();
     }
     
+    //<editor-fold desc="--- INITIALIZATION ---">
+    
     protected void init() {
-        TB.console().initialize();
+        ctx().getBean(Console.class).initialize();
     }
     
-    // <editor-fold desc="Properties">
+    //</editor-fold>
+    
+    // <editor-fold desc="--- PROPERTIES ---">
     
     public final ReadOnlyObjectProperty<AppController> controllerProperty()
     {
@@ -79,4 +93,20 @@ public class AppUI
     }
     
     // </editor-fold>
+    
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+    @Override
+    public FxWeaver weaver()
+    {
+        return weaver;
+    }
+    
+    @Override
+    public ConfigurableApplicationContext ctx()
+    {
+        return ctx;
+    }
+    
+    //</editor-fold>
 }

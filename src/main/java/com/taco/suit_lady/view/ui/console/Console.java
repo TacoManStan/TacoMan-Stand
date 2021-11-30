@@ -1,5 +1,6 @@
 package com.taco.suit_lady.view.ui.console;
 
+import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.BindingTools;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.TB;
@@ -19,6 +20,7 @@ import javafx.collections.ListChangeListener;
 import javafx.scene.control.TreeCell;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -29,9 +31,10 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+@Component
 public class Console
+        implements Springable
 {
-    
     //<editor-fold desc="--- STATIC VARS ---">
     
     private static final String CONSOLE_ROOT_NAME;
@@ -46,7 +49,8 @@ public class Console
     
     //
     
-    //<editor-fold desc="--- INSTANCE FIELD VARS ---">
+    private final FxWeaver weaver;
+    private final ConfigurableApplicationContext ctx;
     
     private final ReentrantLock lock;
     
@@ -56,12 +60,11 @@ public class Console
     
     private ConsolePage consolePage;
     
-    //</editor-fold>
-    
-    //<editor-fold desc="--- CONSTRUCTORS ---">
-    
-    public Console()
+    public Console(FxWeaver weaver, ConfigurableApplicationContext ctx)
     {
+        this.weaver = weaver;
+        this.ctx = ctx;
+        
         this.lock = new ReentrantLock();
         
         this.treeLoaders = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
@@ -69,42 +72,6 @@ public class Console
         this.inProgressMap = new HashMap<>();
         
     }
-    //</editor-fold>
-    
-    //
-    
-    // <editor-fold desc="--- PROPERTIES ---">
-    
-    public ReadOnlyListProperty<ConsoleMessageable<?>> getMessages()
-    {
-        return messages.getReadOnlyProperty();
-    }
-    
-    public boolean isInitialized()
-    {
-        return initialized;
-    }
-    
-    public final ConsolePage getPage()
-    {
-        if (consolePage == null) // Lazy initialization
-            consolePage = TB.resources().get("pages", "console");
-        return consolePage;
-    }
-    
-    private StringBuilder getInProgress()
-    {
-        return inProgressMap.computeIfAbsent(Thread.currentThread(), _thread -> new StringBuilder());
-    }
-    
-    //
-    
-    public final ReadOnlyListProperty<WrappingTreeLoader<ConsoleMessageable<?>, ConsoleElementController>> getActiveConsoles()
-    {
-        return treeLoaders.getReadOnlyProperty();
-    }
-    
-    // </editor-fold>
     
     //<editor-fold desc="--- INITIALIZATION ---">
     
@@ -188,6 +155,39 @@ public class Console
     
     //</editor-fold>
     
+    // <editor-fold desc="--- PROPERTIES ---">
+    
+    public ReadOnlyListProperty<ConsoleMessageable<?>> getMessages()
+    {
+        return messages.getReadOnlyProperty();
+    }
+    
+    public boolean isInitialized()
+    {
+        return initialized;
+    }
+    
+    public final ConsolePage getPage()
+    {
+        if (consolePage == null) // Lazy initialization
+            consolePage = TB.resources().get("pages", "console");
+        return consolePage;
+    }
+    
+    private StringBuilder getInProgress()
+    {
+        return inProgressMap.computeIfAbsent(Thread.currentThread(), _thread -> new StringBuilder());
+    }
+    
+    //
+    
+    public final ReadOnlyListProperty<WrappingTreeLoader<ConsoleMessageable<?>, ConsoleElementController>> getActiveConsoles()
+    {
+        return treeLoaders.getReadOnlyProperty();
+    }
+    
+    // </editor-fold>
+    
     //<editor-fold desc="--- HELPER METHODS ---">
     
     private void append(String str)
@@ -198,38 +198,51 @@ public class Console
     
     //</editor-fold>
     
-    //
-    
     //<editor-fold desc="--- STATIC ---">
     
-    public static void consolify(FxWeaver weaver, ConfigurableApplicationContext ctx, ConsoleUIDataContainer consoleContainer)
+    public void consolify(ConsoleUIDataContainer consoleContainer)
     {
         ExceptionTools.nullCheck(consoleContainer, "Console UI Data Container");
-        
-        final Console console = TB.console();
+    
         FXTools.get().runFX(() -> {
             // treeView.setShowRoot(false); // Disabled temporarily because for some reason hiding the root causes messages to be truncated.
-            
+        
             // The below binding is used to trigger a refresh whenever a console display checkbox is toggled.
             final IntegerBinding incrementingBinding = BindingTools.incrementingBinding(
                     consoleContainer.showTRiBotProperty(),
                     consoleContainer.showClientProperty(),
                     consoleContainer.showScriptProperty(),
                     consoleContainer.showSelectedInstanceOnlyProperty()
-//                    ctx.getBean(DummyContentsHandler.class).readOnlySelectedClientProperty()
+                    //                    ctx.getBean(DummyContentsHandler.class).readOnlySelectedClientProperty()
             );
-            
+        
             final WrappingTreeLoader<ConsoleMessageable<?>, ConsoleElementController> treeLoader = new WrappingTreeLoader<>(
                     consoleContainer.getTreeView(),
                     cellData -> weaver.loadController(ConsoleElementController.class),
                     consoleContainer.getValidator(),
                     CONSOLE_ROOT_NAME
             ).initializeAndGet();
-            
+        
             incrementingBinding.addListener((observable, oldValue, newValue) -> treeLoader.revalidate()); // currently unused
-            
-            console.treeLoaders.add(treeLoader);
+        
+            this.treeLoaders.add(treeLoader);
         }, true);
+    }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+    @Override
+    public FxWeaver weaver()
+    {
+        return weaver;
+    }
+    
+    @Override
+    public ConfigurableApplicationContext ctx()
+    {
+        return ctx;
     }
     
     //</editor-fold>

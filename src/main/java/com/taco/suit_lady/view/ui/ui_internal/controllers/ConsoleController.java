@@ -47,6 +47,7 @@ public class ConsoleController extends SidebarNodeGroupController<ConsolePage>
     @Override
     public void initialize()
     {
-        Console.consolify(weaver(), ctx(), new ConsoleUIDataContainer(consoleTree));
+        ctx().getBean(Console.class).consolify(new ConsoleUIDataContainer(consoleTree));
     }
+    
 }

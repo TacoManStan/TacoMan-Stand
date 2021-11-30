@@ -227,8 +227,7 @@ public class AppController
         initImageButtons();
         initSidebar();
         
-        Console.consolify(
-                weaver, ctx,
+        ctx().getBean(Console.class).consolify(
                 new ConsoleUIDataContainer(
                         consoleTree,
                         consoleTRiBotCheckBox.selectedProperty(),
