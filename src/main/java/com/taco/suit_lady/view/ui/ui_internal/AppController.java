@@ -1,5 +1,6 @@
 package com.taco.suit_lady.view.ui.ui_internal;
 
+import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.TB;
 import com.taco.suit_lady.view.ui.Sidebar;
 import com.taco.suit_lady.view.ui.SidebarNodeGroup;
@@ -57,6 +58,7 @@ import org.springframework.stereotype.Component;
 @Component
 @FxmlView("/fxml/main.fxml")
 public class AppController
+        implements Springable
 {
     // <editor-fold desc="--- STATIC CONSTANTS ---">
     
@@ -187,7 +189,7 @@ public class AppController
         this.ctx = ctx;
     }
     
-    // <editor-fold desc="Initialize">
+    // <editor-fold desc="--- INITIALIZATION ---">
     
     // Called automatically by FXML loader.
     // As some properties may not yet be finished loading, all actual UI initialization should be done in initialize(Stage).
@@ -377,28 +379,19 @@ public class AppController
     
     // </editor-fold>
     
-    //<editor-fold desc="Properties">
+    //<editor-fold desc="--- PROPERTIES ---">
     
     public final Stage getStage()
     {
         return stage;
     }
     
-    //
-    
     public final TreeView<WrappingTreeCellData<ConsoleMessageable<?>>> getConsoleTree()
     {
         return consoleTree;
     }
     
-    public final StackPane getStackPaneRoot()
-    {
-        return stackPaneRoot;
-    }
-    
     //</editor-fold>
-    
-    //
     
     private void toggleSidebar()
     {
@@ -430,7 +423,8 @@ public class AppController
         
         AnimationTimer animationTimer = new AnimationTimer()
         {
-            @Override public void handle(long currentTime)
+            @Override
+            public void handle(long currentTime)
             {
                 if (readyProperty.get()) {
                     readyProperty.set(false);
@@ -474,9 +468,23 @@ public class AppController
         );
     }
     
-    //
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    //<editor-fold desc="Testing">
+    @Override
+    public FxWeaver weaver()
+    {
+        return weaver;
+    }
+    
+    @Override
+    public ConfigurableApplicationContext ctx()
+    {
+        return ctx;
+    }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- TESTING ---">
     
     @FXML void onLoadScriptAction(ActionEvent event) { }
     
