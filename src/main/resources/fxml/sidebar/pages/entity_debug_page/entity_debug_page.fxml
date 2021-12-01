@@ -10,7 +10,7 @@
 
 
 <AnchorPane fx:id="root" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.taco.suit_lady.view.ui.ui_internal.pages.EntityDebugPageController">
+            fx:controller="com.taco.suit_lady.view.ui.ui_internal.pages.entity_debug_page.EntityDebugPageController">
    <children>
       <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="0.0">
           <top>

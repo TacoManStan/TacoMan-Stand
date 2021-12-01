@@ -8,7 +8,7 @@ import com.taco.suit_lady.view.ui.UIBook;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
 import com.taco.suit_lady.view.ui.ui_internal.AppUI;
 import com.taco.suit_lady.view.ui.ui_internal.contents_new.ControllableContentNew;
-import com.taco.suit_lady.view.ui.ui_internal.pages.ExamplePage;
+import com.taco.suit_lady.view.ui.ui_internal.pages.example_page.ExamplePage;
 import javafx.scene.control.Button;
 import org.jetbrains.annotations.NotNull;
 
