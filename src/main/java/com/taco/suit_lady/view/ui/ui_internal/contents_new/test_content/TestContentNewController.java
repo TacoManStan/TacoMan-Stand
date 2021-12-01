@@ -1,4 +1,4 @@
-package com.taco.suit_lady.view.ui.ui_internal.contents_new;
+package com.taco.suit_lady.view.ui.ui_internal.contents_new.test_content;
 
 import com.taco.suit_lady.view.ui.ui_internal.controllers.Controller;
 import javafx.fxml.FXML;

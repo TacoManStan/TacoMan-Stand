@@ -1,4 +1,4 @@
-package com.taco.suit_lady.view.ui.ui_internal.contents_new;
+package com.taco.suit_lady.view.ui.ui_internal.contents_new.test_content;
 
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.TB;
@@ -7,6 +7,7 @@ import com.taco.suit_lady.view.ui.SidebarBookshelf;
 import com.taco.suit_lady.view.ui.UIBook;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
 import com.taco.suit_lady.view.ui.ui_internal.AppUI;
+import com.taco.suit_lady.view.ui.ui_internal.contents_new.ControllableContentNew;
 import com.taco.suit_lady.view.ui.ui_internal.pages.ExamplePage;
 import javafx.scene.control.Button;
 import org.jetbrains.annotations.NotNull;
