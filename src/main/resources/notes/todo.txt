@@ -6,6 +6,7 @@ TODO - Code
     > Look into annotation flags, such as @NotNull.
         > On that note, look into how you can create your own custom annotations (e.g., @PassthroughMethod).
     > Look into Git Blame annotations & when to use them.
+    > Make Console hideable
 
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
