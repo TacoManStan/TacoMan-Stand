@@ -25,6 +25,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Consumer;
 
 public class Sidebar
         implements Springable
@@ -162,8 +163,8 @@ public class Sidebar
      * </ol>
      * <p><b>Initialization</b></p>
      * <ol>
-     *     <li><code><i>{@link #getBackButton()}<b>.</b>{@link ImageButton#initialize() initialize()}</i></code> to initialize the {@link #back() Back} {@link #getBackButton() Button} assigned to this {@link Sidebar}.</li>
-     *     <li><code><i>{@link #bookshelvesProperty()}<b>.forEach(</b>{@link SidebarBookshelf#initialize() initialize()}<b>)</b></i></code> to initialize all {@link SidebarBookshelf SidebarBookshelves} in this {@link Sidebar}.</li>
+     *     <li>Calls <code><i>{@link #getBackButton()}<b>.</b>{@link ImageButton#initialize() initialize()}</i></code> to initialize the {@link #back() Back} {@link #getBackButton() Button} assigned to this {@link Sidebar}.</li>
+     *     <li>Calls <code><i>{@link #bookshelvesProperty()}<b>.</b>{@link Iterable#forEach(Consumer) forEach}<b>(</b>{@link SidebarBookshelf#initialize() initialize()}<b>)</b></i></code> to initialize all {@link SidebarBookshelf SidebarBookshelves} in this {@link Sidebar}.</li>
      *     <li>{@link #selectedBookshelfProperty() Selects} the first (<code><i>{@link #bookshelvesProperty() bookshelvesProperty().get(0)}</i></code>) {@link SidebarBookshelf} in this {@link Sidebar}.</li>
      * </ol>
      */
