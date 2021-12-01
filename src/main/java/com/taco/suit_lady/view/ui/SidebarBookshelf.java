@@ -94,7 +94,7 @@ public class SidebarBookshelf extends UIBookshelf
      *     <li>Defines the {@link Button#setOnAction(EventHandler) functionality} of the {@link #getButton() button} assigned to this {@link SidebarBookshelf}.</li>
      * </ol>
      */
-    protected void initialize()
+    public void initialize()
     {
         // TODO - It might be a good idea to run the majority (if not all) of this on the JFX Thread.
         // TODO - The synchronization works for making most aspects of SidebarBookshelf Thread-Safe, but if a thread already has a reference to the book list, the list can still be modified asynchronously.
@@ -253,4 +253,22 @@ public class SidebarBookshelf extends UIBookshelf
     }
     
     //</editor-fold>
+    
+    
+    @Override
+    public int hashCode()
+    {
+        return super.hashCode();
+    }
+    
+    @Override
+    public String toString()
+    {
+        return "SidebarBookshelf{" +
+               "name=" + nameProperty.get() +
+               ", buttonBox=" + buttonBox +
+               ", button=" + button +
+               ", bookButtonGroup=" + bookButtonGroup +
+               '}';
+    }
 }

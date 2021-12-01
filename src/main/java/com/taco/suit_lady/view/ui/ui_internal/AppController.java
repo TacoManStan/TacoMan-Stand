@@ -32,10 +32,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
@@ -145,9 +142,7 @@ public class AppController
     
     @FXML private AnchorPane sidebarPaneAnchor;
     
-    @FXML private Button generalSidebarButton;
-    @FXML private Button inDevelopmentSidebarButton;
-    @FXML private Button nyiSidebarButton;
+    @FXML private ToolBar sidebarButtonBar;
     
     @FXML private StackPane sidebarChildButtonsPane;
     @FXML private StackPane sidebarContentPane;
@@ -201,16 +196,14 @@ public class AppController
         final AppUI ui = ctx().getBean(AppUI.class);
         
         ui.setController(this);
-        
         ui.setContentStackPane(contentStackPane);
-        
-        ui.setSidebar(new Sidebar(weaver(), ctx(), sidebarChildButtonsPane, sidebarContentPane, backImagePane));
+        ui.setSidebar(new Sidebar(weaver(), ctx(), sidebarChildButtonsPane, sidebarContentPane, backImagePane, sidebarButtonBar));
     }
     
     public final void initialize(Stage stage)
     {
         this.stage = stage;
-//        this.contentPane = new DummyContentsInstancePane();
+        //        this.contentPane = new DummyContentsInstancePane();
         
         // TODO: Synchronize with the actual title of the application.
         this.stage.titleProperty().set("Suit Lady");
@@ -223,8 +216,8 @@ public class AppController
         final AppUI ui = ctx().getBean(AppUI.class);
         ui.init();
         
-//        contentPane.contentProperty().bind(ctx.getBean(DummyContentsHandler.class).selectedInstanceProperty());
-//        contentStackPane.getChildren().add(contentPane);
+        //        contentPane.contentProperty().bind(ctx.getBean(DummyContentsHandler.class).selectedInstanceProperty());
+        //        contentStackPane.getChildren().add(contentPane);
         
         
         initImageButtons();
@@ -237,8 +230,7 @@ public class AppController
                         consoleClientCheckBox.selectedProperty(),
                         consoleScriptCheckBox.selectedProperty(),
                         consoleSelectedInstanceOnlyCheckBox.selectedProperty()
-                )
-        );
+                ));
         
         FXTools.get().constructDraggableNode(dragBar);
         FXTools.get().constructResizableNode(getStage(), cornerResizePane, topResizePane, bottomResizePane, leftResizePane, rightResizePane,
@@ -255,6 +247,7 @@ public class AppController
     {
         final Sidebar sidebar = ctx().getBean(AppUI.class).getSidebar();
         
+        final Button generalSidebarButton = new Button("General");
         final SidebarBookshelf generalSidebarBookshelf = new SidebarBookshelf(sidebar, generalSidebarButton);
         generalSidebarBookshelf.getBooks().add(new UIBook(
                 AppController.this.weaver, AppController.this.ctx,
@@ -275,6 +268,7 @@ public class AppController
         ));
         generalSidebarBookshelf.getButtonGroup().selectFirst();
         
+        final Button inDevelopmentSidebarButton = new Button("In Dev");
         final SidebarBookshelf inDevelopmentSidebarBookshelf = new SidebarBookshelf(sidebar, inDevelopmentSidebarButton);
         inDevelopmentSidebarBookshelf.getBooks().add(new UIBook(
                 AppController.this.weaver, AppController.this.ctx,
@@ -286,15 +280,16 @@ public class AppController
         ));
         inDevelopmentSidebarBookshelf.getButtonGroup().selectFirst();
         
+        final Button nyiSidebarButton = new Button("NYI");
         final SidebarBookshelf nyiSidebarBookshelf = new SidebarBookshelf(sidebar, nyiSidebarButton);
-        nyiSidebarBookshelf.getBooks().add(new UIBook(
-                AppController.this.weaver, AppController.this.ctx,
-                "Repository", "repository",
-                uiBook -> TB.resources().get(
-                        "pages", uiBook.getButtonID(),
-                        () -> new ExamplePage(uiBook, "green")
-                ), null
-        ));
+//        nyiSidebarBookshelf.getBooks().add(new UIBook(
+//                AppController.this.weaver, AppController.this.ctx,
+//                "Repository", "repository",
+//                uiBook -> TB.resources().get(
+//                        "pages", uiBook.getButtonID(),
+//                        () -> new ExamplePage(uiBook, "green")
+//                ), null
+//        ));
         nyiSidebarBookshelf.getBooks().add(new UIBook(
                 AppController.this.weaver, AppController.this.ctx,
                 "Social", "social",

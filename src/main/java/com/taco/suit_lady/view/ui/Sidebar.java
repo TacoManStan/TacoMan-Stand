@@ -8,13 +8,16 @@ import com.taco.suit_lady.view.ui.jfx.button.ImageButton;
 import com.taco.suit_lady.view.ui.jfx.button.ImageButtonGroup;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
 import com.taco.suit_lady.view.ui.jfx.image.ImagePane;
+import com.taco.util.quick.ConsoleBB;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.ToolBar;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -38,12 +41,13 @@ public class Sidebar
     private final StackPane childButtonPane;
     private final StackPane contentPane;
     private final ImageButton backImageButton;
+    private final ToolBar toolBar;
     
     private final ObservableList<SidebarBookshelf> bookshelvesProperty;
     private final ReadOnlyObjectWrapper<SidebarBookshelf> selectedBookshelfProperty;
     
     /**
-     * <p>Refer to {@link #Sidebar(FxWeaver, ConfigurableApplicationContext, StackPane, StackPane, ImagePane) Fully-Parameterized Constructor} for details.</p>
+     * <p>Refer to {@link #Sidebar(FxWeaver, ConfigurableApplicationContext, StackPane, StackPane, ImagePane, ToolBar) Fully-Parameterized Constructor} for details.</p>
      * <p><b>Identical to...</b></p>
      * <blockquote><code>new Sidebar(childButtonPane, contentPane, <u>null</u>)</code></blockquote>
      */
@@ -51,9 +55,10 @@ public class Sidebar
             @NotNull FxWeaver weaver,
             @NotNull ConfigurableApplicationContext ctx,
             @NotNull StackPane childButtonPane,
-            @NotNull StackPane contentPane)
+            @NotNull StackPane contentPane,
+            @NotNull ToolBar toolBar)
     {
-        this(weaver, ctx, childButtonPane, contentPane, null);
+        this(weaver, ctx, childButtonPane, contentPane, null, toolBar);
     }
     
     /**
@@ -97,7 +102,8 @@ public class Sidebar
             @NotNull ConfigurableApplicationContext ctx,
             @NotNull StackPane childButtonPane,
             @NotNull StackPane contentPane,
-            @Nullable ImagePane backImagePane)
+            @Nullable ImagePane backImagePane,
+            @NotNull ToolBar toolBar)
     {
         this.weaver = ExceptionTools.nullCheck(weaver, "FxWeaver");
         this.ctx = ExceptionTools.nullCheck(ctx, "Application Context");
@@ -117,6 +123,7 @@ public class Sidebar
                 false,
                 ImageButton.SMALL
         );
+        this.toolBar = toolBar;
         
         this.bookshelvesProperty = FXCollections.observableArrayList();
         this.selectedBookshelfProperty = new ReadOnlyObjectWrapper<>();
@@ -148,6 +155,13 @@ public class Sidebar
                 }
             }
         });
+        
+        this.bookshelvesProperty.addListener((ListChangeListener<SidebarBookshelf>) c -> FXTools.get().runFX(() -> {
+            while (c.next()) {
+                c.getAddedSubList().forEach(sidebarBookshelf -> toolBar.getItems().add(sidebarBookshelf.getButton()));
+                c.getRemoved().forEach(sidebarBookshelf -> toolBar.getItems().remove(sidebarBookshelf.getButton()));
+            }
+        }, true));
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">
@@ -173,8 +187,12 @@ public class Sidebar
         FXTools.get().runFX(() -> {
             backImageButton.initialize();
             childButtonPane.setAlignment(Pos.TOP_LEFT);
+            
+            ConsoleBB.CONSOLE.print(bookshelvesProperty().toString());
+            
             bookshelvesProperty().forEach(SidebarBookshelf::initialize);
-            SidebarBookshelf firstBookshelf = bookshelvesProperty().get(0);
+            
+            final SidebarBookshelf firstBookshelf = bookshelvesProperty().get(0);
             if (firstBookshelf != null)
                 setSelectedBookshelf(firstBookshelf);
         }, true);
