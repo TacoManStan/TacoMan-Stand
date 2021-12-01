@@ -12,9 +12,9 @@ import com.taco.suit_lady.view.ui.ui_internal.pages.ExamplePage;
 import javafx.scene.control.Button;
 import org.jetbrains.annotations.NotNull;
 
-public class TestControllableContentNew extends ControllableContentNew<TestContentNewController>
+public class TestContentNew extends ControllableContentNew<TestContentNewController>
 {
-    public TestControllableContentNew(@NotNull Springable springable)
+    public TestContentNew(@NotNull Springable springable)
     {
         super(springable);
         initBookshelves();

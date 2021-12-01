@@ -5,7 +5,7 @@ import com.taco.suit_lady.view.ui.Sidebar;
 import com.taco.suit_lady.view.ui.console.Console;
 import com.taco.suit_lady.view.ui.ui_internal.contents_new.ContentManagerNew;
 import com.taco.suit_lady.view.ui.ui_internal.contents_new.ContentNew;
-import com.taco.suit_lady.view.ui.ui_internal.contents_new.test_content.TestControllableContentNew;
+import com.taco.suit_lady.view.ui.ui_internal.contents_new.test_content.TestContentNew;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.layout.StackPane;
@@ -65,9 +65,9 @@ public class AppUI
      *         </ul>
      *     </li>
      *     <li>
-     *         Sets the {@link ContentManagerNew#getContent() content} of the constructed {@link ContentManagerNew} to a new {@link TestControllableContentNew}.
+     *         Sets the {@link ContentManagerNew#getContent() content} of the constructed {@link ContentManagerNew} to a new {@link TestContentNew}.
      *         <ul>
-     *             <li>This {@link AppUI} instance is used only to pass its {@link Springable} values to the constructed {@link TestControllableContentNew}.</li>
+     *             <li>This {@link AppUI} instance is used only to pass its {@link Springable} values to the constructed {@link TestContentNew}.</li>
      *         </ul>
      *     </li>
      * </ol>
@@ -77,7 +77,7 @@ public class AppUI
         ctx().getBean(Console.class).initialize();
         
         this.contentManager = new ContentManagerNew(weaver(), ctx(), getContentStackPane());
-        this.contentManager.setContent(new TestControllableContentNew(this));
+        this.contentManager.setContent(new TestContentNew(this));
     }
     
     //</editor-fold>
