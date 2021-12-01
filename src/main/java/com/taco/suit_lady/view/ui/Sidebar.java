@@ -106,7 +106,7 @@ public class Sidebar
         
         ExceptionTools.nullCheck(childButtonPane, "Sidebar Child Button Pane");
         ExceptionTools.nullCheck(contentPane, "Sidebar Content Pane");
-    
+        
         this.childButtonPane = childButtonPane;
         this.contentPane = contentPane;
         this.backImageButton = new ImageButton(
@@ -206,11 +206,21 @@ public class Sidebar
         return childButtonPane;
     }
     
+    /**
+     * <p>Returns the {@link StackPane} on which the {@link #getSelectedBookshelf() Selected} {@link SidebarBookshelf Bookshelf's} {@link SidebarBookshelf#getContent() content} is displayed.</p>
+     *
+     * @return The {@link StackPane} on which the {@link #getSelectedBookshelf() Selected} {@link SidebarBookshelf Bookshelf's} {@link SidebarBookshelf#getContent() content} is displayed.
+     */
     public StackPane getContentPane()
     {
         return contentPane;
     }
     
+    /**
+     * <p>Returns the {@link ImageButton} that functions as the {@link #back() Back} {@link ImageButton Button} for turning the {@link SidebarBookshelf#selectionProperty() selected} {@link UIBook} back a {@link UIPage page}.</p>
+     *
+     * @return The {@link ImageButton} that functions as the {@link #back() Back} {@link ImageButton Button} for turning the {@link SidebarBookshelf#selectionProperty() selected} {@link UIBook} back a {@link UIPage page}.
+     */
     public ImageButton getBackButton()
     {
         return backImageButton;
@@ -323,7 +333,7 @@ public class Sidebar
     {
         final UIBookshelf selectedBookshelf = getSelectedBookshelf();
         if (selectedBookshelf != null) {
-            UIBook selectedBook = selectedBookshelf.getBookDisplayer().getDisplay();
+            final UIBook selectedBook = selectedBookshelf.getBookDisplayer().getDisplay();
             if (selectedBook != null)
                 selectedBook.getPageHandler().back();
         }
