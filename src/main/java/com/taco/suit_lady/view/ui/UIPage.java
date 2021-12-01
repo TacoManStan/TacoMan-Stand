@@ -11,13 +11,13 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.context.ConfigurableApplicationContext;
 
 // TO-DOC
-public abstract class UIPage<U extends UIPageController<?>>
+public abstract class UIPage<C extends UIPageController<?>>
         implements Displayable, Springable
 {
     private final FxWeaver weaver;
     private final ConfigurableApplicationContext ctx;
     
-    private final U controller;
+    private final C controller;
     
     /**
      * <p>Constructs a new {@link UIPage} using the specified {@link Springable} parameter.</p>
@@ -67,7 +67,7 @@ public abstract class UIPage<U extends UIPageController<?>>
      *
      * @return The {@link Controller} that defines and manages the {@link #getContent() content} displayed by this {@link UIPage}.
      */
-    public @NotNull U getController()
+    public @NotNull C getController()
     {
         return controller;
     }
@@ -138,7 +138,7 @@ public abstract class UIPage<U extends UIPageController<?>>
      *
      * @return The {@link Class} representing the {@link UIPageController} implementation to be used to define and manage the UI of this {@link UIPage} implementation.
      */
-    protected abstract @NotNull Class<U> controllerDefinition();
+    protected abstract @NotNull Class<C> controllerDefinition();
     
     //</editor-fold>
 }
