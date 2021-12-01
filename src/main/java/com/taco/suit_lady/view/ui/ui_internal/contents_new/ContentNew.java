@@ -3,7 +3,9 @@ package com.taco.suit_lady.view.ui.ui_internal.contents_new;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.TB;
-import com.taco.suit_lady.view.ui.UIBook;
+import com.taco.suit_lady.view.ui.Sidebar;
+import com.taco.suit_lady.view.ui.SidebarBookshelf;
+import com.taco.suit_lady.view.ui.ui_internal.AppUI;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.collections.FXCollections;
@@ -19,19 +21,19 @@ public abstract class ContentNew
 {
     private final Springable strictSpringable;
     
-    private final ReadOnlyListWrapper<UIBook> books;
+    private final ReadOnlyListWrapper<SidebarBookshelf> bookshelves;
     
     public ContentNew(@NotNull Springable springable)
     {
         ExceptionTools.nullCheck(springable, "Springable Parent");
         this.strictSpringable = springable.asStrict();
         
-        this.books = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
+        this.bookshelves = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
     }
     
-    public @NotNull ReadOnlyListProperty<UIBook> books()
+    public @NotNull ReadOnlyListProperty<SidebarBookshelf> bookshelves()
     {
-        return books.getReadOnlyProperty();
+        return bookshelves.getReadOnlyProperty();
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
@@ -67,6 +69,7 @@ public abstract class ContentNew
      *             <li>However, even then, both operations will always be executed concurrently with remaining {@code JavaFX} operations taking place in the <code><i>{@link ContentManagerNew#onChange(ContentNew, ContentNew)}</i></code> method.</li>
      *         </ul>
      *     </li>
+     *     <li>{@link #onSet() This method} is wrapped in the <code><i>{@link #onSetInternal()}</i></code> method.</li>
      * </ol>
      */
     // TO-UPDATE
@@ -76,4 +79,20 @@ public abstract class ContentNew
     protected abstract void onRemoved();
     
     //</editor-fold>
+    
+    protected final void onSetInternal()
+    {
+        final Sidebar sidebar = ctx().getBean(AppUI.class).getSidebar();
+        bookshelves().forEach(bookshelf -> sidebar.bookshelvesProperty().add(bookshelf));
+        
+        onSet();
+    }
+    
+    protected final void onRemovedInternal()
+    {
+        final Sidebar sidebar = ctx().getBean(AppUI.class).getSidebar();
+        bookshelves().forEach(bookshelf -> sidebar.bookshelvesProperty().remove(bookshelf));
+        
+        onRemoved();
+    }
 }

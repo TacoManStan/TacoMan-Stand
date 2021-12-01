@@ -24,8 +24,8 @@ public class ContentManagerNew
     
     public ContentManagerNew(@NotNull FxWeaver weaver, @NotNull ConfigurableApplicationContext ctx, @NotNull StackPane contentBase)
     {
-        this.weaver = weaver;
-        this.ctx = ctx;
+        this.weaver = ExceptionTools.nullCheck(weaver, "FxWeaver");
+        this.ctx = ExceptionTools.nullCheck(ctx, "Application Context");
         
         this.contentBase = ExceptionTools.nullCheck(contentBase, "Content Base");
         this.contentProperty = new ReadOnlyObjectWrapper<>();
@@ -41,8 +41,6 @@ public class ContentManagerNew
     {
         return contentBase;
     }
-    
-    //
     
     public @NotNull ReadOnlyObjectProperty<ContentNew> contentProperty()
     {
@@ -73,7 +71,7 @@ public class ContentManagerNew
                 oldContent.getRoot().prefWidthProperty().unbind();
                 oldContent.getRoot().prefHeightProperty().unbind();
     
-                ctx().getBean(LogiCore.class).execute(() -> oldContent.onRemoved());
+                ctx().getBean(LogiCore.class).execute(() -> oldContent.onRemovedInternal());
             }
             if (newContent != null) {
                 ConsoleBB.CONSOLE.print("Adding new content");
@@ -82,7 +80,7 @@ public class ContentManagerNew
                 newContent.getRoot().prefWidthProperty().bind(contentBase.widthProperty());
                 newContent.getRoot().prefHeightProperty().bind(contentBase.heightProperty());
     
-                ctx().getBean(LogiCore.class).execute(() -> newContent.onSet());
+                ctx().getBean(LogiCore.class).execute(() -> newContent.onSetInternal());
             }
         }, true);
     }
