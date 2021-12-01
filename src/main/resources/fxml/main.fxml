@@ -99,7 +99,7 @@
                                 <Insets bottom="2.0" />
                             </padding>
                         </HBox>
-                        <AnchorPane fx:id="sidebarPaneAnchor" minHeight="0.0" minWidth="0.0" prefWidth="305.0" style="-fx-border-color: border-color; -fx-border-width: 0 0 0 1;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <AnchorPane fx:id="sidebarPaneAnchor" minHeight="0.0" minWidth="0.0" prefWidth="275.0" style="-fx-border-color: border-color; -fx-border-width: 0 0 0 1;" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
                                 <Insets />
                             </GridPane.margin>
@@ -134,7 +134,7 @@
                                     <top>
                                         <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" BorderPane.alignment="CENTER">
                                             <children>
-                                                <ToolBar fx:id="sidebarButtonBar" minHeight="25.0" minWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                <ToolBar fx:id="sidebarButtonBar" minWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                             </children>
                                         </AnchorPane>
                                     </top>

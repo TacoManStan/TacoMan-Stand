@@ -22,13 +22,13 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.lang.reflect.Array;
 import java.util.Objects;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -206,43 +206,92 @@ public class ImageButton
     
     //<editor-fold desc="--- INITIALIZATION ---">
     
-    public void initialize()
+    /**
+     * <p>Initializes and then returns a self-reference to this {@link ImageButton}.</p>
+     * <p><b>Initialization Process</b></p>
+     * <ol>
+     *     <li>
+     *         Initializes {@link #getImagePane() ImagePane}.
+     *         <ol>
+     *             <li>
+     *                 Constructs an {@link Array} of all {@link Observable Observables} that will cause the {@link #getImage() Image} for this {@link ImageButton} to be {@link ObjectBinding#computeValue() Recalculated} upon invalidation.
+     *             </li>
+     *             <li>
+     *                 Constructs an {@link ObjectBinding} that {@link ObjectBinding#bind(Observable...) binds} the {@link ImagePane#imageProperty() Image Property} of this {@link ImageButton ImageButton's} {@link #getImagePane() ImagePane} to the value of <code><i>{@link #getImage()}</i></code>.
+     *                 <ul>
+     *                     <li>Sets the {@link Observable Observales} that will trigger a {@link ObjectBinding#computeValue() recalculation} for the {@link ObjectBinding} to the aforementioned {@link Array} of {@link Observable Observales}. </li>
+     *                 </ul>
+     *             </li>
+     *         </ol>
+     *     </li>
+     *     <li>
+     *         Configures this {@link ImageButton ImageButton's} {@link #getImagePane() ImagePane}.
+     *         <ol>
+     *             <li>Sets {@link ImagePane#pickOnBoundsProperty() Pick on Bounds} to {@code true}.</li>
+     *             <li>Sets {@link ImagePane#onMouseClickedProperty() On Mouse Clicked} to {@link Event#consume() Consume} its {@link Event}.</li>
+     *             <li>Sets {@link ImagePane#onMousePressedProperty() On Mouse Pressed} to {@link Event#consume() Consume} its {@link Event}.</li>
+     *             <li>Sets {@link ImagePane#onMouseReleasedProperty() On Mouse Released} to execute <code><i>{@link #onMouseReleased(MouseEvent)}</i></code>.</li>
+     *         </ol>
+     *     </li>
+     *     <li>Returns a self-reference ({@code this}) to this {@link ImageButton}. Note that the return value is oftentimes superfluous.</li>
+     * </ol>
+     *
+     * @return A self-reference ({@code this}) to this {@link ImageButton}.
+     */
+    public ImageButton initialize()
     {
-        // Note: Is NOT called automatically
         // Note: MUST be called manually after an ImageButton is constructed.
-        Objects.requireNonNull(standardImageProperty, "Standard property cannot be null");
         
-        initializeImagePane();
-    }
-    
-    private void initializeImagePane()
-    {
-        Objects.requireNonNull(imagePane, "Image view cannot be null");
+        //<editor-fold desc="ImagePane Initialization">
         
-        ArrayList<Observable> observables = new ArrayList<>(Arrays.asList(
+        final Observable[] observables = new Observable[]{
                 nameBinding,
                 hoveredBinding,
                 pressedBinding,
                 selectedProperty,
                 disabledProperty,
                 standardImageProperty
-        ));
+        };
         
         imagePane.imageProperty().bind(Bindings.createObjectBinding(
-                () -> getImage(), observables.toArray(new Observable[0])));
+                () -> getImage(), observables));
         
         imagePane.setPickOnBounds(true);
+        
         imagePane.setOnMouseClicked(Event::consume);
         imagePane.setOnMousePressed(Event::consume);
-        imagePane.setOnMouseReleased(event -> {
-            if (Objects.equals(event.getSource(), imagePane) && FXTools.get().isMouseOnEventSource(event))
-                // Ignore event if this ImageButton is disabled
-                if (!isDisabled()) {
-                    toggle();
-                    onAction();
-                }
-            event.consume();
-        });
+        imagePane.setOnMouseReleased(event -> onMouseReleased(event));
+        
+        //</editor-fold>
+        return this;
+    }
+    
+    /**
+     * <p>A helper method that is executed whenever this {@link ImageButton ImageButton's} {@link #getImagePane() ImagePane} triggers a {@link MouseEvent#MOUSE_RELEASED Mouse Released Event}.</p>
+     * <p><b>Execution Process</b></p>
+     * <ol>
+     *     <li>
+     *         If <i>any</i> of the following conditions are {@code true}, the {@link MouseEvent} is {@link MouseEvent#consume() consumed}, no other actions are taken, and {@link #onMouseReleased(MouseEvent) this method} returns silently.
+     *         <ol>
+     *             <li>The {@link Event#getSource() Event Source} is not this {@link ImageButton ImageButton's} {@link #getImagePane() ImagePane}.</li>
+     *             <li>The {@link MouseEvent} was not triggered while {@link FXTools#isMouseOnEventSource(MouseEvent) on the} {@link Event#getSource() Event Source}.</li>
+     *             <li>This {@link ImageButton} is currently {@link #disabledProperty() disabled}.</li>
+     *         </ol>
+     *     </li>
+     *     <li>The <code><i>{@link #toggle()}</i></code> method is called on this {@link ImageButton} instance.</li>
+     *     <li>The <code><i>{@link #onAction()}</i></code> method is called on this {@link ImageButton} instance.</li>
+     *     <li>The {@link MouseEvent} is {@link MouseEvent#consume() consumed}.</li>
+     * </ol>
+     *
+     * @param event The triggering {@link MouseEvent} object.
+     */
+    private void onMouseReleased(MouseEvent event)
+    {
+        if (Objects.equals(event.getSource(), imagePane) && FXTools.get().isMouseOnEventSource(event) && !isDisabled()) {
+            toggle();
+            onAction();
+        }
+        event.consume();
     }
     
     //</editor-fold>
@@ -341,7 +390,10 @@ public class ImageButton
      * <p>Executes the {@link #actionResponderProperty() Background Action Responder} and {@link #actionResponderFXProperty() FX Action Responder} {@link Runnable Runnables}.</p>
      * <p><b>Details</b></p>
      * <ol>
-     *     <li>Executed automatically when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.</li>
+     *     <li>
+     *         Executed automatically when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.
+     *         <br><i>See <code>{@link #onMouseReleased(MouseEvent)}</code> for details.</i>
+     *     </li>
      *     <li>
      *         <b>Background Execution</b>
      *         <ol>
@@ -600,9 +652,10 @@ public class ImageButton
     
     /**
      * <p>Toggles the {@link #selectedProperty() selection} state of this {@link ImageButton} by setting it to the opposite of its {@link #isSelected() current} state.</p>
+     * <blockquote><b>Passthrough Definition:</b> <code><i>{@link #setSelected(boolean) setSelected}<b>(!</b>{@link #isSelected()}<b>)</b></i></code></blockquote>
      * <p><b>Details</b></p>
      * <ol>
-     *     <li>{@code Passthrough Definition:} <i><code>{@link #setSelected(boolean) setSelected}<b>(!</b>{@link #isSelected()}<b>)</b></code></i></li>
+     *     <li>If this {@link ImageButton} is not {@link #isToggleable() toggleable}, {@link #toggle() this method} does nothing and silently returns {@code false}.</li>
      * </ol>
      *
      * @return True if the {@link #setSelected(boolean) toggle} operation was successful, false if it was not.

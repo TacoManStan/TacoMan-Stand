@@ -16,6 +16,7 @@ import com.taco.suit_lady.view.ui.ui_internal.console.ConsoleUIDataContainer;
 import com.taco.suit_lady.view.ui.ui_internal.contents.DummyContentsInstancePane;
 import com.taco.suit_lady.view.ui.ui_internal.contents_new.ContentManagerNew;
 import com.taco.suit_lady.view.ui.ui_internal.controllers.SettingsController;
+import com.taco.suit_lady.view.ui.ui_internal.pages.ContentSwitchDemoPage;
 import com.taco.suit_lady.view.ui.ui_internal.pages.DummyInstancesPage;
 import com.taco.suit_lady.view.ui.ui_internal.pages.EntityDebugPage;
 import com.taco.suit_lady.view.ui.ui_internal.pages.ExamplePage;
@@ -278,18 +279,18 @@ public class AppController
                         () -> new EntityDebugPage(uiBook)
                 ), null
         ));
+        inDevelopmentSidebarBookshelf.getBooks().add(new UIBook(
+                weaver(), ctx(),
+                "Content Switch Demo", "rerun",
+                uiBook -> TB.resources().get(
+                        "pages", uiBook.getUID(uiBook.getButtonID()),
+                        () -> new ContentSwitchDemoPage(uiBook)
+                ), null
+        ));
         inDevelopmentSidebarBookshelf.getButtonGroup().selectFirst();
         
         final Button nyiSidebarButton = new Button("NYI");
         final SidebarBookshelf nyiSidebarBookshelf = new SidebarBookshelf(sidebar, nyiSidebarButton);
-//        nyiSidebarBookshelf.getBooks().add(new UIBook(
-//                AppController.this.weaver, AppController.this.ctx,
-//                "Repository", "repository",
-//                uiBook -> TB.resources().get(
-//                        "pages", uiBook.getButtonID(),
-//                        () -> new ExamplePage(uiBook, "green")
-//                ), null
-//        ));
         nyiSidebarBookshelf.getBooks().add(new UIBook(
                 AppController.this.weaver, AppController.this.ctx,
                 "Social", "social",
