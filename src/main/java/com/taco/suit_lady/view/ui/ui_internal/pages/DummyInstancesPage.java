@@ -3,10 +3,9 @@ package com.taco.suit_lady.view.ui.ui_internal.pages;
 import com.taco.suit_lady.view.ui.UIBook;
 import com.taco.suit_lady.view.ui.UIPage;
 import com.taco.suit_lady.view.ui.ui_internal.contents.DummyContentsHandler;
-import com.taco.suit_lady.view.ui.ui_internal.controllers.DummyInstancesController;
 import org.jetbrains.annotations.NotNull;
 
-public class DummyInstancesPage extends UIPage<DummyInstancesController>
+public class DummyInstancesPage extends UIPage<DummyInstancesPageController>
 {
     public DummyInstancesPage(UIBook owner)
     {
@@ -21,12 +20,12 @@ public class DummyInstancesPage extends UIPage<DummyInstancesController>
     @Override
     protected void initializePage(@NotNull Object[] constructorParams) {
         final DummyContentsHandler handler = getHandler();
-        final DummyInstancesController controller = getController();
+        final DummyInstancesPageController controller = getController();
     }
     
     @Override
-    protected @NotNull Class<DummyInstancesController> controllerDefinition()
+    protected @NotNull Class<DummyInstancesPageController> controllerDefinition()
     {
-        return DummyInstancesController.class;
+        return DummyInstancesPageController.class;
     }
 }

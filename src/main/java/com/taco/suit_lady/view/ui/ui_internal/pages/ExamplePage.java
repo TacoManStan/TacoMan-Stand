@@ -2,10 +2,9 @@ package com.taco.suit_lady.view.ui.ui_internal.pages;
 
 import com.taco.suit_lady.view.ui.UIBook;
 import com.taco.suit_lady.view.ui.UIPage;
-import com.taco.suit_lady.view.ui.ui_internal.controllers.ExampleSidebarController;
 import org.jetbrains.annotations.NotNull;
 
-public class ExamplePage extends UIPage<ExampleSidebarController>
+public class ExamplePage extends UIPage<ExamplePageController>
 {
 	private String color;
 
@@ -25,8 +24,8 @@ public class ExamplePage extends UIPage<ExampleSidebarController>
 	}
 	
 	@Override
-	protected @NotNull Class<ExampleSidebarController> controllerDefinition()
+	protected @NotNull Class<ExamplePageController> controllerDefinition()
 	{
-		return ExampleSidebarController.class;
+		return ExamplePageController.class;
 	}
 }

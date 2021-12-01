@@ -2,10 +2,9 @@ package com.taco.suit_lady.view.ui.ui_internal.pages;
 
 import com.taco.suit_lady.view.ui.UIBook;
 import com.taco.suit_lady.view.ui.UIPage;
-import com.taco.suit_lady.view.ui.ui_internal.controllers.EntityDebugController;
 import org.jetbrains.annotations.NotNull;
 
-public class EntityDebugPage extends UIPage<EntityDebugController>
+public class EntityDebugPage extends UIPage<EntityDebugPageController>
 {
     
     public EntityDebugPage(UIBook owner)
@@ -17,9 +16,9 @@ public class EntityDebugPage extends UIPage<EntityDebugController>
     protected void initializePage(@NotNull Object[] constructorParams) { }
     
     @Override
-    protected @NotNull Class<EntityDebugController> controllerDefinition()
+    protected @NotNull Class<EntityDebugPageController> controllerDefinition()
     {
-        return EntityDebugController.class;
+        return EntityDebugPageController.class;
     }
 }
 
