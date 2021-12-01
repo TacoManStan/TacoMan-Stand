@@ -1,7 +1,6 @@
 package com.taco.suit_lady.view.ui.ui_internal.contents_new;
 
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.ArrayTools;
 import com.taco.suit_lady.util.tools.TB;
 import com.taco.suit_lady.view.ui.Sidebar;
 import com.taco.suit_lady.view.ui.SidebarBookshelf;
@@ -54,7 +53,7 @@ public class TestControllableContentNew extends ControllableContentNew<TestConte
             ));
     
             testSidebarBookshelf.getButtonGroup().selectFirst();
-            ArrayTools.addToFront(sidebar.bookshelvesProperty(), testSidebarBookshelf);
+            sidebar.bookshelvesProperty().add(testSidebarBookshelf);
         }, true);
     }
     
