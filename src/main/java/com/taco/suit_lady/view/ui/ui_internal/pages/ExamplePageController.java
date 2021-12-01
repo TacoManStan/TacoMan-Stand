@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
-@FxmlView("/fxml/sidebar/example_sidebar.fxml")
+@FxmlView("/fxml/sidebar/pages/example_page/example_page.fxml")
 @Scope("prototype")
 public class ExamplePageController extends SidebarNodeGroupController<ExamplePage>
 {

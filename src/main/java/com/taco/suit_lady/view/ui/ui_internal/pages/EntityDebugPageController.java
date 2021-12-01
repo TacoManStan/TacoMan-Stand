@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
-@FxmlView("/fxml/sidebar/entity_debug/entity_debug.fxml")
+@FxmlView("/fxml/sidebar/pages/entity_debug_page/entity_debug_page.fxml")
 @Scope("prototype")
 public final class EntityDebugPageController extends SidebarNodeGroupController<EntityDebugPage>
 {

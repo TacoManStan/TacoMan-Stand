@@ -28,7 +28,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 @Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@FxmlView("/fxml/sidebar/client_instance_list/client_instance_list.fxml")
+@FxmlView("/fxml/sidebar/pages/dummy_instances_page/dummy_instances_page.fxml")
 public final class DummyInstancesPageController extends SidebarNodeGroupController<DummyInstancesPage>
 {
     

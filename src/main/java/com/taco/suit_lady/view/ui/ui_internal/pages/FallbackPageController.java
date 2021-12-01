@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
-@FxmlView("/fxml/sidebar/fallback_page.fxml")
+@FxmlView("/fxml/sidebar/pages/fallback_page/fallback_page.fxml")
 @Scope("prototype")
 public class FallbackPageController extends UIPageController<FallbackPage>
 {

@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
-@FxmlView("/fxml/sidebar/console/console_element.fxml")
+@FxmlView("/fxml/console/console_element.fxml")
 @Scope("prototype")
 public final class ConsoleElementController extends CellController<WrappingTreeCellData<ConsoleMessageable<?>>>
 {

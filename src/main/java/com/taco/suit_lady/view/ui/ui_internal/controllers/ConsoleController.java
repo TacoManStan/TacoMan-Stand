@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
-@FxmlView("/fxml/sidebar/console/console.fxml")
+@FxmlView("/fxml/console/console.fxml")
 @Scope("prototype")
 public class ConsoleController extends SidebarNodeGroupController<ConsolePage>
 {
