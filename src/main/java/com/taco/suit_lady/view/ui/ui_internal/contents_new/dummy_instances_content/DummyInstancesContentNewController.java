@@ -2,6 +2,7 @@ package com.taco.suit_lady.view.ui.ui_internal.contents_new.dummy_instances_cont
 
 import com.taco.suit_lady.view.ui.ui_internal.controllers.Controller;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import net.rgielen.fxweaver.core.FxWeaver;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Component;
 public class DummyInstancesContentNewController extends Controller
 {
     @FXML private AnchorPane root;
+    
+    @FXML private Label nameLabel;
     
     public DummyInstancesContentNewController(FxWeaver weaver, ConfigurableApplicationContext ctx)
     {
