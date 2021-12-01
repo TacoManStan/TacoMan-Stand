@@ -713,7 +713,7 @@ public class ArrayTools
      */
     public static <T> void addToFront(List<T> list, T obj)
     {
-        ExceptionTools.nullCheck(list, "List").add(list.size() - 1, ExceptionTools.nullCheck(obj, "Object Param"));
+        ExceptionTools.nullCheck(list, "List").add(0, ExceptionTools.nullCheck(obj, "Object Param"));
     }
     
     // </editor-fold>
