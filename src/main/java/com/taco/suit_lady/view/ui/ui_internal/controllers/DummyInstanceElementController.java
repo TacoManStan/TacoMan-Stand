@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
-@FxmlView("/fxml/sidebar/pages/_old/client_instance_list/client_instance_element.fxml")
+@FxmlView("/fxml/sidebar/pages/dummy_instances_page/dummy_instance_list/dummy_instance_element.fxml")
 @Scope("prototype")
 public final class DummyInstanceElementController extends CellController<DummyInstance>
 {
