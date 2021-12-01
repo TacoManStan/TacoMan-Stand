@@ -1,4 +1,4 @@
-package com.taco.suit_lady.view.ui.ui_internal.controllers;
+package com.taco.suit_lady.view.ui.ui_internal.pages;
 
 import com.taco.suit_lady.util.tools.ArrayTools;
 import com.taco.suit_lady.view.ui.jfx.button.ImageButton;
@@ -8,7 +8,8 @@ import com.taco.suit_lady.view.ui.jfx.lists.CellControlManager;
 import com.taco.suit_lady.view.ui.jfx.lists.ListCellFX;
 import com.taco.suit_lady.view.ui.ui_internal.contents.DummyContentsHandler;
 import com.taco.suit_lady.view.ui.ui_internal.contents.DummyInstance;
-import com.taco.suit_lady.view.ui.ui_internal.pages.DummyInstancesPage;
+import com.taco.suit_lady.view.ui.ui_internal.controllers.DummyInstanceElementController;
+import com.taco.suit_lady.view.ui.ui_internal.controllers.SidebarNodeGroupController;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -28,7 +29,7 @@ import java.util.concurrent.locks.ReentrantLock;
 @Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @FxmlView("/fxml/sidebar/client_instance_list/client_instance_list.fxml")
-public final class DummyInstancesController extends SidebarNodeGroupController<DummyInstancesPage>
+public final class DummyInstancesPageController extends SidebarNodeGroupController<DummyInstancesPage>
 {
     
     //<editor-fold desc="FXML">
@@ -51,7 +52,7 @@ public final class DummyInstancesController extends SidebarNodeGroupController<D
     
     private ImageButton addInstanceImageButton;
     
-    public DummyInstancesController(FxWeaver weaver, ConfigurableApplicationContext ctx)
+    public DummyInstancesPageController(FxWeaver weaver, ConfigurableApplicationContext ctx)
     {
         super(weaver, ctx);
         this.lock = new ReentrantLock();

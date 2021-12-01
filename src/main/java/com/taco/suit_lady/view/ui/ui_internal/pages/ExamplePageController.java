@@ -1,6 +1,6 @@
-package com.taco.suit_lady.view.ui.ui_internal.controllers;
+package com.taco.suit_lady.view.ui.ui_internal.pages;
 
-import com.taco.suit_lady.view.ui.ui_internal.pages.ExamplePage;
+import com.taco.suit_lady.view.ui.ui_internal.controllers.SidebarNodeGroupController;
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -13,11 +13,11 @@ import org.springframework.stereotype.Component;
 @Component
 @FxmlView("/fxml/sidebar/example_sidebar.fxml")
 @Scope("prototype")
-public class ExampleSidebarController extends SidebarNodeGroupController<ExamplePage>
+public class ExamplePageController extends SidebarNodeGroupController<ExamplePage>
 {
     @FXML private BorderPane root;
     
-    public ExampleSidebarController(FxWeaver weaver, ConfigurableApplicationContext ctx) {
+    public ExamplePageController(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         super(weaver, ctx);
     }
     

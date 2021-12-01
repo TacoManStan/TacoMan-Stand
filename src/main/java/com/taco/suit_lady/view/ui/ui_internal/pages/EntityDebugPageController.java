@@ -1,8 +1,8 @@
-package com.taco.suit_lady.view.ui.ui_internal.controllers;
+package com.taco.suit_lady.view.ui.ui_internal.pages;
 
 import com.taco.suit_lady.view.ui.jfx.setting.CheckBoxSettingNode;
 import com.taco.suit_lady.view.ui.jfx.setting.SettingNode;
-import com.taco.suit_lady.view.ui.ui_internal.pages.EntityDebugPage;
+import com.taco.suit_lady.view.ui.ui_internal.controllers.SidebarNodeGroupController;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Component
 @FxmlView("/fxml/sidebar/entity_debug/entity_debug.fxml")
 @Scope("prototype")
-public final class EntityDebugController extends SidebarNodeGroupController<EntityDebugPage>
+public final class EntityDebugPageController extends SidebarNodeGroupController<EntityDebugPage>
 {
     
     //<editor-fold desc="FXML">
@@ -28,7 +28,7 @@ public final class EntityDebugController extends SidebarNodeGroupController<Enti
     
     //</editor-fold>
     
-    public EntityDebugController(FxWeaver weaver, ConfigurableApplicationContext ctx)
+    public EntityDebugPageController(FxWeaver weaver, ConfigurableApplicationContext ctx)
     {
         super(weaver, ctx);
     }
