@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
-@FxmlView("/fxml/test_content.fxml")
+@FxmlView("/fxml/content/test_content/test_content.fxml")
 @Scope("prototype")
 public class TestContentNewController extends Controller
 {
