@@ -656,8 +656,6 @@ public class ArrayTools
             list.add(obj);
     }
     
-    //
-    
     /**
      * Adds the specified element to the specified {@code List} if the specified
      * {@link Predicate} is met.
@@ -704,6 +702,18 @@ public class ArrayTools
         else
             for (T o: objs)
                 addIf(list, condition, o);
+    }
+    
+    /**
+     * <p>Adds the specified {@link T element} to the front of the specified {@link List}.</p>
+     *
+     * @param list The {@link List} the {@link T element} is being added to.
+     * @param obj  The {@link T element} being added.
+     * @param <T>  The type of {@link T element} being added.
+     */
+    public static <T> void addToFront(List<T> list, T obj)
+    {
+        ExceptionTools.nullCheck(list, "List").add(list.size() - 1, ExceptionTools.nullCheck(obj, "Object Param"));
     }
     
     // </editor-fold>
