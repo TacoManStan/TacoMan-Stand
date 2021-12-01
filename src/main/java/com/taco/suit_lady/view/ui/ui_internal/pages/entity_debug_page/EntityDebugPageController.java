@@ -1,4 +1,4 @@
-package com.taco.suit_lady.view.ui.ui_internal.pages;
+package com.taco.suit_lady.view.ui.ui_internal.pages.entity_debug_page;
 
 import com.taco.suit_lady.view.ui.jfx.setting.CheckBoxSettingNode;
 import com.taco.suit_lady.view.ui.jfx.setting.SettingNode;

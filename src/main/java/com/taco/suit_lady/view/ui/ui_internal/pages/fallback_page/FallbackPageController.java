@@ -1,4 +1,4 @@
-package com.taco.suit_lady.view.ui.ui_internal.pages;
+package com.taco.suit_lady.view.ui.ui_internal.pages.fallback_page;
 
 import com.taco.suit_lady.view.ui.ui_internal.controllers.UIPageController;
 import javafx.fxml.FXML;

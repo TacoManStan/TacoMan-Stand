@@ -1,4 +1,4 @@
-package com.taco.suit_lady.view.ui.ui_internal.pages;
+package com.taco.suit_lady.view.ui.ui_internal.pages.content_switch_demo_page;
 
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.view.ui.UIPage;

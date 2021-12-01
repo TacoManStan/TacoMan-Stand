@@ -1,4 +1,4 @@
-package com.taco.suit_lady.view.ui.ui_internal.pages;
+package com.taco.suit_lady.view.ui.ui_internal.pages.example_page;
 
 import com.taco.suit_lady.view.ui.ui_internal.controllers.SidebarNodeGroupController;
 import javafx.fxml.FXML;

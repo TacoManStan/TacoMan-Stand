@@ -1,4 +1,4 @@
-package com.taco.suit_lady.view.ui.ui_internal.pages;
+package com.taco.suit_lady.view.ui.ui_internal.pages.dummy_instances_page;
 
 import com.taco.suit_lady.util.tools.ArrayTools;
 import com.taco.suit_lady.view.ui.jfx.button.ImageButton;
