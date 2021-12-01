@@ -30,25 +30,25 @@ public class TestControllableContentNew extends ControllableContentNew<TestConte
     
             testSidebarBookshelf.getBooks().add(new UIBook(
                     weaver(), ctx(),
-                    "Repository Red", "repository",
+                    "Repository Red", "invalid_button_id",
                     uiBook -> TB.resources().get(
-                            "pages", uiBook.getButtonID() + "_red",
+                            "pages", uiBook.getUID(uiBook.getButtonID()),
                             () -> new ExamplePage(uiBook, "red")
                     ), null
             ));
             testSidebarBookshelf.getBooks().add(new UIBook(
                     weaver(), ctx(),
-                    "Repository Blue", "repository",
+                    "Repository Blue", "invalid_button_id",
                     uiBook -> TB.resources().get(
-                            "pages", uiBook.getButtonID() + "_blue",
+                            "pages", uiBook.getUID(uiBook.getButtonID()),
                             () -> new ExamplePage(uiBook, "blue")
                     ), null
             ));
             testSidebarBookshelf.getBooks().add(new UIBook(
                     weaver(), ctx(),
-                    "Repository Green", "repository",
+                    "Repository Green", "invalid_button_id",
                     uiBook -> TB.resources().get(
-                            "pages", uiBook.getButtonID() + "_green",
+                            "pages", uiBook.getUID(uiBook.getButtonID()),
                             () -> new ExamplePage(uiBook, "green")
                     ), null
             ));

@@ -3,7 +3,6 @@ package com.taco.suit_lady.util;
 
 public interface UID
 {
-
 	/**
 	 * Returns a string value that is unique to this {@code UID} instance.
 	 * @return A string value that is unique to this {@code UID} instance.

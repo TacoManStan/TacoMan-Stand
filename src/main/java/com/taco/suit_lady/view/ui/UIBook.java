@@ -1,7 +1,9 @@
 package com.taco.suit_lady.view.ui;
 
-import com.taco.suit_lady.util.tools.ResourceTools;
+import com.taco.suit_lady.util.UIDProcessable;
+import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.springable.Springable;
+import com.taco.suit_lady.util.tools.ResourceTools;
 import com.taco.suit_lady.view.ui.jfx.button.ButtonViewable;
 import com.taco.suit_lady.view.ui.jfx.button.ImageButton;
 import com.taco.suit_lady.view.ui.ui_internal.pages.FallbackPage;
@@ -20,7 +22,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
 
 public class UIBook
-        implements Displayable, ButtonViewable, Springable
+        implements Displayable, ButtonViewable, Springable, UIDProcessable
 {
     private final FxWeaver weaver;
     private final ConfigurableApplicationContext ctx;
@@ -28,6 +30,7 @@ public class UIBook
     //
     
     private final ReentrantLock lock;
+    private final UIDProcessor uidProcessor;
     
     private final ReadOnlyStringWrapper buttonIDProperty;
     private final ReadOnlyStringWrapper nameProperty;
@@ -79,6 +82,8 @@ public class UIBook
         this.ctx = ctx;
         
         this.lock = new ReentrantLock();
+        this.uidProcessor = new UIDProcessor("books");
+        
         this.buttonIDProperty = new ReadOnlyStringWrapper(buttonID != null ? buttonID : "missingno");
         this.nameProperty = new ReadOnlyStringWrapper(name);
         
@@ -245,6 +250,12 @@ public class UIBook
     {
         if (onAction != null)
             onAction.run();
+    }
+    
+    @Override
+    public UIDProcessor getUIDProcessor()
+    {
+        return uidProcessor;
     }
     
     //</editor-fold>
