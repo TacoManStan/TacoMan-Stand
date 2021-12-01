@@ -7,6 +7,7 @@ import com.taco.suit_lady.view.ui.SidebarBookshelf;
 import com.taco.suit_lady.view.ui.UIBook;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
 import com.taco.suit_lady.view.ui.ui_internal.AppUI;
+import com.taco.suit_lady.view.ui.ui_internal.pages.ContentSwitchDemoPage;
 import com.taco.suit_lady.view.ui.ui_internal.pages.ExamplePage;
 import javafx.scene.control.Button;
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +27,7 @@ public class TestControllableContentNew extends ControllableContentNew<TestConte
             
             final Button testSidebarButton = new Button("Test");
             final SidebarBookshelf testSidebarBookshelf = new SidebarBookshelf(sidebar, testSidebarButton);
-    
+            
             testSidebarBookshelf.getBooks().add(new UIBook(
                     weaver(), ctx(),
                     "Repository Red", "invalid_button_id",
@@ -51,7 +52,15 @@ public class TestControllableContentNew extends ControllableContentNew<TestConte
                             () -> new ExamplePage(uiBook, "green")
                     ), null
             ));
-    
+            testSidebarBookshelf.getBooks().add(new UIBook(
+                    weaver(), ctx(),
+                    "Content Switch Demo", "rerun",
+                    uiBook -> TB.resources().get(
+                            "pages", uiBook.getUID(uiBook.getButtonID()),
+                            () -> new ContentSwitchDemoPage(uiBook)
+                    ), null
+            ));
+            
             testSidebarBookshelf.getButtonGroup().selectFirst();
             sidebar.bookshelvesProperty().add(testSidebarBookshelf);
         }, true);

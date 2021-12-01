@@ -136,8 +136,6 @@ public class UIBook
         return buttonIDProperty.get();
     }
     
-    //
-    
     /**
      * <p>Returns the {@link ReadOnlyStringProperty property} containing the {@link #getName() name} of this {@link UIBook}.</p>
      * <ol>
@@ -167,8 +165,6 @@ public class UIBook
         return nameProperty.get();
     }
     
-    //
-    
     /**
      * <p>Returns the {@link Displayer} responsible for {@link Displayable displaying} currently-visible {@link UIPage pages} attached to this {@link UIBook}.</p>
      *
@@ -179,8 +175,6 @@ public class UIBook
         return displayer;
     }
     
-    //
-    
     /**
      * <p>Returns the {@link UIPageHandler page handler} wrapping {@link UIPage page} functionality for this {@link UIBook}.</p>
      *
@@ -190,8 +184,6 @@ public class UIBook
     {
         return pageHandler;
     }
-    
-    //
     
     /**
      * <p>Returns the {@link ReadOnlyObjectProperty property} containing the {@link ImageButton} for selecting this {@link UIBook}.</p>

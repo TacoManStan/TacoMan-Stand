@@ -99,7 +99,7 @@
                                 <Insets bottom="2.0" />
                             </padding>
                         </HBox>
-                        <AnchorPane fx:id="sidebarPaneAnchor" minHeight="0.0" minWidth="0.0" prefWidth="275.0" style="-fx-border-color: border-color; -fx-border-width: 0 0 0 1;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <AnchorPane fx:id="sidebarPaneAnchor" minHeight="0.0" minWidth="0.0" prefWidth="305.0" style="-fx-border-color: border-color; -fx-border-width: 0 0 0 1;" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
                                 <Insets />
                             </GridPane.margin>
