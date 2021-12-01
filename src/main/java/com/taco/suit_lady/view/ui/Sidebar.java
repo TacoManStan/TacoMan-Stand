@@ -38,8 +38,8 @@ public class Sidebar
     private final StackPane contentPane;
     private final ImageButton backImageButton;
     
-    private final ObservableList<SidebarNodeGroup> nodeGroupsProperty;
-    private final ReadOnlyObjectWrapper<SidebarNodeGroup> selectedNodeGroupProperty;
+    private final ObservableList<SidebarBookshelf> bookshelvesProperty;
+    private final ReadOnlyObjectWrapper<SidebarBookshelf> selectedBookshelfProperty;
     
     /**
      * <p>Refer to {@link #Sidebar(FxWeaver, ConfigurableApplicationContext, StackPane, StackPane, ImagePane) Fully-Parameterized Constructor} for details.</p>
@@ -57,7 +57,7 @@ public class Sidebar
     
     /**
      * <p><b>Fully-Parameterized Constructor</b></p>
-     * <p>Constructs a new {@link Sidebar} instance used to contain {@link SidebarNodeGroup SidebarNodeGroups}.</p>
+     * <p>Constructs a new {@link Sidebar} instance used to contain {@link SidebarBookshelf SidebarBookshelf}.</p>
      * <p><hr>
      * <p><b>Parameter Details</b></p>
      * <ol>
@@ -79,13 +79,13 @@ public class Sidebar
      * </ol>
      * <p><b>Sidebar Contents Pattern</b></p>
      * <ol>
-     *     <li><b>{@link Sidebar}: </b>Contains and manages a group of {@link UINodeGroup UINodeGroups} in the form of {@link SidebarNodeGroup SidebarNodeGroups}.</li>
-     *     <li><b>{@link SidebarNodeGroup}: </b>Contains and manages a group of {@link UINode UINodes}.</li>
-     *     <li><b>{@link UINode}: </b>{@link Displayable} implementations that contain, manage, and display the {@link UIPage#getContent() contents} of {@link UIPage UIPages}.</li>
+     *     <li><b>{@link Sidebar}: </b>Contains and manages a group of {@link UIBookshelf UIBookshelfs} in the form of {@link SidebarBookshelf SidebarBookshelfs}.</li>
+     *     <li><b>{@link SidebarBookshelf}: </b>Contains and manages a group of {@link UIBook UIBooks}.</li>
+     *     <li><b>{@link UIBook}: </b>{@link Displayable} implementations that contain, manage, and display the {@link UIPage#getContent() contents} of {@link UIPage UIPages}.</li>
      * </ol>
      *
-     * @param childButtonPane The {@link StackPane} that the {@link ImageButton ImageButtons} linked to each {@link UINode} in the currently selected {@link SidebarNodeGroup} are displayed on.
-     * @param contentPane     The {@link StackPane} that the {@link UINode#getContent() contents} of the currently displayed {@link UINode} based on the currently selected {@link SidebarNodeGroup} are displayed on.
+     * @param childButtonPane The {@link StackPane} that the {@link ImageButton ImageButtons} linked to each {@link UIBook} in the currently selected {@link SidebarBookshelf} are displayed on.
+     * @param contentPane     The {@link StackPane} that the {@link UIBook#getContent() contents} of the currently displayed {@link UIBook} based on the currently selected {@link SidebarBookshelf} are displayed on.
      * @param backImagePane   The {@link ImagePane} on which the {@link #back() Back} {@link #getBackButton() Button} is displayed on.
      *
      * @throws NullPointerException If the {@code childButtonPane} parameter is {@code null}.
@@ -117,33 +117,33 @@ public class Sidebar
                 ImageButton.SMALL
         );
         
-        this.nodeGroupsProperty = FXCollections.observableArrayList();
-        this.selectedNodeGroupProperty = new ReadOnlyObjectWrapper<>();
+        this.bookshelvesProperty = FXCollections.observableArrayList();
+        this.selectedBookshelfProperty = new ReadOnlyObjectWrapper<>();
         
         //
         
         this.backImageButton.getImagePane().visibleProperty().bind(
-                BindingTools.createRecursiveBinding(selectedNodeGroup -> {
-                    if (selectedNodeGroup != null)
-                        return Bindings.and(Bindings.not(selectedNodeGroup.isEmptyBinding()), selectedNodeGroup.getNodeDisplayer().visibleBinding());
+                BindingTools.createRecursiveBinding(selectedBookshelf -> {
+                    if (selectedBookshelf != null)
+                        return Bindings.and(Bindings.not(selectedBookshelf.isEmptyBinding()), selectedBookshelf.getBookDisplayer().visibleBinding());
                     return null;
-                }, selectedNodeGroupProperty));
+                }, selectedBookshelfProperty));
         
         this.backImageButton.getImagePane().managedProperty().bind(this.backImageButton.getImagePane().visibleProperty());
         
-        this.selectedNodeGroupProperty.addListener((observable, oldNodeGroup, newNodeGroup) -> {
-            if (!Objects.equals(oldNodeGroup, newNodeGroup)) { //If the menu base is already selected, return silently and do nothing.
-                if (oldNodeGroup != null) {
-                    final VBox oldButtonBox = oldNodeGroup.getButtonBox();
+        this.selectedBookshelfProperty.addListener((observable, oldBookshelf, newBookshelf) -> {
+            if (!Objects.equals(oldBookshelf, newBookshelf)) { //If the menu base is already selected, return silently and do nothing.
+                if (oldBookshelf != null) {
+                    final VBox oldButtonBox = oldBookshelf.getButtonBox();
                     if (oldButtonBox != null)
                         this.childButtonPane.getChildren().remove(oldButtonBox);
                 }
-                if (newNodeGroup != null) {
-                    final VBox buttonBox = newNodeGroup.getButtonBox();
+                if (newBookshelf != null) {
+                    final VBox buttonBox = newBookshelf.getButtonBox();
                     
                     this.childButtonPane.getChildren().add(buttonBox);
                     this.contentPane.getChildren().clear();
-                    this.contentPane.getChildren().add(newNodeGroup.getContent());
+                    this.contentPane.getChildren().add(newBookshelf.getContent());
                 }
             }
         });
@@ -163,8 +163,8 @@ public class Sidebar
      * <p><b>Initialization</b></p>
      * <ol>
      *     <li><code><i>{@link #getBackButton()}<b>.</b>{@link ImageButton#initialize() initialize()}</i></code> to initialize the {@link #back() Back} {@link #getBackButton() Button} assigned to this {@link Sidebar}.</li>
-     *     <li><code><i>{@link #nodeGroupsProperty()}<b>.forEach(</b>{@link SidebarNodeGroup#initialize() initialize()}<b>)</b></i></code> to initialize all {@link SidebarNodeGroup SidebarNodeGroups} in this {@link Sidebar}.</li>
-     *     <li>{@link #selectedNodeGroupProperty() Selects} the first (<code><i>{@link #nodeGroupsProperty() nodeGroupsProperty().get(0)}</i></code>) {@link SidebarNodeGroup} in this {@link Sidebar}.</li>
+     *     <li><code><i>{@link #bookshelvesProperty()}<b>.forEach(</b>{@link SidebarBookshelf#initialize() initialize()}<b>)</b></i></code> to initialize all {@link SidebarBookshelf SidebarBookshelves} in this {@link Sidebar}.</li>
+     *     <li>{@link #selectedBookshelfProperty() Selects} the first (<code><i>{@link #bookshelvesProperty() bookshelvesProperty().get(0)}</i></code>) {@link SidebarBookshelf} in this {@link Sidebar}.</li>
      * </ol>
      */
     public void initialize()
@@ -172,10 +172,10 @@ public class Sidebar
         FXTools.get().runFX(() -> {
             backImageButton.initialize();
             childButtonPane.setAlignment(Pos.TOP_LEFT);
-            nodeGroupsProperty().forEach(SidebarNodeGroup::initialize);
-            SidebarNodeGroup firstNodeGroup = nodeGroupsProperty().get(0);
-            if (firstNodeGroup != null)
-                setSelectedNodeGroup(firstNodeGroup);
+            bookshelvesProperty().forEach(SidebarBookshelf::initialize);
+            SidebarBookshelf firstBookshelf = bookshelvesProperty().get(0);
+            if (firstBookshelf != null)
+                setSelectedBookshelf(firstBookshelf);
         }, true);
     }
     
@@ -194,11 +194,11 @@ public class Sidebar
     }
     
     /**
-     * <p>Returns the {@link StackPane} whose {@link StackPane#getChildren() contents} are bound to the {@link SidebarNodeGroup#getButtonBox() Button Box} that contains the {@link ImageButton ImageButtons}
-     * corresponding to each {@link UINode} child in the parent {@link SidebarNodeGroup} that is currently {@link #selectedNodeGroupProperty() selected} by this {@link Sidebar} instance.</p>
+     * <p>Returns the {@link StackPane} whose {@link StackPane#getChildren() contents} are bound to the {@link SidebarBookshelf#getButtonBox() Button Box} that contains the {@link ImageButton ImageButtons}
+     * corresponding to each {@link UIBook} child in the parent {@link SidebarBookshelf} that is currently {@link #selectedBookshelfProperty() selected} by this {@link Sidebar} instance.</p>
      *
-     * @return The {@link StackPane} whose {@link StackPane#getChildren() contents} are bound to the {@link SidebarNodeGroup#getButtonBox() Button Box} that contains the {@link ImageButton ImageButtons}
-     * corresponding to each {@link UINode} child in the parent {@link SidebarNodeGroup} that is currently {@link #selectedNodeGroupProperty() selected} by this {@link Sidebar} instance.
+     * @return The {@link StackPane} whose {@link StackPane#getChildren() contents} are bound to the {@link SidebarBookshelf#getButtonBox() Button Box} that contains the {@link ImageButton ImageButtons}
+     * corresponding to each {@link UIBook} child in the parent {@link SidebarBookshelf} that is currently {@link #selectedBookshelfProperty() selected} by this {@link Sidebar} instance.
      */
     public StackPane getChildButtonPane()
     {
@@ -216,72 +216,72 @@ public class Sidebar
     }
     
     /**
-     * <p>Returns the {@link ObservableList} containing the {@link SidebarNodeGroup NodeGroups} in this {@link Sidebar}.</p>
+     * <p>Returns the {@link ObservableList} containing the {@link SidebarBookshelf Bookshelves} in this {@link Sidebar}.</p>
      *
-     * @return The {@link ObservableList} containing the {@link SidebarNodeGroup NodeGroups} in this {@link Sidebar}.
+     * @return The {@link ObservableList} containing the {@link SidebarBookshelf Bookshelves} in this {@link Sidebar}.
      */
-    public ObservableList<SidebarNodeGroup> nodeGroupsProperty()
+    public ObservableList<SidebarBookshelf> bookshelvesProperty()
     {
-        return nodeGroupsProperty;
+        return bookshelvesProperty;
     }
     
     /**
-     * <p>Returns the {@link ReadOnlyObjectProperty property} containing the {@link #getSelectedNodeGroup() selected} {@link SidebarNodeGroup}.</p>
+     * <p>Returns the {@link ReadOnlyObjectProperty property} containing the {@link #getSelectedBookshelf() selected} {@link SidebarBookshelf}.</p>
      *
-     * @return The {@link ReadOnlyObjectProperty property} containing the {@link #getSelectedNodeGroup() selected} {@link SidebarNodeGroup}.
+     * @return The {@link ReadOnlyObjectProperty property} containing the {@link #getSelectedBookshelf() selected} {@link SidebarBookshelf}.
      *
-     * @see #getSelectedNodeGroup()
-     * @see #setSelectedNodeGroup(SidebarNodeGroup)
-     * @see #isNodeGroupSelected(SidebarNodeGroup)
+     * @see #getSelectedBookshelf()
+     * @see #setSelectedBookshelf(SidebarBookshelf)
+     * @see #isBookshelfSelected(SidebarBookshelf)
      */
-    public ReadOnlyObjectProperty<SidebarNodeGroup> selectedNodeGroupProperty()
+    public ReadOnlyObjectProperty<SidebarBookshelf> selectedBookshelfProperty()
     {
-        return selectedNodeGroupProperty.getReadOnlyProperty();
+        return selectedBookshelfProperty.getReadOnlyProperty();
     }
     
     /**
-     * <p>Returns the {@link #selectedNodeGroupProperty() selected} {@link SidebarNodeGroup}.</p>
+     * <p>Returns the {@link #selectedBookshelfProperty() selected} {@link SidebarBookshelf}.</p>
      *
-     * @return The {@link #selectedNodeGroupProperty() selected} {@link SidebarNodeGroup}.
+     * @return The {@link #selectedBookshelfProperty() selected} {@link SidebarBookshelf}.
      *
-     * @see #selectedNodeGroupProperty()
-     * @see #setSelectedNodeGroup(SidebarNodeGroup)
-     * @see #isNodeGroupSelected(SidebarNodeGroup)
+     * @see #selectedBookshelfProperty()
+     * @see #setSelectedBookshelf(SidebarBookshelf)
+     * @see #isBookshelfSelected(SidebarBookshelf)
      */
-    public SidebarNodeGroup getSelectedNodeGroup()
+    public SidebarBookshelf getSelectedBookshelf()
     {
-        return selectedNodeGroupProperty.get();
+        return selectedBookshelfProperty.get();
     }
     
     /**
-     * <p>Sets the {@link #selectedNodeGroupProperty() selected} {@link SidebarNodeGroup} to the specified value.</p>
+     * <p>Sets the {@link #selectedBookshelfProperty() selected} {@link SidebarBookshelf} to the specified value.</p>
      *
-     * @param menu The {@link SidebarNodeGroup} to be {@link #selectedNodeGroupProperty() selected}.
+     * @param menu The {@link SidebarBookshelf} to be {@link #selectedBookshelfProperty() selected}.
      *
-     * @see #selectedNodeGroupProperty()
-     * @see #getSelectedNodeGroup()
-     * @see #isNodeGroupSelected(SidebarNodeGroup)
+     * @see #selectedBookshelfProperty()
+     * @see #getSelectedBookshelf()
+     * @see #isBookshelfSelected(SidebarBookshelf)
      */
-    protected void setSelectedNodeGroup(SidebarNodeGroup menu)
+    protected void setSelectedBookshelf(SidebarBookshelf menu)
     {
-        selectedNodeGroupProperty.set(menu);
+        selectedBookshelfProperty.set(menu);
     }
     
     /**
-     * <p>Checks if the specified {@link SidebarNodeGroup} is currently {@link #selectedNodeGroupProperty() selected} or not.</p>
+     * <p>Checks if the specified {@link SidebarBookshelf} is currently {@link #selectedBookshelfProperty() selected} or not.</p>
      *
-     * @param menu The {@link SidebarNodeGroup} being checked.
+     * @param menu The {@link SidebarBookshelf} being checked.
      *
-     * @return True if the specified {@link SidebarNodeGroup} is currently {@link #selectedNodeGroupProperty() selected}, false if it is not.
+     * @return True if the specified {@link SidebarBookshelf} is currently {@link #selectedBookshelfProperty() selected}, false if it is not.
      *
-     * @see #selectedNodeGroupProperty()
-     * @see #getSelectedNodeGroup()
-     * @see #setSelectedNodeGroup(SidebarNodeGroup)
+     * @see #selectedBookshelfProperty()
+     * @see #getSelectedBookshelf()
+     * @see #setSelectedBookshelf(SidebarBookshelf)
      * @see ObjectTools#equalsExcludeNull(Object, Object)
      */
-    public boolean isNodeGroupSelected(SidebarNodeGroup menu)
+    public boolean isBookshelfSelected(SidebarBookshelf menu)
     {
-        return ObjectTools.equalsExcludeNull(menu, getSelectedNodeGroup());
+        return ObjectTools.equalsExcludeNull(menu, getSelectedBookshelf());
     }
     
     //</editor-fold>
@@ -303,28 +303,28 @@ public class Sidebar
     //</editor-fold>
     
     /**
-     * <p>{@link SidebarNodeGroup#clearSelection() Clears} the {@link ImageButtonGroup#selectedButtonProperty() selection} of every {@link SidebarNodeGroup SidebarNodeGroups} in this {@link Sidebar}.</p>
+     * <p>{@link SidebarBookshelf#clearSelection() Clears} the {@link ImageButtonGroup#selectedButtonProperty() selection} of every {@link SidebarBookshelf SidebarBookshelves} in this {@link Sidebar}.</p>
      *
-     * @see SidebarNodeGroup#clearSelection()
-     * @see SidebarNodeGroup#getButtonGroup()
+     * @see SidebarBookshelf#clearSelection()
+     * @see SidebarBookshelf#getButtonGroup()
      * @see ImageButtonGroup#selectedButtonProperty()
      * @see ImageButtonGroup#clearSelection(ImageButton...)
      */
     protected void clearAllSelections()
     {
-        nodeGroupsProperty().forEach(menu -> menu.clearSelection());
+        bookshelvesProperty().forEach(menu -> menu.clearSelection());
     }
     
     /**
-     * <p>{@link UIPageHandler#turnTo(UIPage) Turns} the {@link UINode} that is currently {@link UINodeGroup#getNodeDisplayer() selected} by the {@link UINodeGroup} that is currently {@link #selectedNodeGroupProperty() selected} by this {@link Sidebar} instance {@link UIPageHandler#back() back} one {@link UIPage page}.</p>
+     * <p>{@link UIPageHandler#turnTo(UIPage) Turns} the {@link UIBook} that is currently {@link UIBookshelf#getBookDisplayer() selected} by the {@link UIBookshelf} that is currently {@link #selectedBookshelfProperty() selected} by this {@link Sidebar} instance {@link UIPageHandler#back() back} one {@link UIPage page}.</p>
      */
     public void back()
     {
-        UINodeGroup selectedNodeGroup = getSelectedNodeGroup();
-        if (selectedNodeGroup != null) {
-            UINode selectedNode = selectedNodeGroup.getNodeDisplayer().getDisplay();
-            if (selectedNode != null)
-                selectedNode.getPageHandler().back();
+        final UIBookshelf selectedBookshelf = getSelectedBookshelf();
+        if (selectedBookshelf != null) {
+            UIBook selectedBook = selectedBookshelf.getBookDisplayer().getDisplay();
+            if (selectedBook != null)
+                selectedBook.getPageHandler().back();
         }
     }
 }

@@ -3,8 +3,8 @@ package com.taco.suit_lady.view.ui.ui_internal;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.TB;
 import com.taco.suit_lady.view.ui.Sidebar;
-import com.taco.suit_lady.view.ui.SidebarNodeGroup;
-import com.taco.suit_lady.view.ui.UINode;
+import com.taco.suit_lady.view.ui.SidebarBookshelf;
+import com.taco.suit_lady.view.ui.UIBook;
 import com.taco.suit_lady.view.ui.console.Console;
 import com.taco.suit_lady.view.ui.console.ConsoleMessageable;
 import com.taco.suit_lady.view.ui.jfx.button.ImageButton;
@@ -255,57 +255,57 @@ public class AppController
     {
         final Sidebar sidebar = ctx().getBean(AppUI.class).getSidebar();
         
-        final SidebarNodeGroup generalSidebarGroup = new SidebarNodeGroup(sidebar, generalSidebarButton);
-        generalSidebarGroup.getNodes().add(new UINode(
+        final SidebarBookshelf generalSidebarBookshelf = new SidebarBookshelf(sidebar, generalSidebarButton);
+        generalSidebarBookshelf.getBooks().add(new UIBook(
                 AppController.this.weaver, AppController.this.ctx,
                 "Clients", "clients",
-                uiNode -> TB.resources().get(
+                uiBook -> TB.resources().get(
                         "pages",
-                        uiNode.getButtonID(),
-                        () -> new DummyInstancesPage(uiNode)
+                        uiBook.getButtonID(),
+                        () -> new DummyInstancesPage(uiBook)
                 ), null
         ));
-        generalSidebarGroup.getNodes().add(new UINode(
+        generalSidebarBookshelf.getBooks().add(new UIBook(
                 AppController.this.weaver, AppController.this.ctx,
                 "Development", "popout_sidebar",
-                uiNode -> TB.resources().get(
-                        "pages", uiNode.getButtonID(),
-                        () -> new ExamplePage(uiNode, "green")
+                uiBook -> TB.resources().get(
+                        "pages", uiBook.getButtonID(),
+                        () -> new ExamplePage(uiBook, "green")
                 ), null
         ));
-        generalSidebarGroup.getButtonGroup().selectFirst();
+        generalSidebarBookshelf.getButtonGroup().selectFirst();
         
-        final SidebarNodeGroup inDevelopmentSidebarNodeGroup = new SidebarNodeGroup(sidebar, inDevelopmentSidebarButton);
-        inDevelopmentSidebarNodeGroup.getNodes().add(new UINode(
+        final SidebarBookshelf inDevelopmentSidebarBookshelf = new SidebarBookshelf(sidebar, inDevelopmentSidebarButton);
+        inDevelopmentSidebarBookshelf.getBooks().add(new UIBook(
                 AppController.this.weaver, AppController.this.ctx,
                 "Entity Debug", "entity_debug",
-                uiNode -> TB.resources().get(
-                        "pages", uiNode.getButtonID(),
-                        () -> new EntityDebugPage(uiNode)
+                uiBook -> TB.resources().get(
+                        "pages", uiBook.getButtonID(),
+                        () -> new EntityDebugPage(uiBook)
                 ), null
         ));
-        inDevelopmentSidebarNodeGroup.getButtonGroup().selectFirst();
+        inDevelopmentSidebarBookshelf.getButtonGroup().selectFirst();
         
-        final SidebarNodeGroup nyiSidebarGroup = new SidebarNodeGroup(sidebar, nyiSidebarButton);
-        nyiSidebarGroup.getNodes().add(new UINode(
+        final SidebarBookshelf nyiSidebarBookshelf = new SidebarBookshelf(sidebar, nyiSidebarButton);
+        nyiSidebarBookshelf.getBooks().add(new UIBook(
                 AppController.this.weaver, AppController.this.ctx,
                 "Repository", "repository",
-                uiNode -> TB.resources().get(
-                        "pages", uiNode.getButtonID(),
-                        () -> new ExamplePage(uiNode, "green")
+                uiBook -> TB.resources().get(
+                        "pages", uiBook.getButtonID(),
+                        () -> new ExamplePage(uiBook, "green")
                 ), null
         ));
-        nyiSidebarGroup.getNodes().add(new UINode(
+        nyiSidebarBookshelf.getBooks().add(new UIBook(
                 AppController.this.weaver, AppController.this.ctx,
                 "Social", "social",
-                uiNode -> TB.resources().get(
-                        "pages", uiNode.getButtonID(),
-                        () -> new ExamplePage(uiNode, "blue")
+                uiBook -> TB.resources().get(
+                        "pages", uiBook.getButtonID(),
+                        () -> new ExamplePage(uiBook, "blue")
                 ), null
         ));
-        nyiSidebarGroup.getButtonGroup().selectFirst();
+        nyiSidebarBookshelf.getButtonGroup().selectFirst();
         
-        sidebar.nodeGroupsProperty().addAll(generalSidebarGroup, inDevelopmentSidebarNodeGroup, nyiSidebarGroup);
+        sidebar.bookshelvesProperty().addAll(generalSidebarBookshelf, inDevelopmentSidebarBookshelf, nyiSidebarBookshelf);
         sidebar.initialize();
     }
     

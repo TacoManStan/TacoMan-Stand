@@ -3,7 +3,7 @@ package com.taco.suit_lady.view.ui.ui_internal.contents_new;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.TB;
-import com.taco.suit_lady.view.ui.UINode;
+import com.taco.suit_lady.view.ui.UIBook;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.collections.FXCollections;
@@ -19,7 +19,7 @@ public abstract class ContentNew
 {
     private final Springable strictSpringable;
     
-    private final ReadOnlyListWrapper<UINode> books;
+    private final ReadOnlyListWrapper<UIBook> books;
     
     public ContentNew(@NotNull Springable springable)
     {
@@ -29,7 +29,7 @@ public abstract class ContentNew
         this.books = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
     }
     
-    public @NotNull ReadOnlyListProperty<UINode> books()
+    public @NotNull ReadOnlyListProperty<UIBook> books()
     {
         return books.getReadOnlyProperty();
     }

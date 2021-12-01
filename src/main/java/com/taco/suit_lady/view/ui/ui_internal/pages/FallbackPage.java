@@ -1,6 +1,6 @@
 package com.taco.suit_lady.view.ui.ui_internal.pages;
 
-import com.taco.suit_lady.view.ui.UINode;
+import com.taco.suit_lady.view.ui.UIBook;
 import com.taco.suit_lady.view.ui.UIPage;
 import com.taco.suit_lady.view.ui.UIPageHandler;
 import com.taco.suit_lady.view.ui.ui_internal.controllers.DummySidebarController;
@@ -13,11 +13,11 @@ import java.util.function.Function;
 
 /**
  * <p>Page used when a {@link UIPageHandler} fails to load the correct {@link UIPage} implementation, hence the name, {@link FallbackPage}.</p>
- * <p>Refer to the {@link UINode} {@link UINode#UINode(FxWeaver, ConfigurableApplicationContext, String, String, Function, Runnable, StackPane) constructor} for implementation.</p>
+ * <p>Refer to the {@link UIBook} {@link UIBook#UIBook(FxWeaver, ConfigurableApplicationContext, String, String, Function, Runnable, StackPane) constructor} for implementation.</p>
  */
 public class FallbackPage extends UIPage<DummySidebarController>
 {
-    public FallbackPage(UINode owner)
+    public FallbackPage(UIBook owner)
     {
         super(owner);
     }

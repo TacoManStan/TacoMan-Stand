@@ -1,13 +1,13 @@
 package com.taco.suit_lady.view.ui.ui_internal.console;
 
-import com.taco.suit_lady.view.ui.UINode;
+import com.taco.suit_lady.view.ui.UIBook;
 import com.taco.suit_lady.view.ui.UIPage;
 import com.taco.suit_lady.view.ui.ui_internal.controllers.ConsoleController;
 import org.jetbrains.annotations.NotNull;
 
 public class ConsolePage extends UIPage<ConsoleController>
 {
-    public ConsolePage(UINode owner)
+    public ConsolePage(UIBook owner)
     {
         super(owner);
     }

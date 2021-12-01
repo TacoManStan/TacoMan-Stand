@@ -23,7 +23,7 @@ import java.util.function.Function;
 public class UIPageHandler
 {
     private final ReentrantLock lock;
-    private final UINode owner;
+    private final UIBook owner;
     
     private final ObjectProperty<UIPage<?>> coverPageProperty;
     private final ObservableLinkedList<UIPage<?>> pages;
@@ -36,7 +36,7 @@ public class UIPageHandler
      * <p>Constructs a new {@link UIPageHandler} instance.</p>
      * <p><b>Details</b></p>
      * <ol>
-     *     <li>Construction is done internally in the {@link UINode} {@link UINode#UINode(FxWeaver, ConfigurableApplicationContext, String, String, Function, Runnable, StackPane) constructor}.</li>
+     *     <li>Construction is done internally in the {@link UIBook} {@link UIBook#UIBook(FxWeaver, ConfigurableApplicationContext, String, String, Function, Runnable, StackPane) constructor}.</li>
      * </ol>
      * <p><b>Parameter Details</b></p>
      * <ol>
@@ -50,24 +50,24 @@ public class UIPageHandler
      *     <li>
      *         <b>Owner</b> — Refer to <code><i>{@link #getOwner()}</i></code> for additional information.
      *         <ol>
-     *             <li>A backwards reference to the {@link UINode} containing this {@link UIPageHandler} instance.</li>
-     *             <li>In the {@link UINode} {@link UINode#UINode(FxWeaver, ConfigurableApplicationContext, String, String, Function, Runnable, StackPane) constructor}, the {@link #getOwner() owner} is always set to {@code this}.</li>
+     *             <li>A backwards reference to the {@link UIBook} containing this {@link UIPageHandler} instance.</li>
+     *             <li>In the {@link UIBook} {@link UIBook#UIBook(FxWeaver, ConfigurableApplicationContext, String, String, Function, Runnable, StackPane) constructor}, the {@link #getOwner() owner} is always set to {@code this}.</li>
      *         </ol>
      *     </li>
      *     <li>
      *         <b>Cover Page</b> — Refer to <code><i>{@link #coverPageProperty()}</i></code> for additional information.
      *         <ol>
-     *             <li>The {@link UIPage} that is {@link UINode#getDisplayer() displayed} if no {@link UIPage pages} have been added to this {@link UIPageHandler}.</li>
+     *             <li>The {@link UIPage} that is {@link UIBook#getDisplayer() displayed} if no {@link UIPage pages} have been added to this {@link UIPageHandler}.</li>
      *             <li>A {@link UIPageHandler} is considered {@link #isEmptyBinding() empty} when its {@link #getPages() Page List} is {@link ObservableLinkedList#isEmpty() empty}.</li>
      *         </ol>
      *     </li>
      * </ol>
      *
      * @param lock      The {@link ReentrantLock} used to synchronize functionality of this {@link UIPageHandler}.
-     * @param owner     The {@link UINode owner} of this {@link UIPageHandler}.
+     * @param owner     The {@link UIBook owner} of this {@link UIPageHandler}.
      * @param coverPage The {@link #getCoverPage() Cover Page} of this {@link UIPageHandler}.
      */
-    UIPageHandler(ReentrantLock lock, UINode owner, UIPage<?> coverPage)
+    UIPageHandler(ReentrantLock lock, UIBook owner, UIPage<?> coverPage)
     {
         this.lock = lock;
         this.owner = owner;
@@ -82,11 +82,11 @@ public class UIPageHandler
     //<editor-fold desc="--- PROPERTIES ---">
     
     /**
-     * <p>Returns the {@link UINode} containing this {@link UIPage}.</p>
+     * <p>Returns the {@link UIBook} containing this {@link UIPage}.</p>
      *
-     * @return The {@link UINode} containing this {@link UIPage}.
+     * @return The {@link UIBook} containing this {@link UIPage}.
      */
-    public UINode getOwner()
+    public UIBook getOwner()
     {
         return owner;
     }
@@ -95,7 +95,7 @@ public class UIPageHandler
      * <p>Returns the {@link ObjectProperty property} containing the {@link UIPage Cover Page} assigned to this {@link UIPageHandler}.</p>
      * <p><b>Details</b></p>
      * <ol>
-     *     <li>The {@link UIPage} that is {@link UINode#getDisplayer() displayed} if no {@link UIPage pages} have been added to this {@link UIPageHandler}.</li>
+     *     <li>The {@link UIPage} that is {@link UIBook#getDisplayer() displayed} if no {@link UIPage pages} have been added to this {@link UIPageHandler}.</li>
      *     <li>A {@link UIPageHandler} is considered {@link #isEmptyBinding() empty} when its {@link #getPages() Page List} is {@link ObservableLinkedList#isEmpty() empty}.</li>
      *     <li>If this {@link UIPageHandler} does not have a {@link #coverPageProperty() Cover Page}, the returned {@link ObjectProperty property} will contain {@code null}.</li>
      * </ol>

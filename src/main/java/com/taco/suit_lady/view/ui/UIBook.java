@@ -19,7 +19,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
 
-public class UINode
+public class UIBook
         implements Displayable, ButtonViewable, Springable
 {
     private final FxWeaver weaver;
@@ -37,43 +37,43 @@ public class UINode
     
     private final ReadOnlyObjectWrapper<ImageButton> buttonViewProperty;
     
-    public UINode(FxWeaver weaver, ConfigurableApplicationContext ctx, String name, String buttonID, Function<UINode, UIPage<?>> coverPageFunction, Runnable onAction)
+    public UIBook(FxWeaver weaver, ConfigurableApplicationContext ctx, String name, String buttonID, Function<UIBook, UIPage<?>> coverPageFunction, Runnable onAction)
     {
         this(weaver, ctx, name, buttonID, coverPageFunction, onAction, null);
     }
     
     /**
-     * <p><b>Fully parameterized constructor for {@link UINode} objects.</b></p>
+     * <p><b>Fully parameterized constructor for {@link UIBook} objects.</b></p>
      * <br>
      *
-     * @param weaver            The {@link FxWeaver} instance to be used for linking {@link UINode} {@code JavaFX} attributes to {@code Spring}.
+     * @param weaver            The {@link FxWeaver} instance to be used for linking {@link UIBook} {@code JavaFX} attributes to {@code Spring}.
      *                          <ul>
      *                              <li>See <i>{@link Springable#weaver()}</i></li>
      *                          </ul>
-     * @param ctx               The {@link ApplicationContext} that allows easy access to {@code Spring-related} functionality for this {@link UINode}.
+     * @param ctx               The {@link ApplicationContext} that allows easy access to {@code Spring-related} functionality for this {@link UIBook}.
      *                          <ul>
      *                              <li>See <i>{@link Springable#ctx()}</i></li>
      *                          </ul>
-     * @param name              The {@link #getName() name} to be assigned to this {@link UINode}.
+     * @param name              The {@link #getName() name} to be assigned to this {@link UIBook}.
      *                          <ul>
      *                              <li>See <i>{@link #nameProperty()}</i></li>
      *                          </ul>
-     * @param buttonID          The {@link #getButtonID() ID} mapped to the {@link ResourceTools#getImage(String, String, String) cached} {@link Image image} to be used as the {@link #buttonViewProperty() button} for this {@link UINode}.
+     * @param buttonID          The {@link #getButtonID() ID} mapped to the {@link ResourceTools#getImage(String, String, String) cached} {@link Image image} to be used as the {@link #buttonViewProperty() button} for this {@link UIBook}.
      *                          <p>
-     * @param coverPageFunction The {@link Function} that will retrieve the {@link UIPage} to be used as the {@link UIPageHandler#coverPageProperty() cover page} of this {@link UINode}.
+     * @param coverPageFunction The {@link Function} that will retrieve the {@link UIPage} to be used as the {@link UIPageHandler#coverPageProperty() cover page} of this {@link UIBook}.
      *                          <ul>
      *                              <li>If the specified {@link Function} is {@code null}, a {@link FallbackPage} will be used as the {@link UIPageHandler#coverPageProperty() cover page} instead.</li>
      *                          </ul>
-     * @param onAction          A {@link Runnable} that will be {@link Runnable#run() executed} when the {@link #buttonViewProperty() button} for this {@link UINode} is pressed.
+     * @param onAction          A {@link Runnable} that will be {@link Runnable#run() executed} when the {@link #buttonViewProperty() button} for this {@link UIBook} is pressed.
      *                          <ul>
      *                              <li>See <i>{@link ImageButton#initialize()}</i> for exact implementation.</li>
      *                          </ul>
-     * @param contentPane       The {@link StackPane} in which the contents ({@link UIPage pages}) of this {@link UINode} are displayed.
+     * @param contentPane       The {@link StackPane} in which the contents ({@link UIPage pages}) of this {@link UIBook} are displayed.
      *                          <ul>
      *                              <li>Accessed via <i>{@link #getContent() getContent()}<b>.</b>{@link Displayer#getDisplayContainer() getDisplayContainer()}</i></li>
      *                          </ul>
      */
-    public UINode(FxWeaver weaver, ConfigurableApplicationContext ctx, String name, String buttonID, Function<UINode, UIPage<?>> coverPageFunction, Runnable onAction, StackPane contentPane)
+    public UIBook(FxWeaver weaver, ConfigurableApplicationContext ctx, String name, String buttonID, Function<UIBook, UIPage<?>> coverPageFunction, Runnable onAction, StackPane contentPane)
     {
         this.weaver = weaver;
         this.ctx = ctx;
@@ -107,9 +107,9 @@ public class UINode
     //<editor-fold desc="--- PROPERTIES ---">
     
     /**
-     * <p>Returns the {@link ReadOnlyStringProperty property} defining the {@link ImageButton#nameBinding() file name} of the {@link ImageButton button} for this {@link UINode}.</p>
+     * <p>Returns the {@link ReadOnlyStringProperty property} defining the {@link ImageButton#nameBinding() file name} of the {@link ImageButton button} for this {@link UIBook}.</p>
      *
-     * @return The {@link ReadOnlyStringProperty property} defining the {@link ImageButton#nameBinding() file name} of the {@link ImageButton button} for this {@link UINode}.
+     * @return The {@link ReadOnlyStringProperty property} defining the {@link ImageButton#nameBinding() file name} of the {@link ImageButton button} for this {@link UIBook}.
      *
      * @see #getButtonID()
      */
@@ -119,10 +119,10 @@ public class UINode
     }
     
     /**
-     * <p>Returns the {@link ImageButton#nameBinding() file name} of the {@link ImageButton button} for this {@link UINode}.</p>
+     * <p>Returns the {@link ImageButton#nameBinding() file name} of the {@link ImageButton button} for this {@link UIBook}.</p>
      * <p>See <i>{@link #buttonIDProperty()}</i> for details.</p>
      *
-     * @return The {@link ImageButton#nameBinding() file name} of the {@link ImageButton button} for this {@link UINode}.
+     * @return The {@link ImageButton#nameBinding() file name} of the {@link ImageButton button} for this {@link UIBook}.
      *
      * @see #buttonIDProperty()
      */
@@ -134,13 +134,13 @@ public class UINode
     //
     
     /**
-     * <p>Returns the {@link ReadOnlyStringProperty property} containing the {@link #getName() name} of this {@link UINode}.</p>
+     * <p>Returns the {@link ReadOnlyStringProperty property} containing the {@link #getName() name} of this {@link UIBook}.</p>
      * <ol>
-     *     <li>The {@link #getName() name} is only used for UI purposes, such as being displayed in a tooltip upon a user hovering over the {@link #buttonViewProperty() button} for this {@link UINode}.</li>
-     *     <li>To change the actual {@link ImageButton button} for this {@link UINode}, see <i>{@link #buttonIDProperty()}</i>.</li>
+     *     <li>The {@link #getName() name} is only used for UI purposes, such as being displayed in a tooltip upon a user hovering over the {@link #buttonViewProperty() button} for this {@link UIBook}.</li>
+     *     <li>To change the actual {@link ImageButton button} for this {@link UIBook}, see <i>{@link #buttonIDProperty()}</i>.</li>
      * </ol>
      *
-     * @return The {@link ReadOnlyStringProperty property} containing the {@link #getName() name} of this {@link UINode}.
+     * @return The {@link ReadOnlyStringProperty property} containing the {@link #getName() name} of this {@link UIBook}.
      *
      * @see #getName()
      */
@@ -150,10 +150,10 @@ public class UINode
     }
     
     /**
-     * <p>Returns the {@link #nameProperty() name} of this {@link UINode}.</p>
+     * <p>Returns the {@link #nameProperty() name} of this {@link UIBook}.</p>
      * <p>See <i>{@link #nameProperty()}</i> for details.</p>
      *
-     * @return The {@link #nameProperty() name} of this {@link UINode}.
+     * @return The {@link #nameProperty() name} of this {@link UIBook}.
      *
      * @see #nameProperty()
      */
@@ -165,9 +165,9 @@ public class UINode
     //
     
     /**
-     * <p>Returns the {@link Displayer} responsible for {@link Displayable displaying} currently-visible {@link UIPage pages} attached to this {@link UINode}.</p>
+     * <p>Returns the {@link Displayer} responsible for {@link Displayable displaying} currently-visible {@link UIPage pages} attached to this {@link UIBook}.</p>
      *
-     * @return The {@link Displayer} responsible for {@link Displayable displaying} currently-visible {@link UIPage pages} attached to this {@link UINode}.
+     * @return The {@link Displayer} responsible for {@link Displayable displaying} currently-visible {@link UIPage pages} attached to this {@link UIBook}.
      */
     public Displayer<UIPage<?>> getDisplayer()
     {
@@ -177,9 +177,9 @@ public class UINode
     //
     
     /**
-     * <p>Returns the {@link UIPageHandler page handler} wrapping {@link UIPage page} functionality for this {@link UINode}.</p>
+     * <p>Returns the {@link UIPageHandler page handler} wrapping {@link UIPage page} functionality for this {@link UIBook}.</p>
      *
-     * @return The {@link UIPageHandler page handler} wrapping {@link UIPage page} functionality for this {@link UINode}.
+     * @return The {@link UIPageHandler page handler} wrapping {@link UIPage page} functionality for this {@link UIBook}.
      */
     public UIPageHandler getPageHandler()
     {
@@ -189,9 +189,9 @@ public class UINode
     //
     
     /**
-     * <p>Returns the {@link ReadOnlyObjectProperty property} containing the {@link ImageButton} for selecting this {@link UINode}.</p>
+     * <p>Returns the {@link ReadOnlyObjectProperty property} containing the {@link ImageButton} for selecting this {@link UIBook}.</p>
      *
-     * @return The {@link ReadOnlyObjectProperty property} containing the {@link ImageButton} for selecting this {@link UINode}.
+     * @return The {@link ReadOnlyObjectProperty property} containing the {@link ImageButton} for selecting this {@link UIBook}.
      */
     public ReadOnlyObjectProperty<ImageButton> buttonViewProperty()
     {
@@ -199,9 +199,9 @@ public class UINode
     }
     
     /**
-     * <p>Returns the {@link ImageButton} for selecting this {@link UINode}.</p>
+     * <p>Returns the {@link ImageButton} for selecting this {@link UIBook}.</p>
      *
-     * @return The {@link ImageButton} for selecting this {@link UINode}.
+     * @return The {@link ImageButton} for selecting this {@link UIBook}.
      */
     @Override
     public ImageButton getButtonView()
@@ -214,10 +214,10 @@ public class UINode
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     /**
-     * <p>Returns the {@link Pane content} of this {@link UINode}.</p>
+     * <p>Returns the {@link Pane content} of this {@link UIBook}.</p>
      * <blockquote>{@code Passthrough Definition:} <i><code>{@link #getDisplayer()}<b>.</b>{@link Displayer#getDisplayContainer() getDisplayContainer()}</code></i></blockquote>
      *
-     * @return The {@link Pane content} of this {@link UINode}.
+     * @return The {@link Pane content} of this {@link UIBook}.
      */
     @Override
     public Pane getContent()

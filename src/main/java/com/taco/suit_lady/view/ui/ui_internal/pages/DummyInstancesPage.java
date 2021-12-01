@@ -1,6 +1,6 @@
 package com.taco.suit_lady.view.ui.ui_internal.pages;
 
-import com.taco.suit_lady.view.ui.UINode;
+import com.taco.suit_lady.view.ui.UIBook;
 import com.taco.suit_lady.view.ui.UIPage;
 import com.taco.suit_lady.view.ui.ui_internal.contents.DummyContentsHandler;
 import com.taco.suit_lady.view.ui.ui_internal.controllers.DummyInstancesController;
@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class DummyInstancesPage extends UIPage<DummyInstancesController>
 {
-    public DummyInstancesPage(UINode owner)
+    public DummyInstancesPage(UIBook owner)
     {
         super(owner);
     }
