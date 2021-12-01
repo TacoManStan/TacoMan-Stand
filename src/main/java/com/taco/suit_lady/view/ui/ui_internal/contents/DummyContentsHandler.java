@@ -125,8 +125,7 @@ public class DummyContentsHandler
     public DummyInstance newInstance()
     {
         final DummyInstance instance = new DummyInstance(this);
-        if (!instances.add(instance))
-            throw ExceptionTools.ex("Could not add instance: " + instance);
+        if (!instances.add(instance)) throw ExceptionTools.ex("Could not add instance: " + instance);
         return instance;
     }
     
@@ -144,15 +143,10 @@ public class DummyContentsHandler
     public void shutdown()
     {
         final ArrayList<DummyInstance> shutdownFailures = new ArrayList<>();
-        instances.forEach(instance -> {
-            if (!shutdown(instance))
-                shutdownFailures.add(instance);
-        });
+        instances.forEach(instance -> { if (!shutdown(instance)) shutdownFailures.add(instance); });
         
-        if (!shutdownFailures.isEmpty())
-            throw ExceptionTools.ex("Some shutdown operations have failed! " + shutdownFailures);
-        if (!instances.isEmpty())
-            throw ExceptionTools.ex("Instance List is not empty after shutdown operation! " + instances);
+        if (!shutdownFailures.isEmpty()) throw ExceptionTools.ex("Some shutdown operations have failed! " + shutdownFailures);
+        if (!instances.isEmpty()) throw ExceptionTools.ex("Instance List is not empty after shutdown operation! " + instances);
     }
     
     /**
