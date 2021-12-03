@@ -1,7 +1,7 @@
 package com.taco.suit_lady.view.ui.ui_internal.controllers;
 
 import com.taco.suit_lady.view.ui.jfx.button.ImageButton;
-import com.taco.suit_lady.view.ui.jfx.image.ImagePane;
+import com.taco.suit_lady.view.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.view.ui.ui_internal.contents_old.DummyInstance;
 import com.taco.util.quick.ConsoleBB;
 import javafx.fxml.FXML;

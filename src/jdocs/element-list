@@ -30,7 +30,7 @@ com.taco.suit_lady.view.ui.jfx.button
 com.taco.suit_lady.view.ui.jfx.dialog
 com.taco.suit_lady.view.ui.jfx.fxtools
 com.taco.suit_lady.view.ui.jfx.hyperlink
-com.taco.suit_lady.view.ui.jfx.image
+com.taco.suit_lady.view.ui.jfx.components
 com.taco.suit_lady.view.ui.jfx.lists
 com.taco.suit_lady.view.ui.jfx.lists.treehandler
 com.taco.suit_lady.view.ui.jfx.setting

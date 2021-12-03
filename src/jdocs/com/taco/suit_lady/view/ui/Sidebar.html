@@ -152,7 +152,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-constructor-name odd-row-color"><code><span class="member-name-link"><a href="#%3Cinit%3E(javafx.scene.layout.StackPane,javafx.scene.layout.StackPane,com.taco.suit_lady.view.ui.jfx.image.ImagePane)">Sidebar</a></span>&#8203;(@NotNull javafx.scene.layout.StackPane&nbsp;childButtonPane,
  @NotNull javafx.scene.layout.StackPane&nbsp;contentPane,
- @Nullable <a href="jfx/image/ImagePane.html" title="class in com.taco.suit_lady.view.ui.jfx.image">ImagePane</a>&nbsp;backImagePane)</code></div>
+ @Nullable <a href="jfx/image/ImagePane.html" title="class in com.taco.suit_lady.view.ui.jfx.components">ImagePane</a>&nbsp;backImagePane)</code></div>
 <div class="col-last odd-row-color">
 <div class="block"><b>Fully-Parameterized Constructor</b></div>
 </div>
@@ -335,7 +335,7 @@ loadScripts(document, 'script');</script>
  @NotNull
  @NotNull javafx.scene.layout.StackPane&nbsp;contentPane,
  @Nullable
- @Nullable <a href="jfx/image/ImagePane.html" title="class in com.taco.suit_lady.view.ui.jfx.image">ImagePane</a>&nbsp;backImagePane)</span></div>
+ @Nullable <a href="jfx/image/ImagePane.html" title="class in com.taco.suit_lady.view.ui.jfx.components">ImagePane</a>&nbsp;backImagePane)</span></div>
 <div class="block"><p><b>Fully-Parameterized Constructor</b></p>
  <p>Constructs a new <a href="Sidebar.html" title="class in com.taco.suit_lady.view.ui"><code>Sidebar</code></a> instance used to contain <a href="SidebarNodeGroup.html" title="class in com.taco.suit_lady.view.ui"><code>SidebarNodeGroups</code></a>.</p>
  <p><hr>
@@ -350,9 +350,9 @@ loadScripts(document, 'script');</script>
      <li>
          <b>Back Image Pane</b> â€” Refer to <code><i><a href="#getBackButton()"><code>getBackButton()</code></a></i></code> for additional information.
          <ol>
-             <li>If the specified value is <code>null</code>, a new <a href="jfx/image/ImagePane.html" title="class in com.taco.suit_lady.view.ui.jfx.image"><code>ImagePane</code></a> is automatically constructed.</li>
-             <li>To access the aforementioned automatically-constructed <a href="jfx/image/ImagePane.html" title="class in com.taco.suit_lady.view.ui.jfx.image"><code>ImagePane</code></a>, call <i><a href="jfx/button/ImageButton.html#getImagePane()"><code>getImagePane()</code></a></i> on the <a href="#back()"><code>Back</code></a> <a href="jfx/button/ImageButton.html" title="class in com.taco.suit_lady.view.ui.jfx.button"><code>Button</code></a>.</li>
-             <li>The <a href="jfx/image/ImagePane.html" title="class in com.taco.suit_lady.view.ui.jfx.image"><code>ImagePane</code></a> can then be added to a <code>JavaFX Region</code> and the <a href="#back()"><code>Back</code></a> <a href="#getBackButton()"><code>Button</code></a> will work as intended. No additional setup is required.</li>
+             <li>If the specified value is <code>null</code>, a new <a href="jfx/image/ImagePane.html" title="class in com.taco.suit_lady.view.ui.jfx.components"><code>ImagePane</code></a> is automatically constructed.</li>
+             <li>To access the aforementioned automatically-constructed <a href="jfx/image/ImagePane.html" title="class in com.taco.suit_lady.view.ui.jfx.components"><code>ImagePane</code></a>, call <i><a href="jfx/button/ImageButton.html#getImagePane()"><code>getImagePane()</code></a></i> on the <a href="#back()"><code>Back</code></a> <a href="jfx/button/ImageButton.html" title="class in com.taco.suit_lady.view.ui.jfx.button"><code>Button</code></a>.</li>
+             <li>The <a href="jfx/image/ImagePane.html" title="class in com.taco.suit_lady.view.ui.jfx.components"><code>ImagePane</code></a> can then be added to a <code>JavaFX Region</code> and the <a href="#back()"><code>Back</code></a> <a href="#getBackButton()"><code>Button</code></a> will work as intended. No additional setup is required.</li>
              <li>Note that every <code>JavaFX Node</code> instance can have a maximum of <u>one</u> parent at any given time.</li>
          </ol>
      </li>
@@ -367,7 +367,7 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>childButtonPane</code> - The <code>StackPane</code> that the <a href="jfx/button/ImageButton.html" title="class in com.taco.suit_lady.view.ui.jfx.button"><code>ImageButtons</code></a> linked to each <a href="UINode.html" title="class in com.taco.suit_lady.view.ui"><code>UINode</code></a> in the currently selected <a href="SidebarNodeGroup.html" title="class in com.taco.suit_lady.view.ui"><code>SidebarNodeGroup</code></a> are displayed on.</dd>
 <dd><code>contentPane</code> - The <code>StackPane</code> that the <a href="UINode.html#getContent()"><code>contents</code></a> of the currently displayed <a href="UINode.html" title="class in com.taco.suit_lady.view.ui"><code>UINode</code></a> based on the currently selected <a href="SidebarNodeGroup.html" title="class in com.taco.suit_lady.view.ui"><code>SidebarNodeGroup</code></a> are displayed on.</dd>
-<dd><code>backImagePane</code> - The <a href="jfx/image/ImagePane.html" title="class in com.taco.suit_lady.view.ui.jfx.image"><code>ImagePane</code></a> on which the <a href="#back()"><code>Back</code></a> <a href="#getBackButton()"><code>Button</code></a> is displayed on.</dd>
+<dd><code>backImagePane</code> - The <a href="jfx/image/ImagePane.html" title="class in com.taco.suit_lady.view.ui.jfx.components"><code>ImagePane</code></a> on which the <a href="#back()"><code>Back</code></a> <a href="#getBackButton()"><code>Button</code></a> is displayed on.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - If the <code>childButtonPane</code> parameter is <code>null</code>.</dd>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - If the <code>contentPane</code> parameter is <code>null</code>.</dd>

@@ -3,7 +3,7 @@ package com.taco.suit_lady.view.ui.ui_internal.pages.dummy_instances_page;
 import com.taco.suit_lady.util.tools.ArrayTools;
 import com.taco.suit_lady.view.ui.jfx.button.ImageButton;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
-import com.taco.suit_lady.view.ui.jfx.image.ImagePane;
+import com.taco.suit_lady.view.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.view.ui.jfx.lists.CellControlManager;
 import com.taco.suit_lady.view.ui.jfx.lists.ListCellFX;
 import com.taco.suit_lady.view.ui.ui_internal.contents_old.DummyContentsHandler;

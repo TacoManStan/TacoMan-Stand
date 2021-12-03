@@ -1,7 +1,6 @@
-package com.taco.suit_lady.view.ui.jfx.image;
+package com.taco.suit_lady.view.ui.jfx.components;
 
 import com.taco.suit_lady.util.tools.ExceptionTools;
-import com.taco.util.quick.ConsoleBB;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.ObjectBinding;

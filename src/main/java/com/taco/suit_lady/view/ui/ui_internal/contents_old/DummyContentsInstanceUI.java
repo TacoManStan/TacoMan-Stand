@@ -2,7 +2,7 @@ package com.taco.suit_lady.view.ui.ui_internal.contents_old;
 
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.TB;
-import com.taco.suit_lady.view.ui.jfx.image.ImagePane;
+import com.taco.suit_lady.view.ui.jfx.components.ImagePane;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.scene.layout.Pane;

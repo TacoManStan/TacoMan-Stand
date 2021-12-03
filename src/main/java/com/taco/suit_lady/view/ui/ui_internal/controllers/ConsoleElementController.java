@@ -4,7 +4,7 @@ import com.taco.suit_lady.util.timing.Timing;
 import com.taco.suit_lady.view.ui.console.ConsoleMessageable;
 import com.taco.suit_lady.view.ui.jfx.button.ImageButton;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
-import com.taco.suit_lady.view.ui.jfx.image.ImagePane;
+import com.taco.suit_lady.view.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.view.ui.jfx.lists.treehandler.WrappingTreeCellData;
 import com.taco.util.quick.ConsoleBB;
 import javafx.fxml.FXML;
