@@ -5,6 +5,7 @@ import com.taco.suit_lady.view.ui.Sidebar;
 import com.taco.suit_lady.view.ui.console.Console;
 import com.taco.suit_lady.view.ui.ui_internal.contents_sl.SLContentManager;
 import com.taco.suit_lady.view.ui.ui_internal.contents_sl.SLContent;
+import com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot.SLMandelbrotContent;
 import com.taco.suit_lady.view.ui.ui_internal.contents_sl.test.SLTestContent;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -77,7 +78,8 @@ public class AppUI
         ctx().getBean(Console.class).initialize();
         
         this.contentManager = new SLContentManager(weaver(), ctx(), getContentStackPane());
-        this.contentManager.setContent(new SLTestContent(this));
+//        this.contentManager.setContent(new SLTestContent(this));
+        this.contentManager.setContent(new SLMandelbrotContent(this));
     }
     
     //</editor-fold>

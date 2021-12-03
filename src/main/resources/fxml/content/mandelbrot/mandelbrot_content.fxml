@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.taco.suit_lady.view.ui.jfx.components.ImagePane?>
+<?import com.taco.suit_lady.view.ui.jfx.components.BoundCanvas?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -16,7 +16,7 @@
                </font></Label>
             </top>
          <center>
-            <ImagePane fx:id="canvasImagePane" BorderPane.alignment="CENTER" />
+            <BoundCanvas fx:id="canvas" BorderPane.alignment="CENTER" />
          </center>
         </BorderPane>
     </children>

@@ -1,6 +1,6 @@
 package com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot;
 
-import com.taco.suit_lady.view.ui.jfx.components.ImagePane;
+import com.taco.suit_lady.view.ui.jfx.components.BoundCanvas;
 import com.taco.suit_lady.view.ui.ui_internal.contents_sl.SLContentController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -25,7 +25,7 @@ public class SLMandelbrotContentController extends SLContentController
     @FXML private BorderPane borderPaneRoot;
     @FXML private Label titleLabel;
     
-    @FXML private ImagePane canvasImagePane;
+    @FXML private BoundCanvas canvas;
     
     //</editor-fold>
     
@@ -34,9 +34,9 @@ public class SLMandelbrotContentController extends SLContentController
         super(weaver, ctx);
     }
     
-    protected ImagePane canvas()
+    protected BoundCanvas canvas()
     {
-        return canvasImagePane;
+        return canvas;
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
