@@ -5,7 +5,7 @@ import com.taco.suit_lady.view.ui.Sidebar;
 import com.taco.suit_lady.view.ui.console.Console;
 import com.taco.suit_lady.view.ui.ui_internal.contents_sl.SLContentManager;
 import com.taco.suit_lady.view.ui.ui_internal.contents_sl.SLContent;
-import com.taco.suit_lady.view.ui.ui_internal.contents_sl.test_content.SLTestContent;
+import com.taco.suit_lady.view.ui.ui_internal.contents_sl.test.SLTestContent;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.layout.StackPane;

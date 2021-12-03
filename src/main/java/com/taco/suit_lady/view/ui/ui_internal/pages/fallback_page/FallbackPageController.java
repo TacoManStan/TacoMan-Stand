@@ -1,6 +1,6 @@
 package com.taco.suit_lady.view.ui.ui_internal.pages.fallback_page;
 
-import com.taco.suit_lady.view.ui.ui_internal.controllers.UIPageController;
+import com.taco.suit_lady.view.ui.UIPageController;
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;

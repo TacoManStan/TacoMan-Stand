@@ -1,4 +1,4 @@
-package com.taco.suit_lady.view.ui.ui_internal.contents_sl.dummy_instances_content;
+package com.taco.suit_lady.view.ui.ui_internal.contents_sl.dummy_instances;
 
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.TB;
@@ -12,7 +12,7 @@ import com.taco.suit_lady.view.ui.ui_internal.pages.example_page.ExamplePage;
 import javafx.scene.control.Button;
 import org.jetbrains.annotations.NotNull;
 
-public class SLDummyInstancesContent extends SLContent<SLDummyInstancesContentController>
+public class SLDummyInstancesContent extends SLContent<SLDummyInstancesContentData, SLDummyInstancesContentController>
 {
     public SLDummyInstancesContent(@NotNull Springable springable)
     {
@@ -40,15 +40,28 @@ public class SLDummyInstancesContent extends SLContent<SLDummyInstancesContentCo
         }, true);
     }
     
-    @Override
-    protected void onSet() { }
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override
-    protected void onRemoved() { }
+    protected @NotNull SLDummyInstancesContentData loadData()
+    {
+        return new SLDummyInstancesContentData();
+    }
     
     @Override
     protected @NotNull Class<SLDummyInstancesContentController> controllerDefinition()
     {
         return SLDummyInstancesContentController.class;
     }
+    
+    @Override
+    protected void onActivate() { }
+    
+    @Override
+    protected void onDeactivate() { }
+    
+    @Override
+    protected void onShutdown() { }
+    
+    //</editor-fold>
 }

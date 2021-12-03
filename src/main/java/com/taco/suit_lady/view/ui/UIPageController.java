@@ -1,8 +1,8 @@
-package com.taco.suit_lady.view.ui.ui_internal.controllers;
+package com.taco.suit_lady.view.ui;
 
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
-import com.taco.suit_lady.view.ui.UIPage;
+import com.taco.suit_lady.view.ui.ui_internal.controllers.Controller;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -37,11 +37,10 @@ public abstract class UIPageController<T extends UIPage<?>> extends Controller
      *
      * @param page The {@link UIPage} this {@link UIPageController} is to control.
      */
-    public void setPage(@NotNull UIPage<?> page)
+    protected void setPage(@NotNull UIPage<?> page)
     {
-        ExceptionTools.nullCheck(page, "UIPage");
         try {
-            this.page = (T) page;
+            this.page = (T) ExceptionTools.nullCheck(page, "UIPage");
         } catch (Exception e) {
             throw ExceptionTools.ex(e, "UIPage must be of type T [" + page.getClass() + "]");
         }

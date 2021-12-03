@@ -1,4 +1,4 @@
-package com.taco.suit_lady.view.ui.ui_internal.contents_sl.test_content;
+package com.taco.suit_lady.view.ui.ui_internal.contents_sl.test;
 
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.TB;
@@ -12,7 +12,7 @@ import com.taco.suit_lady.view.ui.ui_internal.pages.example_page.ExamplePage;
 import javafx.scene.control.Button;
 import org.jetbrains.annotations.NotNull;
 
-public class SLTestContent extends SLContent<SLTestContentController>
+public class SLTestContent extends SLContent<SLTestContentData, SLTestContentController>
 {
     public SLTestContent(@NotNull Springable springable)
     {
@@ -58,15 +58,28 @@ public class SLTestContent extends SLContent<SLTestContentController>
         }, true);
     }
     
-    @Override
-    protected void onSet() { }
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override
-    protected void onRemoved() { }
+    protected @NotNull SLTestContentData loadData()
+    {
+        return new SLTestContentData();
+    }
     
     @Override
     protected @NotNull Class<SLTestContentController> controllerDefinition()
     {
         return SLTestContentController.class;
     }
+    
+    @Override
+    protected void onActivate() { }
+    
+    @Override
+    protected void onDeactivate() { }
+    
+    @Override
+    protected void onShutdown() { }
+    
+    //</editor-fold>
 }

@@ -1,4 +1,4 @@
-package com.taco.suit_lady.view.ui.ui_internal.contents_sl.test_content;
+package com.taco.suit_lady.view.ui.ui_internal.contents_sl.test;
 
 import com.taco.suit_lady.view.ui.ui_internal.contents_sl.SLContentController;
 import javafx.fxml.FXML;
@@ -11,9 +11,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
-@FxmlView("/fxml/content/test_content/test_content.fxml")
+@FxmlView("/fxml/content/test/test_content.fxml")
 @Scope("prototype")
-public class SLTestContentController extends SLContentController<SLTestContent>
+public class SLTestContentController extends SLContentController
 {
     @FXML private AnchorPane root;
     
