@@ -12,9 +12,9 @@ import com.taco.suit_lady.view.ui.ui_internal.pages.example_page.ExamplePage;
 import javafx.scene.control.Button;
 import org.jetbrains.annotations.NotNull;
 
-public class TestSLContent extends SLContent<TestContentNewController>
+public class SLTestContent extends SLContent<SLTestContentController>
 {
-    public TestSLContent(@NotNull Springable springable)
+    public SLTestContent(@NotNull Springable springable)
     {
         super(springable);
         initBookshelves();
@@ -65,8 +65,8 @@ public class TestSLContent extends SLContent<TestContentNewController>
     protected void onRemoved() { }
     
     @Override
-    protected @NotNull Class<TestContentNewController> controllerDefinition()
+    protected @NotNull Class<SLTestContentController> controllerDefinition()
     {
-        return TestContentNewController.class;
+        return SLTestContentController.class;
     }
 }

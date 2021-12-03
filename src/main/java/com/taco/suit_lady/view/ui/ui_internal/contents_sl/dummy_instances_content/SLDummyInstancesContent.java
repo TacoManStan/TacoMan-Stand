@@ -12,9 +12,9 @@ import com.taco.suit_lady.view.ui.ui_internal.pages.example_page.ExamplePage;
 import javafx.scene.control.Button;
 import org.jetbrains.annotations.NotNull;
 
-public class DummyInstancesSLContent extends SLContent<DummyInstancesContentNewController>
+public class SLDummyInstancesContent extends SLContent<SLDummyInstancesContentController>
 {
-    public DummyInstancesSLContent(@NotNull Springable springable)
+    public SLDummyInstancesContent(@NotNull Springable springable)
     {
         super(springable);
         
@@ -47,8 +47,8 @@ public class DummyInstancesSLContent extends SLContent<DummyInstancesContentNewC
     protected void onRemoved() { }
     
     @Override
-    protected @NotNull Class<DummyInstancesContentNewController> controllerDefinition()
+    protected @NotNull Class<SLDummyInstancesContentController> controllerDefinition()
     {
-        return DummyInstancesContentNewController.class;
+        return SLDummyInstancesContentController.class;
     }
 }

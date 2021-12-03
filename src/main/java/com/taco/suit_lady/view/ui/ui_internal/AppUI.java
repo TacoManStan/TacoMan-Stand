@@ -5,7 +5,7 @@ import com.taco.suit_lady.view.ui.Sidebar;
 import com.taco.suit_lady.view.ui.console.Console;
 import com.taco.suit_lady.view.ui.ui_internal.contents_sl.SLContentManager;
 import com.taco.suit_lady.view.ui.ui_internal.contents_sl.SLContent;
-import com.taco.suit_lady.view.ui.ui_internal.contents_sl.test_content.TestSLContent;
+import com.taco.suit_lady.view.ui.ui_internal.contents_sl.test_content.SLTestContent;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.layout.StackPane;
@@ -65,9 +65,9 @@ public class AppUI
      *         </ul>
      *     </li>
      *     <li>
-     *         Sets the {@link SLContentManager#getContent() content} of the constructed {@link SLContentManager} to a new {@link TestSLContent}.
+     *         Sets the {@link SLContentManager#getContent() content} of the constructed {@link SLContentManager} to a new {@link SLTestContent}.
      *         <ul>
-     *             <li>This {@link AppUI} instance is used only to pass its {@link Springable} values to the constructed {@link TestSLContent}.</li>
+     *             <li>This {@link AppUI} instance is used only to pass its {@link Springable} values to the constructed {@link SLTestContent}.</li>
      *         </ul>
      *     </li>
      * </ol>
@@ -77,7 +77,7 @@ public class AppUI
         ctx().getBean(Console.class).initialize();
         
         this.contentManager = new SLContentManager(weaver(), ctx(), getContentStackPane());
-        this.contentManager.setContent(new TestSLContent(this));
+        this.contentManager.setContent(new SLTestContent(this));
     }
     
     //</editor-fold>
