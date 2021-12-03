@@ -2,7 +2,7 @@ package com.taco.suit_lady.view.ui.ui_internal.pages.dummy_instances_page;
 
 import com.taco.suit_lady.view.ui.UIBook;
 import com.taco.suit_lady.view.ui.UIPage;
-import com.taco.suit_lady.view.ui.ui_internal.contents.DummyContentsHandler;
+import com.taco.suit_lady.view.ui.ui_internal.contents_old.DummyContentsHandler;
 import org.jetbrains.annotations.NotNull;
 
 public class DummyInstancesPage extends UIPage<DummyInstancesPageController>

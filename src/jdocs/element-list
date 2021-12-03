@@ -37,7 +37,7 @@ com.taco.suit_lady.view.ui.jfx.setting
 com.taco.suit_lady.view.ui.jfx.util
 com.taco.suit_lady.view.ui.ui_internal
 com.taco.suit_lady.view.ui.ui_internal.console
-com.taco.suit_lady.view.ui.ui_internal.contents
+com.taco.suit_lady.view.ui.ui_internal.contents_old
 com.taco.suit_lady.view.ui.ui_internal.controllers
 com.taco.suit_lady.view.ui.ui_internal.pages
 com.taco.suit_lady.view.ui.ui_internal.settings

@@ -13,7 +13,7 @@ import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
 import com.taco.suit_lady.view.ui.jfx.image.ImagePane;
 import com.taco.suit_lady.view.ui.jfx.lists.treehandler.WrappingTreeCellData;
 import com.taco.suit_lady.view.ui.ui_internal.console.ConsoleUIDataContainer;
-import com.taco.suit_lady.view.ui.ui_internal.contents.DummyContentsInstancePane;
+import com.taco.suit_lady.view.ui.ui_internal.contents_old.DummyContentsInstancePane;
 import com.taco.suit_lady.view.ui.ui_internal.contents_sl.SLContentManager;
 import com.taco.suit_lady.view.ui.ui_internal.controllers.SettingsController;
 import com.taco.suit_lady.view.ui.ui_internal.pages.content_switch_demo_page.ContentSwitchDemoPage;

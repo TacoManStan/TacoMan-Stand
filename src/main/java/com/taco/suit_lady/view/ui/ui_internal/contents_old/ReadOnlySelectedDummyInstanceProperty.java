@@ -1,4 +1,4 @@
-package com.taco.suit_lady.view.ui.ui_internal.contents;
+package com.taco.suit_lady.view.ui.ui_internal.contents_old;
 
 import javafx.beans.property.ReadOnlyProperty;
 import javafx.beans.property.ReadOnlyStringProperty;
