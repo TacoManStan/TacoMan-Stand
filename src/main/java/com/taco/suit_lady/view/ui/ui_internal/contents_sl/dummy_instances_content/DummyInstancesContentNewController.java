@@ -1,4 +1,4 @@
-package com.taco.suit_lady.view.ui.ui_internal.contents_new.dummy_instances_content;
+package com.taco.suit_lady.view.ui.ui_internal.contents_sl.dummy_instances_content;
 
 import com.taco.suit_lady.view.ui.ui_internal.controllers.Controller;
 import javafx.fxml.FXML;

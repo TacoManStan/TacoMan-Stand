@@ -1,4 +1,4 @@
-package com.taco.suit_lady.view.ui.ui_internal.contents_new;
+package com.taco.suit_lady.view.ui.ui_internal.contents_sl;
 
 import com.taco.suit_lady.logic.LogiCore;
 import com.taco.suit_lady.util.springable.Springable;
@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.context.ConfigurableApplicationContext;
 
-public class ContentManagerNew
+public class SLContentManager
         implements Springable
 {
     private final FxWeaver weaver;
@@ -21,7 +21,7 @@ public class ContentManagerNew
     private final StackPane contentBase;
     private final ReadOnlyObjectWrapper<SLContent> contentProperty; // Add support for a list of overlapping Content, each overlapping on the Content Base StackPane?
     
-    public ContentManagerNew(@NotNull FxWeaver weaver, @NotNull ConfigurableApplicationContext ctx, @NotNull StackPane contentBase)
+    public SLContentManager(@NotNull FxWeaver weaver, @NotNull ConfigurableApplicationContext ctx, @NotNull StackPane contentBase)
     {
         this.weaver = ExceptionTools.nullCheck(weaver, "FxWeaver");
         this.ctx = ExceptionTools.nullCheck(ctx, "Application Context");

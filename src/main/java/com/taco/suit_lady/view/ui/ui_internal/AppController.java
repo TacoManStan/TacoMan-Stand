@@ -14,7 +14,7 @@ import com.taco.suit_lady.view.ui.jfx.image.ImagePane;
 import com.taco.suit_lady.view.ui.jfx.lists.treehandler.WrappingTreeCellData;
 import com.taco.suit_lady.view.ui.ui_internal.console.ConsoleUIDataContainer;
 import com.taco.suit_lady.view.ui.ui_internal.contents.DummyContentsInstancePane;
-import com.taco.suit_lady.view.ui.ui_internal.contents_new.ContentManagerNew;
+import com.taco.suit_lady.view.ui.ui_internal.contents_sl.SLContentManager;
 import com.taco.suit_lady.view.ui.ui_internal.controllers.SettingsController;
 import com.taco.suit_lady.view.ui.ui_internal.pages.content_switch_demo_page.ContentSwitchDemoPage;
 import com.taco.suit_lady.view.ui.ui_internal.pages.dummy_instances_page.DummyInstancesPage;
@@ -185,7 +185,7 @@ public class AppController
         this.ctx = ctx;
     }
     
-    private ContentManagerNew contentManager;
+    private SLContentManager contentManager;
     
     // <editor-fold desc="--- INITIALIZATION ---">
     

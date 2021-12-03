@@ -1,4 +1,4 @@
-package com.taco.suit_lady.view.ui.ui_internal.contents_new;
+package com.taco.suit_lady.view.ui.ui_internal.contents_sl;
 
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
@@ -76,16 +76,16 @@ public abstract class SLContent<C extends Controller>
     protected abstract @NotNull Class<C> controllerDefinition();
     
     /**
-     * <p>Abstract method that is executed <i>after</i> this {@link SLContent} is {@link ContentManagerNew#setContent(SLContent) set} as the active {@link SLContent contnet}.</p>
+     * <p>Abstract method that is executed <i>after</i> this {@link SLContent} is {@link SLContentManager#setContent(SLContent) set} as the active {@link SLContent contnet}.</p>
      * <p><b>Details</b></p>
      * <ol>
      *     <li>{@link #onSet() This method} is {@link ThreadPoolExecutor#execute(Runnable) executed} by the {@link TB Toolbox} {@link ThreadPoolExecutor Executor}.</li>
      *     <li>
-     *         The <code><i>{@link #onRemoved()}</i></code> implementation of the <i>{@link ContentManagerNew#getContent() previous content}</i> is executed <i>prior to</i> {@link #onSet() this method}.
+     *         The <code><i>{@link #onRemoved()}</i></code> implementation of the <i>{@link SLContentManager#getContent() previous content}</i> is executed <i>prior to</i> {@link #onSet() this method}.
      *         <ul>
      *             <li>That said, because both operations are executed in a separate {@link ThreadPoolExecutor#execute(Runnable) execution}, the operations are very likely to occur concurrently.</li>
      *             <li>The only exception to this rule is if the {@link ThreadPoolExecutor Executor} is limited to a single background thread.</li>
-     *             <li>However, even then, both operations will always be executed concurrently with remaining {@code JavaFX} operations taking place in the <code><i>{@link ContentManagerNew#onChange(SLContent, SLContent)}</i></code> method.</li>
+     *             <li>However, even then, both operations will always be executed concurrently with remaining {@code JavaFX} operations taking place in the <code><i>{@link SLContentManager#onChange(SLContent, SLContent)}</i></code> method.</li>
      *         </ul>
      *     </li>
      *     <li>{@link #onSet() This method} is wrapped in the <code><i>{@link #onSetInternal()}</i></code> method.</li>
