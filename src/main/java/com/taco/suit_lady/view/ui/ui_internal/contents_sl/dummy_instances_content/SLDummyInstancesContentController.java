@@ -1,6 +1,6 @@
 package com.taco.suit_lady.view.ui.ui_internal.contents_sl.dummy_instances_content;
 
-import com.taco.suit_lady.view.ui.ui_internal.controllers.Controller;
+import com.taco.suit_lady.view.ui.ui_internal.contents_sl.SLContentController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 @FxmlView("/fxml/content/dummy_instances_content/dummy_instances_content.fxml")
 @Scope("prototype")
-public class SLDummyInstancesContentController extends Controller
+public class SLDummyInstancesContentController extends SLContentController<SLDummyInstancesContent>
 {
     @FXML private AnchorPane root;
     

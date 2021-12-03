@@ -6,7 +6,6 @@ import com.taco.suit_lady.util.tools.TB;
 import com.taco.suit_lady.view.ui.Sidebar;
 import com.taco.suit_lady.view.ui.SidebarBookshelf;
 import com.taco.suit_lady.view.ui.ui_internal.AppUI;
-import com.taco.suit_lady.view.ui.ui_internal.controllers.Controller;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.collections.FXCollections;
@@ -17,7 +16,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.concurrent.ThreadPoolExecutor;
 
-public abstract class SLContent<C extends Controller>
+public abstract class SLContent<C extends SLContentController<?>>
         implements Springable
 {
     private final Springable strictSpringable;

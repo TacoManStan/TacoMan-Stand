@@ -19,7 +19,7 @@ public class SLContentManager
     private final ConfigurableApplicationContext ctx;
     
     private final StackPane contentBase;
-    private final ReadOnlyObjectWrapper<SLContent> contentProperty; // Add support for a list of overlapping Content, each overlapping on the Content Base StackPane?
+    private final ReadOnlyObjectWrapper<SLContent<?>> contentProperty; // Add support for a list of overlapping Content, each overlapping on the Content Base StackPane?
     
     public SLContentManager(@NotNull FxWeaver weaver, @NotNull ConfigurableApplicationContext ctx, @NotNull StackPane contentBase)
     {
@@ -41,17 +41,17 @@ public class SLContentManager
         return contentBase;
     }
     
-    public @NotNull ReadOnlyObjectProperty<SLContent> contentProperty()
+    public @NotNull ReadOnlyObjectProperty<SLContent<?>> contentProperty()
     {
         return contentProperty.getReadOnlyProperty();
     }
     
-    public @Nullable SLContent getContent()
+    public @Nullable SLContent<?> getContent()
     {
         return contentProperty.get();
     }
     
-    public boolean setContent(@Nullable SLContent newContent)
+    public boolean setContent(@Nullable SLContent<?> newContent)
     {
         contentProperty.set(newContent);
         return true; // TODO - Add actual validity checks here
@@ -75,7 +75,7 @@ public class SLContentManager
     
     //</editor-fold>
     
-    private void onChange(@Nullable SLContent oldContent, @Nullable SLContent newContent)
+    private void onChange(@Nullable SLContent<?> oldContent, @Nullable SLContent<?> newContent)
     {
         // TODO - Execute onRemoved() and onSet via a JavaFX Task implementation. For now, though, this will work.
         // When the above is completed, don't forget to update the onRemoved() and onSet() Javadocs as well.
