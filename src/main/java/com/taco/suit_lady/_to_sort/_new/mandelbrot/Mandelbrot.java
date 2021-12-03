@@ -364,7 +364,7 @@ public class Mandelbrot
                        + new Color(image.getRGB(i + 1, j)).getRed()
                        + new Color(image.getRGB(i, j + 1)).getRed()
                        + new Color(image.getRGB(i, j - 1)).getRed()
-                       + new Color(image.getRGB(i, j)).getGreen()) / 5;
+                       + new Color(image.getRGB(i, j)).getRed()) / 5;
                 green = (new Color(image.getRGB(i - 1, j)).getGreen()
                          + new Color(image.getRGB(i + 1, j)).getGreen()
                          + new Color(image.getRGB(i, j + 1)).getGreen()
