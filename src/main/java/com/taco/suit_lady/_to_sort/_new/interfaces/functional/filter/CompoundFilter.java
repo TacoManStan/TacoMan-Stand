@@ -1,4 +1,4 @@
-package com.taco.suit_lady._to_sort._new.functional.filter;
+package com.taco.suit_lady._to_sort._new.interfaces.functional.filter;
 
 import com.taco.suit_lady._to_sort._new.CompareType;
 import com.taco.util.numbers.Numbers;

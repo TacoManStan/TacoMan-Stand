@@ -6,7 +6,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 public abstract class SLContentController<T extends SLContent<?>> extends Controller
 {
-    public SLContentController(FxWeaver weaver, ConfigurableApplicationContext ctx)
+    public SLContentController(FxWeaver weaver, ConfigurableApplicationContext ctx, T owner)
     {
         super(weaver, ctx);
     }

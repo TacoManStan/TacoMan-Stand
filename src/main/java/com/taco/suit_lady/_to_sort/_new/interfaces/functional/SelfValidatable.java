@@ -1,4 +1,4 @@
-package com.taco.suit_lady._to_sort._new.functional;
+package com.taco.suit_lady._to_sort._new.interfaces.functional;
 
 import com.taco.suit_lady._to_sort._new.ValueGroup;
 
