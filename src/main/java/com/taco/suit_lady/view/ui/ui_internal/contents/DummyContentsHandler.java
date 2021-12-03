@@ -64,8 +64,6 @@ public class DummyContentsHandler
         return selectedInstanceProperty.get();
     }
     
-    //
-    
     /**
      * <p>{@link #selectedInstanceProperty() Selects} the specified {@link DummyInstance}.</p>
      *

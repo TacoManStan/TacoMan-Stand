@@ -4,8 +4,8 @@ import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.view.ui.Sidebar;
 import com.taco.suit_lady.view.ui.console.Console;
 import com.taco.suit_lady.view.ui.ui_internal.contents_new.ContentManagerNew;
-import com.taco.suit_lady.view.ui.ui_internal.contents_new.ContentNew;
-import com.taco.suit_lady.view.ui.ui_internal.contents_new.test_content.TestContentNew;
+import com.taco.suit_lady.view.ui.ui_internal.contents_new.SLContent;
+import com.taco.suit_lady.view.ui.ui_internal.contents_new.test_content.TestSLContent;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.layout.StackPane;
@@ -65,9 +65,9 @@ public class AppUI
      *         </ul>
      *     </li>
      *     <li>
-     *         Sets the {@link ContentManagerNew#getContent() content} of the constructed {@link ContentManagerNew} to a new {@link TestContentNew}.
+     *         Sets the {@link ContentManagerNew#getContent() content} of the constructed {@link ContentManagerNew} to a new {@link TestSLContent}.
      *         <ul>
-     *             <li>This {@link AppUI} instance is used only to pass its {@link Springable} values to the constructed {@link TestContentNew}.</li>
+     *             <li>This {@link AppUI} instance is used only to pass its {@link Springable} values to the constructed {@link TestSLContent}.</li>
      *         </ul>
      *     </li>
      * </ol>
@@ -77,7 +77,7 @@ public class AppUI
         ctx().getBean(Console.class).initialize();
         
         this.contentManager = new ContentManagerNew(weaver(), ctx(), getContentStackPane());
-        this.contentManager.setContent(new TestContentNew(this));
+        this.contentManager.setContent(new TestSLContent(this));
     }
     
     //</editor-fold>
@@ -146,9 +146,9 @@ public class AppUI
     }
     
     /**
-     * <p>Returns the {@link ReadOnlyObjectProperty} containing the {@link StackPane} used to display the primary {@link ContentNew} of this {@link AppUI}.</p>
+     * <p>Returns the {@link ReadOnlyObjectProperty} containing the {@link StackPane} used to display the primary {@link SLContent} of this {@link AppUI}.</p>
      *
-     * @return The {@link ReadOnlyObjectProperty} containing the {@link StackPane} used to display the primary {@link ContentNew} of this {@link AppUI}.
+     * @return The {@link ReadOnlyObjectProperty} containing the {@link StackPane} used to display the primary {@link SLContent} of this {@link AppUI}.
      */
     // TO-EXPAND (same with corresponding getter and setter)
     public final ReadOnlyObjectProperty<StackPane> contentStackPaneProperty()
@@ -157,9 +157,9 @@ public class AppUI
     }
     
     /**
-     * <p>Returns the {@link StackPane} used to display the primary {@link ContentNew} of this {@link AppUI}.</p>
+     * <p>Returns the {@link StackPane} used to display the primary {@link SLContent} of this {@link AppUI}.</p>
      *
-     * @return The {@link StackPane} used to display the primary {@link ContentNew} of this {@link AppUI}.
+     * @return The {@link StackPane} used to display the primary {@link SLContent} of this {@link AppUI}.
      */
     public final StackPane getContentStackPane()
     {
@@ -167,13 +167,24 @@ public class AppUI
     }
     
     /**
-     * <p>Sets the {@link StackPane} used to display the primary {@link ContentNew} of this {@link AppUI} to the specified value.</p>
+     * <p>Sets the {@link StackPane} used to display the primary {@link SLContent} of this {@link AppUI} to the specified value.</p>
      *
-     * @param contentStackPane The {@link StackPane} to be set as the {@link StackPane} used to display the primary {@link ContentNew} of this {@link AppUI}.
+     * @param contentStackPane The {@link StackPane} to be set as the {@link StackPane} used to display the primary {@link SLContent} of this {@link AppUI}.
      */
     public final void setContentStackPane(StackPane contentStackPane)
     {
         contentStackPaneProperty.set(contentStackPane);
+    }
+    
+    /**
+     * <p>Returns the {@link ContentManagerNew Content Manager} in charge of managing the {@link SLContent} of this {@link AppUI} instance.</p>
+     *
+     * @return The {@link ContentManagerNew Content Manager} in charge of managing the {@link SLContent} of this {@link AppUI} instance.
+     */
+    // TO-EXPAND
+    public final ContentManagerNew getContentManager()
+    {
+        return contentManager;
     }
     
     // </editor-fold>

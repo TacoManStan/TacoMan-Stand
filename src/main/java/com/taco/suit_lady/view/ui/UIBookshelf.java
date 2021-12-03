@@ -133,6 +133,8 @@ public abstract class UIBookshelf
     
     //</editor-fold>
     
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
     /**
      * <p>Returns the {@link Pane} that contains the {@link #getSelection() content} of this {@link UIBookshelf}.</p>
      * <blockquote><b>Passthrough Definition:</b> <i><code>{@link #getBookDisplayer()}<b>.</b>{@link Displayer#getDisplayContainer() getDisplayContainer()}</code></i></blockquote>
@@ -144,4 +146,6 @@ public abstract class UIBookshelf
     {
         return bookDisplayer.getDisplayContainer();
     }
+    
+    //</editor-fold>
 }

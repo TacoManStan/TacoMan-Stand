@@ -24,6 +24,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 @Component
@@ -32,7 +33,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public final class DummyInstancesPageController extends SidebarNodeGroupController<DummyInstancesPage>
 {
     
-    //<editor-fold desc="FXML">
+    //<editor-fold desc="--- FXML ---">
     
     @FXML private Pane root;
     
@@ -45,6 +46,8 @@ public final class DummyInstancesPageController extends SidebarNodeGroupControll
     
     private final ReentrantLock lock;
     
+    private final DummyContentsHandler contentsHandler;
+    
     private final BooleanProperty playingProperty; // TEST
     private final ReadOnlyObjectWrapper<DummyInstance> selectedInstanceMMProperty;
     
@@ -55,17 +58,16 @@ public final class DummyInstancesPageController extends SidebarNodeGroupControll
     public DummyInstancesPageController(FxWeaver weaver, ConfigurableApplicationContext ctx)
     {
         super(weaver, ctx);
+        
         this.lock = new ReentrantLock();
+        
+        this.contentsHandler = new DummyContentsHandler(ctx(), weaver());
         
         this.playingProperty = new SimpleBooleanProperty();
         this.selectedInstanceMMProperty = new ReadOnlyObjectWrapper<>();
     }
     
-    @Override
-    public Pane root()
-    {
-        return root;
-    }
+    //<editor-fold desc="--- INITIALIZATION ---">
     
     @Override
     @FXML public void initialize()
@@ -76,15 +78,14 @@ public final class DummyInstancesPageController extends SidebarNodeGroupControll
                 listCellFX -> new CellControlManager<>(
                         listCellFX, element -> this.weaver().loadController(DummyInstanceElementController.class))));
         
-        final DummyContentsHandler handler = ctx().getBean(DummyContentsHandler.class);
-        
-        ArrayTools.applyChangeHandler(handler.instances(), this::onAdded, this::onRemoved);
+        ArrayTools.applyChangeHandler(contentsHandler.instances(), this::onAdded, this::onRemoved);
         
         // TODO - Instead of using a MM property, create a contentChangeRequest(...) method in either AppEngine or ClientHandler.
         selectedInstanceMMProperty.addListener((observable, oldClient, newClient) -> instanceListView.getSelectionModel().select(newClient));
         instanceListView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldClient, newClient) -> selectedInstanceMMProperty.set(newClient));
-        handler.selectedInstanceProperty().bindBidirectional(selectedInstanceMMProperty); // Bind "middle-man" property
+        
+        contentsHandler.selectedInstanceProperty().bindBidirectional(selectedInstanceMMProperty); // Bind "middle-man" property
     }
     
     private void initButtonViews()
@@ -104,7 +105,25 @@ public final class DummyInstancesPageController extends SidebarNodeGroupControll
         addInstanceImageButton.initialize();
     }
     
-    //<editor-fold desc="Properties">
+    //</editor-fold>
+    
+    //<editor-fold desc="--- PROPERTIES ---">
+    
+    public Lock getLock()
+    {
+        return lock;
+    }
+    
+    @Override
+    public Pane root()
+    {
+        return root;
+    }
+    
+    public DummyContentsHandler getContentsHandler()
+    {
+        return contentsHandler;
+    }
     
     public BooleanProperty playingProperty()
     {
@@ -136,8 +155,6 @@ public final class DummyInstancesPageController extends SidebarNodeGroupControll
         }
     }
     
-    //
-    
     public ReadOnlyObjectProperty<DummyInstance> selectedInstanceProperty()
     {
         return selectedInstanceMMProperty.getReadOnlyProperty();
@@ -150,6 +167,8 @@ public final class DummyInstancesPageController extends SidebarNodeGroupControll
     
     //</editor-fold>
     
+    //<editor-fold desc="--- HELPER METHODS ---">
+    
     private void onAdded(DummyInstance instance)
     {
         FXTools.get().runFX(() -> FXTools.get().addElement(instance, instanceListView, true), true);
@@ -160,10 +179,10 @@ public final class DummyInstancesPageController extends SidebarNodeGroupControll
         FXTools.get().runFX(() -> instanceListView.getItems().remove(instance), true);
     }
     
-    //
-    
     private void addInstance()
     {
         ctx().getBean(DummyContentsHandler.class).newInstance();
     }
+    
+    //</editor-fold>
 }

@@ -4,7 +4,6 @@ import com.taco.suit_lady.logic.LogiCore;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
-import com.taco.util.quick.ConsoleBB;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.layout.StackPane;
@@ -20,7 +19,7 @@ public class ContentManagerNew
     private final ConfigurableApplicationContext ctx;
     
     private final StackPane contentBase;
-    private final ReadOnlyObjectWrapper<ContentNew> contentProperty;
+    private final ReadOnlyObjectWrapper<SLContent> contentProperty; // Add support for a list of overlapping Content, each overlapping on the Content Base StackPane?
     
     public ContentManagerNew(@NotNull FxWeaver weaver, @NotNull ConfigurableApplicationContext ctx, @NotNull StackPane contentBase)
     {
@@ -42,48 +41,23 @@ public class ContentManagerNew
         return contentBase;
     }
     
-    public @NotNull ReadOnlyObjectProperty<ContentNew> contentProperty()
+    public @NotNull ReadOnlyObjectProperty<SLContent> contentProperty()
     {
         return contentProperty.getReadOnlyProperty();
     }
     
-    public @Nullable ContentNew getContent()
+    public @Nullable SLContent getContent()
     {
         return contentProperty.get();
     }
     
-    public boolean setContent(@Nullable ContentNew newContent)
+    public boolean setContent(@Nullable SLContent newContent)
     {
         contentProperty.set(newContent);
         return true; // TODO - Add actual validity checks here
     }
     
     //</editor-fold>
-    
-    private void onChange(@Nullable ContentNew oldContent, @Nullable ContentNew newContent)
-    {
-        // TODO - Execute onRemoved() and onSet via a JavaFX Task implementation. For now, though, this will work.
-        // When the above is completed, don't forget to update the onRemoved() and onSet() Javadocs as well.
-        FXTools.get().runFX(() -> {
-            if (oldContent != null) {
-                contentBase.getChildren().remove(oldContent.getRoot());
-                
-                oldContent.getRoot().prefWidthProperty().unbind();
-                oldContent.getRoot().prefHeightProperty().unbind();
-    
-                ctx().getBean(LogiCore.class).execute(() -> oldContent.onRemovedInternal());
-            }
-            if (newContent != null) {
-                ConsoleBB.CONSOLE.print("Adding new content");
-                contentBase.getChildren().add(newContent.getRoot());
-                
-                newContent.getRoot().prefWidthProperty().bind(contentBase.widthProperty());
-                newContent.getRoot().prefHeightProperty().bind(contentBase.heightProperty());
-    
-                ctx().getBean(LogiCore.class).execute(() -> newContent.onSetInternal());
-            }
-        }, true);
-    }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
@@ -100,4 +74,28 @@ public class ContentManagerNew
     }
     
     //</editor-fold>
+    
+    private void onChange(@Nullable SLContent oldContent, @Nullable SLContent newContent)
+    {
+        // TODO - Execute onRemoved() and onSet via a JavaFX Task implementation. For now, though, this will work.
+        // When the above is completed, don't forget to update the onRemoved() and onSet() Javadocs as well.
+        FXTools.get().runFX(() -> {
+            if (oldContent != null) {
+                contentBase.getChildren().remove(oldContent.getRoot());
+                
+                oldContent.getRoot().prefWidthProperty().unbind();
+                oldContent.getRoot().prefHeightProperty().unbind();
+    
+                ctx().getBean(LogiCore.class).execute(() -> oldContent.onRemovedInternal());
+            }
+            if (newContent != null) {
+                contentBase.getChildren().add(newContent.getRoot());
+                
+                newContent.getRoot().prefWidthProperty().bind(contentBase.widthProperty());
+                newContent.getRoot().prefHeightProperty().bind(contentBase.heightProperty());
+    
+                ctx().getBean(LogiCore.class).execute(() -> newContent.onSetInternal());
+            }
+        }, true);
+    }
 }
