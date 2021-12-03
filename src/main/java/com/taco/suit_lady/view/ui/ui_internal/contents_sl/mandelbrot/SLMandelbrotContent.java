@@ -13,7 +13,7 @@ public class SLMandelbrotContent extends SLContent<SLMandelbrotContentData, SLMa
         
         final ImagePane canvas = getController().canvas();
         canvas.setRequireWritableContent(true);
-        canvas.setImage();
+//        canvas.setImage();
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
