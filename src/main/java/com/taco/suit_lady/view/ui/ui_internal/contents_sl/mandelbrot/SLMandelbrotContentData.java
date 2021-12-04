@@ -9,24 +9,29 @@ public class SLMandelbrotContentData extends SLContentData
     private final int SIZE_Y;
     private final int MAX_ITERATIONS;
     
-    private double startX;
     private double startY;
-    private double endX;
     private double endY;
+    private double startX;
+    private double endX;
     
     private MandelbrotColor[][] colors;
     private final Color[] presetColors;
     
-    public SLMandelbrotContentData()
+    public SLMandelbrotContentData(int sizeX, int sizeY, double scale)
     {
-        this.SIZE_X = 600;
-        this.SIZE_Y = 400;
+        this.SIZE_X = sizeX;
+        this.SIZE_Y = sizeY;
         this.MAX_ITERATIONS = 1000;
         
-        this.startX = -2;
-        this.startY = -1;
-        this.endX = 1;
-        this.endY = 1;
+        this.startY = -scale;
+        this.endY = scale;
+        this.startX = -((4.0 * getSize(true) * scale) / (3.0 * getSize(false)));
+        this.endX = (2.0 * getSize(true) * scale) / (3.0 * getSize(false));
+        
+        System.out.println("Start X: " + startX);
+        System.out.println("Start Y: " + startY);
+        System.out.println("End X: " + endX);
+        System.out.println("End Y: " + endY);
         
         this.colors = new MandelbrotColor[SIZE_X][SIZE_Y];
         this.presetColors = new Color[255 * 2];

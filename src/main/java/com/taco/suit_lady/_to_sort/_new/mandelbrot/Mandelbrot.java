@@ -13,6 +13,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 /**
@@ -29,8 +30,8 @@ public class Mandelbrot
     private double tempStartY;
     private double tempEndX;
     private double tempEndY;
-    private final int SIZE_X = 300 * 2;
-    private final int SIZE_Y = 200 * 2;
+    private final int SIZE_X = 1200;
+    private final int SIZE_Y = 800;
     private final int MAX_ITERATION = 1000;
     private final int PRECISION = 1;
     private BufferedImage image;
@@ -54,7 +55,7 @@ public class Mandelbrot
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-        frame.setResizable(false);
+        //        frame.setResizable(false);
         label.setFocusable(true);
         label.requestFocusInWindow();
         mouseMovedAdapter = new MouseMotionAdapter()
@@ -126,17 +127,29 @@ public class Mandelbrot
      */
     public static void main(String[] args)
     {
-//        Mandelbrot brot = new Mandelbrot();
-//        brot.drawSet();
+        //        Mandelbrot brot = new Mandelbrot();
+        //        brot.drawSet();
     
-        final SLMandelbrotContentData mandel = new SLMandelbrotContentData();
+        final Mandelbrot brot = new Mandelbrot();
+        final SLMandelbrotContentData mandel = new SLMandelbrotContentData(brot.SIZE_X, brot.SIZE_Y, 1.2);
         mandel.regenerate();
         
-        final Mandelbrot brot = new Mandelbrot();
-        for (int i = 0; i < brot.SIZE_X; i++) {
-            for (int j = 0; j < brot.SIZE_Y; j++) {
-                brot.image.setRGB(i, j, mandel.getColors()[i][j].getAwtColor().getRGB());
+        brot.draw(mandel);
+    }
+    
+    private void draw(SLMandelbrotContentData mandel)
+    {
+        try {
+            for (int i = 0; i < SIZE_X; i++) {
+                for (int j = 0; j < SIZE_Y; j++) {
+                    image.setRGB(i, j, mandel.getColors()[i][j].getAwtColor().getRGB());
+                }
             }
+            EventQueue.invokeAndWait(() -> {
+                frame.repaint();
+            });
+        } catch (InterruptedException | InvocationTargetException e) {
+            e.printStackTrace();
         }
     }
     

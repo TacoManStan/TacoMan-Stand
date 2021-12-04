@@ -23,7 +23,7 @@ public class SLMandelbrotContent extends SLContent<SLMandelbrotContentData, SLMa
     @Override
     protected @NotNull SLMandelbrotContentData loadData()
     {
-        return new SLMandelbrotContentData();
+        return new SLMandelbrotContentData(-1, -1, 1);
     }
     
     @Override
