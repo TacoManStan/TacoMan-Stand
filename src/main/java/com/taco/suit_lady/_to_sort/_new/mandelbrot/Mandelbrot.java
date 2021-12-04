@@ -30,7 +30,7 @@ public class Mandelbrot
     private final int SIZE_X = 300 * 4;
     private final int SIZE_Y = 200 * 4;
     private final int MAX_ITERATION = 1000;
-    private final int PRECISION = 2;
+    private final int PRECISION = 1;
     private BufferedImage image;
     private JFrame frame;
     private JLabel label;
@@ -160,7 +160,8 @@ public class Mandelbrot
                 }
             }
         }
-        paintColors();
+//        paintColors();
+        paintColorsReg();
         frame.add(label);
         label.repaint();
     }
@@ -175,6 +176,8 @@ public class Mandelbrot
         boolean escapes = false;
         while ((x * x) + (y * y) < (2 * 2)
                && iteration < MAX_ITERATION) {
+            if (escapes)
+                return true;
             double xTemp = (x * x) - (y * y) + xScaled;
             y = 2 * x * y + yScaled;
             x = xTemp;
@@ -264,7 +267,6 @@ public class Mandelbrot
         ArrayList<MandelColor>[] groups = new ArrayList[(PRECISION * PRECISION)];
         //i and j represent x and y point on screen
         for (int i = 0; i < SIZE_X; i++) {
-            System.out.println("On line " + i);
             for (int j = 0; j < SIZE_Y; j++) {
                 ArrayList<MandelColor> tempColors = new ArrayList<>();
                 for (int q = 0; q < groups.length; q++) {
