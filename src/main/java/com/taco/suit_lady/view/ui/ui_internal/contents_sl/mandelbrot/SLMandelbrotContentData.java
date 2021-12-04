@@ -1,44 +1,53 @@
 package com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot;
 
 import com.taco.suit_lady.view.ui.ui_internal.contents_sl.SLContentData;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.paint.Color;
+
+import java.util.concurrent.locks.ReentrantLock;
 
 public class SLMandelbrotContentData extends SLContentData
 {
-    private final int SIZE_X;
-    private final int SIZE_Y;
-    private final int MAX_ITERATIONS;
+    private final ReentrantLock lock;
     
-    private double startY;
-    private double endY;
+    private final int MAX_ITERATIONS = 1000;
+    
+    private final IntegerProperty widthProperty;
+    private final IntegerProperty heightProperty;
+    
+    private double scale;
     private double startX;
     private double endX;
     
     private MandelbrotColor[][] colors;
     private final Color[] presetColors;
     
-    public SLMandelbrotContentData(int sizeX, int sizeY, double scale)
+    public SLMandelbrotContentData(int initialWidth, int initialHeight, double scale)
     {
-        this.SIZE_X = sizeX;
-        this.SIZE_Y = sizeY;
-        this.MAX_ITERATIONS = 1000;
+        this.lock = new ReentrantLock();
         
-        this.startY = -scale;
-        this.endY = scale;
-        this.startX = -((4.0 * getSize(true) * scale) / (3.0 * getSize(false)));
-        this.endX = (2.0 * getSize(true) * scale) / (3.0 * getSize(false));
+        this.widthProperty = new SimpleIntegerProperty(initialWidth);
+        this.heightProperty = new SimpleIntegerProperty(initialHeight);
         
-        System.out.println("Start X: " + startX);
-        System.out.println("Start Y: " + startY);
-        System.out.println("End X: " + endX);
-        System.out.println("End Y: " + endY);
+        System.out.println("Start X: " + getStart(true));
+        System.out.println("Start Y: " + getStart(false));
+        System.out.println("End X: " + getEnd(true));
+        System.out.println("End Y: " + getEnd(false));
         
-        this.colors = new MandelbrotColor[SIZE_X][SIZE_Y];
         this.presetColors = new Color[255 * 2];
         
-        //
-        
         initColors();
+    }
+    
+    public final IntegerProperty widthProperty()
+    {
+        return widthProperty;
+    }
+    
+    public final IntegerProperty heightProperty()
+    {
+        return heightProperty;
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">
@@ -53,10 +62,21 @@ public class SLMandelbrotContentData extends SLContentData
     
     //</editor-fold>
     
+    private int ii = 0;
+    private int jj = 0;
+    
+    public void step()
+    {
+    
+    }
+    
     public SLMandelbrotContentData regenerate()
     {
-        for (int i = 0; i < SIZE_X; i++)
-            for (int j = 0; j < SIZE_Y; j++) {
+        this.colors = new MandelbrotColor[getSize(true)][getSize(false)];
+        this.startX = -((4.0 * getSize(true) * scale) / (3.0 * getSize(false)));
+        this.endX = (2.0 * getSize(true) * scale) / (3.0 * getSize(false));
+        for (int i = 0; i < getSize(true); i++)
+            for (int j = 0; j < getSize(false); j++) {
                 final double xScaled = getScaled(i, true);
                 final double yScaled = getScaled(j, false);
                 double x = 0, y = 0;
@@ -109,17 +129,17 @@ public class SLMandelbrotContentData extends SLContentData
     
     private double getStart(boolean isX)
     {
-        return isX ? startX : startY;
+        return isX ? startX : -scale;
     }
     
     private double getEnd(boolean isX)
     {
-        return isX ? endX : endY;
+        return isX ? endX : scale;
     }
     
     private int getSize(boolean isX)
     {
-        return isX ? SIZE_X : SIZE_Y;
+        return isX ? widthProperty.get() : heightProperty.get();
     }
     
     //
