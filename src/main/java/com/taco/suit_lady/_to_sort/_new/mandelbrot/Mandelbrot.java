@@ -4,6 +4,8 @@
  */
 package com.taco.suit_lady._to_sort._new.mandelbrot;
 
+import com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot.SLMandelbrotContentData;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -27,8 +29,8 @@ public class Mandelbrot
     private double tempStartY;
     private double tempEndX;
     private double tempEndY;
-    private final int SIZE_X = 300 * 4;
-    private final int SIZE_Y = 200 * 4;
+    private final int SIZE_X = 300 * 2;
+    private final int SIZE_Y = 200 * 2;
     private final int MAX_ITERATION = 1000;
     private final int PRECISION = 1;
     private BufferedImage image;
@@ -124,8 +126,18 @@ public class Mandelbrot
      */
     public static void main(String[] args)
     {
-        Mandelbrot brot = new Mandelbrot();
-        brot.drawSet();
+//        Mandelbrot brot = new Mandelbrot();
+//        brot.drawSet();
+    
+        final SLMandelbrotContentData mandel = new SLMandelbrotContentData();
+        mandel.regenerate();
+        
+        final Mandelbrot brot = new Mandelbrot();
+        for (int i = 0; i < brot.SIZE_X; i++) {
+            for (int j = 0; j < brot.SIZE_Y; j++) {
+                brot.image.setRGB(i, j, mandel.getColors()[i][j].getAwtColor().getRGB());
+            }
+        }
     }
     
     public void drawSet()
@@ -173,20 +185,17 @@ public class Mandelbrot
         double x = 0;
         double y = 0;
         int iteration = 0;
-        boolean escapes = false;
         while ((x * x) + (y * y) < (2 * 2)
                && iteration < MAX_ITERATION) {
-            if (escapes)
-                return true;
             double xTemp = (x * x) - (y * y) + xScaled;
             y = 2 * x * y + yScaled;
             x = xTemp;
             iteration++;
             if ((x * x) + (y * y) > (2 * 2)) {
-                escapes = true;
+                return true;
             }
         }
-        return escapes;
+        return false;
     }
     
     private double getX(double x)
