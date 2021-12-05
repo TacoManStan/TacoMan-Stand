@@ -4,18 +4,25 @@ import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.view.ui.jfx.components.BoundCanvas;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
 import com.taco.suit_lady.view.ui.ui_internal.contents_sl.SLContent;
-import com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot.SLMandelbrotContentData.MandelbrotColor;
+import com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot.MandelbrotIterator.MandelbrotColor;
+import com.taco.util.quick.ConsoleBB;
 import javafx.concurrent.Task;
 import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 public class SLMandelbrotContent extends SLContent<SLMandelbrotContentData, SLMandelbrotContentController>
 {
-    private Task<MandelbrotColor[][]> worker;
+    private final ReentrantLock lock;
+    
+    private Task<Void> worker;
     
     public SLMandelbrotContent(@NotNull Springable springable)
     {
         super(springable);
+        
+        this.lock = new ReentrantLock();
         
         this.worker = null;
         getController().canvas().setCanvasListener(this::resetCanvas);
@@ -23,42 +30,56 @@ public class SLMandelbrotContent extends SLContent<SLMandelbrotContentData, SLMa
     
     private void resetCanvas(BoundCanvas source, double newWidth, double newHeight)
     {
-//        System.out.println("Redrawing: [" + newWidth + ", " + newHeight + "]");
-        
-        if (worker != null && worker.isRunning())
-            worker.cancel(false);
-        
-        getData().widthProperty().set((int) newWidth);
-        getData().heightProperty().set((int) newHeight);
+        lock.lock();
+        try {
+            //        System.out.println("Redrawing: [" + newWidth + ", " + newHeight + "]");
+            if (worker != null)
+                worker.cancel(false);
     
-        getData().reset();
-        
-        worker = new Task<>()
-        {
-            @Override
-            protected MandelbrotColor[][] call()
+            ConsoleBB.CONSOLE.print("Resetting Canvas");
+            ConsoleBB.CONSOLE.print("Width: " + newWidth);
+            ConsoleBB.CONSOLE.print("Height: " + newHeight);
+    
+            getData().widthProperty().set((int) newWidth);
+            getData().heightProperty().set((int) newHeight);
+    
+            getData().reset();
+    
+            final MandelbrotIterator iterator = new MandelbrotIterator(new MandelbrotColor[(int) newWidth][(int) newHeight], 1.2, lock);
+            worker = new Task<>()
             {
-                while (!getData().isComplete() && !isCancelled())
-                    getData().increment();
-                if (getData().isComplete() && !isCancelled()) {
-                    redraw(getData().getColors());
-                    return getData().getColors();
+                @Override
+                protected Void call()
+                {
+                    while (!iterator.isComplete()) {
+                        iterator.next();
+                        if (isCancelled())
+                            return null;
+                    }
+                    ConsoleBB.CONSOLE.print("Redrawing: + " + iterator.getResult());
+                    ConsoleBB.CONSOLE.print("Redrawing 2");
+                    redraw(iterator.getResult());
+                    return null;
                 }
-                return null;
-            }
-        };
-        new Thread(worker).start();
+            };
+            new Thread(worker).start();
+        } finally {
+            lock.unlock();
+        }
     }
     
     private void redraw(MandelbrotColor[][] colors) {
-        for (int i = 0; i < colors.length; i++)
-            for (int j = 0; j < colors[i].length; j++) {
-                final MandelbrotColor mandelbrotColor = colors[i][j];
-                final Color color = mandelbrotColor != null ? mandelbrotColor.getColor() : Color.BLACK;
-                final int i2 = i;
-                final int j2 = j;
-                FXTools.get().runFX(() -> getController().canvas().getGraphicsContext2D().getPixelWriter().setColor(i2, j2, color), true);
-            }
+        ConsoleBB.CONSOLE.print("Redrawing 3");
+        FXTools.get().runFX(() -> {
+            for (int i = 0; i < colors.length; i++)
+                for (int j = 0; j < colors[i].length; j++) {
+                    final MandelbrotColor mandelbrotColor = colors[i][j];
+                    final Color color = mandelbrotColor != null ? mandelbrotColor.getColor() : Color.BLACK;
+                    final int i2 = i;
+                    final int j2 = j;
+                    getController().canvas().getGraphicsContext2D().getPixelWriter().setColor(i2, j2, color);
+                }
+        }, true);
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
@@ -76,9 +97,7 @@ public class SLMandelbrotContent extends SLContent<SLMandelbrotContentData, SLMa
     }
     
     @Override
-    protected void onActivate() {
-    
-    }
+    protected void onActivate() { }
     
     @Override
     protected void onDeactivate() { }
