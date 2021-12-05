@@ -11,7 +11,7 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor>
 {
     private final int PRECISION = 500;
     
-    private MandelbrotDimensions dimensions;
+    private final MandelbrotDimensions dimensions;
     
     private final Color[] presetColors;
     
