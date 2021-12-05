@@ -104,7 +104,7 @@ public class Console
                 throw ExceptionTools.ex("Console has already been created.");
             initialized = true;
             
-            initStreams();
+//            initStreams();
             
             // TODO [S]: Move this functionality to TreeLoader.
             messages.addListener((ListChangeListener<ConsoleMessageable<?>>) change -> {

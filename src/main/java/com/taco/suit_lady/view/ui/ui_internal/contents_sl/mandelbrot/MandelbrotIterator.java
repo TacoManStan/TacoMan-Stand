@@ -9,7 +9,9 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor>
 {
     private final int PRECISION = 1000;
     
-    private final double scale;
+    private final double startY;
+    private final double endY;
+    
     private final double startX;
     private final double endX;
     
@@ -22,7 +24,9 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor>
         this.presetColors = new Color[255 * 2];
         this.initColors();
     
-        this.scale = scale;
+        this.startY = scale;
+        this.endY = scale;
+        
         this.startX = -((4.0 * getSize(true) * scale) / (3.0 * getSize(false)));
         this.endX = (2.0 * getSize(true) * scale) / (3.0 * getSize(false));
     }
@@ -56,12 +60,12 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor>
     
     private double getStart(boolean isX)
     {
-        return isX ? startX : -scale;
+        return isX ? startX : -startY;
     }
     
     private double getEnd(boolean isX)
     {
-        return isX ? endX : scale;
+        return isX ? endX : startY;
     }
     
     private int getSize(boolean isX)

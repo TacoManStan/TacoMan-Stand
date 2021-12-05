@@ -81,9 +81,18 @@ public class BoundCanvas extends Canvas
         return true;
     }
     
+    private double width;
+    private double height;
+    
     @Override
     public void resize(double width, double height)
     {
+        if (this.width == width && this.height == height)
+            return;
+    
+        this.width = width;
+        this.height = height;
+        
         super.setWidth(width);
         super.setHeight(height);
         

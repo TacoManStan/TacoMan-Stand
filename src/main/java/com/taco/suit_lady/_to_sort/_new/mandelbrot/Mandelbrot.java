@@ -104,14 +104,17 @@ public class Mandelbrot
             label.removeMouseMotionListener(mouseMovedAdapter);
             label.remove(selectionBox);
             tempEndX = getX(evt.getX());
-            double temp = tempEndX - tempStartX;
-            temp *= (double) SIZE_Y / SIZE_X;
+            double temp = (tempEndX - tempStartX) * ((double) SIZE_Y / SIZE_X);
             tempEndY = temp + tempStartY;
             selectingFirst = true;
             startX = tempStartX;
             startY = tempStartY;
             endX = tempEndX;
             endY = tempEndY;
+            System.out.println("Start X: " + startX);
+            System.out.println("Start Y: " + startY);
+            System.out.println("End X: " + endX);
+            System.out.println("End Y: " + endY);
             drawSet();
         }
     }
@@ -127,14 +130,14 @@ public class Mandelbrot
      */
     public static void main(String[] args)
     {
-        //        Mandelbrot brot = new Mandelbrot();
-        //        brot.drawSet();
+                Mandelbrot brot = new Mandelbrot();
+                brot.drawSet();
     
-        final Mandelbrot brot = new Mandelbrot();
-        final SLMandelbrotContentData mandel = new SLMandelbrotContentData(brot.SIZE_X, brot.SIZE_Y, 1.2);
+//        final Mandelbrot brot = new Mandelbrot();
+//        final SLMandelbrotContentData mandel = new SLMandelbrotContentData(brot.SIZE_X, brot.SIZE_Y, 1.2);
 //        mandel.regenerate();
         
-        brot.draw(mandel);
+//        brot.draw(mandel);
     }
     
     private void draw(SLMandelbrotContentData mandel)

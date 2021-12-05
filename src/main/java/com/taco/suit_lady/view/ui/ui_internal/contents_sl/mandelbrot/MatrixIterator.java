@@ -48,7 +48,7 @@ public abstract class MatrixIterator<T>
     {
         this.iX = 0;
         this.iY = 0;
-    
+        
         this.complete = false;
     }
     
@@ -107,6 +107,21 @@ public abstract class MatrixIterator<T>
     public final boolean isComplete()
     {
         return complete;
+    }
+    
+    public final long getWorkTotal()
+    {
+        return (long) getWidth() * (long) getHeight();
+    }
+    
+    public final long getWorkProgress()
+    {
+        return (long) iX + ((long) iY * (long) getWidth());
+    }
+    
+    public final double getWorkPercent()
+    {
+        return (double) getWorkProgress() / (double) getWorkTotal();
     }
     
     //
