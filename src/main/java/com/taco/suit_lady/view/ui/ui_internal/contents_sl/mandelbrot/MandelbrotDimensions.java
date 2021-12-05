@@ -166,6 +166,23 @@ public class MandelbrotDimensions
         return new Point2D(calcedX, calcedY);
     }
     
+    public final void zoomTo(int startX, int startY, int endX, int endY)
+    {
+        final Point2D scaledStartPoint = convertCanvasPoint(startX, startY);
+        final Point2D scaledEndPoint = convertCanvasPoint(endX, endY);
+        
+        xMinProperty.set(scaledStartPoint.getX());
+        yMinProperty.set(scaledStartPoint.getY());
+        xMaxProperty.set(scaledEndPoint.getX());
+        yMaxProperty.set(scaledEndPoint.getY());
+    }
+    
+    public final void resizeTo(double width, double height)
+    {
+        canvasWidthProperty.set((int) width);
+        canvasHeightProperty.set((int) height);
+    }
+    
     private Observable[] getObservablesArray()
     {
         return new Observable[]{

@@ -18,6 +18,7 @@ public class SLMandelbrotContent extends SLContent<SLMandelbrotContentData, SLMa
     private final ReentrantLock lock;
     
     private Task<Void> worker;
+    private MandelbrotDimensions dimensions; // Used to keep track of dimensions for zoom support
     
     public SLMandelbrotContent(@NotNull Springable springable)
     {
@@ -26,43 +27,42 @@ public class SLMandelbrotContent extends SLContent<SLMandelbrotContentData, SLMa
         this.lock = new ReentrantLock();
         
         this.worker = null;
+        this.dimensions = MandelbrotDimensions.newDefaultInstance(getController().canvas().getWidth(), getController().canvas().getHeight());
         
-        getController().setDragConsumer(dragData -> resize(dragData));
-        getController().canvas().setCanvasListener(this::resetCanvas);
+        getController().setDragConsumer(dragData -> zoom(dragData));
+        getController().canvas().setCanvasListener(this::refreshCanvas);
     }
     
-    private void resetCanvas(BoundCanvas source, double newWidth, double newHeight)
+    private void refreshCanvas(BoundCanvas source, double newWidth, double newHeight)
     {
-        if (worker != null)
-            worker.cancel(false);
-        
-        //            getData().widthProperty().set((int) newWidth);
-        //            getData().heightProperty().set((int) newHeight);
-        
-        //            getData().reset();
-        
-        final MandelbrotIterator iterator = new MandelbrotIterator(new MandelbrotColor[(int) newWidth][(int) newHeight], lock);
-        worker = new Task<>()
-        {
-            @Override
-            protected Void call()
+        FXTools.get().runFX(() -> {
+            if (worker != null)
+                worker.cancel(false);
+            
+            dimensions.resizeTo(newWidth, newHeight);
+            final MandelbrotIterator iterator = new MandelbrotIterator(new MandelbrotColor[(int) newWidth][(int) newHeight], dimensions, lock);
+            worker = new Task<>()
             {
-                FXTools.get().runFX(() -> getController().getProgressBar().setVisible(true), true);
-                while (!iterator.isComplete()) {
-                    iterator.next();
-                    if (iterator.getWorkProgress() % 10 == 0)
-                        updateProgress(iterator.getWorkProgress(), iterator.getWorkTotal());
-                    if (isCancelled())
-                        return null;
+                @Override
+                protected Void call()
+                {
+                    FXTools.get().runFX(() -> getController().getProgressBar().setVisible(true), true);
+                    while (!iterator.isComplete()) {
+                        iterator.next();
+                        if (iterator.getWorkProgress() % 10 == 0)
+                            updateProgress(iterator.getWorkProgress(), iterator.getWorkTotal());
+                        if (isCancelled())
+                            return null;
+                    }
+                    //                ConsoleBB.CONSOLE.print("Redrawing...");
+                    redraw(iterator.getResult());
+                    //                getController().getProgressBar().progressProperty().unbind();
+                    return null;
                 }
-                //                ConsoleBB.CONSOLE.print("Redrawing...");
-                redraw(iterator.getResult());
-                //                getController().getProgressBar().progressProperty().unbind();
-                return null;
-            }
-        };
-        getController().getProgressBar().progressProperty().bind(worker.progressProperty());
-        new Thread(worker).start();
+            };
+            getController().getProgressBar().progressProperty().bind(worker.progressProperty());
+            new Thread(worker).start();
+        }, true);
     }
     
     private void redraw(MandelbrotColor[][] colors)
@@ -80,12 +80,16 @@ public class SLMandelbrotContent extends SLContent<SLMandelbrotContentData, SLMa
         }, true);
     }
     
-    private void resize(MouseDragData dragData)
+    private void zoom(MouseDragData dragData)
     {
         if (!dragData.isValid())
             throw ExceptionTools.ex("Drag Data is Invalid!");
         
-        System.out.println("Resizing...  " + dragData);
+        System.out.println("Zooming...  " + dragData);
+        
+        dimensions.zoomTo(dragData.getStartX(), dragData.getStartY(), dragData.getEndX(), dragData.getEndY());
+        // Use width and height values from dimensions variable instead of canvas?
+        refreshCanvas(getController().canvas(), getController().canvas().getWidth(), getController().canvas().getHeight());
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">

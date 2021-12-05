@@ -1,5 +1,6 @@
 package com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot;
 
+import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot.MandelbrotIterator.MandelbrotColor;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
@@ -8,7 +9,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class MandelbrotIterator extends MatrixIterator<MandelbrotColor>
 {
-    private final int PRECISION = 1000;
+    private final int PRECISION = 5000;
     
     private MandelbrotDimensions dimensions;
     
@@ -24,6 +25,11 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor>
         super(targetArray, lock);
         
         this.dimensions = dimensions != null ? dimensions : MandelbrotDimensions.newDefaultInstance(getWidth(), getHeight());
+        
+        if (dimensions.getCanvasWidth() != getWidth() || dimensions.getCanvasHeight() != getHeight())
+            throw ExceptionTools.ex("Dimension Mismatch:  " +
+                                    "Dimensions Data [" + dimensions.getCanvasWidth() + ", " + dimensions.getCanvasHeight() + "  " +
+                                    "Iterator Data [" + getWidth() + ", " + getHeight());
         
         this.presetColors = new Color[255 * 2];
         this.initColors();
@@ -56,8 +62,8 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor>
     
     private boolean escapes(double iX, double iY)
     {
-//        final double xScaled = getScaled(iX, true);
-//        final double yScaled = getScaled(iY, false);
+        //        final double xScaled = getScaled(iX, true);
+        //        final double yScaled = getScaled(iY, false);
         final Point2D convertedPoint = dimensions.convertCanvasPoint(iX, iY);
         double x = 0, y = 0;
         int n = 0;

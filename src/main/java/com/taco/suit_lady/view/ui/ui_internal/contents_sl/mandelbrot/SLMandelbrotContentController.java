@@ -91,7 +91,7 @@ public class SLMandelbrotContentController extends SLContentController
     {
         lock.lock();
         try {
-//            ConsoleBB.CONSOLE.print("Mouse Pressed: [" + e.getX() + ", " + e.getY() + "]");
+            //            ConsoleBB.CONSOLE.print("Mouse Pressed: [" + e.getX() + ", " + e.getY() + "]");
             this.mouseX = (int) e.getX();
             this.mouseY = (int) e.getY();
         } finally {
@@ -104,11 +104,7 @@ public class SLMandelbrotContentController extends SLContentController
         lock.lock();
         try {
             if (FXTools.get().isMouseOnNode(canvas()))
-                getDragConsumer().accept(new MouseDragData(
-                        mouseX, mouseY,
-                        e.getX(), e.getY(),
-                        canvas().getWidth(), canvas().getHeight()
-                ));
+                getDragConsumer().accept(new MouseDragData(mouseX, mouseY, e.getX(), e.getY()));
         } finally {
             lock.unlock();
         }
@@ -139,19 +135,13 @@ public class SLMandelbrotContentController extends SLContentController
         private final int endX;
         private final int endY;
         
-        private final int width;
-        private final int height;
-        
-        public MouseDragData(double startX, double startY, double endX, double endY, double width, double height)
+        public MouseDragData(double startX, double startY, double endX, double endY)
         {
             this.startX = (int) startX;
             this.startY = (int) startY;
             
             this.endX = (int) endX;
             this.endY = (int) endY;
-            
-            this.width = (int) width;
-            this.height = (int) height;
         }
         
         public final int getStartX()
@@ -174,24 +164,12 @@ public class SLMandelbrotContentController extends SLContentController
             return endY;
         }
         
-        public final int getWidth()
-        {
-            return width;
-        }
-        
-        public final int getHeight()
-        {
-            return height;
-        }
-        
         public final boolean isValid()
         {
             return startX >= 0
                    && startY >= 0
                    && endX >= 0
-                   && endY >= 0
-                   && width > 0
-                   && height > 0;
+                   && endY >= 0;
         }
         
         @Override
@@ -202,8 +180,6 @@ public class SLMandelbrotContentController extends SLContentController
                    ", startY=" + startY +
                    ", endX=" + endX +
                    ", endY=" + endY +
-                   ", width=" + width +
-                   ", height=" + height +
                    '}';
         }
     }
