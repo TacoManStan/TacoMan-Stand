@@ -38,7 +38,7 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor>
     @Override
     protected MandelbrotColor step(int i, int j)
     {
-        final Point2D scaledPoint = dimensions.convertCanvasPoint(i, j);
+        final Point2D scaledPoint = dimensions.convertFromCanvas(i, j);
         double x = 0, y = 0;
         int n = 0;
         int N = (int) Math.pow(10, 100);
@@ -55,16 +55,11 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor>
     }
     
     @Override
-    protected void onComplete()
-    {
-        System.out.println(dimensions);
-    }
+    protected void onComplete() { }
     
     private boolean escapes(double iX, double iY)
     {
-        //        final double xScaled = getScaled(iX, true);
-        //        final double yScaled = getScaled(iY, false);
-        final Point2D convertedPoint = dimensions.convertCanvasPoint(iX, iY);
+        final Point2D convertedPoint = dimensions.convertFromCanvas(iX, iY);
         double x = 0, y = 0;
         int n = 0;
         
@@ -83,17 +78,19 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor>
     private void initColors()
     {
         for (int i = 0; i < 255; i++) {
-            presetColors[i] = Color.color(0, 0, i / 255.0);
-            presetColors[i + 255] = Color.color(0, 0, (255 - i) / 255.0);
+            presetColors[i] = Color.color(0, i / 255.0, (255 - i) / 255.0);
+            presetColors[i + 255] = Color.color(0, (255 - i) / 255.0, i / 255.0);
+//            presetColors[i] = Color.color((255 - i) / 255.0, i / 255.0, 0);
+//            presetColors[i + 255] = Color.color(i / 255.0, (255 - i) / 255.0, 0);
         }
     }
     
     public class MandelbrotColor
     {
-        private int bigN;
-        private int smallN;
-        private double x;
-        private double y;
+        private final int bigN;
+        private final int smallN;
+        private final double x;
+        private final double y;
         
         private MandelbrotColor()
         {

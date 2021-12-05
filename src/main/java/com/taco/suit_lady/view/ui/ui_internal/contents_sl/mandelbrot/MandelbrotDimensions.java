@@ -1,5 +1,6 @@
 package com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot;
 
+import com.taco.suit_lady.util.tools.ExceptionTools;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
@@ -152,7 +153,13 @@ public class MandelbrotDimensions
     
     //</editor-fold>
     
-    public final Point2D convertCanvasPoint(double canvasX, double canvasY)
+    public final Point2D convertFromCanvas(Point2D point)
+    {
+        ExceptionTools.nullCheck(point, "Conversion Point");
+        return convertFromCanvas(point.getX(), point.getY());
+    }
+    
+    public final Point2D convertFromCanvas(double canvasX, double canvasY)
     {
         final int iCanvasX = (int) canvasX;
         final int iCanvasY = (int) canvasY;
@@ -168,8 +175,8 @@ public class MandelbrotDimensions
     
     public final void zoomTo(int startX, int startY, int endX, int endY)
     {
-        final Point2D scaledStartPoint = convertCanvasPoint(startX, startY);
-        final Point2D scaledEndPoint = convertCanvasPoint(endX, endY);
+        final Point2D scaledStartPoint = convertFromCanvas(startX, startY);
+        final Point2D scaledEndPoint = convertFromCanvas(endX, endY);
         
         xMinProperty.set(scaledStartPoint.getX());
         yMinProperty.set(scaledStartPoint.getY());
@@ -195,7 +202,8 @@ public class MandelbrotDimensions
         };
     }
     
-    @Override public String toString()
+    @Override
+    public String toString()
     {
         return "MandelbrotDimensions{" +
                "xMin=" + xMinProperty.get() +

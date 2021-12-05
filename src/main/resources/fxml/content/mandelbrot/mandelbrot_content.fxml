@@ -5,6 +5,7 @@
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="root" prefHeight="500.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot.SLMandelbrotContentController">
@@ -22,7 +23,11 @@
             </BorderPane>
             </top>
          <center>
-            <BoundCanvas fx:id="canvas" BorderPane.alignment="CENTER" />
+            <StackPane fx:id="canvasStackPane" BorderPane.alignment="CENTER">
+               <children>
+                  <BoundCanvas fx:id="canvas" />
+               </children>
+            </StackPane>
          </center>
          <bottom>
             <ProgressBar fx:id="progressBar" prefHeight="18.0" prefWidth="500.0" progress="0.0" BorderPane.alignment="CENTER" />

@@ -4,8 +4,6 @@
  */
 package com.taco.suit_lady._to_sort._new.mandelbrot;
 
-import com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot.SLMandelbrotContentData;
-
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -13,7 +11,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 /**
@@ -138,22 +135,6 @@ public class Mandelbrot
 //        mandel.regenerate();
         
 //        brot.draw(mandel);
-    }
-    
-    private void draw(SLMandelbrotContentData mandel)
-    {
-        try {
-            for (int i = 0; i < SIZE_X; i++) {
-                for (int j = 0; j < SIZE_Y; j++) {
-                    image.setRGB(i, j, mandel.getColors()[i][j].getAwtColor().getRGB());
-                }
-            }
-            EventQueue.invokeAndWait(() -> {
-                frame.repaint();
-            });
-        } catch (InterruptedException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
     }
     
     public void drawSet()

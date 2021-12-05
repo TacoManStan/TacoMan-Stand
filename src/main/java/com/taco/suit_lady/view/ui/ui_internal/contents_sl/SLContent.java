@@ -1,18 +1,24 @@
 package com.taco.suit_lady.view.ui.ui_internal.contents_sl;
 
 import com.taco.suit_lady.util.springable.Springable;
+import com.taco.suit_lady.util.tools.ArrayTools;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.TB;
 import com.taco.suit_lady.view.ui.Sidebar;
 import com.taco.suit_lady.view.ui.SidebarBookshelf;
+import com.taco.suit_lady.view.ui.UIBook;
 import com.taco.suit_lady.view.ui.ui_internal.AppUI;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.collections.FXCollections;
+import javafx.scene.control.Button;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ThreadPoolExecutor;
 
 public abstract class SLContent<D extends SLContentData, C extends SLContentController>
@@ -36,7 +42,16 @@ public abstract class SLContent<D extends SLContentData, C extends SLContentCont
         );
         
         this.bookshelves = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
+        ArrayTools.applyChangeHandler(
+                bookshelves,
+                bookshelf -> onBookshelfAdded(bookshelf),
+                bookshelf -> onBookshelfRemoved(bookshelf)
+        );
     }
+    
+    private void onBookshelfRemoved(SidebarBookshelf bookshelf) { }
+    
+    private void onBookshelfAdded(SidebarBookshelf bookshelf) { }
     
     //<editor-fold desc="--- PROPERTIES ---">
     
@@ -58,6 +73,8 @@ public abstract class SLContent<D extends SLContentData, C extends SLContentCont
     //</editor-fold>
     
     //<editor-fold desc="--- ABSTRACT ---">
+    
+    protected abstract @Nullable List<SidebarBookshelf> loadBookshelves(); // Currently Unused
     
     protected abstract @NotNull D loadData();
     
@@ -104,6 +121,29 @@ public abstract class SLContent<D extends SLContentData, C extends SLContentCont
     public ConfigurableApplicationContext ctx()
     {
         return strictSpringable.ctx();
+    }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- PASSTHROUGH METHODS ---">
+    
+    protected final Sidebar getSidebar()
+    {
+        return ctx().getBean(AppUI.class).getSidebar();
+    }
+    
+    protected final SidebarBookshelf injectBookshelf(String name, UIBook... books)
+    {
+        if (ArrayTools.isEmpty(ExceptionTools.nullCheck(books, "Book Array"))) throw ExceptionTools.ex("Bookshelf Contents Cannot Be Empty");
+        if (ArrayTools.containsNull(books)) throw ExceptionTools.ex("Bookshelf Contents Cannot Contain Null Elements: [" + Arrays.asList(books) + "]");
+        
+        final SidebarBookshelf bookshelf = new SidebarBookshelf(getSidebar(), new Button(name));
+
+        bookshelf.getBooks().addAll(books);
+        bookshelf.getButtonGroup().selectFirst();
+        getSidebar().bookshelvesProperty().add(bookshelf);
+        
+        return bookshelf;
     }
     
     //</editor-fold>

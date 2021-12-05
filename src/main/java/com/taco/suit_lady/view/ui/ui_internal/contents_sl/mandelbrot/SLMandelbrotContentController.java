@@ -11,6 +11,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -33,6 +34,7 @@ public class SLMandelbrotContentController extends SLContentController
     @FXML private Label titleLabel;
     
     @FXML private BoundCanvas canvas;
+    @FXML private StackPane canvasStackPane;
     @FXML private ProgressBar progressBar;
     
     //</editor-fold>

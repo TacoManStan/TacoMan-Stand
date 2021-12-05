@@ -2,15 +2,21 @@ package com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot;
 
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
+import com.taco.suit_lady.util.tools.TB;
+import com.taco.suit_lady.view.ui.SidebarBookshelf;
+import com.taco.suit_lady.view.ui.UIBook;
 import com.taco.suit_lady.view.ui.jfx.components.BoundCanvas;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
 import com.taco.suit_lady.view.ui.ui_internal.contents_sl.SLContent;
 import com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot.MandelbrotIterator.MandelbrotColor;
 import com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot.SLMandelbrotContentController.MouseDragData;
+import com.taco.suit_lady.view.ui.ui_internal.pages.mandelbrot.MandelbrotPage;
 import javafx.concurrent.Task;
 import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class SLMandelbrotContent extends SLContent<SLMandelbrotContentData, SLMandelbrotContentController>
@@ -18,13 +24,24 @@ public class SLMandelbrotContent extends SLContent<SLMandelbrotContentData, SLMa
     private final ReentrantLock lock;
     
     private Task<Void> worker;
-    private MandelbrotDimensions dimensions; // Used to keep track of dimensions for zoom support
+    private final MandelbrotDimensions dimensions; // This object is passed to every MandelbrotIterator as they are created
     
     public SLMandelbrotContent(@NotNull Springable springable)
     {
         super(springable);
         
         this.lock = new ReentrantLock();
+        
+        final UIBook[] books = new UIBook[]{
+                new UIBook(weaver(), ctx(),
+                           "Mandelbrot Demo",
+                           "mandelbrot",
+                           uiBook -> TB.resources().get(
+                                   "pages",
+                                   uiBook.getUID(uiBook.getButtonID()),
+                                   () -> new MandelbrotPage(this)),
+                           null)};
+        injectBookshelf("Mandelbrot", books);
         
         this.worker = null;
         this.dimensions = MandelbrotDimensions.newDefaultInstance(getController().canvas().getWidth(), getController().canvas().getHeight());
@@ -54,14 +71,12 @@ public class SLMandelbrotContent extends SLContent<SLMandelbrotContentData, SLMa
                         if (isCancelled())
                             return null;
                     }
-                    //                ConsoleBB.CONSOLE.print("Redrawing...");
                     redraw(iterator.getResult());
-                    //                getController().getProgressBar().progressProperty().unbind();
                     return null;
                 }
             };
             getController().getProgressBar().progressProperty().bind(worker.progressProperty());
-            new Thread(worker).start();
+            new Thread(worker).start(); // Use executor instead?
         }, true);
     }
     
@@ -73,9 +88,7 @@ public class SLMandelbrotContent extends SLContent<SLMandelbrotContentData, SLMa
                 for (int j = 0; j < colors[i].length; j++) {
                     final MandelbrotColor mandelbrotColor = colors[i][j];
                     final Color color = mandelbrotColor != null ? mandelbrotColor.getColor() : Color.BLACK;
-                    final int i2 = i;
-                    final int j2 = j;
-                    getController().canvas().getGraphicsContext2D().getPixelWriter().setColor(i2, j2, color);
+                    getController().canvas().getGraphicsContext2D().getPixelWriter().setColor(i, j, color);
                 }
         }, true);
     }
@@ -85,19 +98,22 @@ public class SLMandelbrotContent extends SLContent<SLMandelbrotContentData, SLMa
         if (!dragData.isValid())
             throw ExceptionTools.ex("Drag Data is Invalid!");
         
-        System.out.println("Zooming...  " + dragData);
-        
         dimensions.zoomTo(dragData.getStartX(), dragData.getStartY(), dragData.getEndX(), dragData.getEndY());
-        // Use width and height values from dimensions variable instead of canvas?
         refreshCanvas(getController().canvas(), getController().canvas().getWidth(), getController().canvas().getHeight());
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override
+    protected @Nullable List<SidebarBookshelf> loadBookshelves()
+    {
+        return null;
+    }
+    
+    @Override
     protected @NotNull SLMandelbrotContentData loadData()
     {
-        return new SLMandelbrotContentData(-1, -1, 1.2);
+        return new SLMandelbrotContentData();
     }
     
     @Override
