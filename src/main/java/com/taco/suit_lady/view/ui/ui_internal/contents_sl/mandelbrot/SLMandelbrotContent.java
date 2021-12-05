@@ -5,7 +5,6 @@ import com.taco.suit_lady.view.ui.jfx.components.BoundCanvas;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
 import com.taco.suit_lady.view.ui.ui_internal.contents_sl.SLContent;
 import com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot.MandelbrotIterator.MandelbrotColor;
-import com.taco.util.quick.ConsoleBB;
 import javafx.concurrent.Task;
 import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
@@ -32,13 +31,8 @@ public class SLMandelbrotContent extends SLContent<SLMandelbrotContentData, SLMa
     {
         lock.lock();
         try {
-            //        System.out.println("Redrawing: [" + newWidth + ", " + newHeight + "]");
             if (worker != null)
                 worker.cancel(false);
-    
-            ConsoleBB.CONSOLE.print("Resetting Canvas");
-            ConsoleBB.CONSOLE.print("Width: " + newWidth);
-            ConsoleBB.CONSOLE.print("Height: " + newHeight);
     
             getData().widthProperty().set((int) newWidth);
             getData().heightProperty().set((int) newHeight);
@@ -56,8 +50,6 @@ public class SLMandelbrotContent extends SLContent<SLMandelbrotContentData, SLMa
                         if (isCancelled())
                             return null;
                     }
-                    ConsoleBB.CONSOLE.print("Redrawing: + " + iterator.getResult());
-                    ConsoleBB.CONSOLE.print("Redrawing 2");
                     redraw(iterator.getResult());
                     return null;
                 }
@@ -69,7 +61,6 @@ public class SLMandelbrotContent extends SLContent<SLMandelbrotContentData, SLMa
     }
     
     private void redraw(MandelbrotColor[][] colors) {
-        ConsoleBB.CONSOLE.print("Redrawing 3");
         FXTools.get().runFX(() -> {
             for (int i = 0; i < colors.length; i++)
                 for (int j = 0; j < colors[i].length; j++) {
