@@ -9,7 +9,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class MandelbrotIterator extends MatrixIterator<MandelbrotColor>
 {
-    private final int PRECISION = 5000;
+    private final int PRECISION = 500;
     
     private MandelbrotDimensions dimensions;
     
