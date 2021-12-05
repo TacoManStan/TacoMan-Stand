@@ -41,7 +41,7 @@ public class SLMandelbrotContent extends SLContent<SLMandelbrotContentData, SLMa
         
         //            getData().reset();
         
-        final MandelbrotIterator iterator = new MandelbrotIterator(new MandelbrotColor[(int) newWidth][(int) newHeight], 1.2, lock);
+        final MandelbrotIterator iterator = new MandelbrotIterator(new MandelbrotColor[(int) newWidth][(int) newHeight], lock);
         worker = new Task<>()
         {
             @Override

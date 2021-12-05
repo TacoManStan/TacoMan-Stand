@@ -1,6 +1,7 @@
 package com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot;
 
 import com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot.MandelbrotIterator.MandelbrotColor;
+import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 
 import java.util.concurrent.locks.ReentrantLock;
@@ -9,40 +10,36 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor>
 {
     private final int PRECISION = 1000;
     
-    private final double startY;
-    private final double endY;
-    
-    private final double startX;
-    private final double endX;
+    private MandelbrotDimensions dimensions;
     
     private final Color[] presetColors;
     
-    public MandelbrotIterator(MandelbrotColor[][] targetArray, double scale, ReentrantLock lock)
+    public MandelbrotIterator(MandelbrotColor[][] targetArray, ReentrantLock lock)
+    {
+        this(targetArray, null, lock);
+    }
+    
+    public MandelbrotIterator(MandelbrotColor[][] targetArray, MandelbrotDimensions dimensions, ReentrantLock lock)
     {
         super(targetArray, lock);
         
+        this.dimensions = dimensions != null ? dimensions : MandelbrotDimensions.newDefaultInstance(getWidth(), getHeight());
+        
         this.presetColors = new Color[255 * 2];
         this.initColors();
-    
-        this.startY = scale;
-        this.endY = scale;
-        
-        this.startX = -((4.0 * getSize(true) * scale) / (3.0 * getSize(false)));
-        this.endX = (2.0 * getSize(true) * scale) / (3.0 * getSize(false));
     }
     
     @Override
     protected MandelbrotColor step(int i, int j)
     {
-        final double xScaled = getScaled(i, true);
-        final double yScaled = getScaled(j, false);
+        final Point2D scaledPoint = dimensions.convertCanvasPoint(i, j);
         double x = 0, y = 0;
         int n = 0;
         int N = (int) Math.pow(10, 100);
         if (escapes(i, j)) {
             while (Math.pow(x, 2) + Math.pow(y, 2) < N) {
-                final double xTemp = Math.pow(x, 2) - Math.pow(y, 2) + xScaled;
-                y = (2 * x * y) + yScaled;
+                final double xTemp = Math.pow(x, 2) - Math.pow(y, 2) + scaledPoint.getX();
+                y = (2 * x * y) + scaledPoint.getY();
                 x = xTemp;
                 n++;
             }
@@ -51,38 +48,23 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor>
             return new MandelbrotColor();
     }
     
-    private double getScaled(double v, boolean isX)
+    @Override
+    protected void onComplete()
     {
-        final double diff = getEnd(isX) - getStart(isX);
-        final double perc = v / getSize(isX);
-        return (diff * perc) + getStart(isX);
-    }
-    
-    private double getStart(boolean isX)
-    {
-        return isX ? startX : -startY;
-    }
-    
-    private double getEnd(boolean isX)
-    {
-        return isX ? endX : startY;
-    }
-    
-    private int getSize(boolean isX)
-    {
-        return isX ? getWidth() : getHeight();
+        System.out.println(dimensions);
     }
     
     private boolean escapes(double iX, double iY)
     {
-        final double xScaled = getScaled(iX, true);
-        final double yScaled = getScaled(iY, false);
+//        final double xScaled = getScaled(iX, true);
+//        final double yScaled = getScaled(iY, false);
+        final Point2D convertedPoint = dimensions.convertCanvasPoint(iX, iY);
         double x = 0, y = 0;
         int n = 0;
         
         while (Math.pow(x, 2) + Math.pow(y, 2) < Math.pow(2, 2) && n < PRECISION) {
-            final double xTemp = Math.pow(x, 2) - Math.pow(y, 2) + xScaled;
-            y = (2 * x * y) + yScaled;
+            final double xTemp = Math.pow(x, 2) - Math.pow(y, 2) + convertedPoint.getX();
+            y = (2 * x * y) + convertedPoint.getY();
             x = xTemp;
             n++;
             if (Math.pow(x, 2) + Math.pow(y, 2) > Math.pow(2, 2))

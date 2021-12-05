@@ -20,6 +20,8 @@ public abstract class MatrixIterator<T>
     
     public MatrixIterator(T[][] targetArray, ReentrantLock lock)
     {
+        ExceptionTools.nullCheck(targetArray, "Target Array");
+        
         this.lock = lock != null ? lock : new ReentrantLock();
         
         this.width = targetArray.length;
@@ -102,6 +104,7 @@ public abstract class MatrixIterator<T>
     private void complete()
     {
         complete = true;
+        onComplete();
     }
     
     public final boolean isComplete()
@@ -127,4 +130,6 @@ public abstract class MatrixIterator<T>
     //
     
     protected abstract T step(int i, int j);
+    
+    protected abstract void onComplete();
 }
