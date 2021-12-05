@@ -20,6 +20,8 @@ public class SLMandelbrotContentData extends SLContentData
     private double startX;
     private double endX;
     
+    private boolean complete = false;
+    
     private MandelbrotColor[][] colors;
     private final Color[] presetColors;
     
@@ -60,21 +62,75 @@ public class SLMandelbrotContentData extends SLContentData
         }
     }
     
-    //</editor-fold>
-    
-    private int ii = 0;
-    private int jj = 0;
-    
-    public void step()
+    public static void main(String[] args)
     {
-    
+        final int iterationNum = 1;
+        final int xSize = 7;
+        final int ySize = 4;
+        
+        System.out.println("iX: " + (iterationNum % xSize));
+        System.out.println("iY: " + (iterationNum / xSize));
     }
     
-    public SLMandelbrotContentData regenerate()
+    //</editor-fold>
+    
+    public boolean isComplete()
     {
+        return complete;
+    }
+    
+    public void reset()
+    {
+        this.iterationNum = 0;
+        this.complete = false;
         this.colors = new MandelbrotColor[getSize(true)][getSize(false)];
         this.startX = -((4.0 * getSize(true) * scale) / (3.0 * getSize(false)));
         this.endX = (2.0 * getSize(true) * scale) / (3.0 * getSize(false));
+    }
+    
+    private int iterationNum;
+    
+    public void increment()
+    {
+        iterationNum++;
+        
+        final int iX = Math.floorMod(iterationNum, getSize(true));
+        final int iY = Math.floorDiv(iterationNum, getSize(true));
+        
+        if (iY == getSize(false))
+            complete = true;
+        else
+            step(iX, iY);
+    }
+    
+    private SLMandelbrotContentData step(int iX, int iY)
+    {
+        complete = false;
+        
+        final double xScaled = getScaled(iX, true);
+        final double yScaled = getScaled(iY, false);
+        
+        double x = 0, y = 0;
+        int n = 0;
+        int N = (int) Math.pow(10, 100);
+        
+        if (escapes(iX, iY)) {
+            while (Math.pow(x, 2) + Math.pow(y, 2) < N) {
+                final double xTemp = Math.pow(x, 2) - Math.pow(y, 2) + xScaled;
+                y = (2 * x * y) + yScaled;
+                x = xTemp;
+                n++;
+            }
+            colors[iX][iY] = new MandelbrotColor(n, N, x, y);
+        } else
+            colors[iX][iY] = new MandelbrotColor();
+        
+        return this;
+    }
+    
+    @Deprecated
+    public SLMandelbrotContentData regenerateOld()
+    {
         for (int i = 0; i < getSize(true); i++)
             for (int j = 0; j < getSize(false); j++) {
                 final double xScaled = getScaled(i, true);
@@ -108,10 +164,10 @@ public class SLMandelbrotContentData extends SLContentData
         return (diff * perc) + getStart(isX);
     }
     
-    private boolean escapes(double i, double j)
+    private boolean escapes(double iX, double iY)
     {
-        final double xScaled = getScaled(i, true);
-        final double yScaled = getScaled(j, false);
+        final double xScaled = getScaled(iX, true);
+        final double yScaled = getScaled(iY, false);
         double x = 0, y = 0;
         int n = 0;
         

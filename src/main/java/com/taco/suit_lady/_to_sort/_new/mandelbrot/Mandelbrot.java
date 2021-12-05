@@ -132,7 +132,7 @@ public class Mandelbrot
     
         final Mandelbrot brot = new Mandelbrot();
         final SLMandelbrotContentData mandel = new SLMandelbrotContentData(brot.SIZE_X, brot.SIZE_Y, 1.2);
-        mandel.regenerate();
+//        mandel.regenerate();
         
         brot.draw(mandel);
     }
