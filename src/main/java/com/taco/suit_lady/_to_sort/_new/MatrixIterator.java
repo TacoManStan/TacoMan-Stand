@@ -1,23 +1,38 @@
-package com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot;
+package com.taco.suit_lady._to_sort._new;
 
 import com.taco.suit_lady.util.tools.ExceptionTools;
 
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * <p>Provides tools for traversing a {@code matrix} (2D Array).</p>
+ *
+ * @param <T> The type of element in the {@code matrix}.
+ */
 public abstract class MatrixIterator<T>
 {
     private final ReentrantLock lock;
     
     private final int width;
     private final int height;
+    
     private final Object[][] values;
     private final boolean isTyped;
+    
+    //
     
     private int iX;
     private int iY;
     
     private boolean complete;
     
+    /**
+     * <p><b><i>Recommended Constructor</i></b></p>
+     * <p>Constructs a new {@link MatrixIterator} instance to traverse the specified {@code matrix}.</p>
+     *
+     * @param targetArray
+     * @param lock
+     */
     public MatrixIterator(T[][] targetArray, ReentrantLock lock)
     {
         ExceptionTools.nullCheck(targetArray, "Target Array");
@@ -39,6 +54,7 @@ public abstract class MatrixIterator<T>
      *     lock.tryLock(timeout, unit)) {
      *   ...
      * }}</pre>
+     *
      * @param width
      * @param height
      * @param lock
