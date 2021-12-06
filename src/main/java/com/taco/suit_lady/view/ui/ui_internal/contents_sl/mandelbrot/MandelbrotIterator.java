@@ -1,5 +1,6 @@
 package com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot;
 
+import com.taco.suit_lady._to_sort._new.MatrixIterator;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot.MandelbrotIterator.MandelbrotColor;
 import javafx.geometry.Point2D;
