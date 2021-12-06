@@ -33,7 +33,8 @@
 
     -fx-text-fill: text-color;
     -fx-prompt-text-fill: prompt-text-color;
-    -fx-font-family: "Menlo";
+    /*-fx-font-family: "Menlo";*/
+    -fx-font-family: "Segoe UI";
 
     -fx-highlight-fill: highlight-color;
 }
@@ -169,7 +170,6 @@
     -fx-text-fill: text-color;
     -fx-prompt-text-fill: prompt-text-color;
     -fx-highlight-fill: highlight-color;
-    -fx-font-family: "Menlo";
 }
 
 .text-field:focused {
@@ -192,6 +192,7 @@
     -fx-text-fill: text-color;
     -fx-prompt-text-fill: prompt-text-color;
     -fx-highlight-fill: highlight-color;
+    -fx-font-family: "Menlo";
 }
 
 .text-area:focused, .text-area:focused .content {
@@ -199,6 +200,7 @@
     -fx-text-fill: text-color;
     -fx-prompt-text-fill: transparent;
     -fx-highlight-fill: highlight-color;
+    -fx-font-family: "Menlo";
 }
 
 /*******************************************************************************
