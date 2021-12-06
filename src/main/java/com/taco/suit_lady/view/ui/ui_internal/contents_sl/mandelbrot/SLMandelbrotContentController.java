@@ -6,7 +6,6 @@ import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
 import com.taco.suit_lady.view.ui.ui_internal.contents_sl.SLContentController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -35,7 +34,6 @@ public class SLMandelbrotContentController extends SLContentController
     
     @FXML private BoundCanvas canvas;
     @FXML private StackPane canvasStackPane;
-    @FXML private ProgressBar progressBar;
     
     //</editor-fold>
     
@@ -66,20 +64,8 @@ public class SLMandelbrotContentController extends SLContentController
     @Override
     public void initialize()
     {
-        //        progressBar.setVisible(false);
-        //        progressBar.prefWidthProperty().bind(canvas().widthProperty());
-        
         canvas().setOnMousePressed(event -> onMousePressed(event));
         canvas().setOnMouseReleased(event -> onMouseReleased(event));
-    }
-    
-    //</editor-fold>
-    
-    //<editor-fold desc="--- PROPERTIES ---">
-    
-    public final ProgressBar getProgressBar()
-    {
-        return progressBar;
     }
     
     //</editor-fold>

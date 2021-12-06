@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="root" style="-fx-border-color: border-color; -fx-border-width: 0;" stylesheets="/css/TRiBot.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.taco.suit_lady.view.ui.ui_internal.AppController">
+<StackPane fx:id="root" style="-fx-border-color: green; -fx-border-width: 0;" stylesheets="/css/TRiBot.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.taco.suit_lady.view.ui.ui_internal.AppController">
     <children>
         <BorderPane>
             <center>
@@ -36,7 +36,7 @@
                         <RowConstraints />
                     </rowConstraints>
                     <children>
-                        <StackPane fx:id="contentStackPane" prefHeight="500.0" prefWidth="1000.0" style="-fx-border-color: border-color; -fx-border-width: 0 0 0 0;" GridPane.columnSpan="1" GridPane.rowIndex="1">
+                        <StackPane fx:id="contentStackPane" prefHeight="500.0" prefWidth="1000.0" style="-fx-border-color: green; -fx-border-width: 0;" GridPane.columnSpan="1" GridPane.rowIndex="1">
                             <GridPane.margin>
                                 <Insets />
                             </GridPane.margin>
@@ -99,7 +99,7 @@
                                 <Insets bottom="2.0" />
                             </padding>
                         </HBox>
-                        <AnchorPane fx:id="sidebarPaneAnchor" minHeight="0.0" minWidth="0.0" prefWidth="275.0" style="-fx-border-color: border-color; -fx-border-width: 0 0 0 1;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <AnchorPane fx:id="sidebarPaneAnchor" minHeight="0.0" minWidth="0.0" prefHeight="500.0" prefWidth="275.0" style="-fx-border-color: border-color; -fx-border-width: 0 0 0 1;" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <GridPane.margin>
                                 <Insets />
                             </GridPane.margin>

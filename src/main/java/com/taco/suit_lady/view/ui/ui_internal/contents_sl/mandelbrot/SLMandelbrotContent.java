@@ -10,7 +10,6 @@ import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
 import com.taco.suit_lady.view.ui.ui_internal.contents_sl.SLContent;
 import com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot.MandelbrotIterator.MandelbrotColor;
 import com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot.SLMandelbrotContentController.MouseDragData;
-import com.taco.suit_lady.view.ui.ui_internal.pages.mandelbrot.MandelbrotPage;
 import javafx.concurrent.Task;
 import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
@@ -26,28 +25,35 @@ public class SLMandelbrotContent extends SLContent<SLMandelbrotContentData, SLMa
     private Task<Void> worker;
     private final MandelbrotDimensions dimensions; // This object is passed to every MandelbrotIterator as they are created
     
+    private final MandelbrotPage coverPage;
+    
     public SLMandelbrotContent(@NotNull Springable springable)
     {
         super(springable);
         
         this.lock = new ReentrantLock();
         
-        final UIBook[] books = new UIBook[]{
-                new UIBook(weaver(), ctx(),
-                           "Mandelbrot Demo",
-                           "mandelbrot",
-                           uiBook -> TB.resources().get(
-                                   "pages",
-                                   uiBook.getUID(uiBook.getButtonID()),
-                                   () -> new MandelbrotPage(this)),
-                           null)};
-        injectBookshelf("Mandelbrot", books);
+        this.coverPage = new MandelbrotPage(this);
+        injectBookshelf("Mandelbrot", new UIBook(
+                weaver(), ctx(),
+                "Mandelbrot Demo",
+                "mandelbrot",
+                uiBook -> TB.resources().get(
+                        "pages",
+                        uiBook.getUID(uiBook.getButtonID()),
+                        () -> coverPage),
+                null));
         
         this.worker = null;
         this.dimensions = MandelbrotDimensions.newDefaultInstance(getController().canvas().getWidth(), getController().canvas().getHeight());
         
         getController().setDragConsumer(dragData -> zoom(dragData));
         getController().canvas().setCanvasListener(this::refreshCanvas);
+    }
+    
+    protected MandelbrotPage getCoverPage()
+    {
+        return coverPage;
     }
     
     private void refreshCanvas(BoundCanvas source, double newWidth, double newHeight)
@@ -63,7 +69,7 @@ public class SLMandelbrotContent extends SLContent<SLMandelbrotContentData, SLMa
                 @Override
                 protected Void call()
                 {
-                    FXTools.get().runFX(() -> getController().getProgressBar().setVisible(true), true);
+                    FXTools.get().runFX(() -> getCoverPage().getController().getProgressBar().setVisible(true), true);
                     while (!iterator.isComplete()) {
                         iterator.next();
                         if (iterator.getWorkProgress() % 10 == 0)
@@ -75,7 +81,7 @@ public class SLMandelbrotContent extends SLContent<SLMandelbrotContentData, SLMa
                     return null;
                 }
             };
-            getController().getProgressBar().progressProperty().bind(worker.progressProperty());
+            getCoverPage().getController().getProgressBar().progressProperty().bind(worker.progressProperty());
             new Thread(worker).start(); // Use executor instead?
         }, true);
     }
@@ -83,7 +89,7 @@ public class SLMandelbrotContent extends SLContent<SLMandelbrotContentData, SLMa
     private void redraw(MandelbrotColor[][] colors)
     {
         FXTools.get().runFX(() -> {
-            getController().getProgressBar().setVisible(false);
+            getCoverPage().getController().getProgressBar().setVisible(false);
             for (int i = 0; i < colors.length; i++)
                 for (int j = 0; j < colors[i].length; j++) {
                     final MandelbrotColor mandelbrotColor = colors[i][j];

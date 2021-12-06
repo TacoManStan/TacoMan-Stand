@@ -1,7 +1,8 @@
-package com.taco.suit_lady.view.ui.ui_internal.pages.mandelbrot;
+package com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot;
 
 import com.taco.suit_lady.view.ui.UIPageController;
 import javafx.fxml.FXML;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import net.rgielen.fxweaver.core.FxWeaver;
@@ -16,10 +17,16 @@ import org.springframework.stereotype.Component;
 public class MandelbrotPageController extends UIPageController<MandelbrotPage>
 {
     @FXML private AnchorPane root;
+    @FXML private ProgressBar progressBar;
     
     protected MandelbrotPageController(FxWeaver weaver, ConfigurableApplicationContext ctx)
     {
         super(weaver, ctx);
+    }
+    
+    protected ProgressBar getProgressBar()
+    {
+        return progressBar;
     }
     
     @Override

@@ -9,7 +9,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class MandelbrotIterator extends MatrixIterator<MandelbrotColor>
 {
-    private final int PRECISION = 500;
+    private final int PRECISION = 1000;
     
     private final MandelbrotDimensions dimensions;
     
@@ -75,13 +75,37 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor>
         return false;
     }
     
+    private Color escapeColor = Color.BLACK;
+    
     private void initColors()
     {
         for (int i = 0; i < 255; i++) {
-            presetColors[i] = Color.color(0, i / 255.0, (255 - i) / 255.0);
-            presetColors[i + 255] = Color.color(0, (255 - i) / 255.0, i / 255.0);
-//            presetColors[i] = Color.color((255 - i) / 255.0, i / 255.0, 0);
-//            presetColors[i + 255] = Color.color(i / 255.0, (255 - i) / 255.0, 0);
+            presetColors[i] = Color.color(i / 255.0, 0, 0);
+            presetColors[i + 255] = Color.color((255 - i) / 255.0, 0, 0);
+            
+            // Green
+            // presetColors[i] = Color.color(0, i / 255.0, 0);
+            // presetColors[i + 255] = Color.color(0, (255 - i) / 255.0, 0);
+            
+            // Purple
+            // presetColors[i] = Color.color(i / 255.0, 0, i / 255.0);
+            // presetColors[i + 255] = Color.color((255 - i) / 255.0, 0, (255 - i) / 255.0);
+            
+            // Teal
+            // presetColors[i] = Color.color(0, i / 255.0, i / 255.0);
+            // presetColors[i + 255] = Color.color(0, (255 - i) / 255.0, (255 - i) / 255.0);
+            
+            // Blue
+            // presetColors[i] = Color.color(0, 0, (255 - i) / 255.0);
+            // presetColors[i + 255] = Color.color(0, 0, i / 255.0);
+            
+            // Green & Blue 1
+            // presetColors[i] = Color.color(0, i / 255.0, (255 - i) / 255.0);
+            // presetColors[i + 255] = Color.color(0, (255 - i) / 255.0, i / 255.0);
+            
+            // Red & Green 1
+            // presetColors[i] = Color.color((255 - i) / 255.0, i / 255.0, 0);
+            // presetColors[i + 255] = Color.color(i / 255.0, (255 - i) / 255.0, 0);
         }
     }
     
@@ -128,7 +152,7 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor>
         public Color getColor()
         {
             if (getBigN() == -1)
-                return Color.BLACK;
+                return escapeColor;
             
             final double z = Math.sqrt(Math.pow(getX(), 2) + Math.pow(getY(), 2));
             

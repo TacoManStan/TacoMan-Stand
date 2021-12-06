@@ -85,14 +85,18 @@ public class SLContentManager
                 
                 oldContent.getController().root().prefWidthProperty().unbind();
                 oldContent.getController().root().prefHeightProperty().unbind();
+                oldContent.getController().root().maxWidthProperty().unbind();
+                oldContent.getController().root().maxHeightProperty().unbind();
     
                 ctx().getBean(LogiCore.class).execute(() -> oldContent.onRemovedInternal());
             }
             if (newContent != null) {
                 contentBase.getChildren().add(newContent.getController().root());
                 
-                newContent.getController().root().prefWidthProperty().bind(contentBase.widthProperty());
-                newContent.getController().root().prefHeightProperty().bind(contentBase.heightProperty());
+                FXTools.get().bindToParent(newContent.getController().root(), contentBase, FXTools.BindOrientation.BOTH, FXTools.BindType.BOTH);
+                
+//                newContent.getController().root().prefWidthProperty().bind(contentBase.widthProperty());
+//                newContent.getController().root().prefHeightProperty().bind(contentBase.heightProperty());
     
                 ctx().getBean(LogiCore.class).execute(() -> newContent.onSetInternal());
             }
