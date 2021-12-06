@@ -248,7 +248,7 @@ public class AppController
     {
         final Sidebar sidebar = ctx().getBean(AppUI.class).getSidebar();
         
-        final Button generalSidebarButton = new Button("General");
+        final Button generalSidebarButton = new Button("Gen");
         final SidebarBookshelf generalSidebarBookshelf = new SidebarBookshelf(sidebar, generalSidebarButton);
         generalSidebarBookshelf.getBooks().add(new UIBook(
                 AppController.this.weaver, AppController.this.ctx,
@@ -269,7 +269,7 @@ public class AppController
         ));
         generalSidebarBookshelf.getButtonGroup().selectFirst();
         
-        final Button inDevelopmentSidebarButton = new Button("In Dev");
+        final Button inDevelopmentSidebarButton = new Button("Dev");
         final SidebarBookshelf inDevelopmentSidebarBookshelf = new SidebarBookshelf(sidebar, inDevelopmentSidebarButton);
         inDevelopmentSidebarBookshelf.getBooks().add(new UIBook(
                 AppController.this.weaver, AppController.this.ctx,

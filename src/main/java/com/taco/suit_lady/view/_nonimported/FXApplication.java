@@ -78,7 +78,6 @@ public class FXApplication extends Application
     public void init()
     {
         // TODO - Update JavaDoc for this method to accurately reflect ApplicationContext initialization process.
-        
         ctx = new SpringApplicationBuilder() // Constructs a new SpringApplicationBuilder instance to handle the ApplicationContext initialization
                 .sources(MainApplication.class) // Defines all global-scope class-based configurations
                 .parent(new ClassPathXmlApplicationContext(StartupUtil.ROOT.XML.ctx_config())) // Gives global scope access to applicable XML Configurations

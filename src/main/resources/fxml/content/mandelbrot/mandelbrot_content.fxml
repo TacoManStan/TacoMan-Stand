@@ -1,27 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.taco.suit_lady.view.ui.jfx.components.BoundCanvas?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="root" prefHeight="500.0" prefWidth="1000.0" style="-fx-border-color: red; -fx-border-width: 0;" stylesheets="/css/TRiBot.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot.SLMandelbrotContentController">
+<AnchorPane fx:id="root" prefHeight="500.0" prefWidth="1000.0" stylesheets="/css/TRiBot.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot.SLMandelbrotContentController">
     <children>
-        <BorderPane fx:id="borderPaneRoot" style="-fx-border-color: blue; -fx-border-width: 0;" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
-            <top>
-            <BorderPane BorderPane.alignment="CENTER">
-               <center>
-                      <Label fx:id="titleLabel" text="Mandelbrot Set Demo">
-                     <font>
-                        <Font name="System Bold" size="24.0" />
-                     </font>
-                  </Label>
-               </center>
-            </BorderPane>
-            </top>
+        <BorderPane fx:id="borderPaneRoot" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
          <center>
-            <AnchorPane style="-fx-border-color: border-color; -fx-border-width: 1;">
+            <AnchorPane>
                <children>
                   <BoundCanvas fx:id="canvas" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>

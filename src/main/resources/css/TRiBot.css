@@ -12,6 +12,7 @@
 
     text-color: rgb(153, 153, 153);
     faint-text-color: rgb(135, 135, 135);
+    faintest-text-color: rgb(110, 110, 110);
     selected-text-color: rgb(186, 186, 186);
     prompt-text-color: rgb(95, 95, 95);
 
@@ -32,6 +33,7 @@
 
     -fx-text-fill: text-color;
     -fx-prompt-text-fill: prompt-text-color;
+    -fx-font-family: "Menlo";
 
     -fx-highlight-fill: highlight-color;
 }
@@ -68,7 +70,8 @@
  ******************************************************************************/
 
 .label {
-    -fx-text-fill: text-color;
+    -fx-background-color: transparent;
+    -fx-text-fill: faintest-text-color;
 }
 
 .tool-tip {
@@ -82,6 +85,30 @@
 
 .corner {
     -fx-background-color: transparent;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Progress Bar                                                                *
+ *                                                                             *
+ ******************************************************************************/
+
+.progress-bar {
+    -fx-accent: focus-color;
+}
+
+.progress-bar .bar {
+    -fx-padding: 1px;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+}
+
+.progress-bar > .track {
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-text-box-border: transparent;
+    -fx-control-inner-background: transparent;
+    -fx-background-color: le-dark-gray;
 }
 
 /*******************************************************************************
@@ -142,6 +169,7 @@
     -fx-text-fill: text-color;
     -fx-prompt-text-fill: prompt-text-color;
     -fx-highlight-fill: highlight-color;
+    -fx-font-family: "Menlo";
 }
 
 .text-field:focused {

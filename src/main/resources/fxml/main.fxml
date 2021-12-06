@@ -41,7 +41,7 @@
                                 <Insets />
                             </GridPane.margin>
                         </StackPane>
-                        <HBox fx:id="windowBar" focusTraversable="true" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" style="-fx-border-color: border-color; -fx-border-width: 0 0 1 0;" GridPane.columnSpan="2">
+                        <HBox fx:id="windowBar" focusTraversable="true" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="30.0" style="-fx-border-color: border-color; -fx-border-width: 0 0 1 0;" GridPane.columnSpan="2">
                             <children>
                                 <BorderPane HBox.hgrow="NEVER">
                                     <HBox.margin>
@@ -60,7 +60,7 @@
                                                         <Insets right="40.0" />
                                                     </BorderPane.margin>
                                                     <top>
-                                                        <TextField fx:id="globalSearchField" alignment="BASELINE_LEFT" maxHeight="-Infinity" minHeight="-Infinity" promptText="Search everywhere" BorderPane.alignment="CENTER">
+                                                        <TextField fx:id="globalSearchField" alignment="BASELINE_LEFT" maxHeight="-Infinity" minHeight="-Infinity" prefWidth="150.0" promptText="Search everywhere" BorderPane.alignment="CENTER">
                                                             <opaqueInsets>
                                                                 <Insets />
                                                             </opaqueInsets>
@@ -68,14 +68,17 @@
                                                                 <Insets top="3.0" />
                                                             </BorderPane.margin>
                                                             <font>
-                                                                <Font size="10.5" />
+                                                                <Font size="11.0" />
                                                             </font>
                                                         </TextField>
                                                     </top>
                                                 </BorderPane>
                                             </right>
                                             <left>
-                                                <Label fx:id="titleLabel" style="-fx-text-fill: text-color;" text="Suit Lady TM" BorderPane.alignment="CENTER" />
+                                                <Label fx:id="titleLabel" style="-fx-text-fill: text-color;" text="Suit Lady TM" BorderPane.alignment="CENTER">
+                                       <font>
+                                          <Font size="13.0" />
+                                       </font></Label>
                                             </left>
                                         </BorderPane>
                                         <Label fx:id="titleLabelCenter" style="-fx-text-fill: text-color;" text="TRiBot FX - TacoManStan" visible="false" />

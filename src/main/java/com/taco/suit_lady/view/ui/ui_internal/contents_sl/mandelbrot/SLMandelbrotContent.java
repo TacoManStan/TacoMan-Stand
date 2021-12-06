@@ -34,7 +34,7 @@ public class SLMandelbrotContent extends SLContent<SLMandelbrotContentData, SLMa
         this.lock = new ReentrantLock();
         
         this.coverPage = new MandelbrotPage(this);
-        injectBookshelf("Mandelbrot", new UIBook(
+        injectBookshelf("Brot", new UIBook(
                 weaver(), ctx(),
                 "Mandelbrot Demo",
                 "mandelbrot",

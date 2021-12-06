@@ -2,6 +2,7 @@ package com.taco.suit_lady;
 
 import com.taco.suit_lady.view._nonimported.FXApplication;
 import javafx.application.Application;
+import javafx.scene.text.Font;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.spring.SpringFxWeaver;
 import net.rgielen.fxweaver.spring.boot.autoconfigure.FxWeaverAutoConfiguration;
@@ -19,6 +20,7 @@ public class MainApplication
      */
     public static void main(String[] args)
     {
+        System.out.println(Font.loadFont(MainApplication.class.getResourceAsStream("/fonts/Menlo-Regular.ttf"), 10));
         Application.launch(FXApplication.class, args);
     }
     
