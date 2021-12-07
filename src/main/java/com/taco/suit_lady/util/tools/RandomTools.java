@@ -1,5 +1,8 @@
 package com.taco.suit_lady.util.tools;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -42,8 +45,7 @@ public class RandomTools
     
     public Random getRandomBySource(String source)
     {
-        switch(source)
-        {
+        switch (source) {
             case RandomTools.GLOBAL_SOURCE -> {
                 return this.random;
             }
@@ -75,6 +77,7 @@ public class RandomTools
      * Generates a pseudo-random, uniformly distributed {@code boolean} value.
      *
      * @return {@code boolean}
+     *
      * @see Random#nextBoolean()
      */
     public boolean nextBoolean()
@@ -91,6 +94,7 @@ public class RandomTools
      * [-2^<sup>31</sup>, 2<sup>31</sup>).
      *
      * @return {@code int}
+     *
      * @see Random#nextInt()
      */
     public int nextInt()
@@ -104,7 +108,9 @@ public class RandomTools
      * 0] if {@code bound} is negative.
      *
      * @param bound The lower or upper bound (exclusive).
+     *
      * @return {@code int}
+     *
      * @see Random#nextInt()
      */
     public int nextInt(final int bound)
@@ -118,7 +124,9 @@ public class RandomTools
      *
      * @param min The lower bound (inclusive).
      * @param max The upper bound (exclusive).
+     *
      * @return {@code int}
+     *
      * @throws IllegalArgumentException When {@code min} > {@code max}.
      * @see Random#nextInt(int)
      */
@@ -141,6 +149,7 @@ public class RandomTools
      * range [0.0, 1.0).
      *
      * @return {@code double}
+     *
      * @see Random#nextDouble()
      */
     public double nextDouble()
@@ -154,7 +163,9 @@ public class RandomTools
      * {@code bound}, 0.0] if {@code bound} is negative.
      *
      * @param bound The lower or upper bound (exclusive).
+     *
      * @return {@code double}
+     *
      * @see Random#nextDouble()
      */
     public double nextDouble(final double bound)
@@ -168,7 +179,9 @@ public class RandomTools
      *
      * @param min The lower bound (inclusive).
      * @param max The upper bound (exclusive).
+     *
      * @return {@code double}
+     *
      * @throws IllegalArgumentException When {@code min} > {@code max}.
      * @see Random#nextDouble()
      */
@@ -195,6 +208,7 @@ public class RandomTools
      * @param max  The maximum value (inclusive).
      * @param mean The mean ({@code >=} min and {@code <=} max).
      * @param sd   The standard deviation.
+     *
      * @return The random integer ({@code >=} min and {@code <=} max).
      */
     public double nextGaussian(final double min, final double max, final double mean, final double sd)
@@ -207,8 +221,7 @@ public class RandomTools
         
         final Random random = getRandom();
         
-        do
-        {
+        do {
             rand = random.nextGaussian() * sd + mean;
         }
         while (rand < min || rand > max);
@@ -224,6 +237,7 @@ public class RandomTools
      * @param min The minimum value (inclusive).
      * @param max The maximum value (inclusive).
      * @param sd  The standard deviation.
+     *
      * @return The random integer ({@code >=} min and {@code <=} max).
      */
     public double nextGaussian(final double min, final double max, final double sd)
@@ -239,6 +253,7 @@ public class RandomTools
      *
      * @param mean The mean ({@code <=} min and {@code <=} max).
      * @param sd   The standard deviation.
+     *
      * @return The random integer ({@code >=} min and {@code <=} max).
      */
     public double nextGaussian(final double mean, final double sd)
@@ -256,6 +271,7 @@ public class RandomTools
      * @param bias The tendency of the mode to approach the {@code min},
      *             {@code max} or midpoint value; positive values bias toward
      *             {@code max}, negative values toward {@code min}.
+     *
      * @return {@code double}
      */
     public double nextSkewedBoundedDouble(
@@ -275,8 +291,7 @@ public class RandomTools
     
     public double next(final Number bound)
     {
-        if (bound.longValue() <= Integer.MAX_VALUE)
-        { // Ensure bound is not a
+        if (bound.longValue() <= Integer.MAX_VALUE) { // Ensure bound is not a
             // long
             double decimal = bound.doubleValue() - bound.intValue();
             if (decimal == 0) // Ensure bound is not a double
@@ -287,8 +302,7 @@ public class RandomTools
     
     public double next(final Number min, final Number max)
     {
-        if (min.longValue() <= Integer.MAX_VALUE && max.longValue() <= Integer.MAX_VALUE)
-        {
+        if (min.longValue() <= Integer.MAX_VALUE && max.longValue() <= Integer.MAX_VALUE) {
             double min_decimal = min.doubleValue() - min.intValue();
             double max_decimal = max.doubleValue() - max.intValue();
             if (min_decimal == 0 && max_decimal == 0)
@@ -298,4 +312,21 @@ public class RandomTools
     }
     
     // </editor-fold>
+    
+    /**
+     * <p>Returns a random element from the specified array.</p>
+     *
+     * @param arr The input array.
+     * @param <T> The type of elements in the array.
+     *
+     * @return A random element from the specified array, or null if the array is empty.
+     *
+     * @throws NullPointerException If the specified array is {@code null}.
+     */
+    public <T> @Nullable T getRandomElement(@NotNull T[] arr)
+    {
+        if (ExceptionTools.nullCheck(arr, "Input Array").length == 0)
+            return null;
+        return arr[nextInt(arr.length - 1)];
+    }
 }
