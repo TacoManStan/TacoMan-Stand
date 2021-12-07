@@ -504,13 +504,14 @@ public class ArrayTools
         return clone;
     }
     
-    public static <T> void reverse(T[] arr)
+    public static <T> T[] reverse(T[] arr)
     {
         if (arr != null) {
             final T[] clone = arr.clone();
             for (int i = 0; i < arr.length; i++)
                 arr[i] = clone[arr.length - (i + 1)];
         }
+        return arr;
     }
     
     public static <T> void edit(List<T> list, ElementCopier<T, T> editer)
