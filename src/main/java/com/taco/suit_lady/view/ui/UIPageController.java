@@ -1,6 +1,5 @@
 package com.taco.suit_lady.view.ui;
 
-import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.view.ui.ui_internal.controllers.Controller;
 import net.rgielen.fxweaver.core.FxWeaver;
@@ -30,8 +29,8 @@ public abstract class UIPageController<T extends UIPage<?>> extends Controller
      * <p>Sets the {@link UIPage} whose UI is controlled by this {@link UIPageController} to the specified value.</p>
      * <p><b>Details</b></p>
      * <ol>
-     *     <li>{@link #setPage(UIPage) This method} is called internally by the {@link UIPage} {@link UIPage#UIPage(Springable, Object...) constructor}.</li>
-     *     <li>{@link #setPage(UIPage) This method} should <i>never</i> be called directly, or anywhere outside of the {@link UIPage} {@link UIPage#UIPage(Springable, Object...) constructor}.</li>
+     *     <li>{@link #setPage(UIPage) This method} is called internally by the {@link UIPage} {@link UIPage#UIPage(UIBook, Object...) constructor}.</li>
+     *     <li>{@link #setPage(UIPage) This method} should <i>never</i> be called directly, or anywhere outside of the {@link UIPage} {@link UIPage#UIPage(UIBook, Object...) constructor}.</li>
      *     <li>Once the {@link UIPage} has been {@link #setPage(UIPage) set}, <code><i>{@link #onPageBindingComplete()}</i></code> is called to wrap up the operation.</li>
      * </ol>
      *

@@ -6,9 +6,8 @@ import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.ObjectTools;
 import com.taco.suit_lady.view.ui.jfx.button.ImageButton;
 import com.taco.suit_lady.view.ui.jfx.button.ImageButtonGroup;
-import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
 import com.taco.suit_lady.view.ui.jfx.components.ImagePane;
-import com.taco.util.quick.ConsoleBB;
+import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -17,6 +16,7 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
@@ -145,6 +145,10 @@ public class Sidebar
                     final VBox oldButtonBox = oldBookshelf.getButtonBox();
                     if (oldButtonBox != null)
                         this.childButtonPane.getChildren().remove(oldButtonBox);
+                    
+                    final Button oldButton = oldBookshelf.getButton();
+                    if (oldButton != null)
+                        oldButton.setText(oldBookshelf.getName());
                 }
                 if (newBookshelf != null) {
                     final VBox buttonBox = newBookshelf.getButtonBox();
@@ -152,6 +156,10 @@ public class Sidebar
                     this.childButtonPane.getChildren().add(buttonBox);
                     this.contentPane.getChildren().clear();
                     this.contentPane.getChildren().add(newBookshelf.getContent());
+    
+                    final Button newButton = newBookshelf.getButton();
+                    if (newButton != null)
+                        newButton.setText("<< " + newBookshelf.getName() + " >>");
                 }
             }
         });

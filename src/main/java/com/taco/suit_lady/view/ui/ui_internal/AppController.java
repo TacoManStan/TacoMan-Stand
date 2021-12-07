@@ -8,9 +8,9 @@ import com.taco.suit_lady.view.ui.UIBook;
 import com.taco.suit_lady.view.ui.console.Console;
 import com.taco.suit_lady.view.ui.console.ConsoleMessageable;
 import com.taco.suit_lady.view.ui.jfx.button.ImageButton;
+import com.taco.suit_lady.view.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXDialogTools;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
-import com.taco.suit_lady.view.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.view.ui.jfx.lists.treehandler.WrappingTreeCellData;
 import com.taco.suit_lady.view.ui.ui_internal.console.ConsoleUIDataContainer;
 import com.taco.suit_lady.view.ui.ui_internal.contents_old.DummyContentsInstancePane;
@@ -33,7 +33,10 @@ import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
-import javafx.scene.control.*;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToolBar;
+import javafx.scene.control.TreeView;
 import javafx.scene.layout.*;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
@@ -250,6 +253,14 @@ public class AppController
         
         final SidebarBookshelf generalSidebarBookshelf = new SidebarBookshelf(sidebar, "General");
         generalSidebarBookshelf.getBooks().add(new UIBook(
+                weaver(), ctx(),
+                "Content Switch Demo", "rerun",
+                uiBook -> TB.resources().get(
+                        "pages", uiBook.getUID(uiBook.getButtonID()),
+                        () -> new ContentSwitchDemoPage(uiBook)
+                ), null
+        ));
+        generalSidebarBookshelf.getBooks().add(new UIBook(
                 AppController.this.weaver, AppController.this.ctx,
                 "Clients", "clients",
                 uiBook -> TB.resources().get(
@@ -268,7 +279,7 @@ public class AppController
         ));
         generalSidebarBookshelf.getButtonGroup().selectFirst();
         
-        final SidebarBookshelf inDevelopmentSidebarBookshelf = new SidebarBookshelf(sidebar, "In Dev");
+        final SidebarBookshelf inDevelopmentSidebarBookshelf = new SidebarBookshelf(sidebar, "In Development");
         inDevelopmentSidebarBookshelf.getBooks().add(new UIBook(
                 AppController.this.weaver, AppController.this.ctx,
                 "Entity Debug", "entity_debug",
@@ -277,17 +288,9 @@ public class AppController
                         () -> new EntityDebugPage(uiBook)
                 ), null
         ));
-        inDevelopmentSidebarBookshelf.getBooks().add(new UIBook(
-                weaver(), ctx(),
-                "Content Switch Demo", "rerun",
-                uiBook -> TB.resources().get(
-                        "pages", uiBook.getUID(uiBook.getButtonID()),
-                        () -> new ContentSwitchDemoPage(uiBook)
-                ), null
-        ));
         inDevelopmentSidebarBookshelf.getButtonGroup().selectFirst();
         
-        final SidebarBookshelf nyiSidebarBookshelf = new SidebarBookshelf(sidebar, "NYI");
+        final SidebarBookshelf nyiSidebarBookshelf = new SidebarBookshelf(sidebar, "Not Yet Implemented");
         nyiSidebarBookshelf.getBooks().add(new UIBook(
                 AppController.this.weaver, AppController.this.ctx,
                 "Social", "social",

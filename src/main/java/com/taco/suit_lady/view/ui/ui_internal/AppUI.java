@@ -77,8 +77,6 @@ public class AppUI
         ctx().getBean(Console.class).initialize();
         
         this.contentManager = new SLContentManager(weaver(), ctx(), getContentStackPane());
-//        this.contentManager.setContent(new SLTestContent(this));
-//        this.contentManager.setContent(new SLMandelbrotContent(this));
     }
     
     //</editor-fold>

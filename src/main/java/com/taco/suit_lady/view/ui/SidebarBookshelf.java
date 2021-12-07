@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -74,6 +75,9 @@ public class SidebarBookshelf extends UIBookshelf
         this.owner = owner;
         this.buttonBox = new VBox();
         this.button = new Button(getName());
+        
+        this.button.setFont(Font.font(10));
+        this.button.setMaxHeight(20);
         
         this.bookButtonGroup = new BoundImageButtonGroup<>(getBooks(), lock);
         
@@ -180,7 +184,7 @@ public class SidebarBookshelf extends UIBookshelf
      * <p>Returns the {@link VBox} {@link Region container} housing all {@link UIBook#buttonViewProperty() selection buttons} mapped to all {@link UIBook UIBooks} in this {@link SidebarBookshelf}.</p>
      * <p><b>Details</b></p>
      * <ol>
-     *     <li>The {@link VBox} returned by {@link #getButtonBox() this method} is created automatically in the {@link SidebarBookshelf} {@link #SidebarBookshelf(Sidebar, Button, StackPane) constructor}.</li>
+     *     <li>The {@link VBox} returned by {@link #getButtonBox() this method} is created automatically in the {@link SidebarBookshelf} {@link #SidebarBookshelf(Sidebar, StackPane, String) constructor}.</li>
      * </ol>
      * <p><b>Usage in {@link Sidebar}</b></p>
      * <ol>
@@ -248,7 +252,6 @@ public class SidebarBookshelf extends UIBookshelf
      */
     public void select()
     {
-        System.out.println("Selecting Bookshelf: " + getName());
         getOwner().setSelectedBookshelf(this);
     }
     
