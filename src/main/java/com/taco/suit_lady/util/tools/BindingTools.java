@@ -305,9 +305,9 @@ public class BindingTools
      * Allows you to bind an {@link ObservableValue} to a dynamic {@link Binding}.
      * <p>
      * <b>Example Class 1:</b>
-     * <blockquote><pre>
-     * <code>public static class ExampleClass1 {
-     *
+     * <pre><code>
+     * public static class ExampleClass1
+     * {
      *      private final {@link ObjectProperty}{@literal ExampleClass2} selectedExampleProperty;
      *
      *      public ExampleClass1(ExampleClass2 selectedExampleClass2) {
@@ -315,11 +315,11 @@ public class BindingTools
      *      }
      *
      *      ... Assumed to have standard Property methods ...
-     * }</code></pre></blockquote>
+     * }</code></pre>
      * <b>Example Class 2:</b>
-     * <blockquote><pre>
-     * <code>public static class ExampleClass2 {
-     *
+     * <pre><code>
+     * public static class ExampleClass2
+     * {
      *      private final {@link StringProperty} nameProperty;
      *
      *      public ExampleClass2(String name) {
@@ -327,23 +327,22 @@ public class BindingTools
      *      }
      *
      *      ... Assumed to have standard Property methods ...
-     * }</code></pre></blockquote>
+     * }</code></pre>
      * <p>
      * <b>Example Usage:</b>
-     * <blockquote><pre>
-     * <code>ExampleClass2 example1 = new ExampleClass2("Example 1");
+     * <pre><code>
+     * ExampleClass2 example1 = new ExampleClass2("Example 1");
      * ExampleClass2 example2 = new ExampleClass2("Example 2");
      * ExampleClass1 exampleClass1 = new ExampleClass1(example1);
-     * <br>
+     *
      * {@link Binding}{@literal <String>} recursiveNameBinding = Properties.recursiveBinding(ExampleClass2::nameProperty, exampleClass1.selectedExampleProperty());
      * recursiveNameBinding.addListener((observable, oldValue, newValue)-> System.out.println("Changing Value - [" + oldValue + "-> " + newValue + "]"));
-     * <br>
+     *
      * example1.setName("New Name (Example 1)");
      * exampleClass1.setSelectedExample(example2);
      * example1.setName("Another New Name (Example 1)");
      * example2.setName("New Name (Example 2)");
-     * exampleClass1.setSelectedExample(example1);
-     * </code></pre></blockquote>
+     * exampleClass1.setSelectedExample(example1);</code></pre>
      */
     public static class RecursiveBinding<U, V>
             implements Binding<V>
