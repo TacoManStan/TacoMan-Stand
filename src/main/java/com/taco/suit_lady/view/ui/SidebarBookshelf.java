@@ -31,6 +31,8 @@ public class SidebarBookshelf extends UIBookshelf
     
     private final BoundImageButtonGroup<UIBook> bookButtonGroup;
     
+    private boolean selectOnAdd;
+    
     /**
      * <p>Refer to {@link #SidebarBookshelf(Sidebar, Button, StackPane) Fully-Parameterized Constructor} for additional information.</p>
      * <blockquote><b>Passthrough Definition:</b> <i><code>
@@ -249,6 +251,7 @@ public class SidebarBookshelf extends UIBookshelf
      */
     public void select()
     {
+        System.out.println("Selecting Bookshelf: " + getName());
         getOwner().setSelectedBookshelf(this);
     }
     

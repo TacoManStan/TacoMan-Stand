@@ -141,6 +141,7 @@ public abstract class SLContent<D extends SLContentData, C extends SLContentCont
 
         bookshelf.getBooks().addAll(books);
         bookshelf.getButtonGroup().selectFirst();
+        
         bookshelves.add(bookshelf);
         
         return bookshelf;

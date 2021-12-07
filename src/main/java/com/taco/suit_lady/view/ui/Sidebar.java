@@ -158,7 +158,10 @@ public class Sidebar
         
         this.bookshelvesProperty.addListener((ListChangeListener<SidebarBookshelf>) c -> FXTools.get().runFX(() -> {
             while (c.next()) {
-                c.getAddedSubList().forEach(sidebarBookshelf -> toolBar.getItems().add(sidebarBookshelf.getButton()));
+                c.getAddedSubList().forEach(sidebarBookshelf -> {
+                    toolBar.getItems().add(sidebarBookshelf.getButton());
+                    sidebarBookshelf.select();
+                });
                 c.getRemoved().forEach(sidebarBookshelf -> toolBar.getItems().remove(sidebarBookshelf.getButton()));
             }
         }, true));
@@ -187,8 +190,6 @@ public class Sidebar
         FXTools.get().runFX(() -> {
             backImageButton.initialize();
             childButtonPane.setAlignment(Pos.TOP_LEFT);
-            
-            ConsoleBB.CONSOLE.print(bookshelvesProperty().toString());
             
             bookshelvesProperty().forEach(SidebarBookshelf::initialize);
             
