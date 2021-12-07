@@ -2,6 +2,7 @@ package com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot;
 
 import com.taco.suit_lady._to_sort._new.MatrixIterator;
 import com.taco.suit_lady.util.tools.ExceptionTools;
+import com.taco.suit_lady.util.tools.RandomTools;
 import com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot.MandelbrotIterator.MandelbrotColor;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
@@ -80,34 +81,39 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor>
     
     private void initColors()
     {
-        for (int i = 0; i < 255; i++) {
-            presetColors[i] = Color.color(i / 255.0, 0, 0);
-            presetColors[i + 255] = Color.color((255 - i) / 255.0, 0, 0);
-            
-            // Green
-            // presetColors[i] = Color.color(0, i / 255.0, 0);
-            // presetColors[i + 255] = Color.color(0, (255 - i) / 255.0, 0);
-            
-            // Purple
-            // presetColors[i] = Color.color(i / 255.0, 0, i / 255.0);
-            // presetColors[i + 255] = Color.color((255 - i) / 255.0, 0, (255 - i) / 255.0);
-            
-            // Teal
-            // presetColors[i] = Color.color(0, i / 255.0, i / 255.0);
-            // presetColors[i + 255] = Color.color(0, (255 - i) / 255.0, (255 - i) / 255.0);
-            
-            // Blue
-            // presetColors[i] = Color.color(0, 0, (255 - i) / 255.0);
-            // presetColors[i + 255] = Color.color(0, 0, i / 255.0);
-            
-            // Green & Blue 1
-            // presetColors[i] = Color.color(0, i / 255.0, (255 - i) / 255.0);
-            // presetColors[i + 255] = Color.color(0, (255 - i) / 255.0, i / 255.0);
-            
-            // Red & Green 1
-            // presetColors[i] = Color.color((255 - i) / 255.0, i / 255.0, 0);
-            // presetColors[i + 255] = Color.color(i / 255.0, (255 - i) / 255.0, 0);
-        }
+        final int random = RandomTools.get().nextInt(7);
+        System.out.println("Random: " + random);
+        for (int i = 0; i < 255; i++)
+            switch (random) {
+                case 0 -> {
+                    presetColors[i] = Color.color(i / 255.0, 0, 0);
+                    presetColors[i + 255] = Color.color((255 - i) / 255.0, 0, 0);
+                }
+                case 1 -> {
+                    presetColors[i] = Color.color(0, i / 255.0, 0);
+                    presetColors[i + 255] = Color.color(0, (255 - i) / 255.0, 0);
+                }
+                case 2 -> {
+                    presetColors[i] = Color.color(i / 255.0, 0, i / 255.0);
+                    presetColors[i + 255] = Color.color((255 - i) / 255.0, 0, (255 - i) / 255.0);
+                }
+                case 3 -> {
+                    presetColors[i] = Color.color(0, i / 255.0, i / 255.0);
+                    presetColors[i + 255] = Color.color(0, (255 - i) / 255.0, (255 - i) / 255.0);
+                }
+                case 4 -> {
+                    presetColors[i] = Color.color(0, 0, (255 - i) / 255.0);
+                    presetColors[i + 255] = Color.color(0, 0, i / 255.0);
+                }
+                case 5 -> {
+                    presetColors[i] = Color.color(0, i / 255.0, (255 - i) / 255.0);
+                    presetColors[i + 255] = Color.color(0, (255 - i) / 255.0, i / 255.0);
+                }
+                case 6 -> {
+                    presetColors[i] = Color.color((255 - i) / 255.0, i / 255.0, 0);
+                    presetColors[i + 255] = Color.color(i / 255.0, (255 - i) / 255.0, 0);
+                }
+            }
     }
     
     public class MandelbrotColor

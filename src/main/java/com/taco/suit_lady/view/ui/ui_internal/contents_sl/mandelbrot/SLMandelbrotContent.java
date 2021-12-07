@@ -22,7 +22,7 @@ public class SLMandelbrotContent extends SLContent<SLMandelbrotContentData, SLMa
     private Task<Void> worker;
     private final MandelbrotDimensions dimensions; // This object is passed to every MandelbrotIterator as they are created
     
-    private MandelbrotPage coverPage; // Functionally final
+    private final MandelbrotPage coverPage;
     
     public SLMandelbrotContent(@NotNull Springable springable)
     {
