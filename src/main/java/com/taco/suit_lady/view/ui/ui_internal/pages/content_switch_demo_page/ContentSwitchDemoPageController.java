@@ -1,6 +1,10 @@
 package com.taco.suit_lady.view.ui.ui_internal.pages.content_switch_demo_page;
 
 import com.taco.suit_lady.view.ui.UIPageController;
+import com.taco.suit_lady.view.ui.ui_internal.AppUI;
+import com.taco.suit_lady.view.ui.ui_internal.contents_sl.SLContent;
+import com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot.SLMandelbrotContent;
+import com.taco.suit_lady.view.ui.ui_internal.contents_sl.test.SLTestContent;
 import com.taco.util.quick.ConsoleBB;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -24,9 +28,17 @@ public class ContentSwitchDemoPageController extends UIPageController<ContentSwi
     @FXML private Button button2;
     @FXML private Button button3;
     
+    private final SLContent<?, ?> content1;
+    private final SLContent<?, ?> content2;
+    private final SLContent<?, ?> content3;
+    
     protected ContentSwitchDemoPageController(FxWeaver weaver, ConfigurableApplicationContext ctx)
     {
         super(weaver, ctx);
+        
+        this.content1 = new SLMandelbrotContent(this);
+        this.content2 = new SLMandelbrotContent(this);
+        this.content3 = new SLTestContent(this);
     }
     
     @Override
@@ -44,16 +56,19 @@ public class ContentSwitchDemoPageController extends UIPageController<ContentSwi
     
     private void button1()
     {
-        ConsoleBB.CONSOLE.print("Button 1");
+        ConsoleBB.CONSOLE.print("B1 Pressed");
+        ctx().getBean(AppUI.class).getContentManager().setContent(content1);
     }
     
     private void button2()
     {
-        ConsoleBB.CONSOLE.print("Button 2");
+        ConsoleBB.CONSOLE.print("B2 Pressed");
+        ctx().getBean(AppUI.class).getContentManager().setContent(content2);
     }
     
     private void button3()
     {
-        ConsoleBB.CONSOLE.print("Button 3");
+        ConsoleBB.CONSOLE.print("B3 Pressed");
+        ctx().getBean(AppUI.class).getContentManager().setContent(content3);
     }
 }

@@ -44,8 +44,8 @@ public abstract class SLContent<D extends SLContentData, C extends SLContentCont
         this.bookshelves = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
         ArrayTools.applyChangeHandler(
                 bookshelves,
-                bookshelf -> onBookshelfAdded(bookshelf),
-                bookshelf -> onBookshelfRemoved(bookshelf)
+                bookshelf -> onBookshelfAddedInternal(bookshelf),
+                bookshelf -> onBookshelfRemovedInternal(bookshelf)
         );
     }
     
@@ -141,7 +141,7 @@ public abstract class SLContent<D extends SLContentData, C extends SLContentCont
 
         bookshelf.getBooks().addAll(books);
         bookshelf.getButtonGroup().selectFirst();
-        getSidebar().bookshelvesProperty().add(bookshelf);
+        bookshelves.add(bookshelf);
         
         return bookshelf;
     }
@@ -164,6 +164,17 @@ public abstract class SLContent<D extends SLContentData, C extends SLContentCont
         getBookshelves().forEach(bookshelf -> sidebar.bookshelvesProperty().remove(bookshelf));
         
         onDeactivate();
+    }
+    
+    private void onBookshelfAddedInternal(SidebarBookshelf bookshelf)
+    {
+        bookshelf.initialize();
+        onBookshelfAdded(bookshelf);
+    }
+    
+    private void onBookshelfRemovedInternal(SidebarBookshelf bookshelf)
+    {
+        onBookshelfRemoved(bookshelf);
     }
     
     //</editor-fold>

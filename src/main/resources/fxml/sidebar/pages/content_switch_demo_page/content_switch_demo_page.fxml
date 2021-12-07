@@ -9,9 +9,9 @@
          <top>
             <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
               <items>
-                <Button fx:id="button1" mnemonicParsing="false" text="Content 1" />
-                  <Button fx:id="button2" mnemonicParsing="false" text="Content 2" />
-                  <Button fx:id="button3" mnemonicParsing="false" text="Content 3" />
+                <Button fx:id="button1" mnemonicParsing="false" text="B1" />
+                  <Button fx:id="button2" mnemonicParsing="false" text="B2" />
+                  <Button fx:id="button3" mnemonicParsing="false" text="B3" />
               </items>
             </ToolBar>
          </top></BorderPane>

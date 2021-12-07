@@ -46,17 +46,9 @@ public abstract class UIBookshelf
             return null;
         }, bookDisplayer.displayProperty());
         
-        this.isEmptyBinding = Bindings.createBooleanBinding(() -> {
-            final Boolean hasPagedContent = innerBinding.getValue();
-            return hasPagedContent != null && hasPagedContent;
-        }, BindingTools.createRecursiveBinding((UIBook uiBook) -> {
-            if (uiBook != null) {
-                final UIPageHandler pageHandler = uiBook.getPageHandler();
-                if (pageHandler != null)
-                    return pageHandler.isEmptyBinding();
-            }
-            return null;
-        }, bookDisplayer.displayProperty()));
+        this.isEmptyBinding = Bindings.createBooleanBinding(
+                () -> innerBinding.getValue(),
+                innerBinding, bookDisplayer.displayProperty());
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
@@ -86,6 +78,7 @@ public abstract class UIBookshelf
      * <blockquote><b>Passthrough Definition:</b> <i><code>{@link #getBookDisplayer()}<b>.</b>{@link Displayer#displayProperty() displayProperty()}</code></i></blockquote>
      *
      * @return The {@link ReadOnlyObjectProperty property} containing the currently selected {@link UIBook} in this {@link UIBookshelf}.
+     *
      * @see #getBookDisplayer()
      */
     public @NotNull ReadOnlyObjectProperty<UIBook> selectionProperty()
@@ -98,6 +91,7 @@ public abstract class UIBookshelf
      * <blockquote><b>Passthrough Definition:</b> <i><code>{@link #getBookDisplayer()}<b>.</b>{@link Displayer#displayProperty() displayProperty()}<b>.</b>{@link ReadOnlyObjectProperty#get() get()}</code></i></blockquote>
      *
      * @return The currently selected {@link UIBook content} in this {@link UIBookshelf}.
+     *
      * @see #selectionProperty()
      * @see #getBookDisplayer()
      */
