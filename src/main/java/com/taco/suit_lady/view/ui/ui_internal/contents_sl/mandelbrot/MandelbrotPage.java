@@ -1,5 +1,6 @@
 package com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot;
 
+import com.taco.suit_lady.view.ui.UIBook;
 import com.taco.suit_lady.view.ui.UIPage;
 import org.jetbrains.annotations.NotNull;
 
@@ -7,9 +8,9 @@ public class MandelbrotPage extends UIPage<MandelbrotPageController>
 {
     private final SLMandelbrotContent slContent;
     
-    public MandelbrotPage(@NotNull SLMandelbrotContent slContent, Object... constructorParams)
+    public MandelbrotPage(@NotNull UIBook owner, @NotNull SLMandelbrotContent slContent, Object... constructorParams)
     {
-        super(slContent, constructorParams);
+        super(owner, constructorParams);
         
         this.slContent = slContent;
     }

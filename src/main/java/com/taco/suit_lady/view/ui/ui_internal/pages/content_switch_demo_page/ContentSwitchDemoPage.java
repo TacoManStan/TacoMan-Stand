@@ -1,15 +1,15 @@
 package com.taco.suit_lady.view.ui.ui_internal.pages.content_switch_demo_page;
 
-import com.taco.suit_lady.util.springable.Springable;
+import com.taco.suit_lady.view.ui.UIBook;
 import com.taco.suit_lady.view.ui.UIPage;
 import org.jetbrains.annotations.NotNull;
 
 
 public class ContentSwitchDemoPage extends UIPage<ContentSwitchDemoPageController>
 {
-    public ContentSwitchDemoPage(@NotNull Springable springable, Object... constructorParams)
+    public ContentSwitchDemoPage(@NotNull UIBook owner, Object... constructorParams)
     {
-        super(springable, constructorParams);
+        super(owner, constructorParams);
     }
     
     @Override

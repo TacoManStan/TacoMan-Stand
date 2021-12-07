@@ -22,7 +22,7 @@ public class SLMandelbrotContent extends SLContent<SLMandelbrotContentData, SLMa
     private Task<Void> worker;
     private final MandelbrotDimensions dimensions; // This object is passed to every MandelbrotIterator as they are created
     
-    private final MandelbrotPage coverPage;
+    private MandelbrotPage coverPage;
     
     public SLMandelbrotContent(@NotNull Springable springable)
     {
@@ -30,15 +30,14 @@ public class SLMandelbrotContent extends SLContent<SLMandelbrotContentData, SLMa
         
         this.lock = new ReentrantLock();
         
-        this.coverPage = new MandelbrotPage(this);
-        injectBookshelf("Brot", new UIBook(
+        injectBookshelf("Mandelbrot", new UIBook(
                 weaver(), ctx(),
                 "Mandelbrot Demo",
                 "mandelbrot",
                 uiBook -> TB.resources().get(
                         "pages",
                         uiBook.getUID(uiBook.getButtonID()),
-                        () -> coverPage),
+                        () -> coverPage = new MandelbrotPage(uiBook, this)),
                 null));
         
         this.worker = null;

@@ -16,6 +16,8 @@ public abstract class UIPage<C extends UIPageController<?>>
     private final FxWeaver weaver;
     private final ConfigurableApplicationContext ctx;
     
+    private final UIBook owner;
+    
     private final C controller;
     
     /**
@@ -30,7 +32,7 @@ public abstract class UIPage<C extends UIPageController<?>>
      *     </li>
      * </ol>
      *
-     * @param springable The {@link Springable} containing the {@link FxWeaver} and {@link ConfigurableApplicationContext Application Context} required to construct and configure this {@link UIPage}.
+     * @param owner The {@link Springable} containing the {@link FxWeaver} and {@link ConfigurableApplicationContext Application Context} required to construct and configure this {@link UIPage}.
      *
      * @throws NullPointerException If the specified {@link Springable} is {@code null}.
      * @throws NullPointerException If the {@link FxWeaver} returned by this specified {@link Springable} is {@code null}.
@@ -38,12 +40,13 @@ public abstract class UIPage<C extends UIPageController<?>>
      * @throws NullPointerException If the controller {@link #controllerDefinition() definition} is {@code null}.
      * @throws NullPointerException If the {@link UIPageController controller} loaded by the {@link #weaver() FxWeaver} using the controller {@link #controllerDefinition() definition} defined by this {@link UIPage} implementation is {@code null}.
      */
-    public UIPage(@NotNull Springable springable, Object... constructorParams)
+    public UIPage(@NotNull UIBook owner, Object... constructorParams)
     {
-        ExceptionTools.nullCheck(springable, "Springable Parent");
+        ExceptionTools.nullCheck(owner, "Springable Parent (UIBook Owner)");
         
-        this.weaver = ExceptionTools.nullCheck(springable.weaver(), "FxWeaver");
-        this.ctx = ExceptionTools.nullCheck(springable.ctx(), "ApplicationContext");
+        this.weaver = ExceptionTools.nullCheck(owner.weaver(), "FxWeaver");
+        this.ctx = ExceptionTools.nullCheck(owner.ctx(), "ApplicationContext");
+        this.owner = owner;
         
         // Compound expression containing null checks for both the controller definition and the resulting constructor instance itself
         this.controller = ExceptionTools.nullCheckMessage(
@@ -57,11 +60,22 @@ public abstract class UIPage<C extends UIPageController<?>>
     
     //<editor-fold desc="--- PROPERTIES ---">
     
+    
+    /**
+     * <p>Returns the {@link UIBook} instance that contains this {@link UIPage} instance.
+     *
+     * @return The {@link UIBook} instance that contains this {@link UIPage} instance.
+     */
+    public final @NotNull UIBook getOwner()
+    {
+        return owner;
+    }
+    
     /**
      * <p>Returns the {@link UIPageController} that defines and manages the {@link #getContent() content} displayed by this {@link UIPage}.</p>
      * <p><b>Details</b></p>
      * <ol>
-     *     <li>The {@link UIPageController} returned by {@link #getController() this method} is automatically loaded in the {@link UIPage} {@link UIPage#UIPage(Springable, Object...) constructor}.</li>
+     *     <li>The {@link UIPageController} returned by {@link #getController() this method} is automatically loaded in the {@link UIPage} {@link UIPage#UIPage(UIBook, Object...) constructor}.</li>
      * </ol>
      *
      * @return The {@link Controller} that defines and manages the {@link #getContent() content} displayed by this {@link UIPage}.
@@ -123,7 +137,7 @@ public abstract class UIPage<C extends UIPageController<?>>
      *     <li>Parameter array should never be {@code null}.</li>
      * </ol>
      *
-     * @param constructorParams The array of {@link Object Objects} passed to the {@link UIPage} {@link UIPage#UIPage(Springable, Object...) constructor} to be used to initialize/construct {@link UIPage} implementations.
+     * @param constructorParams The array of {@link Object Objects} passed to the {@link UIPage} {@link UIPage#UIPage(UIBook, Object...) constructor} to be used to initialize/construct {@link UIPage} implementations.
      */
     protected abstract void initializePage(@NotNull Object[] constructorParams);
     
@@ -132,7 +146,7 @@ public abstract class UIPage<C extends UIPageController<?>>
      * <p><b>Details</b></p>
      * <ol>
      *     <li>Used internally to automatically construct the {@link UIPageController} set to manage this {@link UIPage}.</li>
-     *     <li>Automatic {@link UIPageController controller} construction is done in the {@link UIPage} {@link UIPage#UIPage(Springable, Object...) constructor}</li>
+     *     <li>Automatic {@link UIPageController controller} construction is done in the {@link UIPage} {@link UIPage#UIPage(UIBook, Object...) constructor}</li>
      * </ol>
      *
      * @return The {@link Class} representing the {@link UIPageController} implementation to be used to define and manage the UI of this {@link UIPage} implementation.

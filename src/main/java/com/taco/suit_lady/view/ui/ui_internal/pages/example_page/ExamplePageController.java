@@ -2,6 +2,7 @@ package com.taco.suit_lady.view.ui.ui_internal.pages.example_page;
 
 import com.taco.suit_lady.view.ui.ui_internal.controllers.SidebarNodeGroupController;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import net.rgielen.fxweaver.core.FxWeaver;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 public class ExamplePageController extends SidebarNodeGroupController<ExamplePage>
 {
     @FXML private BorderPane root;
+    @FXML private Button pageTurnButton;
     
     public ExamplePageController(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         super(weaver, ctx);
@@ -28,7 +30,9 @@ public class ExamplePageController extends SidebarNodeGroupController<ExamplePag
     }
     
     @Override
-    @FXML public void initialize() { }
+    @FXML public void initialize() {
+        pageTurnButton.setOnAction(event -> getPage().getOwner().getPageHandler().turnToNew(new ExamplePage(getPage().getOwner(), "transparent")));
+    }
     
     @Override
     protected void onPageBindingComplete()

@@ -127,13 +127,31 @@ public abstract class SLContent<D extends SLContentData, C extends SLContentCont
         return ctx().getBean(AppUI.class).getSidebar();
     }
     
+//    @SafeVarargs
+//    protected final SidebarBookshelf injectBookshelf(@NotNull String name, @NotNull Function<UIBookshelf, UIBook>... bookFactories)
+//    {
+//        ExceptionTools.nullCheck(name, "Bookshelf Name");
+//        if (ArrayTools.containsNull(ExceptionTools.nullCheck(bookFactories, "Book Factories Array")))
+//            throw ExceptionTools.ex("Book Factory Array cannot contain any null elements!");
+//
+//        final SidebarBookshelf bookshelf = new SidebarBookshelf(getSidebar(), name);
+//
+//        Arrays.stream(ArrayTools.reverse(ExceptionTools.nullCheck(bookFactories, "Book Factories Array"))).forEach(
+//                bookFactory -> bookshelf.getBooks().add(ExceptionTools.nullCheck(bookFactory.apply(bookshelf), "Book Factory Result")));
+//        bookshelf.getButtonGroup().selectFirst();
+//
+//        bookshelves.add(bookshelf);
+//
+//        return bookshelf;
+//    }
+    
     protected SidebarBookshelf injectBookshelf(String name, UIBook... books)
     {
         if (ArrayTools.isEmpty(ExceptionTools.nullCheck(books, "Book Array"))) throw ExceptionTools.ex("Bookshelf Contents Cannot Be Empty");
         if (ArrayTools.containsNull(books)) throw ExceptionTools.ex("Bookshelf Contents Cannot Contain Null Elements: [" + Arrays.asList(books) + "]");
         
         final SidebarBookshelf bookshelf = new SidebarBookshelf(getSidebar(), name);
-
+        
         bookshelf.getBooks().addAll(books);
         bookshelf.getButtonGroup().selectFirst();
         

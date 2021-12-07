@@ -8,7 +8,6 @@ import com.taco.suit_lady.view.ui.jfx.lists.CellControlManager;
 import com.taco.suit_lady.view.ui.jfx.lists.ListCellFX;
 import com.taco.suit_lady.view.ui.ui_internal.contents_old.DummyContentsHandler;
 import com.taco.suit_lady.view.ui.ui_internal.contents_old.DummyInstance;
-import com.taco.suit_lady.view.ui.ui_internal.controllers.DummyInstanceElementController;
 import com.taco.suit_lady.view.ui.ui_internal.controllers.SidebarNodeGroupController;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
