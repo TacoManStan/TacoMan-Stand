@@ -25,14 +25,13 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.binding.ObjectBinding;
+import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
+import javafx.scene.Parent;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
@@ -182,6 +181,11 @@ public class AppController
     private Stage stage;
     private DummyContentsInstancePane contentPane;
     
+    private StackPane globalOverlayStackPane;
+    private ObjectBinding<StackPane> selectionOverlayStackPaneBinding;
+    private ReadOnlyListWrapper<Parent> globalOverlays;
+    
+    
     public AppController(FxWeaver weaver, ConfigurableApplicationContext ctx)
     {
         this.weaver = weaver;
@@ -217,12 +221,7 @@ public class AppController
         sidebarImagePane.setRotationAxis(Rotate.Y_AXIS);
         sidebarPaneAnchor.managedProperty().bind(sidebarPaneAnchor.visibleProperty());
         
-        final AppUI ui = ctx().getBean(AppUI.class);
-        ui.init();
-        
-        //        contentPane.contentProperty().bind(ctx.getBean(DummyContentsHandler.class).selectedInstanceProperty());
-        //        contentStackPane.getChildren().add(contentPane);
-        
+        getAppUI().init();
         
         initImageButtons();
         initSidebar();
@@ -241,11 +240,25 @@ public class AppController
                                              minimizeImagePane, maximizeImagePane, closeImagePane, settingsImagePane, sidebarImagePane
         );
         
+//        initOverlays();
+        
         stage.show();
         onShownInit();
     }
     
     //
+    
+    private void initOverlays()
+    {
+        selectionOverlayStackPaneBinding = Bindings.createObjectBinding(
+                () -> getAppUI().getContentManager().getContent().getController().getOverlayPane(),
+                getAppUI().getContentManager().contentProperty());
+        selectionOverlayStackPaneBinding.addListener((observable, oldValue, newValue) -> {
+            if (oldValue != null) {
+            
+            }
+        });
+    }
     
     private void initSidebar()
     {
@@ -396,6 +409,16 @@ public class AppController
     }
     
     //</editor-fold>
+    
+    /**
+     * <p>Convenience method for retrieving the singleton {@link AppUI} instance for this application runtime instance.
+     *
+     * @return The singleton {@link AppUI} instance for this application runtime instance.
+     */
+    public final AppUI getAppUI()
+    {
+        return ctx().getBean(AppUI.class);
+    }
     
     private void toggleSidebar()
     {

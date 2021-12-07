@@ -95,7 +95,7 @@
  ******************************************************************************/
 
 .progress-bar {
-    -fx-accent: focus-color;
+    -fx-accent: tribot;
 }
 
 .progress-bar .bar {
