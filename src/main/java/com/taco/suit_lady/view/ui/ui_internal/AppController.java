@@ -32,10 +32,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToolBar;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
@@ -126,6 +123,8 @@ public class AppController
     @FXML private StackPane contentStackPane;
     
     @FXML private TreeView<WrappingTreeCellData<ConsoleMessageable<?>>> consoleTree;
+    
+    @FXML private Label bookshelfTitleLabel;
     
     //
     
@@ -240,7 +239,14 @@ public class AppController
                                              minimizeImagePane, maximizeImagePane, closeImagePane, settingsImagePane, sidebarImagePane
         );
         
-//        initOverlays();
+        bookshelfTitleLabel.textProperty().bind(
+                Bindings.createStringBinding(() -> {
+                    final SidebarBookshelf bookshelf = getAppUI().getSidebar().getSelectedBookshelf();
+                    return bookshelf != null ? bookshelf.getName() : "No Bookshelf Selected";
+                }, getAppUI().getSidebar().selectedBookshelfProperty())
+        );
+        
+        //        initOverlays();
         
         stage.show();
         onShownInit();

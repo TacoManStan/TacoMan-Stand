@@ -205,6 +205,27 @@
 
 /*******************************************************************************
  *                                                                             *
+ * ChoiceBox                                                                   *
+ *                                                                             *
+ ******************************************************************************/
+
+.choice-box {
+    -fx-background-color: transparent;
+    -fx-border-color: border-color;
+    -fx-border-style: solid;
+    -fx-text-fill: text-color;
+    -fx-prompt-text-fill: transparent;
+    -fx-highlight-fill: highlight-color;
+}
+
+.choice-box .arrow {
+    -fx-background-color: control-background-color;
+    -fx-focus-color: focus-color;
+    -fx-background-insets: 0, 0, 0, 0;
+}
+
+/*******************************************************************************
+ *                                                                             *
  * ListView                                                                    *
  *                                                                             *
  ******************************************************************************/
