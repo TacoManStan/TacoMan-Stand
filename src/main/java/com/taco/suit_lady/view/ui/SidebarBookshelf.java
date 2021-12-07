@@ -34,14 +34,14 @@ public class SidebarBookshelf extends UIBookshelf
     private boolean selectOnAdd;
     
     /**
-     * <p>Refer to {@link #SidebarBookshelf(Sidebar, Button, StackPane) Fully-Parameterized Constructor} for additional information.</p>
+     * <p>Refer to {@link #SidebarBookshelf(Sidebar, StackPane, String) Fully-Parameterized Constructor} for additional information.</p>
      * <blockquote><b>Passthrough Definition:</b> <i><code>
-     * new {@link #SidebarBookshelf(Sidebar, Button, StackPane) SidebarBookshelf}<b>(</b>owner<b>,</b> menuButton<b>,</b> <u>null</u><b>)</b>
+     * new {@link #SidebarBookshelf(Sidebar, StackPane, String) SidebarBookshelf}<b>(</b>owner<b>,</b> menuButton<b>,</b> <u>null</u><b>)</b>
      * </code></i></blockquote>
      */
-    public SidebarBookshelf(@NotNull Sidebar owner, @NotNull Button menuButton)
+    public SidebarBookshelf(@NotNull Sidebar owner, @NotNull String name)
     {
-        this(owner, menuButton, null);
+        this(owner, null, name);
     }
     
     /**
@@ -51,32 +51,29 @@ public class SidebarBookshelf extends UIBookshelf
      *                    <ul>
      *                          <li>Cannot be {@code null}.</li>
      *                    </ul>
-     * @param menuButton  The {@link Button} that {@link #select() selects} this {@link SidebarBookshelf} when {@link Button#onActionProperty() pressed}.
-     *                    <ul>
-     *                          <li>Cannot be {@code null}.</li>
-     *                    </ul>
      * @param contentPane The {@link StackPane} on which the {@link #getContent() contents} of this {@link SidebarBookshelf} are displayed.
      *                    <ul>
      *                          <li>Cannot be {@code null}.</li>
      *                    </ul>
+     * @param name The name of the constructed {@link SidebarBookshelf}. Displayed as the selection button text and internal name property.
      *
      * @throws NullPointerException If the {@code owner} parameter is {@code null}.
      * @throws NullPointerException If the {@code menuButton} parameter is {@code null}.
      * @see UIBookshelf#UIBookshelf(StackPane)
      */
-    public SidebarBookshelf(@NotNull Sidebar owner, @NotNull Button menuButton, @Nullable StackPane contentPane)
+    // TO-UPDATE
+    public SidebarBookshelf(@NotNull Sidebar owner, @Nullable StackPane contentPane, @NotNull String name)
     {
         super(contentPane);
         
         ExceptionTools.nullCheck(owner, "Sidebar (Owner/Parent)");
-        ExceptionTools.nullCheck(menuButton, "Menu Button");
         
         this.lock = owner.getLock();
-        this.nameProperty = new SimpleStringProperty();
+        this.nameProperty = new SimpleStringProperty(name);
         
         this.owner = owner;
         this.buttonBox = new VBox();
-        this.button = menuButton;
+        this.button = new Button(getName());
         
         this.bookButtonGroup = new BoundImageButtonGroup<>(getBooks(), lock);
         

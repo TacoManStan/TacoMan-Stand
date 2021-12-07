@@ -11,14 +11,11 @@ import com.taco.suit_lady.view.ui.ui_internal.AppUI;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.collections.FXCollections;
-import javafx.scene.control.Button;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.ThreadPoolExecutor;
 
 public abstract class SLContent<D extends SLContentData, C extends SLContentController>
@@ -73,8 +70,6 @@ public abstract class SLContent<D extends SLContentData, C extends SLContentCont
     //</editor-fold>
     
     //<editor-fold desc="--- ABSTRACT ---">
-    
-    protected abstract @Nullable List<SidebarBookshelf> loadBookshelves(); // Currently Unused
     
     protected abstract @NotNull D loadData();
     
@@ -132,12 +127,12 @@ public abstract class SLContent<D extends SLContentData, C extends SLContentCont
         return ctx().getBean(AppUI.class).getSidebar();
     }
     
-    protected final SidebarBookshelf injectBookshelf(String name, UIBook... books)
+    protected SidebarBookshelf injectBookshelf(String name, UIBook... books)
     {
         if (ArrayTools.isEmpty(ExceptionTools.nullCheck(books, "Book Array"))) throw ExceptionTools.ex("Bookshelf Contents Cannot Be Empty");
         if (ArrayTools.containsNull(books)) throw ExceptionTools.ex("Bookshelf Contents Cannot Contain Null Elements: [" + Arrays.asList(books) + "]");
         
-        final SidebarBookshelf bookshelf = new SidebarBookshelf(getSidebar(), new Button(name));
+        final SidebarBookshelf bookshelf = new SidebarBookshelf(getSidebar(), name);
 
         bookshelf.getBooks().addAll(books);
         bookshelf.getButtonGroup().selectFirst();

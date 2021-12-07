@@ -1,12 +1,8 @@
 package com.taco.suit_lady.view.ui.ui_internal.contents_sl.dummy_instances;
 
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.view.ui.SidebarBookshelf;
 import com.taco.suit_lady.view.ui.ui_internal.contents_sl.SLContent;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 public class SLDummyInstancesContent extends SLContent<SLDummyInstancesContentData, SLDummyInstancesContentController>
 {
@@ -16,12 +12,6 @@ public class SLDummyInstancesContent extends SLContent<SLDummyInstancesContentDa
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
-    
-    @Override
-    protected @Nullable List<SidebarBookshelf> loadBookshelves()
-    {
-        return null;
-    }
     
     @Override
     protected @NotNull SLDummyInstancesContentData loadData()

@@ -3,7 +3,6 @@ package com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.TB;
-import com.taco.suit_lady.view.ui.SidebarBookshelf;
 import com.taco.suit_lady.view.ui.UIBook;
 import com.taco.suit_lady.view.ui.jfx.components.BoundCanvas;
 import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
@@ -13,9 +12,7 @@ import com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot.SLMandelbro
 import javafx.concurrent.Task;
 import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class SLMandelbrotContent extends SLContent<SLMandelbrotContentData, SLMandelbrotContentController>
@@ -25,7 +22,7 @@ public class SLMandelbrotContent extends SLContent<SLMandelbrotContentData, SLMa
     private Task<Void> worker;
     private final MandelbrotDimensions dimensions; // This object is passed to every MandelbrotIterator as they are created
     
-    private final MandelbrotPage coverPage;
+    private MandelbrotPage coverPage; // Functionally final
     
     public SLMandelbrotContent(@NotNull Springable springable)
     {
@@ -109,12 +106,6 @@ public class SLMandelbrotContent extends SLContent<SLMandelbrotContentData, SLMa
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
-    
-    @Override
-    protected @Nullable List<SidebarBookshelf> loadBookshelves()
-    {
-        return null;
-    }
     
     @Override
     protected @NotNull SLMandelbrotContentData loadData()

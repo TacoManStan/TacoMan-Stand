@@ -248,8 +248,7 @@ public class AppController
     {
         final Sidebar sidebar = ctx().getBean(AppUI.class).getSidebar();
         
-        final Button generalSidebarButton = new Button("Gen");
-        final SidebarBookshelf generalSidebarBookshelf = new SidebarBookshelf(sidebar, generalSidebarButton);
+        final SidebarBookshelf generalSidebarBookshelf = new SidebarBookshelf(sidebar, "General");
         generalSidebarBookshelf.getBooks().add(new UIBook(
                 AppController.this.weaver, AppController.this.ctx,
                 "Clients", "clients",
@@ -269,8 +268,7 @@ public class AppController
         ));
         generalSidebarBookshelf.getButtonGroup().selectFirst();
         
-        final Button inDevelopmentSidebarButton = new Button("Dev");
-        final SidebarBookshelf inDevelopmentSidebarBookshelf = new SidebarBookshelf(sidebar, inDevelopmentSidebarButton);
+        final SidebarBookshelf inDevelopmentSidebarBookshelf = new SidebarBookshelf(sidebar, "In Dev");
         inDevelopmentSidebarBookshelf.getBooks().add(new UIBook(
                 AppController.this.weaver, AppController.this.ctx,
                 "Entity Debug", "entity_debug",
@@ -289,8 +287,7 @@ public class AppController
         ));
         inDevelopmentSidebarBookshelf.getButtonGroup().selectFirst();
         
-        final Button nyiSidebarButton = new Button("NYI");
-        final SidebarBookshelf nyiSidebarBookshelf = new SidebarBookshelf(sidebar, nyiSidebarButton);
+        final SidebarBookshelf nyiSidebarBookshelf = new SidebarBookshelf(sidebar, "NYI");
         nyiSidebarBookshelf.getBooks().add(new UIBook(
                 AppController.this.weaver, AppController.this.ctx,
                 "Social", "social",
