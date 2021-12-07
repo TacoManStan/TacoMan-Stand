@@ -1,8 +1,9 @@
-package com.taco.suit_lady.view.ui.ui_internal.controllers;
+package com.taco.suit_lady.view.ui.ui_internal.pages.dummy_instances_page;
 
 import com.taco.suit_lady.view.ui.jfx.button.ImageButton;
 import com.taco.suit_lady.view.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.view.ui.ui_internal.contents_old.DummyInstance;
+import com.taco.suit_lady.view.ui.ui_internal.controllers.CellController;
 import com.taco.util.quick.ConsoleBB;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
