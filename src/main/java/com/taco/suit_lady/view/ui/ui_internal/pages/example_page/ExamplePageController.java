@@ -19,7 +19,8 @@ public class ExamplePageController extends SidebarNodeGroupController<ExamplePag
     @FXML private BorderPane root;
     @FXML private Button pageTurnButton;
     
-    public ExamplePageController(FxWeaver weaver, ConfigurableApplicationContext ctx) {
+    public ExamplePageController(FxWeaver weaver, ConfigurableApplicationContext ctx)
+    {
         super(weaver, ctx);
     }
     
@@ -30,7 +31,8 @@ public class ExamplePageController extends SidebarNodeGroupController<ExamplePag
     }
     
     @Override
-    @FXML public void initialize() {
+    @FXML public void initialize()
+    {
         pageTurnButton.setOnAction(event -> getPage().getOwner().getPageHandler().turnToNew(new ExamplePage(getPage().getOwner(), "transparent")));
     }
     
