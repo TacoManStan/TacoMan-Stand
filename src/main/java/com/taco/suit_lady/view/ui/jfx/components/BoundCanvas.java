@@ -1,9 +1,7 @@
 package com.taco.suit_lady.view.ui.jfx.components;
 
-import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.TaskTools;
 import com.taco.suit_lady.util.tools.fxtools.FXTools;
-import com.taco.suit_lady.view.ui.jfx.components.paint_commands.PaintCommandable;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -74,8 +72,11 @@ public class BoundCanvas extends Canvas
     public final boolean removePaintCommand(PaintCommandable command)
     {
         return TaskTools.sync(lock, () -> {
-            if (containsPaintCommand(command))
-                return getPaintCommands().remove(command);
+            if (containsPaintCommand(command)) {
+                final boolean removed = getPaintCommands().remove(command);
+                command.onRemoved(this);
+                return removed;
+            }
             return false;
         });
     }
@@ -83,12 +84,14 @@ public class BoundCanvas extends Canvas
     public final boolean addPaintCommand(PaintCommandable command)
     {
         return TaskTools.sync(lock, () -> {
-            if (command != null) {
-                if (!containsPaintCommand(command))
-                    return getPaintCommands().add(command);
-                else
-                    throw ExceptionTools.ex("Paint Command has already been added to Canvas! [" + command + "]");
-            }
+            if (command != null)
+                if (containsPaintCommand(command))
+                    return true;
+                else {
+                    final boolean added = getPaintCommands().add(command);
+                    command.onAdded(this);
+                    return added;
+                }
             return false;
         });
     }
@@ -151,7 +154,7 @@ public class BoundCanvas extends Canvas
         repaint();
     }
     
-    private void repaint()
+    protected void repaint()
     {
         TaskTools.sync(lock, () -> {
             FXTools.get().clearCanvasUnsafe(this);
