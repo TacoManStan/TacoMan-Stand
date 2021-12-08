@@ -3,12 +3,10 @@ package com.taco.suit_lady.view.ui.ui_internal;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.view.ui.Sidebar;
 import com.taco.suit_lady.view.ui.console.Console;
-import com.taco.suit_lady.view.ui.ui_internal.contents_sl.SLContent;
-import com.taco.suit_lady.view.ui.ui_internal.contents_sl.SLContentManager;
+import com.taco.suit_lady.view.ui.jfx.components.ContentPane;
 import com.taco.suit_lady.view.ui.ui_internal.contents_sl.test.SLTestContent;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.scene.layout.StackPane;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -24,8 +22,6 @@ public class AppUI
     
     private final ReadOnlyObjectWrapper<AppController> controllerProperty;
     private final ReadOnlyObjectWrapper<Sidebar> sidebarProperty;
-    
-    private final ReadOnlyObjectWrapper<StackPane> contentStackPaneProperty;
     
     private SLContentManager contentManager;
     
@@ -47,8 +43,6 @@ public class AppUI
         
         this.controllerProperty = new ReadOnlyObjectWrapper<>();
         this.sidebarProperty = new ReadOnlyObjectWrapper<>();
-        
-        this.contentStackPaneProperty = new ReadOnlyObjectWrapper<>();
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">
@@ -61,7 +55,7 @@ public class AppUI
      *     <li>
      *         Sets the {@link #contentManager} of this {@link AppUI} to a new {@link SLContentManager}.
      *         <ul>
-     *             <li>The {@link #getContentStackPane() Content Stack Pane} of this {@link AppUI} is used as the {@link SLContentManager#getContentBase() Content Base} for the constructed {@link SLContentManager} object.</li>
+     *             <li>The {@link ContentPane Content Stack Pane} of this {@link AppUI} is used as the {@link SLContentManager#getContentBase() Content Base} for the constructed {@link SLContentManager} object.</li>
      *         </ul>
      *     </li>
      *     <li>
@@ -75,8 +69,7 @@ public class AppUI
     protected void init()
     {
         ctx().getBean(Console.class).initialize();
-        
-        this.contentManager = new SLContentManager(weaver(), ctx(), getContentStackPane());
+        this.contentManager = new SLContentManager(weaver(), ctx());
     }
     
     //</editor-fold>
@@ -142,37 +135,6 @@ public class AppUI
     protected final void setSidebar(Sidebar sidebar)
     {
         sidebarProperty.set(sidebar);
-    }
-    
-    /**
-     * <p>Returns the {@link ReadOnlyObjectProperty} containing the {@link StackPane} used to display the primary {@link SLContent} of this {@link AppUI}.</p>
-     *
-     * @return The {@link ReadOnlyObjectProperty} containing the {@link StackPane} used to display the primary {@link SLContent} of this {@link AppUI}.
-     */
-    // TO-EXPAND (same with corresponding getter and setter)
-    public final ReadOnlyObjectProperty<StackPane> contentStackPaneProperty()
-    {
-        return contentStackPaneProperty.getReadOnlyProperty();
-    }
-    
-    /**
-     * <p>Returns the {@link StackPane} used to display the primary {@link SLContent} of this {@link AppUI}.</p>
-     *
-     * @return The {@link StackPane} used to display the primary {@link SLContent} of this {@link AppUI}.
-     */
-    public final StackPane getContentStackPane()
-    {
-        return contentStackPaneProperty.get();
-    }
-    
-    /**
-     * <p>Sets the {@link StackPane} used to display the primary {@link SLContent} of this {@link AppUI} to the specified value.</p>
-     *
-     * @param contentStackPane The {@link StackPane} to be set as the {@link StackPane} used to display the primary {@link SLContent} of this {@link AppUI}.
-     */
-    public final void setContentStackPane(StackPane contentStackPane)
-    {
-        contentStackPaneProperty.set(contentStackPane);
     }
     
     /**

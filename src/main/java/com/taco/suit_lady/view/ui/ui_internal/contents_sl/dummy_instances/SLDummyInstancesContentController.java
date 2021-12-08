@@ -1,6 +1,6 @@
 package com.taco.suit_lady.view.ui.ui_internal.contents_sl.dummy_instances;
 
-import com.taco.suit_lady.view.ui.ui_internal.contents_sl.SLContentController;
+import com.taco.suit_lady.view.ui.ui_internal.SLContentController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;

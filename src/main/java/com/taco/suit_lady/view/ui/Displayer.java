@@ -1,7 +1,7 @@
 package com.taco.suit_lady.view.ui;
 
 import com.taco.suit_lady.util.tools.ExceptionTools;
-import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
+import com.taco.suit_lady.util.tools.fxtools.FXTools;
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;

@@ -1,6 +1,6 @@
 package com.taco.suit_lady.view.ui.jfx.lists;
 
-import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
+import com.taco.suit_lady.util.tools.fxtools.FXTools;
 import com.taco.suit_lady.view.ui.ui_internal.controllers.CellController;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;

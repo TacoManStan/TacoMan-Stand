@@ -1,6 +1,6 @@
 package com.taco.suit_lady.view.ui.jfx.hyperlink;
 
-import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
+import com.taco.suit_lady.util.tools.fxtools.FXTools;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;

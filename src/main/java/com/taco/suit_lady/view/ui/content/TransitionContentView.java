@@ -1,6 +1,6 @@
 package com.taco.suit_lady.view.ui.content;
 
-import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
+import com.taco.suit_lady.util.tools.fxtools.FXTools;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;

@@ -1,7 +1,7 @@
 package com.taco.suit_lady.view.ui.ui_internal.contents_sl.dummy_instances;
 
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.view.ui.ui_internal.contents_sl.SLContent;
+import com.taco.suit_lady.view.ui.ui_internal.SLContent;
 import org.jetbrains.annotations.NotNull;
 
 public class SLDummyInstancesContent extends SLContent<SLDummyInstancesContentData, SLDummyInstancesContentController>

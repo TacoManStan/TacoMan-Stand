@@ -3,7 +3,7 @@ package com.taco.suit_lady.view.ui.ui_internal.contents_sl.test;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.TB;
 import com.taco.suit_lady.view.ui.UIBook;
-import com.taco.suit_lady.view.ui.ui_internal.contents_sl.SLContent;
+import com.taco.suit_lady.view.ui.ui_internal.SLContent;
 import com.taco.suit_lady.view.ui.ui_internal.pages.example_page.ExamplePage;
 import org.jetbrains.annotations.NotNull;
 

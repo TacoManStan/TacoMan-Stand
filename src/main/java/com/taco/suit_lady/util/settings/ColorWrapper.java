@@ -1,6 +1,6 @@
 package com.taco.suit_lady.util.settings;
 
-import com.taco.suit_lady.view.ui.jfx.fxtools.FXGraphicTools;
+import com.taco.suit_lady.util.tools.fxtools.FXGraphicTools;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;

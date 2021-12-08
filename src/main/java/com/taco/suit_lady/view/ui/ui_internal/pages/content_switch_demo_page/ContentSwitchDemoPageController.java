@@ -2,7 +2,7 @@ package com.taco.suit_lady.view.ui.ui_internal.pages.content_switch_demo_page;
 
 import com.taco.suit_lady.view.ui.UIPageController;
 import com.taco.suit_lady.view.ui.ui_internal.AppUI;
-import com.taco.suit_lady.view.ui.ui_internal.contents_sl.SLContent;
+import com.taco.suit_lady.view.ui.ui_internal.SLContent;
 import com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot.SLMandelbrotContent;
 import com.taco.suit_lady.view.ui.ui_internal.contents_sl.test.SLTestContent;
 import com.taco.util.quick.ConsoleBB;

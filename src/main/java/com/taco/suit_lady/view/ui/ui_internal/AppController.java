@@ -9,15 +9,12 @@ import com.taco.suit_lady.view.ui.console.Console;
 import com.taco.suit_lady.view.ui.console.ConsoleMessageable;
 import com.taco.suit_lady.view.ui.jfx.button.ImageButton;
 import com.taco.suit_lady.view.ui.jfx.components.ImagePane;
-import com.taco.suit_lady.view.ui.jfx.fxtools.FXDialogTools;
-import com.taco.suit_lady.view.ui.jfx.fxtools.FXTools;
+import com.taco.suit_lady.util.tools.fxtools.FXDialogTools;
+import com.taco.suit_lady.util.tools.fxtools.FXTools;
 import com.taco.suit_lady.view.ui.jfx.lists.treehandler.WrappingTreeCellData;
 import com.taco.suit_lady.view.ui.ui_internal.console.ConsoleUIDataContainer;
-import com.taco.suit_lady.view.ui.ui_internal.contents_old.DummyContentsInstancePane;
-import com.taco.suit_lady.view.ui.ui_internal.contents_sl.SLContentManager;
 import com.taco.suit_lady.view.ui.ui_internal.controllers.SettingsController;
 import com.taco.suit_lady.view.ui.ui_internal.pages.content_switch_demo_page.ContentSwitchDemoPage;
-import com.taco.suit_lady.view.ui.ui_internal.pages.dummy_instances_page.DummyInstancesPage;
 import com.taco.suit_lady.view.ui.ui_internal.pages.entity_debug_page.EntityDebugPage;
 import com.taco.suit_lady.view.ui.ui_internal.pages.example_page.ExamplePage;
 import javafx.animation.AnimationTimer;
@@ -120,7 +117,7 @@ public class AppController
     @FXML private StackPane dragBar;
     
     @FXML private GridPane gridPane;
-    @FXML private StackPane contentStackPane;
+    @FXML private AnchorPane contentAnchorPane;
     
     @FXML private TreeView<WrappingTreeCellData<ConsoleMessageable<?>>> consoleTree;
     
@@ -178,7 +175,6 @@ public class AppController
     //
     
     private Stage stage;
-    private DummyContentsInstancePane contentPane;
     
     private StackPane globalOverlayStackPane;
     private ObjectBinding<StackPane> selectionOverlayStackPaneBinding;
@@ -201,9 +197,7 @@ public class AppController
     public final void initialize()
     {
         final AppUI ui = ctx().getBean(AppUI.class);
-        
         ui.setController(this);
-        ui.setContentStackPane(contentStackPane);
         ui.setSidebar(new Sidebar(weaver(), ctx(), sidebarChildButtonsPane, sidebarContentPane, backImagePane, sidebarButtonBar));
     }
     
@@ -221,6 +215,9 @@ public class AppController
         sidebarPaneAnchor.managedProperty().bind(sidebarPaneAnchor.visibleProperty());
         
         getAppUI().init();
+        
+        contentAnchorPane.getChildren().add(getAppUI().getContentManager().getContentBasePane());
+        FXTools.get().setAnchors(getAppUI().getContentManager().getContentBasePane(), 0.0);
         
         initImageButtons();
         initSidebar();
@@ -277,15 +274,6 @@ public class AppController
                 uiBook -> TB.resources().get(
                         "pages", uiBook.getUID(uiBook.getButtonID()),
                         () -> new ContentSwitchDemoPage(uiBook)
-                ), null
-        ));
-        generalSidebarBookshelf.getBooks().add(new UIBook(
-                AppController.this.weaver, AppController.this.ctx,
-                "Clients", "clients",
-                uiBook -> TB.resources().get(
-                        "pages",
-                        uiBook.getButtonID(),
-                        () -> new DummyInstancesPage(uiBook)
                 ), null
         ));
         generalSidebarBookshelf.getBooks().add(new UIBook(

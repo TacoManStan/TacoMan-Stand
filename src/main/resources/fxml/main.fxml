@@ -37,15 +37,10 @@
                   <RowConstraints maxHeight="-Infinity" minHeight="10.0" valignment="CENTER" vgrow="NEVER" />
                         <RowConstraints maxHeight="1.7976931348623157E308" minHeight="-Infinity" vgrow="SOMETIMES" />
                   <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="NEVER" />
-                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="NEVER" />
                         <RowConstraints />
                     </rowConstraints>
                     <children>
-                        <StackPane fx:id="contentStackPane" prefHeight="500.0" prefWidth="1000.0" GridPane.columnSpan="1" GridPane.rowIndex="2">
-                            <GridPane.margin>
-                                <Insets />
-                            </GridPane.margin>
-                        </StackPane>
                         <HBox fx:id="windowBar" focusTraversable="true" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="30.0" style="-fx-border-color: border-color; -fx-border-width: 0;" GridPane.columnSpan="2">
                             <children>
                                 <BorderPane HBox.hgrow="NEVER">
@@ -215,6 +210,7 @@
                       </Menu>
                     </menus>
                   </MenuBar>
+                  <AnchorPane fx:id="contentAnchorPane" prefHeight="500.0" prefWidth="1000.0" GridPane.rowIndex="2" />
                     </children>
                     <BorderPane.margin>
                         <Insets />
