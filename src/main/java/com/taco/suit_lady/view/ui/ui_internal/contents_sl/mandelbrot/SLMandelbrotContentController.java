@@ -80,7 +80,6 @@ public class SLMandelbrotContentController extends SLContentController
     
     private int mouseX = -1;
     private int mouseY = -1;
-    private boolean isDragging = false;
     
     private void onMousePressed(MouseEvent e)
     {
@@ -89,8 +88,6 @@ public class SLMandelbrotContentController extends SLContentController
             //            ConsoleBB.CONSOLE.print("Mouse Pressed: [" + e.getX() + ", " + e.getY() + "]");
             this.mouseX = (int) e.getX();
             this.mouseY = (int) e.getY();
-            
-            this.isDragging = true;
         } finally {
             lock.unlock();
         }
@@ -103,8 +100,6 @@ public class SLMandelbrotContentController extends SLContentController
             //            System.out.println("Registered Release Event");
             if (FXTools.get().isMouseOnNode(canvas()))
                 getDragConsumer().accept(generateDragData(e));
-            
-            this.isDragging = false;
         } finally {
             lock.unlock();
         }
@@ -114,7 +109,7 @@ public class SLMandelbrotContentController extends SLContentController
     {
         lock.lock();
         try {
-            if (FXTools.get().isMouseOnNode(canvas()) && isDragging)
+            if (FXTools.get().isMouseOnNode(canvas()))
                 getMoveConsumer().accept(generateDragData(e));
         } finally {
             lock.unlock();
