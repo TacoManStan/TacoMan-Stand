@@ -148,9 +148,7 @@ public class SLContentManager
                 ctx().getBean(LogiCore.class).execute(() -> oldContent.onRemovedInternal());
             }
             if (newContent != null) {
-                getContentPrimaryPane().getChildren().add(newContent.getController().root());
-                
-                FXTools.get().bindToParent(newContent.getController().root(), getContentPrimaryPane(), FXTools.BindOrientation.BOTH, FXTools.BindType.BOTH);
+                FXTools.get().bindToParent(newContent.getController().root(), getContentPrimaryPane(), FXTools.BindOrientation.BOTH, FXTools.BindType.BOTH, true);
                 
                 ctx().getBean(LogiCore.class).execute(() -> newContent.onSetInternal());
             }

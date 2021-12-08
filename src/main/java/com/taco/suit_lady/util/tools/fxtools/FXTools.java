@@ -45,6 +45,8 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;
 import javafx.util.StringConverter;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.util.List;
@@ -866,7 +868,7 @@ public class FXTools
     {
         ExceptionTools.nullCheck(node, "Input Node");
         
-        AnchorPane.setLeftAnchor(node,left);
+        AnchorPane.setLeftAnchor(node, left);
         AnchorPane.setRightAnchor(node, right);
         AnchorPane.setTopAnchor(node, top);
         AnchorPane.setBottomAnchor(node, bottom);
@@ -1120,63 +1122,125 @@ public class FXTools
     
     //<editor-fold desc="Node Sizing">
     
-    public void bindToParent(Region region, Region parent, BindOrientation bindOrientation, BindType bindType)
+    public <T extends Region> T bindToParent(@NotNull T child, @NotNull Region parent, boolean addTo)
     {
-        bindToParent(region, parent, true, false, bindOrientation, bindType);
+        return bindToParent(child, parent, BindOrientation.BOTH, BindType.BOTH, addTo);
     }
     
-    public void bindToParent(Region region, Region parent, ObservableDoubleValue observableOffset, BindOrientation bindOrientation, BindType bindType)
+    public <T extends Region> T bindToParent(@NotNull T child, @NotNull Region parent, @NotNull BindOrientation bindOrientation, @NotNull BindType bindType, boolean addTo)
     {
-        bindToParent(region, parent, true, false, observableOffset, bindOrientation, bindType);
+        return bindToParent(child, parent, true, false, bindOrientation, bindType, addTo);
     }
     
-    public void bindToParent(Region region, Region parent, boolean includePadding, boolean includeInsets, BindOrientation bindOrientation, BindType bindType)
+    public <T extends Region> T bindToParent(
+            @NotNull T child,
+            @NotNull Region parent,
+            @Nullable ObservableDoubleValue observableOffset,
+            @NotNull BindOrientation bindOrientation,
+            @NotNull BindType bindType,
+            boolean addTo)
     {
-        bindToParent(region, parent, includePadding, includeInsets, null, bindOrientation, bindType);
+        return bindToParent(child, parent, true, false, observableOffset, bindOrientation, bindType, addTo);
     }
     
-    public void bindToParent(
-            Region region,
-            Region parent,
+    public <T extends Region> T bindToParent(
+            @NotNull T child,
+            @NotNull Region parent,
             boolean includePadding,
             boolean includeInsets,
-            ObservableDoubleValue observableOffset,
-            BindOrientation bindOrientation,
-            BindType bindType)
+            @NotNull BindOrientation bindOrientation,
+            @NotNull BindType bindType,
+            boolean addTo)
     {
-        ExceptionTools.nullCheck(region, "Region");
+        return bindToParent(child, parent, includePadding, includeInsets, null, bindOrientation, bindType, addTo);
+    }
+    
+    /**
+     * <p>Binds the specified {@link Region child} to the specified {@link Region parent} using the specified {@link BindOrientation} and {@link BindType} rules.</p>
+     *
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>
+     *         If {@code addTo} is true, the specified {@link Region child} will be added to the specified {@link Region parent} as a {@link Pane#getChildren() child element}.
+     *         <ul>
+     *             <li>If {@code addTo} is true, then the specified {@link Region} must be an instance of {@link Pane}.</li>
+     *             <li>If {@code addTo} is true and the specified {@link Region} is <i>not</i> an instance of {@link Pane}, an {@link RuntimeException exception} is thrown.</li>
+     *         </ul>
+     *     </li>
+     * </ol>
+     *
+     * @param child            The {@link Region child} element.
+     * @param parent           The {@link Region parent} element that the {@link Region child} is being bound to in size.
+     * @param includePadding   True if {@link Region#paddingProperty() padding} should be counted in size calculations, false if it should not.
+     * @param includeInsets    True if {@link Region#insetsProperty() insets} should be counted in size calculations, false if they should not.
+     * @param observableOffset An {@link ObservableValue} that defines any additional size modifications that should be added to the {@link Region child's} calculated dimensions.
+     *                         If {@code null}, then an offset of {@code 0} is used.
+     * @param bindOrientation  The {@link BindOrientation} defining which {@link Region parent} dimensions the {@link Region child} should be bound to.
+     * @param bindType         The {@link BindType} defining which {@link Region child} dimension properties should be bound to the parent.
+     *                         Options are {@link Region#prefWidthProperty() Pref. Width} & {@link Region#prefHeightProperty() Pref. Height}, {@link Region#maxWidthProperty() Max Width} & {@link Region#maxHeightProperty() Max Height}, or all of the above.
+     * @param addTo            True if the {@link Region child} element should be automatically added to the specified {@link Region parent}, false if it should not (useful when the child has already been added to the parent upon method call).
+     * @param <T>              The {@link Region Region Implementation} of the {@code child} element.
+     *
+     * @return The specified {@link Region child} element. Useful in chained method calls, though this method can be thought of as {@code functionally void}.
+     */
+    // TO-EXPAND
+    public <T extends Region> T bindToParent(
+            @NotNull T child,
+            @NotNull Region parent,
+            boolean includePadding,
+            boolean includeInsets,
+            @Nullable ObservableDoubleValue observableOffset,
+            @NotNull BindOrientation bindOrientation,
+            @NotNull BindType bindType,
+            boolean addTo)
+    {
+        ExceptionTools.nullCheck(child, "Region");
         ExceptionTools.nullCheck(parent, "Parent Region");
         ExceptionTools.nullCheck(bindOrientation, "Bind Orientation");
         ExceptionTools.nullCheck(bindType, "Bind Type");
         
-        ObservableDoubleValue _observableOffset = observableOffset == null ? new SimpleDoubleProperty(0.0) : observableOffset;
+        final ObservableDoubleValue observableOffsetImpl = observableOffset == null ? new SimpleDoubleProperty(0.0) : observableOffset;
+        final DoubleProperty widthProperty;
+        final DoubleProperty heightProperty;
         
-        DoubleProperty _widthProperty;
-        DoubleProperty _heightProperty;
+        if (addTo)
+            if (parent instanceof Pane) ((Pane) parent).getChildren().add(child);
+            else throw ExceptionTools.ex("Parent must be an implementation of Pane!  (" + parent.getClass() + ")");
+        
         if (bindType == BindType.PREF || bindType == BindType.BOTH) {
-            _widthProperty = region.prefWidthProperty();
-            _heightProperty = region.prefHeightProperty();
+            widthProperty = child.prefWidthProperty();
+            heightProperty = child.prefHeightProperty();
         } else if (bindType == BindType.MAX) {
-            _widthProperty = region.maxWidthProperty();
-            _heightProperty = region.maxHeightProperty();
+            widthProperty = child.maxWidthProperty();
+            heightProperty = child.maxHeightProperty();
         } else
             throw ExceptionTools.unsupported("Unknown BindType: " + bindType);
         
         if (bindOrientation == BindOrientation.WIDTH || bindOrientation == BindOrientation.BOTH) {
-            _widthProperty.bind(Bindings.createDoubleBinding(() -> {
-                return getNodeSize(parent, includePadding, includeInsets, _observableOffset.get(), BindOrientation.WIDTH);
-            }, parent.widthProperty(), parent.heightProperty(), parent.paddingProperty(), parent.insetsProperty(), _observableOffset));
+            widthProperty.bind(Bindings.createDoubleBinding(
+                    () -> getNodeSize(parent, includePadding, includeInsets, observableOffsetImpl.get(), BindOrientation.WIDTH),
+                    parent.widthProperty(),
+                    parent.heightProperty(),
+                    parent.paddingProperty(),
+                    parent.insetsProperty(),
+                    observableOffsetImpl));
             if (bindType == BindType.BOTH)
-                region.maxWidthProperty().bind(region.prefWidthProperty());
+                child.maxWidthProperty().bind(child.prefWidthProperty());
         }
         
         if (bindOrientation == BindOrientation.HEIGHT || bindOrientation == BindOrientation.BOTH) {
-            _heightProperty.bind(Bindings.createDoubleBinding(() -> {
-                return getNodeSize(parent, includePadding, includeInsets, _observableOffset.get(), BindOrientation.HEIGHT);
-            }, parent.widthProperty(), parent.heightProperty(), parent.paddingProperty(), parent.insetsProperty(), _observableOffset));
+            heightProperty.bind(Bindings.createDoubleBinding(
+                    () -> getNodeSize(parent, includePadding, includeInsets, observableOffsetImpl.get(), BindOrientation.HEIGHT),
+                    parent.widthProperty(),
+                    parent.heightProperty(),
+                    parent.paddingProperty(),
+                    parent.insetsProperty(),
+                    observableOffsetImpl));
             if (bindType == BindType.BOTH)
-                region.maxHeightProperty().bind(region.prefHeightProperty());
+                child.maxHeightProperty().bind(child.prefHeightProperty());
         }
+        
+        return child;
     }
     
     public double getNodeSize(Region region, boolean includePadding, boolean includeInsets, BindOrientation bindOrientation)

@@ -332,8 +332,7 @@ public class Displayer<T extends Displayable>
             if (newDisplayable != null) {
                 final Pane newContent = newDisplayable.getContent();
                 if (newContent != null) {
-                    FXTools.get().bindToParent(newContent, displayContainer, FXTools.BindOrientation.BOTH, FXTools.BindType.BOTH);
-                    displayContainer.getChildren().add(newContent);
+                    FXTools.get().bindToParent(newContent, displayContainer, FXTools.BindOrientation.BOTH, FXTools.BindType.BOTH, true);
                 }
             }
         } finally {
