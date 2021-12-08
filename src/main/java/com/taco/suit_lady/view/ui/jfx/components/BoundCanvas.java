@@ -1,14 +1,26 @@
 package com.taco.suit_lady.view.ui.jfx.components;
 
+import com.taco.suit_lady.util.tools.ExceptionTools;
+import com.taco.suit_lady.util.tools.TaskTools;
+import com.taco.suit_lady.util.tools.fxtools.FXTools;
+import com.taco.suit_lady.view.ui.jfx.components.paint_commands.PaintCommandable;
+import javafx.beans.property.ReadOnlyListProperty;
+import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.collections.FXCollections;
 import javafx.scene.canvas.Canvas;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 public class BoundCanvas extends Canvas
 {
+    private final ReentrantLock lock;
+    
     private final ReadOnlyObjectWrapper<CanvasListener> canvasListenerProperty;
+    private final ReadOnlyListWrapper<PaintCommandable> paintCommands;
     
     public BoundCanvas()
     {
@@ -21,10 +33,18 @@ public class BoundCanvas extends Canvas
     }
     
     {
-        canvasListenerProperty = new ReadOnlyObjectWrapper<>();
+        this.lock = new ReentrantLock();
+        
+        this.canvasListenerProperty = new ReadOnlyObjectWrapper<>();
+        this.paintCommands = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
+    
+    public final @NotNull ReentrantLock getLock()
+    {
+        return lock;
+    }
     
     public final @NotNull ReadOnlyObjectProperty<CanvasListener> canvasListenerProperty()
     {
@@ -39,6 +59,38 @@ public class BoundCanvas extends Canvas
     public final void setCanvasListener(@Nullable CanvasListener canvasListener)
     {
         canvasListenerProperty.set(canvasListener);
+    }
+    
+    protected final @NotNull ReadOnlyListProperty<PaintCommandable> getPaintCommands()
+    {
+        return paintCommands.getReadOnlyProperty();
+    }
+    
+    public final boolean containsPaintCommand(PaintCommandable command)
+    {
+        return TaskTools.sync(lock, () -> command != null && getPaintCommands().contains(command));
+    }
+    
+    public final boolean removePaintCommand(PaintCommandable command)
+    {
+        return TaskTools.sync(lock, () -> {
+            if (containsPaintCommand(command))
+                return getPaintCommands().remove(command);
+            return false;
+        });
+    }
+    
+    public final boolean addPaintCommand(PaintCommandable command)
+    {
+        return TaskTools.sync(lock, () -> {
+            if (command != null) {
+                if (!containsPaintCommand(command))
+                    return getPaintCommands().add(command);
+                else
+                    throw ExceptionTools.ex("Paint Command has already been added to Canvas! [" + command + "]");
+            }
+            return false;
+        });
     }
     
     //</editor-fold>
@@ -89,16 +141,27 @@ public class BoundCanvas extends Canvas
     {
         if (this.width == width && this.height == height)
             return;
-    
+        
         this.width = width;
         this.height = height;
         
         super.setWidth(width);
         super.setHeight(height);
         
-        final CanvasListener listener = getCanvasListener();
-        if (listener != null)
-            listener.redraw(this, width, height);
+        repaint();
+    }
+    
+    private void repaint()
+    {
+        TaskTools.sync(lock, () -> {
+            FXTools.get().clearCanvasUnsafe(this);
+            for (PaintCommandable paintCommand: getPaintCommands())
+                paintCommand.paint(this);
+            
+            final CanvasListener listener = getCanvasListener();
+            if (listener != null)
+                listener.redraw(this, width, height);
+        });
     }
     
     //</editor-fold>
