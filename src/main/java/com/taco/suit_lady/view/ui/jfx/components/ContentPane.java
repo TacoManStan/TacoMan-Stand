@@ -11,6 +11,7 @@ public class ContentPane extends StackPane
     private final StackPane backgroundPane;
     
     private final BoundCanvas overlayCanvas;
+    private final BoundCanvas backgroundCanvas;
     
     public ContentPane()
     {
@@ -18,12 +19,14 @@ public class ContentPane extends StackPane
         this.contentPane = loadContentPane();
         this.backgroundPane = loadBackgroundPane();
         
-        FXTools.get().bindToParent(foregroundPane, this, FXTools.BindOrientation.BOTH, FXTools.BindType.BOTH, true);
-        FXTools.get().bindToParent(contentPane, this, FXTools.BindOrientation.BOTH, FXTools.BindType.BOTH, true);
-        FXTools.get().bindToParent(backgroundPane, this, FXTools.BindOrientation.BOTH, FXTools.BindType.BOTH, true);
+        FXTools.get().bindToParent(foregroundPane, this, true);
+        FXTools.get().bindToParent(contentPane, this, true);
+        FXTools.get().bindToParent(backgroundPane, this, true);
         
         this.overlayCanvas = new BoundCanvas();
+        this.backgroundCanvas = new BoundCanvas();
         
+        FXTools.get().bindToParent(overlayCanvas, foregroundPane, true);
     }
     
     //<editor-fold desc="--- PROPERTIES ---">

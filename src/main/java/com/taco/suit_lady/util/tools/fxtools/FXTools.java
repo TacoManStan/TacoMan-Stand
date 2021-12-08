@@ -876,6 +876,11 @@ public class FXTools
         return node;
     }
     
+    public <T extends Node> T setAnchors(T node)
+    {
+        return setAnchors(node, 0, 0, 0, 0);
+    }
+    
     public <T extends Node> T setAnchors(T node, double value)
     {
         return setAnchors(node, value, value, value, value);
