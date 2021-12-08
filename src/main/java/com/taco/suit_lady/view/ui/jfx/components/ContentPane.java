@@ -1,5 +1,6 @@
 package com.taco.suit_lady.view.ui.jfx.components;
 
+import com.taco.suit_lady.util.tools.fxtools.FXTools;
 import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,6 +15,12 @@ public class ContentPane extends StackPane
         this.foregroundPane = loadForegroundPane();
         this.contentPane = loadContentPane();
         this.backgroundPane = loadBackgroundPane();
+        
+        this.getChildren().addAll(foregroundPane, contentPane, backgroundPane);
+        
+        FXTools.get().bindToParent(foregroundPane, this, FXTools.BindOrientation.BOTH, FXTools.BindType.BOTH);
+        FXTools.get().bindToParent(contentPane, this, FXTools.BindOrientation.BOTH, FXTools.BindType.BOTH);
+        FXTools.get().bindToParent(backgroundPane, this, FXTools.BindOrientation.BOTH, FXTools.BindType.BOTH);
     }
     
     //<editor-fold desc="--- PROPERTIES ---">

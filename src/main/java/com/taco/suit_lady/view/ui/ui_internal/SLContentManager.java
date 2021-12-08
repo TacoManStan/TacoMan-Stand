@@ -62,19 +62,38 @@ public class SLContentManager
         return contentBase;
     }
     
-    public final @NotNull ContentPane getForegroundPane()
+    //
+    
+    protected final @NotNull ContentPane getInternalForegroundBasePane()
     {
         return (ContentPane) getContentBasePane().getForegroundPane();
     }
     
-    public final @NotNull ContentPane getContentPrimaryPane()
+    protected final @NotNull ContentPane getInternalContentBasePane()
     {
         return (ContentPane) getContentBasePane().getContentPane();
     }
     
-    public final @NotNull ContentPane getBackgroundPane()
+    protected final @NotNull ContentPane getInternalBackgroundBasePane()
     {
         return (ContentPane) getContentBasePane().getBackgroundPane();
+    }
+    
+    //
+    
+    public final @NotNull StackPane getContentForegroundPane()
+    {
+        return getInternalContentBasePane().getForegroundPane();
+    }
+    
+    public final @NotNull StackPane getContentPrimaryPane()
+    {
+        return getInternalContentBasePane().getContentPane();
+    }
+    
+    public final @NotNull StackPane getContentBackgroundPane()
+    {
+        return getInternalContentBasePane().getBackgroundPane();
     }
     
     //
@@ -119,7 +138,7 @@ public class SLContentManager
         // When the above is completed, don't forget to update the onRemoved() and onSet() Javadocs as well.
         FXTools.get().runFX(() -> {
             if (oldContent != null) {
-                contentBase.getChildren().remove(oldContent.getController().root());
+                getContentPrimaryPane().getChildren().remove(oldContent.getController().root());
                 
                 oldContent.getController().root().prefWidthProperty().unbind();
                 oldContent.getController().root().prefHeightProperty().unbind();
@@ -129,12 +148,9 @@ public class SLContentManager
                 ctx().getBean(LogiCore.class).execute(() -> oldContent.onRemovedInternal());
             }
             if (newContent != null) {
-                contentBase.getChildren().add(newContent.getController().root());
+                getContentPrimaryPane().getChildren().add(newContent.getController().root());
                 
-                FXTools.get().bindToParent(newContent.getController().root(), contentBase, FXTools.BindOrientation.BOTH, FXTools.BindType.BOTH);
-                
-                //                newContent.getController().root().prefWidthProperty().bind(contentBase.widthProperty());
-                //                newContent.getController().root().prefHeightProperty().bind(contentBase.heightProperty());
+                FXTools.get().bindToParent(newContent.getController().root(), getContentPrimaryPane(), FXTools.BindOrientation.BOTH, FXTools.BindType.BOTH);
                 
                 ctx().getBean(LogiCore.class).execute(() -> newContent.onSetInternal());
             }
