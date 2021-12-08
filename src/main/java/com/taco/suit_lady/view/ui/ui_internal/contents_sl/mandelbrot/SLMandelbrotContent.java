@@ -6,11 +6,14 @@ import com.taco.suit_lady.util.tools.TB;
 import com.taco.suit_lady.view.ui.UIBook;
 import com.taco.suit_lady.view.ui.jfx.components.BoundCanvas;
 import com.taco.suit_lady.util.tools.fxtools.FXTools;
+import com.taco.suit_lady.view.ui.ui_internal.AppUI;
 import com.taco.suit_lady.view.ui.ui_internal.SLContent;
 import com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot.MandelbrotIterator.MandelbrotColor;
 import com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot.SLMandelbrotContentController.MouseDragData;
 import javafx.concurrent.Task;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.locks.ReentrantLock;
@@ -44,6 +47,7 @@ public class SLMandelbrotContent extends SLContent<SLMandelbrotContentData, SLMa
         this.dimensions = MandelbrotDimensions.newDefaultInstance(getController().canvas().getWidth(), getController().canvas().getHeight());
         
         getController().setDragConsumer(dragData -> zoom(dragData));
+        getController().setMoveConsumer(dragData -> updateZoomBox(dragData));
         getController().canvas().setCanvasListener(this::refreshCanvas);
     }
     
@@ -55,6 +59,8 @@ public class SLMandelbrotContent extends SLContent<SLMandelbrotContentData, SLMa
     private void refreshCanvas(BoundCanvas source, double newWidth, double newHeight)
     {
         FXTools.get().runFX(() -> {
+            FXTools.get().clearCanvasUnsafe(ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas());
+            
             if (worker != null)
                 worker.cancel(false);
             
@@ -102,6 +108,12 @@ public class SLMandelbrotContent extends SLContent<SLMandelbrotContentData, SLMa
         
         dimensions.zoomTo(dragData.getStartX(), dragData.getStartY(), dragData.getEndX(), dragData.getEndY());
         refreshCanvas(getController().canvas(), getController().canvas().getWidth(), getController().canvas().getHeight());
+    }
+    
+    private void updateZoomBox(MouseDragData moveData)
+    {
+//        final AppUI ui = ctx().getBean(AppUI.class);
+        FXTools.get().drawRectangle(ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas(), moveData.getAsPaintable(), true, false);
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">

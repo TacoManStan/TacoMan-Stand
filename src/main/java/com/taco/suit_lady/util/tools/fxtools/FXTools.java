@@ -28,6 +28,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -38,6 +39,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.scene.web.WebView;
@@ -52,6 +54,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.Callable;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 
 /**
@@ -889,6 +892,76 @@ public class FXTools
     public <T extends Node> T setAnchors(T node, double lr, double tb)
     {
         return setAnchors(node, lr, lr, tb, tb);
+    }
+    
+    public void drawRectangle(Canvas canvas, Rectangle rectangle, boolean wipeCanvas, boolean fill)
+    {
+        ExceptionTools.nullCheck(canvas, "Canvas Input");
+        ExceptionTools.nullCheck(rectangle, "Rectangle Input");
+        
+        FXTools.get().runFX(() -> {
+            if (wipeCanvas)
+                clearCanvasUnsafe(canvas);
+            
+            if (fill)
+                canvas.getGraphicsContext2D().fillRect(
+                        rectangle.getX(), rectangle.getY(),
+                        rectangle.getWidth(), rectangle.getHeight());
+            else
+                canvas.getGraphicsContext2D().strokeRect(
+                        rectangle.getX(), rectangle.getY(),
+                        rectangle.getWidth(), rectangle.getHeight());
+        }, true);
+    }
+    
+    public void fillRectangle(Canvas canvas, Rectangle rectangle, boolean wipeCanvas)
+    {
+        ExceptionTools.nullCheck(canvas, "Canvas Input");
+        ExceptionTools.nullCheck(rectangle, "Rectangle Input");
+        
+        canvas.getGraphicsContext2D().fillRect(
+                rectangle.getX(), rectangle.getY(),
+                rectangle.getWidth(), rectangle.getHeight());
+    }
+    
+    public Canvas clearCanvasUnsafe(Canvas canvas)
+    {
+        return clearCanvas(canvas, null);
+    }
+    
+    public Canvas clearCanvas(Canvas canvas)
+    {
+        return clearCanvas(canvas, new ReentrantLock());
+    }
+    
+    public Canvas clearCanvas(Canvas canvas, ReentrantLock lock)
+    {
+        ExceptionTools.nullCheck(canvas, "Canvas Input");
+        
+        if (lock != null)
+            try {
+                clearCanvasImpl(canvas);
+            } finally {
+                lock.unlock();
+            }
+        else
+            clearCanvasImpl(canvas);
+        
+        return canvas;
+    }
+    
+    private void clearCanvasImpl(Canvas canvas)
+    {
+        canvas.getGraphicsContext2D().clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+    }
+    
+    public void togglePickOnBounds(Node node, boolean pickOnBounds)
+    {
+        ExceptionTools.nullCheck(node, "Input Node").setPickOnBounds(pickOnBounds);
+        if (node instanceof Canvas)
+            node.setMouseTransparent(!pickOnBounds);
+        if (node instanceof Region)
+            ((Region) node).getChildrenUnmodifiable().forEach(child -> togglePickOnBounds(child, pickOnBounds));
     }
     
     public BorderPane progressOverlay(Node parent)

@@ -10,9 +10,6 @@ public class ContentPane extends StackPane
     private final StackPane contentPane;
     private final StackPane backgroundPane;
     
-    private final BoundCanvas overlayCanvas;
-    private final BoundCanvas backgroundCanvas;
-    
     public ContentPane()
     {
         this.foregroundPane = loadForegroundPane();
@@ -23,10 +20,7 @@ public class ContentPane extends StackPane
         FXTools.get().bindToParent(contentPane, this, true);
         FXTools.get().bindToParent(backgroundPane, this, true);
         
-        this.overlayCanvas = new BoundCanvas();
-        this.backgroundCanvas = new BoundCanvas();
-        
-        FXTools.get().bindToParent(overlayCanvas, foregroundPane, true);
+        FXTools.get().togglePickOnBounds(this, false);
     }
     
     //<editor-fold desc="--- PROPERTIES ---">

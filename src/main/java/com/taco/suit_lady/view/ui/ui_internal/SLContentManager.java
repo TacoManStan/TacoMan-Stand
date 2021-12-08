@@ -3,6 +3,8 @@ package com.taco.suit_lady.view.ui.ui_internal;
 import com.taco.suit_lady.logic.LogiCore;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
+import com.taco.suit_lady.view.ui.jfx.components.BoundCanvas;
+import com.taco.suit_lady.view.ui.jfx.components.CanvasContentPane;
 import com.taco.suit_lady.view.ui.jfx.components.ContentPane;
 import com.taco.suit_lady.util.tools.fxtools.FXTools;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -27,27 +29,26 @@ public class SLContentManager
         this.weaver = ExceptionTools.nullCheck(weaver, "FxWeaver");
         this.ctx = ExceptionTools.nullCheck(ctx, "Application Context");
         
-        this.contentBase =
-                new ContentPane()
-                {
-                    @Override
-                    protected @NotNull StackPane loadForegroundPane()
-                    {
-                        return new ContentPane();
-                    }
-                    
-                    @Override
-                    protected @NotNull StackPane loadContentPane()
-                    {
-                        return new ContentPane();
-                    }
-                    
-                    @Override
-                    protected @NotNull StackPane loadBackgroundPane()
-                    {
-                        return new ContentPane();
-                    }
-                };
+        this.contentBase = new ContentPane()
+        {
+            @Override
+            protected @NotNull StackPane loadForegroundPane()
+            {
+                return new CanvasContentPane();
+            }
+            
+            @Override
+            protected @NotNull StackPane loadContentPane()
+            {
+                return new CanvasContentPane();
+            }
+            
+            @Override
+            protected @NotNull StackPane loadBackgroundPane()
+            {
+                return new CanvasContentPane();
+            }
+        };
         this.contentProperty = new ReadOnlyObjectWrapper<>();
         
         //
@@ -57,6 +58,8 @@ public class SLContentManager
     
     //<editor-fold desc="--- PROPERTIES ---">
     
+    //<editor-fold desc="--- INTERNAL UI PROPERTIES ---">
+    
     protected ContentPane getContentBasePane()
     {
         return contentBase;
@@ -64,22 +67,26 @@ public class SLContentManager
     
     //
     
-    protected final @NotNull ContentPane getInternalForegroundBasePane()
+    protected final @NotNull CanvasContentPane getInternalForegroundBasePane()
     {
-        return (ContentPane) getContentBasePane().getForegroundPane();
+        return (CanvasContentPane) getContentBasePane().getForegroundPane();
     }
     
-    protected final @NotNull ContentPane getInternalContentBasePane()
+    protected final @NotNull CanvasContentPane getInternalContentBasePane()
     {
-        return (ContentPane) getContentBasePane().getContentPane();
+        return (CanvasContentPane) getContentBasePane().getContentPane();
     }
     
-    protected final @NotNull ContentPane getInternalBackgroundBasePane()
+    protected final @NotNull CanvasContentPane getInternalBackgroundBasePane()
     {
-        return (ContentPane) getContentBasePane().getBackgroundPane();
+        return (CanvasContentPane) getContentBasePane().getBackgroundPane();
     }
     
-    //
+    //</editor-fold>
+    
+    //<editor-fold desc="--- CONTENT UI PROPERTIES ---">
+    
+    // NODE STACK ORDER: background pane -> backdrop canvas -> primary pane -> overlay canvas -> foreground pane
     
     public final @NotNull StackPane getContentForegroundPane()
     {
@@ -97,6 +104,18 @@ public class SLContentManager
     }
     
     //
+    
+    public final @NotNull BoundCanvas getContentOverlayCanvas()
+    {
+        return getInternalContentBasePane().getOverlayCanvas();
+    }
+    
+    public final @NotNull BoundCanvas getContentBackdropCanvas()
+    {
+        return getInternalContentBasePane().getBackdropCanvas();
+    }
+    
+    //</editor-fold>
     
     public @NotNull ReadOnlyObjectProperty<SLContent<?, ?>> contentProperty()
     {

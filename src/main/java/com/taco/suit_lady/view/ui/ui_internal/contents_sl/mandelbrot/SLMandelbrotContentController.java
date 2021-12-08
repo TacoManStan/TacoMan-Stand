@@ -5,12 +5,14 @@ import com.taco.suit_lady.view.ui.jfx.components.BoundCanvas;
 import com.taco.suit_lady.util.tools.fxtools.FXTools;
 import com.taco.suit_lady.view.ui.ui_internal.SLContentController;
 import javafx.fxml.FXML;
+import javafx.geometry.Point2D;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Rectangle;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -38,7 +40,9 @@ public class SLMandelbrotContentController extends SLContentController
     //</editor-fold>
     
     private final ReentrantLock lock;
+    
     private Consumer<MouseDragData> dragConsumer;
+    private Consumer<MouseDragData> moveConsumer;
     
     public SLMandelbrotContentController(FxWeaver weaver, ConfigurableApplicationContext ctx)
     {
@@ -66,6 +70,8 @@ public class SLMandelbrotContentController extends SLContentController
     {
         canvas().setOnMousePressed(event -> onMousePressed(event));
         canvas().setOnMouseReleased(event -> onMouseReleased(event));
+//        canvas().setOnMouseMoved(event -> onMouseMoved(event));
+        canvas().setOnMouseDragged(event -> onMouseDragged(event));
     }
     
     //</editor-fold>
@@ -74,6 +80,7 @@ public class SLMandelbrotContentController extends SLContentController
     
     private int mouseX = -1;
     private int mouseY = -1;
+    private boolean isDragging = false;
     
     private void onMousePressed(MouseEvent e)
     {
@@ -82,6 +89,8 @@ public class SLMandelbrotContentController extends SLContentController
             //            ConsoleBB.CONSOLE.print("Mouse Pressed: [" + e.getX() + ", " + e.getY() + "]");
             this.mouseX = (int) e.getX();
             this.mouseY = (int) e.getY();
+            
+            this.isDragging = true;
         } finally {
             lock.unlock();
         }
@@ -91,16 +100,35 @@ public class SLMandelbrotContentController extends SLContentController
     {
         lock.lock();
         try {
+            //            System.out.println("Registered Release Event");
             if (FXTools.get().isMouseOnNode(canvas()))
-                getDragConsumer().accept(new MouseDragData(mouseX, mouseY, e.getX(), e.getY()));
+                getDragConsumer().accept(generateDragData(e));
+            
+            this.isDragging = false;
         } finally {
             lock.unlock();
         }
     }
     
+    private void onMouseDragged(MouseEvent e)
+    {
+        lock.lock();
+        try {
+            if (FXTools.get().isMouseOnNode(canvas()) && isDragging)
+                getMoveConsumer().accept(generateDragData(e));
+        } finally {
+            lock.unlock();
+        }
+    }
+    
+    private MouseDragData generateDragData(MouseEvent e)
+    {
+        return new MouseDragData(mouseX, mouseY, e.getX(), e.getY());
+    }
+    
     public final void setDragConsumer(Consumer<MouseDragData> dragConsumer)
     {
-        this.dragConsumer = ExceptionTools.nullCheck(dragConsumer, "Mouse Drag Consumer Function");
+        this.dragConsumer = ExceptionTools.nullCheck(dragConsumer, "Mouse DRAG Consumer");
     }
     
     public final void resetDragConsumer()
@@ -111,6 +139,21 @@ public class SLMandelbrotContentController extends SLContentController
     private Consumer<MouseDragData> getDragConsumer()
     {
         return dragConsumer;
+    }
+    
+    public final void setMoveConsumer(Consumer<MouseDragData> moveConsumer)
+    {
+        this.moveConsumer = ExceptionTools.nullCheck(moveConsumer, "Mouse MOVE Consumer");
+    }
+    
+    public final void resetMoveConsumer()
+    {
+        setMoveConsumer(mouseDragData -> { });
+    }
+    
+    private Consumer<MouseDragData> getMoveConsumer()
+    {
+        return moveConsumer;
     }
     
     //
@@ -150,6 +193,35 @@ public class SLMandelbrotContentController extends SLContentController
         public final int getEndY()
         {
             return endY;
+        }
+        
+        public final int getWidth()
+        {
+            return endX - startX;
+        }
+        
+        public final int getHeight()
+        {
+            return endY - startY;
+        }
+        
+        //
+        
+        public final Point2D getTopLeft()
+        {
+            return new Point2D(Math.min(getStartX(), getEndX()), Math.min(getStartY(), getEndY()));
+        }
+        
+        public final Point2D getDimensions()
+        {
+            return new Point2D(Math.abs(getWidth()), Math.abs(getHeight()));
+        }
+        
+        public final Rectangle getAsPaintable()
+        {
+            final Point2D topLeftImpl = getTopLeft();
+            final Point2D dimensionsImpl = getDimensions();
+            return new Rectangle(topLeftImpl.getX(), topLeftImpl.getY(), dimensionsImpl.getX(), dimensionsImpl.getY());
         }
         
         public final boolean isValid()
