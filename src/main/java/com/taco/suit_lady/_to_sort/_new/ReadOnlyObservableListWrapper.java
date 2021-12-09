@@ -1,7 +1,9 @@
 package com.taco.suit_lady._to_sort._new;
 
 import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import org.jetbrains.annotations.NotNull;
@@ -18,16 +20,46 @@ public class ReadOnlyObservableListWrapper<T>
     private final ObservableList<T> backingList;
     private final ReadOnlyObservableList<T> readOnlyList;
     
+    private boolean keepSorted;
+    
+    public ReadOnlyObservableListWrapper()
+    {
+        this(FXCollections.observableArrayList());
+    }
+    
     public ReadOnlyObservableListWrapper(@NotNull ObservableList<T> backingList)
     {
         this.backingList = backingList;
         this.readOnlyList = new ReadOnlyObservableList<>(this);
+        
+        this.keepSorted = false;
+        
+        //
+        
+        addListener((InvalidationListener) observable -> {
+            if (keepSorted)
+                sort(null);
+        });
     }
+    
+    //<editor-fold desc="--- PROPERTIES ---">
     
     public final ReadOnlyObservableList<T> getReadOnlyList()
     {
         return readOnlyList;
     }
+    
+    public final boolean isKeepSorted()
+    {
+        return keepSorted;
+    }
+    
+    public final void setKeepSorted(boolean keepSorted)
+    {
+        this.keepSorted = keepSorted;
+    }
+    
+    //</editor-fold>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
