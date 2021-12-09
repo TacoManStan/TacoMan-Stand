@@ -1212,12 +1212,11 @@ public class ArrayTools
      *
      * @param collection The {@link Collection} being iterated.
      * @param clazz      The {@link Class type} of {@link Object} to scan for when iterating the specified {@link Collection}.
-     * @param <T>        The {@link Class type} of {@link Object} to be scanned for when iterating the specified {@link Collection}.
      *
      * @return True if the specified {@link Collection} contains elements of the specified {@link Class type} matching conditions defined by the additional parameters, false if it does not.
      */
     // TO-EXPAND
-    public static <T> boolean containsTypeAll(@NotNull Collection<Object> collection, @NotNull Class<T> clazz)
+    public static boolean containsTypeAll(@NotNull Collection<?> collection, @NotNull Class<?> clazz)
     {
         return containsType(collection, clazz, false, false, true);
     }
@@ -1228,12 +1227,11 @@ public class ArrayTools
      *
      * @param collection The {@link Collection} being iterated.
      * @param clazz      The {@link Class type} of {@link Object} to scan for when iterating the specified {@link Collection}.
-     * @param <T>        The {@link Class type} of {@link Object} to be scanned for when iterating the specified {@link Collection}.
      *
      * @return True if the specified {@link Collection} contains elements of the specified {@link Class type} matching conditions defined by the additional parameters, false if it does not.
      */
     // TO-EXPAND
-    public static <T> boolean containsTypeAny(@NotNull Collection<Object> collection, @NotNull Class<T> clazz)
+    public static boolean containsTypeAny(@NotNull Collection<?> collection, @NotNull Class<?> clazz)
     {
         return containsType(collection, clazz, false, false, false);
     }
@@ -1247,40 +1245,40 @@ public class ArrayTools
      * @param allowNullElements True if {@code null} elements are permitted in the specified {@link Collection}, false if they are not.
      * @param allowEmpty        True if the specified {@link Collection} is permitted to be {@link Collection#isEmpty() empty}, false if it is not.
      * @param requireAll        True if <i>all</i> elements contained within the specified {@link Collection} must be of the specified {@link Class type}, false if only <i>one</i> element is required to match the specified {@link Class type}.
-     * @param <T>               The {@link Class type} of {@link Object} to be scanned for when iterating the specified {@link Collection}.
      *
      * @return True if the specified {@link Collection} contains elements of the specified {@link Class type} matching conditions defined by the additional parameters, false if it does not.
      */
-    public static <T> boolean containsType(@NotNull Collection<Object> collection, @NotNull Class<T> clazz, boolean allowNullElements, boolean allowEmpty, boolean requireAll)
+    public static boolean containsType(@NotNull Collection<?> collection, @NotNull Class<?> clazz, boolean allowNullElements, boolean allowEmpty, boolean requireAll)
     {
         // If the collection instance is null, throw a NPE.
-        ExceptionTools.nullCheck(collection, "Collection Parameter");
-        
         // If the collection is empty, return the value of the specified allowEmpty boolean.
-        if (collection.isEmpty())
+        if (ExceptionTools.nullCheck(collection, "Collection Parameter").isEmpty())
             return allowEmpty;
+        
+        // Keeps track of whether a valid element has been found or not.
+        boolean found = false;
         
         // Iterate through the collection of objects.
         for (final Object o: collection) {
-            
             // If the element is not null, continue to perform additional checks.
             if (o != null) {
+                boolean cast = true;
+                // Try to cast the element to the specified class and set 'cast' to equal true if the cast was successful or false if a CC Exception was thrown.
+                try { clazz.cast(o); } catch (ClassCastException e) { cast = false; }
+                // If the cast was NOT successful AND requireAll was set to true, return false.
+                if (!cast && requireAll)
+                    return false;
+                // If the cast WAS successful, set the 'found' boolean to true.
+                if (cast)
+                    found = true;
+            } else
+                // If the element is null and null elements are not permitted, return false. Otherwise, continue iteration.
                 if (!allowNullElements)
                     return false;
-                
-                // Try to cast the element to the specified class.
-                // If an exception is thrown (meaning element is of invalid type) and all elements are required to be of the specified type, return false. Otherwise, continue iteration.
-                try { clazz.cast(o); } catch (ClassCastException e) {
-                    if (requireAll)
-                        return false;
-                }
-                // If the element is null and null elements are not permitted, return false. Otherwise, continue iteration.
-            } else if (!allowNullElements)
-                return false;
         }
         
-        // If no return value was reached throughout iteration, return false.
-        return false;
+        // If no return value was reached throughout iteration, then the specified collection has passed all checks, and the boolean tracking if a valid element was found is returned.
+        return found;
     }
     
     // </editor-fold>
