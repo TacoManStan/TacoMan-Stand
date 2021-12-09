@@ -1,10 +1,12 @@
 package com.taco.suit_lady.view.ui.jfx.overlay;
 
+import com.taco.suit_lady._to_sort._new.ReadOnlyObservableList;
+import com.taco.suit_lady._to_sort._new.ReadOnlyObservableListWrapper;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ArrayTools;
 import com.taco.suit_lady.util.tools.ExceptionTools;
-import javafx.beans.property.ReadOnlyListWrapper;
+import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import net.rgielen.fxweaver.core.FxWeaver;
@@ -21,14 +23,14 @@ public class OverlayHandler
     private final Springable springable;
     private final ReentrantLock lock;
     
-    private final ReadOnlyListWrapper<Overlay> overlays;
+    private final ReadOnlyObservableListWrapper<Overlay> overlays;
     
     public OverlayHandler(@NotNull Springable springable, @Nullable ReentrantLock lock, @Nullable Overlay... initialOverlays)
     {
         this.springable = ExceptionTools.nullCheck(springable, "Springable Input");
         this.lock = lock;
         
-        this.overlays = new ReadOnlyListWrapper<>(initInitialOverlayList(initialOverlays));
+        this.overlays = new ReadOnlyObservableListWrapper<>(initInitialOverlayList(initialOverlays));
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">
@@ -36,6 +38,15 @@ public class OverlayHandler
     private ObservableList<Overlay> initInitialOverlayList(@Nullable Overlay[] initialOverlays)
     {
         return initialOverlays != null ? FXCollections.observableArrayList(initialOverlays) : FXCollections.observableArrayList();
+    }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- PROPERTIES ---">
+    
+    public final ReadOnlyObservableList<Overlay> overlays()
+    {
+        return overlays.getReadOnlyList();
     }
     
     //</editor-fold>
@@ -58,19 +69,6 @@ public class OverlayHandler
     public @NotNull Lock getLock()
     {
         return lock != null ? lock : new ReentrantLock();
-    }
-    
-    //</editor-fold>
-    
-    //<editor-fold desc="--- UNUSED/OLD ---">
-    
-    /**
-     * <p>Currently Unused</p>
-     */
-    private ObservableList<Overlay> initInitialOverlayListOld(@Nullable Object wildcard)
-    {
-        return wildcard instanceof ObservableList<?> && ArrayTools.containsTypeAll((ObservableList<?>) wildcard, Overlay.class)
-                ? ((ObservableList<Overlay>) wildcard) : FXCollections.observableArrayList();
     }
     
     //</editor-fold>
