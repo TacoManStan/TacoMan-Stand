@@ -1196,6 +1196,93 @@ public class ArrayTools
                && java.util.stream.Stream.of(arr).anyMatch(p -> p != null && p.name().equals(value));
     }
     
+    /**
+     * <p>TODO: The purge method should remove all elements from the specified collection that are not of the specified class type.</p>
+     * <p>Any removed elements should be added to a List, which is then returned upon method completion.</p>
+     */
+    // TO-DOC
+    public static <T> List<Object> purge(@NotNull Collection<Object> collection, @NotNull Class<T> clazz)
+    {
+        throw ExceptionTools.nyi();
+    }
+    
+    /**
+     * <p><b>Passthrough Definition</b></p>
+     * <blockquote><i><code>{@link ArrayTools}<b>.</b>{@link #containsType(Collection, Class, boolean, boolean, boolean) containsType}<b>(</b>collection<b>,</b> clazz<b>,</b> <u>false</u><b>,</b> <u>false</u><b>,</b> <u>true</u><b>)</b></code></i></blockquote>
+     *
+     * @param collection The {@link Collection} being iterated.
+     * @param clazz      The {@link Class type} of {@link Object} to scan for when iterating the specified {@link Collection}.
+     * @param <T>        The {@link Class type} of {@link Object} to be scanned for when iterating the specified {@link Collection}.
+     *
+     * @return True if the specified {@link Collection} contains elements of the specified {@link Class type} matching conditions defined by the additional parameters, false if it does not.
+     */
+    // TO-EXPAND
+    public static <T> boolean containsTypeAll(@NotNull Collection<Object> collection, @NotNull Class<T> clazz)
+    {
+        return containsType(collection, clazz, false, false, true);
+    }
+    
+    /**
+     * <p><b>Passthrough Definition</b></p>
+     * <blockquote><i><code>{@link ArrayTools}<b>.</b>{@link #containsType(Collection, Class, boolean, boolean, boolean) containsType}<b>(</b>collection<b>,</b> clazz<b>,</b> <u>false</u><b>,</b> <u>false</u><b>,</b> <u>false</u><b>)</b></code></i></blockquote>
+     *
+     * @param collection The {@link Collection} being iterated.
+     * @param clazz      The {@link Class type} of {@link Object} to scan for when iterating the specified {@link Collection}.
+     * @param <T>        The {@link Class type} of {@link Object} to be scanned for when iterating the specified {@link Collection}.
+     *
+     * @return True if the specified {@link Collection} contains elements of the specified {@link Class type} matching conditions defined by the additional parameters, false if it does not.
+     */
+    // TO-EXPAND
+    public static <T> boolean containsTypeAny(@NotNull Collection<Object> collection, @NotNull Class<T> clazz)
+    {
+        return containsType(collection, clazz, false, false, false);
+    }
+    
+    /**
+     * <p>Checks if the specified {@link Collection} instance contains elements of the specified {@link Class type}.</p>
+     * <p>Additional parameters define how the array is iterated and which conditions must be met.</p>
+     *
+     * @param collection        The {@link Collection} being iterated.
+     * @param clazz             The {@link Class type} of {@link Object} to scan for when iterating the specified {@link Collection}.
+     * @param allowNullElements True if {@code null} elements are permitted in the specified {@link Collection}, false if they are not.
+     * @param allowEmpty        True if the specified {@link Collection} is permitted to be {@link Collection#isEmpty() empty}, false if it is not.
+     * @param requireAll        True if <i>all</i> elements contained within the specified {@link Collection} must be of the specified {@link Class type}, false if only <i>one</i> element is required to match the specified {@link Class type}.
+     * @param <T>               The {@link Class type} of {@link Object} to be scanned for when iterating the specified {@link Collection}.
+     *
+     * @return True if the specified {@link Collection} contains elements of the specified {@link Class type} matching conditions defined by the additional parameters, false if it does not.
+     */
+    public static <T> boolean containsType(@NotNull Collection<Object> collection, @NotNull Class<T> clazz, boolean allowNullElements, boolean allowEmpty, boolean requireAll)
+    {
+        // If the collection instance is null, throw a NPE.
+        ExceptionTools.nullCheck(collection, "Collection Parameter");
+        
+        // If the collection is empty, return the value of the specified allowEmpty boolean.
+        if (collection.isEmpty())
+            return allowEmpty;
+        
+        // Iterate through the collection of objects.
+        for (final Object o: collection) {
+            
+            // If the element is not null, continue to perform additional checks.
+            if (o != null) {
+                if (!allowNullElements)
+                    return false;
+                
+                // Try to cast the element to the specified class.
+                // If an exception is thrown (meaning element is of invalid type) and all elements are required to be of the specified type, return false. Otherwise, continue iteration.
+                try { clazz.cast(o); } catch (ClassCastException e) {
+                    if (requireAll)
+                        return false;
+                }
+                // If the element is null and null elements are not permitted, return false. Otherwise, continue iteration.
+            } else if (!allowNullElements)
+                return false;
+        }
+        
+        // If no return value was reached throughout iteration, return false.
+        return false;
+    }
+    
     // </editor-fold>
     
     //<editor-fold desc="Copy">
