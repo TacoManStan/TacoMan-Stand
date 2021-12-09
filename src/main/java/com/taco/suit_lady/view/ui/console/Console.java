@@ -19,6 +19,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.scene.control.TreeCell;
 import net.rgielen.fxweaver.core.FxWeaver;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -243,6 +244,12 @@ public class Console
     public ConfigurableApplicationContext ctx()
     {
         return ctx;
+    }
+    
+    @Override
+    public final @NotNull Console console()
+    {
+        return this;
     }
     
     //</editor-fold>

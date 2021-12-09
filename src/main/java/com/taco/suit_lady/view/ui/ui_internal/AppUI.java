@@ -8,6 +8,7 @@ import com.taco.suit_lady.view.ui.ui_internal.contents_sl.test.SLTestContent;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import net.rgielen.fxweaver.core.FxWeaver;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
@@ -55,7 +56,7 @@ public class AppUI
      *     <li>
      *         Sets the {@link #contentManager} of this {@link AppUI} to a new {@link SLContentManager}.
      *         <ul>
-     *             <li>The {@link ContentPane Content Stack Pane} of this {@link AppUI} is used as the {@link SLContentManager#getContentBase() Content Base} for the constructed {@link SLContentManager} object.</li>
+     *             <li>The {@link ContentPane Content Stack Pane} of this {@link AppUI} is used as the {@link SLContentManager#getContentBasePane() Content Base} for the constructed {@link SLContentManager} object.</li>
      *         </ul>
      *     </li>
      *     <li>
@@ -122,7 +123,7 @@ public class AppUI
      *
      * @return The {@link Sidebar} of this {@link AppUI}.
      */
-    public final Sidebar getSidebar()
+    public final @NotNull Sidebar getSidebar()
     {
         return sidebarProperty.get();
     }
@@ -162,6 +163,18 @@ public class AppUI
     public ConfigurableApplicationContext ctx()
     {
         return ctx;
+    }
+    
+    @Override
+    public final @NotNull AppUI ui()
+    {
+        return this;
+    }
+    
+    @Override
+    public final @NotNull Sidebar sidebar()
+    {
+        return getSidebar();
     }
     
     //</editor-fold>

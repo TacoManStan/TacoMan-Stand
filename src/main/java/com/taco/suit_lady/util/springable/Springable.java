@@ -1,8 +1,13 @@
 package com.taco.suit_lady.util.springable;
 
+import com.taco.suit_lady.view.ui.Sidebar;
+import com.taco.suit_lady.view.ui.console.Console;
+import com.taco.suit_lady.view.ui.ui_internal.AppUI;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 
 /**
@@ -34,6 +39,41 @@ public interface Springable
     ConfigurableApplicationContext ctx();
     
     //<editor-fold desc="--- DEFAULT METHODS ---">
+    
+    /**
+     * <p>Returns the singleton {@link Console} instance stored and managed by the {@link SpringApplication Spring} framework.</p>
+     * <blockquote><b>Passthrough Definition:</b> <i><code>{@link #ctx()}<b>.</b>{@link ApplicationContext#getBean(Class) getBean}<b>(</b>{@link Console}<b>.</b>{@link #getClass() class}<b>)</b></code></i></blockquote>
+     *
+     * @return The singleton {@link Console} instance stored and managed by the {@link SpringApplication Spring} framework.
+     */
+    default @NotNull Console console()
+    {
+        return ctx().getBean(Console.class);
+    }
+    
+    /**
+     * <p>Returns the singleton {@link AppUI} instance stored and managed by the {@link SpringApplication Spring} framework.</p>
+     * <blockquote><b>Passthrough Definition:</b> <i><code>{@link #ctx()}<b>.</b>{@link ApplicationContext#getBean(Class) getBean}<b>(</b>{@link AppUI}<b>.</b>{@link #getClass() class}<b>)</b></code></i></blockquote>
+     *
+     * @return The singleton {@link AppUI} instance stored and managed by the {@link SpringApplication Spring} framework.
+     */
+    default @NotNull AppUI ui()
+    {
+        return ctx().getBean(AppUI.class);
+    }
+    
+    /**
+     * <p>Returns the {@link Sidebar} instance contained within the {@link AppUI} singleton stored and managed by the {@link SpringApplication Spring} framework.</p>
+     * <blockquote><b>Passthrough Definition:</b> <i><code>{@link #ui()}<b>.</b>{@link AppUI#getSidebar() sidebar()}</b></code></i></blockquote>
+     *
+     * @return The {@link Sidebar} instance contained within the {@link AppUI} singleton stored and managed by the {@link SpringApplication Spring} framework.
+     */
+    default @NotNull Sidebar sidebar()
+    {
+        return ui().getSidebar();
+    }
+    
+    //
     
     /**
      * <p>Constructs a new {@link SimpleSpringable} instance wrapping the contents of this {@link Springable}.</p>
