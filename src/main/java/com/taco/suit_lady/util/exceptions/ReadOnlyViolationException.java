@@ -1,6 +1,6 @@
 package com.taco.suit_lady.util.exceptions;
 
-public class ReadOnlyViolationException extends RuntimeException
+public class ReadOnlyViolationException extends UnsupportedOperationException
 {
     public ReadOnlyViolationException()
     {

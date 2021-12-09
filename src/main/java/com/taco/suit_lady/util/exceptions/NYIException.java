@@ -1,6 +1,6 @@
 package com.taco.suit_lady.util.exceptions;
 
-public class NYIException extends RuntimeException
+public class NYIException extends UnsupportedOperationException
 {
     public NYIException()
     {
