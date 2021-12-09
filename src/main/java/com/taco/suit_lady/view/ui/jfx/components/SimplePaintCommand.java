@@ -1,5 +1,6 @@
 package com.taco.suit_lady.view.ui.jfx.components;
 
+import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.TaskTools;
 import com.taco.suit_lady.util.tools.fxtools.FXTools;
@@ -13,7 +14,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 
 public abstract class SimplePaintCommand
-        implements PaintCommandable
+        implements PaintCommandable, Lockable
 {
     private final ReentrantLock lock;
     
@@ -40,11 +41,6 @@ public abstract class SimplePaintCommand
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final @NotNull ReentrantLock getLock()
-    {
-        return lock;
-    }
-    
     public final @NotNull ReadOnlyObjectProperty<Predicate<BoundCanvas>> autoRemoveConditionProperty()
     {
         return autoRemoveConditionProperty.getReadOnlyProperty();
@@ -55,9 +51,9 @@ public abstract class SimplePaintCommand
         return autoRemoveConditionProperty.get();
     }
     
-    public final void setAutoRemoveCondition(@NotNull Predicate<BoundCanvas> autoRemoveCondition)
+    public final void setAutoRemoveCondition(@NotNull Predicate<BoundCanvas> condition)
     {
-        autoRemoveConditionProperty.set(ExceptionTools.nullCheck(autoRemoveCondition, "Auto-Remove Condition Input"));
+        autoRemoveConditionProperty.set(ExceptionTools.nullCheck(condition, "Condition"));
     }
     
     public final @NotNull BooleanProperty activeProperty()
@@ -78,34 +74,41 @@ public abstract class SimplePaintCommand
     //</editor-fold>
     
     
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
     @Override
     public void onAdded(BoundCanvas canvas)
     {
-        TaskTools.sync(lock, () -> { owners.add(canvas); });
+        sync(() -> { owners.add(canvas); });
     }
     
     @Override
     public void onRemoved(BoundCanvas canvas)
     {
-        TaskTools.sync(lock, () -> { owners.remove(canvas); });
+        sync(() -> { owners.remove(canvas); });
     }
     
     @Override
     public final void paint(BoundCanvas canvas)
     {
         if (isActive())
-            FXTools.get().runFX(() -> {
-                lock.lock();
-                try {
-                    if (getAutoRemoveCondition().test(canvas))
-                        canvas.removePaintCommand(this);
-                    else
-                        onPaint(canvas);
-                } finally {
-                    lock.unlock();
-                }
-            }, true);
+            FXTools.get().runFX(() -> sync(() -> {
+                if (getAutoRemoveCondition().test(canvas))
+                    canvas.removePaintCommand(this);
+                else
+                    onPaint(canvas);
+            }), true);
     }
+    
+    //
+    
+    @Override
+    public final @NotNull ReentrantLock getLock()
+    {
+        return lock;
+    }
+    
+    //</editor-fold>
     
     protected abstract void onPaint(BoundCanvas canvas);
 }

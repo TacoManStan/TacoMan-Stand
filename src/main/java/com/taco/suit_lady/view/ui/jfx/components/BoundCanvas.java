@@ -102,35 +102,33 @@ public class BoundCanvas extends Canvas
         return paintCommands.getReadOnlyProperty();
     }
     
-    public final boolean containsPaintCommand(PaintCommandable command)
+    public final boolean containsPaintCommand(@Nullable PaintCommandable command)
     {
-        return sync(() -> command != null && getPaintCommands().contains(command));
+        return command != null && sync(() -> getPaintCommands().contains(command));
     }
     
-    public final boolean removePaintCommand(PaintCommandable command)
+    public final boolean removePaintCommand(@Nullable PaintCommandable command)
     {
-        return sync(() -> {
+        return command != null && sync(() -> {
             if (containsPaintCommand(command)) {
                 final boolean removed = getPaintCommands().remove(command);
                 command.onRemoved(this);
                 return removed;
-            }
-            return false;
+            } else
+                return false;
         });
     }
     
-    public final boolean addPaintCommand(PaintCommandable command)
+    public final boolean addPaintCommand(@Nullable PaintCommandable command)
     {
-        return sync(() -> {
-            if (command != null)
-                if (containsPaintCommand(command))
-                    return true;
-                else {
-                    final boolean added = getPaintCommands().add(command);
-                    command.onAdded(this);
-                    return added;
-                }
-            return false;
+        return command != null && sync(() -> {
+            if (containsPaintCommand(command))
+                return true;
+            else {
+                final boolean added = getPaintCommands().add(command);
+                command.onAdded(this);
+                return added;
+            }
         });
     }
     
