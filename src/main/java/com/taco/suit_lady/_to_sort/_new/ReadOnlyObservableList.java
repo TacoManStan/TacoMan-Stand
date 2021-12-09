@@ -5,9 +5,11 @@ import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.util.Callback;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -17,7 +19,12 @@ public class ReadOnlyObservableList<T>
     
     public ReadOnlyObservableList()
     {
-        this.list = FXCollections.observableArrayList();
+        this(FXCollections.observableArrayList());
+    }
+    
+    public ReadOnlyObservableList(@NotNull ObservableList<T> backingList)
+    {
+        this.list = ExceptionTools.nullCheck(backingList, "Backing List");
     }
     
     public final int getSize()
@@ -25,14 +32,14 @@ public class ReadOnlyObservableList<T>
         return list.size();
     }
     
-    public final boolean isEmpty()
-    {
-        return list.isEmpty();
-    }
-    
     public final boolean isSize(int size)
     {
         return getSize() == size;
+    }
+    
+    public final boolean isEmpty()
+    {
+        return list.isEmpty();
     }
     
     //<editor-fold desc="--- LISTENERS ---">
@@ -121,9 +128,29 @@ public class ReadOnlyObservableList<T>
         return list.toArray(a);
     }
     
-    public final ObservableList<T> getCopy()
+    //
+    
+    public final @NotNull ObservableList<T> getObservableCopy()
     {
-        return list; // TODO: Return a copy
+        return getObservableCopy(e -> e);
+    }
+    
+    public final @NotNull ObservableList<T> getObservableCopy(@NotNull Callback<T, T> copier)
+    {
+        return FXCollections.observableArrayList(getCopy(copier));
+    }
+    
+    public final @NotNull ArrayList<T> getCopy()
+    {
+        return getCopy(e -> e);
+    }
+    
+    public final @NotNull ArrayList<T> getCopy(@NotNull Callback<T, T> copier)
+    {
+        // TODO: Synchronize?
+        final ArrayList<T> newList = new ArrayList<>();
+        list.forEach(e -> newList.add(copier.call(e)));
+        return newList;
     }
     
     //</editor-fold>
