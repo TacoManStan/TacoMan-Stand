@@ -29,14 +29,14 @@ public interface Springable
      *
      * @return The {@link FxWeaver} to be used by this {@link Springable} implementation when necessary.
      */
-    FxWeaver weaver();
+    @NotNull FxWeaver weaver();
     
     /**
      * <p>Grants access to the appropriate {@link ConfigurableApplicationContext Application Context} for use in this {@link Springable} implementation.</p>
      *
      * @return The {@link ConfigurableApplicationContext Application Context} to be used by this {@link Springable} implementation when necessary.
      */
-    ConfigurableApplicationContext ctx();
+    @NotNull ConfigurableApplicationContext ctx();
     
     //<editor-fold desc="--- DEFAULT METHODS ---">
     

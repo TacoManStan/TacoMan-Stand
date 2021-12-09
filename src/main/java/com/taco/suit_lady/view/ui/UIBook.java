@@ -15,6 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import net.rgielen.fxweaver.core.FxWeaver;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -223,13 +224,13 @@ public class UIBook
     }
     
     @Override
-    public FxWeaver weaver()
+    public @NotNull FxWeaver weaver()
     {
         return weaver;
     }
     
     @Override
-    public ConfigurableApplicationContext ctx()
+    public @NotNull ConfigurableApplicationContext ctx()
     {
         return this.ctx;
     }

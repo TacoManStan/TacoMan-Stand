@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import net.rgielen.fxweaver.core.FxWeaver;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -125,13 +126,13 @@ public class FxWeaverInitializer
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override
-    public FxWeaver weaver()
+    public @NotNull FxWeaver weaver()
     {
         return weaver;
     }
     
     @Override
-    public ConfigurableApplicationContext ctx()
+    public @NotNull ConfigurableApplicationContext ctx()
     {
         return ctx;
     }

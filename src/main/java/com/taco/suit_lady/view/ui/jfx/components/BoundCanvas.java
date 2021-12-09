@@ -154,13 +154,13 @@ public class BoundCanvas extends Canvas
     //
     
     @Override
-    public FxWeaver weaver()
+    public @NotNull FxWeaver weaver()
     {
         return springable.weaver();
     }
     
     @Override
-    public ConfigurableApplicationContext ctx()
+    public @NotNull ConfigurableApplicationContext ctx()
     {
         return springable.ctx();
     }

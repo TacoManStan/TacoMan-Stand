@@ -73,13 +73,13 @@ public class ContentPane extends StackPane
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override
-    public FxWeaver weaver()
+    public @NotNull FxWeaver weaver()
     {
         return springable.weaver();
     }
     
     @Override
-    public ConfigurableApplicationContext ctx()
+    public @NotNull ConfigurableApplicationContext ctx()
     {
         return springable.ctx();
     }

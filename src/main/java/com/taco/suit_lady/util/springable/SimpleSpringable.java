@@ -1,6 +1,7 @@
 package com.taco.suit_lady.util.springable;
 
 import net.rgielen.fxweaver.core.FxWeaver;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -34,7 +35,7 @@ public record SimpleSpringable(@Nullable FxWeaver weaver, @Nullable Configurable
      * @return {@inheritDoc}
      */
     @Override
-    public @Nullable FxWeaver weaver() { return weaver; }
+    public @NotNull FxWeaver weaver() { return weaver; }
     
     /**
      * {@inheritDoc}
@@ -42,5 +43,5 @@ public record SimpleSpringable(@Nullable FxWeaver weaver, @Nullable Configurable
      * @return {@inheritDoc}
      */
     @Override
-    public @Nullable ConfigurableApplicationContext ctx() { return ctx; }
+    public @NotNull ConfigurableApplicationContext ctx() { return ctx; }
 }

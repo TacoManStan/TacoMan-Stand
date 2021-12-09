@@ -46,13 +46,13 @@ public class LogiCore
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override
-    public FxWeaver weaver()
+    public @NotNull FxWeaver weaver()
     {
         return weaver;
     }
     
     @Override
-    public ConfigurableApplicationContext ctx()
+    public @NotNull ConfigurableApplicationContext ctx()
     {
         return ctx;
     }

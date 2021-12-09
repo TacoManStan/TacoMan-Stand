@@ -4,6 +4,7 @@ import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.fxtools.FXTools;
 import javafx.scene.layout.AnchorPane;
 import net.rgielen.fxweaver.core.FxWeaver;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ConfigurableApplicationContext;
 
 public class CanvasPane extends AnchorPane
@@ -36,13 +37,13 @@ public class CanvasPane extends AnchorPane
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override
-    public FxWeaver weaver()
+    public @NotNull FxWeaver weaver()
     {
         return springable.weaver();
     }
     
     @Override
-    public ConfigurableApplicationContext ctx()
+    public @NotNull ConfigurableApplicationContext ctx()
     {
         return springable.ctx();
     }

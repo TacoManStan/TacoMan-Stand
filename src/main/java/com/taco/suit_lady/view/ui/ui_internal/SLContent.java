@@ -125,13 +125,13 @@ public abstract class SLContent<D extends SLContentData, C extends SLContentCont
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override
-    public FxWeaver weaver()
+    public @NotNull FxWeaver weaver()
     {
         return strictSpringable.weaver();
     }
     
     @Override
-    public ConfigurableApplicationContext ctx()
+    public @NotNull ConfigurableApplicationContext ctx()
     {
         return strictSpringable.ctx();
     }

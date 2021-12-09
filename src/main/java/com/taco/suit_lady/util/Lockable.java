@@ -14,7 +14,7 @@ import java.util.function.Supplier;
         extends Lock
 {
     
-    Lock getLock();
+    @NotNull Lock getLock();
     
     /* *************************************************************************** *
      *                                                                             *
