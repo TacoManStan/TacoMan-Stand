@@ -1,5 +1,6 @@
 package com.taco.suit_lady.view.ui.jfx.components;
 
+import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.tools.TaskTools;
 import com.taco.suit_lady.util.tools.fxtools.FXTools;
 import javafx.beans.property.ReadOnlyListProperty;
@@ -13,22 +14,16 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * <p>A {@link #isResizable() resizable} implementation of {@link Canvas}.</p>
+ */
 public class BoundCanvas extends Canvas
+        implements Lockable
 {
     private final ReentrantLock lock;
     
     private final ReadOnlyObjectWrapper<CanvasListener> canvasListenerProperty;
     private final ReadOnlyListWrapper<PaintCommandable> paintCommands;
-    
-    public BoundCanvas()
-    {
-        super();
-    }
-    
-    public BoundCanvas(double width, double height)
-    {
-        super(width, height);
-    }
     
     {
         this.lock = new ReentrantLock();
@@ -37,23 +32,66 @@ public class BoundCanvas extends Canvas
         this.paintCommands = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
     }
     
-    //<editor-fold desc="--- PROPERTIES ---">
-    
-    public final @NotNull ReentrantLock getLock()
+    /**
+     * <p>Constructs a new {@link BoundCanvas} instance with default {@link #widthProperty() width} and {@link #heightProperty() height} values.</p>
+     */
+    public BoundCanvas()
     {
-        return lock;
+        super();
     }
     
+    /**
+     * <p>Constructs a new {@link BoundCanvas} instance with the specified initial {@link #heightProperty() height} and {@code width}.</p>
+     *
+     * @param width  The initial {@link #widthProperty() width} of this {@link BoundCanvas}.
+     * @param height The initial {@link #heightProperty() height} of this {@link BoundCanvas}.
+     */
+    public BoundCanvas(double width, double height)
+    {
+        super(width, height);
+    }
+    
+    //<editor-fold desc="--- PROPERTIES ---">
+    
+    /**
+     * <p>Returns the {@link ReadOnlyObjectProperty} containing the {@link CanvasListener} instance that is called to {@link CanvasListener#redraw(BoundCanvas, double, double) redraw} whenever this {@link BoundCanvas} is {@link #repaint() repainted}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>If the {@link CanvasListener} is set to {@code null}, no additional {@link CanvasListener#redraw(BoundCanvas, double, double) redrawing} operations will be executed.</li>
+     *     <li>Default {@link #repaint() repaint} operations are still performed.</li>
+     * </ol>
+     *
+     * @return The {@link ReadOnlyObjectProperty} containing the {@link CanvasListener} instance that is called whenever the {@link BoundCanvas canvas} needs to be {@link CanvasListener#redraw(BoundCanvas, double, double) redrawn}.
+     */
     public final @NotNull ReadOnlyObjectProperty<CanvasListener> canvasListenerProperty()
     {
         return canvasListenerProperty.getReadOnlyProperty();
     }
     
+    /**
+     * <b>Passthrough Definition:</b> <i><code>{@link #canvasListenerProperty()}<b>.</b>{@link ReadOnlyObjectProperty#get() get()}</code></i>
+     *
+     * @return See {@link #canvasListenerProperty()}.
+     */
     public final @Nullable CanvasListener getCanvasListener()
     {
         return canvasListenerProperty.get();
     }
     
+    /**
+     * <b>Passthrough Definition:</b> <i><code>{@code canvasListenerProperty}<b>.</b>{@link ReadOnlyObjectWrapper#set(Object) set}<b>(</b>{@link CanvasListener}</code><b>)</b></i>
+     * <p><b>Note That...</b></p>
+     * <ol>
+     *     <li>
+     *         <i>{@link #canvasListenerProperty()}</i> returns a {@link ReadOnlyObjectProperty}, not a {@link ReadOnlyObjectWrapper}.
+     *         <ul>
+     *             <li>As such, {@link #setCanvasListener(CanvasListener) this method} is the only way to {@link ReadOnlyObjectWrapper#set(Object) change} the {@link CanvasListener} for this {@link BoundCanvas}.</li>
+     *         </ul>
+     *     </li>
+     * </ol>
+     *
+     * @param canvasListener See {@link #canvasListenerProperty()}}.
+     */
     public final void setCanvasListener(@Nullable CanvasListener canvasListener)
     {
         canvasListenerProperty.set(canvasListener);
@@ -66,12 +104,12 @@ public class BoundCanvas extends Canvas
     
     public final boolean containsPaintCommand(PaintCommandable command)
     {
-        return TaskTools.sync(lock, () -> command != null && getPaintCommands().contains(command));
+        return sync(() -> command != null && getPaintCommands().contains(command));
     }
     
     public final boolean removePaintCommand(PaintCommandable command)
     {
-        return TaskTools.sync(lock, () -> {
+        return sync(() -> {
             if (containsPaintCommand(command)) {
                 final boolean removed = getPaintCommands().remove(command);
                 command.onRemoved(this);
@@ -83,7 +121,7 @@ public class BoundCanvas extends Canvas
     
     public final boolean addPaintCommand(PaintCommandable command)
     {
-        return TaskTools.sync(lock, () -> {
+        return sync(() -> {
             if (command != null)
                 if (containsPaintCommand(command))
                     return true;
@@ -99,6 +137,14 @@ public class BoundCanvas extends Canvas
     //</editor-fold>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+    @Override
+    public final @NotNull ReentrantLock getLock()
+    {
+        return lock;
+    }
+    
+    //<editor-fold desc="--- CANVAS ---">
     
     @Override
     public double minHeight(double width)
@@ -154,9 +200,13 @@ public class BoundCanvas extends Canvas
         repaint();
     }
     
+    //</editor-fold>
+    
+    //</editor-fold>
+    
     protected void repaint()
     {
-        TaskTools.sync(lock, () -> {
+        sync(() -> {
             FXTools.get().clearCanvasUnsafe(this);
             for (PaintCommandable paintCommand: getPaintCommands())
                 paintCommand.paint(this);
@@ -166,8 +216,6 @@ public class BoundCanvas extends Canvas
                 listener.redraw(this, width, height);
         });
     }
-    
-    //</editor-fold>
     
     public interface CanvasListener
     {
