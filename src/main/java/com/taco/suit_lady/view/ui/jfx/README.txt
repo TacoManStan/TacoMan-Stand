@@ -1,0 +1,2 @@
+> All classes contained within the jfx package should be decoupled from any SL Manager-specific members.
+    > TODO: In fact, the entire jfx package should be added to the Tacository framework, which will ensure coupling as such is impossible.
