@@ -22,8 +22,9 @@ public class OverlayHandler
     private final Springable springable;
     private final ReentrantLock lock;
 
-    private final StackPane rootPane;
     private final ReadOnlyObservableListWrapper<Overlay> overlays;
+    
+    private final StackPane rootPane;
     
     public OverlayHandler(@NotNull Springable springable, @Nullable ReentrantLock lock, @Nullable Overlay... initialOverlays)
     {
@@ -31,6 +32,8 @@ public class OverlayHandler
         this.lock = lock;
         
         this.overlays = new ReadOnlyObservableListWrapper<>(initInitialOverlayList(initialOverlays));
+        this.overlays.setKeepSorted(true);
+        
         this.rootPane = new StackPane();
     }
     

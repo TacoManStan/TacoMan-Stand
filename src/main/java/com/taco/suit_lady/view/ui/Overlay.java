@@ -22,7 +22,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public abstract class Overlay
-        implements Springable, Lockable, ReadOnlyNameableProperty
+        implements Springable, Lockable, ReadOnlyNameableProperty, Comparable<Overlay>
 {
     private final Springable springable;
     private final ReentrantLock lock;
@@ -35,10 +35,10 @@ public abstract class Overlay
     public Overlay(@NotNull Springable springable, @Nullable ReentrantLock lock, @Nullable String name, int paintPriority)
     {
         this.springable = ExceptionTools.nullCheck(springable, "Springable Input").asStrict();
-        this.lock = lock;
-        this.nameProperty = new ReadOnlyStringWrapper();
+        this.lock = lock; // Null-checking is done in get method via lazy instantiation
+        this.nameProperty = new ReadOnlyStringWrapper(name);
         
-        this.paintPriorityProperty = new ReadOnlyIntegerWrapper(0);
+        this.paintPriorityProperty = new ReadOnlyIntegerWrapper(paintPriority);
         
         this.paintCommands = new ReadOnlyObservableListWrapper<>();
         this.paintCommands.setKeepSorted(true);
@@ -101,6 +101,14 @@ public abstract class Overlay
     public final ReadOnlyStringProperty nameProperty()
     {
         return nameProperty.getReadOnlyProperty();
+    }
+    
+    //
+    
+    @Override
+    public int compareTo(@NotNull Overlay o)
+    {
+        return Integer.compare((Math.abs(getPaintPriority())), Math.abs(o.getPaintPriority()));
     }
     
     //</editor-fold>
