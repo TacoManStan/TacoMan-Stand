@@ -29,24 +29,24 @@ public class SLContentManager
         this.weaver = ExceptionTools.nullCheck(weaver, "FxWeaver");
         this.ctx = ExceptionTools.nullCheck(ctx, "Application Context");
         
-        this.contentBase = new ContentPane()
+        this.contentBase = new ContentPane(this)
         {
             @Override
             protected @NotNull StackPane loadForegroundPane()
             {
-                return new CanvasContentPane();
+                return new CanvasContentPane(this);
             }
             
             @Override
             protected @NotNull StackPane loadContentPane()
             {
-                return new CanvasContentPane();
+                return new CanvasContentPane(this);
             }
             
             @Override
             protected @NotNull StackPane loadBackgroundPane()
             {
-                return new CanvasContentPane();
+                return new CanvasContentPane(this);
             }
         };
         this.contentProperty = new ReadOnlyObjectWrapper<>();

@@ -1,20 +1,28 @@
 package com.taco.suit_lady.view.ui.jfx.components;
 
+import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.fxtools.FXTools;
 import javafx.scene.layout.AnchorPane;
+import net.rgielen.fxweaver.core.FxWeaver;
+import org.springframework.context.ConfigurableApplicationContext;
 
 public class CanvasPane extends AnchorPane
+        implements Springable
 {
+    private final Springable springable;
+    
     private final BoundCanvas canvas;
     
-    public CanvasPane()
+    public CanvasPane(Springable springable)
     {
-        this(0, 0, 0, 0);
+        this(springable, 0, 0, 0, 0);
     }
     
-    public CanvasPane(double left, double right, double top, double bottom)
+    public CanvasPane(Springable springable, double left, double right, double top, double bottom)
     {
-        this.canvas = new BoundCanvas();
+        this.springable = springable.asStrict();
+        
+        this.canvas = new BoundCanvas(this);
         
         getChildren().add(canvas);
         FXTools.get().setAnchors(canvas, left, right, top, bottom);
@@ -24,4 +32,20 @@ public class CanvasPane extends AnchorPane
     {
         return canvas;
     }
+    
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+    @Override
+    public FxWeaver weaver()
+    {
+        return null;
+    }
+    
+    @Override
+    public ConfigurableApplicationContext ctx()
+    {
+        return null;
+    }
+    
+    //</editor-fold>
 }

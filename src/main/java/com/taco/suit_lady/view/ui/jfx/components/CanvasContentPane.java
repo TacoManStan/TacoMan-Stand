@@ -1,16 +1,20 @@
 package com.taco.suit_lady.view.ui.jfx.components;
 
+import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.fxtools.FXTools;
+import org.jetbrains.annotations.NotNull;
 
 public class CanvasContentPane extends ContentPane
 {
     private final CanvasPane overlayCanvasPane;
     private final CanvasPane backdropCanvasPane;
     
-    public CanvasContentPane()
+    public CanvasContentPane(@NotNull Springable springable)
     {
-        this.overlayCanvasPane = new CanvasPane();
-        this.backdropCanvasPane = new CanvasPane();
+        super(springable);
+        
+        this.overlayCanvasPane = new CanvasPane(this);
+        this.backdropCanvasPane = new CanvasPane(this);
     
         FXTools.get().bindToParent(overlayCanvasPane, this, false);
         FXTools.get().bindToParent(backdropCanvasPane, this, false);

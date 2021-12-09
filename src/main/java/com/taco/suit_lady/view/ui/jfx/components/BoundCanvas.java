@@ -1,6 +1,7 @@
 package com.taco.suit_lady.view.ui.jfx.components;
 
 import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.TaskTools;
 import com.taco.suit_lady.util.tools.fxtools.FXTools;
 import javafx.beans.property.ReadOnlyListProperty;
@@ -9,8 +10,10 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.scene.canvas.Canvas;
+import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -18,9 +21,11 @@ import java.util.concurrent.locks.ReentrantLock;
  * <p>A {@link #isResizable() resizable} implementation of {@link Canvas}.</p>
  */
 public class BoundCanvas extends Canvas
-        implements Lockable
+        implements Springable, Lockable
 {
     private final ReentrantLock lock;
+    
+    private final Springable springable;
     
     private final ReadOnlyObjectWrapper<CanvasListener> canvasListenerProperty;
     private final ReadOnlyListWrapper<PaintCommandable> paintCommands;
@@ -35,9 +40,11 @@ public class BoundCanvas extends Canvas
     /**
      * <p>Constructs a new {@link BoundCanvas} instance with default {@link #widthProperty() width} and {@link #heightProperty() height} values.</p>
      */
-    public BoundCanvas()
+    public BoundCanvas(@NotNull Springable springable)
     {
         super();
+        
+        this.springable = springable;
     }
     
     /**
@@ -46,9 +53,11 @@ public class BoundCanvas extends Canvas
      * @param width  The initial {@link #widthProperty() width} of this {@link BoundCanvas}.
      * @param height The initial {@link #heightProperty() height} of this {@link BoundCanvas}.
      */
-    public BoundCanvas(double width, double height)
+    public BoundCanvas(@NotNull Springable springable, double width, double height)
     {
         super(width, height);
+        
+        this.springable = springable;
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
@@ -140,6 +149,20 @@ public class BoundCanvas extends Canvas
     public final @NotNull ReentrantLock getLock()
     {
         return lock;
+    }
+    
+    //
+    
+    @Override
+    public FxWeaver weaver()
+    {
+        return springable.weaver();
+    }
+    
+    @Override
+    public ConfigurableApplicationContext ctx()
+    {
+        return springable.ctx();
     }
     
     //<editor-fold desc="--- CANVAS ---">
