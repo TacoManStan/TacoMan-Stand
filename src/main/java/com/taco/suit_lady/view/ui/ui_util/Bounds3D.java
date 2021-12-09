@@ -20,4 +20,20 @@ public record Bounds3D(int x, int y, int z, int width, int height, int depth)
     {
         return new Point3D(width, height, depth);
     }
+    
+    public Bounds2D xyBounds2D()
+    {
+        return new Bounds2D(x, y, width, height);
+    }
+    
+    public Bounds2D xzBounds2D()
+    {
+        return new Bounds2D(x, z, width, depth);
+    }
+    
+    @SuppressWarnings("SuspiciousNameCombination")
+    public Bounds2D yzBounds2D()
+    {
+        return new Bounds2D(y, z, height, depth);
+    }
 }
