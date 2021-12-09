@@ -31,11 +31,12 @@ public class OverlayHandler
         this.lock = lock;
         
         this.overlays = new ReadOnlyObservableListWrapper<>(initInitialOverlayList(initialOverlays));
+        this.rootPane = new StackPane();
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">
     
-    private ObservableList<Overlay> initInitialOverlayList(@Nullable Overlay[] initialOverlays)
+    private @NotNull ObservableList<Overlay> initInitialOverlayList(@Nullable Overlay[] initialOverlays)
     {
         return initialOverlays != null ? FXCollections.observableArrayList(initialOverlays) : FXCollections.observableArrayList();
     }
@@ -49,7 +50,10 @@ public class OverlayHandler
         return overlays.getReadOnlyList();
     }
     
-    
+    protected final StackPane getRoot()
+    {
+        return rootPane;
+    }
     
     //</editor-fold>
     
