@@ -1,14 +1,13 @@
-package com.taco.suit_lady.view.ui.jfx.overlay;
+package com.taco.suit_lady.view.ui;
 
 import com.taco.suit_lady._to_sort._new.ReadOnlyObservableList;
 import com.taco.suit_lady._to_sort._new.ReadOnlyObservableListWrapper;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.ArrayTools;
 import com.taco.suit_lady.util.tools.ExceptionTools;
-import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.layout.StackPane;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,7 +21,8 @@ public class OverlayHandler
 {
     private final Springable springable;
     private final ReentrantLock lock;
-    
+
+    private final StackPane rootPane;
     private final ReadOnlyObservableListWrapper<Overlay> overlays;
     
     public OverlayHandler(@NotNull Springable springable, @Nullable ReentrantLock lock, @Nullable Overlay... initialOverlays)
@@ -48,6 +48,8 @@ public class OverlayHandler
     {
         return overlays.getReadOnlyList();
     }
+    
+    
     
     //</editor-fold>
     
