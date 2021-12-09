@@ -38,13 +38,13 @@ public class CanvasPane extends AnchorPane
     @Override
     public FxWeaver weaver()
     {
-        return null;
+        return springable.weaver();
     }
     
     @Override
     public ConfigurableApplicationContext ctx()
     {
-        return null;
+        return springable.ctx();
     }
     
     //</editor-fold>
