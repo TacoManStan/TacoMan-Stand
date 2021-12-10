@@ -23,9 +23,8 @@ import java.util.concurrent.locks.ReentrantLock;
 public class BoundCanvas extends Canvas
         implements Springable, Lockable
 {
-    private final ReentrantLock lock;
-    
     private final Springable springable;
+    private final ReentrantLock lock;
     
     private final ReadOnlyObjectWrapper<CanvasListener> canvasListenerProperty;
     private final ReadOnlyListWrapper<PaintCommandable> paintCommands;
