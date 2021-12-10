@@ -1,9 +1,10 @@
 package com.taco.suit_lady.util.tools;
 
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import org.checkerframework.checker.index.qual.NonNegative;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,10 +13,12 @@ import java.lang.reflect.Array;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 // TODO - Convert to non-static
@@ -28,18 +31,18 @@ public class ArrayTools
     }
     
     /**
-     * <p>Returns the {@link T element} at the specified {@code index} using <i>{@code () -> null}</i> as the {@link Supplier Fallback Supplier}.</p>
+     * <p>Returns the {@link T element} at the specified {@code movedToIndex} using <i>{@code () -> null}</i> as the {@link Supplier Fallback Supplier}.</p>
      * <p><b>Passthrough Definition</b></p>
      * <blockquote><i><code>
-     * {@link ArrayTools}<b>.</b>{@link ArrayTools#getAt(int, List, Supplier, Supplier) getAt}<b>(</b>{@code index}<b>,</b> {@code list}<b>,</b> <u>{@code () -> null)}</u><b>,</b> <u>{@code () -> null)}</u><b>)</b>
+     * {@link ArrayTools}<b>.</b>{@link ArrayTools#getAt(int, List, Supplier, Supplier) getAt}<b>(</b>{@code movedToIndex}<b>,</b> {@code list}<b>,</b> <u>{@code () -> null)}</u><b>,</b> <u>{@code () -> null)}</u><b>)</b>
      * </code></i></blockquote>
      *
-     * @param index The {@code index} to {@link List#get(int) retrieve} the desired {@link T element} from.
+     * @param index The {@code movedToIndex} to {@link List#get(int) retrieve} the desired {@link T element} from.
      * @param list  The {@link List} from which the returned {@link T element} is {@link List#get(int) retrieved}.
      * @param <T>   The type of element contained in the specified {@link List}.
      *              <p>Also the type of {@link Object} returned by {@link #getAt(int, List, Supplier, Supplier) this method}.
      *
-     * @return The {@link T element} at the specified {@code index} in the specified {@link List}.
+     * @return The {@link T element} at the specified {@code movedToIndex} in the specified {@link List}.
      */
     public static <T> T getAt(@NonNegative int index, @NotNull List<T> list)
     {
@@ -47,19 +50,19 @@ public class ArrayTools
     }
     
     /**
-     * <p>Returns the {@link T element} at the specified {@code index} using optional {@link Supplier Fallback Supplier} to handle all types of invalid queries.</p>
+     * <p>Returns the {@link T element} at the specified {@code movedToIndex} using optional {@link Supplier Fallback Supplier} to handle all types of invalid queries.</p>
      * <p><b>Passthrough Definition</b></p>
      * <blockquote><i><code>
-     * {@link ArrayTools}<b>.</b>{@link ArrayTools#getAt(int, List, Supplier, Supplier) getAt}<b>(</b>{@code index}<b>,</b> {@code list}<b>,</b> {@code fallbackSupplier}<b>,</b> {@code fallbackSupplier}<b>)</b>
+     * {@link ArrayTools}<b>.</b>{@link ArrayTools#getAt(int, List, Supplier, Supplier) getAt}<b>(</b>{@code movedToIndex}<b>,</b> {@code list}<b>,</b> {@code fallbackSupplier}<b>,</b> {@code fallbackSupplier}<b>)</b>
      * </code></i></blockquote>
      *
-     * @param index            The {@code index} to {@link List#get(int) retrieve} the desired {@link T element} from.
+     * @param index            The {@code movedToIndex} to {@link List#get(int) retrieve} the desired {@link T element} from.
      * @param list             The {@link List} from which the returned {@link T element} is {@link List#get(int) retrieved}.
-     * @param fallbackSupplier An optional {@link Supplier} that is called if the specified {@code index} is invalid for any reason or if the {@link T element} at the specified {@code index} is {@code null}.
+     * @param fallbackSupplier An optional {@link Supplier} that is called if the specified {@code movedToIndex} is invalid for any reason or if the {@link T element} at the specified {@code movedToIndex} is {@code null}.
      * @param <T>              The type of element contained in the specified {@link List}.
      *                         <p>Also the type of {@link Object} returned by {@link #getAt(int, List, Supplier, Supplier) this method}.
      *
-     * @return The {@link T element} at the specified {@code index} in the specified {@link List}.
+     * @return The {@link T element} at the specified {@code movedToIndex} in the specified {@link List}.
      *
      * @see #getAt(int, List, Supplier, Supplier)
      */
@@ -69,7 +72,7 @@ public class ArrayTools
     }
     
     /**
-     * <p>Returns the {@link T element} at the specified {@code index} using optional {@link Supplier Fallback Suppliers} to handle various types of invalid queries.</p>
+     * <p>Returns the {@link T element} at the specified {@code movedToIndex} using optional {@link Supplier Fallback Suppliers} to handle various types of invalid queries.</p>
      * <p><b>LOGIC OVERVIEW</b></p>
      * <ol>
      *     <li>
@@ -82,7 +85,7 @@ public class ArrayTools
      *         <b>Index is <u>Valid</u></b>
      *         <ul>
      *             <li>
-     *                 Retrieve the {@link T element} at the specified {@code index}.
+     *                 Retrieve the {@link T element} at the specified {@code movedToIndex}.
      *                 <ol>
      *                     <li>
      *                         <b>Element is <u>Not Null</u></b>
@@ -110,20 +113,20 @@ public class ArrayTools
      *     </li>
      * </ol>
      *
-     * @param index                          The {@code index} to {@link List#get(int) retrieve} the desired {@link T element} from.
+     * @param index                          The {@code movedToIndex} to {@link List#get(int) retrieve} the desired {@link T element} from.
      * @param list                           The {@link List} from which the returned {@link T element} is {@link List#get(int) retrieved}.
-     * @param ifInvalidIndexFallbackSupplier An optional {@link Supplier} that is called if the specified {@code index} is invalid for any reason.
-     * @param ifNullFallbackSupplier         An optional {@link Supplier} that is called if the {@link T element} at the specified {@code index} is {@code null}.
+     * @param ifInvalidIndexFallbackSupplier An optional {@link Supplier} that is called if the specified {@code movedToIndex} is invalid for any reason.
+     * @param ifNullFallbackSupplier         An optional {@link Supplier} that is called if the {@link T element} at the specified {@code movedToIndex} is {@code null}.
      * @param <T>                            The type of element contained in the specified {@link List}.
      *                                       <p>Also the type of {@link Object} returned by {@link #getAt(int, List, Supplier, Supplier) this method}.
      *
-     * @return The {@link T element} at the specified {@code index} in the specified {@link List}.
+     * @return The {@link T element} at the specified {@code movedToIndex} in the specified {@link List}.
      * <p>See documentation body for details.
      *
-     * @throws IndexOutOfBoundsException If the specified {@code index} is a negative value.
+     * @throws IndexOutOfBoundsException If the specified {@code movedToIndex} is a negative value.
      * @throws NullPointerException      If the specified {@link List} is {@code null}.
-     * @throws IndexOutOfBoundsException If the specified {@code index} is not within the {@link List#size() bounds} of the specified {@link List} and the {@link Supplier ifInvalidIndexFallbackSupplier} was not specified.
-     * @throws NullPointerException      If the {@link T element} at the specified {@code index} is {@code null} and the {@link Supplier ifNullFallbackSupplier} was not specified.
+     * @throws IndexOutOfBoundsException If the specified {@code movedToIndex} is not within the {@link List#size() bounds} of the specified {@link List} and the {@link Supplier ifInvalidIndexFallbackSupplier} was not specified.
+     * @throws NullPointerException      If the {@link T element} at the specified {@code movedToIndex} is {@code null} and the {@link Supplier ifNullFallbackSupplier} was not specified.
      */
     public static <T> T getAt(@NonNegative int index, @NotNull List<T> list, @Nullable Supplier<T> ifInvalidIndexFallbackSupplier, @Nullable Supplier<T> ifNullFallbackSupplier)
     {
@@ -137,7 +140,7 @@ public class ArrayTools
                 if (ifNullFallbackSupplier != null)
                     value = ifNullFallbackSupplier.get();
                 else
-                    throw ExceptionTools.ex(new NullPointerException(), "Value at index [" + index + "] is null, but ifNull fallback Supplier was not provided.");
+                    throw ExceptionTools.ex(new NullPointerException(), "Value at movedToIndex [" + index + "] is null, but ifNull fallback Supplier was not provided.");
         } else if (ifInvalidIndexFallbackSupplier != null)
             value = ifInvalidIndexFallbackSupplier.get();
         else
@@ -233,13 +236,13 @@ public class ArrayTools
     }
     
     /**
-     * Returns the element at the specified index of the specified {@link List}.
+     * Returns the element at the specified movedToIndex of the specified {@link List}.
      *
-     * @param index The index.
+     * @param index The movedToIndex.
      * @param list  The {@link List}.
      * @param <T>   The type of elements in the specified {@link List}.
      *
-     * @return The element at the specified index of the specified {@link List}.
+     * @return The element at the specified movedToIndex of the specified {@link List}.
      */
     public static <T> T getElementAt(int index, List<T> list)
     {
@@ -252,13 +255,13 @@ public class ArrayTools
     }
     
     /**
-     * Returns the element at the specified index of the specified array.
+     * Returns the element at the specified movedToIndex of the specified array.
      *
-     * @param index The index.
+     * @param index The movedToIndex.
      * @param arr   The array.
      * @param <T>   The type of elements in the specified array.
      *
-     * @return The element at the specified index of the specified array.
+     * @return The element at the specified movedToIndex of the specified array.
      */
     public static <T> T getElementAt(int index, T[] arr)
     {
@@ -358,7 +361,7 @@ public class ArrayTools
      * @param subArr The ArrayList that is being searched for.
      *
      * @return A point representing the location of the sub array. The x
-     * coordinate of the point is the index of the first matching
+     * coordinate of the point is the movedToIndex of the first matching
      * element in the base array that was found, the y coordinate is the
      * last matching element in the base array that was found.
      */
@@ -486,13 +489,13 @@ public class ArrayTools
     }
     
     /**
-     * Returns the index of the specified value in the specified array.
+     * Returns the movedToIndex of the specified value in the specified array.
      *
      * @param <T>   The type of elements inside the array.
      * @param value The value being searched for.
      * @param arr   The array being searched.
      *
-     * @return The index of the specified value in the specified array.
+     * @return The movedToIndex of the specified value in the specified array.
      */
     @SafeVarargs
     public static <T> int indexOf(T value, T... arr)
@@ -536,8 +539,8 @@ public class ArrayTools
      * Returns the furthest left point between the specified min and max indexes
      * of the specified array.
      *
-     * @param min      The minimum (inclusive) index.
-     * @param max      The maximum (non-inclusive) index.
+     * @param min      The minimum (inclusive) movedToIndex.
+     * @param max      The maximum (non-inclusive) movedToIndex.
      * @param lookNull True if this method should look for a null element, false
      *                 otherwise.
      * @param arr      The array.
@@ -623,39 +626,265 @@ public class ArrayTools
     
     //
     
-    public static <E> void applyChangeHandler(ObservableList<E> list, Consumer<E> addHandler, Consumer<E> removeHandler)
+    //    public static <E> void applyChangeHandler(ObservableList<E> list, Consumer<E> addHandler, Consumer<E> removeHandler)
+    //    {
+    //        applyChangeHandler(null, list,
+    //                           null, null,
+    //                           null,
+    //                           addHandler, removeHandler);
+    //    }
+    
+    //    public static <E> void applyChangeHandler(
+    //            Lock lock, ObservableList<E> list,
+    //            BiConsumer<Permutation<E>, E> permutatedElementHandler, Runnable permutationHandler,
+    //            BiConsumer<Integer, Integer> updateHandler,
+    //            Consumer<E> addHandler, Consumer<E> removeHandler)
+    //    {
+    //        ExceptionTools.nullCheck(list, "Observable List").addListener(new ListChangeListener<E>()
+    //        {
+    //            private final ArrayList<E> previousOrder;
+    //
+    //            {
+    //                this.previousOrder = new ArrayList<>();
+    //            }
+    //
+    //            @Override public void onChanged(Change<? extends E> change)
+    //            {
+    //                while (change.next())
+    //                    if (change.wasPermutated()) {
+    //                        if (permutationHandler != null)
+    //                            permutationHandler.run();
+    //                        if (permutatedElementHandler != null)
+    //                            IntStream.range(change.getFrom(), change.getTo()).forEach(
+    //                                    i -> permutatedElementHandler.accept(
+    //                                            new Permutation<>(change.getPermutation(i), i, list.get(i)),
+    //                                            list.get(change.getPermutation(i))));
+    //                    } else if (change.wasUpdated()) {
+    //                        if (updateHandler != null)
+    //                            updateHandler.accept(change.getFrom(), change.getTo());
+    //                    } else {
+    //                        change.getAddedSubList().forEach(addHandler);
+    //                        change.getRemoved().forEach(removeHandler);
+    //                    }
+    //            }
+    //        });
+    //    }
+    
+    public static <E> void applyChangeListener(@NotNull ObservableList<E> list, @NotNull ListListener<E> listener)
     {
-        applyChangeHandler(null, list,
-                           null, null,
-                           null,
-                           addHandler, removeHandler);
+        ExceptionTools.nullCheck(list, "Observable List").addListener(ExceptionTools.nullCheck(listener, "List Listener"));
     }
     
-    public static <E, C extends ListChangeListener<? super E>> void applyChangeHandler(
-            Lock lock, ObservableList<E> list,
-            BiConsumer<Integer, Integer> permutatedElementHandler, Runnable permutationHandler,
-            BiConsumer<Integer, Integer> updateHandler,
-            Consumer<E> addHandler, Consumer<E> removeHandler)
+    public static <E> void applyChangeListener(
+            @Nullable ReentrantLock lock, @NotNull ObservableList<E> list,
+            @Nullable PermutationResponder<E> permutationResponder)
     {
-        ExceptionTools.nullCheck(list, "Observable List").addListener((ListChangeListener<? super E>) change -> {
-            while (change.next()) {
-                if (change.wasPermutated()) {
-                    if (permutationHandler != null)
-                        permutationHandler.run();
-                    if (permutatedElementHandler != null)
-                        for (int i = change.getFrom(); i < change.getTo(); i++)
-                            permutatedElementHandler.accept(change.getPermutation(i), i);
-                } else if (change.wasUpdated()) {
-                    if (updateHandler != null)
-                        updateHandler.accept(change.getFrom(), change.getTo());
-                } else {
-                    //                    if (change.wasAdded())
-                    change.getAddedSubList().forEach(addHandler);
-                    //                    if (change.wasRemoved())
-                    change.getRemoved().forEach(removeHandler);
-                }
+        list.addListener(newChangeListener(lock, list, permutationResponder, null, null, null));
+    }
+    
+    public static <E> void applyChangeListener(
+            @Nullable ReentrantLock lock, @NotNull ObservableList<E> list,
+            @Nullable Consumer<E> addListener, @Nullable Consumer<E> removeListener)
+    {
+        list.addListener(newChangeListener(lock, list, null, null, addListener, removeListener));
+    }
+    
+    public static <E> void applyChangeListener(
+            @Nullable ReentrantLock lock, @NotNull ObservableList<E> list,
+            @Nullable PermutationResponder<E> permutationResponder,
+            @Nullable Consumer<E> addListener, @Nullable Consumer<E> removeListener)
+    {
+        list.addListener(newChangeListener(lock, list, permutationResponder, null, addListener, removeListener));
+    }
+    
+    public static <E> void applyChangeListener(
+            @Nullable ReentrantLock lock, @NotNull ObservableList<E> list,
+            @Nullable PermutationResponder<E> permutationResponder,
+            @Nullable BiConsumer<Integer, Integer> updateListener,
+            @Nullable Consumer<E> addListener, @Nullable Consumer<E> removeListener)
+    {
+        list.addListener(newChangeListener(lock, list, permutationResponder, updateListener, addListener, removeListener));
+    }
+    
+    @Contract("_, _, _ -> new")
+    public static <E> @NotNull ListChangeListener<E> newChangeListener(
+            @Nullable ReentrantLock lock, @NotNull ObservableList<E> list,
+            @Nullable PermutationResponder<E> permutationResponder)
+    {
+        return newChangeListener(lock, list, permutationResponder, null, null, null);
+    }
+    
+    @Contract("_, _, _, _ -> new")
+    public static <E> @NotNull ListChangeListener<E> newChangeListener(
+            @Nullable ReentrantLock lock, @NotNull ObservableList<E> list,
+            @Nullable Consumer<E> addListener, @Nullable Consumer<E> removeListener)
+    {
+        return newChangeListener(lock, list, null, null, addListener, removeListener);
+    }
+    
+    @Contract("_, _, _, _, _ -> new")
+    public static <E> @NotNull ListChangeListener<E> newChangeListener(
+            @Nullable ReentrantLock lock, @NotNull ObservableList<E> list,
+            @Nullable PermutationResponder<E> permutationResponder,
+            @Nullable Consumer<E> addListener, @Nullable Consumer<E> removeListener)
+    {
+        return newChangeListener(lock, list, permutationResponder, null, addListener, removeListener);
+    }
+    
+    @Contract("_, _, _, _, _, _ -> new")
+    public static <E> @NotNull ListChangeListener<E> newChangeListener(
+            @Nullable ReentrantLock lock, @NotNull ObservableList<E> list,
+            @Nullable PermutationResponder<E> permutationResponder,
+            @Nullable BiConsumer<Integer, Integer> updateListener,
+            @Nullable Consumer<E> addListener, @Nullable Consumer<E> removeListener)
+    {
+        return new ListListener<>(lock, list)
+        {
+            @Override
+            public void onPermutation()
+            {
+                if (permutationResponder != null)
+                    permutationResponder.respond();
             }
-        });
+            
+            @Override
+            public void onPermutate(Permutation<E> permutation, Permutation<E> secondaryPermutation)
+            {
+                if (permutationResponder != null)
+                    permutationResponder.respond(permutation, secondaryPermutation);
+            }
+            
+            @Override
+            public void onUpdate(int from, int to)
+            {
+                if (updateListener != null)
+                    updateListener.accept(from, to);
+            }
+            
+            @Override
+            public void onAdded(E element)
+            {
+                if (addListener != null)
+                    addListener.accept(element);
+            }
+            
+            @Override
+            public void onRemoved(E element)
+            {
+                if (removeListener != null)
+                    removeListener.accept(element);
+            }
+        };
+    }
+    
+    public record Permutation<T>(int movedFromIndex, int movedToIndex, T contents) { }
+    
+    @FunctionalInterface
+    public interface PermutationResponder<E>
+    {
+        void respond(Permutation<E> primaryPermutation, Permutation<E> secondaryPermutation);
+        
+        default void respond() { }
+    }
+    
+    public static class ListListener<E>
+            implements ListChangeListener<E>
+    {
+        private final ReentrantLock lock;
+        
+        private final ObservableList<E> list;
+        private final ReadOnlyObjectWrapper<List<E>> backingListProperty;
+        
+        protected ListListener(@NotNull ObservableList<E> list)
+        {
+            this(null, list);
+        }
+        
+        protected ListListener(@Nullable ReentrantLock lock, @NotNull ObservableList<E> list)
+        {
+            this.lock = lock;
+            
+            this.list = list;
+            this.backingListProperty = new ReadOnlyObjectWrapper<>();
+            
+            refresh();
+        }
+        
+        private void refresh()
+        {
+            TaskTools.sync(lock, () -> backingListProperty.set(ArrayTools.copy(list)), true);
+        }
+        
+        @Override
+        public final void onChanged(Change<? extends E> change)
+        {
+            TaskTools.sync(lock, () -> {
+                while (change.next()) {
+                    if (change.wasPermutated()) {
+                        onPermutationInternal();
+                        
+                        IntStream.range(change.getFrom(), change.getTo()).forEach(i -> {
+                            final E newElement = list.get(i);
+                            final int oldIndex = backingListProperty.get().indexOf(newElement);
+                            @SuppressWarnings("UnnecessaryLocalVariable") final int newIndex = i;
+                            
+                            final E oldElement = list.get(change.getPermutation(newIndex));
+                            final int oldElementOldIndex = backingListProperty.get().indexOf(oldElement);
+                            final int oldElementNewIndex = change.getPermutation(newIndex);
+                            
+                            onPermutateInternal(
+                                    new Permutation<>(oldIndex, newIndex, newElement),
+                                    new Permutation<>(oldElementOldIndex, oldElementNewIndex, oldElement));
+                        });
+                    } else if (change.wasUpdated())
+                        onUpdateInternal(change.getFrom(), change.getTo());
+                    else {
+                        change.getAddedSubList().forEach(e -> onAddedInternal(e));
+                        change.getRemoved().forEach(e -> onRemovedInternal(e));
+                    }
+                }
+                refresh();
+            }, true);
+        }
+        
+        protected void onPermutation() { }
+        
+        protected void onPermutate(Permutation<E> primaryPermutation, Permutation<E> secondaryPermutation) { }
+        
+        protected void onUpdate(int from, int to) { }
+        
+        protected void onAdded(E element) { }
+        
+        protected void onRemoved(E element) { }
+        
+        //<editor-fold desc="--- INTERNAL ---">
+        
+        private void onPermutationInternal()
+        {
+            TaskTools.sync(lock, () -> onPermutation(), true);
+        }
+        
+        private void onPermutateInternal(Permutation<E> primaryPermutation, Permutation<E> secondaryPermutation)
+        {
+            TaskTools.sync(lock, () -> onPermutate(primaryPermutation, secondaryPermutation), true);
+        }
+        
+        private void onUpdateInternal(int from, int to)
+        {
+            TaskTools.sync(lock, () -> onUpdate(from, to), true);
+        }
+        
+        private void onAddedInternal(E element)
+        {
+            TaskTools.sync(lock, () -> onAdded(element), true);
+        }
+        
+        private void onRemovedInternal(E element)
+        {
+            TaskTools.sync(lock, () -> onRemoved(element), true);
+        }
+        
+        //</editor-fold>
     }
     
     //
@@ -1813,8 +2042,8 @@ public class ArrayTools
          * the specified array to the left the specified number of spaces.
          *
          * @param arr      The array.
-         * @param minIndex The minimum (inclusive) index.
-         * @param maxIndex The maximum (exclusive) index. Specify -1 for no max index
+         * @param minIndex The minimum (inclusive) movedToIndex.
+         * @param maxIndex The maximum (exclusive) movedToIndex. Specify -1 for no max movedToIndex
          *                 (the end of the array).
          * @param spaces   The number of spaces the elements are being shifted.
          * @param safe     True if the operation should be done only if the operation
@@ -1840,12 +2069,12 @@ public class ArrayTools
         }
         
         /**
-         * Makes space in the specified array at the specified index of the
+         * Makes space in the specified array at the specified movedToIndex of the
          * specified size. The space is made by moving existing elements to the
          * right.
          *
          * @param arr    The array.
-         * @param index  The index the space is being added at.
+         * @param index  The movedToIndex the space is being added at.
          * @param spaces The number of indexes in which the space should take up.
          * @param safe   True if the operation should be done only if the operation
          *               can be safely completed without overwriting any non-null
@@ -1877,16 +2106,16 @@ public class ArrayTools
          * Each PlaceElement is placed into the specified array under the
          * following conditions:
          * <ol>
-         * <li>The index is between the calculated minimum and maximum indexes
+         * <li>The movedToIndex is between the calculated minimum and maximum indexes
          * (see below)</li>
-         * <li>The index is non-null.</li>
+         * <li>The movedToIndex is non-null.</li>
          * </ol>
-         * The minimum index is always set to the index specified by the
+         * The minimum movedToIndex is always set to the movedToIndex specified by the
          * PlaceElement.
          * <p>
          * If the PlaceElement is the last element in the PlaceElement array,
-         * then the maximum index is set to {@code arr.length - 1}. In all other
-         * scenarios, the maximum index is set to the index specified by the
+         * then the maximum movedToIndex is set to {@code arr.length - 1}. In all other
+         * scenarios, the maximum movedToIndex is set to the movedToIndex specified by the
          * next PlaceElement in PlaceElement array.
          *
          * @param arr      The array.
@@ -1914,11 +2143,11 @@ public class ArrayTools
         
         /**
          * Inserts the specified element into the specified array at the
-         * specified index.
+         * specified movedToIndex.
          *
          * @param arr     The array.
          * @param element The element that is being inserted into the array.
-         * @param index   The index in which the element is being inserted into.
+         * @param index   The movedToIndex in which the element is being inserted into.
          * @param safe    True if the operation should be done only if the operation
          *                can be safely completed without overwriting any non-null
          *                elements, false otherwise.
@@ -1942,10 +2171,10 @@ public class ArrayTools
          *
          * @param arr1        The first array (the array being moved <i>from</i>).
          * @param arr2        The second array (the array being moved <i>to</i>).
-         * @param index1      The index of the element being moved from the first array.
-         * @param index2      The index in which the element from the first array is
+         * @param index1      The movedToIndex of the element being moved from the first array.
+         * @param index2      The movedToIndex in which the element from the first array is
          *                    being moved to in the second array.
-         * @param stopShiftAt The index (max) in which elements should stop being
+         * @param stopShiftAt The movedToIndex (max) in which elements should stop being
          *                    shifted in the first array after the element has been
          *                    removed. Specify -1 to remove until the end of the array,
          *                    or 0 to not move at all.
@@ -1976,9 +2205,9 @@ public class ArrayTools
          * @param arr1        The first array (the array being moved <i>from</i>).
          * @param arr2        The second array (the array being moved <i>to</i>).
          * @param obj         The element being moved from the first array.
-         * @param index       The index in which the element from the first array is
+         * @param index       The movedToIndex in which the element from the first array is
          *                    being moved to in the second array.
-         * @param stopShiftAt The index (max) in which elements should stop being
+         * @param stopShiftAt The movedToIndex (max) in which elements should stop being
          *                    shifted in the first array after the element has been
          *                    removed. Specify -1 to remove until the end of the array,
          *                    or 0 to not move at all.
