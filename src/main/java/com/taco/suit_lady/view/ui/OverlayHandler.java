@@ -4,10 +4,7 @@ import com.taco.suit_lady._to_sort._new.ReadOnlyObservableList;
 import com.taco.suit_lady._to_sort._new.ReadOnlyObservableListWrapper;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.ArrayTools;
-import com.taco.suit_lady.util.tools.ArrayTools.Permutation;
 import com.taco.suit_lady.util.tools.ExceptionTools;
-import com.taco.suit_lady.util.tools.TaskTools;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.StackPane;
@@ -16,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 

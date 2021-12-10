@@ -31,17 +31,19 @@ public class ArrayTools
     
     /**
      * <p>Sorts the specified {@link List} using the {@link Comparator#naturalOrder() Natural Order} as the {@link Comparator}.</p>
-     * <br><hr><br>
-     * <p><h3>Passthrough Definition Mk1</h3></p>
+     * <hr>
+     * <H4>Passthrough Definition Mk1</H4>
      * <pre>{@code list.sort((Comparator<? super E>) Comparator.naturalOrder());
      * return list;}</pre>
-     * <br>
-     * <p><h3>Passthrough Definition Mk2</h3></p>
+     * <H4>Passthrough Definition Mk2</H4>
      * <blockquote><i><code>
      * list<b>.</b>{@link List#sort(Comparator) sort}<b>(</b>{@link Comparator}<b>.</b>{@link Comparator#naturalOrder() naturalOrder()}<b>)</b>;
      * <br>
      * return list;
      * </code></i></blockquote>
+     * <H4>Passthrough Definition Mk3</H4>
+     * <pre><code> list<b>.</b>{@link List#sort(Comparator) sort}<b>(</b>{@link Comparator}<b>.</b>{@link Comparator#naturalOrder() naturalOrder()}<b>)</b>;
+     * return list;</code></pre>
      *
      * @param list The {@link List} to be sorted.
      * @param <E>  The type of {@code objects} contained within the specified {@link List}.

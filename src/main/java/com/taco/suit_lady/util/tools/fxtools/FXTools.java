@@ -1255,7 +1255,7 @@ public class FXTools
      *                         If {@code null}, then an offset of {@code 0} is used.
      * @param bindOrientation  The {@link BindOrientation} defining which {@link Region parent} dimensions the {@link Region child} should be bound to.
      * @param bindType         The {@link BindType} defining which {@link Region child} dimension properties should be bound to the parent.
-     *                         Options are {@link Region#prefWidthProperty() Pref. Width} & {@link Region#prefHeightProperty() Pref. Height}, {@link Region#maxWidthProperty() Max Width} & {@link Region#maxHeightProperty() Max Height}, or all of the above.
+     *                         Options are {@link Region#prefWidthProperty() Pref. Width} and {@link Region#prefHeightProperty() Pref. Height}, {@link Region#maxWidthProperty() Max Width} and {@link Region#maxHeightProperty() Max Height}, or all of the above.
      * @param addTo            True if the {@link Region child} element should be automatically added to the specified {@link Region parent}, false if it should not (useful when the child has already been added to the parent upon method call).
      * @param <T>              The {@link Region Region Implementation} of the {@code child} element.
      *

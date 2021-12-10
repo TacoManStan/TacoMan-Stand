@@ -11,7 +11,7 @@ public interface UIDProcessable extends UID
     /**
      * <p>Returns the {@link UIDProcessor} instance for this {@link UIDProcessable} object.</p>
      * <br><hr><br>
-     * <h2>Example Implementation</h2>
+     * <h4>Example Implementation</h4>
      * <pre>{@code @Override
      * public UIDProcessor getUIDProcessor()
      * {
