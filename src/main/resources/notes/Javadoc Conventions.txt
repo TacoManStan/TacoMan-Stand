@@ -23,4 +23,4 @@ COPY/PASTE:
     1.
         this.weaver = ExceptionTools.nullCheck(weaver, "FxWeaver");
         this.ctx = ExceptionTools.nullCheck(ctx, "Application Context");
-    2.
+    2. TaskTools.sync(lock, () -> {}, true);
