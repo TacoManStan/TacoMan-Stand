@@ -24,6 +24,14 @@ COPY/PASTE:
         this.weaver = ExceptionTools.nullCheck(weaver, "FxWeaver");
         this.ctx = ExceptionTools.nullCheck(ctx, "Application Context");
     2. TaskTools.sync(lock, () -> {}, true);
+    3. Embedded Code Block (UIDProcessable.getUIDProcessor() docs as example)
+             * <pre>{@code @Override
+             * public UIDProcessor getUIDProcessor()
+             * {
+             *     if (uIDContainer == null) // Lazy Initialization
+             *         uIDContainer = new UIDProcessor("group-name");
+             *     return uIDContainer;
+             * }}</pre>
 
 USEFUL EXAMPLES
     1. UIDProcessable.getUIDProcessor() : Formatted Javadoc code blocks
