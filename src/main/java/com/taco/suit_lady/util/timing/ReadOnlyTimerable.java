@@ -3,7 +3,7 @@ package com.taco.suit_lady.util.timing;
 import javafx.beans.property.ReadOnlyLongProperty;
 
 public interface ReadOnlyTimerable
-    extends Timeable
+    extends ReadOnlyTimeable
 {
     ReadOnlyLongProperty timeoutProperty();
     long getTimeout();
