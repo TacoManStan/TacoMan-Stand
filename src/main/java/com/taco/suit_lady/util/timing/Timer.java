@@ -6,6 +6,7 @@ import javafx.beans.property.ReadOnlyLongProperty;
 import javafx.beans.property.ReadOnlyLongWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import org.jetbrains.annotations.NotNull;
 
 // TODO - Rewrite/update ALL JavaDocs
 
@@ -17,7 +18,7 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
  * @see Timers
  */
 public class Timer
-		implements Timeable {
+		implements Timerable, ReactiveTimerable {
 
 	private final ReadOnlyLongWrapper timeoutProperty;
 	private long startTime;
@@ -32,7 +33,7 @@ public class Timer
 	 * @param onTimeout A Runnable that is executed when the timer times out. Null for no action.
 	 * @see Timers
 	 */
-	protected Timer(Number timeout, Runnable onTimeout) {
+	protected Timer(@NotNull Number timeout, Runnable onTimeout) {
 		this.timeoutProperty = new ReadOnlyLongWrapper(timeout.longValue());
 		this.startTime = 0L;
 		this.stopped = false;
@@ -47,7 +48,7 @@ public class Timer
 	 *
 	 * @return The timeout property for this timer.
 	 */
-	public final ReadOnlyLongProperty timeoutProperty() {
+	@Override public final ReadOnlyLongProperty timeoutProperty() {
 		return timeoutProperty.getReadOnlyProperty();
 	}
 
@@ -56,7 +57,7 @@ public class Timer
 	 *
 	 * @return The timeout.
 	 */
-	public final long getTimeout() {
+	@Override public final long getTimeout() {
 		return timeoutProperty.get();
 	}
 
@@ -65,7 +66,7 @@ public class Timer
 	 *
 	 * @param timeout The timeout. Any number less than 0 will result in no timeout being used.
 	 */
-	public final void setTimeout(Number timeout) {
+	@Override public final void setTimeout(@NotNull Number timeout) {
 		timeoutProperty.set(CalculationTools.clampMin(timeout.longValue(), -1L));
 	}
 
@@ -78,7 +79,7 @@ public class Timer
 	 *
 	 * @return True if the timer has been started, false otherwise.
 	 */
-	public final boolean isStarted() {
+	@Override public final boolean isStarted() {
 		return startTime != 0;
 	}
 
@@ -89,21 +90,21 @@ public class Timer
 	 *
 	 * @return True if the timer is stopped, false otherwise.
 	 */
-	public final boolean isStopped() {
+	@Override public final boolean isStopped() {
 		return stopped;
 	}
 
 	//
-
-	public final ReadOnlyObjectProperty<Runnable> onTimeoutProperty() {
+	
+	@Override public final ReadOnlyObjectProperty<Runnable> onTimeoutProperty() {
 		return onTimeoutProperty.getReadOnlyProperty();
 	}
-
-	public final Runnable getOnTimeout() {
+	
+	@Override public final Runnable getOnTimeout() {
 		return onTimeoutProperty.get();
 	}
-
-	public final void setOnTimeout(Runnable onTimeout) {
+	
+	@Override public final void setOnTimeout(Runnable onTimeout) {
 		onTimeoutProperty.set(onTimeout);
 	}
 
@@ -136,7 +137,7 @@ public class Timer
 	 *
 	 * @return The amount of milliseconds before the timer times out.
 	 */
-	public final long getRemainingTime() {
+	@Override public final long getRemainingTime() {
 		return (getStartTime() + getTimeout()) - Timing.currentTimeMillis();
 	}
 
@@ -145,7 +146,7 @@ public class Timer
 	 *
 	 * @return True if the timer has timed out, false otherwise.
 	 */
-	public final boolean isTimedOut() {
+	@Override public final boolean isTimedOut() {
 		final long timeout = getTimeout();
 		return timeout >= 0 && (stopped || Timing.currentTimeMillis() > startTime + timeout);
 	}
@@ -166,7 +167,7 @@ public class Timer
 	 *
 	 * @param newTimeout The new timeout for this timer. -1 to start the timer without changing the timeout.
 	 */
-	public final Timer start(Number newTimeout) {
+	@Override public final Timer start(Number newTimeout) {
 		long long_new_timeout = ExceptionTools.nullCheck(newTimeout, "New Timeout").longValue();
 		setTimeout(long_new_timeout);
 		return start();
@@ -184,7 +185,7 @@ public class Timer
 	 *
 	 * @param newTimeout The new timeout for this timer. -1 to not change the timeout. Cannot be less than -1.
 	 */
-	public final Timer reset(Number newTimeout) {
+	@Override public final Timer reset(Number newTimeout) {
 		long long_new_timeout = ExceptionTools.nullCheck(newTimeout, "New Timeout").longValue();
 		if (getStartTime() == 0)
 			return this;
