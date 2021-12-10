@@ -1,6 +1,7 @@
 package com.taco.suit_lady.util.tools;
 
 import javafx.collections.ListChangeListener;
+import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import org.checkerframework.checker.index.qual.NonNegative;
 import org.jetbrains.annotations.NotNull;
@@ -11,6 +12,7 @@ import java.lang.reflect.Array;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -19,6 +21,12 @@ import java.util.stream.Stream;
 // TODO - Convert to non-static
 public class ArrayTools
 {
+    public static <E> List<E> sort(List<E> list)
+    {
+        list.sort((Comparator<? super E>) Comparator.naturalOrder());
+        return list;
+    }
+    
     /**
      * <p>Returns the {@link T element} at the specified {@code index} using <i>{@code () -> null}</i> as the {@link Supplier Fallback Supplier}.</p>
      * <p><b>Passthrough Definition</b></p>
@@ -615,20 +623,37 @@ public class ArrayTools
     
     //
     
-    public static <T> void applyChangeHandler(ObservableList<T> list, Consumer<T> addHandler, Consumer<T> removeHandler)
+    public static <E> void applyChangeHandler(ObservableList<E> list, Consumer<E> addHandler, Consumer<E> removeHandler)
     {
-        applyChangeHandler(list, addHandler, removeHandler, null);
+        applyChangeHandler(null, list,
+                           null, null,
+                           null,
+                           addHandler, removeHandler);
     }
     
-    public static <T> void applyChangeHandler(ObservableList<T> list, Consumer<T> addHandler, Consumer<T> removeHandler, Lock lock)
+    public static <E, C extends ListChangeListener<? super E>> void applyChangeHandler(
+            Lock lock, ObservableList<E> list,
+            BiConsumer<Integer, Integer> permutatedElementHandler, Runnable permutationHandler,
+            BiConsumer<Integer, Integer> updateHandler,
+            Consumer<E> addHandler, Consumer<E> removeHandler)
     {
-        ExceptionTools.nullCheck(list, "Observable List");
-        list.addListener((ListChangeListener<? super T>) change -> {
+        ExceptionTools.nullCheck(list, "Observable List").addListener((ListChangeListener<? super E>) change -> {
             while (change.next()) {
-                if (change.wasAdded())
+                if (change.wasPermutated()) {
+                    if (permutationHandler != null)
+                        permutationHandler.run();
+                    if (permutatedElementHandler != null)
+                        for (int i = change.getFrom(); i < change.getTo(); i++)
+                            permutatedElementHandler.accept(change.getPermutation(i), i);
+                } else if (change.wasUpdated()) {
+                    if (updateHandler != null)
+                        updateHandler.accept(change.getFrom(), change.getTo());
+                } else {
+                    //                    if (change.wasAdded())
                     change.getAddedSubList().forEach(addHandler);
-                if (change.wasRemoved())
+                    //                    if (change.wasRemoved())
                     change.getRemoved().forEach(removeHandler);
+                }
             }
         });
     }
