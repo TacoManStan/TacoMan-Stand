@@ -37,7 +37,31 @@ public record Bounds2D(int x, int y, int width, int height)
     
     //</editor-fold>
     
-    //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    //<editor-fold desc="--- STATIC CONVERSION ---">
+    
+    public static @NotNull Bounds2D fromRectAWT(@NotNull java.awt.Rectangle rectangle)
+    {
+        ExceptionTools.nullCheck(rectangle, "AWT Rectangle");
+        return new Bounds2D(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+    }
+    
+    public static @NotNull Bounds2D fromRectFX(@NotNull javafx.scene.shape.Rectangle rectangle)
+    {
+        ExceptionTools.nullCheck(rectangle, "JFX Rectangle");
+        return new Bounds2D((int) rectangle.getX(), (int) rectangle.getY(), (int) rectangle.getWidth(), (int) rectangle.getHeight());
+    }
+    
+    public static @NotNull Bounds2D fromPoints(@NotNull Point2D location, @NotNull Point2D dimensions)
+    {
+        ExceptionTools.nullCheck(location, "Location Point2D");
+        ExceptionTools.nullCheck(dimensions, "Dimensions Point2D");
+        
+        return new Bounds2D((int) location.getX(), (int) location.getY(), (int) dimensions.getX(), (int) dimensions.getY());
+    }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- FOUNDATIONAL ---">
     
     @Override
     public boolean equals(Object o)
@@ -77,30 +101,6 @@ public record Bounds2D(int x, int y, int width, int height)
                ", width=" + width +
                ", height=" + height +
                '}';
-    }
-    
-    //</editor-fold>
-    
-    //<editor-fold desc="--- STATIC CONVERSION ---">
-    
-    public static @NotNull Bounds2D fromRectAWT(@NotNull java.awt.Rectangle rectangle)
-    {
-        ExceptionTools.nullCheck(rectangle, "AWT Rectangle");
-        return new Bounds2D(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
-    }
-    
-    public static @NotNull Bounds2D fromRectFX(@NotNull javafx.scene.shape.Rectangle rectangle)
-    {
-        ExceptionTools.nullCheck(rectangle, "JFX Rectangle");
-        return new Bounds2D((int) rectangle.getX(), (int) rectangle.getY(), (int) rectangle.getWidth(), (int) rectangle.getHeight());
-    }
-    
-    public static @NotNull Bounds2D fromPoints(@NotNull Point2D location, @NotNull Point2D dimensions)
-    {
-        ExceptionTools.nullCheck(location, "Location Point2D");
-        ExceptionTools.nullCheck(dimensions, "Dimensions Point2D");
-        
-        return new Bounds2D((int) location.getX(), (int) location.getY(), (int) dimensions.getX(), (int) dimensions.getY());
     }
     
     //</editor-fold>
