@@ -1,4 +1,4 @@
-package com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot;
+package com.taco.suit_lady.view.ui.ui_internal.contents.mandelbrot;
 
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import javafx.beans.Observable;

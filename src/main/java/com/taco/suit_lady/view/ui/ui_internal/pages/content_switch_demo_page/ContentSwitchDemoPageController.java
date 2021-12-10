@@ -2,9 +2,9 @@ package com.taco.suit_lady.view.ui.ui_internal.pages.content_switch_demo_page;
 
 import com.taco.suit_lady.view.ui.UIPageController;
 import com.taco.suit_lady.view.ui.ui_internal.AppUI;
-import com.taco.suit_lady.view.ui.ui_internal.SLContent;
-import com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot.SLMandelbrotContent;
-import com.taco.suit_lady.view.ui.ui_internal.contents_sl.test.SLTestContent;
+import com.taco.suit_lady.view.ui.ui_internal.Content;
+import com.taco.suit_lady.view.ui.ui_internal.contents.mandelbrot.MandelbrotContent;
+import com.taco.suit_lady.view.ui.ui_internal.contents.test.TestContent;
 import com.taco.util.quick.ConsoleBB;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -28,17 +28,17 @@ public class ContentSwitchDemoPageController extends UIPageController<ContentSwi
     @FXML private Button button2;
     @FXML private Button button3;
     
-    private final SLContent<?, ?> content1;
-    private final SLContent<?, ?> content2;
-    private final SLContent<?, ?> content3;
+    private final Content<?, ?> content1;
+    private final Content<?, ?> content2;
+    private final Content<?, ?> content3;
     
     protected ContentSwitchDemoPageController(FxWeaver weaver, ConfigurableApplicationContext ctx)
     {
         super(weaver, ctx);
         
-        this.content1 = new SLMandelbrotContent(this);
-        this.content2 = new SLMandelbrotContent(this);
-        this.content3 = new SLTestContent(this);
+        this.content1 = new MandelbrotContent(this);
+        this.content2 = new MandelbrotContent(this);
+        this.content3 = new TestContent(this);
     }
     
     @Override

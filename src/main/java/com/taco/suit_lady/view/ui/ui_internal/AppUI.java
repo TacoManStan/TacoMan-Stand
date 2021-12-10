@@ -4,7 +4,7 @@ import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.view.ui.Sidebar;
 import com.taco.suit_lady.view.ui.console.Console;
 import com.taco.suit_lady.view.ui.jfx.components.ContentPane;
-import com.taco.suit_lady.view.ui.ui_internal.contents_sl.test.SLTestContent;
+import com.taco.suit_lady.view.ui.ui_internal.contents.test.TestContent;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import net.rgielen.fxweaver.core.FxWeaver;
@@ -24,7 +24,7 @@ public class AppUI
     private final ReadOnlyObjectWrapper<AppController> controllerProperty;
     private final ReadOnlyObjectWrapper<Sidebar> sidebarProperty;
     
-    private SLContentManager contentManager;
+    private ContentManager contentManager;
     
     /**
      * <p>Constructs a new {@link AppUI} instance.</p>
@@ -54,15 +54,15 @@ public class AppUI
      * <ol>
      *     <li>{@link Console#initialize() Initializes} the {@code singleton} {@link Console} object.</li>
      *     <li>
-     *         Sets the {@link #contentManager} of this {@link AppUI} to a new {@link SLContentManager}.
+     *         Sets the {@link #contentManager} of this {@link AppUI} to a new {@link ContentManager}.
      *         <ul>
-     *             <li>The {@link ContentPane Content Stack Pane} of this {@link AppUI} is used as the {@link SLContentManager#getContentBasePane() Content Base} for the constructed {@link SLContentManager} object.</li>
+     *             <li>The {@link ContentPane Content Stack Pane} of this {@link AppUI} is used as the {@link ContentManager#getContentBasePane() Content Base} for the constructed {@link ContentManager} object.</li>
      *         </ul>
      *     </li>
      *     <li>
-     *         Sets the {@link SLContentManager#getContent() content} of the constructed {@link SLContentManager} to a new {@link SLTestContent}.
+     *         Sets the {@link ContentManager#getContent() content} of the constructed {@link ContentManager} to a new {@link TestContent}.
      *         <ul>
-     *             <li>This {@link AppUI} instance is used only to pass its {@link Springable} values to the constructed {@link SLTestContent}.</li>
+     *             <li>This {@link AppUI} instance is used only to pass its {@link Springable} values to the constructed {@link TestContent}.</li>
      *         </ul>
      *     </li>
      * </ol>
@@ -70,7 +70,7 @@ public class AppUI
     protected void init()
     {
         ctx().getBean(Console.class).initialize();
-        this.contentManager = new SLContentManager(weaver(), ctx());
+        this.contentManager = new ContentManager(weaver(), ctx());
     }
     
     //</editor-fold>
@@ -139,12 +139,12 @@ public class AppUI
     }
     
     /**
-     * <p>Returns the {@link SLContentManager Content Manager} in charge of managing the {@link SLContent} of this {@link AppUI} instance.</p>
+     * <p>Returns the {@link ContentManager Content Manager} in charge of managing the {@link Content} of this {@link AppUI} instance.</p>
      *
-     * @return The {@link SLContentManager Content Manager} in charge of managing the {@link SLContent} of this {@link AppUI} instance.
+     * @return The {@link ContentManager Content Manager} in charge of managing the {@link Content} of this {@link AppUI} instance.
      */
     // TO-EXPAND
-    public final SLContentManager getContentManager()
+    public final ContentManager getContentManager()
     {
         return contentManager;
     }

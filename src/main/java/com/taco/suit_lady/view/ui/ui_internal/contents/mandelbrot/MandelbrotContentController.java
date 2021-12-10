@@ -1,9 +1,9 @@
-package com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot;
+package com.taco.suit_lady.view.ui.ui_internal.contents.mandelbrot;
 
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.view.ui.jfx.components.BoundCanvas;
 import com.taco.suit_lady.util.tools.fxtools.FXTools;
-import com.taco.suit_lady.view.ui.ui_internal.SLContentController;
+import com.taco.suit_lady.view.ui.ui_internal.ContentController;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Label;
@@ -25,7 +25,7 @@ import java.util.function.Consumer;
 @Component
 @FxmlView("/fxml/content/mandelbrot/mandelbrot_content.fxml")
 @Scope("prototype")
-public class SLMandelbrotContentController extends SLContentController
+public class MandelbrotContentController extends ContentController
 {
     //<editor-fold desc="--- FXML FIELDS ---">
     
@@ -44,7 +44,7 @@ public class SLMandelbrotContentController extends SLContentController
     private Consumer<MouseDragData> dragConsumer;
     private Consumer<MouseDragData> moveConsumer;
     
-    public SLMandelbrotContentController(FxWeaver weaver, ConfigurableApplicationContext ctx)
+    public MandelbrotContentController(FxWeaver weaver, ConfigurableApplicationContext ctx)
     {
         super(weaver, ctx);
         

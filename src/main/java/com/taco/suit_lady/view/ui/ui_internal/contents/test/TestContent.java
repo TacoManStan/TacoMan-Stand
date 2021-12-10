@@ -1,15 +1,15 @@
-package com.taco.suit_lady.view.ui.ui_internal.contents_sl.test;
+package com.taco.suit_lady.view.ui.ui_internal.contents.test;
 
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.TB;
 import com.taco.suit_lady.view.ui.UIBook;
-import com.taco.suit_lady.view.ui.ui_internal.SLContent;
+import com.taco.suit_lady.view.ui.ui_internal.Content;
 import com.taco.suit_lady.view.ui.ui_internal.pages.example_page.ExamplePage;
 import org.jetbrains.annotations.NotNull;
 
-public class SLTestContent extends SLContent<SLTestContentData, SLTestContentController>
+public class TestContent extends Content<TestContentData, TestContentController>
 {
-    public SLTestContent(@NotNull Springable springable)
+    public TestContent(@NotNull Springable springable)
     {
         super(springable);
     
@@ -44,15 +44,15 @@ public class SLTestContent extends SLContent<SLTestContentData, SLTestContentCon
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override
-    protected @NotNull SLTestContentData loadData()
+    protected @NotNull TestContentData loadData()
     {
-        return new SLTestContentData();
+        return new TestContentData();
     }
     
     @Override
-    protected @NotNull Class<SLTestContentController> controllerDefinition()
+    protected @NotNull Class<TestContentController> controllerDefinition()
     {
-        return SLTestContentController.class;
+        return TestContentController.class;
     }
     
     @Override

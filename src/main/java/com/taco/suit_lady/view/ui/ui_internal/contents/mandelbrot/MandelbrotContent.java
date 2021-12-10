@@ -1,4 +1,4 @@
-package com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot;
+package com.taco.suit_lady.view.ui.ui_internal.contents.mandelbrot;
 
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
@@ -9,9 +9,9 @@ import com.taco.suit_lady.view.ui.jfx.components.BoundCanvas;
 import com.taco.suit_lady.util.tools.fxtools.FXTools;
 import com.taco.suit_lady.view.ui.jfx.components.RectanglePaintCommand;
 import com.taco.suit_lady.view.ui.ui_internal.AppUI;
-import com.taco.suit_lady.view.ui.ui_internal.SLContent;
-import com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot.MandelbrotIterator.MandelbrotColor;
-import com.taco.suit_lady.view.ui.ui_internal.contents_sl.mandelbrot.SLMandelbrotContentController.MouseDragData;
+import com.taco.suit_lady.view.ui.ui_internal.Content;
+import com.taco.suit_lady.view.ui.ui_internal.contents.mandelbrot.MandelbrotIterator.MandelbrotColor;
+import com.taco.suit_lady.view.ui.ui_internal.contents.mandelbrot.MandelbrotContentController.MouseDragData;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.concurrent.Task;
@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-public class SLMandelbrotContent extends SLContent<SLMandelbrotContentData, SLMandelbrotContentController>
+public class MandelbrotContent extends Content<MandelbrotContentData, MandelbrotContentController>
 {
     private final ReentrantLock lock;
     
@@ -32,7 +32,7 @@ public class SLMandelbrotContent extends SLContent<SLMandelbrotContentData, SLMa
     
     private MandelbrotPage coverPage;
     
-    public SLMandelbrotContent(@NotNull Springable springable)
+    public MandelbrotContent(@NotNull Springable springable)
     {
         super(springable);
         
@@ -148,15 +148,15 @@ public class SLMandelbrotContent extends SLContent<SLMandelbrotContentData, SLMa
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override
-    protected @NotNull SLMandelbrotContentData loadData()
+    protected @NotNull MandelbrotContentData loadData()
     {
-        return new SLMandelbrotContentData();
+        return new MandelbrotContentData();
     }
     
     @Override
-    protected @NotNull Class<SLMandelbrotContentController> controllerDefinition()
+    protected @NotNull Class<MandelbrotContentController> controllerDefinition()
     {
-        return SLMandelbrotContentController.class;
+        return MandelbrotContentController.class;
     }
     
     @Override

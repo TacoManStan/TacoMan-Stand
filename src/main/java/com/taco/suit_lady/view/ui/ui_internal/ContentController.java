@@ -5,11 +5,11 @@ import javafx.scene.layout.StackPane;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.springframework.context.ConfigurableApplicationContext;
 
-public abstract class SLContentController extends Controller
+public abstract class ContentController extends Controller
 {
     private final StackPane overlayStackPane;
     
-    public SLContentController(FxWeaver weaver, ConfigurableApplicationContext ctx)
+    public ContentController(FxWeaver weaver, ConfigurableApplicationContext ctx)
     {
         super(weaver, ctx);
         

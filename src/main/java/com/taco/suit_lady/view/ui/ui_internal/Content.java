@@ -17,7 +17,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import java.util.Arrays;
 import java.util.concurrent.ThreadPoolExecutor;
 
-public abstract class SLContent<D extends SLContentData, C extends SLContentController>
+public abstract class Content<D extends ContentData, C extends ContentController>
         implements Springable
 {
     private final Springable strictSpringable;
@@ -27,7 +27,7 @@ public abstract class SLContent<D extends SLContentData, C extends SLContentCont
     
     private final ReadOnlyListWrapper<SidebarBookshelf> bookshelves;
     
-    public SLContent(@NotNull Springable springable)
+    public Content(@NotNull Springable springable)
     {
         this.strictSpringable = ExceptionTools.nullCheck(springable, "Springable Parent").asStrict();
         
@@ -92,16 +92,16 @@ public abstract class SLContent<D extends SLContentData, C extends SLContentCont
     //<editor-fold desc="--- EVENTS ---">
     
     /**
-     * <p>Abstract method that is executed <i>after</i> this {@link SLContent} is {@link SLContentManager#setContent(SLContent) set} as the active {@link SLContent contnet}.</p>
+     * <p>Abstract method that is executed <i>after</i> this {@link Content} is {@link ContentManager#setContent(Content) set} as the active {@link Content contnet}.</p>
      * <p><b>Details</b></p>
      * <ol>
      *     <li>{@link #onActivate() This method} is {@link ThreadPoolExecutor#execute(Runnable) executed} by the {@link TB Toolbox} {@link ThreadPoolExecutor Executor}.</li>
      *     <li>
-     *         The <code><i>{@link #onDeactivate()}</i></code> implementation of the <i>{@link SLContentManager#getContent() previous content}</i> is executed <i>prior to</i> {@link #onActivate() this method}.
+     *         The <code><i>{@link #onDeactivate()}</i></code> implementation of the <i>{@link ContentManager#getContent() previous content}</i> is executed <i>prior to</i> {@link #onActivate() this method}.
      *         <ul>
      *             <li>That said, because both operations are executed in a separate {@link ThreadPoolExecutor#execute(Runnable) execution}, the operations are very likely to occur concurrently.</li>
      *             <li>The only exception to this rule is if the {@link ThreadPoolExecutor Executor} is limited to a single background thread.</li>
-     *             <li>However, even then, both operations will always be executed concurrently with remaining {@code JavaFX} operations taking place in the <code><i>{@link SLContentManager#onChange(SLContent, SLContent)}</i></code> method.</li>
+     *             <li>However, even then, both operations will always be executed concurrently with remaining {@code JavaFX} operations taking place in the <code><i>{@link ContentManager#onChange(Content, Content)}</i></code> method.</li>
      *         </ul>
      *     </li>
      *     <li>{@link #onActivate() This method} is wrapped in the <code><i>{@link #onSetInternal()}</i></code> method.</li>

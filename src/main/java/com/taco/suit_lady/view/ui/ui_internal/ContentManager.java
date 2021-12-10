@@ -15,16 +15,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.context.ConfigurableApplicationContext;
 
-public class SLContentManager
+public class ContentManager
         implements Springable
 {
     private final FxWeaver weaver;
     private final ConfigurableApplicationContext ctx;
     
     private final ContentPane contentBase;
-    private final ReadOnlyObjectWrapper<SLContent<?, ?>> contentProperty; // Add support for a list of overlapping Content, each overlapping on the Content Base StackPane?
+    private final ReadOnlyObjectWrapper<Content<?, ?>> contentProperty; // Add support for a list of overlapping Content, each overlapping on the Content Base StackPane?
     
-    public SLContentManager(@NotNull FxWeaver weaver, @NotNull ConfigurableApplicationContext ctx)
+    public ContentManager(@NotNull FxWeaver weaver, @NotNull ConfigurableApplicationContext ctx)
     {
         this.weaver = ExceptionTools.nullCheck(weaver, "FxWeaver");
         this.ctx = ExceptionTools.nullCheck(ctx, "Application Context");
@@ -117,17 +117,17 @@ public class SLContentManager
     
     //</editor-fold>
     
-    public @NotNull ReadOnlyObjectProperty<SLContent<?, ?>> contentProperty()
+    public @NotNull ReadOnlyObjectProperty<Content<?, ?>> contentProperty()
     {
         return contentProperty.getReadOnlyProperty();
     }
     
-    public @Nullable SLContent<?, ?> getContent()
+    public @Nullable Content<?, ?> getContent()
     {
         return contentProperty.get();
     }
     
-    public boolean setContent(@Nullable SLContent<?, ?> newContent)
+    public boolean setContent(@Nullable Content<?, ?> newContent)
     {
         contentProperty.set(newContent);
         return true; // TODO - Add actual validity checks here
@@ -151,7 +151,7 @@ public class SLContentManager
     
     //</editor-fold>
     
-    private void onChange(@Nullable SLContent<?, ?> oldContent, @Nullable SLContent<?, ?> newContent)
+    private void onChange(@Nullable Content<?, ?> oldContent, @Nullable Content<?, ?> newContent)
     {
         // TODO - Execute onRemoved() and onSet via a JavaFX Task implementation. For now, though, this will work.
         // When the above is completed, don't forget to update the onRemoved() and onSet() Javadocs as well.
