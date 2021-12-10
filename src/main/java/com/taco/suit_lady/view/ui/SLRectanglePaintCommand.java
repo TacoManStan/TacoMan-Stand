@@ -1,14 +1,5 @@
 package com.taco.suit_lady.view.ui;
 
-import com.taco.suit_lady.util.tools.ArrayTools;
-import com.taco.suit_lady.util.tools.fxtools.FXTools;
-import com.taco.suit_lady.view.ui.jfx.components.PaintCommandable;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
-import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

@@ -1,4 +1,4 @@
-package com.taco.suit_lady.view.ui.ui_util;
+package com.taco.suit_lady.view.ui.jfx.util;
 
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import javafx.geometry.BoundingBox;
