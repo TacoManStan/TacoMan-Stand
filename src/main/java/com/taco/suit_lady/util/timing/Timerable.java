@@ -1,13 +1,11 @@
 package com.taco.suit_lady.util.timing;
 
 public interface Timerable
-    extends ReadOnlyTimerable
+    extends ReadOnlyTimerable, Timeable
 {
     void setTimeout(Number timeout);
     boolean isTimedOut();
     
-    Timerable start();
-    Timerable start(Number newTimeout);
-    
-    Timerable reset(Number newTimeout);
+    ReadOnlyTimerable start(Number newTimeout);
+    ReadOnlyTimerable reset(Number newTimeout);
 }

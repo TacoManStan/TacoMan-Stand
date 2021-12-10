@@ -74,7 +74,7 @@ public final class Timing
      */
     public static boolean wait(SimplePredicate condition, long timeout)
     {
-        Timer timer = Timers.newCountdownTimer(timeout).start();
+        Timer timer = Timers.newCountdown(timeout).start();
         while (timeout == -1 || !timer.isTimedOut())
         {
             if (condition.test())

@@ -3,9 +3,9 @@ package com.taco.suit_lady.util.timing;
 public interface Timeable
         extends ReadOnlyTimeable
 {
-    Timeable start();
-    Timeable reset();
-    Timeable stop();
+    ReadOnlyTimeable start();
+    ReadOnlyTimeable reset();
+    ReadOnlyTimeable stop();
 }
 
 
