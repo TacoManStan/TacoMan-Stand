@@ -1,5 +1,8 @@
 package com.taco.suit_lady.util.tools;
 
+import com.taco.suit_lady.util.UIDProcessable;
+import com.taco.suit_lady.util.UIDProcessor;
+import com.taco.util.obj_traits.common.Nameable;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -627,7 +630,7 @@ public class ArrayTools
     
     //<editor-fold desc="--- LIST LISTENING">
     
-    public static <E> void applyChangeListener(@NotNull ObservableList<E> list, @NotNull ListListener<E> listener)
+    public static <E> void applyChangeListener(@NotNull ObservableList<E> list, @NotNull ListChangeListener<E> listener)
     {
         ExceptionTools.nullCheck(list, "Observable List").addListener(ExceptionTools.nullCheck(listener, "List Listener"));
     }
@@ -745,7 +748,7 @@ public class ArrayTools
     }
     
     public static class ListListener<E>
-            implements ListChangeListener<E>
+            implements ListChangeListener<E>, Nameable, UIDProcessable
     {
         private final ReentrantLock lock;
         
@@ -839,8 +842,20 @@ public class ArrayTools
         {
             TaskTools.sync(lock, () -> onRemoved(element), true);
         }
-        
+    
         //</editor-fold>
+    
+        @Override
+        public String getName()
+        {
+            return null;
+        }
+    
+        @Override
+        public UIDProcessor getUIDProcessor()
+        {
+            return null;
+        }
     }
     
     //
@@ -899,44 +914,51 @@ public class ArrayTools
             System.out.println("Populating List...");
             list.addAll("Dinner", "Elephant", "33", "Accelerator", "Zebra", "Eggplant", "Walrus", "Apple", "Tree", "Aardvark");
             
-            System.out.println("Setting Listener...");
-            //        ArrayTools.applyListener(list, new ListListener<>(list)
-            //        {
-            //            @Override
-            //            public void onPermutation()
-            //            {
-            //                System.out.println(">>> On Permutation");
-            //            }
-            //
-            //            @Override
-            //            public void onUpdate(int from, int to)
-            //            {
-            //                System.out.println(">>> On Update:  [" + from + " -> " + to + "]");
-            //            }
-            //
-            //            @Override
-            //            public void onPermutate(Permutation<String> primaryPermutation, Permutation<String> secondaryPermutation)
-            //            {
-            //                System.out.println(">>> On Permuted:  " +
-            //                                   "[" + primaryPermutation.contents() + ": " + primaryPermutation.movedFromIndex() + " -> " + primaryPermutation.movedToIndex() + "]  |  " +
-            //                                   "[" + secondaryPermutation.contents() + ": " + secondaryPermutation.movedFromIndex() + " -> " + secondaryPermutation.movedToIndex() + "]");
-            //            }
-            //
-            //            @Override
-            //            public void onAdded(String element)
-            //            {
-            //                System.out.println(">>> On Added:  [" + element + "]");
-            //            }
-            //
-            //            @Override
-            //            public void onRemoved(String element)
-            //            {
-            //                System.out.println(">>> On Removed:  [" + element + "]");
-            //            }
-            //        });
+            System.out.println("Setting Listeners...");
+            ArrayTools.applyChangeListener(list, getAnonymous(null, list));
+            
             ArrayTools.applyChangeListener(null, list, (primaryPermutation, secondaryPermutation) -> onPermutated(primaryPermutation, secondaryPermutation));
+            ArrayTools.applyChangeListener(null, list, added -> onAdded(added), removed -> onRemoved(removed));
             
             testPrints(list);
+        }
+        
+        private static ListChangeListener<String> getAnonymous(ReentrantLock lock, ObservableList<String> list)
+        {
+            return new ListListener<>(list)
+            {
+                @Override
+                public void onPermutation()
+                {
+                    System.out.println(">>> On Permutation (Anonymous)");
+                }
+                
+                @Override
+                public void onUpdate(int from, int to)
+                {
+                    System.out.println(">>> On Update:  [" + from + " -> " + to + "] (Anonymous)");
+                }
+                
+                @Override
+                public void onPermutate(Permutation<String> primaryPermutation, Permutation<String> secondaryPermutation)
+                {
+                    System.out.println(">>> On Permuted:  " +
+                                       "[" + primaryPermutation.contents() + ": " + primaryPermutation.movedFromIndex() + " -> " + primaryPermutation.movedToIndex() + "]  |  " +
+                                       "[" + secondaryPermutation.contents() + ": " + secondaryPermutation.movedFromIndex() + " -> " + secondaryPermutation.movedToIndex() + "] (Anonymous)");
+                }
+                
+                @Override
+                public void onAdded(String element)
+                {
+                    System.out.println(">>> On Added:  [" + element + "] (Anonymous)");
+                }
+                
+                @Override
+                public void onRemoved(String element)
+                {
+                    System.out.println(">>> On Removed:  [" + element + "] (Anonymous)");
+                }
+            };
         }
         
         private static void printList(List<String> list)
@@ -962,14 +984,14 @@ public class ArrayTools
             System.out.println(">>> On Update:  [" + from + " -> " + to + "]");
         }
         
-        private static void onAdded(String overlay)
+        private static void onAdded(String s)
         {
-            System.out.println(">>> On Added:  [" + overlay + "]");
+            System.out.println(">>> On Added:  [" + s + "]");
         }
         
-        private static void onRemoved(String overlay)
+        private static void onRemoved(String s)
         {
-            System.out.println(">>> On Removed:  [" + overlay + "]");
+            System.out.println(">>> On Removed:  [" + s + "]");
         }
     }
     
