@@ -37,6 +37,50 @@ public record Bounds2D(int x, int y, int width, int height)
     
     //</editor-fold>
     
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+            return true;
+        if (!(o instanceof Bounds2D bounds2D))
+            return false;
+        
+        if (x != bounds2D.x)
+            return false;
+        if (y != bounds2D.y)
+            return false;
+        if (width != bounds2D.width)
+            return false;
+        return height == bounds2D.height;
+    }
+    
+    @Override
+    public int hashCode()
+    {
+        int result = x;
+        
+        result = 31 * result + y;
+        result = 31 * result + width;
+        result = 31 * result + height;
+        
+        return result;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return "Bounds2D{" +
+               "x=" + x +
+               ", y=" + y +
+               ", width=" + width +
+               ", height=" + height +
+               '}';
+    }
+    
+    //</editor-fold>
+    
     //<editor-fold desc="--- STATIC CONVERSION ---">
     
     public static @NotNull Bounds2D fromRectAWT(@NotNull java.awt.Rectangle rectangle)
