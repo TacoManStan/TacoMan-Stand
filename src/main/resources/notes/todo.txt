@@ -8,6 +8,12 @@ TODO - Code
     > Look into Git Blame annotations & when to use them.
     > Make Console hideable
     > Learn how to use @Contract(...) annotation
+    > Start creating Live Templates every time you comment a snippet of code that you intend to copy/paste
+            > e.g., the code block shown in the UIProcessable.getUIDProcessor() documentation
+        > Then, create a standardized, formatted footer (code block footer, not method footer) that shows the hotkey code for the Live Template that corresponds to the snippet
+    > Spend time deciding how you want to format you javadocs, learn what you need to in order to do it (javadoc tables, images, etc.), then make all of your javadocs consistent
+        >> IMPORTANT: In addition to the aforementioned code block footer standard, create a method/class/constructor/etc. footer that includes several pieces of information
+            > e.g., javadoc styling version number, last date modified, etc.
 
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
