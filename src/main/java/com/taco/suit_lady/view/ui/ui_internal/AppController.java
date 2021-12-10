@@ -188,7 +188,7 @@ public class AppController
         this.ctx = ctx;
     }
     
-    private SLContentManager contentManager;
+    private ContentManager contentManager;
     
     // <editor-fold desc="--- INITIALIZATION ---">
     
