@@ -624,51 +624,7 @@ public class ArrayTools
         return targetList;
     }
     
-    //
-    
-    //    public static <E> void applyChangeHandler(ObservableList<E> list, Consumer<E> addHandler, Consumer<E> removeHandler)
-    //    {
-    //        applyChangeHandler(null, list,
-    //                           null, null,
-    //                           null,
-    //                           addHandler, removeHandler);
-    //    }
-    
-    //    public static <E> void applyChangeHandler(
-    //            Lock lock, ObservableList<E> list,
-    //            BiConsumer<Permutation<E>, E> permutatedElementHandler, Runnable permutationHandler,
-    //            BiConsumer<Integer, Integer> updateHandler,
-    //            Consumer<E> addHandler, Consumer<E> removeHandler)
-    //    {
-    //        ExceptionTools.nullCheck(list, "Observable List").addListener(new ListChangeListener<E>()
-    //        {
-    //            private final ArrayList<E> previousOrder;
-    //
-    //            {
-    //                this.previousOrder = new ArrayList<>();
-    //            }
-    //
-    //            @Override public void onChanged(Change<? extends E> change)
-    //            {
-    //                while (change.next())
-    //                    if (change.wasPermutated()) {
-    //                        if (permutationHandler != null)
-    //                            permutationHandler.run();
-    //                        if (permutatedElementHandler != null)
-    //                            IntStream.range(change.getFrom(), change.getTo()).forEach(
-    //                                    i -> permutatedElementHandler.accept(
-    //                                            new Permutation<>(change.getPermutation(i), i, list.get(i)),
-    //                                            list.get(change.getPermutation(i))));
-    //                    } else if (change.wasUpdated()) {
-    //                        if (updateHandler != null)
-    //                            updateHandler.accept(change.getFrom(), change.getTo());
-    //                    } else {
-    //                        change.getAddedSubList().forEach(addHandler);
-    //                        change.getRemoved().forEach(removeHandler);
-    //                    }
-    //            }
-    //        });
-    //    }
+    //<editor-fold desc="--- LIST LISTENING">
     
     public static <E> void applyChangeListener(@NotNull ObservableList<E> list, @NotNull ListListener<E> listener)
     {
@@ -886,6 +842,8 @@ public class ArrayTools
         
         //</editor-fold>
     }
+    
+    //</editor-fold>
     
     //
     
