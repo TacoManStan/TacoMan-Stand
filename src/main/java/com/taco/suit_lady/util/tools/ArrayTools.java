@@ -1,6 +1,7 @@
 package com.taco.suit_lady.util.tools;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import org.checkerframework.checker.index.qual.NonNegative;
@@ -775,7 +776,7 @@ public class ArrayTools
         public final void onChanged(Change<? extends E> change)
         {
             TaskTools.sync(lock, () -> {
-                while (change.next()) {
+                while (change.next())
                     if (change.wasPermutated()) {
                         onPermutationInternal();
                         
@@ -798,7 +799,6 @@ public class ArrayTools
                         change.getAddedSubList().forEach(e -> onAddedInternal(e));
                         change.getRemoved().forEach(e -> onRemovedInternal(e));
                     }
-                }
                 refresh();
             }, true);
         }
@@ -841,6 +841,136 @@ public class ArrayTools
         }
         
         //</editor-fold>
+    }
+    
+    //
+    
+    public static class ListListenerDemo
+    {
+        public static void main(String[] args)
+        {
+            test2();
+        }
+        
+        private static void testPrints(ObservableList<String> list)
+        {
+            printList(list);
+            System.out.println("Sorting...");
+            ArrayTools.sort(list);
+            printList(list);
+            
+            printList(list);
+            System.out.println("Adding...");
+            list.add("Hello!");
+            printList(list);
+            
+            printList(list);
+            System.out.println("Shuffling...");
+            FXCollections.shuffle(list);
+            printList(list);
+            
+            printList(list);
+            System.out.println("Resorting...");
+            ArrayTools.sort(list);
+            printList(list);
+        }
+        
+        private static void test1()
+        {
+            System.out.println("Creating List...");
+            final ObservableList<String> list = FXCollections.observableArrayList();
+            
+            System.out.println("Populating List...");
+            list.addAll("Dinner", "Elephant", "33", "Accelerator", "Zebra", "Eggplant", "Walrus", "Apple", "Tree", "Aardvark");
+            
+            System.out.println("Setting Listener...");
+            //        ArrayTools.applyChangeHandler(null, list,
+            //                                      (wrapper, oldObj) -> onPermutated(wrapper, oldObj), () -> onPermutation(),
+            //                                      (from, to) -> onUpdated(from, to),
+            //                                      s -> onAdded(s), s -> onRemoved(s));
+            testPrints(list);
+        }
+        
+        private static void test2()
+        {
+            System.out.println("Creating List...");
+            final ObservableList<String> list = FXCollections.observableArrayList();
+            
+            System.out.println("Populating List...");
+            list.addAll("Dinner", "Elephant", "33", "Accelerator", "Zebra", "Eggplant", "Walrus", "Apple", "Tree", "Aardvark");
+            
+            System.out.println("Setting Listener...");
+            //        ArrayTools.applyListener(list, new ListListener<>(list)
+            //        {
+            //            @Override
+            //            public void onPermutation()
+            //            {
+            //                System.out.println(">>> On Permutation");
+            //            }
+            //
+            //            @Override
+            //            public void onUpdate(int from, int to)
+            //            {
+            //                System.out.println(">>> On Update:  [" + from + " -> " + to + "]");
+            //            }
+            //
+            //            @Override
+            //            public void onPermutate(Permutation<String> primaryPermutation, Permutation<String> secondaryPermutation)
+            //            {
+            //                System.out.println(">>> On Permuted:  " +
+            //                                   "[" + primaryPermutation.contents() + ": " + primaryPermutation.movedFromIndex() + " -> " + primaryPermutation.movedToIndex() + "]  |  " +
+            //                                   "[" + secondaryPermutation.contents() + ": " + secondaryPermutation.movedFromIndex() + " -> " + secondaryPermutation.movedToIndex() + "]");
+            //            }
+            //
+            //            @Override
+            //            public void onAdded(String element)
+            //            {
+            //                System.out.println(">>> On Added:  [" + element + "]");
+            //            }
+            //
+            //            @Override
+            //            public void onRemoved(String element)
+            //            {
+            //                System.out.println(">>> On Removed:  [" + element + "]");
+            //            }
+            //        });
+            ArrayTools.applyChangeListener(null, list, (primaryPermutation, secondaryPermutation) -> onPermutated(primaryPermutation, secondaryPermutation));
+            
+            testPrints(list);
+        }
+        
+        private static void printList(List<String> list)
+        {
+            System.out.println("::: LIST :::");
+            list.forEach(s -> System.out.println("[" + list.indexOf(s) + "]: " + s));
+        }
+        
+        private static <T> void onPermutated(Permutation<T> primaryPermutation, Permutation<T> secondaryPermutation)
+        {
+            System.out.println(">>> On Permuted:  " +
+                               "[" + primaryPermutation.contents() + ": " + primaryPermutation.movedFromIndex() + " -> " + primaryPermutation.movedToIndex() + "]  |  " +
+                               "[" + secondaryPermutation.contents() + ": " + secondaryPermutation.movedFromIndex() + " -> " + secondaryPermutation.movedToIndex() + "]");
+        }
+        
+        private static void onPermutation()
+        {
+            System.out.println(">>> On Permutation");
+        }
+        
+        private static void onUpdated(int from, int to)
+        {
+            System.out.println(">>> On Update:  [" + from + " -> " + to + "]");
+        }
+        
+        private static void onAdded(String overlay)
+        {
+            System.out.println(">>> On Added:  [" + overlay + "]");
+        }
+        
+        private static void onRemoved(String overlay)
+        {
+            System.out.println(">>> On Removed:  [" + overlay + "]");
+        }
     }
     
     //</editor-fold>
