@@ -2,22 +2,19 @@ package com.taco.suit_lady.view.ui;
 
 import com.taco.suit_lady._to_sort._new.ReadOnlyObservableList;
 import com.taco.suit_lady._to_sort._new.ReadOnlyObservableListWrapper;
-import com.taco.suit_lady._to_sort._new.interfaces.NameableProperty;
 import com.taco.suit_lady._to_sort._new.interfaces.ReadOnlyNameableProperty;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
-import com.taco.suit_lady.view.ui.jfx.components.PaintCommandable;
-import com.taco.util.obj_traits.common.Nameable;
-import javafx.beans.property.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.beans.property.ReadOnlyIntegerProperty;
+import javafx.beans.property.ReadOnlyIntegerWrapper;
+import javafx.beans.property.ReadOnlyStringProperty;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import java.util.Arrays;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -30,7 +27,7 @@ public abstract class Overlay
     
     private final ReadOnlyIntegerWrapper paintPriorityProperty;
     
-    private final ReadOnlyObservableListWrapper<PaintCommandable> paintCommands;
+    private final ReadOnlyObservableListWrapper<SLPaintCommand<?>> paintCommands;
     
     public Overlay(@NotNull Springable springable, @Nullable ReentrantLock lock, @Nullable String name, int paintPriority)
     {
@@ -65,12 +62,12 @@ public abstract class Overlay
     
     //
     
-    public final ReadOnlyObservableList<PaintCommandable> paintCommands()
+    public final ReadOnlyObservableList<SLPaintCommand<?>> paintCommands()
     {
         return paintCommands.getReadOnlyList();
     }
     
-    public final void addPaintCommand(@NotNull PaintCommandable paintCommand)
+    public final void addPaintCommand(@NotNull SLPaintCommand<?> paintCommand)
     {
         paintCommands.add(ExceptionTools.nullCheck(paintCommand, "Paint Command Input"));
     }
