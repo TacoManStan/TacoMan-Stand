@@ -155,18 +155,9 @@ public class Timer
 	/**
 	 * Starts this timer.
 	 */
-	@Override public final void start() {
+	@Override public final Timer start() {
 		this.stopped = false;
 		this.startTime = Timing.currentTimeMillis();
-	}
-
-	/**
-	 * Starts and then returns this timer.
-	 *
-	 * @return This timer.
-	 */
-	@Override public final Timer startAndGet() {
-		start();
 		return this;
 	}
 
@@ -175,17 +166,17 @@ public class Timer
 	 *
 	 * @param newTimeout The new timeout for this timer. -1 to start the timer without changing the timeout.
 	 */
-	public final void start(Number newTimeout) {
+	public final Timer start(Number newTimeout) {
 		long long_new_timeout = ExceptionTools.nullCheck(newTimeout, "New Timeout").longValue();
 		setTimeout(long_new_timeout);
-		start();
+		return start();
 	}
 
 	/**
 	 * Resets the timer. Calling this method has no effect if the timer has not yet been started.
 	 */
-	@Override public final void reset() {
-		reset(-1);
+	@Override public final Timer reset() {
+		return reset(-1);
 	}
 
 	/**
@@ -193,17 +184,18 @@ public class Timer
 	 *
 	 * @param newTimeout The new timeout for this timer. -1 to not change the timeout. Cannot be less than -1.
 	 */
-	public final void reset(Number newTimeout) {
+	public final Timer reset(Number newTimeout) {
 		long long_new_timeout = ExceptionTools.nullCheck(newTimeout, "New Timeout").longValue();
 		if (getStartTime() == 0)
-			return;
-		start(long_new_timeout);
+			return this;
+		return start(long_new_timeout);
 	}
 
 	/**
 	 * Stops this timer.
 	 */
-	@Override public final void stop() {
+	@Override public final Timer stop() {
 		stopped = true;
+		return this;
 	}
 }

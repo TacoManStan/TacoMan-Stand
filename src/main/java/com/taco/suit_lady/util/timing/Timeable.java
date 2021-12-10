@@ -1,12 +1,10 @@
 package com.taco.suit_lady.util.timing;
 
 public interface Timeable {
-
-	void start();
-	<T extends Timeable> T startAndGet();
-
-	void reset();
-	void stop();
+	
+	<T extends Timeable> T start();
+	<T extends Timeable> T reset();
+	<T extends Timeable> T stop();
 
 	long getElapsedTime();
 //	double getElapsedTime(TimeUnit timeUnit);

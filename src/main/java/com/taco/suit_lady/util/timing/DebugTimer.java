@@ -96,25 +96,21 @@ public class DebugTimer
      *                                                                             *
      * *************************************************************************** */
     
-    @Override public void start()
+    @Override public DebugTimer start()
     {
         startTime = System.nanoTime();
-    }
-    
-    @Override public DebugTimer startAndGet()
-    {
-        start();
         return this;
     }
     
-    public void reset()
+    @Override public DebugTimer reset()
     {
-        start();
+        return start();
     }
     
-    @Override public void stop()
+    @Override public DebugTimer stop()
     {
         startTime = 0L;
+        return this;
     }
     
     /* *************************************************************************** *
