@@ -11,7 +11,11 @@ public interface UIDProcessable extends UID
      * <p>Returns the {@link UIDProcessor} instance for this {@link UIDProcessable} object.</p>
      * <hr><br>
      * <h4>Example Implementation</h4>
-     * <pre>{@code @Override
+     * <pre>{@code private UIDProcessor uIDContainer;
+     *
+     * ...
+     *
+     * @Override
      * public UIDProcessor getUIDProcessor()
      * {
      *     if (uIDContainer == null) // Lazy Initialization
