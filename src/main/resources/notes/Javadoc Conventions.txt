@@ -24,3 +24,6 @@ COPY/PASTE:
         this.weaver = ExceptionTools.nullCheck(weaver, "FxWeaver");
         this.ctx = ExceptionTools.nullCheck(ctx, "Application Context");
     2. TaskTools.sync(lock, () -> {}, true);
+
+USEFUL EXAMPLES
+    1. UIDProcessable.getUIDProcessor() : Formatted Javadoc code blocks
