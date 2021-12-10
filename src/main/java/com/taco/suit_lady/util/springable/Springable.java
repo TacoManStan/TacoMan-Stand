@@ -42,7 +42,7 @@ public interface Springable
     
     /**
      * <p>Returns the singleton {@link Console} instance stored and managed by the {@link SpringApplication Spring} framework.</p>
-     * <blockquote><b>Passthrough Definition:</b> <i><code>{@link #ctx()}<b>.</b>{@link ApplicationContext#getBean(Class) getBean}<b>(</b>{@link Console}<b>.</b>{@link #getClass() class}<b>)</b></code></i></blockquote>
+     * <blockquote><b>Passthrough Definition:</b> <i><code>{@link #ctx()}<b>.</b>{@link ApplicationContext#getBean(Class) getBean}<b>(</b>{@link Console}<b>.</b>{@code class}<b>)</b></code></i></blockquote>
      *
      * @return The singleton {@link Console} instance stored and managed by the {@link SpringApplication Spring} framework.
      */
@@ -53,7 +53,7 @@ public interface Springable
     
     /**
      * <p>Returns the singleton {@link AppUI} instance stored and managed by the {@link SpringApplication Spring} framework.</p>
-     * <blockquote><b>Passthrough Definition:</b> <i><code>{@link #ctx()}<b>.</b>{@link ApplicationContext#getBean(Class) getBean}<b>(</b>{@link AppUI}<b>.</b>{@link #getClass() class}<b>)</b></code></i></blockquote>
+     * <blockquote><b>Passthrough Definition:</b> <i><code>{@link #ctx()}<b>.</b>{@link ApplicationContext#getBean(Class) getBean}<b>(</b>{@link AppUI}<b>.</b>{@code class}<b>)</b></code></i></blockquote>
      *
      * @return The singleton {@link AppUI} instance stored and managed by the {@link SpringApplication Spring} framework.
      */
@@ -64,7 +64,7 @@ public interface Springable
     
     /**
      * <p>Returns the {@link Sidebar} instance contained within the {@link AppUI} singleton stored and managed by the {@link SpringApplication Spring} framework.</p>
-     * <blockquote><b>Passthrough Definition:</b> <i><code>{@link #ui()}<b>.</b>{@link AppUI#getSidebar() sidebar()}</b></code></i></blockquote>
+     * <blockquote><b>Passthrough Definition:</b> <i><code>{@link #ui()}<b>.</b>{@link AppUI#getSidebar() sidebar()}</code></i></blockquote>
      *
      * @return The {@link Sidebar} instance contained within the {@link AppUI} singleton stored and managed by the {@link SpringApplication Spring} framework.
      */
