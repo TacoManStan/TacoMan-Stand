@@ -28,7 +28,6 @@ import java.util.stream.Stream;
 // TODO - Convert to non-static
 public class ArrayTools
 {
-    
     /**
      * <p>Sorts the specified {@link List} using the {@link Comparator#naturalOrder() Natural Order} as the {@link Comparator}.</p>
      * <hr>
