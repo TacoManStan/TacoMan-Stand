@@ -10,6 +10,7 @@ import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.scene.layout.StackPane;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,6 +26,8 @@ public abstract class Overlay
     private final ReentrantLock lock;
     private final ReadOnlyStringWrapper nameProperty;
     
+    private final StackPane root;
+    
     private final ReadOnlyIntegerWrapper paintPriorityProperty;
     
     private final ReadOnlyObservableListWrapper<SLPaintCommand<?>> paintCommands;
@@ -35,6 +38,8 @@ public abstract class Overlay
         this.lock = lock; // Null-checking is done in get method via lazy instantiation
         this.nameProperty = new ReadOnlyStringWrapper(name);
         
+        this.root = new StackPane();
+        
         this.paintPriorityProperty = new ReadOnlyIntegerWrapper(paintPriority);
         
         this.paintCommands = new ReadOnlyObservableListWrapper<>();
@@ -42,6 +47,13 @@ public abstract class Overlay
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
+    
+    protected final StackPane root()
+    {
+        return root;
+    }
+    
+    //
     
     public final ReadOnlyIntegerProperty paintPriorityProperty()
     {

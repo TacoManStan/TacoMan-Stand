@@ -38,11 +38,11 @@ public abstract class Content<D extends ContentData, C extends ContentController
         );
         
         this.bookshelves = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
-        ArrayTools.applyChangeHandler(
-                bookshelves,
-                bookshelf -> onBookshelfAddedInternal(bookshelf),
-                bookshelf -> onBookshelfRemovedInternal(bookshelf)
-        );
+//        ArrayTools.applyChangeHandler(
+//                bookshelves,
+//                bookshelf -> onBookshelfAddedInternal(bookshelf),
+//                bookshelf -> onBookshelfRemovedInternal(bookshelf)
+//        );
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
