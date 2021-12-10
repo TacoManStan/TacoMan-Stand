@@ -1,9 +1,17 @@
 package com.taco.suit_lady.view.ui;
 
+import com.taco.suit_lady._to_sort._new.interfaces.ObservablePropertyContainer;
 import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.tools.ExceptionTools;
+import com.taco.suit_lady.view.ui.ui_util.Bounds2D;
 import com.taco.util.obj_traits.common.Nameable;
+import javafx.beans.Observable;
+import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,7 +20,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 
 public abstract class SLPaintCommand<N extends Node>
-        implements Lockable, Nameable, Comparable<SLPaintCommand<N>>
+        implements Lockable, Nameable, Comparable<SLPaintCommand<N>>, ObservablePropertyContainer
 {
     private final ReentrantLock lock;
     private final String name;
@@ -22,10 +30,17 @@ public abstract class SLPaintCommand<N extends Node>
     
     private final Predicate<? super SLPaintCommand<N>> autoRemoveCondition;
     private final BooleanProperty activeProperty;
-    
     private final IntegerProperty paintPriorityProperty;
-    
     private final boolean scaleToParent;
+    
+    //
+    
+    private final IntegerProperty xProperty;
+    private final IntegerProperty yProperty;
+    private final IntegerProperty widthProperty;
+    private final IntegerProperty heightProperty;
+    
+    private final ObjectBinding<Bounds2D> boundsBinding;
     
     public SLPaintCommand(@Nullable ReentrantLock lock, @NotNull String name, @Nullable Predicate<? super SLPaintCommand<N>> autoRemoveCondition, boolean scaleToParent, int priority)
     {
@@ -41,6 +56,14 @@ public abstract class SLPaintCommand<N extends Node>
         this.paintPriorityProperty = new SimpleIntegerProperty();
         
         this.scaleToParent = scaleToParent;
+        
+        this.xProperty = new SimpleIntegerProperty();
+        this.yProperty = new SimpleIntegerProperty();
+        this.widthProperty = new SimpleIntegerProperty();
+        this.heightProperty = new SimpleIntegerProperty();
+        
+        this.boundsBinding = createObjectBinding(() -> new Bounds2D(getX(), getY(), getWidth(), getHeight()));
+        this.boundsBinding.addListener((observable, oldValue, newValue) -> nodeProperty.set(regenerateNode()));
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
@@ -87,15 +110,116 @@ public abstract class SLPaintCommand<N extends Node>
         return paintPriorityProperty.get();
     }
     
+    //
+    
+    public final IntegerProperty xProperty()
+    {
+        return xProperty;
+    }
+    
+    public final int getX()
+    {
+        return xProperty.get();
+    }
+    
+    public final void setX(int x)
+    {
+        xProperty.set(x);
+    }
+    
+    //
+    
+    public final IntegerProperty yProperty()
+    {
+        return yProperty;
+    }
+    
+    public final int getY()
+    {
+        return yProperty.get();
+    }
+    
+    public final void setY(int y)
+    {
+        yProperty.set(y);
+    }
+    
+    //
+    
+    public final IntegerProperty widthProperty()
+    {
+        return widthProperty;
+    }
+    
+    public final int getWidth()
+    {
+        return widthProperty.get();
+    }
+    
+    public final void setWidth(int width)
+    {
+        widthProperty.set(width);
+    }
+    
+    //
+    
+    public final IntegerProperty heightProperty()
+    {
+        return heightProperty;
+    }
+    
+    public final int getHeight()
+    {
+        return heightProperty.get();
+    }
+    
+    public final void setHeight(int height)
+    {
+        heightProperty.set(height);
+    }
+    
+    //
+    
+    public final void setBounds(@NotNull Bounds2D bounds)
+    {
+        ExceptionTools.nullCheck(bounds, "Bounds");
+        
+        setX(bounds.x());
+        setY(bounds.y());
+        setWidth(bounds.width());
+        setHeight(bounds.height());
+    }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- BINDINGS ---">
+    
+    public final ObjectBinding<Bounds2D> boundsBinding()
+    {
+        return boundsBinding;
+    }
+    
+    public final Bounds2D getBounds()
+    {
+        return boundsBinding.get();
+    }
+    
     //</editor-fold>
     
     //<editor-fold desc="--- ABSTRACT ---">
     
-    protected abstract N getPaintNode();
+    protected abstract N regenerateNode();
     
-    protected abstract void onAdded(@NotNull OverlayHandler owner);
+    protected abstract void onAdded(@NotNull Overlay owner);
     
-    protected abstract void onRemoved(@NotNull OverlayHandler owner);
+    protected abstract void onRemoved(@NotNull Overlay owner);
+    
+    //
+    
+    protected ObservableValue<?>[] regenerateTriggers()
+    {
+        return new ObservableValue<?>[]{boundsBinding};
+    }
     
     //</editor-fold>
     
@@ -113,7 +237,13 @@ public abstract class SLPaintCommand<N extends Node>
         return name;
     }
     
-    //
+    @Override
+    public Observable[] properties()
+    {
+        return new Observable[]{
+                ownerProperty, nodeProperty, paintPriorityProperty,
+                xProperty, yProperty, widthProperty, heightProperty};
+    }
     
     @Override
     public int compareTo(@NotNull SLPaintCommand<N> o)
