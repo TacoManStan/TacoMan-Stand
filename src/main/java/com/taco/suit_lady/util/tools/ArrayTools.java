@@ -28,9 +28,36 @@ import java.util.stream.Stream;
 // TODO - Convert to non-static
 public class ArrayTools
 {
-    public static <E> List<E> sort(List<E> list)
+    
+    /**
+     * <p>Sorts the specified {@link List} using the {@link Comparator#naturalOrder() Natural Order} as the {@link Comparator}.</p>
+     * <br><hr><br>
+     * <p><h3>Passthrough Definition Mk1</h3></p>
+     * <pre>{@code list.sort((Comparator<? super E>) Comparator.naturalOrder());
+     * return list;}</pre>
+     * <br>
+     * <p><h3>Passthrough Definition Mk2</h3></p>
+     * <blockquote><i><code>
+     * list<b>.</b>{@link List#sort(Comparator) sort}<b>(</b>{@link Comparator}<b>.</b>{@link Comparator#naturalOrder() naturalOrder()}<b>)</b>;
+     * <br>
+     * return list;
+     * </code></i></blockquote>
+     *
+     * @param list The {@link List} to be sorted.
+     * @param <E>  The type of {@code objects} contained within the specified {@link List}.
+     *
+     * @return The sorted {@link List}.
+     *
+     * @see List
+     * @see Comparable
+     * @see Comparator
+     * @see List#sort(Comparator)
+     * @see Comparator#naturalOrder()
+     */
+    @Contract("_ -> param1")
+    public static <E extends Comparable<E>> @NotNull List<E> sort(@NotNull List<E> list)
     {
-        list.sort((Comparator<? super E>) Comparator.naturalOrder());
+        list.sort(Comparator.naturalOrder());
         return list;
     }
     
@@ -842,15 +869,15 @@ public class ArrayTools
         {
             TaskTools.sync(lock, () -> onRemoved(element), true);
         }
-    
+        
         //</editor-fold>
-    
+        
         @Override
         public String getName()
         {
             return null;
         }
-    
+        
         @Override
         public UIDProcessor getUIDProcessor()
         {
