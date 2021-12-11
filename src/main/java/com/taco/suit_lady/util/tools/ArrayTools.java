@@ -781,7 +781,8 @@ public class ArrayTools
             @Nullable ReentrantLock lock, @NotNull ObservableList<E> list,
             @Nullable CompoundListListenable<E> eventResponder)
     {
-        return new CompoundListListener<>(lock, list) {
+        return new CompoundListListener<>(lock, list)
+        {
             @Override
             public void eventResponse(@NotNull Permutation<E> permutationPrimary, @Nullable Permutation<E> permutationSecondary, @NotNull ChangeType changeType)
             {
