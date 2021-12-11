@@ -23,6 +23,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -788,6 +789,28 @@ public class ArrayTools
                    ", contents=" + contents +
                    '}';
         }
+        
+        @Override
+        public boolean equals(Object o)
+        {
+            if (this == o) return true;
+            if (!(o instanceof Permutation)) return false;
+            
+            Permutation<?> that = (Permutation<?>) o;
+            
+            if (movedFromIndex != that.movedFromIndex) return false;
+            if (movedToIndex != that.movedToIndex) return false;
+            return contents.equals(that.contents);
+        }
+        
+        @Override
+        public int hashCode()
+        {
+            int result = movedFromIndex;
+            result = 31 * result + movedToIndex;
+            result = 31 * result + contents.hashCode();
+            return result;
+        }
     }
     
     @FunctionalInterface
@@ -866,18 +889,67 @@ public class ArrayTools
                     } else if (change.wasUpdated())
                         onUpdateInternal(change.getFrom(), change.getTo());
                     else {
-                        change.getRemoved().forEach(element -> onRemovedInternal(new Permutation<>(
+                        ArrayList<Permutation<E>> removedPermutations = change.getRemoved().stream().<Permutation<E>>map(element -> new Permutation<>(
                                 backingListProperty.get().indexOf(element),
                                 list.indexOf(element),
-                                element)));
-                        change.getAddedSubList().forEach(element -> onAddedInternal(new Permutation<>(
+                                element)).collect(Collectors.toCollection(ArrayList::new));
+                        ArrayList<Permutation<E>> addedPermutations = change.getAddedSubList().stream().<Permutation<E>>map(element -> new Permutation<>(
                                 backingListProperty.get().indexOf(element),
                                 list.indexOf(element),
-                                element)));
+                                element)).collect(Collectors.toCollection(ArrayList::new));
+                        ArrayList<Permutation<E>> permutations = new ArrayList<>();
+                        
+                        for (Permutation<E> removed: removedPermutations) {
+                            if (addedPermutations.contains(removed)) {
+                                permutations.add(removed);
+                            }
+                        }
+                        for (Permutation<E> p : permutations) {
+                            removedPermutations.remove(p);
+                            addedPermutations.remove(p);
+                        }
+                        
+//                        System.out.println("PRINTING CALCULATED PERMUTATIONS");
+                        
+                        for (Permutation<E> permutation: permutations) {
+//                            System.out.println("ON PERMUTATION: " + permutation);
+                            onPermutateInternal(permutation, getByIndex(permutation.movedToIndex(), false, permutations, addedPermutations));
+                        }
+                        
+//                        System.out.println("PRINTING REMAINING ADD/REMOVE OPERATIONS");
+                        
+                        removedPermutations.forEach(permutation -> onRemovedInternal(permutation));
+                        addedPermutations.forEach(permutation -> onAddedInternal(permutation));
+                        
+//                        System.out.println("PRINTING DEFAULT ADD/REMOVE OPERATIONS");
+//
+//                        change.getRemoved().forEach(element -> onRemovedInternal(new Permutation<>(
+//                                backingListProperty.get().indexOf(element),
+//                                list.indexOf(element),
+//                                element)));
+//                        change.getAddedSubList().forEach(element -> onAddedInternal(new Permutation<>(
+//                                backingListProperty.get().indexOf(element),
+//                                list.indexOf(element),
+//                                element)));
                     }
                 
                 refresh();
             }, true);
+        }
+        
+        @SafeVarargs
+        private Permutation<E> getByIndex(int index, boolean to, List<Permutation<E>>... lists)
+        {
+            for (List<Permutation<E>> list: lists) {
+                Permutation<E> p = list.stream().filter(
+                        permutation ->
+                                (!to && permutation.movedFromIndex() == index)
+                                || (to && permutation.movedToIndex() == index)
+                ).findFirst().orElse(null);
+                if (p != null)
+                    return p;
+            }
+            return null;
         }
         
         //<editor-fold desc="--- FUNCTIONALLY ABSTRACT ---">
@@ -929,6 +1001,11 @@ public class ArrayTools
         private void onUpdateInternal(int from, int to)
         {
             TaskTools.sync(lock, () -> onUpdate(from, to), true);
+        }
+        
+        private void checkForPermutation(ObservableList<E> addedList, ObservableList<E> removedList)
+        {
+        
         }
         
         private void onAddedInternal(Permutation<E> permutation)
@@ -1007,23 +1084,54 @@ public class ArrayTools
         {
             printList(list, footer);
             
+            
             System.out.println("Sorting...");
+            
             ArrayTools.sort(list);
             
             printList(list, footer);
             
+            
             System.out.println("Adding...");
+            
             list.add("Hello!");
             
             printList(list, footer);
             
+            
             System.out.println("Shuffling...");
+            
             FXCollections.shuffle(list);
             
             printList(list, footer);
             
+            
             System.out.println("Resorting...");
+            
             ArrayTools.sort(list);
+            
+            printList(list, footer);
+            
+            
+            System.out.println("Reversing...");
+            
+            Collections.reverse(list);
+            
+            printList(list, footer);
+            
+            
+            System.out.println("Clearing...");
+            
+            ArrayList<String> copy = new ArrayList<>(list);
+            
+            list.clear();
+            
+            printList(list, footer);
+            
+            
+            System.out.println("Re-Adding...");
+            
+            list.addAll(copy);
             
             printList(list, footer);
         }
@@ -1065,9 +1173,10 @@ public class ArrayTools
             final ObservableList<String> list = initTestList();
             
             ArrayTools.applyCompoundListListener(lock, list, (permutation, permutation2, changeType) ->
-                    onCompoundEvent(permutation, permutation2, changeType, false, true));
+                    onCompoundEvent(permutation, permutation2, changeType, false, false));
             
-            testPrints(list, "Compound Listener Test");
+            //            testPrints(list, "Compound Listener Test");
+            testPrints(list, null);
         }
         
         private static @NotNull ObservableList<String> initTestList()
@@ -1134,7 +1243,10 @@ public class ArrayTools
         
         private static void printList(@NotNull List<String> list, @Nullable String footer)
         {
-            doPrint(() -> list.forEach(s -> System.out.println("[" + list.indexOf(s) + "]: " + s)), "list", footer, true);
+            if (!list.isEmpty())
+                doPrint(() -> list.forEach(s -> System.out.println("[" + list.indexOf(s) + "]: " + s)), "list", footer, true);
+            else
+                doPrint(() -> System.out.println("empty"), "list", footer, true);
         }
         
         private static <T> void onPermutate(Permutation<T> primaryPermutation, Permutation<T> secondaryPermutation, String message, boolean box)
@@ -1177,6 +1289,8 @@ public class ArrayTools
         {
             if (box) {
                 System.out.println();
+                System.out.println();
+                System.out.println();
                 System.out.println("------------------------------------------------------------");
             }
             
@@ -1205,6 +1319,8 @@ public class ArrayTools
                 if (footer == null)
                     System.out.println();
                 System.out.println("------------------------------------------------------------");
+                System.out.println();
+                System.out.println();
                 System.out.println();
             }
         }
