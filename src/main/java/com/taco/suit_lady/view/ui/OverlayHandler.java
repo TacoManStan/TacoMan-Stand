@@ -4,6 +4,7 @@ import com.taco.suit_lady._to_sort._new.ReadOnlyObservableList;
 import com.taco.suit_lady._to_sort._new.ReadOnlyObservableListWrapper;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
+import com.taco.suit_lady.util.tools.ArrayTools;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -35,6 +36,8 @@ public class OverlayHandler
         this.overlays.setKeepSorted(true);
         
         this.rootPane = new StackPane();
+    
+//        ArrayTools.applyChangeListener(lock, overlays,);
         
         //        ArrayTools.applyChangeHandler(null, overlays,
         //                                      (permutation, secondaryPermutation) -> { }, () -> { },

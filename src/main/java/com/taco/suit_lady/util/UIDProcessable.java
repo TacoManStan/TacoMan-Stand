@@ -13,7 +13,7 @@ public interface UIDProcessable extends UID
      * <h4>Example Implementation</h4>
      * <pre>{@code private UIDProcessor uIDContainer;
      *
-     * ...
+     * //...
      *
      * @Override
      * public UIDProcessor getUIDProcessor()
