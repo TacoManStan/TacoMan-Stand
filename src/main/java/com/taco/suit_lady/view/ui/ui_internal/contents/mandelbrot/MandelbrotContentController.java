@@ -1,8 +1,10 @@
 package com.taco.suit_lady.view.ui.ui_internal.contents.mandelbrot;
 
+import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.view.ui.jfx.components.BoundCanvas;
 import com.taco.suit_lady.util.tools.fxtools.FXTools;
+import com.taco.suit_lady.view.ui.jfx.components.CanvasPane;
 import com.taco.suit_lady.view.ui.ui_internal.ContentController;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
@@ -15,10 +17,12 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 
@@ -26,6 +30,7 @@ import java.util.function.Consumer;
 @FxmlView("/fxml/content/mandelbrot/mandelbrot_content.fxml")
 @Scope("prototype")
 public class MandelbrotContentController extends ContentController
+        implements Lockable
 {
     //<editor-fold desc="--- FXML FIELDS ---">
     
@@ -34,8 +39,10 @@ public class MandelbrotContentController extends ContentController
     @FXML private BorderPane borderPaneRoot;
     @FXML private Label titleLabel;
     
-    @FXML private BoundCanvas canvas;
     @FXML private StackPane canvasStackPane;
+    @FXML private AnchorPane canvasAnchorPane;
+    
+    private final CanvasPane canvasPane;
     
     //</editor-fold>
     
@@ -49,15 +56,23 @@ public class MandelbrotContentController extends ContentController
         super(weaver, ctx);
         
         this.lock = new ReentrantLock();
+        this.canvasPane = new CanvasPane(this);
+        
         this.resetDragConsumer();
     }
     
     protected BoundCanvas canvas()
     {
-        return canvas;
+        return canvasPane.canvas();
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+    @Override
+    public @NotNull Lock getLock()
+    {
+        return lock;
+    }
     
     @Override
     public Pane root()
@@ -68,6 +83,9 @@ public class MandelbrotContentController extends ContentController
     @Override
     public void initialize()
     {
+        canvasAnchorPane.getChildren().add(canvasPane);
+        FXTools.get().setAnchors(canvasPane, 0, 0, 0, 0);
+        
         canvas().setOnMousePressed(event -> onMousePressed(event));
         canvas().setOnMouseReleased(event -> onMouseReleased(event));
 //        canvas().setOnMouseMoved(event -> onMouseMoved(event));
@@ -83,37 +101,26 @@ public class MandelbrotContentController extends ContentController
     
     private void onMousePressed(MouseEvent e)
     {
-        lock.lock();
-        try {
-            //            ConsoleBB.CONSOLE.print("Mouse Pressed: [" + e.getX() + ", " + e.getY() + "]");
+        sync(() -> {
             this.mouseX = (int) e.getX();
             this.mouseY = (int) e.getY();
-        } finally {
-            lock.unlock();
-        }
+        });
     }
     
     private void onMouseReleased(MouseEvent e)
     {
-        lock.lock();
-        try {
-            //            System.out.println("Registered Release Event");
+        sync(() -> {
             if (FXTools.get().isMouseOnNode(canvas()))
                 getDragConsumer().accept(generateDragData(e));
-        } finally {
-            lock.unlock();
-        }
+        });
     }
     
     private void onMouseDragged(MouseEvent e)
     {
-        lock.lock();
-        try {
+        sync(() -> {
             if (FXTools.get().isMouseOnNode(canvas()))
                 getMoveConsumer().accept(generateDragData(e));
-        } finally {
-            lock.unlock();
-        }
+        });
     }
     
     private MouseDragData generateDragData(MouseEvent e)

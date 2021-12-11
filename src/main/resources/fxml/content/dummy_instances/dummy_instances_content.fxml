@@ -4,15 +4,17 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="root" prefHeight="500.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.taco.suit_lady.view.ui.ui_internal.contents.dummy_instances.DummyInstancesContentController">
+<AnchorPane fx:id="root" prefHeight="500.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.taco.suit_lady.view.ui.ui_internal.contents.dummy_instances.DummyInstancesContentController">
     <children>
         <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <center>
+            <center>
                 <Label fx:id="nameLabel" text="&lt;&lt;  Selected Content Name  &gt;&gt;" BorderPane.alignment="CENTER">
-               <font>
-                  <Font name="Century Gothic" size="24.0" />
-               </font></Label>
-         </center>
+                    <font>
+                        <Font name="Century Gothic" size="24.0"/>
+                    </font>
+                </Label>
+            </center>
         </BorderPane>
     </children>
 </AnchorPane>
