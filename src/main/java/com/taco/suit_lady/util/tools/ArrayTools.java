@@ -648,11 +648,23 @@ public class ArrayTools
         return targetList;
     }
     
-    //<editor-fold desc="--- LIST LISTENING">
+    //<editor-fold desc="--- LIST LISTENING ---">
     
     public static <E> void applyChangeListener(@NotNull ObservableList<E> list, @NotNull ListChangeListener<E> listener)
     {
         ExceptionTools.nullCheck(list, "Observable List").addListener(ExceptionTools.nullCheck(listener, "List Listener"));
+    }
+    
+    public static <E> void applyCompoundListListener(@Nullable ReentrantLock lock, @NotNull ObservableList<E> list, @NotNull BiConsumer<Permutation<E>, ChangeType> changeHandler)
+    {
+        applyChangeListener(list, new CompoundListListener<>(lock, list)
+        {
+            @Override
+            protected void eventResponse(@NotNull Permutation<E> primaryPermutation, @NotNull ChangeType changeType)
+            {
+                changeHandler.accept(primaryPermutation, changeType);
+            }
+        });
     }
     
     public static <E> void applyChangeListener(
@@ -664,7 +676,8 @@ public class ArrayTools
     
     public static <E> void applyChangeListener(
             @Nullable ReentrantLock lock, @NotNull ObservableList<E> list,
-            @Nullable Consumer<E> addListener, @Nullable Consumer<E> removeListener)
+            @Nullable Consumer<Permutation<E>> addListener,
+            @Nullable Consumer<Permutation<E>> removeListener)
     {
         list.addListener(newChangeListener(lock, list, null, null, addListener, removeListener));
     }
@@ -672,7 +685,8 @@ public class ArrayTools
     public static <E> void applyChangeListener(
             @Nullable ReentrantLock lock, @NotNull ObservableList<E> list,
             @Nullable PermutationResponder<E> permutationResponder,
-            @Nullable Consumer<E> addListener, @Nullable Consumer<E> removeListener)
+            @Nullable Consumer<Permutation<E>> addListener,
+            @Nullable Consumer<Permutation<E>> removeListener)
     {
         list.addListener(newChangeListener(lock, list, permutationResponder, null, addListener, removeListener));
     }
@@ -681,7 +695,8 @@ public class ArrayTools
             @Nullable ReentrantLock lock, @NotNull ObservableList<E> list,
             @Nullable PermutationResponder<E> permutationResponder,
             @Nullable BiConsumer<Integer, Integer> updateListener,
-            @Nullable Consumer<E> addListener, @Nullable Consumer<E> removeListener)
+            @Nullable Consumer<Permutation<E>> addListener,
+            @Nullable Consumer<Permutation<E>> removeListener)
     {
         list.addListener(newChangeListener(lock, list, permutationResponder, updateListener, addListener, removeListener));
     }
@@ -697,7 +712,8 @@ public class ArrayTools
     @Contract("_, _, _, _ -> new")
     public static <E> @NotNull ListChangeListener<E> newChangeListener(
             @Nullable ReentrantLock lock, @NotNull ObservableList<E> list,
-            @Nullable Consumer<E> addListener, @Nullable Consumer<E> removeListener)
+            @Nullable Consumer<Permutation<E>> addListener,
+            @Nullable Consumer<Permutation<E>> removeListener)
     {
         return newChangeListener(lock, list, null, null, addListener, removeListener);
     }
@@ -706,7 +722,8 @@ public class ArrayTools
     public static <E> @NotNull ListChangeListener<E> newChangeListener(
             @Nullable ReentrantLock lock, @NotNull ObservableList<E> list,
             @Nullable PermutationResponder<E> permutationResponder,
-            @Nullable Consumer<E> addListener, @Nullable Consumer<E> removeListener)
+            @Nullable Consumer<Permutation<E>> addListener,
+            @Nullable Consumer<Permutation<E>> removeListener)
     {
         return newChangeListener(lock, list, permutationResponder, null, addListener, removeListener);
     }
@@ -716,7 +733,8 @@ public class ArrayTools
             @Nullable ReentrantLock lock, @NotNull ObservableList<E> list,
             @Nullable PermutationResponder<E> permutationResponder,
             @Nullable BiConsumer<Integer, Integer> updateListener,
-            @Nullable Consumer<E> addListener, @Nullable Consumer<E> removeListener)
+            @Nullable Consumer<Permutation<E>> addListener,
+            @Nullable Consumer<Permutation<E>> removeListener)
     {
         return new ListListener<>(lock, list)
         {
@@ -742,22 +760,34 @@ public class ArrayTools
             }
             
             @Override
-            public void onAdded(E element)
+            public void onAdded(Permutation<E> permutation)
             {
                 if (addListener != null)
-                    addListener.accept(element);
+                    addListener.accept(permutation);
             }
             
             @Override
-            public void onRemoved(E element)
+            public void onRemoved(Permutation<E> permutation)
             {
                 if (removeListener != null)
-                    removeListener.accept(element);
+                    removeListener.accept(permutation);
             }
         };
     }
     
-    public record Permutation<T>(int movedFromIndex, int movedToIndex, T contents) { }
+    public record Permutation<T>(int movedFromIndex, int movedToIndex, T contents)
+    {
+        @Contract(pure = true)
+        @Override
+        public @NotNull String toString()
+        {
+            return "Permutation{" +
+                   "movedFromIndex=" + movedFromIndex +
+                   ", movedToIndex=" + movedToIndex +
+                   ", contents=" + contents +
+                   '}';
+        }
+    }
     
     @FunctionalInterface
     public interface PermutationResponder<E>
@@ -771,24 +801,40 @@ public class ArrayTools
             implements ListChangeListener<E>, Nameable, UIDProcessable
     {
         private final ReentrantLock lock;
+        private final String name;
         
         private final ObservableList<E> list;
         private final ReadOnlyObjectWrapper<List<E>> backingListProperty;
         
+        //<editor-fold desc="--- CONSTRUCTORS ---">
+        
         protected ListListener(@NotNull ObservableList<E> list)
         {
-            this(null, list);
+            this(null, null, list);
+        }
+        
+        protected ListListener(@Nullable String name, @NotNull ObservableList<E> list)
+        {
+            this(null, name, list);
         }
         
         protected ListListener(@Nullable ReentrantLock lock, @NotNull ObservableList<E> list)
         {
+            this(lock, null, list);
+        }
+        
+        protected ListListener(@Nullable ReentrantLock lock, @Nullable String name, @NotNull ObservableList<E> list)
+        {
             this.lock = lock;
+            this.name = name;
             
             this.list = list;
             this.backingListProperty = new ReadOnlyObjectWrapper<>();
             
             refresh();
         }
+        
+        //</editor-fold>
         
         private void refresh()
         {
@@ -819,12 +865,21 @@ public class ArrayTools
                     } else if (change.wasUpdated())
                         onUpdateInternal(change.getFrom(), change.getTo());
                     else {
-                        change.getAddedSubList().forEach(e -> onAddedInternal(e));
-                        change.getRemoved().forEach(e -> onRemovedInternal(e));
+                        change.getAddedSubList().forEach(element -> onAddedInternal(new Permutation<>(
+                                backingListProperty.get().indexOf(element),
+                                list.indexOf(element),
+                                element)));
+                        change.getRemoved().forEach(element -> onRemovedInternal(new Permutation<>(
+                                backingListProperty.get().indexOf(element),
+                                list.indexOf(element),
+                                element)));
                     }
+                
                 refresh();
             }, true);
         }
+        
+        //<editor-fold desc="--- FUNCTIONALLY ABSTRACT ---">
         
         protected void onPermutation() { }
         
@@ -832,9 +887,31 @@ public class ArrayTools
         
         protected void onUpdate(int from, int to) { }
         
-        protected void onAdded(E element) { }
+        protected void onAdded(Permutation<E> permutation) { }
         
-        protected void onRemoved(E element) { }
+        protected void onRemoved(Permutation<E> permutation) { }
+        
+        //</editor-fold>
+        
+        //<editor-fold desc="--- IMPLEMENTATIONS ---">
+        
+        @Override
+        public String getName()
+        {
+            return name;
+        }
+        
+        private UIDProcessor uIDContainer;
+        
+        @Override
+        public UIDProcessor getUIDProcessor()
+        {
+            if (uIDContainer == null) // Lazy Initialization
+                uIDContainer = new UIDProcessor("group-name");
+            return uIDContainer;
+        }
+        
+        //</editor-fold>
         
         //<editor-fold desc="--- INTERNAL ---">
         
@@ -853,29 +930,67 @@ public class ArrayTools
             TaskTools.sync(lock, () -> onUpdate(from, to), true);
         }
         
-        private void onAddedInternal(E element)
+        private void onAddedInternal(Permutation<E> permutation)
         {
-            TaskTools.sync(lock, () -> onAdded(element), true);
+            TaskTools.sync(lock, () -> onAdded(permutation), true);
         }
         
-        private void onRemovedInternal(E element)
+        private void onRemovedInternal(Permutation<E> permutation)
         {
-            TaskTools.sync(lock, () -> onRemoved(element), true);
+            TaskTools.sync(lock, () -> onRemoved(permutation), true);
         }
         
         //</editor-fold>
+    }
+    
+    public static abstract class CompoundListListener<E> extends ListListener<E>
+    {
+        protected CompoundListListener(@NotNull ObservableList<E> list)
+        {
+            super(list);
+        }
+        
+        protected CompoundListListener(@Nullable String name, @NotNull ObservableList<E> list)
+        {
+            super(name, list);
+        }
+        
+        protected CompoundListListener(@Nullable ReentrantLock lock, @NotNull ObservableList<E> list)
+        {
+            super(lock, list);
+        }
+        
+        protected CompoundListListener(@Nullable ReentrantLock lock, @Nullable String name, @NotNull ObservableList<E> list)
+        {
+            super(lock, name, list);
+        }
+        
+        //
+        
+        protected abstract void eventResponse(@NotNull Permutation<E> primaryPermutation, @NotNull ChangeType changeType);
         
         @Override
-        public String getName()
+        protected final void onPermutate(Permutation<E> primaryPermutation, Permutation<E> secondaryPermutation)
         {
-            return null;
+            eventResponse(primaryPermutation, ChangeType.PERMUTATE);
         }
         
         @Override
-        public UIDProcessor getUIDProcessor()
+        protected final void onAdded(Permutation<E> permutation)
         {
-            return null;
+            eventResponse(permutation, ChangeType.ADD);
         }
+        
+        @Override
+        protected final void onRemoved(Permutation<E> permutation)
+        {
+            eventResponse(permutation, ChangeType.REMOVE);
+        }
+    }
+    
+    public enum ChangeType
+    {
+        ADD, REMOVE, UPDATE, PERMUTATE
     }
     
     //
@@ -928,6 +1043,8 @@ public class ArrayTools
         
         private static void test2()
         {
+            final ReentrantLock lock = new ReentrantLock();
+            
             System.out.println("Creating List...");
             final ObservableList<String> list = FXCollections.observableArrayList();
             
@@ -935,12 +1052,23 @@ public class ArrayTools
             list.addAll("Dinner", "Elephant", "33", "Accelerator", "Zebra", "Eggplant", "Walrus", "Apple", "Tree", "Aardvark");
             
             System.out.println("Setting Listeners...");
-            ArrayTools.applyChangeListener(list, getAnonymous(null, list));
+            ArrayTools.applyChangeListener(list, getAnonymous(lock, list));
             
-            ArrayTools.applyChangeListener(null, list, (primaryPermutation, secondaryPermutation) -> onPermutated(primaryPermutation, secondaryPermutation));
-            ArrayTools.applyChangeListener(null, list, added -> onAdded(added), removed -> onRemoved(removed));
+            ArrayTools.applyChangeListener(lock, list, (primaryPermutation, secondaryPermutation) -> onPermutate(primaryPermutation, secondaryPermutation, "SUB LISTENER 1"));
+            ArrayTools.applyChangeListener(lock, list, added -> onAdd(added, "SUB LISTENER 2"), removed -> onRemove(removed, "SUB LISTENER 2"));
             
+            ArrayTools.applyCompoundListListener(lock, list, (permutation, changeType) -> onCompoundEvent(permutation, changeType));
             testPrints(list);
+        }
+        
+        private static <E> void onCompoundEvent(Permutation<E> permutation, ChangeType changeType)
+        {
+            switch (changeType) {
+                case PERMUTATE -> onPermutate(permutation, null, "COMPOUND LISTENER");
+                case UPDATE -> onUpdate(permutation.movedFromIndex(), permutation.movedToIndex(), "COMPOUND LISTENER");
+                case ADD -> onAdd(permutation, "COMPOUND LISTENER");
+                case REMOVE -> onRemove(permutation, "COMPOUND LISTENER");
+            }
         }
         
         private static ListChangeListener<String> getAnonymous(ReentrantLock lock, ObservableList<String> list)
@@ -950,68 +1078,108 @@ public class ArrayTools
                 @Override
                 public void onPermutation()
                 {
-                    System.out.println(">>> On Permutation (Anonymous)");
+                    ListListenerDemo.onPermutation("ANON LISTENER");
                 }
                 
                 @Override
                 public void onUpdate(int from, int to)
                 {
-                    System.out.println(">>> On Update:  [" + from + " -> " + to + "] (Anonymous)");
+                    ListListenerDemo.onUpdate(from, to, "ANON LISTENER");
                 }
                 
                 @Override
                 public void onPermutate(Permutation<String> primaryPermutation, Permutation<String> secondaryPermutation)
                 {
-                    System.out.println(">>> On Permuted:  " +
-                                       "[" + primaryPermutation.contents() + ": " + primaryPermutation.movedFromIndex() + " -> " + primaryPermutation.movedToIndex() + "]  |  " +
-                                       "[" + secondaryPermutation.contents() + ": " + secondaryPermutation.movedFromIndex() + " -> " + secondaryPermutation.movedToIndex() + "] (Anonymous)");
+                    ListListenerDemo.onPermutate(primaryPermutation, secondaryPermutation, "ANON LISTENER");
                 }
                 
                 @Override
-                public void onAdded(String element)
+                public void onAdded(Permutation<String> permutation)
                 {
-                    System.out.println(">>> On Added:  [" + element + "] (Anonymous)");
+                    ListListenerDemo.onAdd(permutation, "ANON LISTENER");
                 }
                 
                 @Override
-                public void onRemoved(String element)
+                public void onRemoved(Permutation<String> permutation)
                 {
-                    System.out.println(">>> On Removed:  [" + element + "] (Anonymous)");
+                    ListListenerDemo.onRemove(permutation, "ANON LISTENER");
                 }
             };
         }
         
         private static void printList(List<String> list)
         {
+            System.out.println();
+            System.out.println("------------------------------------------------------------");
             System.out.println("::: LIST :::");
             list.forEach(s -> System.out.println("[" + list.indexOf(s) + "]: " + s));
+            System.out.println("------------------------------------------------------------");
+            System.out.println();
         }
         
-        private static <T> void onPermutated(Permutation<T> primaryPermutation, Permutation<T> secondaryPermutation)
+        private static <T> void onPermutate(Permutation<T> primaryPermutation, Permutation<T> secondaryPermutation, String message)
         {
-            System.out.println(">>> On Permuted:  " +
-                               "[" + primaryPermutation.contents() + ": " + primaryPermutation.movedFromIndex() + " -> " + primaryPermutation.movedToIndex() + "]  |  " +
-                               "[" + secondaryPermutation.contents() + ": " + secondaryPermutation.movedFromIndex() + " -> " + secondaryPermutation.movedToIndex() + "]");
+            final String p1Contents = primaryPermutation != null ? "" + primaryPermutation.contents() : "N/A";
+            final String p1FromIndex = primaryPermutation != null ? "" + primaryPermutation.movedFromIndex() : "N/A";
+            final String p1ToIndex = primaryPermutation != null ? "" + primaryPermutation.movedToIndex() : "N/A";
+    
+            final String p2Contents = secondaryPermutation != null ? "" + secondaryPermutation.contents() : "N/A";
+            final String p2FromIndex = secondaryPermutation != null ? "" + secondaryPermutation.movedFromIndex() : "N/A";
+            final String p2ToIndex = secondaryPermutation != null ? "" + secondaryPermutation.movedToIndex() : "N/A";
+            
+            System.out.println();
+            System.out.println("------------------------------------------------------------");
+            System.out.println(">>> On Permutated:  " +
+                               "[" + p1Contents + ": " + p1FromIndex + " -> " + p1ToIndex + "]  |  " +
+                               "[" + p2Contents + ": " + p2FromIndex + " -> " + p2ToIndex + "]");
+            if (message != null)
+                System.out.println("Message: " + message);
+            System.out.println("------------------------------------------------------------");
+            System.out.println();
         }
         
-        private static void onPermutation()
+        private static void onPermutation(String message)
         {
+            System.out.println();
+            System.out.println("------------------------------------------------------------");
             System.out.println(">>> On Permutation");
+            if (message != null)
+                System.out.println("Message: " + message);
+            System.out.println("------------------------------------------------------------");
+            System.out.println();
         }
         
-        private static void onUpdated(int from, int to)
+        private static void onUpdate(int from, int to, String message)
         {
+            System.out.println();
+            System.out.println("------------------------------------------------------------");
             System.out.println(">>> On Update:  [" + from + " -> " + to + "]");
+            if (message != null)
+                System.out.println("Message: " + message);
+            System.out.println("------------------------------------------------------------");
+            System.out.println();
         }
         
-        private static void onAdded(String s)
+        private static <E> void onAdd(Permutation<E> s, String message)
         {
+            System.out.println();
+            System.out.println("------------------------------------------------------------");
             System.out.println(">>> On Added:  [" + s + "]");
+            if (message != null)
+                System.out.println("Message: " + message);
+            System.out.println("------------------------------------------------------------");
+            System.out.println();
         }
         
-        private static void onRemoved(String s)
+        private static <E> void onRemove(Permutation<E> s, String message)
         {
+            System.out.println();
+            System.out.println("------------------------------------------------------------");
             System.out.println(">>> On Removed:  [" + s + "]");
+            if (message != null)
+                System.out.println("Message: " + message);
+            System.out.println("------------------------------------------------------------");
+            System.out.println();
         }
     }
     
