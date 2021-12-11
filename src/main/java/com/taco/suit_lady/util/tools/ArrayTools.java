@@ -662,7 +662,7 @@ public class ArrayTools
         applyChangeListener(list, new CompoundListListener<>(lock, list)
         {
             @Override
-            protected void eventResponse(@NotNull Permutation<E> primaryPermutation, @Nullable Permutation<E> secondaryPermutation, @NotNull ChangeType changeType)
+            public void eventResponse(@NotNull Permutation<E> primaryPermutation, @Nullable Permutation<E> secondaryPermutation, @NotNull ChangeType changeType)
             {
                 changeHandler.accept(primaryPermutation, secondaryPermutation, changeType);
             }
@@ -822,7 +822,7 @@ public class ArrayTools
     }
     
     public static class ListListener<E>
-            implements ListChangeListener<E>, Nameable, UIDProcessable
+            implements ListListenable<E>, ListChangeListener<E>, Nameable, UIDProcessable
     {
         private final ReentrantLock lock;
         private final String name;
@@ -897,40 +897,20 @@ public class ArrayTools
                                 backingListProperty.get().indexOf(element),
                                 list.indexOf(element),
                                 element)).collect(Collectors.toCollection(ArrayList::new));
-                        ArrayList<Permutation<E>> permutations = new ArrayList<>();
                         
-                        for (Permutation<E> removed: removedPermutations) {
-                            if (addedPermutations.contains(removed)) {
-                                permutations.add(removed);
-                            }
-                        }
-                        for (Permutation<E> p : permutations) {
+                        ArrayList<Permutation<E>> permutations = removedPermutations.stream().filter(addedPermutations::contains)
+                                .collect(Collectors.toCollection(ArrayList::new));
+                        
+                        permutations.forEach(p -> {
                             removedPermutations.remove(p);
                             addedPermutations.remove(p);
-                        }
+                        });
                         
-//                        System.out.println("PRINTING CALCULATED PERMUTATIONS");
-                        
-                        for (Permutation<E> permutation: permutations) {
-//                            System.out.println("ON PERMUTATION: " + permutation);
-                            onPermutateInternal(permutation, getByIndex(permutation.movedToIndex(), false, permutations, addedPermutations));
-                        }
-                        
-//                        System.out.println("PRINTING REMAINING ADD/REMOVE OPERATIONS");
+                        permutations.forEach(permutation -> onPermutateInternal(
+                                permutation, getByIndex(permutation.movedToIndex(), false, permutations, addedPermutations)));
                         
                         removedPermutations.forEach(permutation -> onRemovedInternal(permutation));
                         addedPermutations.forEach(permutation -> onAddedInternal(permutation));
-                        
-//                        System.out.println("PRINTING DEFAULT ADD/REMOVE OPERATIONS");
-//
-//                        change.getRemoved().forEach(element -> onRemovedInternal(new Permutation<>(
-//                                backingListProperty.get().indexOf(element),
-//                                list.indexOf(element),
-//                                element)));
-//                        change.getAddedSubList().forEach(element -> onAddedInternal(new Permutation<>(
-//                                backingListProperty.get().indexOf(element),
-//                                list.indexOf(element),
-//                                element)));
                     }
                 
                 refresh();
@@ -952,21 +932,24 @@ public class ArrayTools
             return null;
         }
         
-        //<editor-fold desc="--- FUNCTIONALLY ABSTRACT ---">
-        
-        protected void onPermutation() { }
-        
-        protected void onPermutate(Permutation<E> primaryPermutation, Permutation<E> secondaryPermutation) { }
-        
-        protected void onUpdate(int from, int to) { }
-        
-        protected void onAdded(Permutation<E> permutation) { }
-        
-        protected void onRemoved(Permutation<E> permutation) { }
-        
-        //</editor-fold>
-        
         //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+        @Override
+        public void onPermutation() { }
+    
+        @Override
+        public void onPermutate(Permutation<E> primaryPermutation, Permutation<E> secondaryPermutation) { }
+    
+        @Override
+        public void onUpdate(int from, int to) { }
+    
+        @Override
+        public void onAdded(Permutation<E> permutation) { }
+    
+        @Override
+        public void onRemoved(Permutation<E> permutation) { }
+        
+        //
         
         @Override
         public String getName()
@@ -1021,7 +1004,27 @@ public class ArrayTools
         //</editor-fold>
     }
     
+    public interface ListListenable<E>
+    {
+        void onPermutation();
+        
+        void onPermutate(Permutation<E> primaryPermutation, Permutation<E> secondaryPermutation);
+        
+        void onUpdate(int from, int to);
+        
+        void onAdded(Permutation<E> permutation);
+        
+        void onRemoved(Permutation<E> permutation);
+    }
+    
+    public interface CompoundListListenable<E>
+        extends ListListenable<E>
+    {
+        void eventResponse(@NotNull Permutation<E> permutationPrimary, @Nullable Permutation<E> permutationSecondary, @NotNull ChangeType changeType);
+    }
+    
     public static abstract class CompoundListListener<E> extends ListListener<E>
+            implements CompoundListListenable<E>
     {
         protected CompoundListListener(@NotNull ObservableList<E> list)
         {
@@ -1043,24 +1046,20 @@ public class ArrayTools
             super(lock, name, list);
         }
         
-        //
-        
-        protected abstract void eventResponse(@NotNull Permutation<E> primaryPermutation, @Nullable Permutation<E> secondaryPermutation, @NotNull ChangeType changeType);
-        
         @Override
-        protected final void onPermutate(Permutation<E> primaryPermutation, Permutation<E> secondaryPermutation)
+        public final void onPermutate(Permutation<E> primaryPermutation, Permutation<E> secondaryPermutation)
         {
             eventResponse(primaryPermutation, secondaryPermutation, ChangeType.PERMUTATE);
         }
         
         @Override
-        protected final void onAdded(Permutation<E> permutation)
+        public final void onAdded(Permutation<E> permutation)
         {
             eventResponse(permutation, null, ChangeType.ADD);
         }
         
         @Override
-        protected final void onRemoved(Permutation<E> permutation)
+        public final void onRemoved(Permutation<E> permutation)
         {
             eventResponse(permutation, null, ChangeType.REMOVE);
         }
