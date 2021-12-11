@@ -652,14 +652,14 @@ public class ArrayTools
     
     //<editor-fold desc="--- LIST LISTENING ---">
     
-    public static <E> void applyChangeListener(@NotNull ObservableList<E> list, @NotNull ListChangeListener<E> listener)
+    public static <E> void applyListListener(@NotNull ObservableList<E> list, @NotNull ListChangeListener<E> listener)
     {
         ExceptionTools.nullCheck(list, "Observable List").addListener(ExceptionTools.nullCheck(listener, "List Listener"));
     }
     
-    public static <E> void applyCompoundListListener(@Nullable ReentrantLock lock, @NotNull ObservableList<E> list, @NotNull TriConsumer<Permutation<E>, Permutation<E>, ChangeType> changeHandler)
+    public static <E> void applyListListener(@Nullable ReentrantLock lock, @NotNull ObservableList<E> list, @NotNull TriConsumer<Permutation<E>, Permutation<E>, ChangeType> changeHandler)
     {
-        applyChangeListener(list, new CompoundListListener<>(lock, list)
+        applyListListener(list, new CompoundListListener<>(lock, list)
         {
             @Override
             public void eventResponse(@NotNull Permutation<E> primaryPermutation, @Nullable Permutation<E> secondaryPermutation, @NotNull ChangeType changeType)
@@ -669,69 +669,69 @@ public class ArrayTools
         });
     }
     
-    public static <E> void applyChangeListener(
+    public static <E> void applyListListener(
             @Nullable ReentrantLock lock, @NotNull ObservableList<E> list,
             @Nullable PermutationResponder<E> permutationResponder)
     {
-        list.addListener(newChangeListener(lock, list, permutationResponder, null, null, null));
+        list.addListener(createListListener(lock, list, permutationResponder, null, null, null));
     }
     
-    public static <E> void applyChangeListener(
+    public static <E> void applyListListener(
             @Nullable ReentrantLock lock, @NotNull ObservableList<E> list,
             @Nullable Consumer<Permutation<E>> addListener,
             @Nullable Consumer<Permutation<E>> removeListener)
     {
-        list.addListener(newChangeListener(lock, list, null, null, addListener, removeListener));
+        list.addListener(createListListener(lock, list, null, null, addListener, removeListener));
     }
     
-    public static <E> void applyChangeListener(
+    public static <E> void applyListListener(
             @Nullable ReentrantLock lock, @NotNull ObservableList<E> list,
             @Nullable PermutationResponder<E> permutationResponder,
             @Nullable Consumer<Permutation<E>> addListener,
             @Nullable Consumer<Permutation<E>> removeListener)
     {
-        list.addListener(newChangeListener(lock, list, permutationResponder, null, addListener, removeListener));
+        list.addListener(createListListener(lock, list, permutationResponder, null, addListener, removeListener));
     }
     
-    public static <E> void applyChangeListener(
+    public static <E> void applyListListener(
             @Nullable ReentrantLock lock, @NotNull ObservableList<E> list,
             @Nullable PermutationResponder<E> permutationResponder,
             @Nullable BiConsumer<Integer, Integer> updateListener,
             @Nullable Consumer<Permutation<E>> addListener,
             @Nullable Consumer<Permutation<E>> removeListener)
     {
-        list.addListener(newChangeListener(lock, list, permutationResponder, updateListener, addListener, removeListener));
+        list.addListener(createListListener(lock, list, permutationResponder, updateListener, addListener, removeListener));
     }
     
     @Contract("_, _, _ -> new")
-    public static <E> @NotNull ListChangeListener<E> newChangeListener(
+    public static <E> @NotNull ListChangeListener<E> createListListener(
             @Nullable ReentrantLock lock, @NotNull ObservableList<E> list,
             @Nullable PermutationResponder<E> permutationResponder)
     {
-        return newChangeListener(lock, list, permutationResponder, null, null, null);
+        return createListListener(lock, list, permutationResponder, null, null, null);
     }
     
     @Contract("_, _, _, _ -> new")
-    public static <E> @NotNull ListChangeListener<E> newChangeListener(
+    public static <E> @NotNull ListChangeListener<E> createListListener(
             @Nullable ReentrantLock lock, @NotNull ObservableList<E> list,
             @Nullable Consumer<Permutation<E>> addListener,
             @Nullable Consumer<Permutation<E>> removeListener)
     {
-        return newChangeListener(lock, list, null, null, addListener, removeListener);
+        return createListListener(lock, list, null, null, addListener, removeListener);
     }
     
     @Contract("_, _, _, _, _ -> new")
-    public static <E> @NotNull ListChangeListener<E> newChangeListener(
+    public static <E> @NotNull ListChangeListener<E> createListListener(
             @Nullable ReentrantLock lock, @NotNull ObservableList<E> list,
             @Nullable PermutationResponder<E> permutationResponder,
             @Nullable Consumer<Permutation<E>> addListener,
             @Nullable Consumer<Permutation<E>> removeListener)
     {
-        return newChangeListener(lock, list, permutationResponder, null, addListener, removeListener);
+        return createListListener(lock, list, permutationResponder, null, addListener, removeListener);
     }
     
     @Contract("_, _, _, _, _, _ -> new")
-    public static <E> @NotNull ListChangeListener<E> newChangeListener(
+    public static <E> @NotNull ListChangeListener<E> createListListener(
             @Nullable ReentrantLock lock, @NotNull ObservableList<E> list,
             @Nullable PermutationResponder<E> permutationResponder,
             @Nullable BiConsumer<Integer, Integer> updateListener,
@@ -773,6 +773,19 @@ public class ArrayTools
             {
                 if (removeListener != null)
                     removeListener.accept(permutation);
+            }
+        };
+    }
+    
+    public static <E> @NotNull CompoundListListener<E> createListListener(
+            @Nullable ReentrantLock lock, @NotNull ObservableList<E> list,
+            @Nullable CompoundListListenable<E> eventResponder)
+    {
+        return new CompoundListListener<>(lock, list) {
+            @Override
+            public void eventResponse(@NotNull Permutation<E> permutationPrimary, @Nullable Permutation<E> permutationSecondary, @NotNull ChangeType changeType)
+            {
+                eventResponder.eventResponse(permutationPrimary, permutationSecondary, changeType);
             }
         };
     }
@@ -933,19 +946,19 @@ public class ArrayTools
         }
         
         //<editor-fold desc="--- IMPLEMENTATIONS ---">
-    
+        
         @Override
         public void onPermutation() { }
-    
+        
         @Override
         public void onPermutate(Permutation<E> primaryPermutation, Permutation<E> secondaryPermutation) { }
-    
+        
         @Override
         public void onUpdate(int from, int to) { }
-    
+        
         @Override
         public void onAdded(Permutation<E> permutation) { }
-    
+        
         @Override
         public void onRemoved(Permutation<E> permutation) { }
         
@@ -1018,7 +1031,7 @@ public class ArrayTools
     }
     
     public interface CompoundListListenable<E>
-        extends ListListenable<E>
+            extends ListListenable<E>
     {
         void eventResponse(@NotNull Permutation<E> permutationPrimary, @Nullable Permutation<E> permutationSecondary, @NotNull ChangeType changeType);
     }
@@ -1156,12 +1169,12 @@ public class ArrayTools
             final ReentrantLock lock = new ReentrantLock();
             final ObservableList<String> list = initTestList();
             
-            ArrayTools.applyChangeListener(list, getAnonymous(lock, list));
+            ArrayTools.applyListListener(list, getAnonymous(lock, list));
             
-            ArrayTools.applyChangeListener(lock, list, (primaryPermutation, secondaryPermutation) -> onPermutate(primaryPermutation, secondaryPermutation, "SUB LISTENER 1", false));
-            ArrayTools.applyChangeListener(lock, list, added -> onAdd(added, "SUB LISTENER 2", false), removed -> onRemove(removed, "SUB LISTENER 2", false));
+            ArrayTools.applyListListener(lock, list, (primaryPermutation, secondaryPermutation) -> onPermutate(primaryPermutation, secondaryPermutation, "SUB LISTENER 1", false));
+            ArrayTools.applyListListener(lock, list, added -> onAdd(added, "SUB LISTENER 2", false), removed -> onRemove(removed, "SUB LISTENER 2", false));
             
-            ArrayTools.applyCompoundListListener(lock, list, (permutation, permutation2, changeType) -> onCompoundEvent(permutation, permutation2, changeType, false, true));
+            ArrayTools.applyListListener(lock, list, (permutation, permutation2, changeType) -> onCompoundEvent(permutation, permutation2, changeType, false, true));
             
             testPrints(list, "test method 2");
         }
@@ -1171,7 +1184,7 @@ public class ArrayTools
             final ReentrantLock lock = new ReentrantLock();
             final ObservableList<String> list = initTestList();
             
-            ArrayTools.applyCompoundListListener(lock, list, (permutation, permutation2, changeType) ->
+            ArrayTools.applyListListener(lock, list, (permutation, permutation2, changeType) ->
                     onCompoundEvent(permutation, permutation2, changeType, false, false));
             
             //            testPrints(list, "Compound Listener Test");

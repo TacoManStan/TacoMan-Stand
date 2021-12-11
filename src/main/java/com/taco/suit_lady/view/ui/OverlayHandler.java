@@ -36,6 +36,8 @@ public class OverlayHandler
         this.overlays.setKeepSorted(true);
         
         this.rootPane = new StackPane();
+        
+        ArrayTools.applyChangeListener();
     
 //        ArrayTools.applyChangeListener(lock, overlays,);
         
