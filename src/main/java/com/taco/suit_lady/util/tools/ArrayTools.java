@@ -1197,17 +1197,13 @@ public class ArrayTools
             if (footer != null) {
                 if (box && title != null) {
                     System.out.println();
-                    //                    System.out.println("Footer Note: " + footer + "");
                     System.out.println("" + footer + "");
-                } else {
+                } else
                     System.out.println("    > " + footer);
-                }
             }
             if (box) {
-                if (footer == null) {
+                if (footer == null)
                     System.out.println();
-                }
-                //                System.out.println("------------------------------------------------------------");
                 System.out.println("------------------------------------------------------------");
                 System.out.println();
             }
