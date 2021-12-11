@@ -56,19 +56,16 @@ public class ContentSwitchDemoPageController extends UIPageController<ContentSwi
     
     private void button1()
     {
-        ConsoleBB.CONSOLE.print("B1 Pressed");
         ctx().getBean(AppUI.class).getContentManager().setContent(content1);
     }
     
     private void button2()
     {
-        ConsoleBB.CONSOLE.print("B2 Pressed");
         ctx().getBean(AppUI.class).getContentManager().setContent(content2);
     }
     
     private void button3()
     {
-        ConsoleBB.CONSOLE.print("B3 Pressed");
         ctx().getBean(AppUI.class).getContentManager().setContent(content3);
     }
 }
