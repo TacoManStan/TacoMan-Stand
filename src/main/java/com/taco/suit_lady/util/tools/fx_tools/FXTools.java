@@ -1,4 +1,4 @@
-package com.taco.suit_lady.util.tools.fxtools;
+package com.taco.suit_lady.util.tools.fx_tools;
 
 import com.sun.javafx.application.PlatformImpl;
 import com.taco.suit_lady.util.SimplePredicate;

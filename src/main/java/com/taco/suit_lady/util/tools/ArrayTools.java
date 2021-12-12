@@ -1,13 +1,5 @@
 package com.taco.suit_lady.util.tools;
 
-import com.taco.suit_lady._to_sort._new.interfaces.functional.TriConsumer;
-import com.taco.suit_lady.util.UIDProcessable;
-import com.taco.suit_lady.util.UIDProcessor;
-import com.taco.util.obj_traits.common.Nameable;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import org.checkerframework.checker.index.qual.NonNegative;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -18,18 +10,12 @@ import java.lang.reflect.Array;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 // TODO - Convert to non-static
-public class ArrayTools
-{
+public class ArrayTools {
     /**
      * <p>Sorts the specified {@link List} using the {@link Comparator#naturalOrder() Natural Order} as the {@link Comparator}.</p>
      * <hr>
@@ -50,8 +36,7 @@ public class ArrayTools
      * @see Comparator#naturalOrder()
      */
     @Contract("_ -> param1")
-    public static <E extends Comparable<E>> @NotNull List<E> sort(@NotNull List<E> list)
-    {
+    public static <E extends Comparable<E>> @NotNull List<E> sort(@NotNull List<E> list) {
         list.sort(Comparator.naturalOrder());
         return list;
     }
@@ -70,8 +55,7 @@ public class ArrayTools
      *
      * @return The {@link T element} at the specified {@code movedToIndex} in the specified {@link List}.
      */
-    public static <T> T getAt(@NonNegative int index, @NotNull List<T> list)
-    {
+    public static <T> T getAt(@NonNegative int index, @NotNull List<T> list) {
         return getAt(index, list, () -> null);
     }
     
@@ -92,8 +76,7 @@ public class ArrayTools
      *
      * @see #getAt(int, List, Supplier, Supplier)
      */
-    public static <T> T getAt(@NonNegative int index, @NotNull List<T> list, @Nullable Supplier<T> fallbackSupplier)
-    {
+    public static <T> T getAt(@NonNegative int index, @NotNull List<T> list, @Nullable Supplier<T> fallbackSupplier) {
         return getAt(index, list, fallbackSupplier, fallbackSupplier);
     }
     
@@ -154,8 +137,7 @@ public class ArrayTools
      * @throws IndexOutOfBoundsException If the specified {@code movedToIndex} is not within the {@link List#size() bounds} of the specified {@link List} and the {@link Supplier ifInvalidIndexFallbackSupplier} was not specified.
      * @throws NullPointerException      If the {@link T element} at the specified {@code movedToIndex} is {@code null} and the {@link Supplier ifNullFallbackSupplier} was not specified.
      */
-    public static <T> T getAt(@NonNegative int index, @NotNull List<T> list, @Nullable Supplier<T> ifInvalidIndexFallbackSupplier, @Nullable Supplier<T> ifNullFallbackSupplier)
-    {
+    public static <T> T getAt(@NonNegative int index, @NotNull List<T> list, @Nullable Supplier<T> ifInvalidIndexFallbackSupplier, @Nullable Supplier<T> ifNullFallbackSupplier) {
         ExceptionTools.nullCheck(list, "List cannot be null.");
         
         T value;
@@ -184,8 +166,7 @@ public class ArrayTools
      *
      * @return True if the specified {@code array} is empty, false otherwise.
      */
-    public static boolean isEmpty(Object[] arr)
-    {
+    public static boolean isEmpty(Object[] arr) {
         return ExceptionTools.nullCheck(arr, "Array").length == 0;
     }
     
@@ -202,8 +183,7 @@ public class ArrayTools
      * @return True if the specified {@code array} is null or empty, false
      * otherwise.
      */
-    public static boolean isNullOrEmpty(Object[] arr)
-    {
+    public static boolean isNullOrEmpty(Object[] arr) {
         return arr == null || arr.length == 0;
     }
     
@@ -220,8 +200,7 @@ public class ArrayTools
      * @return An array with the duplicates filtered out.
      */
     @SuppressWarnings("unchecked")
-    public static <T> T[] filterDuplicatesArray(T[] arr)
-    {
+    public static <T> T[] filterDuplicatesArray(T[] arr) {
         if (arr.length < 1)
             return arr;
         HashSet<T> set = new LinkedHashSet<>(Arrays.asList(arr));
@@ -240,8 +219,7 @@ public class ArrayTools
      *
      * @return An ArrayList with the duplicates filtered out.
      */
-    public static <T> ArrayList<T> filterDuplicatesList(T[] arr)
-    {
+    public static <T> ArrayList<T> filterDuplicatesList(T[] arr) {
         return new ArrayList<>(Arrays.asList(filterDuplicatesArray(arr)));
     }
     
@@ -256,8 +234,7 @@ public class ArrayTools
      * @return True if the specified values can be retrieved from the specified
      * array, false otherwise.
      */
-    public static boolean isValidArray(Object[][] array, int i, int j)
-    {
+    public static boolean isValidArray(Object[][] array, int i, int j) {
         return i >= 0 && j >= 0 && i < array.length && j < array[i].length;
     }
     
@@ -270,8 +247,7 @@ public class ArrayTools
      *
      * @return The element at the specified movedToIndex of the specified {@link List}.
      */
-    public static <T> T getElementAt(int index, List<T> list)
-    {
+    public static <T> T getElementAt(int index, List<T> list) {
         if (list.size() > index && index >= 0) {
             final T element = list.get(index);
             if (element != null)
@@ -289,8 +265,7 @@ public class ArrayTools
      *
      * @return The element at the specified movedToIndex of the specified array.
      */
-    public static <T> T getElementAt(int index, T[] arr)
-    {
+    public static <T> T getElementAt(int index, T[] arr) {
         return getElementAt(index, Arrays.asList(arr));
     }
     
@@ -308,8 +283,7 @@ public class ArrayTools
      * equal to the specified element is not contained within the
      * specified ArrayList.
      */
-    public static <T> T getElement(T element, ArrayList<T> arr)
-    {
+    public static <T> T getElement(T element, ArrayList<T> arr) {
         final int index = arr.indexOf(element);
         if (index == -1)
             return null;
@@ -333,8 +307,7 @@ public class ArrayTools
      */
     @SafeVarargs
     @SuppressWarnings("varargs")
-    public static <T> T getElement(T element, T... arr)
-    {
+    public static <T> T getElement(T element, T... arr) {
         return getElement(element, new ArrayList<>(Arrays.asList(arr)));
     }
     
@@ -348,8 +321,7 @@ public class ArrayTools
      * @return The first non-null element in the specified List. If none exists,
      * returns null.
      */
-    public static <T> T getFirstNonNullElement(List<T> list)
-    {
+    public static <T> T getFirstNonNullElement(List<T> list) {
         if (list != null)
             for (T o: list)
                 if (o != null)
@@ -368,8 +340,7 @@ public class ArrayTools
      * exists, returns null.
      */
     @SafeVarargs
-    public static <T> T getFirstNonNullElement(T... arr)
-    {
+    public static <T> T getFirstNonNullElement(T... arr) {
         if (arr != null)
             for (T o: arr)
                 if (o != null)
@@ -391,8 +362,7 @@ public class ArrayTools
      * element in the base array that was found, the y coordinate is the
      * last matching element in the base array that was found.
      */
-    public static <T> Point getLongestIndex(ArrayList<T> arr, ArrayList<T> subArr)
-    {
+    public static <T> Point getLongestIndex(ArrayList<T> arr, ArrayList<T> subArr) {
         ArrayList<Integer> possibleIndexes = new ArrayList<>();
         T sub1 = subArr.get(0);
         for (int i = 0; i < arr.size(); i++)
@@ -426,8 +396,7 @@ public class ArrayTools
      * array.
      */
     @SafeVarargs
-    public static <T> T[] concat(T[]... arrs)
-    {
+    public static <T> T[] concat(T[]... arrs) {
         if (arrs != null)
             if (arrs.length > 1) {
                 int totalLength = 0;
@@ -456,8 +425,7 @@ public class ArrayTools
      * @return The result of the second array being concatenated onto the first
      * array.
      */
-    public static int[] concat(int[] arr1, int[] arr2)
-    {
+    public static int[] concat(int[] arr1, int[] arr2) {
         int[] copy = (int[]) Array.newInstance(arr1.getClass().getComponentType(), arr1.length + arr2.length);
         System.arraycopy(arr1, 0, copy, 0, arr1.length);
         System.arraycopy(arr2, 0, copy, arr1.length, arr2.length);
@@ -474,8 +442,7 @@ public class ArrayTools
      * @return The median of the specified array of ints. Returns -1 if the
      * offset is invalid.
      */
-    public static int getMedian(int[] arr, double offset)
-    {
+    public static int getMedian(int[] arr, double offset) {
         if (offset == -1)
             offset = .50;
         else if (offset <= 0 || offset > 1)
@@ -505,8 +472,7 @@ public class ArrayTools
      *
      * @return An array of ints the same as the specified List of Integers.
      */
-    public static int[] convertIntegers(List<Integer> arr)
-    {
+    public static int[] convertIntegers(List<Integer> arr) {
         int[] ret = new int[arr.size()];
         Iterator<Integer> iterator = arr.iterator();
         for (int i = 0; i < ret.length; i++)
@@ -524,8 +490,7 @@ public class ArrayTools
      * @return The movedToIndex of the specified value in the specified array.
      */
     @SafeVarargs
-    public static <T> int indexOf(T value, T... arr)
-    {
+    public static <T> int indexOf(T value, T... arr) {
         if (value != null)
             for (int i = 0; i < arr.length; i++)
                 if (arr[i] != null)
@@ -534,15 +499,13 @@ public class ArrayTools
         return -1;
     }
     
-    public static <T> T[] getReverse(T[] arr)
-    {
+    public static <T> T[] getReverse(T[] arr) {
         final T[] clone = arr.clone();
         reverse(clone);
         return clone;
     }
     
-    public static <T> T[] reverse(T[] arr)
-    {
+    public static <T> T[] reverse(T[] arr) {
         if (arr != null) {
             final T[] clone = arr.clone();
             for (int i = 0; i < arr.length; i++)
@@ -551,8 +514,7 @@ public class ArrayTools
         return arr;
     }
     
-    public static <T> void edit(List<T> list, ElementCopier<T, T> editer)
-    {
+    public static <T> void edit(List<T> list, ElementCopier<T, T> editer) {
         if (list != null && editer != null)
             for (int i = 0; i < list.size(); i++)
                 try {
@@ -575,8 +537,7 @@ public class ArrayTools
      * @return The furthest left point between the specified min and max indexes
      * of the specified array, or -1 if no elements were found.
      */
-    private static <T> int getFurthestLeft(int min, int max, boolean lookNull, T[] arr)
-    {
+    private static <T> int getFurthestLeft(int min, int max, boolean lookNull, T[] arr) {
         boolean reached = false;
         for (int i = min; i < max; i++)
             if ((arr[i] == null) == lookNull) {
@@ -587,8 +548,7 @@ public class ArrayTools
         return -1;
     }
     
-    public static <T> T[] createAndFillArray(List<T> list, Class<T> clazz)
-    {
+    public static <T> T[] createAndFillArray(List<T> list, Class<T> clazz) {
         T[] arr = createArray((Class<T[]>) GeneralTools.get().getArrayClass(clazz), list.size());
         if (arr != null)
             for (int i = 0; i < list.size(); i++) {
@@ -599,8 +559,7 @@ public class ArrayTools
         return arr;
     }
     
-    public static <T> T[] createArray(Class<T[]> type, int size)
-    {
+    public static <T> T[] createArray(Class<T[]> type, int size) {
         return type.cast(Array.newInstance(type.getComponentType(), size));
     }
     
@@ -617,8 +576,7 @@ public class ArrayTools
      * @throws NullPointerException if the specified {@code Map} is null.
      * @see #getMapValues(Map, List)
      */
-    public static <V> ArrayList<V> getMapValues(Map<?, V> map)
-    {
+    public static <V> ArrayList<V> getMapValues(Map<?, V> map) {
         return (ArrayList<V>) getMapValues(ExceptionTools.nullCheck(map, "Map"), null);
     }
     
@@ -637,8 +595,7 @@ public class ArrayTools
      * @throws NullPointerException if the specified {@code Map} is null.
      * @see #getMapValues(Map)
      */
-    public static <V> List<V> getMapValues(Map<?, V> map, List<V> targetList)
-    {
+    public static <V> List<V> getMapValues(Map<?, V> map, List<V> targetList) {
         Collection<V> _mapContents = ExceptionTools.nullCheck(map, "Map").values();
         
         if (targetList == null)
@@ -650,698 +607,7 @@ public class ArrayTools
         return targetList;
     }
     
-    //<editor-fold desc="--- LIST LISTENING ---">
-    
-    public static <E> void applyListListener(@NotNull ObservableList<E> list, @NotNull ListChangeListener<E> listener)
-    {
-        ExceptionTools.nullCheck(list, "Observable List").addListener(ExceptionTools.nullCheck(listener, "List Listener"));
-    }
-    
-    public static <E> void applyListListener(@Nullable ReentrantLock lock, @NotNull ObservableList<E> list, @NotNull TriConsumer<Permutation<E>, Permutation<E>, ChangeType> changeHandler)
-    {
-        applyListListener(list, new CompoundListListener<>(lock, list)
-        {
-            @Override
-            public void eventResponse(@NotNull Permutation<E> primaryPermutation, @Nullable Permutation<E> secondaryPermutation, @NotNull ChangeType changeType)
-            {
-                changeHandler.accept(primaryPermutation, secondaryPermutation, changeType);
-            }
-        });
-    }
-    
-    public static <E> void applyListListener(
-            @Nullable ReentrantLock lock, @NotNull ObservableList<E> list,
-            @Nullable PermutationResponder<E> permutationResponder)
-    {
-        list.addListener(createListListener(lock, list, permutationResponder, null, null, null));
-    }
-    
-    public static <E> void applyListListener(
-            @Nullable ReentrantLock lock, @NotNull ObservableList<E> list,
-            @Nullable Consumer<Permutation<E>> addListener,
-            @Nullable Consumer<Permutation<E>> removeListener)
-    {
-        list.addListener(createListListener(lock, list, null, null, addListener, removeListener));
-    }
-    
-    public static <E> void applyListListener(
-            @Nullable ReentrantLock lock, @NotNull ObservableList<E> list,
-            @Nullable PermutationResponder<E> permutationResponder,
-            @Nullable Consumer<Permutation<E>> addListener,
-            @Nullable Consumer<Permutation<E>> removeListener)
-    {
-        list.addListener(createListListener(lock, list, permutationResponder, null, addListener, removeListener));
-    }
-    
-    public static <E> void applyListListener(
-            @Nullable ReentrantLock lock, @NotNull ObservableList<E> list,
-            @Nullable PermutationResponder<E> permutationResponder,
-            @Nullable BiConsumer<Integer, Integer> updateListener,
-            @Nullable Consumer<Permutation<E>> addListener,
-            @Nullable Consumer<Permutation<E>> removeListener)
-    {
-        list.addListener(createListListener(lock, list, permutationResponder, updateListener, addListener, removeListener));
-    }
-    
-    @Contract("_, _, _ -> new")
-    public static <E> @NotNull ListChangeListener<E> createListListener(
-            @Nullable ReentrantLock lock, @NotNull ObservableList<E> list,
-            @Nullable PermutationResponder<E> permutationResponder)
-    {
-        return createListListener(lock, list, permutationResponder, null, null, null);
-    }
-    
-    @Contract("_, _, _, _ -> new")
-    public static <E> @NotNull ListChangeListener<E> createListListener(
-            @Nullable ReentrantLock lock, @NotNull ObservableList<E> list,
-            @Nullable Consumer<Permutation<E>> addListener,
-            @Nullable Consumer<Permutation<E>> removeListener)
-    {
-        return createListListener(lock, list, null, null, addListener, removeListener);
-    }
-    
-    @Contract("_, _, _, _, _ -> new")
-    public static <E> @NotNull ListChangeListener<E> createListListener(
-            @Nullable ReentrantLock lock, @NotNull ObservableList<E> list,
-            @Nullable PermutationResponder<E> permutationResponder,
-            @Nullable Consumer<Permutation<E>> addListener,
-            @Nullable Consumer<Permutation<E>> removeListener)
-    {
-        return createListListener(lock, list, permutationResponder, null, addListener, removeListener);
-    }
-    
-    @Contract("_, _, _, _, _, _ -> new")
-    public static <E> @NotNull ListChangeListener<E> createListListener(
-            @Nullable ReentrantLock lock, @NotNull ObservableList<E> list,
-            @Nullable PermutationResponder<E> permutationResponder,
-            @Nullable BiConsumer<Integer, Integer> updateListener,
-            @Nullable Consumer<Permutation<E>> addListener,
-            @Nullable Consumer<Permutation<E>> removeListener)
-    {
-        return new ListListener<>(lock, list)
-        {
-            @Override
-            public void onPermutation()
-            {
-                if (permutationResponder != null)
-                    permutationResponder.respond();
-            }
-            
-            @Override
-            public void onPermutate(Permutation<E> permutation, Permutation<E> secondaryPermutation)
-            {
-                if (permutationResponder != null)
-                    permutationResponder.respond(permutation, secondaryPermutation);
-            }
-            
-            @Override
-            public void onUpdate(int from, int to)
-            {
-                if (updateListener != null)
-                    updateListener.accept(from, to);
-            }
-            
-            @Override
-            public void onAdded(Permutation<E> permutation)
-            {
-                if (addListener != null)
-                    addListener.accept(permutation);
-            }
-            
-            @Override
-            public void onRemoved(Permutation<E> permutation)
-            {
-                if (removeListener != null)
-                    removeListener.accept(permutation);
-            }
-        };
-    }
-    
-    public static <E> @NotNull CompoundListListener<E> createListListener(
-            @Nullable ReentrantLock lock, @NotNull ObservableList<E> list,
-            @Nullable CompoundListListenable<E> eventResponder)
-    {
-        return new CompoundListListener<>(lock, list)
-        {
-            @Override
-            public void eventResponse(@NotNull Permutation<E> permutationPrimary, @Nullable Permutation<E> permutationSecondary, @NotNull ChangeType changeType)
-            {
-                eventResponder.eventResponse(permutationPrimary, permutationSecondary, changeType);
-            }
-        };
-    }
-    
-    public record Permutation<T>(int movedFromIndex, int movedToIndex, T contents)
-    {
-        @Contract(pure = true)
-        @Override
-        public @NotNull String toString()
-        {
-            return "Permutation{" +
-                   "movedFromIndex=" + movedFromIndex +
-                   ", movedToIndex=" + movedToIndex +
-                   ", contents=" + contents +
-                   '}';
-        }
-        
-        @Override
-        public boolean equals(Object o)
-        {
-            if (this == o) return true;
-            if (!(o instanceof Permutation)) return false;
-            
-            Permutation<?> that = (Permutation<?>) o;
-            
-            if (movedFromIndex != that.movedFromIndex) return false;
-            if (movedToIndex != that.movedToIndex) return false;
-            return contents.equals(that.contents);
-        }
-        
-        @Override
-        public int hashCode()
-        {
-            int result = movedFromIndex;
-            result = 31 * result + movedToIndex;
-            result = 31 * result + contents.hashCode();
-            return result;
-        }
-    }
-    
-    @FunctionalInterface
-    public interface PermutationResponder<E>
-    {
-        void respond(Permutation<E> primaryPermutation, Permutation<E> secondaryPermutation);
-        
-        default void respond() { }
-    }
-    
-    public static class ListListener<E>
-            implements ListListenable<E>, ListChangeListener<E>, Nameable, UIDProcessable
-    {
-        private final ReentrantLock lock;
-        private final String name;
-        
-        private final ObservableList<E> list;
-        private final ReadOnlyObjectWrapper<List<E>> backingListProperty;
-        
-        //<editor-fold desc="--- CONSTRUCTORS ---">
-        
-        protected ListListener(@NotNull ObservableList<E> list)
-        {
-            this(null, null, list);
-        }
-        
-        protected ListListener(@Nullable String name, @NotNull ObservableList<E> list)
-        {
-            this(null, name, list);
-        }
-        
-        protected ListListener(@Nullable ReentrantLock lock, @NotNull ObservableList<E> list)
-        {
-            this(lock, null, list);
-        }
-        
-        protected ListListener(@Nullable ReentrantLock lock, @Nullable String name, @NotNull ObservableList<E> list)
-        {
-            this.lock = lock;
-            this.name = name;
-            
-            this.list = list;
-            this.backingListProperty = new ReadOnlyObjectWrapper<>();
-            
-            refresh();
-        }
-        
-        //</editor-fold>
-        
-        private void refresh()
-        {
-            TaskTools.sync(lock, () -> backingListProperty.set(ArrayTools.copy(list)), true);
-        }
-        
-        @Override
-        public final void onChanged(Change<? extends E> change)
-        {
-            TaskTools.sync(lock, () -> {
-                while (change.next())
-                    if (change.wasPermutated()) {
-                        onPermutationInternal();
-                        
-                        IntStream.range(change.getFrom(), change.getTo()).forEach(i -> {
-                            final E newElement = list.get(i);
-                            final int oldIndex = backingListProperty.get().indexOf(newElement);
-                            @SuppressWarnings("UnnecessaryLocalVariable") final int newIndex = i;
-                            
-                            final E oldElement = list.get(change.getPermutation(newIndex));
-                            final int oldElementOldIndex = backingListProperty.get().indexOf(oldElement);
-                            final int oldElementNewIndex = change.getPermutation(newIndex);
-                            
-                            onPermutateInternal(
-                                    new Permutation<>(oldIndex, newIndex, newElement),
-                                    new Permutation<>(oldElementOldIndex, oldElementNewIndex, oldElement));
-                        });
-                    } else if (change.wasUpdated())
-                        onUpdateInternal(change.getFrom(), change.getTo());
-                    else {
-                        ArrayList<Permutation<E>> removedPermutations = change.getRemoved().stream().<Permutation<E>>map(element -> new Permutation<>(
-                                backingListProperty.get().indexOf(element),
-                                list.indexOf(element),
-                                element)).collect(Collectors.toCollection(ArrayList::new));
-                        ArrayList<Permutation<E>> addedPermutations = change.getAddedSubList().stream().<Permutation<E>>map(element -> new Permutation<>(
-                                backingListProperty.get().indexOf(element),
-                                list.indexOf(element),
-                                element)).collect(Collectors.toCollection(ArrayList::new));
-                        
-                        ArrayList<Permutation<E>> permutations = removedPermutations.stream().filter(addedPermutations::contains)
-                                .collect(Collectors.toCollection(ArrayList::new));
-                        
-                        permutations.forEach(p -> {
-                            removedPermutations.remove(p);
-                            addedPermutations.remove(p);
-                        });
-                        
-                        permutations.forEach(permutation -> onPermutateInternal(
-                                permutation, getByIndex(permutation.movedToIndex(), false, permutations, addedPermutations)));
-                        
-                        removedPermutations.forEach(permutation -> onRemovedInternal(permutation));
-                        addedPermutations.forEach(permutation -> onAddedInternal(permutation));
-                    }
-                
-                refresh();
-            }, true);
-        }
-        
-        @SafeVarargs
-        private Permutation<E> getByIndex(int index, boolean to, List<Permutation<E>>... lists)
-        {
-            for (List<Permutation<E>> list: lists) {
-                Permutation<E> p = list.stream().filter(
-                        permutation ->
-                                (!to && permutation.movedFromIndex() == index)
-                                || (to && permutation.movedToIndex() == index)
-                ).findFirst().orElse(null);
-                if (p != null)
-                    return p;
-            }
-            return null;
-        }
-        
-        //<editor-fold desc="--- IMPLEMENTATIONS ---">
-        
-        @Override
-        public void onPermutation() { }
-        
-        @Override
-        public void onPermutate(Permutation<E> primaryPermutation, Permutation<E> secondaryPermutation) { }
-        
-        @Override
-        public void onUpdate(int from, int to) { }
-        
-        @Override
-        public void onAdded(Permutation<E> permutation) { }
-        
-        @Override
-        public void onRemoved(Permutation<E> permutation) { }
-        
-        //
-        
-        @Override
-        public String getName()
-        {
-            return name;
-        }
-        
-        private UIDProcessor uIDContainer;
-        
-        @Override
-        public UIDProcessor getUIDProcessor()
-        {
-            if (uIDContainer == null) // Lazy Initialization
-                uIDContainer = new UIDProcessor("group-name");
-            return uIDContainer;
-        }
-        
-        //</editor-fold>
-        
-        //<editor-fold desc="--- INTERNAL ---">
-        
-        private void onPermutationInternal()
-        {
-            TaskTools.sync(lock, () -> onPermutation(), true);
-        }
-        
-        private void onPermutateInternal(Permutation<E> primaryPermutation, Permutation<E> secondaryPermutation)
-        {
-            TaskTools.sync(lock, () -> onPermutate(primaryPermutation, secondaryPermutation), true);
-        }
-        
-        private void onUpdateInternal(int from, int to)
-        {
-            TaskTools.sync(lock, () -> onUpdate(from, to), true);
-        }
-        
-        private void checkForPermutation(ObservableList<E> addedList, ObservableList<E> removedList)
-        {
-        
-        }
-        
-        private void onAddedInternal(Permutation<E> permutation)
-        {
-            TaskTools.sync(lock, () -> onAdded(permutation), true);
-        }
-        
-        private void onRemovedInternal(Permutation<E> permutation)
-        {
-            TaskTools.sync(lock, () -> onRemoved(permutation), true);
-        }
-        
-        //</editor-fold>
-    }
-    
-    public interface ListListenable<E>
-    {
-        void onPermutation();
-        
-        void onPermutate(Permutation<E> primaryPermutation, Permutation<E> secondaryPermutation);
-        
-        void onUpdate(int from, int to);
-        
-        void onAdded(Permutation<E> permutation);
-        
-        void onRemoved(Permutation<E> permutation);
-    }
-    
-    public interface CompoundListListenable<E>
-            extends ListListenable<E>
-    {
-        void eventResponse(@NotNull Permutation<E> permutationPrimary, @Nullable Permutation<E> permutationSecondary, @NotNull ChangeType changeType);
-    }
-    
-    public static abstract class CompoundListListener<E> extends ListListener<E>
-            implements CompoundListListenable<E>
-    {
-        protected CompoundListListener(@NotNull ObservableList<E> list)
-        {
-            super(list);
-        }
-        
-        protected CompoundListListener(@Nullable String name, @NotNull ObservableList<E> list)
-        {
-            super(name, list);
-        }
-        
-        protected CompoundListListener(@Nullable ReentrantLock lock, @NotNull ObservableList<E> list)
-        {
-            super(lock, list);
-        }
-        
-        protected CompoundListListener(@Nullable ReentrantLock lock, @Nullable String name, @NotNull ObservableList<E> list)
-        {
-            super(lock, name, list);
-        }
-        
-        @Override
-        public final void onPermutate(Permutation<E> primaryPermutation, Permutation<E> secondaryPermutation)
-        {
-            eventResponse(primaryPermutation, secondaryPermutation, ChangeType.PERMUTATE);
-        }
-        
-        @Override
-        public final void onAdded(Permutation<E> permutation)
-        {
-            eventResponse(permutation, null, ChangeType.ADD);
-        }
-        
-        @Override
-        public final void onRemoved(Permutation<E> permutation)
-        {
-            eventResponse(permutation, null, ChangeType.REMOVE);
-        }
-    }
-    
-    public enum ChangeType
-    {
-        ADD, REMOVE, UPDATE, PERMUTATE
-    }
-    
-    //
-    
-    public static class ListListenerDemo
-    {
-        public static void main(String[] args)
-        {
-            test3();
-        }
-        
-        private static void testPrints(ObservableList<String> list, @Nullable String footer)
-        {
-            printList(list, footer);
-            
-            
-            System.out.println("Sorting...");
-            
-            ArrayTools.sort(list);
-            
-            printList(list, footer);
-            
-            
-            System.out.println("Adding...");
-            
-            list.add("Hello!");
-            
-            printList(list, footer);
-            
-            
-            System.out.println("Shuffling...");
-            
-            FXCollections.shuffle(list);
-            
-            printList(list, footer);
-            
-            
-            System.out.println("Resorting...");
-            
-            ArrayTools.sort(list);
-            
-            printList(list, footer);
-            
-            
-            System.out.println("Reversing...");
-            
-            Collections.reverse(list);
-            
-            printList(list, footer);
-            
-            
-            System.out.println("Clearing...");
-            
-            ArrayList<String> copy = new ArrayList<>(list);
-            
-            list.clear();
-            
-            printList(list, footer);
-            
-            
-            System.out.println("Re-Adding...");
-            
-            list.addAll(copy);
-            
-            printList(list, footer);
-        }
-        
-        private static void test1()
-        {
-            System.out.println("Creating List...");
-            final ObservableList<String> list = FXCollections.observableArrayList();
-            
-            System.out.println("Populating List...");
-            list.addAll("Dinner", "Elephant", "33", "Accelerator", "Zebra", "Eggplant", "Walrus", "Apple", "Tree", "Aardvark");
-            
-            System.out.println("Setting Listener...");
-            //        ArrayTools.applyChangeHandler(null, list,
-            //                                      (wrapper, oldObj) -> onPermutated(wrapper, oldObj), () -> onPermutation(),
-            //                                      (from, to) -> onUpdated(from, to),
-            //                                      s -> onAdded(s), s -> onRemoved(s));
-            testPrints(list, "test method 1");
-        }
-        
-        private static void test2()
-        {
-            final ReentrantLock lock = new ReentrantLock();
-            final ObservableList<String> list = initTestList();
-            
-            ArrayTools.applyListListener(list, getAnonymous(lock, list));
-            
-            ArrayTools.applyListListener(lock, list, (primaryPermutation, secondaryPermutation) -> onPermutate(primaryPermutation, secondaryPermutation, "SUB LISTENER 1", false));
-            ArrayTools.applyListListener(lock, list, added -> onAdd(added, "SUB LISTENER 2", false), removed -> onRemove(removed, "SUB LISTENER 2", false));
-            
-            ArrayTools.applyListListener(lock, list, (permutation, permutation2, changeType) -> onCompoundEvent(permutation, permutation2, changeType, false, true));
-            
-            testPrints(list, "test method 2");
-        }
-        
-        private static void test3()
-        {
-            final ReentrantLock lock = new ReentrantLock();
-            final ObservableList<String> list = initTestList();
-            
-            ArrayTools.applyListListener(lock, list, (permutation, permutation2, changeType) ->
-                    onCompoundEvent(permutation, permutation2, changeType, false, false));
-            
-            //            testPrints(list, "Compound Listener Test");
-            testPrints(list, null);
-        }
-        
-        private static @NotNull ObservableList<String> initTestList()
-        {
-            System.out.println("Creating List...");
-            final ObservableList<String> list = FXCollections.observableArrayList();
-            
-            System.out.println("Populating List...");
-            list.addAll("Dinner", "Elephant", "33", "Accelerator", "Zebra", "Eggplant", "Walrus", "Apple", "Tree", "Aardvark");
-            
-            System.out.println("Setting Listeners...");
-            
-            return list;
-        }
-        
-        private static <E> void onCompoundEvent(Permutation<E> permutation, Permutation<E> permutation2, @NotNull ChangeType changeType, boolean box, boolean printName)
-        {
-            final String footer = printName ? "COMPOUND LISTENER" : null;
-            
-            switch (changeType) {
-                case PERMUTATE -> onPermutate(permutation, permutation2, footer, box);
-                case UPDATE -> onUpdate(permutation.movedFromIndex(), permutation.movedToIndex(), footer, box);
-                case ADD -> onAdd(permutation, footer, box);
-                case REMOVE -> onRemove(permutation, footer, box);
-            }
-        }
-        
-        @Contract("_, _ -> new")
-        private static @NotNull ListChangeListener<String> getAnonymous(ReentrantLock lock, ObservableList<String> list)
-        {
-            return new ListListener<>(list)
-            {
-                @Override
-                public void onPermutation()
-                {
-                    ListListenerDemo.onPermutation("ANON LISTENER", false);
-                }
-                
-                @Override
-                public void onUpdate(int from, int to)
-                {
-                    ListListenerDemo.onUpdate(from, to, "ANON LISTENER", false);
-                }
-                
-                @Override
-                public void onPermutate(Permutation<String> primaryPermutation, Permutation<String> secondaryPermutation)
-                {
-                    ListListenerDemo.onPermutate(primaryPermutation, secondaryPermutation, "ANON LISTENER", false);
-                }
-                
-                @Override
-                public void onAdded(Permutation<String> permutation)
-                {
-                    ListListenerDemo.onAdd(permutation, "ANON LISTENER", false);
-                }
-                
-                @Override
-                public void onRemoved(Permutation<String> permutation)
-                {
-                    ListListenerDemo.onRemove(permutation, "ANON LISTENER", false);
-                }
-            };
-        }
-        
-        private static void printList(@NotNull List<String> list, @Nullable String footer)
-        {
-            if (!list.isEmpty())
-                doPrint(() -> list.forEach(s -> System.out.println("[" + list.indexOf(s) + "]: " + s)), "list", footer, true);
-            else
-                doPrint(() -> System.out.println("empty"), "list", footer, true);
-        }
-        
-        private static <T> void onPermutate(Permutation<T> primaryPermutation, Permutation<T> secondaryPermutation, String message, boolean box)
-        {
-            final String p1Contents = primaryPermutation != null ? "" + primaryPermutation.contents() : "N/A";
-            final String p1FromIndex = primaryPermutation != null ? "" + primaryPermutation.movedFromIndex() : "N/A";
-            final String p1ToIndex = primaryPermutation != null ? "" + primaryPermutation.movedToIndex() : "N/A";
-            
-            final String p2Contents = secondaryPermutation != null ? "" + secondaryPermutation.contents() : "N/A";
-            final String p2FromIndex = secondaryPermutation != null ? "" + secondaryPermutation.movedFromIndex() : "N/A";
-            final String p2ToIndex = secondaryPermutation != null ? "" + secondaryPermutation.movedToIndex() : "N/A";
-            
-            doPrint(() -> System.out.println(">>> Permutated:  " +
-                                             "[" + p1Contents + ": " + p1FromIndex + " -> " + p1ToIndex + "]  |  " +
-                                             "[" + p2Contents + ": " + p2FromIndex + " -> " + p2ToIndex + "]"),
-                    null, message, box);
-        }
-        
-        private static void onPermutation(String message, boolean box)
-        {
-            doPrint(() -> System.out.println(">>> Permutation Start"), null, message, box);
-        }
-        
-        private static void onUpdate(int from, int to, String message, boolean box)
-        {
-            doPrint(() -> System.out.println(">>> Updated:  [" + from + " -> " + to + "]"), null, message, box);
-        }
-        
-        private static <E> void onAdd(Permutation<E> permutation, String message, boolean box)
-        {
-            doPrint(() -> System.out.println(">>> Added:  [" + permutation + "]"), null, message, box);
-        }
-        
-        private static <E> void onRemove(Permutation<E> permutation, String message, boolean box)
-        {
-            doPrint(() -> System.out.println(">>> Removed:  [" + permutation + "]"), null, message, box);
-        }
-        
-        private static void doPrint(@NotNull Runnable prints, @Nullable String title, @Nullable String footer, boolean box)
-        {
-            if (box) {
-                System.out.println();
-                System.out.println();
-                System.out.println();
-                System.out.println("------------------------------------------------------------");
-            }
-            
-            if (title != null) {
-                if (!box)
-                    System.out.println("------------------------------------------------------------");
-                System.out.println("::: " + title.toUpperCase() + " :::");
-                System.out.println("------------------------------------------------------------");
-                System.out.println();
-            }
-            
-            //
-            
-            prints.run();
-            
-            //
-            
-            if (footer != null) {
-                if (box && title != null) {
-                    System.out.println();
-                    System.out.println("" + footer + "");
-                } else
-                    System.out.println("    > " + footer);
-            }
-            if (box) {
-                if (footer == null)
-                    System.out.println();
-                System.out.println("------------------------------------------------------------");
-                System.out.println();
-                System.out.println();
-                System.out.println();
-            }
-        }
-    }
-    
-    //</editor-fold>
-    
-    //
+
     
     // <editor-fold desc="Add/Remove">
     
@@ -1359,8 +625,7 @@ public class ArrayTools
      *
      * @throws NullPointerException if the specified {@code List} is null.
      */
-    public static <T> void add(List<T> list, T obj)
-    {
+    public static <T> void add(List<T> list, T obj) {
         if (!list.contains(obj))
             list.add(obj);
     }
@@ -1378,8 +643,7 @@ public class ArrayTools
      *
      * @throws NullPointerException If the {@code List} or {@code Predicate} is {@code null}.
      */
-    public static <T> void addIf(List<T> list, Predicate<T> condition, T obj)
-    {
+    public static <T> void addIf(List<T> list, Predicate<T> condition, T obj) {
         if (condition.test(obj))
             list.add(obj);
     }
@@ -1403,8 +667,7 @@ public class ArrayTools
      */
     @SafeVarargs
     @SuppressWarnings("varargs")
-    public static <T> void addIf(List<T> list, Predicate<T> condition, Lock lock, T... objs)
-    {
+    public static <T> void addIf(List<T> list, Predicate<T> condition, Lock lock, T... objs) {
         if (lock != null)
             for (T o: objs)
                 addIf(list, condition, o);
@@ -1420,8 +683,7 @@ public class ArrayTools
      * @param obj  The {@link T element} being added.
      * @param <T>  The type of {@link T element} being added.
      */
-    public static <T> void addToFront(List<T> list, T obj)
-    {
+    public static <T> void addToFront(List<T> list, T obj) {
         ExceptionTools.nullCheck(list, "List").add(0, ExceptionTools.nullCheck(obj, "Object Param"));
     }
     
@@ -1451,8 +713,7 @@ public class ArrayTools
      *
      * @throws NullPointerException If the specified {@code List} is {@code null}.
      */
-    public static <T> boolean insertAfter(List<T> list, T searchElement, T objToInsert)
-    {
+    public static <T> boolean insertAfter(List<T> list, T searchElement, T objToInsert) {
         throw ExceptionTools.nyi();
     } // TODO
     
@@ -1478,8 +739,7 @@ public class ArrayTools
      *
      * @throws NullPointerException If the specified {@code List} is {@code null}.
      */
-    public static <T> boolean insertBefore(List<T> list, T searchElement, T objToInsert)
-    {
+    public static <T> boolean insertBefore(List<T> list, T searchElement, T objToInsert) {
         throw ExceptionTools.nyi();
     } // TODO
     
@@ -1491,8 +751,7 @@ public class ArrayTools
      * @see #insertBefore(List, Object, Object)
      * @see #insertAfter(List, Object, Object)
      */
-    public enum InsertType
-    {
+    public enum InsertType {
         BEFORE, AFTER
     } // TODO - Implement into applicable methods.
     
@@ -1506,8 +765,7 @@ public class ArrayTools
      * @param list The {@link Collection}.
      * @param <T>  The type of elements in the host {@link Collection}.
      */
-    public static <T> void removeNull(Collection<T> list)
-    {
+    public static <T> void removeNull(Collection<T> list) {
         list.removeIf(element -> element == null);
     }
     
@@ -1520,8 +778,7 @@ public class ArrayTools
      * @param sourceArr The array being shifted.
      * @param <T>       The type of elements inside the array.
      */
-    public static <T> List<T> removeNull(T[] sourceArr)
-    {
+    public static <T> List<T> removeNull(T[] sourceArr) {
         if (sourceArr != null) {
             final ArrayList<T> list = new ArrayList<>(sourceArr.length);
             
@@ -1537,8 +794,7 @@ public class ArrayTools
     
     //
     
-    public static <V> boolean remove(Map<?, V> map, V obj)
-    {
+    public static <V> boolean remove(Map<?, V> map, V obj) {
         ExceptionTools.nullCheck(map, "Map");
         ExceptionTools.nullCheck(obj, "Object to Remove");
         //        ConsoleBB.CONSOLE.dev("Removing \"" + obj + "\" from \"" + map + "\"");
@@ -1547,8 +803,7 @@ public class ArrayTools
         return map.values().removeAll(Collections.singleton(obj));
     }
     
-    public static <V> boolean removeFirst(Map<?, V> map, V obj)
-    {
+    public static <V> boolean removeFirst(Map<?, V> map, V obj) {
         ExceptionTools.nullCheck(map, "Map");
         ExceptionTools.nullCheck(obj, "Object to Remove");
         
@@ -1570,8 +825,7 @@ public class ArrayTools
      *
      * @return True if the array contains the value, false otherwise.
      */
-    public static boolean contains(int value, int... array)
-    {
+    public static boolean contains(int value, int... array) {
         if (array != null)
             for (int i: array)
                 if (i == value)
@@ -1587,8 +841,7 @@ public class ArrayTools
      *
      * @return True if the array contains the key, false otherwise.
      */
-    public static boolean contains(short value, short... array)
-    {
+    public static boolean contains(short value, short... array) {
         if (array != null)
             for (short a: array)
                 if (a == value)
@@ -1604,8 +857,7 @@ public class ArrayTools
      *
      * @return True if the array contains the key, false otherwise.
      */
-    public static boolean contains(char value, char... array)
-    {
+    public static boolean contains(char value, char... array) {
         if (array != null)
             for (char a: array)
                 if (a == value)
@@ -1625,8 +877,7 @@ public class ArrayTools
      */
     @SafeVarargs
     @SuppressWarnings("varargs")
-    public static <T> boolean contains(T object, T... array)
-    {
+    public static <T> boolean contains(T object, T... array) {
         return array != null && Stream.of(array).anyMatch(e -> Objects.equals(e, object));
     }
     
@@ -1642,8 +893,7 @@ public class ArrayTools
      * based on the specified {@link Predicate}, false otherwise.
      */
     @SafeVarargs
-    public static <T> boolean contains(Predicate<T> filter, T... array)
-    {
+    public static <T> boolean contains(Predicate<T> filter, T... array) {
         if (array != null)
             for (T obj: array)
                 try {
@@ -1670,8 +920,7 @@ public class ArrayTools
      */
     @SafeVarargs
     @SuppressWarnings("varargs")
-    public static <T> boolean containsCompare(T object, Comparator<T> comparator, T... array)
-    {
+    public static <T> boolean containsCompare(T object, Comparator<T> comparator, T... array) {
         if (array != null && object != null)
             for (T obj: array)
                 if (obj != null && comparator.compare(object, obj) > 0)
@@ -1690,8 +939,7 @@ public class ArrayTools
      * @return True if the specified array contains any null elements, false otherwise.
      */
     @SafeVarargs
-    public static <T> boolean containsNull(T... array)
-    {
+    public static <T> boolean containsNull(T... array) {
         if (array != null)
             return Stream.of(array).anyMatch(e -> e == null);
         return false;
@@ -1709,8 +957,7 @@ public class ArrayTools
      * elements, false otherwise.
      */
     @SafeVarargs
-    public static <T> boolean containsAny(T[] array, T... elements)
-    {
+    public static <T> boolean containsAny(T[] array, T... elements) {
         return array != null && containsAny(Arrays.asList(array), elements);
     }
     
@@ -1727,8 +974,7 @@ public class ArrayTools
      * the specified elements, false otherwise.
      */
     @SafeVarargs
-    public static <T> boolean containsAny(Collection<T> collection, T... elements)
-    {
+    public static <T> boolean containsAny(Collection<T> collection, T... elements) {
         return collection != null && elements != null &&
                collection.stream().anyMatch(
                        e1 -> Stream.of(elements).anyMatch(
@@ -1746,8 +992,7 @@ public class ArrayTools
      * @return True if any of the specified array's contents matches the
      * specified {@link Predicate}, false otherwise.
      */
-    public static <T> boolean containsAnyMatching(T[] array, Predicate<T> filter)
-    {
+    public static <T> boolean containsAnyMatching(T[] array, Predicate<T> filter) {
         return array != null && Arrays.stream(array).anyMatch(filter);
     }
     
@@ -1764,8 +1009,7 @@ public class ArrayTools
      * contents matches the specified {@link Predicate}, false
      * otherwise.
      */
-    public static <T> boolean containsAnyMatching(Collection<T> collection, Predicate<T> filter)
-    {
+    public static <T> boolean containsAnyMatching(Collection<T> collection, Predicate<T> filter) {
         return collection != null && filter != null && collection.stream().anyMatch(filter);
     }
     
@@ -1781,8 +1025,7 @@ public class ArrayTools
      * elements, false otherwise.
      */
     @SafeVarargs
-    public static <T> boolean containsAll(T[] array, T... elements)
-    {
+    public static <T> boolean containsAll(T[] array, T... elements) {
         return array != null && elements != null && Arrays.asList(array).containsAll(Arrays.asList(elements));
     }
     
@@ -1801,8 +1044,7 @@ public class ArrayTools
      * @deprecated Because this method is inefficient - O(n^2)
      */
     @SafeVarargs
-    public static <T> boolean containsAll(Collection<T> collection, T... elements)
-    {
+    public static <T> boolean containsAll(Collection<T> collection, T... elements) {
         return collection != null && elements != null && collection.containsAll(Arrays.asList(elements));
     }
     
@@ -1816,8 +1058,7 @@ public class ArrayTools
      * @return True if the specified array of strings contains the specified
      * string (ignoring case), false otherwise.
      */
-    public static boolean containsString(String string, String... array)
-    {
+    public static boolean containsString(String string, String... array) {
         if (string != null && array != null)
             return Stream.of(array).anyMatch(p -> p != null && p.equalsIgnoreCase(string));
         return false;
@@ -1835,8 +1076,7 @@ public class ArrayTools
      * @return Whether the specified String is contained within any String that
      * is contained within the specified ArrayList of Strings.
      */
-    public static boolean containsStringPart(String string, String... arr)
-    {
+    public static boolean containsStringPart(String string, String... arr) {
         if (string == null || arr == null)
             return false;
         string = string.toLowerCase();
@@ -1860,8 +1100,7 @@ public class ArrayTools
      *
      * @deprecated Because this method is inefficient - O(n^n)
      */
-    public static boolean containsStringPart(String[] strings, String... arr)
-    {
+    public static boolean containsStringPart(String[] strings, String... arr) {
         return strings != null && arr != null && java.util.stream.Stream.of(strings).anyMatch(p -> p != null
                                                                                                    && java.util.stream.Stream.of(arr).anyMatch(p2 -> p2 != null && p.toLowerCase().contains(p2)));
     }
@@ -1882,8 +1121,7 @@ public class ArrayTools
      *
      * @deprecated Because this method is inefficient - O(n^n)
      */
-    public static boolean containsStringPart(ArrayList<String> strings, String... arr)
-    {
+    public static boolean containsStringPart(ArrayList<String> strings, String... arr) {
         return strings != null && arr != null && strings.stream().anyMatch(p -> p != null
                                                                                 && java.util.stream.Stream.of(arr).anyMatch(p2 -> p2 != null && p.toLowerCase().contains(p2)));
     }
@@ -1898,8 +1136,7 @@ public class ArrayTools
      * @return true if the specified name is contained in the specified array of
      * Enums.
      */
-    public static boolean containsEnum(String value, Enum[] arr)
-    {
+    public static boolean containsEnum(String value, Enum[] arr) {
         return value != null && arr != null
                && java.util.stream.Stream.of(arr).anyMatch(p -> p != null && p.name().equals(value));
     }
@@ -1909,8 +1146,7 @@ public class ArrayTools
      * <p>Any removed elements should be added to a List, which is then returned upon method completion.</p>
      */
     // TO-DOC
-    public static <T> List<Object> purge(@NotNull Collection<Object> collection, @NotNull Class<T> clazz)
-    {
+    public static <T> List<Object> purge(@NotNull Collection<Object> collection, @NotNull Class<T> clazz) {
         throw ExceptionTools.nyi();
     }
     
@@ -1924,8 +1160,7 @@ public class ArrayTools
      * @return True if the specified {@link Collection} contains elements of the specified {@link Class type} matching conditions defined by the additional parameters, false if it does not.
      */
     // TO-EXPAND
-    public static boolean containsTypeAll(@NotNull Collection<?> collection, @NotNull Class<?> clazz)
-    {
+    public static boolean containsTypeAll(@NotNull Collection<?> collection, @NotNull Class<?> clazz) {
         return containsType(collection, clazz, false, false, true);
     }
     
@@ -1939,8 +1174,7 @@ public class ArrayTools
      * @return True if the specified {@link Collection} contains elements of the specified {@link Class type} matching conditions defined by the additional parameters, false if it does not.
      */
     // TO-EXPAND
-    public static boolean containsTypeAny(@NotNull Collection<?> collection, @NotNull Class<?> clazz)
-    {
+    public static boolean containsTypeAny(@NotNull Collection<?> collection, @NotNull Class<?> clazz) {
         return containsType(collection, clazz, false, false, false);
     }
     
@@ -1956,8 +1190,7 @@ public class ArrayTools
      *
      * @return True if the specified {@link Collection} contains elements of the specified {@link Class type} matching conditions defined by the additional parameters, false if it does not.
      */
-    public static boolean containsType(@NotNull Collection<?> collection, @NotNull Class<?> clazz, boolean allowNullElements, boolean allowEmpty, boolean requireAll)
-    {
+    public static boolean containsType(@NotNull Collection<?> collection, @NotNull Class<?> clazz, boolean allowNullElements, boolean allowEmpty, boolean requireAll) {
         // If the collection instance is null, throw a NPE.
         // If the collection is empty, return the value of the specified allowEmpty boolean.
         if (ExceptionTools.nullCheck(collection, "Collection Parameter").isEmpty())
@@ -2005,8 +1238,7 @@ public class ArrayTools
      *
      * @throws NullPointerException If the specified {@code Collection} is null.
      */
-    public static <V> ArrayList<V> copy(Collection<V> collection)
-    {
+    public static <V> ArrayList<V> copy(Collection<V> collection) {
         return new ArrayList<>(ExceptionTools.nullCheck(collection, "Collection"));
     }
     
@@ -2022,8 +1254,7 @@ public class ArrayTools
      *
      * @throws NullPointerException If the specified {@code Map} is null.
      */
-    public static <K, V> Map<K, V> copy(Map<K, V> map)
-    {
+    public static <K, V> Map<K, V> copy(Map<K, V> map) {
         HashMap<K, V> _map = new HashMap<>(ExceptionTools.nullCheck(map, "Map").size());
         _map.putAll(map);
         return _map;
@@ -2042,8 +1273,7 @@ public class ArrayTools
      *
      * @return An array representing the list.
      */
-    public static String[] toArrayString(List<String> list)
-    {
+    public static String[] toArrayString(List<String> list) {
         if (list == null)
             return new String[0];
         else
@@ -2059,8 +1289,7 @@ public class ArrayTools
      *
      * @return An array representing the list.
      */
-    public static int[] toArrayInt(List<Integer> list)
-    {
+    public static int[] toArrayInt(List<Integer> list) {
         if (list == null)
             return new int[0];
         else {
@@ -2080,8 +1309,7 @@ public class ArrayTools
      *
      * @return An array representing the list.
      */
-    public static double[] toArrayDouble(List<Double> list)
-    {
+    public static double[] toArrayDouble(List<Double> list) {
         if (list == null)
             return new double[0];
         else {
@@ -2101,8 +1329,7 @@ public class ArrayTools
      *
      * @return An array representing the list.
      */
-    public static long[] toArrayLong(List<Long> list)
-    {
+    public static long[] toArrayLong(List<Long> list) {
         if (list == null)
             return new long[0];
         else {
@@ -2122,8 +1349,7 @@ public class ArrayTools
      *
      * @return An array representing the list.
      */
-    public static boolean[] toArrayBoolean(List<Boolean> list)
-    {
+    public static boolean[] toArrayBoolean(List<Boolean> list) {
         if (list == null)
             return new boolean[0];
         final boolean[] arr = new boolean[list.size()];
@@ -2140,8 +1366,7 @@ public class ArrayTools
      *
      * @return The converted array.
      */
-    public static int[] toArray(Integer[] arr)
-    {
+    public static int[] toArray(Integer[] arr) {
         if (arr == null)
             return null;
         final int[] primArr = new int[arr.length];
@@ -2163,8 +1388,7 @@ public class ArrayTools
      *
      * @return The converted array.
      */
-    public static long[] toArray(Long[] arr)
-    {
+    public static long[] toArray(Long[] arr) {
         if (arr == null)
             return null;
         final long[] primArr = new long[arr.length];
@@ -2186,8 +1410,7 @@ public class ArrayTools
      *
      * @return The converted array.
      */
-    public static double[] toArray(Double[] arr)
-    {
+    public static double[] toArray(Double[] arr) {
         if (arr == null)
             return null;
         final double[] primArr = new double[arr.length];
@@ -2209,8 +1432,7 @@ public class ArrayTools
      *
      * @return The converted array.
      */
-    public static boolean[] toArray(Boolean[] arr)
-    {
+    public static boolean[] toArray(Boolean[] arr) {
         if (arr == null)
             return null;
         final boolean[] primArr = new boolean[arr.length];
@@ -2232,8 +1454,7 @@ public class ArrayTools
      *
      * @return The converted array.
      */
-    public static char[] toArray(Character[] arr)
-    {
+    public static char[] toArray(Character[] arr) {
         if (arr == null)
             return null;
         final char[] primArr = new char[arr.length];
@@ -2255,8 +1476,7 @@ public class ArrayTools
      *
      * @return The converted array.
      */
-    public static Integer[] toArray(int[] primArr)
-    {
+    public static Integer[] toArray(int[] primArr) {
         if (primArr == null)
             return null;
         final Integer[] arr = new Integer[primArr.length];
@@ -2273,8 +1493,7 @@ public class ArrayTools
      *
      * @return The converted array.
      */
-    public static Long[] toArray(long[] primArr)
-    {
+    public static Long[] toArray(long[] primArr) {
         if (primArr == null)
             return null;
         final Long[] arr = new Long[primArr.length];
@@ -2291,8 +1510,7 @@ public class ArrayTools
      *
      * @return The converted array.
      */
-    public static Double[] toArray(double[] primArr)
-    {
+    public static Double[] toArray(double[] primArr) {
         if (primArr == null)
             return null;
         final Double[] arr = new Double[primArr.length];
@@ -2309,8 +1527,7 @@ public class ArrayTools
      *
      * @return The converted array.
      */
-    public static Character[] toArray(char[] primArr)
-    {
+    public static Character[] toArray(char[] primArr) {
         if (primArr == null)
             return null;
         final Character[] arr = new Character[primArr.length];
@@ -2334,8 +1551,7 @@ public class ArrayTools
      * simple class name} of each element of the array, using the
      * default toString method of {@link List}.
      */
-    public static String toString(Object... arr)
-    {
+    public static String toString(Object... arr) {
         return toString(Arrays.asList(arr));
     }
     
@@ -2350,8 +1566,7 @@ public class ArrayTools
      * simple class name} of each element of the list, using the default
      * toString method of {@link List}.
      */
-    public static <T> String toString(List<T> list)
-    {
+    public static <T> String toString(List<T> list) {
         Iterator<T> it = list.iterator();
         if (!it.hasNext())
             return "";
@@ -2379,8 +1594,7 @@ public class ArrayTools
      * simple class name} of each element of the array, using the
      * default toString method of {@link List}.
      */
-    public static String toClassString(Object... arr)
-    {
+    public static String toClassString(Object... arr) {
         return toClassString(Arrays.asList(arr));
     }
     
@@ -2395,8 +1609,7 @@ public class ArrayTools
      * simple class name} of each element of the list, using the default
      * toString method of {@link List}.
      */
-    public static String toClassString(List list)
-    {
+    public static String toClassString(List list) {
         if (list != null) {
             ArrayList<String> stringArr = new ArrayList<>(list.size());
             for (Object obj: list)
@@ -2412,42 +1625,35 @@ public class ArrayTools
     
     //<editor-fold desc="Classes">
     
-    public static class PlaceElement<T>
-    {
+    public static class PlaceElement<T> {
         
         private final int index;
         private final int maxIndex;
         private final T element;
         
-        public PlaceElement(int index, T element)
-        {
+        public PlaceElement(int index, T element) {
             this(index, -1, element);
         }
         
-        public PlaceElement(int index, int maxIndex, T element)
-        {
+        public PlaceElement(int index, int maxIndex, T element) {
             this.index = index;
             this.maxIndex = maxIndex;
             this.element = element;
         }
     }
     
-    public interface ElementFilter<T>
-    {
+    public interface ElementFilter<T> {
         boolean accept(T element);
     }
     
-    public interface ElementCopier<P, R>
-    {
+    public interface ElementCopier<P, R> {
         R copy(int index, P p);
     }
     
     //
     
-    public static class Advanced
-    {
-        private Advanced()
-        {
+    public static class Advanced {
+        private Advanced() {
         } // No instance
         
         /**
@@ -2469,8 +1675,7 @@ public class ArrayTools
          * @param stopPoints The array of stop points.
          * @param <T>        The type of elements inside the array.
          */
-        public static <T> void shift(T[] arr, int... stopPoints)
-        {
+        public static <T> void shift(T[] arr, int... stopPoints) {
             if (arr != null && stopPoints != null && stopPoints.length > 0) {
                 Arrays.sort(stopPoints);
                 stopPoints = concat(concat(new int[]{0}, stopPoints), new int[]{arr.length});
@@ -2482,7 +1687,7 @@ public class ArrayTools
                         int furthestLeftNonNull;
                         while ((furthestLeftNull = getFurthestLeft(nextStopPoint, j, true,
                                                                    arr
-                        )) < (furthestLeftNonNull = getFurthestLeft(nextStopPoint, j, false, arr))) {
+                                                                  )) < (furthestLeftNonNull = getFurthestLeft(nextStopPoint, j, false, arr))) {
                             arr[furthestLeftNull] = arr[furthestLeftNonNull];
                             arr[furthestLeftNonNull] = null;
                         }
@@ -2507,8 +1712,7 @@ public class ArrayTools
          *
          * @return True if the shift was successful, false otherwise.
          */
-        public static <T> boolean shiftExact(T[] arr, int minIndex, int maxIndex, int spaces, boolean safe)
-        {
+        public static <T> boolean shiftExact(T[] arr, int minIndex, int maxIndex, int spaces, boolean safe) {
             maxIndex = maxIndex == -1 ? arr.length : maxIndex;
             if (safe)
                 for (int i = minIndex - spaces; i < minIndex; i++) {
@@ -2537,8 +1741,7 @@ public class ArrayTools
          *
          * @return True if the space was made, false otherwise.
          */
-        public static <T> boolean spread(T[] arr, int index, int spaces, boolean safe)
-        {
+        public static <T> boolean spread(T[] arr, int index, int spaces, boolean safe) {
             if (safe)
                 for (int i = arr.length - 1; i >= arr.length - spaces; i--)
                     if (arr[i] != null)
@@ -2577,8 +1780,7 @@ public class ArrayTools
          * @param <T>      The type of elements inside the array.
          */
         @SafeVarargs
-        public static <T> void place(T[] arr, PlaceElement<T>... elements)
-        {
+        public static <T> void place(T[] arr, PlaceElement<T>... elements) {
             for (int i = 0; i < elements.length; i++) {
                 PlaceElement<T> currentElement = elements[i];
                 int currentIndex = currentElement.index;
@@ -2610,8 +1812,7 @@ public class ArrayTools
          * @return True if the element was inserted successfully, false
          * otherwise.
          */
-        public static <T> boolean insert(T[] arr, T element, int index, boolean safe)
-        {
+        public static <T> boolean insert(T[] arr, T element, int index, boolean safe) {
             if (spread(arr, index, 1, safe)) {
                 arr[index] = element;
                 return true;
@@ -2639,8 +1840,7 @@ public class ArrayTools
          *
          * @return True if the element was successfully moved, false otherwise.
          */
-        public static <T> boolean move(T[] arr1, T[] arr2, int index1, int index2, int stopShiftAt, boolean safe)
-        {
+        public static <T> boolean move(T[] arr1, T[] arr2, int index1, int index2, int stopShiftAt, boolean safe) {
             T obj = arr1[index1];
             if (insert(arr2, obj, index2, safe)) {
                 arr1[index1] = null;
@@ -2672,8 +1872,7 @@ public class ArrayTools
          *
          * @return True if the element was successfully moved, false otherwise.
          */
-        public static <T> boolean move(T[] arr1, T[] arr2, T obj, int index, int stopShiftAt, boolean safe)
-        {
+        public static <T> boolean move(T[] arr1, T[] arr2, T obj, int index, int stopShiftAt, boolean safe) {
             return move(arr1, arr2, indexOf(obj, arr1), index, stopShiftAt, safe);
         }
         
@@ -2691,8 +1890,7 @@ public class ArrayTools
          * have been copied into it. Note that this method does
          * <i>not</i> create a new array.
          */
-        public static <T, Z> Z[] copyInto(T[] sourceArr, Z[] targetArr, ElementCopier<T, Z> copier)
-        {
+        public static <T, Z> Z[] copyInto(T[] sourceArr, Z[] targetArr, ElementCopier<T, Z> copier) {
             return copyInto(sourceArr, targetArr, copier, null);
         }
         
@@ -2714,8 +1912,7 @@ public class ArrayTools
          */
         public static <T, Z> Z[] copyInto(
                 T[] sourceArr, Z[] targetArr, ElementCopier<T, Z> copier,
-                Supplier<Z> onNull)
-        {
+                Supplier<Z> onNull) {
             if (sourceArr == null)
                 throw ExceptionTools.ex(new NullPointerException("Source array cannot be null"));
             else if (targetArr == null)

@@ -1,4 +1,4 @@
-package com.taco.suit_lady.util.tools.fxtools;
+package com.taco.suit_lady.util.tools.fx_tools;
 
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
