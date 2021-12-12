@@ -1,6 +1,6 @@
 package com.taco.suit_lady.view.ui.jfx.components;
 
-import com.taco.suit_lady.util.tools.fxtools.FXTools;
+import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;

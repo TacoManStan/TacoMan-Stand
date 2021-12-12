@@ -4,7 +4,7 @@ import com.taco.suit_lady.util.Validatable;
 import com.taco.suit_lady.util.tools.ArrayTools;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.TB;
-import com.taco.suit_lady.util.tools.fxtools.FXTools;
+import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import com.taco.suit_lady.view.ui.jfx.lists.CellControlManager;
 import com.taco.suit_lady.view.ui.jfx.lists.TreeCellFX;
 import com.taco.suit_lady.view.ui.ui_internal.controllers.CellController;

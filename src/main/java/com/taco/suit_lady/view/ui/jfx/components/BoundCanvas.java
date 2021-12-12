@@ -2,8 +2,7 @@ package com.taco.suit_lady.view.ui.jfx.components;
 
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.TaskTools;
-import com.taco.suit_lady.util.tools.fxtools.FXTools;
+import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;

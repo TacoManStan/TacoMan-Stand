@@ -1,6 +1,6 @@
 package com.taco.suit_lady.util.tools;
 
-import com.taco.suit_lady.util.tools.fxtools.FXTools;
+import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 
 public class TB // Stands for ToolBox
 {

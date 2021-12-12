@@ -3,7 +3,7 @@ package com.taco.suit_lady.view.ui.ui_internal.contents.mandelbrot;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.view.ui.jfx.components.BoundCanvas;
-import com.taco.suit_lady.util.tools.fxtools.FXTools;
+import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import com.taco.suit_lady.view.ui.jfx.components.CanvasPane;
 import com.taco.suit_lady.view.ui.ui_internal.ContentController;
 import javafx.fxml.FXML;

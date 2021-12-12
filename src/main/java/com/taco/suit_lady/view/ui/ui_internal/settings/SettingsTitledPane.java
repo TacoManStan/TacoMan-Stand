@@ -1,6 +1,6 @@
 package com.taco.suit_lady.view.ui.ui_internal.settings;
 
-import com.taco.suit_lady.util.tools.fxtools.FXTools;
+import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import com.taco.suit_lady.view.ui.ui_internal.controllers.SettingGroupController;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.collections.ListChangeListener;

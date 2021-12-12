@@ -6,7 +6,7 @@ import com.taco.suit_lady.util.tools.TB;
 import com.taco.suit_lady.util.tools.TaskTools;
 import com.taco.suit_lady.view.ui.UIBook;
 import com.taco.suit_lady.view.ui.jfx.components.BoundCanvas;
-import com.taco.suit_lady.util.tools.fxtools.FXTools;
+import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import com.taco.suit_lady.view.ui.jfx.components.RectanglePaintCommand;
 import com.taco.suit_lady.view.ui.ui_internal.AppUI;
 import com.taco.suit_lady.view.ui.ui_internal.Content;

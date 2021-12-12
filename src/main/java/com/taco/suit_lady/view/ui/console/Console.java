@@ -4,7 +4,7 @@ import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.BindingTools;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.TB;
-import com.taco.suit_lady.util.tools.fxtools.FXTools;
+import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import com.taco.suit_lady.view.ui.jfx.lists.treehandler.TreeCellData;
 import com.taco.suit_lady.view.ui.jfx.lists.treehandler.TreeLoader;
 import com.taco.suit_lady.view.ui.jfx.lists.treehandler.WrappingTreeLoader;

@@ -37,7 +37,7 @@ public class OverlayHandler
         
         this.rootPane = new StackPane();
         
-        ArrayTools.applyChangeListener();
+//        ArrayTools.applyListListener(lock, overlays(), );
     
 //        ArrayTools.applyChangeListener(lock, overlays,);
         
