@@ -111,33 +111,33 @@ public final class ListTools {
             //
             
             @Override
-            public void onPermutateBefore() {
-                listener.onPermutateBefore();
+            public void onPrePermutate() {
+                listener.onPrePermutate();
             }
             
             @Override
-            public void onPermutateAfter() {
-                listener.onPermutateAfter();
+            public void onPostPermutate() {
+                listener.onPostPermutate();
             }
             
             @Override
-            public void onAddBefore() {
-                listener.onAddBefore();
+            public void onPreAdd() {
+                listener.onPreAdd();
             }
             
             @Override
-            public void onAddAfter() {
-                listener.onAddAfter();
+            public void onPostAdd() {
+                listener.onPostAdd();
             }
             
             @Override
-            public void onRemoveBefore() {
-                listener.onRemoveBefore();
+            public void onPreRemove() {
+                listener.onPreRemove();
             }
             
             @Override
-            public void onRemoveAfter() {
-                listener.onRemoveAfter();
+            public void onPostRemove() {
+                listener.onPostRemove();
             }
             
             @Override
@@ -156,24 +156,24 @@ public final class ListTools {
     public interface SimpleOperationListener<E> extends OperationListener<E> {
         
         @Override
-        default void onPermutateBefore() { }
+        default void onPrePermutate() { }
         
         @Override
-        default void onPermutateAfter() { }
-        
-        
-        @Override
-        default void onAddBefore() { }
-        
-        @Override
-        default void onAddAfter() { }
+        default void onPostPermutate() { }
         
         
         @Override
-        default void onRemoveBefore() { }
+        default void onPreAdd() { }
         
         @Override
-        default void onRemoveAfter() { }
+        default void onPostAdd() { }
+        
+        
+        @Override
+        default void onPreRemove() { }
+        
+        @Override
+        default void onPostRemove() { }
     }
     
     //
@@ -212,32 +212,32 @@ public final class ListTools {
         //<editor-fold desc="--- BEFORE/AFTER ---">
         
         @Override
-        default void onPermutateBefore() {
+        default void onPrePermutate() {
             respond(null, null, OperationType.PERMUTATION, TriggerType.PRE_CHANGE);
         }
         
         @Override
-        default void onPermutateAfter() {
+        default void onPostPermutate() {
             respond(null, null, OperationType.PERMUTATION, TriggerType.POST_CHANGE);
         }
         
         @Override
-        default void onAddBefore() {
+        default void onPreAdd() {
             respond(null, null, OperationType.ADDITION, TriggerType.PRE_CHANGE);
         }
         
         @Override
-        default void onAddAfter() {
+        default void onPostAdd() {
             respond(null, null, OperationType.ADDITION, TriggerType.POST_CHANGE);
         }
         
         @Override
-        default void onRemoveBefore() {
+        default void onPreRemove() {
             respond(null, null, OperationType.REMOVAL, TriggerType.PRE_CHANGE);
         }
         
         @Override
-        default void onRemoveAfter() {
+        default void onPostRemove() {
             respond(null, null, OperationType.REMOVAL, TriggerType.POST_CHANGE);
         }
         

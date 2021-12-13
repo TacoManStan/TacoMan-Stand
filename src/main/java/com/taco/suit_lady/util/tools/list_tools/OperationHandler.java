@@ -7,7 +7,6 @@ import com.taco.suit_lady.util.tools.ArrayTools;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.TaskTools;
 import com.taco.suit_lady.util.tools.list_tools.Operation.OperationType;
-import com.taco.suit_lady.util.tools.list_tools.Operation.TriggerType;
 import com.taco.util.obj_traits.common.Nameable;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -28,7 +27,6 @@ import java.util.stream.IntStream;
 
 /**
  * <p>An abstract implementation of both {@link ListChangeListener} and {@link OperationListener}.</p>
- * <hr>
  * <h2>Details</h2>
  * <ol>
  *     <li>
@@ -39,14 +37,6 @@ import java.util.stream.IntStream;
  *     </li>
  *     <li>The primary function of {@link OperationHandler} is to streamline the event data provided by <i>{@link ListChangeListener#onChanged(Change) ListChangeListener#onChanged(Change)}</i>.</li>
  *     <li>{@link OperationHandler} uses {@link Operation} records to communicate a {@link Change Change Event}.</li>
- *     <li>
- *         By default, an {@link OperationHandler} will attempt to detect {@link ObservableList} {@link #onAdd(Operation) add} and {@link #onRemove(Operation) remove} operations that are functionally {@link OperationType#PERMUTATION permutations}
- *         — e.g. <i>{@link Collections}<b>.</b>{@link Collections#shuffle(List) shuffle}<b>(</b>{@link List}<b>)</b></i>.
- *         <ul>
- *             <li>If such an {@link Operation} exists, the {@link OperationType#ADDITION add} and {@link OperationType#REMOVAL remove} operations that comprise the inferred {@link OperationType#PERMUTATION permutation} are no longer triggered as {@link OperationType#ADDITION add} or {@link OperationType#REMOVAL remove} events, but rather converted and submitted as a single {@link OperationType#PERMUTATION permutation} event.</li>
- *             <li>To disable automatic {@link OperationType#PERMUTATION permutation} conversions, set <i>{@link #isSmartConvertProperty()}</i> to {@code false}.</li>
- *         </ul>
- *     </li>
  * </ol>
  * <hr>
  * <h2>Auto Conversion</h2>
@@ -56,9 +46,9 @@ import java.util.stream.IntStream;
  * </p>
  * <ol>
  *     <li>If such an {@link Operation} exists, the {@link OperationType#ADDITION add} and {@link OperationType#REMOVAL remove} operations that comprise the inferred {@link OperationType#PERMUTATION permutation} are no longer triggered as {@link OperationType#ADDITION add} or {@link OperationType#REMOVAL remove} events, but rather converted and submitted as a single {@link OperationType#PERMUTATION permutation} event.</li>
- *     <li>To disable automatic {@link OperationType#PERMUTATION permutation} conversions, set <i>{@link #isSmartConvertProperty()}</i> to {@code false}.</li>
+ *     <li>To disable automatic {@link OperationType#PERMUTATION permutation} conversions, set <i>{@link #isSmartConvertProperty() Smart Convert}</i> to {@code false}.</li>
  * </ol>
- * <h3>Known Functions</h3>
+ * <h3>Known Functions Behavior</h3>
  * <p>Below outline {@link List} manipulation functions and thir permutation behavior.</p>
  * <h4>With <u>Smart Convert</u> Permutation Event Support</h4>
  * <ol>
@@ -74,9 +64,7 @@ import java.util.stream.IntStream;
  * </ol>
  * <h3>Example Output</h3>
  * <p>Refer to {@link ListToolsDemo}.</p>
- * <h2>Operation Group Handling</h2>
- * <p>It is common for an {@link Operation} to be one of numerous {@link Operation opertions} that occurred in a single {@link Change Change Event} {@link Change#next() step}.</p>
- * <p></p>
+ *
  *
  * @param <E> The type of element contained within the {@link ObservableList list} that has been assigned to this {@link OperationHandler}.
  */
@@ -208,26 +196,26 @@ public abstract class OperationHandler<E>
     //<editor-fold desc="--- EVENT RESPONSE ---">
     
     @Override
-    public void onPermutateBefore() { }
+    public void onPrePermutate() { }
     
     @Override
-    public void onPermutateAfter() { }
+    public void onPostPermutate() { }
     
     //
     
     @Override
-    public void onAddBefore() { }
+    public void onPreAdd() { }
     
     @Override
-    public void onAddAfter() { }
+    public void onPostAdd() { }
     
     //
     
     @Override
-    public void onRemoveBefore() { }
+    public void onPreRemove() { }
     
     @Override
-    public void onRemoveAfter() { }
+    public void onPostRemove() { }
     
     //
     
@@ -274,8 +262,8 @@ public abstract class OperationHandler<E>
     
     private void onPermutateOperationInternal(boolean before) {
         TaskTools.sync(lock, () -> {
-            if (before) onPermutateBefore();
-            else onPermutateAfter();
+            if (before) onPrePermutate();
+            else onPostPermutate();
         }, true);
     }
     
@@ -283,14 +271,14 @@ public abstract class OperationHandler<E>
         TaskTools.sync(lock, () -> {
             if (add)
                 if (before)
-                    onAddBefore();
+                    onPreAdd();
                 else
-                    onAddAfter();
+                    onPostAdd();
             if (!add)
                 if (before)
-                    onRemoveBefore();
+                    onPreRemove();
                 else
-                    onRemoveAfter();
+                    onPostRemove();
         }, true);
     }
     
