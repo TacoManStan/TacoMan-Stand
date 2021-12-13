@@ -2,6 +2,7 @@ package com.taco.suit_lady.util.tools.list_tools;
 
 import com.taco.suit_lady.util.tools.list_tools.Operation.OperationType;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 
 import java.util.concurrent.locks.ReentrantLock;
@@ -42,26 +43,81 @@ public interface OperationListener<E> {
      * @param op  The primary {@link Operation}.
      * @param op2 The secondary {@link Operation}.
      */
+    //TO-EXPAND
     void onPermutate(Operation<E> op, Operation<E> op2);
     
+    /**
+     * <p>Executed <u>prior</u> to triggering all {@link OperationType#PERMUTATION permutation} operations that occurred in a single {@link Change Change Event} {@link Change#next() step}.</p>
+     * <p><b>Details</b></p>
+     * <ul>
+     *     <li>If no {@link OperationType#PERMUTATION permutation} operations occurred in the {@link Change Change Event}, {@link #onPermutateBefore() this method} is not called.</li>
+     * </ul>
+     */
     void onPermutateBefore();
     
+    /**
+     * <p>Executed <u>after</u> triggering all {@link OperationType#PERMUTATION permutation} operations that occurred in a single {@link Change Change Event} {@link Change#next() step}.</p>
+     * <p><b>Details</b></p>
+     * <ul>
+     *     <li>If no {@link OperationType#PERMUTATION permutation} operations occurred in the {@link Change Change Event}, {@link #onPermutateAfter() this method} is not called.</li>
+     * </ul>
+     */
     void onPermutateAfter();
     
     
+    //TO-DOC
     void onAdd(Operation<E> op);
     
+    /**
+     * <p>Executed <u>prior</u> to triggering all {@link OperationType#ADDITION addition} operations that occurred in a single {@link Change Change Event} {@link Change#next() step}.</p>
+     * <p><b>Details</b></p>
+     * <ul>
+     *     <li>If no {@link OperationType#ADDITION addition} operations occurred in the {@link Change Change Event}, {@link #onAddBefore() this method} is not called.</li>
+     * </ul>
+     */
     void onAddBefore();
     
+    /**
+     * <p>Executed <u>after</u> triggering all {@link OperationType#ADDITION addition} operations that occurred in a single {@link Change Change Event} {@link Change#next() step}.</p>
+     * <p><b>Details</b></p>
+     * <ul>
+     *     <li>If no {@link OperationType#ADDITION addition} operations occurred in the {@link Change Change Event}, {@link #onAddAfter() this method} is not called.</li>
+     * </ul>
+     */
     void onAddAfter();
     
     
+    //TO-DOC
     void onRemove(Operation<E> op);
     
+    /**
+     * <p>Executed <u>prior</u> to triggering all {@link OperationType#REMOVAL removal} operations that occurred in a single {@link Change Change Event} {@link Change#next() step}.</p>
+     * <p><b>Details</b></p>
+     * <ul>
+     *     <li>If no {@link OperationType#REMOVAL removal} operations occurred in the {@link Change Change Event}, {@link #onRemoveBefore() this method} is not called.</li>
+     * </ul>
+     */
     void onRemoveBefore();
     
+    /**
+     * <p>Executed <u>after</u> triggering all {@link OperationType#REMOVAL removal} operations that occurred in a single {@link Change Change Event} {@link Change#next() step}.</p>
+     * <p><b>Details</b></p>
+     * <ul>
+     *     <li>If no {@link OperationType#REMOVAL removal} operations occurred in the {@link Change Change Event}, {@link #onRemoveBefore() this method} is not called.</li>
+     * </ul>
+     */
     void onRemoveAfter();
     
     
+    /**
+     * <p>Executed once in response to a {@link OperationType#UPDATION updation} operation that occurred in a single {@link Change Change Event} {@link Change#next() step}.</p>
+     * <p><b>Details</b></p>
+     * <ul>
+     *     <li>List operations that utilize this event type are rare, and therefore this method typically be ignored in favor of {@link #onPermutate(Operation, Operation) permutate}, {@link #onAdd(Operation) add}, and {@link #onRemove(Operation) remove} event responses.</li>
+     * </ul>
+     *
+     * @param from
+     * @param to
+     */
     void onUpdate(int from, int to);
 }
