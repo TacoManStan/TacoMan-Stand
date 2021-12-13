@@ -1,10 +1,14 @@
 package com.taco.suit_lady.util.tools.list_tools;
 
+import com.taco.suit_lady.util.timing.Timer;
+import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import com.taco.suit_lady.util.tools.list_tools.ListTools.SimpleOperationListener;
 import com.taco.suit_lady.util.tools.list_tools.Operation.OperationType;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
+import javafx.scene.Node;
+import org.jetbrains.annotations.Contract;
 
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -21,6 +25,33 @@ import java.util.concurrent.locks.ReentrantLock;
  *         </ul>
  *     </li>
  *     <li>Various interface extensions of {@link OperationListener} exist to allow varying amounts and types of lambda factory input parameters.</li>
+ *     <li>
+ *         Keep in mind that {@link OperationListener} is bound by the same limitations as {@link ListChangeListener}.
+ *         <ul>
+ *             <li>This is primarily relevant for {@code multi-threaded} applications that might trigger concurrency problems if the list is modified in the middle of {@link Change Change Event} handling.</li>
+ *             <li>
+ *                 This is exceptionally important when using an {@link OperationListener} to track {@link Change changes} made to an {@link ObservableList} that is a member of a {@code JavaFX} {@link Node} object
+ *                 — This is because {@link OperationListener} events should be handled in a {@code background thread}, whereas the {@code user} is still able to make {@link Change changes} to the {@link ObservableList list}
+ *                 via {@code JavaFX UI} input, which must always be immediately responsive.
+ *             </li>
+ *             <li>
+ *                 The two solutions to the aforementioned concurrency problem are as follows:
+ *                 <ol>
+ *                     <li>
+ *                         Perform all {@link OperationListener} event handling on the {@link FXTools#runFX(Runnable, boolean) JavaFX Thread}.
+ *                         <ul>
+ *                             <li>This is a viable solution <i>only</i> if <i>all</i> event handling operations are bound by {@link Contract contract} to complete execution instantaneously.</li>
+ *                             <li>
+ *                                 When using this strategy, it is recommended to use a {@link Timer} to automatically break out of the event handling operation if the {@link Timer} is active for too long.
+ *                                 Should the {@link Timer} expire, a {@link RuntimeException} should be thrown to indicate the event handling has been done incorrectly.
+ *                             </li>
+ *                         </ul>
+ *                     </li>
+ *                     <li>Listen to a <i>copy</i> of the {@code JavaFX} {@link ObservableList} and then synchronize the copy to the original using a {@link ReentrantLock}. TO-EXPAND</li>
+ *                 </ol>
+ *             </li>
+ *         </ul>
+ *     </li>
  * </ol>
  * <hr>
  * <h2>Operation Event Response Functions</h2>
@@ -60,6 +91,62 @@ import java.util.concurrent.locks.ReentrantLock;
  *         </ul>
  *     </li>
  * </ol>
+ * <hr>
+ * <h2>Examples</h2>
+ * <pre>{@code new OperationHandler<>(lock, name, list) {
+ *
+ *     @Override
+ *     public void onPermutate(Operation<E> op, Operation<E> op2) {
+ *         listener.onPermutate(op, op2);
+ *     }
+ *
+ *     @Override
+ *     public void onAdd(Operation<E> op) {
+ *         listener.onAdd(op);
+ *     }
+ *
+ *     @Override
+ *     public void onRemove(Operation<E> op) {
+ *         listener.onRemove(op);
+ *     }
+ *
+ *     //
+ *
+ *     @Override
+ *     public void onPrePermutate() {
+ *         listener.onPrePermutate();
+ *     }
+ *
+ *     @Override
+ *     public void onPostPermutate() {
+ *         listener.onPostPermutate();
+ *     }
+ *
+ *     @Override
+ *     public void onPreAdd() {
+ *         listener.onPreAdd();
+ *     }
+ *
+ *     @Override
+ *     public void onPostAdd() {
+ *         listener.onPostAdd();
+ *     }
+ *
+ *     @Override
+ *     public void onPreRemove() {
+ *         listener.onPreRemove();
+ *     }
+ *
+ *     @Override
+ *     public void onPostRemove() {
+ *         listener.onPostRemove();
+ *     }
+ *
+ *     @Override
+ *     public void onUpdate(int from, int to) {
+ *         listener.onUpdate(from, to);
+ *     }
+ * };}</pre>
  *
  * @param <E> The type of element in the {@link ObservableList} this {@link OperationListener} is listening to.
  */
