@@ -1,116 +1,175 @@
 package com.taco.suit_lady.util.tools.list_tools;
 
+import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.tools.ArrayTools;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.TaskTools;
+import com.taco.suit_lady.util.tools.list_tools.Operation.OperationType;
+import com.taco.suit_lady.util.tools.list_tools.Operation.TriggerType;
 import com.taco.util.obj_traits.common.Nameable;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+/**
+ * <p>An abstract implementation of both {@link ListChangeListener} and {@link OperationListener}.</p>
+ * <hr>
+ * <h2>Details</h2>
+ * <ol>
+ *     <li>
+ *         {@link OperationHandler} objects are constructed by <i>{@link ListTools}<b>.</b>{@link ListTools#wrap(ReentrantLock, String, ObservableList, OperationListener) wrap(...)}</i> and other factory methods in the {@link ListTools} utility class.
+ *         <ul>
+ *             <li>Most factory methods return a {@link OperationHandler} that was constructed using <i>{@link ListTools}<b>.</b>{@link ListTools#wrap(ReentrantLock, String, ObservableList, OperationListener) wrap(...)}</i>.</li>
+ *         </ul>
+ *     </li>
+ *     <li>The primary function of {@link OperationHandler} is to streamline the event data provided by <i>{@link ListChangeListener#onChanged(Change) ListChangeListener#onChanged(Change)}</i>.</li>
+ *     <li>{@link OperationHandler} uses {@link Operation} records to communicate a {@link Change Change Event}.</li>
+ *     <li>
+ *         By default, an {@link OperationHandler} will attempt to detect {@link ObservableList} {@link #onAdd(Operation) add} and {@link #onRemove(Operation) remove} operations that are functionally {@link OperationType#PERMUTATION permutations}
+ *         — e.g. <i>{@link Collections}<b>.</b>{@link Collections#shuffle(List) shuffle}<b>(</b>{@link List}<b>)</b></i>.
+ *         <ul>
+ *             <li>If such an {@link Operation} exists, the {@link OperationType#ADDITION add} and {@link OperationType#REMOVAL remove} operations that comprise the inferred {@link OperationType#PERMUTATION permutation} are no longer triggered as {@link OperationType#ADDITION add} or {@link OperationType#REMOVAL remove} events, but rather converted and submitted as a single {@link OperationType#PERMUTATION permutation} event.</li>
+ *             <li>To disable automatic {@link OperationType#PERMUTATION permutation} conversions, set <i>{@link #isSmartConvertProperty()}</i> to {@code false}.</li>
+ *         </ul>
+ *     </li>
+ * </ol>
+ * <hr>
+ * <h2>Auto Conversion</h2>
+ * <p>
+ *     By default, an {@link OperationHandler} will attempt to detect {@link ObservableList} {@link #onAdd(Operation) add} and {@link #onRemove(Operation) remove} operations that are functionally {@link OperationType#PERMUTATION permutations}
+ *     — e.g. <i>{@link Collections}<b>.</b>{@link Collections#shuffle(List) shuffle}<b>(</b>{@link List}<b>)</b></i>.
+ * </p>
+ * <ol>
+ *     <li>If such an {@link Operation} exists, the {@link OperationType#ADDITION add} and {@link OperationType#REMOVAL remove} operations that comprise the inferred {@link OperationType#PERMUTATION permutation} are no longer triggered as {@link OperationType#ADDITION add} or {@link OperationType#REMOVAL remove} events, but rather converted and submitted as a single {@link OperationType#PERMUTATION permutation} event.</li>
+ *     <li>To disable automatic {@link OperationType#PERMUTATION permutation} conversions, set <i>{@link #isSmartConvertProperty()}</i> to {@code false}.</li>
+ * </ol>
+ * <h3>Known Functions</h3>
+ * <p>Below outline {@link List} manipulation functions and thir permutation behavior.</p>
+ * <h4>With <u>Smart Convert</u> Permutation Event Support</h4>
+ * <ol>
+ *     <li>{@link FXCollections#shuffle(ObservableList)}</li>
+ * </ol>
+ * <h4>Without <u>Smart Convert</u> Permutation Event Support</h4>
+ * <ol>
+ *     <li>{@link Collections#shuffle(List)}</li>
+ * </ol>
+ * <h4>With <u>Native</u> Permutation Event Support</h4>
+ * <ol>
+ *     <li>{@link ArrayTools#sort(List)}</li>
+ * </ol>
+ * <h3>Example Output</h3>
+ * <p>Refer to {@link ListToolsDemo}.</p>
+ * <h2>Operation Group Handling</h2>
+ * <p>It is common for an {@link Operation} to be one of numerous {@link Operation opertions} that occurred in a single {@link Change Change Event} {@link Change#next() step}.</p>
+ * <p></p>
+ *
+ * @param <E> The type of element contained within the {@link ObservableList list} that has been assigned to this {@link OperationHandler}.
+ */
+// TO-EXPAND
 public abstract class OperationHandler<E>
-    implements OperationListener<E>, ListChangeListener<E>, Nameable, UIDProcessable {
+        implements OperationListener<E>, ListChangeListener<E>, Lockable, Nameable, UIDProcessable {
+    
+    private final ReentrantLock lock;
+    private final String name;
+    
+    private final ObservableList<E> list;
+    private final ReadOnlyObjectWrapper<List<E>> backingListProperty;
+    
+    private final BooleanProperty smartConvertProperty;
+    
+    protected OperationHandler(@Nullable ReentrantLock lock, @Nullable String name, @NotNull ObservableList<E> list) {
+        this.lock = lock;
+        this.name = name;
         
-        private final ReentrantLock lock;
-        private final String name;
+        this.list = list;
+        this.backingListProperty = new ReadOnlyObjectWrapper<>();
         
-        private final ObservableList<E> list;
-        private final ReadOnlyObjectWrapper<List<E>> backingListProperty;
-        
-        //<editor-fold desc="--- CONSTRUCTORS ---">
-        
-        protected OperationHandler(@NotNull ObservableList < E > list) {
-            this(null, null, list);
-        }
-        
-        protected OperationHandler(@Nullable String name, @NotNull ObservableList < E > list) {
-            this(null, name, list);
-        }
-        
-        protected OperationHandler(@Nullable ReentrantLock lock, @NotNull ObservableList<E> list) {
-            this(lock, null, list);
-        }
-        
-        protected OperationHandler(@Nullable ReentrantLock lock, @Nullable String name, @NotNull ObservableList<E> list) {
-            this.lock = lock;
-            this.name = name;
-            
-            this.list = list;
-            this.backingListProperty = new ReadOnlyObjectWrapper<>();
-        }
-        
-        //</editor-fold>
-        
-        @SafeVarargs
-        public final @Nullable Operation<E> getByIndex(int index, boolean to, List<Operation<E>> @NotNull ... lists) {
-            for (List<Operation<E>> list: lists) {
-                Operation<E> p = list.stream().filter(
-                        operation -> (!to && operation.movedFromIndex() == index) || (to && operation.movedToIndex() == index)).findFirst().orElse(null);
-                if (p != null)
-                    return p;
-            }
-            return null;
-        }
-        
-        public final OperationHandler<E> apply() {
-            refresh();
-            ExceptionTools.nullCheck(list, "Observable List").addListener(ExceptionTools.nullCheck(this, "List Listener"));
-            return this;
-        }
-        
-        
-        //<editor-fold desc="--- IMPLEMENTATIONS ---">
-        
-        @Override
-        public final void onChanged(Change<? extends E> change) {
-            TaskTools.sync(lock, () -> {
-                while (change.next())
-                    if (change.wasPermutated()) {
-                        onPermutateOperationInternal(true);
+        this.smartConvertProperty = new SimpleBooleanProperty(false);
+    }
+    
+    //<editor-fold desc="--- PROPERTIES  ---
+    
+    public final ObservableList<E> getList() {
+        return list;
+    }
+    
+    
+    public final BooleanProperty isSmartConvertProperty() {
+        return smartConvertProperty;
+    }
+    
+    public final boolean isSmartConvert() {
+        return smartConvertProperty.get();
+    }
+    
+    public final void setSmartConvert(boolean smartConvert) {
+        smartConvertProperty.set(smartConvert);
+    }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+    @Override
+    public @NotNull Lock getLock() {
+        return lock;
+    }
+    
+    @Override
+    public final void onChanged(Change<? extends E> change) {
+        TaskTools.sync(lock, () -> {
+            while (change.next())
+                if (change.wasPermutated()) {
+                    onPermutateOperationInternal(true);
+                    
+                    IntStream.range(change.getFrom(), change.getTo()).forEach(i -> {
+                        final E newElement = list.get(i);
+                        final int oldIndex = backingListProperty.get().indexOf(newElement);
+                        @SuppressWarnings("UnnecessaryLocalVariable") final int newIndex = i;
                         
-                        IntStream.range(change.getFrom(), change.getTo()).forEach(i -> {
-                            final E newElement = list.get(i);
-                            final int oldIndex = backingListProperty.get().indexOf(newElement);
-                            @SuppressWarnings("UnnecessaryLocalVariable") final int newIndex = i;
-                            
-                            final E oldElement = list.get(change.getPermutation(newIndex));
-                            final int oldElementOldIndex = backingListProperty.get().indexOf(oldElement);
-                            final int oldElementNewIndex = change.getPermutation(newIndex);
-                            
-                            onPermutateInternal(
-                                    new Operation<>(oldIndex, newIndex, newElement),
-                                    new Operation<>(oldElementOldIndex, oldElementNewIndex, oldElement));
-                        });
+                        final E oldElement = list.get(change.getPermutation(newIndex));
+                        final int oldElementOldIndex = backingListProperty.get().indexOf(oldElement);
+                        final int oldElementNewIndex = change.getPermutation(newIndex);
                         
-                        onPermutateOperationInternal(false);
-                    } else if (change.wasUpdated())
-                        onUpdateInternal(change.getFrom(), change.getTo());
-                    else {
-                        ArrayList<Operation<E>> allOperations = list.stream().map(element -> new Operation<>(
-                                backingListProperty.get().indexOf(element),
-                                list.indexOf(element),
-                                element)).collect(Collectors.toCollection(ArrayList::new));
-                        
-                        ArrayList<Operation<E>> removedOperations = change.getRemoved().stream().<Operation<E>>map(element -> new Operation<>(
-                                backingListProperty.get().indexOf(element),
-                                list.indexOf(element),
-                                element)).collect(Collectors.toCollection(ArrayList::new));
-                        ArrayList<Operation<E>> addedOperations = change.getAddedSubList().stream().<Operation<E>>map(element -> new Operation<>(
-                                backingListProperty.get().indexOf(element),
-                                list.indexOf(element),
-                                element)).collect(Collectors.toCollection(ArrayList::new));
-                        
+                        onPermutateInternal(
+                                new Operation<>(oldIndex, newIndex, newElement),
+                                new Operation<>(oldElementOldIndex, oldElementNewIndex, oldElement));
+                    });
+                    
+                    onPermutateOperationInternal(false);
+                } else if (change.wasUpdated())
+                    onUpdateInternal(change.getFrom(), change.getTo());
+                else {
+                    ArrayList<Operation<E>> allOperations = list.stream().map(element -> new Operation<>(
+                            backingListProperty.get().indexOf(element),
+                            list.indexOf(element),
+                            element)).collect(Collectors.toCollection(ArrayList::new));
+                    
+                    ArrayList<Operation<E>> removedOperations = change.getRemoved().stream().<Operation<E>>map(element -> new Operation<>(
+                            backingListProperty.get().indexOf(element),
+                            list.indexOf(element),
+                            element)).collect(Collectors.toCollection(ArrayList::new));
+                    ArrayList<Operation<E>> addedOperations = change.getAddedSubList().stream().<Operation<E>>map(element -> new Operation<>(
+                            backingListProperty.get().indexOf(element),
+                            list.indexOf(element),
+                            element)).collect(Collectors.toCollection(ArrayList::new));
+                    
+                    if (isSmartConvert()) {
                         ArrayList<Operation<E>> operations = allOperations.stream().filter(
                                 o -> addedOperations.contains(o) && removedOperations.contains(o)).collect(
                                 Collectors.toCollection(ArrayList::new));
@@ -126,180 +185,141 @@ public abstract class OperationHandler<E>
                             operations.forEach(operation -> onPermutateInternal(operation, getByIndex(operation.movedToIndex(), false, allOperations)));
                             onPermutateOperationInternal(false);
                         }
-                        
-                        
-                        if (!removedOperations.isEmpty()) {
-                            onAddOrRemoveOperationInternal(true, false);
-                            removedOperations.forEach(operation -> onRemoveInternal(operation));
-                            onAddOrRemoveOperationInternal(false, false);
-                        }
-                        
-                        if (!addedOperations.isEmpty()) {
-                            onAddOrRemoveOperationInternal(true, true);
-                            addedOperations.forEach(operation -> onAddInternal(operation));
-                            onAddOrRemoveOperationInternal(false, true);
-                        }
                     }
-                
-                refresh();
-            }, true);
-        }
-        
-        //<editor-fold desc="--- EVENT RESPONSE ---">
-        
-        @Override
-        public void onPermutateBefore() { }
-        
-        @Override
-        public void onPermutateAfter() { }
-        
-        //
-        
-        @Override
-        public void onAddBefore() { }
-        
-        @Override
-        public void onAddAfter() { }
-        
-        //
-        
-        @Override
-        public void onRemoveBefore() { }
-        
-        @Override
-        public void onRemoveAfter() { }
-        
-        //
-        
-        @Override
-        public void onUpdate(int from, int to) { }
-        
-        //</editor-fold>
-        
-        @Override
-        public String getName() {
-            return name;
-        }
-        
-        private UIDProcessor uIDContainer;
-        
-        @Override
-        public UIDProcessor getUIDProcessor() {
-            if (uIDContainer == null) // Lazy Initialization
-                uIDContainer = new UIDProcessor("group-name");
-            return uIDContainer;
-        }
-        
-        //</editor-fold>
-        
-        //<editor-fold desc="--- INTERNAL ---">
-        
-        private void onPermutateInternal(Operation<E> op1, Operation<E> op2) {
-            TaskTools.sync(lock, () -> onPermutate(op1, op2), true);
-        }
-        
-        private void onUpdateInternal(int from, int to) {
-            TaskTools.sync(lock, () -> onUpdate(from, to), true);
-        }
-        
-        private void onAddInternal(Operation<E> op) {
-            TaskTools.sync(lock, () -> onAdd(op), true);
-        }
-        
-        private void onRemoveInternal(Operation<E> op) {
-            TaskTools.sync(lock, () -> onRemove(op), true);
-        }
-        
-        //
-        
-        private void onPermutateOperationInternal(boolean before) {
-            TaskTools.sync(lock, () -> {
-                if (before) onPermutateBefore();
-                else onPermutateAfter();
-            }, true);
-        }
-        
-        private void onAddOrRemoveOperationInternal(boolean before, boolean add) {
-            TaskTools.sync(lock, () -> {
-                if (add)
-                    if (before)
-                        onAddBefore();
-                    else
-                        onAddAfter();
-                if (!add)
-                    if (before)
-                        onRemoveBefore();
-                    else
-                        onRemoveAfter();
-            }, true);
-        }
-        
-        //
-        
-        private void refresh() {
-            TaskTools.sync(lock, () -> backingListProperty.set(ArrayTools.copy(list)), true);
-        }
-        
-        //</editor-fold>
-        
-        //<editor-fold desc="--- STATIC ---">
-        
-        @Contract("_, _, _ -> new")
-        public static <E> @NotNull OperationHandler<E> wrap(@Nullable ReentrantLock lock, @NotNull ObservableList<E> list, OperationListener<E> listener) {
-            return new OperationHandler<>(lock, list) {
-                @Override
-                public void onPermutate(Operation<E> op, Operation<E> op2) {
-                    listener.onPermutate(op, op2);
+                    
+                    
+                    if (!removedOperations.isEmpty()) {
+                        onAddOrRemoveOperationInternal(true, false);
+                        removedOperations.forEach(operation -> onRemoveInternal(operation));
+                        onAddOrRemoveOperationInternal(false, false);
+                    }
+                    
+                    if (!addedOperations.isEmpty()) {
+                        onAddOrRemoveOperationInternal(true, true);
+                        addedOperations.forEach(operation -> onAddInternal(operation));
+                        onAddOrRemoveOperationInternal(false, true);
+                    }
                 }
-                
-                @Override
-                public void onAdd(Operation<E> op) {
-                    listener.onAdd(op);
-                }
-                
-                @Override
-                public void onRemove(Operation<E> op) {
-                    listener.onRemove(op);
-                }
-                
-                //
-                
-                @Override
-                public void onPermutateBefore() {
-                    listener.onPermutateBefore();
-                }
-                
-                @Override
-                public void onPermutateAfter() {
-                    listener.onPermutateAfter();
-                }
-                
-                @Override
-                public void onAddBefore() {
-                    listener.onAddBefore();
-                }
-                
-                @Override
-                public void onAddAfter() {
-                    listener.onAddAfter();
-                }
-                
-                @Override
-                public void onRemoveBefore() {
-                    listener.onRemoveBefore();
-                }
-                
-                @Override
-                public void onRemoveAfter() {
-                    listener.onRemoveAfter();
-                }
-                
-                @Override
-                public void onUpdate(int from, int to) {
-                    listener.onUpdate(from, to);
-                }
-            };
-        }
-        
-        //</editor-fold>
+            
+            refresh();
+        }, true);
     }
+    
+    //<editor-fold desc="--- EVENT RESPONSE ---">
+    
+    @Override
+    public void onPermutateBefore() { }
+    
+    @Override
+    public void onPermutateAfter() { }
+    
+    //
+    
+    @Override
+    public void onAddBefore() { }
+    
+    @Override
+    public void onAddAfter() { }
+    
+    //
+    
+    @Override
+    public void onRemoveBefore() { }
+    
+    @Override
+    public void onRemoveAfter() { }
+    
+    //
+    
+    @Override
+    public void onUpdate(int from, int to) { }
+    
+    //</editor-fold>
+    
+    @Override
+    public String getName() {
+        return name;
+    }
+    
+    private UIDProcessor uIDContainer;
+    
+    @Override
+    public UIDProcessor getUIDProcessor() {
+        if (uIDContainer == null) // Lazy Initialization
+            uIDContainer = new UIDProcessor("group-name");
+        return uIDContainer;
+    }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- INTERNAL ---">
+    
+    private void onPermutateInternal(Operation<E> op1, Operation<E> op2) {
+        TaskTools.sync(lock, () -> onPermutate(op1, op2), true);
+    }
+    
+    private void onUpdateInternal(int from, int to) {
+        TaskTools.sync(lock, () -> onUpdate(from, to), true);
+    }
+    
+    private void onAddInternal(Operation<E> op) {
+        TaskTools.sync(lock, () -> onAdd(op), true);
+    }
+    
+    private void onRemoveInternal(Operation<E> op) {
+        TaskTools.sync(lock, () -> onRemove(op), true);
+    }
+    
+    //
+    
+    private void onPermutateOperationInternal(boolean before) {
+        TaskTools.sync(lock, () -> {
+            if (before) onPermutateBefore();
+            else onPermutateAfter();
+        }, true);
+    }
+    
+    private void onAddOrRemoveOperationInternal(boolean before, boolean add) {
+        TaskTools.sync(lock, () -> {
+            if (add)
+                if (before)
+                    onAddBefore();
+                else
+                    onAddAfter();
+            if (!add)
+                if (before)
+                    onRemoveBefore();
+                else
+                    onRemoveAfter();
+        }, true);
+    }
+    
+    //
+    
+    private void refresh() {
+        TaskTools.sync(lock, () -> backingListProperty.set(ArrayTools.copy(list)), true);
+    }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- STATIC ---">
+    
+    //</editor-fold>
+    
+    @SafeVarargs
+    public final @Nullable Operation<E> getByIndex(int index, boolean to, List<Operation<E>> @NotNull ... lists) {
+        for (List<Operation<E>> list: lists) {
+            Operation<E> p = list.stream().filter(
+                    operation -> (!to && operation.movedFromIndex() == index) || (to && operation.movedToIndex() == index)).findFirst().orElse(null);
+            if (p != null)
+                return p;
+        }
+        return null;
+    }
+    
+    public final OperationHandler<E> apply() {
+        refresh();
+        ExceptionTools.nullCheck(list, "Observable List").addListener(ExceptionTools.nullCheck(this, "List Listener"));
+        return this;
+    }
+}

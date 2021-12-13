@@ -47,10 +47,17 @@ public class ListToolsDemo {
         printList(list, footer);
         
         
-        System.out.println("Shuffling...");
+        System.out.println("Shuffling (Collections)...");
         
+        Collections.shuffle(list);
+        
+        printList(list, footer);
+    
+    
+        System.out.println("Shuffling (FXCollections)...");
+    
         FXCollections.shuffle(list);
-        
+    
         printList(list, footer);
         
         

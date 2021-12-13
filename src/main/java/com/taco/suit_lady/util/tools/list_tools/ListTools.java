@@ -1,29 +1,19 @@
 package com.taco.suit_lady.util.tools.list_tools;
 
-import com.taco.suit_lady.util.UIDProcessable;
-import com.taco.suit_lady.util.UIDProcessor;
-import com.taco.suit_lady.util.tools.ArrayTools;
-import com.taco.suit_lady.util.tools.ExceptionTools;
-import com.taco.suit_lady.util.tools.TaskTools;
 import com.taco.suit_lady.util.tools.list_tools.Operation.OperationType;
 import com.taco.suit_lady.util.tools.list_tools.Operation.TriggerType;
-import com.taco.util.obj_traits.common.Nameable;
-import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
- * <p>A static utility class containing methods and interfaces</p>
+ * <p>A static utility class containing functions used to easily add {@link OperationResponder} {@link ListChangeListener ListChangeListeners} to an {@link ObservableList}.</p>
  */
+// TO-EXPAND
 public final class ListTools {
     
     private ListTools() { } // No Instance
@@ -37,7 +27,7 @@ public final class ListTools {
     }
     
     public static <E> OperationHandler<E> applyListener(@Nullable ReentrantLock lock, @NotNull ObservableList<E> list, @NotNull OperationListener<E> listener) {
-        return OperationHandler.wrap(lock, list, listener).apply();
+        return ListTools.wrap(lock, null, list, listener).apply();
     }
     
     //
@@ -75,6 +65,86 @@ public final class ListTools {
     
     public static <E> OperationHandler<E> applyListener(@Nullable ReentrantLock lock, @NotNull ObservableList<E> list, @NotNull SimpleOperationResponder<E> listener) {
         return applyListener(lock, list, (OperationListener<E>) listener);
+    }
+    
+    
+    //
+    
+    
+    /**
+     * <p>Wraps the specified {@link OperationListener} instance in an {@link OperationHandler} object.</p>
+     * <br>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>Keep in mind, {@link OperationHandler} is itself an implementation of {@link OperationListener}.</li>
+     *     <li>The constructed {@link OperationHandler} instance passes its {@link OperationListener} method definitions to the specified {@link OperationListener} parameter.</li>
+     * </ol>
+     * <hr>
+     * <p><b>Examples</b></p>
+     * <br>
+     * <h4>{@link OperationListener} Passthrough</h4>
+     * <pre>{@code @Override
+     * public void onPermutate(Operation<E> op, Operation<E> op2) {
+     *     listener.onPermutate(op, op2);
+     * }}</pre>
+     */
+    // TO-EXPAND
+    @Contract("_, _, _, _ -> new")
+    public static <E> @NotNull OperationHandler<E> wrap(@Nullable ReentrantLock lock, @Nullable String name, @NotNull ObservableList<E> list, OperationListener<E> listener) {
+        return new OperationHandler<>(lock, name, list) {
+            
+            @Override
+            public void onPermutate(Operation<E> op, Operation<E> op2) {
+                listener.onPermutate(op, op2);
+            }
+            
+            @Override
+            public void onAdd(Operation<E> op) {
+                listener.onAdd(op);
+            }
+            
+            @Override
+            public void onRemove(Operation<E> op) {
+                listener.onRemove(op);
+            }
+            
+            //
+            
+            @Override
+            public void onPermutateBefore() {
+                listener.onPermutateBefore();
+            }
+            
+            @Override
+            public void onPermutateAfter() {
+                listener.onPermutateAfter();
+            }
+            
+            @Override
+            public void onAddBefore() {
+                listener.onAddBefore();
+            }
+            
+            @Override
+            public void onAddAfter() {
+                listener.onAddAfter();
+            }
+            
+            @Override
+            public void onRemoveBefore() {
+                listener.onRemoveBefore();
+            }
+            
+            @Override
+            public void onRemoveAfter() {
+                listener.onRemoveAfter();
+            }
+            
+            @Override
+            public void onUpdate(int from, int to) {
+                listener.onUpdate(from, to);
+            }
+        };
     }
     
     //</editor-fold>
