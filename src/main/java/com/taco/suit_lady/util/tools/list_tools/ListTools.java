@@ -16,15 +16,15 @@ import java.util.concurrent.locks.ReentrantLock;
  * <h2>Details</h2>
  * <p><i>TO-EXPAND</i></p>
  * <br><hr>
- * <h2>Example Usage</h2>
+ * <h2>Example Usages</h2>
  * <p>
- *     There are numerous default implementations of {@link OperationListener} that {@link ListTools} provides.
- *     Example usage of such implementations are shown below.
+ * There are numerous default implementations of {@link OperationListener} that {@link ListTools} provides.
+ * Example usage of such implementations are shown below.
  * </p>
  * <br>
- * <h3>Anonymous {@link OperationListener}</h3>
+ * <h3>{@link OperationListener}</h3>
  * <p>The base {@link OperationListener} interface provides a separate abstract method for handling each type of {@link Change Change Event}.</p>
- * <blockquote><pre>{@code
+ * <pre>{@code
  * ObservableList<E> list = ...;
  *
  * OperationListener<E> opListener = new OperationListener<>() {
@@ -42,6 +42,11 @@ import java.util.concurrent.locks.ReentrantLock;
  *     @Override
  *     public void onRemove(Operation<E> op) {
  *         // Handle removal logic
+ *     }
+ *
+ *     @Override
+ *     public void onUpdate(int from, int to) {
+ *         // Handle generic updation logic (rarely used)
  *     }
  *
  *
@@ -74,34 +79,59 @@ import java.util.concurrent.locks.ReentrantLock;
  *     public void onPostRemove() {
  *         // Handle post-removal logic
  *     }
- *
- *     @Override
- *     public void onUpdate(int from, int to) {
- *         // Handle generic updation logic (rarely used)
- *     }
  * };
  *
  * ListTools.applyListener(list, opListener);
- * }</pre></blockquote>
+ * }</pre>
  * <br>
- * <h3>Anonymous {@link OperationListener}</h3>
- * <p>The {@link OperationResponder} implementation of {@link OperationListener} overrides the abstract methods provided by {@link OperationListener} and wraps them into a single abstract method.</p>
- * <blockquote><pre>{@code
+ * <h3>{@link SimpleOperationListener}</h3>
+ * <p>The {@link SimpleOperationListener} interface provides empty default implementations of all pre and post as well as update event handling.</p>
+ * <pre>{@code
  * ObservableList<E> list = ...;
  *
- * ListTools.OperationResponder<E> opResponder = new OperationResponder<>() {
+ * SimpleOperationListener<E> opListener = new SimpleOperationListener<>() {
  *
  *     @Override
- *     public void respond(@Nullable Operation<E> op1, @Nullable Operation<E> op2, @NotNull OperationType opType, @NotNull TriggerType triggerType) {
- *         // Check Operation Type
- *         // Check Trigger Type
- *         // Check Inferred (optional)
- *         // Respond to event
+ *     public void onPermutate(Operation<E> op, Operation<E> op2) {
+ *         // Handle permutation logic
+ *     }
+ *
+ *     @Override
+ *     public void onAdd(Operation<E> op) {
+ *         // Handle addition logic
+ *     }
+ *
+ *     @Override
+ *     public void onRemove(Operation<E> op) {
+ *         // Handle removal logic
  *     }
  * };
  *
  * ListTools.applyListener(list, opListener);
- * }</pre></blockquote>
+ * }</pre>
+ * <br>
+ * <h3>{@link OperationResponder}</h3>
+ * <p>The {@link OperationResponder} interface overrides the abstract methods provided by {@link OperationListener} and wraps them into a single abstract method.</p>
+ * <pre>{@code
+ * ObservableList<E> list = ...;
+ *
+ * ListTools.applyListener(list, (op1, op2, opType, triggerType) -> {
+ *     // Check Operation Type
+ *     // Check Trigger Type
+ *     // Check Inferred (optional)
+ *     // Respond to event
+ * });
+ * }</pre>
+ * <br>
+ * <h3>{@link SimpleOperationResponder}</h3>
+ * <p>The {@link SimpleOperationResponder} interface removes all but the first {@link Operation} input from {@link OperationResponder} for more basic event handling.</p>
+ * <pre>{@code
+ * ObservableList<E> list = ...;
+ *
+ * ListTools.applyListener(list, op -> {
+ *     // Respond to event
+ * });
+ * }</pre>
  */
 // TO-EXPAND
 public final class ListTools {
@@ -264,6 +294,9 @@ public final class ListTools {
         
         @Override
         default void onPostRemove() { }
+        
+        @Override
+        default void onUpdate(int from, int to) { }
     }
     
     //
@@ -336,6 +369,7 @@ public final class ListTools {
         //</editor-fold>
     }
     
+    @FunctionalInterface
     public interface UnlinkedOperationResponder<E> extends OperationResponder<E> {
         
         void respond(@Nullable Operation<E> op, @NotNull OperationType opType, @NotNull TriggerType triggerType);
@@ -346,6 +380,7 @@ public final class ListTools {
         }
     }
     
+    @FunctionalInterface
     public interface SimpleOperationResponder<E> extends OperationResponder<E> {
         
         void respond(@Nullable Operation<E> op);
