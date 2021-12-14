@@ -53,7 +53,7 @@ import java.util.concurrent.locks.ReentrantLock;
  *         </ul>
  *     </li>
  * </ol>
- * <hr>
+ * <br><hr>
  * <h2>Operation Event Response Functions</h2>
  * <p><i>See individual method documentation for additional information.</i></p>
  * <h3>Permutation</h3>
@@ -74,7 +74,7 @@ import java.util.concurrent.locks.ReentrantLock;
  *     <li><b>{@link #onPostRemove() On Post-Remove}:</b> Executed immediately <i>after</i> triggering all {@link OperationType#REMOVAL removal} operations that occurred in a single {@link Change Change Event} {@link Change#next() step}.</li>
  *     <li><b>{@link #onRemove(Operation) On Remove}:</b> Executed for each {@link OperationType#REMOVAL removal} operation that occurred in a single {@link Change Change Event} {@link Change#next() step}.</li>
  * </ol>
- * <hr>
+ * <br><hr>
  * <h2>Implementation</h2>
  * <ol>
  *     <li>The most concrete implementation of {@link OperationListener} is the {@link OperationHandler} class.</li>
@@ -91,62 +91,67 @@ import java.util.concurrent.locks.ReentrantLock;
  *         </ul>
  *     </li>
  * </ol>
- * <hr>
- * <h2>Examples</h2>
- * <pre>{@code new OperationHandler<>(lock, name, list) {
+ * <br><hr>
+ * <h2>Example Usage</h2>
+ * <pre>{@code
+ * ObservableList<E> list = ...;
+ *
+ * OperationListener<E> opListener = new OperationListener<>() {
  *
  *     @Override
  *     public void onPermutate(Operation<E> op, Operation<E> op2) {
- *         listener.onPermutate(op, op2);
+ *         // Handle permutation logic
  *     }
  *
  *     @Override
  *     public void onAdd(Operation<E> op) {
- *         listener.onAdd(op);
+ *         // Handle addition logic
  *     }
  *
  *     @Override
  *     public void onRemove(Operation<E> op) {
- *         listener.onRemove(op);
+ *         // Handle removal logic
  *     }
  *
- *     //
  *
  *     @Override
  *     public void onPrePermutate() {
- *         listener.onPrePermutate();
+ *         // Handle pre-permutation logic
  *     }
  *
  *     @Override
  *     public void onPostPermutate() {
- *         listener.onPostPermutate();
+ *         // Handle post-permutation logic
  *     }
  *
  *     @Override
  *     public void onPreAdd() {
- *         listener.onPreAdd();
+ *         // Handle pre-addition logic
  *     }
  *
  *     @Override
  *     public void onPostAdd() {
- *         listener.onPostAdd();
+ *         // Handle post-addition logic
  *     }
  *
  *     @Override
  *     public void onPreRemove() {
- *         listener.onPreRemove();
+ *         // Handle pre-removal logic
  *     }
  *
  *     @Override
  *     public void onPostRemove() {
- *         listener.onPostRemove();
+ *         // Handle post-removal logic
  *     }
  *
  *     @Override
  *     public void onUpdate(int from, int to) {
- *         listener.onUpdate(from, to);
+ *         // Handle generic updation logic (rarely used)
  *     }
- * };}</pre>
+ * };
+ *
+ * ListTools.applyListener(list, opListener);
+ * }</pre>
  *
  * @param <E> The type of element in the {@link ObservableList} this {@link OperationListener} is listening to.
  */

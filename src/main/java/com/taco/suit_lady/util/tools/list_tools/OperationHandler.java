@@ -90,7 +90,7 @@ public abstract class OperationHandler<E>
         this.smartConvertProperty = new SimpleBooleanProperty(false);
     }
     
-    //<editor-fold desc="--- PROPERTIES  ---
+    //<editor-fold desc="--- PROPERTIES  ---">
     
     public final ObservableList<E> getList() {
         return list;
@@ -287,10 +287,6 @@ public abstract class OperationHandler<E>
     private void refresh() {
         TaskTools.sync(lock, () -> backingListProperty.set(ArrayTools.copy(list)), true);
     }
-    
-    //</editor-fold>
-    
-    //<editor-fold desc="--- STATIC ---">
     
     //</editor-fold>
     
