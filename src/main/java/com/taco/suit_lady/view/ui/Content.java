@@ -1,12 +1,9 @@
-package com.taco.suit_lady.view.ui.ui_internal;
+package com.taco.suit_lady.view.ui;
 
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ArrayTools;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.TB;
-import com.taco.suit_lady.view.ui.Sidebar;
-import com.taco.suit_lady.view.ui.SidebarBookshelf;
-import com.taco.suit_lady.view.ui.UIBook;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.collections.FXCollections;
@@ -25,6 +22,8 @@ public abstract class Content<D extends ContentData, C extends ContentController
     private final D data;
     private final C controller;
     
+    private final OverlayHandler overlayHandler;
+    
     private final ReadOnlyListWrapper<SidebarBookshelf> bookshelves;
     
     public Content(@NotNull Springable springable)
@@ -36,6 +35,9 @@ public abstract class Content<D extends ContentData, C extends ContentController
                 weaver().loadController(ExceptionTools.nullCheck(controllerDefinition(), "Controller Definition Class")),
                 "Error Loading Controller of Type [" + controllerDefinition() + "] — Ensure controller class is defined in FXML file."
         );
+        
+        this.overlayHandler = new OverlayHandler(this, null);
+        this.overlayHandler.addOverlay(new Overlay(this, null, "default", 1));
         
         this.bookshelves = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
 //        ArrayTools.applyChangeHandler(
@@ -57,6 +59,10 @@ public abstract class Content<D extends ContentData, C extends ContentController
         return controller;
     }
     
+    public final @NotNull OverlayHandler getOverlayHandler() {
+        return overlayHandler;
+    }
+    
     protected final @NotNull ReadOnlyListProperty<SidebarBookshelf> getBookshelves()
     {
         return bookshelves.getReadOnlyProperty();
@@ -76,6 +82,7 @@ public abstract class Content<D extends ContentData, C extends ContentController
         bookshelf.getBooks().addAll(books);
         bookshelf.getButtonGroup().selectFirst();
         
+        onBookshelfAddedInternal(bookshelf);
         bookshelves.add(bookshelf);
         
         return bookshelf;

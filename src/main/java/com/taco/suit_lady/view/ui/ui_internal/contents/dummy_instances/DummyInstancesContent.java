@@ -1,7 +1,7 @@
 package com.taco.suit_lady.view.ui.ui_internal.contents.dummy_instances;
 
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.view.ui.ui_internal.Content;
+import com.taco.suit_lady.view.ui.Content;
 import org.jetbrains.annotations.NotNull;
 
 public class DummyInstancesContent extends Content<DummyInstancesContentData, DummyInstancesContentController>

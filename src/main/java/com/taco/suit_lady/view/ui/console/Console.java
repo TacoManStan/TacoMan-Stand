@@ -8,7 +8,7 @@ import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import com.taco.suit_lady.view.ui.jfx.lists.treehandler.TreeCellData;
 import com.taco.suit_lady.view.ui.jfx.lists.treehandler.TreeLoader;
 import com.taco.suit_lady.view.ui.jfx.lists.treehandler.WrappingTreeLoader;
-import com.taco.suit_lady.view.ui.ui_internal.AppUI;
+import com.taco.suit_lady.view.ui.AppUI;
 import com.taco.suit_lady.view.ui.ui_internal.console.ConsolePage;
 import com.taco.suit_lady.view.ui.ui_internal.console.ConsoleUIDataContainer;
 import com.taco.suit_lady.view.ui.ui_internal.controllers.ConsoleElementController;

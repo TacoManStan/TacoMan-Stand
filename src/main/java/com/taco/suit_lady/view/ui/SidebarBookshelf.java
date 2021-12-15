@@ -103,6 +103,8 @@ public class SidebarBookshelf extends UIBookshelf
         // TODO - The synchronization works for making most aspects of SidebarBookshelf Thread-Safe, but if a thread already has a reference to the book list, the list can still be modified asynchronously.
         lock.lock();
         try {
+            System.out.println("Initializing... " + getName());
+            
             buttonBox.setSpacing(1.0);
             buttonBox.setAlignment(Pos.TOP_LEFT);
             

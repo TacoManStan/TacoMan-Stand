@@ -1,11 +1,10 @@
 package com.taco.suit_lady.view.ui.ui_internal.pages.content_switch_demo_page;
 
 import com.taco.suit_lady.view.ui.UIPageController;
-import com.taco.suit_lady.view.ui.ui_internal.AppUI;
-import com.taco.suit_lady.view.ui.ui_internal.Content;
+import com.taco.suit_lady.view.ui.AppUI;
+import com.taco.suit_lady.view.ui.Content;
 import com.taco.suit_lady.view.ui.ui_internal.contents.mandelbrot.MandelbrotContent;
 import com.taco.suit_lady.view.ui.ui_internal.contents.test.TestContent;
-import com.taco.util.quick.ConsoleBB;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;

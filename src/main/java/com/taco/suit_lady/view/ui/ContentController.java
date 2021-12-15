@@ -1,4 +1,4 @@
-package com.taco.suit_lady.view.ui.ui_internal;
+package com.taco.suit_lady.view.ui;
 
 import com.taco.suit_lady.view.ui.ui_internal.controllers.Controller;
 import javafx.scene.layout.StackPane;

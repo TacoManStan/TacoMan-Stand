@@ -1,6 +1,6 @@
 package com.taco.suit_lady.view.ui.ui_internal.contents.test;
 
-import com.taco.suit_lady.view.ui.ui_internal.ContentController;
+import com.taco.suit_lady.view.ui.ContentController;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;

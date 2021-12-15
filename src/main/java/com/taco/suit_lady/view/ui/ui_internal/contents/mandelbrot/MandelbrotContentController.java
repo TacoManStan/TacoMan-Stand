@@ -5,7 +5,8 @@ import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.view.ui.jfx.components.BoundCanvas;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import com.taco.suit_lady.view.ui.jfx.components.CanvasPane;
-import com.taco.suit_lady.view.ui.ui_internal.ContentController;
+import com.taco.suit_lady.view.ui.ContentController;
+import com.taco.suit_lady.view.ui.jfx.util.Bounds2D;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Label;
@@ -14,7 +15,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Rectangle;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.jetbrains.annotations.NotNull;
@@ -30,8 +30,7 @@ import java.util.function.Consumer;
 @FxmlView("/fxml/content/mandelbrot/mandelbrot_content.fxml")
 @Scope("prototype")
 public class MandelbrotContentController extends ContentController
-        implements Lockable
-{
+        implements Lockable {
     //<editor-fold desc="--- FXML FIELDS ---">
     
     @FXML private AnchorPane root;
@@ -51,8 +50,7 @@ public class MandelbrotContentController extends ContentController
     private Consumer<MouseDragData> dragConsumer;
     private Consumer<MouseDragData> moveConsumer;
     
-    public MandelbrotContentController(FxWeaver weaver, ConfigurableApplicationContext ctx)
-    {
+    public MandelbrotContentController(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         super(weaver, ctx);
         
         this.lock = new ReentrantLock();
@@ -61,34 +59,30 @@ public class MandelbrotContentController extends ContentController
         this.resetDragConsumer();
     }
     
-    protected BoundCanvas canvas()
-    {
+    protected BoundCanvas canvas() {
         return canvasPane.canvas();
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override
-    public @NotNull Lock getLock()
-    {
+    public @NotNull Lock getLock() {
         return lock;
     }
     
     @Override
-    public Pane root()
-    {
+    public Pane root() {
         return root;
     }
     
     @Override
-    public void initialize()
-    {
+    public void initialize() {
         canvasAnchorPane.getChildren().add(canvasPane);
         FXTools.get().setAnchors(canvasPane, 0, 0, 0, 0);
         
         canvas().setOnMousePressed(event -> onMousePressed(event));
         canvas().setOnMouseReleased(event -> onMouseReleased(event));
-//        canvas().setOnMouseMoved(event -> onMouseMoved(event));
+        //        canvas().setOnMouseMoved(event -> onMouseMoved(event));
         canvas().setOnMouseDragged(event -> onMouseDragged(event));
     }
     
@@ -99,77 +93,65 @@ public class MandelbrotContentController extends ContentController
     private int mouseX = -1;
     private int mouseY = -1;
     
-    private void onMousePressed(MouseEvent e)
-    {
+    private void onMousePressed(MouseEvent e) {
         sync(() -> {
             this.mouseX = (int) e.getX();
             this.mouseY = (int) e.getY();
         });
     }
     
-    private void onMouseReleased(MouseEvent e)
-    {
+    private void onMouseReleased(MouseEvent e) {
         sync(() -> {
             if (FXTools.get().isMouseOnNode(canvas()))
                 getDragConsumer().accept(generateDragData(e));
         });
     }
     
-    private void onMouseDragged(MouseEvent e)
-    {
+    private void onMouseDragged(MouseEvent e) {
         sync(() -> {
             if (FXTools.get().isMouseOnNode(canvas()))
                 getMoveConsumer().accept(generateDragData(e));
         });
     }
     
-    private MouseDragData generateDragData(MouseEvent e)
-    {
+    private MouseDragData generateDragData(MouseEvent e) {
         return new MouseDragData(mouseX, mouseY, e.getX(), e.getY());
     }
     
-    public final void setDragConsumer(Consumer<MouseDragData> dragConsumer)
-    {
+    public final void setDragConsumer(Consumer<MouseDragData> dragConsumer) {
         this.dragConsumer = ExceptionTools.nullCheck(dragConsumer, "Mouse DRAG Consumer");
     }
     
-    public final void resetDragConsumer()
-    {
+    public final void resetDragConsumer() {
         setDragConsumer(mouseDragData -> { });
     }
     
-    private Consumer<MouseDragData> getDragConsumer()
-    {
+    private Consumer<MouseDragData> getDragConsumer() {
         return dragConsumer;
     }
     
-    public final void setMoveConsumer(Consumer<MouseDragData> moveConsumer)
-    {
+    public final void setMoveConsumer(Consumer<MouseDragData> moveConsumer) {
         this.moveConsumer = ExceptionTools.nullCheck(moveConsumer, "Mouse MOVE Consumer");
     }
     
-    public final void resetMoveConsumer()
-    {
+    public final void resetMoveConsumer() {
         setMoveConsumer(mouseDragData -> { });
     }
     
-    private Consumer<MouseDragData> getMoveConsumer()
-    {
+    private Consumer<MouseDragData> getMoveConsumer() {
         return moveConsumer;
     }
     
     //
     
-    protected static class MouseDragData
-    {
+    protected static class MouseDragData {
         private final int startX;
         private final int startY;
         
         private final int endX;
         private final int endY;
         
-        public MouseDragData(double startX, double startY, double endX, double endY)
-        {
+        public MouseDragData(double startX, double startY, double endX, double endY) {
             this.startX = (int) startX;
             this.startY = (int) startY;
             
@@ -177,57 +159,45 @@ public class MandelbrotContentController extends ContentController
             this.endY = (int) endY;
         }
         
-        public final int getStartX()
-        {
+        public final int getStartX() {
             return startX;
         }
         
-        public final int getStartY()
-        {
+        public final int getStartY() {
             return startY;
         }
         
-        public final int getEndX()
-        {
+        public final int getEndX() {
             return endX;
         }
         
-        public final int getEndY()
-        {
+        public final int getEndY() {
             return endY;
         }
         
-        public final int getWidth()
-        {
+        public final int getWidth() {
             return endX - startX;
         }
         
-        public final int getHeight()
-        {
+        public final int getHeight() {
             return endY - startY;
         }
         
         //
         
-        public final Point2D getTopLeft()
-        {
+        public final Point2D getTopLeft() {
             return new Point2D(Math.min(getStartX(), getEndX()), Math.min(getStartY(), getEndY()));
         }
         
-        public final Point2D getDimensions()
-        {
+        public final Point2D getDimensions() {
             return new Point2D(Math.abs(getWidth()), Math.abs(getHeight()));
         }
         
-        public final Rectangle getAsPaintable()
-        {
-            final Point2D topLeftImpl = getTopLeft();
-            final Point2D dimensionsImpl = getDimensions();
-            return new Rectangle(topLeftImpl.getX(), topLeftImpl.getY(), dimensionsImpl.getX(), dimensionsImpl.getY());
+        public final Bounds2D getBounds() {
+            return Bounds2D.fromPoints(getTopLeft(), getDimensions());
         }
         
-        public final boolean isValid()
-        {
+        public final boolean isValid() {
             return startX >= 0
                    && startY >= 0
                    && endX >= 0
@@ -235,8 +205,7 @@ public class MandelbrotContentController extends ContentController
         }
         
         @Override
-        public String toString()
-        {
+        public String toString() {
             return "MouseDragData{" +
                    "startX=" + startX +
                    ", startY=" + startY +

@@ -18,8 +18,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 
 public abstract class SLPaintCommand<N extends Node>
-        implements Lockable, Nameable, Comparable<SLPaintCommand<N>>, ObservablePropertyContainer
-{
+        implements Lockable, Nameable, Comparable<SLPaintCommand<?>>, ObservablePropertyContainer {
     private final ReentrantLock lock;
     private final String name;
     
@@ -40,16 +39,15 @@ public abstract class SLPaintCommand<N extends Node>
     
     private final ObjectBinding<Bounds2D> boundsBinding;
     
-    public SLPaintCommand(@Nullable ReentrantLock lock, @NotNull String name, @Nullable Predicate<? super SLPaintCommand<N>> autoRemoveCondition, boolean scaleToParent, int priority)
-    {
+    public SLPaintCommand(@Nullable ReentrantLock lock, @NotNull String name, @Nullable Predicate<? super SLPaintCommand<N>> autoRemoveCondition, boolean scaleToParent, int priority) {
         this.lock = lock;
         this.name = name;
         
         this.ownerProperty = new ReadOnlyObjectWrapper<>();
         this.nodeProperty = new ReadOnlyObjectWrapper<>();
         
-        this.autoRemoveCondition = autoRemoveCondition != null ? autoRemoveCondition : paintCommand -> true;
-        this.activeProperty = new SimpleBooleanProperty(false);
+        this.autoRemoveCondition = autoRemoveCondition != null ? autoRemoveCondition : paintCommand -> false;
+        this.activeProperty = new SimpleBooleanProperty(true);
         
         this.paintPriorityProperty = new SimpleIntegerProperty();
         
@@ -61,125 +59,134 @@ public abstract class SLPaintCommand<N extends Node>
         this.heightProperty = new SimpleIntegerProperty();
         
         this.boundsBinding = createObjectBinding(() -> new Bounds2D(getX(), getY(), getWidth(), getHeight()));
-        this.boundsBinding.addListener((observable, oldValue, newValue) -> nodeProperty.set(regenerateNode()));
+        this.boundsBinding.addListener((observable, oldValue, newValue) -> nodeProperty.set(refreshNodeImpl()));
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final ReadOnlyObjectProperty<Overlay> ownerProperty()
-    {
+    public final ReadOnlyObjectProperty<Overlay> ownerProperty() {
         return ownerProperty.getReadOnlyProperty();
     }
     
-    protected final Predicate<? super SLPaintCommand<N>> getAutoRemoveCondition()
-    {
+    public final Overlay getOwner() {
+        return ownerProperty.get();
+    }
+    
+    protected final ReadOnlyObjectWrapper<Overlay> ownerPropertyImpl() {
+        return ownerProperty;
+    }
+    
+    protected final Overlay setOwner(Overlay overlay) {
+        return sync(() -> {
+            Overlay oldOverlay = getOwner();
+            ownerProperty.set(overlay);
+            return oldOverlay;
+        });
+    }
+    
+    protected final ReadOnlyObjectProperty<N> nodeProperty() {
+        return nodeProperty.getReadOnlyProperty();
+    }
+    
+    protected final N getNode() {
+//        System.out.println("get node...");
+        return sync(() -> {
+            if (nodeProperty.get() != null)
+                return nodeProperty.get();
+            nodeProperty.set(refreshNodeImpl());
+            return getNode();
+        });
+    }
+    
+    protected final Predicate<? super SLPaintCommand<N>> getAutoRemoveCondition() {
         return autoRemoveCondition;
     }
     
-    public final BooleanProperty activeProperty()
-    {
+    public final BooleanProperty activeProperty() {
         return activeProperty;
     }
     
-    public final SLPaintCommand<N> activate()
-    {
+    public final SLPaintCommand<N> activate() {
         activeProperty.set(true);
         return this;
     }
     
-    public final SLPaintCommand<N> deactivate()
-    {
+    public final SLPaintCommand<N> deactivate() {
         activeProperty.set(false);
         return this;
     }
     
-    public final boolean isScaleToParent()
-    {
+    public final boolean isScaleToParent() {
         return scaleToParent;
     }
     
-    public final IntegerProperty paintPriorityProperty()
-    {
+    public final IntegerProperty paintPriorityProperty() {
         return paintPriorityProperty;
     }
     
-    public final int getPaintPriority()
-    {
+    public final int getPaintPriority() {
         return paintPriorityProperty.get();
     }
     
     //
     
-    public final IntegerProperty xProperty()
-    {
+    public final IntegerProperty xProperty() {
         return xProperty;
     }
     
-    public final int getX()
-    {
+    public final int getX() {
         return xProperty.get();
     }
     
-    public final void setX(int x)
-    {
+    public final void setX(int x) {
         xProperty.set(x);
     }
     
     //
     
-    public final IntegerProperty yProperty()
-    {
+    public final IntegerProperty yProperty() {
         return yProperty;
     }
     
-    public final int getY()
-    {
+    public final int getY() {
         return yProperty.get();
     }
     
-    public final void setY(int y)
-    {
+    public final void setY(int y) {
         yProperty.set(y);
     }
     
     //
     
-    public final IntegerProperty widthProperty()
-    {
+    public final IntegerProperty widthProperty() {
         return widthProperty;
     }
     
-    public final int getWidth()
-    {
+    public final int getWidth() {
         return widthProperty.get();
     }
     
-    public final void setWidth(int width)
-    {
+    public final void setWidth(int width) {
         widthProperty.set(width);
     }
     
     //
     
-    public final IntegerProperty heightProperty()
-    {
+    public final IntegerProperty heightProperty() {
         return heightProperty;
     }
     
-    public final int getHeight()
-    {
+    public final int getHeight() {
         return heightProperty.get();
     }
     
-    public final void setHeight(int height)
-    {
+    public final void setHeight(int height) {
         heightProperty.set(height);
     }
     
     //
     
-    public final void setBounds(@NotNull Bounds2D bounds)
-    {
+    public final void setBounds(@NotNull Bounds2D bounds) {
         ExceptionTools.nullCheck(bounds, "Bounds");
         
         setX(bounds.x());
@@ -192,13 +199,11 @@ public abstract class SLPaintCommand<N extends Node>
     
     //<editor-fold desc="--- BINDINGS ---">
     
-    public final ObjectBinding<Bounds2D> boundsBinding()
-    {
+    public final ObjectBinding<Bounds2D> boundsBinding() {
         return boundsBinding;
     }
     
-    public final Bounds2D getBounds()
-    {
+    public final Bounds2D getBounds() {
         return boundsBinding.get();
     }
     
@@ -206,7 +211,13 @@ public abstract class SLPaintCommand<N extends Node>
     
     //<editor-fold desc="--- ABSTRACT ---">
     
-    protected abstract N regenerateNode();
+    protected abstract N refreshNode();
+    
+    protected void applyRefreshSettings(@NotNull N n) {
+//        System.out.println("Applying refresh settings...");
+        n.setManaged(false);
+        n.visibleProperty().bind(activeProperty);
+    }
     
     protected abstract void onAdded(@NotNull Overlay owner);
     
@@ -214,8 +225,7 @@ public abstract class SLPaintCommand<N extends Node>
     
     //
     
-    protected ObservableValue<?>[] regenerateTriggers()
-    {
+    protected ObservableValue<?>[] regenerateTriggers() {
         return new ObservableValue<?>[]{boundsBinding};
     }
     
@@ -224,30 +234,32 @@ public abstract class SLPaintCommand<N extends Node>
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override
-    public final @NotNull Lock getLock()
-    {
+    public final @NotNull Lock getLock() {
         return lock != null ? lock : new ReentrantLock();
     }
     
     @Override
-    public final String getName()
-    {
+    public final String getName() {
         return name;
     }
     
     @Override
-    public Observable[] properties()
-    {
+    public Observable[] properties() {
         return new Observable[]{
                 ownerProperty, nodeProperty, paintPriorityProperty,
                 xProperty, yProperty, widthProperty, heightProperty};
     }
     
     @Override
-    public int compareTo(@NotNull SLPaintCommand<N> o)
-    {
+    public int compareTo(@NotNull SLPaintCommand<?> o) {
         return Integer.compare((Math.abs(getPaintPriority())), Math.abs(o.getPaintPriority()));
     }
     
     //</editor-fold>
+    
+    private N refreshNodeImpl() {
+        final N n = refreshNode();
+        applyRefreshSettings(n);
+        return n;
+    }
 }

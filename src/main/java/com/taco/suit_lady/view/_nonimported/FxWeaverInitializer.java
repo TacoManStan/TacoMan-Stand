@@ -2,8 +2,8 @@ package com.taco.suit_lady.view._nonimported;
 
 import com.taco.suit_lady.MainApplication;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.view.ui.ui_internal.AppController;
-import com.taco.suit_lady.view.ui.ui_internal.AppUI;
+import com.taco.suit_lady.view.ui.AppController;
+import com.taco.suit_lady.view.ui.AppUI;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

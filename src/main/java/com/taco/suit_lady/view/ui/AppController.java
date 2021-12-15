@@ -1,10 +1,7 @@
-package com.taco.suit_lady.view.ui.ui_internal;
+package com.taco.suit_lady.view.ui;
 
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.TB;
-import com.taco.suit_lady.view.ui.Sidebar;
-import com.taco.suit_lady.view.ui.SidebarBookshelf;
-import com.taco.suit_lady.view.ui.UIBook;
 import com.taco.suit_lady.view.ui.console.Console;
 import com.taco.suit_lady.view.ui.console.ConsoleMessageable;
 import com.taco.suit_lady.view.ui.jfx.button.ImageButton;

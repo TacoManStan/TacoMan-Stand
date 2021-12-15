@@ -2,7 +2,7 @@ package com.taco.suit_lady.util.springable;
 
 import com.taco.suit_lady.view.ui.Sidebar;
 import com.taco.suit_lady.view.ui.console.Console;
-import com.taco.suit_lady.view.ui.ui_internal.AppUI;
+import com.taco.suit_lady.view.ui.AppUI;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
