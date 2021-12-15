@@ -6,10 +6,12 @@ import com.taco.suit_lady._to_sort._new.interfaces.ReadOnlyNameableProperty;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
+import com.taco.suit_lady.util.tools.list_tools.ListTools;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
@@ -20,8 +22,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public abstract class Overlay
-        implements Springable, Lockable, ReadOnlyNameableProperty, Comparable<Overlay>
-{
+        implements Springable, Lockable, ReadOnlyNameableProperty, Comparable<Overlay> {
+    
     private final Springable springable;
     private final ReentrantLock lock;
     private final ReadOnlyStringWrapper nameProperty;
@@ -30,10 +32,9 @@ public abstract class Overlay
     
     private final ReadOnlyIntegerWrapper paintPriorityProperty;
     
-    private final ReadOnlyObservableListWrapper<SLPaintCommand<?>> paintCommands;
+    private final ReadOnlyObservableListWrapper<SLPaintCommand<Node>> paintCommands;
     
-    public Overlay(@NotNull Springable springable, @Nullable ReentrantLock lock, @Nullable String name, int paintPriority)
-    {
+    public Overlay(@NotNull Springable springable, @Nullable ReentrantLock lock, @Nullable String name, int paintPriority) {
         this.springable = ExceptionTools.nullCheck(springable, "Springable Input").asStrict();
         this.lock = lock; // Null-checking is done in get method via lazy instantiation
         this.nameProperty = new ReadOnlyStringWrapper(name);
@@ -43,30 +44,29 @@ public abstract class Overlay
         this.paintPriorityProperty = new ReadOnlyIntegerWrapper(paintPriority);
         
         this.paintCommands = new ReadOnlyObservableListWrapper<>();
-        this.paintCommands.setKeepSorted(true);
+        
+        ListTools.applyListener(lock, paintCommands, (op1, op2, opType, triggerType) -> {
+        
+        });
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    protected final StackPane root()
-    {
+    protected final StackPane root() {
         return root;
     }
     
     //
     
-    public final ReadOnlyIntegerProperty paintPriorityProperty()
-    {
+    public final ReadOnlyIntegerProperty paintPriorityProperty() {
         return paintPriorityProperty.getReadOnlyProperty();
     }
     
-    public final int getPaintPriority()
-    {
+    public final int getPaintPriority() {
         return paintPriorityProperty.get();
     }
     
-    public final void setPaintPriority(int paintPriority)
-    {
+    public final void setPaintPriority(int paintPriority) {
         if (paintPriority < 0)
             throw ExceptionTools.ex(new IndexOutOfBoundsException("Paint Priority Must Be Non-Negative! [" + paintPriority + "]"));
         paintPriorityProperty.set(paintPriority);
@@ -74,13 +74,11 @@ public abstract class Overlay
     
     //
     
-    public final ReadOnlyObservableList<SLPaintCommand<?>> paintCommands()
-    {
-        return paintCommands.getReadOnlyList();
+    public final ReadOnlyObservableList<SLPaintCommand<Node>> paintCommands() {
+        return paintCommands.readOnlyList();
     }
     
-    public final void addPaintCommand(@NotNull SLPaintCommand<?> paintCommand)
-    {
+    public final void addPaintCommand(@NotNull SLPaintCommand<Node> paintCommand) {
         paintCommands.add(ExceptionTools.nullCheck(paintCommand, "Paint Command Input"));
     }
     
@@ -89,34 +87,29 @@ public abstract class Overlay
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override
-    public final @NotNull FxWeaver weaver()
-    {
+    public final @NotNull FxWeaver weaver() {
         return springable.weaver();
     }
     
     @Override
-    public final @NotNull ConfigurableApplicationContext ctx()
-    {
+    public final @NotNull ConfigurableApplicationContext ctx() {
         return springable.ctx();
     }
     
     @Override
-    public final @NotNull Lock getLock()
-    {
+    public final @NotNull Lock getLock() {
         return lock != null ? lock : new ReentrantLock();
     }
     
     @Override
-    public final ReadOnlyStringProperty nameProperty()
-    {
+    public final ReadOnlyStringProperty nameProperty() {
         return nameProperty.getReadOnlyProperty();
     }
     
     //
     
     @Override
-    public int compareTo(@NotNull Overlay o)
-    {
+    public int compareTo(@NotNull Overlay o) {
         return Integer.compare((Math.abs(getPaintPriority())), Math.abs(o.getPaintPriority()));
     }
     

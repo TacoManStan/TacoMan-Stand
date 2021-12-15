@@ -28,7 +28,7 @@ public record Operation<E>(int movedFromIndex, int movedToIndex, E contents) {
     @Contract(pure = true)
     @Override
     public @NotNull String toString() {
-        return "Permutation{" +
+        return "Operation{" +
                "\"" + contents + "\"" +
                ", fromIndex=" + movedFromIndex +
                ", toIndex=" + movedToIndex +
@@ -84,11 +84,11 @@ public record Operation<E>(int movedFromIndex, int movedToIndex, E contents) {
         EVENT_NO_CHANGE, EVENT_ADD, EVENT_REMOVE, EVENT_MOVE
     }
     
-    enum OperationType {
+    public enum OperationType {
         ADDITION, REMOVAL, PERMUTATION, UPDATION
     }
     
-    enum TriggerType {
+    public enum TriggerType {
         PRE_CHANGE, POST_CHANGE, CHANGE, UPDATE
     }
 }

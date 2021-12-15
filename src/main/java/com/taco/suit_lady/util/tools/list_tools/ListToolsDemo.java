@@ -105,7 +105,7 @@ public class ListToolsDemo {
         return list;
     }
     
-    private static void printList(@NotNull List<String> list, @Nullable String footer) {
+    public static void printList(@NotNull List<String> list, @Nullable String footer) {
         if (!list.isEmpty())
             doPrint(() -> list.forEach(s -> System.out.println("[" + list.indexOf(s) + "]: " + s)), "list", footer, true);
         else

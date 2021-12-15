@@ -25,8 +25,6 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-
-
 /**
  * <p>An abstract implementation of both {@link ListChangeListener} and {@link OperationListener}.</p>
  * <h2>Details</h2>
@@ -88,7 +86,7 @@ public abstract class OperationHandler<E>
         this.list = list;
         this.backingListProperty = new ReadOnlyObjectWrapper<>();
         
-        this.smartConvertProperty = new SimpleBooleanProperty(false);
+        this.smartConvertProperty = new SimpleBooleanProperty(true);
     }
     
     //<editor-fold desc="--- PROPERTIES  ---">
