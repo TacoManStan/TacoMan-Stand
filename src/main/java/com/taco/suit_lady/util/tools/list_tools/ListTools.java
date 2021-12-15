@@ -124,7 +124,10 @@ import java.util.concurrent.locks.ReentrantLock;
  * }</pre>
  * <br>
  * <h3>{@link SimpleOperationResponder}</h3>
- * <p>The {@link SimpleOperationResponder} interface removes all but the first {@link Operation} input from {@link OperationResponder} for more basic event handling.</p>
+ * <p>
+ *     The {@link SimpleOperationResponder} interface removes all but the first {@link Operation} input from {@link OperationResponder} for more basic event handling.
+ *     <br>Only responds to {@link TriggerType#CHANGE Change} triggers.
+ * </p>
  * <pre>{@code
  * ObservableList<E> list = ...;
  *

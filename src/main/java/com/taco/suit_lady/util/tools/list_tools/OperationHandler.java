@@ -25,6 +25,8 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+
+
 /**
  * <p>An abstract implementation of both {@link ListChangeListener} and {@link OperationListener}.</p>
  * <h2>Details</h2>
@@ -64,7 +66,6 @@ import java.util.stream.IntStream;
  * </ol>
  * <h3>Example Output</h3>
  * <p>Refer to {@link ListToolsDemo}.</p>
- *
  *
  * @param <E> The type of element contained within the {@link ObservableList list} that has been assigned to this {@link OperationHandler}.
  */
@@ -290,6 +291,15 @@ public abstract class OperationHandler<E>
     
     //</editor-fold>
     
+    /**
+     * <p>Returns the first {@link Operation} matching the specified {@code index} of the specified {@link Boolean index type} located in any of the specified {@link List lists}.</p>
+     *
+     * @param index The {@code index} being searched for.
+     * @param to    True if the {@link Operation#movedToIndex() moved to} {@code index} should be searched for, false if the {@link Operation#movedFromIndex() moved from} index should be searched for instead.
+     * @param lists The array of {@link List lists} to be scanned for an {@link Operation} that matches the specified {@code index}.
+     *
+     * @return The first {@link Operation} matching the specified {@code index} of the specified {@link Boolean index type} located in any of the specified {@link List lists}.
+     */
     @SafeVarargs
     public final @Nullable Operation<E> getByIndex(int index, boolean to, List<Operation<E>> @NotNull ... lists) {
         for (List<Operation<E>> list: lists) {
@@ -301,6 +311,11 @@ public abstract class OperationHandler<E>
         return null;
     }
     
+    /**
+     * <p>Applies this {@link OperationHandler} as a {@link ListChangeListener} to the {@link ObservableList} assigned to this {@link OperationHandler} object.</p>
+     *
+     * @return This {@link OperationHandler}. Functionally void.
+     */
     public final OperationHandler<E> apply() {
         refresh();
         ExceptionTools.nullCheck(list, "Observable List").addListener(ExceptionTools.nullCheck(this, "List Listener"));
