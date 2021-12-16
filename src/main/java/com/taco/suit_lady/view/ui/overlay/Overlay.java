@@ -49,12 +49,7 @@ public class Overlay
         
         ListTools.applyListener(lock, paintCommands, (op1, op2, opType, triggerType) -> {
             root.getChildren().retainAll();
-            System.out.println("Paint command updated...");
-            for (SLPaintCommand<?> paintCommand: paintCommands) {
-                root.getChildren().add(paintCommand.getNode());
-                System.out.println("Command: " + paintCommand);
-                System.out.println("Command Parent: " + root.getBoundsInParent());
-            }
+            paintCommands.forEach(paintCommand -> root.getChildren().add(paintCommand.getNode()));
         });
     }
     
@@ -88,8 +83,8 @@ public class Overlay
     
     public final void addPaintCommand(@NotNull SLPaintCommand<?> paintCommand) {
         sync(() -> {
-            paintCommand.setOwner(this); // TODO: Move to listener & also track remove events
-            paintCommands.add(ExceptionTools.nullCheck(paintCommand, "Paint Command Input"));
+            ExceptionTools.nullCheck(paintCommand, "Paint Command Input").setOwner(this); // TODO: Move to listener & also track remove events
+            paintCommands.add(paintCommand);
         });
     }
     
