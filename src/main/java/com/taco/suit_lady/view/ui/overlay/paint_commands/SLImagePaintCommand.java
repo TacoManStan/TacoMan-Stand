@@ -3,39 +3,70 @@ package com.taco.suit_lady.view.ui.overlay.paint_commands;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ResourceTools;
 import com.taco.suit_lady.view.ui.jfx.components.ImagePane;
+import com.taco.suit_lady.view.ui.jfx.util.Bounds2D;
 import com.taco.suit_lady.view.ui.overlay.Overlay;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.image.ImageView;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 
-public class SLImagePaintCommand extends SLPaintCommand<ImagePane> {
+public class SLImagePaintCommand extends SLPaintCommand<ImageView> {
     
-    private final ImagePane imagePane;
+    private final ImageView imageView;
     
     public SLImagePaintCommand(
             @Nullable ReentrantLock lock, @NotNull Springable springable, @NotNull String name,
-            @Nullable Predicate<? super SLPaintCommand<ImagePane>> autoRemoveCondition,
+            @Nullable Predicate<? super SLPaintCommand<ImageView>> autoRemoveCondition,
+            boolean scaleToParent, int priority) {
+        super(lock, springable, name, autoRemoveCondition, scaleToParent, priority);
+        
+        this.imageView = new ImageView(ResourceTools.get().getImage("/", "Flork_of_Taco", "png"));
+    }
+    
+    public SLImagePaintCommand(
+            @Nullable ReentrantLock lock, @NotNull Springable springable, @NotNull String name,
+            @Nullable Predicate<? super SLPaintCommand<ImageView>> autoRemoveCondition,
+            boolean scaleToParent, int priority,
+            String imageID, String pathID) {
+        super(lock, springable, name, autoRemoveCondition, scaleToParent, priority);
+        
+        this.imageView = new ImageView(ResourceTools.get().getImage(pathID, imageID, "png"));
+    }
+    
+    public SLImagePaintCommand(
+            @Nullable ReentrantLock lock, @NotNull Springable springable, @NotNull String name,
+            @Nullable Predicate<? super SLPaintCommand<ImageView>> autoRemoveCondition,
+            boolean scaleToParent, int priority,
+            String url) {
+        super(lock, springable, name, autoRemoveCondition, scaleToParent, priority);
+        
+        this.imageView = new ImageView(url);
+    }
+    
+    public SLImagePaintCommand(
+            @Nullable ReentrantLock lock, @NotNull Springable springable, @NotNull String name,
+            @Nullable Predicate<? super SLPaintCommand<ImageView>> autoRemoveCondition,
             boolean scaleToParent, int priority,
             Image image) {
         super(lock, springable, name, autoRemoveCondition, scaleToParent, priority);
         
-        this.imagePane = new ImagePane(ResourceTools.get().getImage("/", "Flork_of_Taco", "png"));
+        this.imageView = new ImageView(image);
     }
     
-    // TODO: Add additional painting properties, probably to the parent intermediary SLShapePaintCommand class
     @Override
-    protected ImagePane refreshNode() {
-        return sync(() -> {
-            imagePane.resizeRelocate(getX(), getY(),
-                                     getWidth() > 0 ? getWidth() : 1,
-                                     getHeight() > 0 ? getHeight() : 1);
-            return imagePane;
-        });
+    protected ImageView refreshNode() {
+        return imageView;
+    }
+    
+    @Override
+    protected void syncBounds(@NotNull ImageView imageView, @NotNull Bounds2D newBounds) {
+        imageView.setX(getX());
+        imageView.setY(getY());
+        imageView.setFitWidth(getWidthSafe());
+        imageView.setFitHeight(getHeightSafe());
     }
     
     @Override

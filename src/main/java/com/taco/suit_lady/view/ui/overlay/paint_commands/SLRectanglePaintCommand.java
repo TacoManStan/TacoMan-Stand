@@ -1,6 +1,7 @@
 package com.taco.suit_lady.view.ui.overlay.paint_commands;
 
 import com.taco.suit_lady.util.springable.Springable;
+import com.taco.suit_lady.view.ui.jfx.util.Bounds2D;
 import com.taco.suit_lady.view.ui.overlay.Overlay;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -28,19 +29,15 @@ public class SLRectanglePaintCommand extends SLShapePaintCommand<Rectangle> {
     // TODO: Add additional painting properties, probably to the parent intermediary SLShapePaintCommand class
     @Override
     protected Rectangle refreshNode() {
-        return sync(() -> {
-            rectangle.setX(getX());
-            rectangle.setY(getY());
-            rectangle.setWidth(getWidth());
-            rectangle.setHeight(getHeight());
-            
-            //            rectangle.setManaged(false); // Otherwise, the above x and y coordinates are ignored by the parent StackPane
-            
-            //            System.out.println("Refreshing node... " + rectangle);
-            //            System.out.println("Parent... " + getOwner());
-            
-            return rectangle;
-        });
+        return rectangle;
+    }
+    
+    @Override
+    protected void syncBounds(@NotNull Rectangle rectangle, @NotNull Bounds2D newBounds) {
+        rectangle.setX(getX());
+        rectangle.setY(getY());
+        rectangle.setWidth(getWidthSafe());
+        rectangle.setHeight(getHeightSafe());
     }
     
     @Override

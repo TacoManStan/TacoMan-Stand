@@ -179,6 +179,10 @@ public abstract class SLPaintCommand<N extends Node>
         return widthProperty.get();
     }
     
+    public final int getWidthSafe() {
+        return getWidth() > 0 ? getWidth() : 1;
+    }
+    
     public final void setWidth(int width) {
         widthProperty.set(width);
     }
@@ -191,6 +195,10 @@ public abstract class SLPaintCommand<N extends Node>
     
     public final int getHeight() {
         return heightProperty.get();
+    }
+    
+    public final int getHeightSafe() {
+        return getHeight() > 0 ? getHeight() : 1;
     }
     
     public final void setHeight(int height) {
@@ -226,10 +234,16 @@ public abstract class SLPaintCommand<N extends Node>
     
     protected abstract N refreshNode();
     
-    protected void applyRefreshSettings(@NotNull N n) {
+    protected void applyRefresh(@NotNull N n) {
         //        System.out.println("Applying refresh settings...");
         n.setManaged(false);
         n.visibleProperty().bind(activeProperty);
+        
+        syncBounds(n, getBounds());
+    }
+    
+    protected void syncBounds(@NotNull N n, @NotNull Bounds2D newBounds) {
+        getNode().resizeRelocate(getX(), getY(), getWidthSafe(), getHeightSafe());
     }
     
     protected abstract void onAdded(@NotNull Overlay owner);
@@ -285,7 +299,7 @@ public abstract class SLPaintCommand<N extends Node>
         debugger().warn("Refreshing Node, but as a warning...");
         
         final N n = refreshNode();
-        applyRefreshSettings(n);
+        applyRefresh(n);
         return n;
     }
 }
