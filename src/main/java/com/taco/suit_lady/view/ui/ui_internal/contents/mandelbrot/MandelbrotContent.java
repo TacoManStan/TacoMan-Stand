@@ -60,8 +60,7 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
         
         this.selectionBoxPaintCommand = new SLRectanglePaintCommand(
                 lock, this, "selection-box",
-                null, true, 1,
-                0, 0, 0, 0);
+                null, true, 1);
         this.selectionBoxPaintCommand2 = new SLImagePaintCommand(
                 lock, this, "selection-box2",
                 null, true, 1);

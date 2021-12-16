@@ -18,9 +18,8 @@ public class SLRectanglePaintCommand extends SLShapePaintCommand<Rectangle> {
     public SLRectanglePaintCommand(
             @Nullable ReentrantLock lock, @NotNull Springable springable, @NotNull String name,
             @Nullable Predicate<? super SLPaintCommand<Rectangle>> autoRemoveCondition,
-            boolean scaleToParent, int priority,
-            int x, int y, int width, int height) {
-        super(lock, springable, name, autoRemoveCondition, scaleToParent, priority, x, y, width, height);
+            boolean scaleToParent, int priority) {
+        super(lock, springable, name, autoRemoveCondition, scaleToParent, priority, 0, 0, 0, 0);
         
         this.rectangle = new Rectangle();
         this.rectangle.setFill(null);
