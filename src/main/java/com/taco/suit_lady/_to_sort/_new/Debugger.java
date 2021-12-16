@@ -49,18 +49,6 @@ public class Debugger {
         });
     }
     
-    private static @NotNull ObservableList<String> initTestList() {
-        System.out.println("Creating List...");
-        final ObservableList<String> list = FXCollections.observableArrayList();
-        
-        System.out.println("Populating List...");
-        list.addAll("Dinner", "Elephant", "33", "Accelerator", "Zebra", "Eggplant", "Walrus", "Apple", "Tree", "Aardvark");
-        
-        System.out.println("Setting Listeners...");
-        
-        return list;
-    }
-    
     public void printList(@NotNull List<String> list, @Nullable String footer) {
         if (!list.isEmpty())
             doPrint(() -> list.forEach(s -> System.out.println("[" + list.indexOf(s) + "]: " + s)), "list", footer, true);
