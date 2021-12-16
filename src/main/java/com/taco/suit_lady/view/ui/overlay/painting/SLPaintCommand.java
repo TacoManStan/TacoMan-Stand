@@ -35,7 +35,6 @@ public abstract class SLPaintCommand<N extends Node>
     private final Predicate<? super SLPaintCommand<N>> autoRemoveCondition;
     private final BooleanProperty activeProperty;
     private final IntegerProperty paintPriorityProperty;
-    private final boolean scaleToParent;
     
     //
     
@@ -50,7 +49,6 @@ public abstract class SLPaintCommand<N extends Node>
                           @NotNull Springable springable,
                           @NotNull String name,
                           @Nullable Predicate<? super SLPaintCommand<N>> autoRemoveCondition,
-                          boolean scaleToParent,
                           int priority) {
         this.lock = lock;
         this.springable = ExceptionTools.nullCheck(springable, "Springable Input").asStrict();
@@ -63,8 +61,6 @@ public abstract class SLPaintCommand<N extends Node>
         this.activeProperty = new SimpleBooleanProperty(true);
         
         this.paintPriorityProperty = new SimpleIntegerProperty(priority);
-        
-        this.scaleToParent = scaleToParent;
         
         this.xProperty = new SimpleIntegerProperty();
         this.yProperty = new SimpleIntegerProperty();
@@ -127,10 +123,6 @@ public abstract class SLPaintCommand<N extends Node>
     public final SLPaintCommand<N> deactivate() {
         activeProperty.set(false);
         return this;
-    }
-    
-    public final boolean isScaleToParent() {
-        return scaleToParent;
     }
     
     public final IntegerProperty paintPriorityProperty() {
