@@ -21,8 +21,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-public class MandelbrotContent extends Content<MandelbrotContentData, MandelbrotContentController>
-{
+public class MandelbrotContent extends Content<MandelbrotContentData, MandelbrotContentController> {
     private final ReentrantLock lock;
     
     private Task<Void> worker;
@@ -34,8 +33,7 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
     
     private MandelbrotPage coverPage;
     
-    public MandelbrotContent(@NotNull Springable springable)
-    {
+    public MandelbrotContent(@NotNull Springable springable) {
         super(springable);
         
         this.lock = new ReentrantLock();
@@ -56,38 +54,36 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
         
         getController().canvas().setCanvasListener(this::refreshCanvas);
         
-        this.selectionBoxPaintCommand = new SLRectanglePaintCommand(lock, "selection-box", null, true, 1, 0, 0, 0, 0);
+        this.selectionBoxPaintCommand = new SLRectanglePaintCommand(
+                lock, this, "selection-box",
+                null, true, 1,
+                0, 0, 0, 0);
         getOverlayHandler().getOverlay("default").addPaintCommand(selectionBoxPaintCommand);
         
-//        this.selectionBoxPaintCommand = new RectanglePaintCommand(false, lock);
-//        ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas().addPaintCommand(selectionBoxPaintCommand);
+        //        this.selectionBoxPaintCommand = new RectanglePaintCommand(false, lock);
+        //        ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas().addPaintCommand(selectionBoxPaintCommand);
         
         getController().setDragConsumer(dragData -> zoom(dragData));
         getController().setMoveConsumer(dragData -> updateZoomBox(dragData));
     }
     
-    public final ReadOnlyBooleanProperty isGeneratingProperty()
-    {
+    public final ReadOnlyBooleanProperty isGeneratingProperty() {
         return isGeneratingProperty.getReadOnlyProperty();
     }
     
-    public final boolean isGenerating()
-    {
+    public final boolean isGenerating() {
         return isGeneratingProperty.get();
     }
     
-    protected final void setIsGenerating(boolean isGenerating)
-    {
+    protected final void setIsGenerating(boolean isGenerating) {
         isGeneratingProperty.set(isGenerating);
     }
     
-    protected MandelbrotPage getCoverPage()
-    {
+    protected MandelbrotPage getCoverPage() {
         return coverPage;
     }
     
-    private void refreshCanvas(BoundCanvas source, double newWidth, double newHeight)
-    {
+    private void refreshCanvas(BoundCanvas source, double newWidth, double newHeight) {
         FXTools.get().runFX(() -> TaskTools.sync(lock, () -> {
             FXTools.get().clearCanvasUnsafe(ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas());
             
@@ -96,11 +92,9 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
             
             dimensions.resizeTo(newWidth, newHeight);
             final MandelbrotIterator iterator = new MandelbrotIterator(new MandelbrotColor[(int) newWidth][(int) newHeight], dimensions, lock);
-            worker = new Task<>()
-            {
+            worker = new Task<>() {
                 @Override
-                protected Void call()
-                {
+                protected Void call() {
                     FXTools.get().runFX(() -> getCoverPage().getController().getProgressBar().setVisible(true), true);
                     while (!iterator.isComplete()) {
                         iterator.next();
@@ -118,8 +112,7 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
         }), true);
     }
     
-    private void redraw(MandelbrotColor[][] colors)
-    {
+    private void redraw(MandelbrotColor[][] colors) {
         FXTools.get().runFX(() -> TaskTools.sync(lock, () -> {
             getCoverPage().getController().getProgressBar().setVisible(false);
             for (int i = 0; i < colors.length; i++)
@@ -131,22 +124,20 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
         }), true);
     }
     
-    private void zoom(MouseDragData dragData)
-    {
+    private void zoom(MouseDragData dragData) {
         if (!dragData.isValid())
             throw ExceptionTools.ex("Drag Data is Invalid!");
-//        selectionBoxPaintCommandOld.setActive(false);
+        //        selectionBoxPaintCommandOld.setActive(false);
         selectionBoxPaintCommand.deactivate();
         dimensions.zoomTo(dragData.getStartX(), dragData.getStartY(), dragData.getEndX(), dragData.getEndY());
         refreshCanvas(getController().canvas(), getController().canvas().getWidth(), getController().canvas().getHeight());
     }
     
-    private void updateZoomBox(MouseDragData moveData)
-    {
+    private void updateZoomBox(MouseDragData moveData) {
         TaskTools.sync(lock, () -> {
-//            selectionBoxPaintCommandOld.setActive(true);
-//            selectionBoxPaintCommandOld.setRectangle(moveData.getAsPaintable());
-//            System.out.println("Updating zoom box... " + moveData.getBounds());
+            //            selectionBoxPaintCommandOld.setActive(true);
+            //            selectionBoxPaintCommandOld.setRectangle(moveData.getAsPaintable());
+            //            System.out.println("Updating zoom box... " + moveData.getBounds());
             selectionBoxPaintCommand.activate();
             selectionBoxPaintCommand.setBounds(moveData.getBounds());
         });
@@ -157,14 +148,12 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override
-    protected @NotNull MandelbrotContentData loadData()
-    {
+    protected @NotNull MandelbrotContentData loadData() {
         return new MandelbrotContentData();
     }
     
     @Override
-    protected @NotNull Class<MandelbrotContentController> controllerDefinition()
-    {
+    protected @NotNull Class<MandelbrotContentController> controllerDefinition() {
         return MandelbrotContentController.class;
     }
     

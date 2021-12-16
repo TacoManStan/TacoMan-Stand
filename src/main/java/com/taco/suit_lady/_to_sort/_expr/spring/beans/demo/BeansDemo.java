@@ -69,6 +69,8 @@ public class BeansDemo
         bean.test();
     }
     
+    
+    
     public void configurationSingletonDemo()
     {
         System.out.println("Initializing: External Configuration Singleton Bean Demo");

@@ -2,6 +2,8 @@ package com.taco.suit_lady.view.ui;
 
 import com.taco.suit_lady._to_sort._new.interfaces.ObservablePropertyContainer;
 import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.springable.Springable;
+import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.view.ui.jfx.util.Bounds2D;
 import com.taco.util.obj_traits.common.Nameable;
@@ -10,16 +12,20 @@ import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
+import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 
 public abstract class SLPaintCommand<N extends Node>
-        implements Lockable, Nameable, Comparable<SLPaintCommand<?>>, ObservablePropertyContainer {
+        implements Lockable, Springable, Nameable, Comparable<SLPaintCommand<?>>, ObservablePropertyContainer {
+    
     private final ReentrantLock lock;
+    private final StrictSpringable springable;
     private final String name;
     
     private final ReadOnlyObjectWrapper<Overlay> ownerProperty; // Try to decouple this if you can.
@@ -39,8 +45,9 @@ public abstract class SLPaintCommand<N extends Node>
     
     private final ObjectBinding<Bounds2D> boundsBinding;
     
-    public SLPaintCommand(@Nullable ReentrantLock lock, @NotNull String name, @Nullable Predicate<? super SLPaintCommand<N>> autoRemoveCondition, boolean scaleToParent, int priority) {
+    public SLPaintCommand(@Nullable ReentrantLock lock, @NotNull Springable springable, @NotNull String name, @Nullable Predicate<? super SLPaintCommand<N>> autoRemoveCondition, boolean scaleToParent, int priority) {
         this.lock = lock;
+        this.springable = ExceptionTools.nullCheck(springable, "Springable Input").asStrict();
         this.name = name;
         
         this.ownerProperty = new ReadOnlyObjectWrapper<>();
@@ -89,7 +96,7 @@ public abstract class SLPaintCommand<N extends Node>
     }
     
     protected final N getNode() {
-//        System.out.println("get node...");
+        //        System.out.println("get node...");
         return sync(() -> {
             if (nodeProperty.get() != null)
                 return nodeProperty.get();
@@ -214,7 +221,7 @@ public abstract class SLPaintCommand<N extends Node>
     protected abstract N refreshNode();
     
     protected void applyRefreshSettings(@NotNull N n) {
-//        System.out.println("Applying refresh settings...");
+        //        System.out.println("Applying refresh settings...");
         n.setManaged(false);
         n.visibleProperty().bind(activeProperty);
     }
@@ -243,11 +250,21 @@ public abstract class SLPaintCommand<N extends Node>
         return name;
     }
     
+    
+    @Override
+    public @NotNull FxWeaver weaver() {
+        return springable.weaver();
+    }
+    
+    @Override
+    public @NotNull ConfigurableApplicationContext ctx() {
+        return springable.ctx();
+    }
+    
+    
     @Override
     public Observable[] properties() {
-        return new Observable[]{
-                ownerProperty, nodeProperty, paintPriorityProperty,
-                xProperty, yProperty, widthProperty, heightProperty};
+        return new Observable[]{ownerProperty, nodeProperty, paintPriorityProperty, xProperty, yProperty, widthProperty, heightProperty};
     }
     
     @Override
@@ -258,6 +275,9 @@ public abstract class SLPaintCommand<N extends Node>
     //</editor-fold>
     
     private N refreshNodeImpl() {
+        debugger().print("Refreshing Node...");
+        debugger().warn("Refreshing Node, but as a warning...");
+        
         final N n = refreshNode();
         applyRefreshSettings(n);
         return n;

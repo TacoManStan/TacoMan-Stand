@@ -1,5 +1,6 @@
 package com.taco.suit_lady.view.ui;
 
+import com.taco.suit_lady.util.springable.Springable;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.jetbrains.annotations.NotNull;
@@ -12,11 +13,11 @@ public class SLRectanglePaintCommand extends SLShapePaintCommand<Rectangle> {
     private final Rectangle rectangle;
     
     public SLRectanglePaintCommand(
-            @Nullable ReentrantLock lock, @NotNull String name,
+            @Nullable ReentrantLock lock, @NotNull Springable springable, @NotNull String name,
             @Nullable Predicate<? super SLPaintCommand<Rectangle>> autoRemoveCondition,
             boolean scaleToParent, int priority,
             int x, int y, int width, int height) {
-        super(lock, name, autoRemoveCondition, scaleToParent, priority, x, y, width, height);
+        super(lock, springable, name, autoRemoveCondition, scaleToParent, priority, x, y, width, height);
         
         this.rectangle = new Rectangle();
         this.rectangle.setFill(null);
@@ -32,10 +33,10 @@ public class SLRectanglePaintCommand extends SLShapePaintCommand<Rectangle> {
             rectangle.setWidth(getWidth());
             rectangle.setHeight(getHeight());
             
-//            rectangle.setManaged(false); // Otherwise, the above x and y coordinates are ignored by the parent StackPane
+            //            rectangle.setManaged(false); // Otherwise, the above x and y coordinates are ignored by the parent StackPane
             
-//            System.out.println("Refreshing node... " + rectangle);
-//            System.out.println("Parent... " + getOwner());
+            //            System.out.println("Refreshing node... " + rectangle);
+            //            System.out.println("Parent... " + getOwner());
             
             return rectangle;
         });

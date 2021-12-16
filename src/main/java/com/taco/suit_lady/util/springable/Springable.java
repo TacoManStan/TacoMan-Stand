@@ -1,5 +1,6 @@
 package com.taco.suit_lady.util.springable;
 
+import com.taco.suit_lady._to_sort._new.Debugger;
 import com.taco.suit_lady.view.ui.Sidebar;
 import com.taco.suit_lady.view.ui.console.Console;
 import com.taco.suit_lady.view.ui.AppUI;
@@ -22,8 +23,7 @@ import org.springframework.context.ConfigurableApplicationContext;
  *     <li>Annotating implemented methods as either {@link Nullable} or {@link NotNull} to reflect nullity is strongly recommended.</li>
  * </ol>
  */
-public interface Springable
-{
+public interface Springable {
     /**
      * <p>Grants access to the appropriate {@link FxWeaver} instance for use in this {@link Springable} implementation.</p>
      *
@@ -46,8 +46,7 @@ public interface Springable
      *
      * @return The singleton {@link Console} instance stored and managed by the {@link SpringApplication Spring} framework.
      */
-    default @NotNull Console console()
-    {
+    default @NotNull Console console() {
         return ctx().getBean(Console.class);
     }
     
@@ -57,8 +56,7 @@ public interface Springable
      *
      * @return The singleton {@link AppUI} instance stored and managed by the {@link SpringApplication Spring} framework.
      */
-    default @NotNull AppUI ui()
-    {
+    default @NotNull AppUI ui() {
         return ctx().getBean(AppUI.class);
     }
     
@@ -68,9 +66,12 @@ public interface Springable
      *
      * @return The {@link Sidebar} instance contained within the {@link AppUI} singleton stored and managed by the {@link SpringApplication Spring} framework.
      */
-    default @NotNull Sidebar sidebar()
-    {
+    default @NotNull Sidebar sidebar() {
         return ui().getSidebar();
+    }
+    
+    default @NotNull Debugger debugger() {
+        return ctx().getBean(Debugger.class);
     }
     
     //
@@ -85,8 +86,7 @@ public interface Springable
      *
      * @return A new {@link SimpleSpringable} instance wrapping the contents of this {@link Springable}.
      */
-    default @NotNull SimpleSpringable asSimple()
-    {
+    default @NotNull SimpleSpringable asSimple() {
         return new SimpleSpringable(weaver(), ctx());
     }
     
@@ -96,8 +96,7 @@ public interface Springable
      *
      * @return A new {@link StrictSpringable} instance wrapping the contents of this {@link Springable}.
      */
-    default @NotNull StrictSpringable asStrict()
-    {
+    default @NotNull StrictSpringable asStrict() {
         return new StrictSpringable(weaver(), ctx());
     }
     

@@ -1,6 +1,7 @@
 package com.taco.suit_lady.view.ui;
 
 import com.taco.suit_lady._to_sort._new.interfaces.ObservablePropertyContainer;
+import com.taco.suit_lady.util.springable.Springable;
 import javafx.scene.shape.Shape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,11 +13,11 @@ public abstract class SLShapePaintCommand<S extends Shape> extends SLPaintComman
         implements ObservablePropertyContainer
 {
     public SLShapePaintCommand(
-            @Nullable ReentrantLock lock, @NotNull String name,
+            @Nullable ReentrantLock lock, @NotNull Springable springable, @NotNull String name,
             @Nullable Predicate<? super SLPaintCommand<S>> autoRemoveCondition,
             boolean scaleToParent, int priority,
             int x, int y, int width, int height)
     {
-        super(lock, name, autoRemoveCondition, scaleToParent, priority);
+        super(lock, springable, name, autoRemoveCondition, scaleToParent, priority);
     }
 }
