@@ -1,8 +1,7 @@
-package com.taco.suit_lady.view.ui.overlay.paint_commands;
+package com.taco.suit_lady.view.ui.overlay.painting;
 
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ResourceTools;
-import com.taco.suit_lady.view.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.view.ui.jfx.util.Bounds2D;
 import com.taco.suit_lady.view.ui.overlay.Overlay;
 import javafx.scene.image.Image;

@@ -4,9 +4,9 @@ import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.TB;
 import com.taco.suit_lady.util.tools.TaskTools;
-import com.taco.suit_lady.view.ui.overlay.paint_commands.SLEllipsePaintCommand;
-import com.taco.suit_lady.view.ui.overlay.paint_commands.SLImagePaintCommand;
-import com.taco.suit_lady.view.ui.overlay.paint_commands.SLRectanglePaintCommand;
+import com.taco.suit_lady.view.ui.overlay.painting.SLEllipsePaintCommand;
+import com.taco.suit_lady.view.ui.overlay.painting.SLImagePaintCommand;
+import com.taco.suit_lady.view.ui.overlay.painting.SLRectanglePaintCommand;
 import com.taco.suit_lady.view.ui.UIBook;
 import com.taco.suit_lady.view.ui.jfx.components.BoundCanvas;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
@@ -31,9 +31,9 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
     private final ReadOnlyBooleanWrapper isGeneratingProperty;
     
     private RectanglePaintCommand selectionBoxPaintCommandOld;
-    private SLRectanglePaintCommand selectionBoxPaintCommand;
-    private SLImagePaintCommand selectionBoxPaintCommand2;
-    private SLEllipsePaintCommand selectionCirclePaintCommand;
+    private final SLRectanglePaintCommand selectionBoxPaintCommand;
+    private final SLImagePaintCommand selectionBoxPaintCommand2;
+    private final SLEllipsePaintCommand selectionCirclePaintCommand;
     
     private MandelbrotPage coverPage;
     

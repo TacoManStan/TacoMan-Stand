@@ -1,4 +1,4 @@
-package com.taco.suit_lady.view.ui.overlay.paint_commands;
+package com.taco.suit_lady.view.ui.overlay.painting;
 
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.view.ui.jfx.util.Bounds2D;

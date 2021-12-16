@@ -7,7 +7,7 @@ import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.list_tools.ListTools;
-import com.taco.suit_lady.view.ui.overlay.paint_commands.SLPaintCommand;
+import com.taco.suit_lady.view.ui.overlay.painting.SLPaintCommand;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
