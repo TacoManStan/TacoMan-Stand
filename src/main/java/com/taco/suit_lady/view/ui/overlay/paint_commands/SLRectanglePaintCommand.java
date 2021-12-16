@@ -1,6 +1,7 @@
-package com.taco.suit_lady.view.ui;
+package com.taco.suit_lady.view.ui.overlay.paint_commands;
 
 import com.taco.suit_lady.util.springable.Springable;
+import com.taco.suit_lady.view.ui.overlay.Overlay;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.jetbrains.annotations.NotNull;

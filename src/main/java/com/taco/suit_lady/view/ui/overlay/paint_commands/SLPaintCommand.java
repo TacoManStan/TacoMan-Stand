@@ -1,4 +1,4 @@
-package com.taco.suit_lady.view.ui;
+package com.taco.suit_lady.view.ui.overlay.paint_commands;
 
 import com.taco.suit_lady._to_sort._new.interfaces.ObservablePropertyContainer;
 import com.taco.suit_lady.util.Lockable;
@@ -6,6 +6,7 @@ import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.view.ui.jfx.util.Bounds2D;
+import com.taco.suit_lady.view.ui.overlay.Overlay;
 import com.taco.util.obj_traits.common.Nameable;
 import javafx.beans.Observable;
 import javafx.beans.binding.ObjectBinding;
@@ -83,7 +84,7 @@ public abstract class SLPaintCommand<N extends Node>
         return ownerProperty;
     }
     
-    protected final Overlay setOwner(Overlay overlay) {
+    public final Overlay setOwner(Overlay overlay) {
         return sync(() -> {
             Overlay oldOverlay = getOwner();
             ownerProperty.set(overlay);
@@ -95,7 +96,7 @@ public abstract class SLPaintCommand<N extends Node>
         return nodeProperty.getReadOnlyProperty();
     }
     
-    protected final N getNode() {
+    public final N getNode() {
         //        System.out.println("get node...");
         return sync(() -> {
             if (nodeProperty.get() != null)

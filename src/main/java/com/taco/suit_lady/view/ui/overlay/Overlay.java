@@ -1,4 +1,4 @@
-package com.taco.suit_lady.view.ui;
+package com.taco.suit_lady.view.ui.overlay;
 
 import com.taco.suit_lady._to_sort._new.ReadOnlyObservableList;
 import com.taco.suit_lady._to_sort._new.ReadOnlyObservableListWrapper;
@@ -6,9 +6,8 @@ import com.taco.suit_lady._to_sort._new.interfaces.ReadOnlyNameableProperty;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
-import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import com.taco.suit_lady.util.tools.list_tools.ListTools;
-import com.taco.suit_lady.view.ui.jfx.util.Bounds2D;
+import com.taco.suit_lady.view.ui.overlay.paint_commands.SLPaintCommand;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;

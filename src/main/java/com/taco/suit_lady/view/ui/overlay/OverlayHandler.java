@@ -1,4 +1,4 @@
-package com.taco.suit_lady.view.ui;
+package com.taco.suit_lady.view.ui.overlay;
 
 import com.taco.suit_lady._to_sort._new.ReadOnlyObservableList;
 import com.taco.suit_lady._to_sort._new.ReadOnlyObservableListWrapper;
@@ -88,7 +88,7 @@ public class OverlayHandler
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    protected final StackPane root() {
+    public final StackPane root() {
         return root;
     }
     
