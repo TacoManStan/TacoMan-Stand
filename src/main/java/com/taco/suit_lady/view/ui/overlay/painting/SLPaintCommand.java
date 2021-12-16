@@ -296,7 +296,6 @@ public abstract class SLPaintCommand<N extends Node>
     
     private N refreshNodeImpl() {
         debugger().print("Refreshing Node...");
-        debugger().warn("Refreshing Node, but as a warning...");
         
         final N n = refreshNode();
         applyRefresh(n);

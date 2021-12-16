@@ -60,13 +60,13 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
         
         this.selectionBoxPaintCommand = new SLRectanglePaintCommand(
                 lock, this, "selection-box",
-                null, true, 3);
+                null, true, 1);
         this.selectionBoxPaintCommand2 = new SLImagePaintCommand(
                 lock, this, "selection-box2",
-                null, true, 2);
+                null, true, 3);
         this.selectionCirclePaintCommand = new SLEllipsePaintCommand(
                 lock, this, "selection-circle",
-                null, true, 1);
+                null, true, 2);
         
         this.selectionBoxPaintCommand.deactivate();
         this.selectionBoxPaintCommand2.deactivate();

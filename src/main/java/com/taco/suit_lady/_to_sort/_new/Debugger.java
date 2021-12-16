@@ -1,35 +1,33 @@
 package com.taco.suit_lady._to_sort._new;
 
-import com.taco.suit_lady.util.tools.ArrayTools;
 import com.taco.suit_lady.util.tools.ExceptionTools;
-import com.taco.suit_lady.util.tools.list_tools.Operation;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.IntStream;
 
 @Component
-public class Debugger {
+public final class Debugger {
     
-    private final ReadOnlyBooleanWrapper isGeneralEnabledProperty;
+    public static final String PRINT = "print";
+    public static final String WARN = "warn";
+    public static final String ERROR = "error";
+    
+    private final ReadOnlyBooleanWrapper isPrintEnabledProperty;
     private final ReadOnlyBooleanWrapper isWarnEnabledProperty;
     private final ReadOnlyBooleanWrapper isErrorEnabledProperty;
     
     public Debugger() {
-        this.isGeneralEnabledProperty = new ReadOnlyBooleanWrapper(false);
+        this.isPrintEnabledProperty = new ReadOnlyBooleanWrapper(true);
         this.isWarnEnabledProperty = new ReadOnlyBooleanWrapper(false);
         this.isErrorEnabledProperty = new ReadOnlyBooleanWrapper(false);
         
         
-        this.isGeneralEnabledProperty.addListener((observable, oldValue, newValue) -> {
+        this.isPrintEnabledProperty.addListener((observable, oldValue, newValue) -> {
             if (newValue && !oldValue)
                 System.out.println("General Debug Output is now Enabled");
             else if (!newValue && oldValue)
@@ -49,60 +47,96 @@ public class Debugger {
         });
     }
     
-    public void printList(@NotNull List<String> list, @Nullable String footer) {
-        if (!list.isEmpty())
-            doPrint(() -> list.forEach(s -> System.out.println("[" + list.indexOf(s) + "]: " + s)), "list", footer, true);
-        else
-            doPrint(() -> System.out.println("empty"), "list", footer, true);
+    
+    public void print(@NotNull String msg) {
+        print(PRINT, msg);
     }
     
-    public void doPrint(@NotNull Runnable prints, @Nullable String title, @Nullable String footer, boolean box) {
-        if (box) {
-            System.out.println();
-            System.out.println();
-            System.out.println();
-            System.out.println("------------------------------------------------------------");
-        }
-        
-        if (title != null) {
-            if (!box)
+    public void print(@NotNull String printType, @NotNull String msg) {
+        if (isTypeEnabled(printType))
+            System.out.println(printType + ": " + msg);
+    }
+    
+    
+    public <E> void printList(@NotNull List<E> list, @Nullable String footer) {
+        printList(PRINT, list, footer);
+    }
+    
+    public <E> void printList(@NotNull String printType, @NotNull List<E> list, @Nullable String footer) {
+        if (!list.isEmpty())
+            printBlock(printType, "list", footer, true, list.toArray());
+        else
+            printBlock(printType, "list", footer, true, "empty");
+    }
+    
+    
+    public void printBlock(@NotNull Runnable printAction, @Nullable String title, @Nullable String footer, boolean box) {
+        printBlock(PRINT, printAction, title, footer, box);
+    }
+    
+    @SafeVarargs
+    public final <E> void printBlock(@Nullable String title, @Nullable String footer, boolean box, E... prints) {
+        printBlock(PRINT, title, footer, box, prints);
+    }
+    
+    @SafeVarargs
+    public final <E> void printBlock(@Nullable String printType, @Nullable String title, @Nullable String footer, boolean box, E... prints) {
+        printBlock(printType, () -> IntStream.range(0, prints.length).mapToObj(i -> "[" + i + "]: " + prints[i]).forEach(System.out::println),
+                   title, footer, box);
+    }
+    
+    
+    public void printBlock(@NotNull String printType, @NotNull Runnable prints, @Nullable String title, @Nullable String footer, boolean box) {
+        if (isTypeEnabled(printType)) {
+            footer = "[ " + printType.toUpperCase()  + " ]" + (footer != null ? "  " + footer : "");
+            
+            if (box) {
+                System.out.println();
+                System.out.println();
+                System.out.println();
                 System.out.println("------------------------------------------------------------");
-            System.out.println("::: " + title.toUpperCase() + " :::");
-            System.out.println("------------------------------------------------------------");
-            System.out.println();
-        }
-        
-        //
-        
-        prints.run();
-        
-        //
-        
-        if (footer != null) {
-            if (box && title != null) {
+            }
+            
+            if (title != null) {
+                if (!box)
+                    System.out.println("------------------------------------------------------------");
+                System.out.println("::: " + title.toUpperCase() + " :::");
+                System.out.println("------------------------------------------------------------");
                 System.out.println();
-                System.out.println("" + footer + "");
-            } else
-                System.out.println("    > " + footer);
-        }
-        if (box) {
-            if (footer == null)
+            }
+            
+            //
+            
+            prints.run();
+            
+            //
+            
+            if (footer != null) {
+                if (box && title != null) {
+                    System.out.println();
+                    System.out.println("" + footer + "");
+                } else
+                    System.out.println("    > " + footer);
+            }
+            if (box) {
+                if (footer == null)
+                    System.out.println();
+                System.out.println("------------------------------------------------------------");
                 System.out.println();
-            System.out.println("------------------------------------------------------------");
-            System.out.println();
-            System.out.println();
-            System.out.println();
+                System.out.println();
+                System.out.println();
+            }
         }
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final ReadOnlyBooleanProperty readOnlyIsGeneralEnabledProperty() {
-        return isGeneralEnabledProperty.getReadOnlyProperty();
+    public final ReadOnlyBooleanProperty readOnlyIsPrintEnabledProperty() {
+        return isPrintEnabledProperty.getReadOnlyProperty();
     }
     
-    public final boolean isGeneralEnabled() {
-        return isGeneralEnabledProperty.get();
+    public final boolean isPrintEnabled() {
+        return isPrintEnabledProperty.get();
     }
     
     public final ReadOnlyBooleanProperty readOnlyIsWarnEnabledProperty() {
@@ -121,23 +155,16 @@ public class Debugger {
         return isErrorEnabledProperty.get();
     }
     
-    //</editor-fold>
-    
-    //<editor-fold desc="--- CLASS BODY ---">
-    
-    public void print(String msg) {
-        if (isGeneralEnabled())
-            System.out.println("STATUS:  " + msg);
-    }
-    
-    public void warn(String msg) {
-        if (isWarnEnabled())
-            System.out.println("WARNING: " + msg);
-    }
-    
-    public void error(String msg) {
-        if (isErrorEnabled())
-            System.out.println("ERROR:   " + msg);
+    public final boolean isTypeEnabled(@NotNull String printType) {
+        ExceptionTools.nullCheck(printType, "Print Type");
+        if (printType.equalsIgnoreCase(PRINT))
+            return isPrintEnabled();
+        else if (printType.equalsIgnoreCase(WARN))
+            return isWarnEnabled();
+        else if (printType.equalsIgnoreCase(ERROR))
+            return isErrorEnabled();
+        else
+            throw ExceptionTools.unsupported("Unrecognized Print Type: " + printType);
     }
     
     //</editor-fold>

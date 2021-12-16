@@ -87,7 +87,7 @@ public class Overlay
             ExceptionTools.nullCheck(paintCommand, "Paint Command Input").setOwner(this); // TODO: Move to listener & also track remove events
             paintCommands.add(paintCommand);
             FXCollections.sort(paintCommands);
-            debugger().print("Paint Commands: " );
+            debugger().printList(paintCommands, "Paint Commands");
         });
     }
     

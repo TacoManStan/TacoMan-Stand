@@ -12,7 +12,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class ListToolsDemo {
@@ -166,6 +165,6 @@ public class ListToolsDemo {
         } else
             throw ExceptionTools.ex("BLAH BLAH BLAH");
         
-        debugger.doPrint(printsI, titleI, footerI, boxI);
+        debugger.printBlock(printsI, titleI, footerI, boxI);
     }
 }
