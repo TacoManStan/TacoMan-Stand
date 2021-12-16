@@ -4,6 +4,7 @@ import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.TB;
 import com.taco.suit_lady.util.tools.TaskTools;
+import com.taco.suit_lady.view.ui.overlay.paint_commands.SLEllipsePaintCommand;
 import com.taco.suit_lady.view.ui.overlay.paint_commands.SLImagePaintCommand;
 import com.taco.suit_lady.view.ui.overlay.paint_commands.SLRectanglePaintCommand;
 import com.taco.suit_lady.view.ui.UIBook;
@@ -32,6 +33,7 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
     private RectanglePaintCommand selectionBoxPaintCommandOld;
     private SLRectanglePaintCommand selectionBoxPaintCommand;
     private SLImagePaintCommand selectionBoxPaintCommand2;
+    private SLEllipsePaintCommand selectionCirclePaintCommand;
     
     private MandelbrotPage coverPage;
     
@@ -63,11 +65,18 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
         this.selectionBoxPaintCommand2 = new SLImagePaintCommand(
                 lock, this, "selection-box2",
                 null, true, 1);
+        this.selectionCirclePaintCommand = new SLEllipsePaintCommand(
+                lock, this, "selection-circle",
+                null, true, 1);
+        
+        this.selectionBoxPaintCommand.deactivate();
         this.selectionBoxPaintCommand2.deactivate();
+        this.selectionCirclePaintCommand.deactivate();
         
         
 //        getOverlayHandler().getOverlay("default").addPaintCommand(selectionBoxPaintCommand);
-        getOverlayHandler().getOverlay("default").addPaintCommand(selectionBoxPaintCommand2);
+//        getOverlayHandler().getOverlay("default").addPaintCommand(selectionBoxPaintCommand2);
+        getOverlayHandler().getOverlay("default").addPaintCommand(selectionCirclePaintCommand);
         
         //        this.selectionBoxPaintCommand = new RectanglePaintCommand(false, lock);
         //        ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas().addPaintCommand(selectionBoxPaintCommand);
@@ -139,6 +148,7 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
         //        selectionBoxPaintCommandOld.setActive(false);
         selectionBoxPaintCommand.deactivate();
         selectionBoxPaintCommand2.deactivate();
+        selectionCirclePaintCommand.deactivate();
         dimensions.zoomTo(dragData.getStartX(), dragData.getStartY(), dragData.getEndX(), dragData.getEndY());
         refreshCanvas(getController().canvas(), getController().canvas().getWidth(), getController().canvas().getHeight());
     }
@@ -150,8 +160,10 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
             //            System.out.println("Updating zoom box... " + moveData.getBounds());
             selectionBoxPaintCommand.activate();
             selectionBoxPaintCommand2.activate();
+            selectionCirclePaintCommand.activate();
             selectionBoxPaintCommand.setBounds(moveData.getBounds());
             selectionBoxPaintCommand2.setBounds(moveData.getBounds());
+            selectionCirclePaintCommand.setBounds(moveData.getBounds());
         });
         //        final AppUI ui = ctx().getBean(AppUI.class);
         //        FXTools.get().drawRectangle(ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas(), moveData.getAsPaintable(), true, false);

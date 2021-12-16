@@ -12,6 +12,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 
 public class SLRectanglePaintCommand extends SLShapePaintCommand<Rectangle> {
+    
     private final Rectangle rectangle;
     
     public SLRectanglePaintCommand(
