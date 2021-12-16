@@ -30,40 +30,6 @@ public class OverlayHandler
     
     private final StackPane root;
     
-    public static void main(String[] args) {
-        ReadOnlyObservableListWrapper<String> listWrapper = new ReadOnlyObservableListWrapper<>();
-        ListTools.applyListener(null, listWrapper, (op1, op2, opType, triggerType) -> {
-            System.out.println("Operation Event Triggered:  [" + op1 + "  |  " + op2 + "  |  " + opType + "  |  " + triggerType + "]");
-        });
-        
-        
-        ListToolsDemo.printList(listWrapper, null);
-        
-        listWrapper.add("Element 1");
-        ListToolsDemo.printList(listWrapper, null);
-        
-        listWrapper.add("Element 54");
-        ListToolsDemo.printList(listWrapper, null);
-        
-        listWrapper.add("asdf");
-        ListToolsDemo.printList(listWrapper, null);
-        
-        listWrapper.add("3");
-        ListToolsDemo.printList(listWrapper, null);
-        
-        listWrapper.add("z");
-        ListToolsDemo.printList(listWrapper, null);
-        
-        listWrapper.add("hello");
-        ListToolsDemo.printList(listWrapper, null);
-        
-        //        listWrapper.sort(null);
-        //        ListToolsDemo.printList(listWrapper, null);
-        
-        FXCollections.sort(listWrapper);
-        ListToolsDemo.printList(listWrapper, null);
-    }
-    
     public OverlayHandler(@NotNull Springable springable, @Nullable ReentrantLock lock, @Nullable Overlay... initialOverlays) {
         this.springable = ExceptionTools.nullCheck(springable, "Springable Input");
         this.lock = lock;
