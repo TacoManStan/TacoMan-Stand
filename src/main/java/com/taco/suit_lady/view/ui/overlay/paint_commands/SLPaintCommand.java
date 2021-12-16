@@ -46,7 +46,12 @@ public abstract class SLPaintCommand<N extends Node>
     
     private final ObjectBinding<Bounds2D> boundsBinding;
     
-    public SLPaintCommand(@Nullable ReentrantLock lock, @NotNull Springable springable, @NotNull String name, @Nullable Predicate<? super SLPaintCommand<N>> autoRemoveCondition, boolean scaleToParent, int priority) {
+    public SLPaintCommand(@Nullable ReentrantLock lock,
+                          @NotNull Springable springable,
+                          @NotNull String name,
+                          @Nullable Predicate<? super SLPaintCommand<N>> autoRemoveCondition,
+                          boolean scaleToParent,
+                          int priority) {
         this.lock = lock;
         this.springable = ExceptionTools.nullCheck(springable, "Springable Input").asStrict();
         this.name = name;

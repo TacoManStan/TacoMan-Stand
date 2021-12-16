@@ -4,6 +4,7 @@ import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.TB;
 import com.taco.suit_lady.util.tools.TaskTools;
+import com.taco.suit_lady.view.ui.overlay.paint_commands.SLImagePaintCommand;
 import com.taco.suit_lady.view.ui.overlay.paint_commands.SLRectanglePaintCommand;
 import com.taco.suit_lady.view.ui.UIBook;
 import com.taco.suit_lady.view.ui.jfx.components.BoundCanvas;
@@ -30,6 +31,7 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
     
     private RectanglePaintCommand selectionBoxPaintCommandOld;
     private SLRectanglePaintCommand selectionBoxPaintCommand;
+    private SLImagePaintCommand selectionBoxPaintCommand2;
     
     private MandelbrotPage coverPage;
     
@@ -58,7 +60,14 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
                 lock, this, "selection-box",
                 null, true, 1,
                 0, 0, 0, 0);
-        getOverlayHandler().getOverlay("default").addPaintCommand(selectionBoxPaintCommand);
+        this.selectionBoxPaintCommand2 = new SLImagePaintCommand(
+                lock, this, "selection-box2",
+                null, true, 1, null);
+        this.selectionBoxPaintCommand2.deactivate();
+        
+        
+//        getOverlayHandler().getOverlay("default").addPaintCommand(selectionBoxPaintCommand);
+        getOverlayHandler().getOverlay("default").addPaintCommand(selectionBoxPaintCommand2);
         
         //        this.selectionBoxPaintCommand = new RectanglePaintCommand(false, lock);
         //        ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas().addPaintCommand(selectionBoxPaintCommand);
@@ -129,6 +138,7 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
             throw ExceptionTools.ex("Drag Data is Invalid!");
         //        selectionBoxPaintCommandOld.setActive(false);
         selectionBoxPaintCommand.deactivate();
+        selectionBoxPaintCommand2.deactivate();
         dimensions.zoomTo(dragData.getStartX(), dragData.getStartY(), dragData.getEndX(), dragData.getEndY());
         refreshCanvas(getController().canvas(), getController().canvas().getWidth(), getController().canvas().getHeight());
     }
@@ -139,7 +149,9 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
             //            selectionBoxPaintCommandOld.setRectangle(moveData.getAsPaintable());
             //            System.out.println("Updating zoom box... " + moveData.getBounds());
             selectionBoxPaintCommand.activate();
+            selectionBoxPaintCommand2.activate();
             selectionBoxPaintCommand.setBounds(moveData.getBounds());
+            selectionBoxPaintCommand2.setBounds(moveData.getBounds());
         });
         //        final AppUI ui = ctx().getBean(AppUI.class);
         //        FXTools.get().drawRectangle(ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas(), moveData.getAsPaintable(), true, false);
