@@ -3,13 +3,12 @@ package com.taco.suit_lady._to_sort._new.interfaces;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import javafx.beans.Observable;
 import javafx.beans.binding.*;
-import org.aspectj.weaver.ast.Call;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.Callable;
 
 @FunctionalInterface
-public interface ObservablePropertyContainer
+public interface ObservablePropertyContainable
 {
     @NotNull Observable[] properties();
     

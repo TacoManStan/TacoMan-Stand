@@ -1,4 +1,4 @@
-package com.taco.suit_lady.view.ui.overlay;
+package com.taco.suit_lady.view.ui.painting;
 
 import com.taco.suit_lady._to_sort._new.ReadOnlyObservableList;
 import com.taco.suit_lady._to_sort._new.ReadOnlyObservableListWrapper;
@@ -7,7 +7,6 @@ import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import com.taco.suit_lady.util.tools.list_tools.ListTools;
-import com.taco.suit_lady.util.tools.list_tools.ListToolsDemo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.StackPane;

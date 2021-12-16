@@ -4,9 +4,9 @@ import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.TB;
 import com.taco.suit_lady.util.tools.TaskTools;
-import com.taco.suit_lady.view.ui.overlay.painting.SLEllipsePaintCommand;
-import com.taco.suit_lady.view.ui.overlay.painting.SLImagePaintCommand;
-import com.taco.suit_lady.view.ui.overlay.painting.SLRectanglePaintCommand;
+import com.taco.suit_lady.view.ui.painting.SLEllipsePaintCommand;
+import com.taco.suit_lady.view.ui.painting.SLImagePaintCommand;
+import com.taco.suit_lady.view.ui.painting.SLRectanglePaintCommand;
 import com.taco.suit_lady.view.ui.UIBook;
 import com.taco.suit_lady.view.ui.jfx.components.BoundCanvas;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
@@ -60,13 +60,13 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
         
         this.selectionBoxPaintCommand = new SLRectanglePaintCommand(
                 lock, this, "selection-box",
-                null, true, 1);
+                null, 1);
         this.selectionBoxPaintCommand2 = new SLImagePaintCommand(
                 lock, this, "selection-box2",
-                null, true, 3);
+                null, 3);
         this.selectionCirclePaintCommand = new SLEllipsePaintCommand(
                 lock, this, "selection-circle",
-                null, true, 2);
+                null, 2);
         
         this.selectionBoxPaintCommand.deactivate();
         this.selectionBoxPaintCommand2.deactivate();

@@ -1,8 +1,7 @@
-package com.taco.suit_lady.view.ui.overlay.painting;
+package com.taco.suit_lady.view.ui.painting;
 
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.view.ui.jfx.util.Bounds2D;
-import com.taco.suit_lady.view.ui.overlay.Overlay;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.jetbrains.annotations.NotNull;
@@ -17,9 +16,8 @@ public class SLRectanglePaintCommand extends SLShapePaintCommand<Rectangle> {
     
     public SLRectanglePaintCommand(
             @Nullable ReentrantLock lock, @NotNull Springable springable, @NotNull String name,
-            @Nullable Predicate<? super SLPaintCommand<Rectangle>> autoRemoveCondition,
-            boolean scaleToParent, int priority) {
-        super(lock, springable, name, autoRemoveCondition, scaleToParent, priority, 0, 0, 0, 0);
+            @Nullable Predicate<? super SLPaintCommand<Rectangle>> autoRemoveCondition, int priority) {
+        super(lock, springable, name, autoRemoveCondition, priority);
         
         this.rectangle = new Rectangle();
         this.rectangle.setFill(Color.RED);

@@ -1,9 +1,8 @@
-package com.taco.suit_lady.view.ui.overlay.painting;
+package com.taco.suit_lady.view.ui.painting;
 
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ResourceTools;
 import com.taco.suit_lady.view.ui.jfx.util.Bounds2D;
-import com.taco.suit_lady.view.ui.overlay.Overlay;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.jetbrains.annotations.NotNull;
@@ -18,39 +17,35 @@ public class SLImagePaintCommand extends SLPaintCommand<ImageView> {
     
     public SLImagePaintCommand(
             @Nullable ReentrantLock lock, @NotNull Springable springable, @NotNull String name,
-            @Nullable Predicate<? super SLPaintCommand<ImageView>> autoRemoveCondition,
-            boolean scaleToParent, int priority) {
-        super(lock, springable, name, autoRemoveCondition, scaleToParent, priority);
+            @Nullable Predicate<? super SLPaintCommand<ImageView>> autoRemoveCondition, int priority) {
+        super(lock, springable, name, autoRemoveCondition, priority);
         
         this.imageView = new ImageView(ResourceTools.get().getImage("/", "Flork_of_Taco", "png"));
     }
     
     public SLImagePaintCommand(
             @Nullable ReentrantLock lock, @NotNull Springable springable, @NotNull String name,
-            @Nullable Predicate<? super SLPaintCommand<ImageView>> autoRemoveCondition,
-            boolean scaleToParent, int priority,
+            @Nullable Predicate<? super SLPaintCommand<ImageView>> autoRemoveCondition, int priority,
             String imageID, String pathID) {
-        super(lock, springable, name, autoRemoveCondition, scaleToParent, priority);
+        super(lock, springable, name, autoRemoveCondition, priority);
         
         this.imageView = new ImageView(ResourceTools.get().getImage(pathID, imageID, "png"));
     }
     
     public SLImagePaintCommand(
             @Nullable ReentrantLock lock, @NotNull Springable springable, @NotNull String name,
-            @Nullable Predicate<? super SLPaintCommand<ImageView>> autoRemoveCondition,
-            boolean scaleToParent, int priority,
+            @Nullable Predicate<? super SLPaintCommand<ImageView>> autoRemoveCondition, int priority,
             String url) {
-        super(lock, springable, name, autoRemoveCondition, scaleToParent, priority);
+        super(lock, springable, name, autoRemoveCondition, priority);
         
         this.imageView = new ImageView(url);
     }
     
     public SLImagePaintCommand(
             @Nullable ReentrantLock lock, @NotNull Springable springable, @NotNull String name,
-            @Nullable Predicate<? super SLPaintCommand<ImageView>> autoRemoveCondition,
-            boolean scaleToParent, int priority,
+            @Nullable Predicate<? super SLPaintCommand<ImageView>> autoRemoveCondition, int priority,
             Image image) {
-        super(lock, springable, name, autoRemoveCondition, scaleToParent, priority);
+        super(lock, springable, name, autoRemoveCondition, priority);
         
         this.imageView = new ImageView(image);
     }

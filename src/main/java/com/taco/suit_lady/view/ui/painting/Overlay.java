@@ -1,4 +1,4 @@
-package com.taco.suit_lady.view.ui.overlay;
+package com.taco.suit_lady.view.ui.painting;
 
 import com.taco.suit_lady._to_sort._new.ReadOnlyObservableList;
 import com.taco.suit_lady._to_sort._new.ReadOnlyObservableListWrapper;
@@ -7,7 +7,6 @@ import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.list_tools.ListTools;
-import com.taco.suit_lady.view.ui.overlay.painting.SLPaintCommand;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
@@ -83,11 +82,20 @@ public class Overlay
     }
     
     public final void addPaintCommand(@NotNull SLPaintCommand<?> paintCommand) {
+        ExceptionTools.nullCheck(paintCommand, "Paint Command Input").setOwner(this); // TODO: Move to listener & also track remove events
         sync(() -> {
-            ExceptionTools.nullCheck(paintCommand, "Paint Command Input").setOwner(this); // TODO: Move to listener & also track remove events
             paintCommands.add(paintCommand);
             FXCollections.sort(paintCommands);
-            debugger().printList(paintCommands, "Paint Commands");
+            debugger().printList(paintCommands, "Paint Commands (Added)");
+        });
+    }
+    
+    public final boolean removePaintCommand(@NotNull SLPaintCommand<?> paintCommand) {
+        ExceptionTools.nullCheck(paintCommand, "Paint Command Input");
+        return sync(() -> {
+            paintCommands.remove(paintCommand);
+            debugger().printList(paintCommands, "Paint Commands (Removed)");
+            return !paintCommands.contains(paintCommand);
         });
     }
     

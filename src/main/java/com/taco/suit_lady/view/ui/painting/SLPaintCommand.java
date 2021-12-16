@@ -1,12 +1,11 @@
-package com.taco.suit_lady.view.ui.overlay.painting;
+package com.taco.suit_lady.view.ui.painting;
 
-import com.taco.suit_lady._to_sort._new.interfaces.ObservablePropertyContainer;
+import com.taco.suit_lady._to_sort._new.interfaces.ObservablePropertyContainable;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.view.ui.jfx.util.Bounds2D;
-import com.taco.suit_lady.view.ui.overlay.Overlay;
 import com.taco.util.obj_traits.common.Nameable;
 import javafx.beans.Observable;
 import javafx.beans.binding.ObjectBinding;
@@ -23,7 +22,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 
 public abstract class SLPaintCommand<N extends Node>
-        implements Lockable, Springable, Nameable, Comparable<SLPaintCommand<?>>, ObservablePropertyContainer {
+        implements Lockable, Springable, Nameable, Comparable<SLPaintCommand<?>>, ObservablePropertyContainable {
     
     private final ReentrantLock lock;
     private final StrictSpringable springable;
@@ -36,7 +35,6 @@ public abstract class SLPaintCommand<N extends Node>
     private final BooleanProperty activeProperty;
     private final IntegerProperty paintPriorityProperty;
     
-    //
     
     private final IntegerProperty xProperty;
     private final IntegerProperty yProperty;
@@ -45,11 +43,21 @@ public abstract class SLPaintCommand<N extends Node>
     
     private final ObjectBinding<Bounds2D> boundsBinding;
     
-    public SLPaintCommand(@Nullable ReentrantLock lock,
-                          @NotNull Springable springable,
-                          @NotNull String name,
-                          @Nullable Predicate<? super SLPaintCommand<N>> autoRemoveCondition,
-                          int priority) {
+    public SLPaintCommand(@NotNull Springable springable, @NotNull String name, int priority) {
+        this(null, springable, name, null, priority);
+    }
+    
+    public SLPaintCommand(@NotNull Springable springable, @NotNull String name, @Nullable Predicate<? super SLPaintCommand<N>> autoRemoveCondition, int priority) {
+        this(null, springable, name, autoRemoveCondition, priority);
+    }
+    
+    public SLPaintCommand(@Nullable ReentrantLock lock, @NotNull Springable springable, @NotNull String name, int priority) {
+        this(lock, springable, name, null, priority);
+    }
+    
+    public SLPaintCommand(
+            @Nullable ReentrantLock lock, @NotNull Springable springable, @NotNull String name,
+            @Nullable Predicate<? super SLPaintCommand<N>> autoRemoveCondition, int priority) {
         this.lock = lock;
         this.springable = ExceptionTools.nullCheck(springable, "Springable Input").asStrict();
         this.name = name;
@@ -67,25 +75,26 @@ public abstract class SLPaintCommand<N extends Node>
         this.widthProperty = new SimpleIntegerProperty();
         this.heightProperty = new SimpleIntegerProperty();
         
+        
         this.boundsBinding = createObjectBinding(() -> new Bounds2D(getX(), getY(), getWidth(), getHeight()));
         this.boundsBinding.addListener((observable, oldValue, newValue) -> nodeProperty.set(refreshNodeImpl()));
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final ReadOnlyObjectProperty<Overlay> ownerProperty() {
+    public final @NotNull ReadOnlyObjectProperty<Overlay> ownerProperty() {
         return ownerProperty.getReadOnlyProperty();
     }
     
-    public final Overlay getOwner() {
+    public final @Nullable Overlay getOwner() {
         return ownerProperty.get();
     }
     
-    protected final ReadOnlyObjectWrapper<Overlay> ownerPropertyImpl() {
+    protected final @NotNull ReadOnlyObjectWrapper<Overlay> ownerPropertyImpl() {
         return ownerProperty;
     }
     
-    public final Overlay setOwner(Overlay overlay) {
+    public final @Nullable Overlay setOwner(@Nullable Overlay overlay) {
         return sync(() -> {
             Overlay oldOverlay = getOwner();
             ownerProperty.set(overlay);
@@ -93,11 +102,11 @@ public abstract class SLPaintCommand<N extends Node>
         });
     }
     
-    protected final ReadOnlyObjectProperty<N> nodeProperty() {
+    protected final @NotNull ReadOnlyObjectProperty<N> nodeProperty() {
         return nodeProperty.getReadOnlyProperty();
     }
     
-    public final N getNode() {
+    public final @NotNull N getNode() {
         //        System.out.println("get node...");
         return sync(() -> {
             if (nodeProperty.get() != null)
@@ -107,25 +116,25 @@ public abstract class SLPaintCommand<N extends Node>
         });
     }
     
-    protected final Predicate<? super SLPaintCommand<N>> getAutoRemoveCondition() {
+    protected final @NotNull Predicate<? super SLPaintCommand<N>> getAutoRemoveCondition() {
         return autoRemoveCondition;
     }
     
-    public final BooleanProperty activeProperty() {
+    public final @NotNull BooleanProperty activeProperty() {
         return activeProperty;
     }
     
-    public final SLPaintCommand<N> activate() {
+    public final @NotNull SLPaintCommand<N> activate() {
         activeProperty.set(true);
         return this;
     }
     
-    public final SLPaintCommand<N> deactivate() {
+    public final @NotNull SLPaintCommand<N> deactivate() {
         activeProperty.set(false);
         return this;
     }
     
-    public final IntegerProperty paintPriorityProperty() {
+    public final @NotNull IntegerProperty paintPriorityProperty() {
         return paintPriorityProperty;
     }
     
@@ -135,7 +144,7 @@ public abstract class SLPaintCommand<N extends Node>
     
     //
     
-    public final IntegerProperty xProperty() {
+    public final @NotNull IntegerProperty xProperty() {
         return xProperty;
     }
     
@@ -143,13 +152,13 @@ public abstract class SLPaintCommand<N extends Node>
         return xProperty.get();
     }
     
-    public final void setX(int x) {
-        xProperty.set(x);
+    public final void setX(double x) {
+        xProperty.set((int) x);
     }
     
     //
     
-    public final IntegerProperty yProperty() {
+    public final @NotNull IntegerProperty yProperty() {
         return yProperty;
     }
     
@@ -157,13 +166,13 @@ public abstract class SLPaintCommand<N extends Node>
         return yProperty.get();
     }
     
-    public final void setY(int y) {
-        yProperty.set(y);
+    public final void setY(double y) {
+        yProperty.set((int) y);
     }
     
     //
     
-    public final IntegerProperty widthProperty() {
+    public final @NotNull IntegerProperty widthProperty() {
         return widthProperty;
     }
     
@@ -175,13 +184,13 @@ public abstract class SLPaintCommand<N extends Node>
         return getWidth() > 0 ? getWidth() : 1;
     }
     
-    public final void setWidth(int width) {
-        widthProperty.set(width);
+    public final void setWidth(double width) {
+        widthProperty.set((int) width);
     }
     
     //
     
-    public final IntegerProperty heightProperty() {
+    public final @NotNull IntegerProperty heightProperty() {
         return heightProperty;
     }
     
@@ -193,19 +202,24 @@ public abstract class SLPaintCommand<N extends Node>
         return getHeight() > 0 ? getHeight() : 1;
     }
     
-    public final void setHeight(int height) {
-        heightProperty.set(height);
+    public final void setHeight(double height) {
+        heightProperty.set((int) height);
     }
     
     //
     
     public final void setBounds(@NotNull Bounds2D bounds) {
         ExceptionTools.nullCheck(bounds, "Bounds");
-        
-        setX(bounds.x());
-        setY(bounds.y());
-        setWidth(bounds.width());
-        setHeight(bounds.height());
+        setBounds(bounds.x(), bounds.y(), bounds.width(), bounds.height());
+    }
+    
+    public final void setBounds(double x, double y, double width, double height) {
+        sync(() -> {
+            setX(x);
+            setY(y);
+            setWidth(width);
+            setHeight(height);
+        });
     }
     
     //</editor-fold>
@@ -235,7 +249,7 @@ public abstract class SLPaintCommand<N extends Node>
     }
     
     protected void syncBounds(@NotNull N n, @NotNull Bounds2D newBounds) {
-        getNode().resizeRelocate(getX(), getY(), getWidthSafe(), getHeightSafe());
+        sync(() -> getNode().resizeRelocate(getX(), getY(), getWidthSafe(), getHeightSafe()));
     }
     
     protected abstract void onAdded(@NotNull Overlay owner);
@@ -281,19 +295,23 @@ public abstract class SLPaintCommand<N extends Node>
     
     @Override
     public int compareTo(@NotNull SLPaintCommand<?> o) {
-        System.out.println("Paint Priority 1: " + getPaintPriority());
-        System.out.println("Paint Priority 2: " + o.getPaintPriority());
-        System.out.println("Comparing: " + Integer.compare((Math.abs(getPaintPriority())), Math.abs(o.getPaintPriority())));
         return Integer.compare((Math.abs(getPaintPriority())), Math.abs(o.getPaintPriority()));
     }
     
     //</editor-fold>
     
     private N refreshNodeImpl() {
-        debugger().print("Refreshing Node...");
-        
         final N n = refreshNode();
         applyRefresh(n);
         return n;
+    }
+    
+    private boolean autoRemove() {
+        return sync(() -> {
+            final Overlay overlay = getOwner();
+            if (overlay != null && autoRemoveCondition.test(this))
+                return overlay.removePaintCommand(this);
+            return false;
+        });
     }
 }

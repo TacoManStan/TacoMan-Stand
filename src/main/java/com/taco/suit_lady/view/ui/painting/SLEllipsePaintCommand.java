@@ -1,9 +1,7 @@
-package com.taco.suit_lady.view.ui.overlay.painting;
+package com.taco.suit_lady.view.ui.painting;
 
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.view.ui.jfx.util.Bounds2D;
-import com.taco.suit_lady.view.ui.overlay.Overlay;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,16 +13,14 @@ public class SLEllipsePaintCommand extends SLShapePaintCommand<Ellipse> {
     
     private final Ellipse ellipse;
     
-    public SLEllipsePaintCommand(@Nullable ReentrantLock lock,
-                                 @NotNull Springable springable,
-                                 @NotNull String name,
-                                 @Nullable Predicate<? super SLPaintCommand<Ellipse>> autoRemoveCondition,
-                                 boolean scaleToParent, int priority) {
-        super(lock, springable, name, autoRemoveCondition, scaleToParent, priority, 0, 0, 0, 0);
+    public SLEllipsePaintCommand(
+            @Nullable ReentrantLock lock, @NotNull Springable springable, @NotNull String name,
+            @Nullable Predicate<? super SLPaintCommand<Ellipse>> autoRemoveCondition, int priority) {
+        super(lock, springable, name, autoRemoveCondition, priority);
         
         this.ellipse = new Ellipse();
-//        this.ellipse.setFill(null);
-//        this.ellipse.setStroke(Color.BLACK);
+        //        this.ellipse.setFill(null);
+        //        this.ellipse.setStroke(Color.BLACK);
     }
     
     @Override
