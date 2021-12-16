@@ -60,10 +60,10 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
         
         this.selectionBoxPaintCommand = new SLRectanglePaintCommand(
                 lock, this, "selection-box",
-                null, true, 1);
+                null, true, 3);
         this.selectionBoxPaintCommand2 = new SLImagePaintCommand(
                 lock, this, "selection-box2",
-                null, true, 1);
+                null, true, 2);
         this.selectionCirclePaintCommand = new SLEllipsePaintCommand(
                 lock, this, "selection-circle",
                 null, true, 1);
@@ -73,8 +73,8 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
         this.selectionCirclePaintCommand.deactivate();
         
         
-//        getOverlayHandler().getOverlay("default").addPaintCommand(selectionBoxPaintCommand);
-//        getOverlayHandler().getOverlay("default").addPaintCommand(selectionBoxPaintCommand2);
+        getOverlayHandler().getOverlay("default").addPaintCommand(selectionBoxPaintCommand);
+        getOverlayHandler().getOverlay("default").addPaintCommand(selectionBoxPaintCommand2);
         getOverlayHandler().getOverlay("default").addPaintCommand(selectionCirclePaintCommand);
         
         //        this.selectionBoxPaintCommand = new RectanglePaintCommand(false, lock);

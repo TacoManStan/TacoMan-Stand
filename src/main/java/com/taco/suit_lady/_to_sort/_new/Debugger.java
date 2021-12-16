@@ -1,9 +1,20 @@
 package com.taco.suit_lady._to_sort._new;
 
+import com.taco.suit_lady.util.tools.ArrayTools;
+import com.taco.suit_lady.util.tools.ExceptionTools;
+import com.taco.suit_lady.util.tools.list_tools.Operation;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Component
 public class Debugger {
@@ -12,7 +23,7 @@ public class Debugger {
     private final ReadOnlyBooleanWrapper isWarnEnabledProperty;
     private final ReadOnlyBooleanWrapper isErrorEnabledProperty;
     
-    protected Debugger() {
+    public Debugger() {
         this.isGeneralEnabledProperty = new ReadOnlyBooleanWrapper(false);
         this.isWarnEnabledProperty = new ReadOnlyBooleanWrapper(false);
         this.isErrorEnabledProperty = new ReadOnlyBooleanWrapper(false);
@@ -36,6 +47,64 @@ public class Debugger {
             else if (!newValue && oldValue)
                 System.out.println("Error Debug Output is now Disabled");
         });
+    }
+    
+    private static @NotNull ObservableList<String> initTestList() {
+        System.out.println("Creating List...");
+        final ObservableList<String> list = FXCollections.observableArrayList();
+        
+        System.out.println("Populating List...");
+        list.addAll("Dinner", "Elephant", "33", "Accelerator", "Zebra", "Eggplant", "Walrus", "Apple", "Tree", "Aardvark");
+        
+        System.out.println("Setting Listeners...");
+        
+        return list;
+    }
+    
+    public void printList(@NotNull List<String> list, @Nullable String footer) {
+        if (!list.isEmpty())
+            doPrint(() -> list.forEach(s -> System.out.println("[" + list.indexOf(s) + "]: " + s)), "list", footer, true);
+        else
+            doPrint(() -> System.out.println("empty"), "list", footer, true);
+    }
+    
+    public void doPrint(@NotNull Runnable prints, @Nullable String title, @Nullable String footer, boolean box) {
+        if (box) {
+            System.out.println();
+            System.out.println();
+            System.out.println();
+            System.out.println("------------------------------------------------------------");
+        }
+        
+        if (title != null) {
+            if (!box)
+                System.out.println("------------------------------------------------------------");
+            System.out.println("::: " + title.toUpperCase() + " :::");
+            System.out.println("------------------------------------------------------------");
+            System.out.println();
+        }
+        
+        //
+        
+        prints.run();
+        
+        //
+        
+        if (footer != null) {
+            if (box && title != null) {
+                System.out.println();
+                System.out.println("" + footer + "");
+            } else
+                System.out.println("    > " + footer);
+        }
+        if (box) {
+            if (footer == null)
+                System.out.println();
+            System.out.println("------------------------------------------------------------");
+            System.out.println();
+            System.out.println();
+            System.out.println();
+        }
     }
     
     //<editor-fold desc="--- PROPERTIES ---">

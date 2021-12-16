@@ -23,8 +23,8 @@ public class SLEllipsePaintCommand extends SLShapePaintCommand<Ellipse> {
         super(lock, springable, name, autoRemoveCondition, scaleToParent, priority, 0, 0, 0, 0);
         
         this.ellipse = new Ellipse();
-        this.ellipse.setFill(null);
-        this.ellipse.setStroke(Color.BLACK);
+//        this.ellipse.setFill(null);
+//        this.ellipse.setStroke(Color.BLACK);
     }
     
     @Override

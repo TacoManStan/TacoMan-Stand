@@ -1,5 +1,6 @@
 package com.taco.suit_lady.util.tools.list_tools;
 
+import com.taco.suit_lady._to_sort._new.Debugger;
 import com.taco.suit_lady.util.tools.ArrayTools;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.list_tools.Operation.OperationType;
@@ -19,60 +20,61 @@ public class ListToolsDemo {
     public static void main(String[] args) {
         final ReentrantLock lock = new ReentrantLock();
         final ObservableList<String> list = ListToolsDemo.initTestList();
+        final Debugger debugger = new Debugger();
         
         //        ListTools.applyListener(lock, list, op -> Demo.doPrint(() -> System.out.println("GENERIC OPERATION:  " + op), "Listener 1", null, false));
         //        ListTools.applyListener(lock, list, (op, opType, triggerType) -> Demo.printListEvent(op, null, opType, triggerType, "Listener 2", false));
-        ListTools.applyListener(lock, list, (op1, op2, opType, triggerType) -> ListToolsDemo.printListEvent(op1, op2, opType, triggerType, null, false));
-        
-        ListToolsDemo.testPrints(list, null);
+        ListTools.applyListener(lock, list, (op1, op2, opType, triggerType)
+                -> ListToolsDemo.printListEvent(debugger, op1, op2, opType, triggerType, null, false));
+        ListToolsDemo.testPrints(debugger, list, null);
     }
     
     //
     
-    private static void testPrints(ObservableList<String> list, @Nullable String footer) {
-        printList(list, footer);
+    private static void testPrints(Debugger debugger, ObservableList<String> list, @Nullable String footer) {
+        debugger.printList(list, footer);
         
         
         System.out.println("Sorting...");
         
         ArrayTools.sort(list);
         
-        printList(list, footer);
+        debugger.printList(list, footer);
         
         
         System.out.println("Adding...");
         
         list.add("Hello!");
         
-        printList(list, footer);
+        debugger.printList(list, footer);
         
         
         System.out.println("Shuffling (Collections)...");
         
         Collections.shuffle(list);
         
-        printList(list, footer);
-    
-    
+        debugger.printList(list, footer);
+        
+        
         System.out.println("Shuffling (FXCollections)...");
-    
+        
         FXCollections.shuffle(list);
-    
-        printList(list, footer);
+        
+        debugger.printList(list, footer);
         
         
         System.out.println("Resorting...");
         
         ArrayTools.sort(list);
         
-        printList(list, footer);
+        debugger.printList(list, footer);
         
         
         System.out.println("Reversing...");
         
         Collections.reverse(list);
         
-        printList(list, footer);
+        debugger.printList(list, footer);
         
         
         System.out.println("Clearing...");
@@ -81,14 +83,14 @@ public class ListToolsDemo {
         
         list.clear();
         
-        printList(list, footer);
+        debugger.printList(list, footer);
         
         
         System.out.println("Re-Adding...");
         
         list.addAll(copy);
         
-        printList(list, footer);
+        debugger.printList(list, footer);
     }
     
     //
@@ -105,15 +107,9 @@ public class ListToolsDemo {
         return list;
     }
     
-    public static void printList(@NotNull List<String> list, @Nullable String footer) {
-        if (!list.isEmpty())
-            doPrint(() -> list.forEach(s -> System.out.println("[" + list.indexOf(s) + "]: " + s)), "list", footer, true);
-        else
-            doPrint(() -> System.out.println("empty"), "list", footer, true);
-    }
-    
     @SuppressWarnings("DuplicatedCode")
     private static <E> void printListEvent(
+            Debugger debugger,
             Operation<E> p1, Operation<E> p2,
             OperationType operationType, TriggerType triggerType,
             String message, boolean box) {
@@ -170,45 +166,6 @@ public class ListToolsDemo {
         } else
             throw ExceptionTools.ex("BLAH BLAH BLAH");
         
-        doPrint(printsI, titleI, footerI, boxI);
-    }
-    
-    private static void doPrint(@NotNull Runnable prints, @Nullable String title, @Nullable String footer, boolean box) {
-        if (box) {
-            System.out.println();
-            System.out.println();
-            System.out.println();
-            System.out.println("------------------------------------------------------------");
-        }
-        
-        if (title != null) {
-            if (!box)
-                System.out.println("------------------------------------------------------------");
-            System.out.println("::: " + title.toUpperCase() + " :::");
-            System.out.println("------------------------------------------------------------");
-            System.out.println();
-        }
-        
-        //
-        
-        prints.run();
-        
-        //
-        
-        if (footer != null) {
-            if (box && title != null) {
-                System.out.println();
-                System.out.println("" + footer + "");
-            } else
-                System.out.println("    > " + footer);
-        }
-        if (box) {
-            if (footer == null)
-                System.out.println();
-            System.out.println("------------------------------------------------------------");
-            System.out.println();
-            System.out.println();
-            System.out.println();
-        }
+        debugger.doPrint(printsI, titleI, footerI, boxI);
     }
 }

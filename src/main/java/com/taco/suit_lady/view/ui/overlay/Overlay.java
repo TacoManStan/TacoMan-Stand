@@ -12,6 +12,7 @@ import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.layout.StackPane;
 import net.rgielen.fxweaver.core.FxWeaver;
@@ -85,6 +86,8 @@ public class Overlay
         sync(() -> {
             ExceptionTools.nullCheck(paintCommand, "Paint Command Input").setOwner(this); // TODO: Move to listener & also track remove events
             paintCommands.add(paintCommand);
+            FXCollections.sort(paintCommands);
+            debugger().print("Paint Commands: " );
         });
     }
     

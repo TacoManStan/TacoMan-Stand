@@ -22,8 +22,8 @@ public class SLRectanglePaintCommand extends SLShapePaintCommand<Rectangle> {
         super(lock, springable, name, autoRemoveCondition, scaleToParent, priority, 0, 0, 0, 0);
         
         this.rectangle = new Rectangle();
-        this.rectangle.setFill(null);
-        this.rectangle.setStroke(Color.BLACK);
+        this.rectangle.setFill(Color.RED);
+//        this.rectangle.setStroke(Color.BLACK);
     }
     
     // TODO: Add additional painting properties, probably to the parent intermediary SLShapePaintCommand class
