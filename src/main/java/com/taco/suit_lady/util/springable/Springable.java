@@ -70,6 +70,7 @@ public interface Springable {
         return ui().getSidebar();
     }
     
+    // TO-DOC
     default @NotNull Debugger debugger() {
         return ctx().getBean(Debugger.class);
     }
