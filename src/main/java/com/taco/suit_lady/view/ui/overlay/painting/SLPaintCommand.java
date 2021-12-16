@@ -62,7 +62,7 @@ public abstract class SLPaintCommand<N extends Node>
         this.autoRemoveCondition = autoRemoveCondition != null ? autoRemoveCondition : paintCommand -> false;
         this.activeProperty = new SimpleBooleanProperty(true);
         
-        this.paintPriorityProperty = new SimpleIntegerProperty();
+        this.paintPriorityProperty = new SimpleIntegerProperty(priority);
         
         this.scaleToParent = scaleToParent;
         
@@ -289,6 +289,9 @@ public abstract class SLPaintCommand<N extends Node>
     
     @Override
     public int compareTo(@NotNull SLPaintCommand<?> o) {
+        System.out.println("Paint Priority 1: " + getPaintPriority());
+        System.out.println("Paint Priority 2: " + o.getPaintPriority());
+        System.out.println("Comparing: " + Integer.compare((Math.abs(getPaintPriority())), Math.abs(o.getPaintPriority())));
         return Integer.compare((Math.abs(getPaintPriority())), Math.abs(o.getPaintPriority()));
     }
     
