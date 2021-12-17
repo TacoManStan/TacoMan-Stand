@@ -3,6 +3,9 @@ package com.taco.suit_lady._to_sort._new.interfaces;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import javafx.beans.Observable;
 import javafx.beans.binding.*;
+import javafx.beans.property.ReadOnlyIntegerProperty;
+import javafx.beans.property.ReadOnlyIntegerWrapper;
+import javafx.beans.value.ChangeListener;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.Callable;

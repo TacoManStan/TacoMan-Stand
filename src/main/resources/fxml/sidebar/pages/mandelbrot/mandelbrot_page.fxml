@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.taco.suit_lady.view.ui.jfx.components.DoubleField2?>
+<?import com.taco.suit_lady.view.ui.jfx.components.IntField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -30,31 +31,38 @@
                         <HBox spacing="5.0">
                            <children>
                               <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="X Min" HBox.hgrow="NEVER" />
-                              <TextField HBox.hgrow="ALWAYS" fx:id="xLocTextField" />
+                              <DoubleField2 maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" fx:id="xMinTextField" />
                            </children>
                         </HBox>
                         <HBox spacing="5.0">
                            <children>
                               <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Y Min" HBox.hgrow="NEVER" />
-                              <TextField fx:id="yLocTextField" HBox.hgrow="ALWAYS" />
+                              <DoubleField2 fx:id="yMinTextField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
                         <HBox spacing="5.0">
                            <children>
                               <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="X Max" HBox.hgrow="NEVER" />
-                              <TextField fx:id="widthTextField" HBox.hgrow="ALWAYS" />
+                              <DoubleField2 maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" fx:id="xMaxTextField" />
                            </children>
                         </HBox>
                         <HBox spacing="5.0">
                            <children>
                               <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Y Max" HBox.hgrow="NEVER" />
-                              <TextField fx:id="heightTextField" HBox.hgrow="ALWAYS" />
+                              <DoubleField2 fx:id="yMaxTextField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
                         <HBox spacing="5.0">
                            <children>
                               <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Color Scheme" HBox.hgrow="NEVER" />
                               <ChoiceBox fx:id="colorSchemeChoiceBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
+                        <Separator prefWidth="200.0" />
+                        <HBox spacing="5.0">
+                           <children>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Int Field Test" HBox.hgrow="NEVER" />
+                              <IntField fx:id="intFieldTest" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
                         <Separator prefWidth="200.0" />
@@ -80,6 +88,19 @@
                            <children>
                               <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="CanvasHeight" HBox.hgrow="NEVER" />
                               <Label fx:id="canvasHeightLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="&lt; Width Label &gt;" HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
+                        <Separator prefWidth="200.0" />
+                        <HBox spacing="5.0">
+                           <children>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="X Min Value" HBox.hgrow="NEVER" />
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="&lt; X Min Test Label &gt;" HBox.hgrow="ALWAYS" fx:id="xMinLabel" />
+                           </children>
+                        </HBox>
+                        <HBox spacing="5.0">
+                           <children>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Int Field Value" HBox.hgrow="NEVER" />
+                              <Label fx:id="intFieldTestLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="&lt; Int Field Test Label &gt;" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
                      </children>

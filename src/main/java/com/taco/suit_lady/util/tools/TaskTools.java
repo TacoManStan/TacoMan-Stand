@@ -13,20 +13,17 @@ import java.util.function.Supplier;
  * <p>
  * <i>It is recommended that you only use this class if you are experienced with synchronization.</i>
  */
-public class TaskTools
-{
+public class TaskTools {
     private TaskTools() { }
     
-    public static Thread start(Thread thread)
-    {
+    public static Thread start(Thread thread) {
         if (thread == null)
             throw new NullPointerException("Thread cannot be null.");
         thread.start();
         return thread;
     }
     
-    public static Thread start(Thread thread, Lock lock)
-    {
+    public static Thread start(Thread thread, Lock lock) {
         throw new UndefinedRuntimeException(ExceptionTools.nyi());
     }
     
@@ -36,11 +33,12 @@ public class TaskTools
      * If the {@link Runnable} returned by the specified {@code Supplier} is itself a {@code Thread}, no additional {@code Thread} will be created.
      *
      * @param threadSupplier The {@code Supplier} that returns the {@code Runnable} that is to be created as a {@code Thread}.
+     *
      * @return The {@code Thread} returned by the specified {@code Supplier}.
+     *
      * @throws NullPointerException if the specified {@code Supplier} is null.
      */
-    public static Thread start(Supplier<Runnable> threadSupplier)
-    {
+    public static Thread start(Supplier<Runnable> threadSupplier) {
         Runnable runnable = ExceptionTools.nullCheck(threadSupplier, "Thread Supplier").get();
         return start(runnable instanceof Thread ? (Thread) runnable : new Thread(runnable));
     }
@@ -66,11 +64,11 @@ public class TaskTools
      *                         <li>If an {@code Exception} is thrown during the execution of an action, remaining actions will <i>not</i> be executed.</li>
      *                         <li>Null actions are ignored.</li>
      *                         </ul>
+     *
      * @see #sync(Lock, Function, Supplier, boolean, Consumer...)
      */
     @SafeVarargs
-    public static void sync(Lock lock, Runnable runnable, Consumer<Throwable>... onFinallyActions)
-    {
+    public static void sync(Lock lock, Runnable runnable, Consumer<Throwable>... onFinallyActions) {
         ExceptionTools.nullCheck(runnable, "Runnable");
         ExceptionTools.nullCheck(onFinallyActions, "On-Finally Actions", "leave empty for no actions");
         
@@ -99,11 +97,11 @@ public class TaskTools
      *                         <li>If an {@code Exception} is thrown during the execution of an action, remaining actions will <i>not</i> be executed.</li>
      *                         <li>Null actions are ignored.</li>
      *                         </ul>
+     *
      * @see #sync(Lock, Function, Supplier, boolean, Consumer...)
      */
     @SafeVarargs
-    public static void sync(Lock lock, Runnable runnable, boolean allowNull, Consumer<Throwable>... onFinallyActions)
-    {
+    public static void sync(Lock lock, Runnable runnable, boolean allowNull, Consumer<Throwable>... onFinallyActions) {
         ExceptionTools.nullCheck(runnable, "Runnable");
         ExceptionTools.nullCheck(onFinallyActions, "On-Finally Actions", "leave empty for no actions");
         
@@ -131,12 +129,13 @@ public class TaskTools
      *                         <li>Null actions are ignored.</li>
      *                         </ul>
      * @param <R>              The type of Object returned by this method (and the specified {@link Supplier}.
+     *
      * @return The value returned by the specified {@link Supplier}.
+     *
      * @see #sync(Lock, Function, Supplier, boolean, Consumer...)
      */
     @SafeVarargs
-    public static <R> R sync(Lock lock, Supplier<R> runnableSupplier, Consumer<Throwable>... onFinallyActions)
-    {
+    public static <R> R sync(Lock lock, Supplier<R> runnableSupplier, Consumer<Throwable>... onFinallyActions) {
         ExceptionTools.nullCheck(runnableSupplier, "Runnable Supplier");
         ExceptionTools.nullCheck(onFinallyActions, "On-Finally Actions", "leave empty for no actions");
         
@@ -166,12 +165,13 @@ public class TaskTools
      *                         <li>If an {@code Exception} is thrown during the execution of an action, remaining actions will <i>not</i> be executed.</li>
      *                         <li>Null actions are ignored.</li>
      *                         </ul>
+     *
      * @return The value returned by the specified {@link Supplier}.
+     *
      * @see #sync(Lock, Function, Supplier, boolean, Consumer...)
      */
     @SafeVarargs
-    public static <R> R sync(Lock lock, Supplier<R> runnableSupplier, boolean allowNull, Consumer<Throwable>... onFinallyActions)
-    {
+    public static <R> R sync(Lock lock, Supplier<R> runnableSupplier, boolean allowNull, Consumer<Throwable>... onFinallyActions) {
         ExceptionTools.nullCheck(runnableSupplier, "Runnable Supplier");
         ExceptionTools.nullCheck(onFinallyActions, "On-Finally Actions", "leave empty for no actions");
         
@@ -213,7 +213,9 @@ public class TaskTools
      *                              <li>Any null actions will result in a {@code NullPointerException} being thrown.</li>
      *                              </ol>
      * @param <R>                   The type of Object returned by this method (and the specified {@link Function}.
+     *
      * @return The value returned by the specified {@code runnableFunction}.
+     *
      * @throws NullPointerException If...
      *                              <ol>
      *                              <li>The specified {@code lock} is null <u>and</u> {@code allowNullLock} is specified as {@code false}.</li>
@@ -226,8 +228,7 @@ public class TaskTools
      *                              All null-checks are performed at the beginning of the method.
      */
     @SafeVarargs
-    public static <T, R> R sync(Lock lock, Function<T, R> runnableFunction, Supplier<T> functionInputSupplier, boolean allowNullLock, Consumer<Throwable>... onFinally)
-    {
+    public static <T, R> R sync(Lock lock, Function<T, R> runnableFunction, Supplier<T> functionInputSupplier, boolean allowNullLock, Consumer<Throwable>... onFinally) {
         ExceptionTools.nullCheck(runnableFunction, "Runnable Function");
         ExceptionTools.nullCheck(functionInputSupplier, "Return Value Supplier");
         ExceptionTools.nullCheck(onFinally, "On-Finally Actions", "leave empty for no actions, not null");
@@ -238,25 +239,17 @@ public class TaskTools
         final boolean locked = lock(lock, allowNullLock);
         Throwable thrown = null;
         
-        try
-        {
+        try {
             return runnableFunction.apply(functionInputSupplier.get());
-        }
-        catch (Throwable t)
-        {
+        } catch (Throwable t) {
             thrown = t;
             if (ArrayTools.isEmpty(onFinally))
                 throw ExceptionTools.ex(t, "");
-        }
-        finally
-        {
-            try
-            {
+        } finally {
+            try {
                 for (Consumer<Throwable> onFinallyAction: onFinally)
                     ExceptionTools.nullCheck(onFinallyAction, "On-Finally Action").accept(thrown);
-            }
-            finally
-            {
+            } finally {
                 if (locked)
                     lock.unlock();
             }
@@ -276,10 +269,10 @@ public class TaskTools
      * <i>Calling this method is the same as calling {@link #lock(Lock, boolean) ThreadTools.lock(lock, false)}</i>
      *
      * @param lock The {@link ReentrantLock}.
+     *
      * @see #sync(Lock, Function, Supplier, boolean, Consumer...)
      */
-    public static void lock(Lock lock)
-    {
+    public static void lock(Lock lock) {
         lock(lock, false);
     }
     
@@ -310,15 +303,15 @@ public class TaskTools
      *                  <li>When <i>true</i>: Returns false immediately; does not perform any synchronization.</li>
      *                  <li>When <i>false</i>: Throws a {@link NullPointerException}.</li>
      *                  </ol>
+     *
      * @return True if the lock was successful, false otherwise.
+     *
      * @see #sync(Lock, Function, Supplier, boolean, Consumer...)
      */
-    public static boolean lock(Lock lock, boolean allowNull)
-    {
+    public static boolean lock(Lock lock, boolean allowNull) {
         if (!allowNull)
             ExceptionTools.nullCheckMessage(lock, "Lock cannot be null if allowNull is false");
-        if (lock != null)
-        {
+        if (lock != null) {
             lock.lock();
             return true;
         }

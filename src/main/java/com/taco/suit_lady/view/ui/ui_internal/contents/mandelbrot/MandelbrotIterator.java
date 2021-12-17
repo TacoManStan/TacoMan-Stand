@@ -1,38 +1,71 @@
 package com.taco.suit_lady.view.ui.ui_internal.contents.mandelbrot;
 
 import com.taco.suit_lady._to_sort._new.MatrixIterator;
+import com.taco.suit_lady.util.springable.Springable;
+import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.RandomTools;
 import com.taco.suit_lady.view.ui.ui_internal.contents.mandelbrot.MandelbrotIterator.MandelbrotColor;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
+import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-public class MandelbrotIterator extends MatrixIterator<MandelbrotColor> {
+public class MandelbrotIterator extends MatrixIterator<MandelbrotColor>
+        implements Springable {
+    
+    private final StrictSpringable springable;
+    
+    
     private final int PRECISION = 1000;
     
     private final MandelbrotDimensions dimensions;
     
     private final Color[] presetColors;
     
-    public MandelbrotIterator(MandelbrotColor[][] targetArray, ReentrantLock lock) {
-        this(targetArray, null, lock);
+    public MandelbrotIterator(Springable springable, MandelbrotColor[][] targetArray, ReentrantLock lock) {
+        this(springable, targetArray, null, lock);
     }
     
-    public MandelbrotIterator(MandelbrotColor[][] targetArray, @NotNull MandelbrotDimensions dimensions, ReentrantLock lock) {
+    public MandelbrotIterator(Springable springable, MandelbrotColor[][] targetArray, @NotNull MandelbrotDimensions dimensions, ReentrantLock lock) {
         super(targetArray, lock);
         
-        this.dimensions = dimensions != null ? dimensions : MandelbrotDimensions.newDefaultInstance(getWidth(), getHeight());
+        this.springable = springable.asStrict();
+        
+        
+        this.dimensions = dimensions != null ? dimensions : MandelbrotDimensions.newDefaultInstance(this, getWidth(), getHeight());
         
         if (dimensions.getCanvasWidth() != getWidth() || dimensions.getCanvasHeight() != getHeight())
             throw ExceptionTools.ex("Dimension Mismatch:  " +
                                     "Dimensions Data [" + dimensions.getCanvasWidth() + ", " + dimensions.getCanvasHeight() + "  " +
                                     "Iterator Data [" + getWidth() + ", " + getHeight());
-    
+        
         this.presetColors = MandelbrotColorScheme.values()[RandomTools.get().nextInt(6)].getColorArray();
     }
+    
+    private boolean escapes(double iX, double iY) {
+        final Point2D convertedPoint = dimensions.convertFromCanvas(iX, iY);
+        double x = 0, y = 0;
+        int n = 0;
+        
+        while (Math.pow(x, 2) + Math.pow(y, 2) < Math.pow(2, 2) && n < PRECISION) {
+            final double xTemp = Math.pow(x, 2) - Math.pow(y, 2) + convertedPoint.getX();
+            y = (2 * x * y) + convertedPoint.getY();
+            x = xTemp;
+            n++;
+            if (Math.pow(x, 2) + Math.pow(y, 2) > Math.pow(2, 2))
+                return true;
+        }
+        
+        return false;
+    }
+    
+    private Color escapeColor = Color.BLACK;
+    
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override
     protected MandelbrotColor step(int i, int j) {
@@ -55,24 +88,18 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor> {
     @Override
     protected void onComplete() { }
     
-    private boolean escapes(double iX, double iY) {
-        final Point2D convertedPoint = dimensions.convertFromCanvas(iX, iY);
-        double x = 0, y = 0;
-        int n = 0;
-        
-        while (Math.pow(x, 2) + Math.pow(y, 2) < Math.pow(2, 2) && n < PRECISION) {
-            final double xTemp = Math.pow(x, 2) - Math.pow(y, 2) + convertedPoint.getX();
-            y = (2 * x * y) + convertedPoint.getY();
-            x = xTemp;
-            n++;
-            if (Math.pow(x, 2) + Math.pow(y, 2) > Math.pow(2, 2))
-                return true;
-        }
-        
-        return false;
+    
+    @Override
+    public @NotNull FxWeaver weaver() {
+        return springable.weaver();
     }
     
-    private Color escapeColor = Color.BLACK;
+    @Override
+    public @NotNull ConfigurableApplicationContext ctx() {
+        return springable.ctx();
+    }
+    
+    //</editor-fold>
     
     public class MandelbrotColor {
         private final int bigN;

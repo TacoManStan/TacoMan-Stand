@@ -22,7 +22,7 @@ public final class Debugger {
     private final ReadOnlyBooleanWrapper isErrorEnabledProperty;
     
     public Debugger() {
-        this.isPrintEnabledProperty = new ReadOnlyBooleanWrapper(true);
+        this.isPrintEnabledProperty = new ReadOnlyBooleanWrapper(false);
         this.isWarnEnabledProperty = new ReadOnlyBooleanWrapper(false);
         this.isErrorEnabledProperty = new ReadOnlyBooleanWrapper(false);
         
