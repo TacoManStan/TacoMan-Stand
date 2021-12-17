@@ -18,6 +18,7 @@ import com.taco.suit_lady.view.ui.ui_internal.contents.mandelbrot.MandelbrotCont
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 
@@ -57,10 +58,12 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
         this.isGeneratingProperty = new ReadOnlyBooleanWrapper(false);
         
         getController().canvas().setCanvasListener(this::refreshCanvas);
+        getCoverPage().getController().getRegenerateButton().setOnAction(event -> regenerate(event));
         
         this.selectionBoxPaintCommand = new SLRectanglePaintCommand(
                 lock, this, "selection-box",
-                null, 1);
+                null, 1,
+                null, Color.BLACK);
         this.selectionBoxPaintCommand2 = new SLImagePaintCommand(
                 lock, this, "selection-box2",
                 null, 3);
@@ -74,8 +77,8 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
         
         
         getOverlayHandler().getOverlay("default").addPaintCommand(selectionBoxPaintCommand);
-        getOverlayHandler().getOverlay("default").addPaintCommand(selectionBoxPaintCommand2);
-        getOverlayHandler().getOverlay("default").addPaintCommand(selectionCirclePaintCommand);
+//        getOverlayHandler().getOverlay("default").addPaintCommand(selectionBoxPaintCommand2);
+//        getOverlayHandler().getOverlay("default").addPaintCommand(selectionCirclePaintCommand);
         
         //        this.selectionBoxPaintCommand = new RectanglePaintCommand(false, lock);
         //        ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas().addPaintCommand(selectionBoxPaintCommand);
@@ -125,9 +128,15 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
                 }
             };
             getCoverPage().getController().getProgressBar().progressProperty().bind(worker.progressProperty());
+            getCoverPage().getController().getWidthLabel().setText("" + dimensions.getWidth());
+            getCoverPage().getController().getHeightLabel().setText("" + dimensions.getHeight());
+            getCoverPage().getController().getCanvasWidthLabel().setText("" + dimensions.getCanvasWidth());
+            getCoverPage().getController().getCanvasHeightLabel().setText("" + dimensions.getCanvasHeight());
             new Thread(worker).start(); // Use executor instead?
         }), true);
     }
+    
+    private void regenerate(ActionEvent event) { }
     
     private void redraw(MandelbrotColor[][] colors) {
         FXTools.get().runFX(() -> TaskTools.sync(lock, () -> {

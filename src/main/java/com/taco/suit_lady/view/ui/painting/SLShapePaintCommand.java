@@ -2,6 +2,7 @@ package com.taco.suit_lady.view.ui.painting;
 
 import com.taco.suit_lady._to_sort._new.interfaces.ObservablePropertyContainable;
 import com.taco.suit_lady.util.springable.Springable;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

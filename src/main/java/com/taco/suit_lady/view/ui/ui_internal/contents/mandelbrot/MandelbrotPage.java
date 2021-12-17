@@ -21,7 +21,9 @@ public class MandelbrotPage extends UIPage<MandelbrotPageController>
     }
     
     @Override
-    protected void initializePage(@NotNull Object[] constructorParams) { }
+    protected void initializePage(@NotNull Object[] constructorParams) {
+    
+    }
     
     @Override
     protected @NotNull Class<MandelbrotPageController> controllerDefinition()

@@ -6,24 +6,22 @@ import com.taco.suit_lady.util.tools.RandomTools;
 import com.taco.suit_lady.view.ui.ui_internal.contents.mandelbrot.MandelbrotIterator.MandelbrotColor;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-public class MandelbrotIterator extends MatrixIterator<MandelbrotColor>
-{
+public class MandelbrotIterator extends MatrixIterator<MandelbrotColor> {
     private final int PRECISION = 1000;
     
     private final MandelbrotDimensions dimensions;
     
     private final Color[] presetColors;
     
-    public MandelbrotIterator(MandelbrotColor[][] targetArray, ReentrantLock lock)
-    {
+    public MandelbrotIterator(MandelbrotColor[][] targetArray, ReentrantLock lock) {
         this(targetArray, null, lock);
     }
     
-    public MandelbrotIterator(MandelbrotColor[][] targetArray, MandelbrotDimensions dimensions, ReentrantLock lock)
-    {
+    public MandelbrotIterator(MandelbrotColor[][] targetArray, @NotNull MandelbrotDimensions dimensions, ReentrantLock lock) {
         super(targetArray, lock);
         
         this.dimensions = dimensions != null ? dimensions : MandelbrotDimensions.newDefaultInstance(getWidth(), getHeight());
@@ -32,14 +30,12 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor>
             throw ExceptionTools.ex("Dimension Mismatch:  " +
                                     "Dimensions Data [" + dimensions.getCanvasWidth() + ", " + dimensions.getCanvasHeight() + "  " +
                                     "Iterator Data [" + getWidth() + ", " + getHeight());
-        
-        this.presetColors = new Color[255 * 2];
-        this.initColors();
+    
+        this.presetColors = MandelbrotColorScheme.values()[RandomTools.get().nextInt(6)].getColorArray();
     }
     
     @Override
-    protected MandelbrotColor step(int i, int j)
-    {
+    protected MandelbrotColor step(int i, int j) {
         final Point2D scaledPoint = dimensions.convertFromCanvas(i, j);
         double x = 0, y = 0;
         int n = 0;
@@ -59,8 +55,7 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor>
     @Override
     protected void onComplete() { }
     
-    private boolean escapes(double iX, double iY)
-    {
+    private boolean escapes(double iX, double iY) {
         final Point2D convertedPoint = dimensions.convertFromCanvas(iX, iY);
         double x = 0, y = 0;
         int n = 0;
@@ -79,85 +74,40 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor>
     
     private Color escapeColor = Color.BLACK;
     
-    private void initColors()
-    {
-        final int random = RandomTools.get().nextInt(7);
-        System.out.println("Random: " + random);
-        for (int i = 0; i < 255; i++)
-            switch (random) {
-                case 0 -> {
-                    presetColors[i] = Color.color(i / 255.0, 0, 0);
-                    presetColors[i + 255] = Color.color((255 - i) / 255.0, 0, 0);
-                }
-                case 1 -> {
-                    presetColors[i] = Color.color(0, i / 255.0, 0);
-                    presetColors[i + 255] = Color.color(0, (255 - i) / 255.0, 0);
-                }
-                case 2 -> {
-                    presetColors[i] = Color.color(i / 255.0, 0, i / 255.0);
-                    presetColors[i + 255] = Color.color((255 - i) / 255.0, 0, (255 - i) / 255.0);
-                }
-                case 3 -> {
-                    presetColors[i] = Color.color(0, i / 255.0, i / 255.0);
-                    presetColors[i + 255] = Color.color(0, (255 - i) / 255.0, (255 - i) / 255.0);
-                }
-                case 4 -> {
-                    presetColors[i] = Color.color(0, 0, (255 - i) / 255.0);
-                    presetColors[i + 255] = Color.color(0, 0, i / 255.0);
-                }
-                case 5 -> {
-                    presetColors[i] = Color.color(0, i / 255.0, (255 - i) / 255.0);
-                    presetColors[i + 255] = Color.color(0, (255 - i) / 255.0, i / 255.0);
-                }
-                case 6 -> {
-                    presetColors[i] = Color.color((255 - i) / 255.0, i / 255.0, 0);
-                    presetColors[i + 255] = Color.color(i / 255.0, (255 - i) / 255.0, 0);
-                }
-            }
-    }
-    
-    public class MandelbrotColor
-    {
+    public class MandelbrotColor {
         private final int bigN;
         private final int smallN;
         private final double x;
         private final double y;
         
-        private MandelbrotColor()
-        {
+        private MandelbrotColor() {
             this(0, -1, 0, 0); // Black
         }
         
-        private MandelbrotColor(int smallN, int bigN, double x, double y)
-        {
+        private MandelbrotColor(int smallN, int bigN, double x, double y) {
             this.bigN = bigN;
             this.smallN = smallN;
             this.x = x;
             this.y = y;
         }
         
-        public int getBigN()
-        {
+        public int getBigN() {
             return bigN;
         }
         
-        public int getSmallN()
-        {
+        public int getSmallN() {
             return smallN;
         }
         
-        public double getX()
-        {
+        public double getX() {
             return x;
         }
         
-        public double getY()
-        {
+        public double getY() {
             return y;
         }
         
-        public Color getColor()
-        {
+        public Color getColor() {
             if (getBigN() == -1)
                 return escapeColor;
             
@@ -175,8 +125,7 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor>
             return presetColors[value];
         }
         
-        public java.awt.Color getAwtColor()
-        {
+        public java.awt.Color getAwtColor() {
             final Color colorFX = getColor();
             final int r = (int) (colorFX.getRed() * 255);
             final int g = (int) (colorFX.getGreen() * 255);
@@ -185,8 +134,7 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor>
         }
         
         @Override
-        public String toString()
-        {
+        public String toString() {
             return "\nn: " + getSmallN()
                    + "\nN: " + getBigN()
                    + "\nX: " + getX()

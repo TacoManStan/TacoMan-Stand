@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="500.0" prefWidth="250.0" stylesheets="/css/TRiBot.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.taco.suit_lady.view.ui.ui_internal.contents.mandelbrot.MandelbrotPageController">
+<AnchorPane fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="500.0" prefWidth="250.0" stylesheets="/css/TRiBot.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.taco.suit_lady.view.ui.ui_internal.contents.mandelbrot.MandelbrotPageController">
     <children>
         <BorderPane layoutX="5.0" layoutY="5.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
             <bottom>
@@ -13,11 +22,75 @@
                     </children>
                 </AnchorPane>
             </bottom>
-            <top>
-                <BorderPane minHeight="25.0" prefHeight="25.0" BorderPane.alignment="CENTER" />
-            </top>
             <center>
-                <BorderPane BorderPane.alignment="CENTER" />
+                <BorderPane BorderPane.alignment="CENTER">
+               <center>
+                  <VBox spacing="10.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <HBox spacing="5.0">
+                           <children>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="X Min" HBox.hgrow="NEVER" />
+                              <TextField HBox.hgrow="ALWAYS" fx:id="xLocTextField" />
+                           </children>
+                        </HBox>
+                        <HBox spacing="5.0">
+                           <children>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Y Min" HBox.hgrow="NEVER" />
+                              <TextField fx:id="yLocTextField" HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
+                        <HBox spacing="5.0">
+                           <children>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="X Max" HBox.hgrow="NEVER" />
+                              <TextField fx:id="widthTextField" HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
+                        <HBox spacing="5.0">
+                           <children>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Y Max" HBox.hgrow="NEVER" />
+                              <TextField fx:id="heightTextField" HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
+                        <HBox spacing="5.0">
+                           <children>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Color Scheme" HBox.hgrow="NEVER" />
+                              <ChoiceBox fx:id="colorSchemeChoiceBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
+                        <Separator prefWidth="200.0" />
+                        <HBox spacing="5.0">
+                           <children>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Width" HBox.hgrow="NEVER" />
+                              <Label fx:id="widthLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="&lt; Width Label &gt;" HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
+                        <HBox spacing="5.0">
+                           <children>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Height" HBox.hgrow="NEVER" />
+                              <Label fx:id="heightLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="&lt; Height Label &gt;" HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
+                        <HBox spacing="5.0">
+                           <children>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Canvas Width" HBox.hgrow="NEVER" />
+                              <Label fx:id="canvasWidthLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="&lt; Width Label &gt;" HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
+                        <HBox spacing="5.0">
+                           <children>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="CanvasHeight" HBox.hgrow="NEVER" />
+                              <Label fx:id="canvasHeightLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="&lt; Width Label &gt;" HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
+                     </children>
+                     <BorderPane.margin>
+                        <Insets bottom="15.0" />
+                     </BorderPane.margin>
+                  </VBox>
+               </center>
+               <bottom>
+                  <Button fx:id="regenerateButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Regenerate" BorderPane.alignment="CENTER" />
+               </bottom></BorderPane>
             </center>
         </BorderPane>
     </children>
