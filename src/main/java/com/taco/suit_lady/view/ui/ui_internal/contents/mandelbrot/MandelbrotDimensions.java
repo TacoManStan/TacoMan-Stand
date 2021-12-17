@@ -23,11 +23,11 @@ public class MandelbrotDimensions
     private final DoubleBinding widthBinding;
     private final DoubleBinding heightBinding;
     
-    private final DoubleBinding xScalingProperty;
-    private final DoubleBinding yScalingProperty;
+    private final DoubleBinding xScalingBinding;
+    private final DoubleBinding yScalingBinding;
     
-    private final DoubleBinding scaledWidthProperty;
-    private final DoubleBinding scaledHeightProperty;
+    private final DoubleBinding scaledWidthBinding;
+    private final DoubleBinding scaledHeightBinding;
     
     private final DoubleBinding scaledXMinBinding;
     private final DoubleBinding scaledXMaxBinding;
@@ -47,21 +47,21 @@ public class MandelbrotDimensions
         this.widthBinding = Bindings.createDoubleBinding(() -> getMaxX() - getMinX(), getObservablesArray());
         this.heightBinding = Bindings.createDoubleBinding(() -> getMaxY() - getMinY(), getObservablesArray());
         
-        this.xScalingProperty = Bindings.createDoubleBinding(() -> {
+        this.xScalingBinding = Bindings.createDoubleBinding(() -> {
             if (((double) getCanvasWidth() / (double) getCanvasHeight()) >= (getWidth() / getHeight()))
                 return (getCanvasWidth() * getHeight()) / (getCanvasHeight() * getWidth());
             else
                 return 1.0;
         }, getObservablesArray());
-        this.yScalingProperty = Bindings.createDoubleBinding(() -> {
+        this.yScalingBinding = Bindings.createDoubleBinding(() -> {
             if (((double) getCanvasWidth() / (double) getCanvasHeight()) <= (getWidth() / getHeight()))
                 return (getCanvasHeight() * getWidth()) / (getCanvasWidth() * getHeight());
             else
                 return 1.0;
         }, getObservablesArray());
         
-        this.scaledWidthProperty = Bindings.createDoubleBinding(() -> getWidth() * getScalingX(), getObservablesArray());
-        this.scaledHeightProperty = Bindings.createDoubleBinding(() -> getHeight() * getScalingY(), getObservablesArray());
+        this.scaledWidthBinding = Bindings.createDoubleBinding(() -> getWidth() * getScalingX(), getObservablesArray());
+        this.scaledHeightBinding = Bindings.createDoubleBinding(() -> getHeight() * getScalingY(), getObservablesArray());
         
         this.scaledXMinBinding = Bindings.createDoubleBinding(() -> getMinX() - ((getScaledWidth() - getWidth()) / 2), getObservablesArray());
         this.scaledXMaxBinding = Bindings.createDoubleBinding(() -> getMaxX() + ((getScaledWidth() - getWidth()) / 2), getObservablesArray());
@@ -71,9 +71,24 @@ public class MandelbrotDimensions
     
     //<editor-fold desc="--- PROPERTIES ---">
     
+    public final DoubleProperty xMinProperty() {
+        return xMinProperty;
+    }
+    
     public final double getMinX()
     {
         return xMinProperty.get();
+    }
+    
+    public final double setMinX(double newValue) {
+        double oldValue = getMinX();
+        xMinProperty.set(newValue);
+        return oldValue;
+    }
+    
+    
+    public final DoubleProperty xMaxProperty() {
+        return xMaxProperty;
     }
     
     public final double getMaxX()
@@ -81,9 +96,31 @@ public class MandelbrotDimensions
         return xMaxProperty.get();
     }
     
+    public final double setMaxX(double newValue) {
+        double oldValue = getMaxX();
+        xMaxProperty.set(newValue);
+        return oldValue;
+    }
+    
+    
+    public final DoubleProperty yMinProperty() {
+        return yMinProperty;
+    }
+    
     public final double getMinY()
     {
         return yMinProperty.get();
+    }
+    
+    public final double setMinY(double newValue) {
+        double oldValue = getMinY();
+        yMinProperty.set(newValue);
+        return oldValue;
+    }
+    
+    
+    public final DoubleProperty yMaxProperty() {
+        return yMaxProperty;
     }
     
     public final double getMaxY()
@@ -91,54 +128,16 @@ public class MandelbrotDimensions
         return yMaxProperty.get();
     }
     
-    public final double getWidth()
-    {
-        return widthBinding.get();
+    public final double setMaxY(double newValue) {
+        double oldValue = getMaxY();
+        yMaxProperty.set(newValue);
+        return oldValue;
     }
     
-    public final double getHeight()
-    {
-        return heightBinding.get();
-    }
+    //
     
-    public final double getScalingX()
-    {
-        return xScalingProperty.get();
-    }
-    
-    public final double getScalingY()
-    {
-        return yScalingProperty.get();
-    }
-    
-    public final double getScaledWidth()
-    {
-        return scaledWidthProperty.get();
-    }
-    
-    public final double getScaledHeight()
-    {
-        return scaledHeightProperty.get();
-    }
-    
-    public final double getScaledMinX()
-    {
-        return scaledXMinBinding.get();
-    }
-    
-    public final double getScaledMaxX()
-    {
-        return scaledXMaxBinding.get();
-    }
-    
-    public final double getScaledMinY()
-    {
-        return scaledYMinBinding.get();
-    }
-    
-    public final double getScaledMaxY()
-    {
-        return scaledYMaxBinding.get();
+    public final IntegerProperty canvasWidthBinding() {
+        return canvasWidthProperty;
     }
     
     public final int getCanvasWidth()
@@ -146,10 +145,119 @@ public class MandelbrotDimensions
         return canvasWidthProperty.get();
     }
     
+    
+    public final IntegerProperty canvasHeightProperty() {
+        return canvasHeightProperty;
+    }
+    
     public final int getCanvasHeight()
     {
         return canvasHeightProperty.get();
     }
+    
+    
+    //<editor-fold desc="--- BINDINGS ---">
+    
+    public final DoubleBinding widthBinding() {
+        return widthBinding;
+    }
+    
+    public final double getWidth()
+    {
+        return widthBinding.get();
+    }
+    
+    
+    public final DoubleBinding heightBinding() {
+        return heightBinding;
+    }
+    
+    public final double getHeight()
+    {
+        return heightBinding.get();
+    }
+    
+    
+    public final DoubleBinding xScalingProperty() {
+        return xScalingBinding;
+    }
+    
+    public final double getScalingX()
+    {
+        return xScalingBinding.get();
+    }
+    
+    
+    public final DoubleBinding yScalingBinding() {
+        return yScalingBinding;
+    }
+    
+    public final double getScalingY()
+    {
+        return yScalingBinding.get();
+    }
+    
+    
+    public final DoubleBinding scaledWidthBinding() {
+        return scaledWidthBinding;
+    }
+    
+    public final double getScaledWidth()
+    {
+        return scaledWidthBinding.get();
+    }
+    
+    
+    public final DoubleBinding scaledHeightBinding() {
+        return scaledHeightBinding;
+    }
+    
+    public final double getScaledHeight()
+    {
+        return scaledHeightBinding.get();
+    }
+    
+    
+    public final DoubleBinding scaledXMinBinding() {
+        return scaledXMinBinding;
+    }
+    
+    public final double getScaledMinX()
+    {
+        return scaledXMinBinding.get();
+    }
+    
+    
+    public final DoubleBinding scaledXMaxBinding() {
+        return scaledXMaxBinding;
+    }
+    
+    public final double getScaledMaxX()
+    {
+        return scaledXMaxBinding.get();
+    }
+    
+    
+    public final DoubleBinding scaledYMinBinding() {
+        return scaledYMinBinding;
+    }
+    
+    public final double getScaledMinY()
+    {
+        return scaledYMinBinding.get();
+    }
+    
+    
+    public final DoubleBinding scaledYMaxBinding() {
+        return scaledYMaxBinding;
+    }
+    
+    public final double getScaledMaxY()
+    {
+        return scaledYMaxBinding.get();
+    }
+    
+    //</editor-fold>
     
     //</editor-fold>
     
@@ -214,10 +322,10 @@ public class MandelbrotDimensions
                ", canvasHeight=" + canvasHeightProperty.get() +
                ", width=" + widthBinding.get() +
                ", height=" + heightBinding.get() +
-               ", xScaling=" + xScalingProperty.get() +
-               ", yScaling=" + yScalingProperty.get() +
-               ", scaledWidth=" + scaledWidthProperty.get() +
-               ", scaledHeight=" + scaledHeightProperty.get() +
+               ", xScaling=" + xScalingBinding.get() +
+               ", yScaling=" + yScalingBinding.get() +
+               ", scaledWidth=" + scaledWidthBinding.get() +
+               ", scaledHeight=" + scaledHeightBinding.get() +
                ", scaledXMin=" + scaledXMinBinding.get() +
                ", scaledXMax=" + scaledXMaxBinding.get() +
                ", scaledYMin=" + scaledYMinBinding.get() +
