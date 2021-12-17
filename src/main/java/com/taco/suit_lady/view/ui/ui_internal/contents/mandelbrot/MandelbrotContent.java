@@ -17,7 +17,6 @@ import com.taco.suit_lady.view.ui.Content;
 import com.taco.suit_lady.view.ui.ui_internal.contents.mandelbrot.MandelbrotIterator.MandelbrotColor;
 import com.taco.suit_lady.view.ui.ui_internal.contents.mandelbrot.MandelbrotContentController.MouseDragData;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
@@ -31,7 +30,7 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
     private final ReentrantLock lock;
     
     private Task<Void> worker;
-    private final MandelbrotDimensions dimensions; // This object is passed to every MandelbrotIterator as they are created
+    private final MandelbrotData data; // This object is passed to every MandelbrotIterator as they are created
     private final ReadOnlyBooleanWrapper isGeneratingProperty;
     
     private RectanglePaintCommand selectionBoxPaintCommandOld;
@@ -40,8 +39,6 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
     private final SLEllipsePaintCommand selectionCirclePaintCommand;
     
     private MandelbrotPage coverPage;
-    
-    private boolean isRefreshing = false;
     
     public MandelbrotContent(@NotNull Springable springable) {
         super(springable);
@@ -59,7 +56,7 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
                 null));
         
         this.worker = null;
-        this.dimensions = MandelbrotDimensions.newDefaultInstance(this, getController().canvas().getWidth(), getController().canvas().getHeight());
+        this.data = MandelbrotData.newDefaultInstance(this, getController().canvas().getWidth(), getController().canvas().getHeight());
         this.isGeneratingProperty = new ReadOnlyBooleanWrapper(false);
         
         getController().canvas().setCanvasListener((source, newWidth, newHeight) -> refreshCanvas());
@@ -95,41 +92,45 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
     }
     
     private void initUIPage() {
-        getCoverPage().getController().getXMaxTextField().getFormatter().valueProperty().bindBidirectional(dimensions.xMaxProperty());
-        getCoverPage().getController().getYMaxTextField().getFormatter().valueProperty().bindBidirectional(dimensions.yMaxProperty());
-        getCoverPage().getController().getXMinTextField().getFormatter().valueProperty().bindBidirectional(dimensions.xMinProperty());
-        getCoverPage().getController().getYMinTextField().getFormatter().valueProperty().bindBidirectional(dimensions.yMinProperty());
+        //Bind the value properties of relevant JFX components to the matching MandelbrotData property bidirectionally
+        getCoverPage().getController().getXMaxTextField().getFormatter().valueProperty().bindBidirectional(data.xMaxProperty());
+        getCoverPage().getController().getYMaxTextField().getFormatter().valueProperty().bindBidirectional(data.yMaxProperty());
+        getCoverPage().getController().getXMinTextField().getFormatter().valueProperty().bindBidirectional(data.xMinProperty());
+        getCoverPage().getController().getYMinTextField().getFormatter().valueProperty().bindBidirectional(data.yMinProperty());
         
+        getCoverPage().getController().getColorSchemeChoiceBox().valueProperty().bindBidirectional(data.colorSchemeProperty());
+        getCoverPage().getController().getAutoRegenerateCheckBox().selectedProperty().bindBidirectional(data.autoRegenerateProperty());
+        
+        
+        // Refresh the generated image when an applicable MandelbrotData property changes
+        data.xMinProperty().addListener((observable, oldValue, newValue) -> refreshCanvasChecked());
+        data.xMaxProperty().addListener((observable, oldValue, newValue) -> refreshCanvasChecked());
+        data.yMinProperty().addListener((observable, oldValue, newValue) -> refreshCanvasChecked());
+        data.yMaxProperty().addListener((observable, oldValue, newValue) -> refreshCanvasChecked());
+        
+        data.colorSchemeProperty().addListener((observable, oldValue, newValue) -> refreshCanvasChecked());
+    
+    
+        // Bind the text properties of applicable labels to reflect relevant MandelbrotData calculated values (bindings)
         getCoverPage().getController().getWidthLabel().textProperty().bind(
-                Bindings.createStringBinding(() -> "" + dimensions.getWidth(), dimensions.widthBinding()));
+                Bindings.createStringBinding(() -> "" + data.getWidth(), data.widthBinding()));
         getCoverPage().getController().getHeightLabel().textProperty().bind(
-                Bindings.createStringBinding(() -> "" + dimensions.getHeight(), dimensions.heightBinding()));
-        getCoverPage().getController().getCanvasWidthLabel().textProperty().bind(
-                Bindings.createStringBinding(() -> "" + dimensions.getCanvasWidth(), dimensions.canvasWidthProperty()));
-        getCoverPage().getController().getHeightLabel().textProperty().bind(
-                Bindings.createStringBinding(() -> "" + dimensions.getCanvasHeight(), dimensions.canvasHeightProperty()));
+                Bindings.createStringBinding(() -> "" + data.getHeight(), data.heightBinding()));
         
-        //        dimensions.changeCounter().addListener((observable, oldValue, newValue) -> refreshCanvas());
-        dimensions.xMinProperty().addListener(this::changed);
-        dimensions.xMaxProperty().addListener(this::changed);
-        dimensions.yMinProperty().addListener(this::changed);
-        dimensions.yMaxProperty().addListener(this::changed);
-    }
-    
-    public final ReadOnlyBooleanProperty isGeneratingProperty() {
-        return isGeneratingProperty.getReadOnlyProperty();
-    }
-    
-    public final boolean isGenerating() {
-        return isGeneratingProperty.get();
-    }
-    
-    protected final void setIsGenerating(boolean isGenerating) {
-        isGeneratingProperty.set(isGenerating);
+        getCoverPage().getController().getCanvasWidthLabel().textProperty().bind(
+                Bindings.createStringBinding(() -> "" + data.getCanvasWidth(), data.canvasWidthProperty()));
+        getCoverPage().getController().getCanvasHeightLabel().textProperty().bind(
+                Bindings.createStringBinding(() -> "" + data.getCanvasHeight(), data.canvasHeightProperty()));
     }
     
     protected MandelbrotPage getCoverPage() {
         return coverPage;
+    }
+    
+    private void refreshCanvasChecked() {
+        boolean autoRegenerateEnabled = data.isAutoRegenerateEnabled();
+        if (autoRegenerateEnabled)
+            refreshCanvas();
     }
     
     private void refreshCanvas() {
@@ -141,15 +142,15 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
             
             if (worker != null) {
                 debugger().print("Cancelling Worker...");
-                worker.cancel(true);
+                worker.cancel(false);
             }
             FXTools.get().clearCanvasUnsafe(ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas());
             
             debugger().print("In Refresh 2...");
             
-            dimensions.resizeTo(newWidth, newHeight);
+            data.resizeTo(newWidth, newHeight);
             final MandelbrotIterator iterator = new MandelbrotIterator(
-                    this, new MandelbrotColor[(int) newWidth][(int) newHeight], dimensions, lock);
+                    this, new MandelbrotColor[(int) newWidth][(int) newHeight], data, lock);
             worker = new Task<>() {
                 @Override
                 protected Void call() {
@@ -210,7 +211,7 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
         selectionBoxPaintCommand2.deactivate();
         selectionCirclePaintCommand.deactivate();
         
-        dimensions.zoomTo(dragData.getStartX(), dragData.getStartY(), dragData.getEndX(), dragData.getEndY());
+        data.zoomTo(dragData.getStartX(), dragData.getStartY(), dragData.getEndX(), dragData.getEndY());
     }
     
     private void updateZoomBox(MouseDragData moveData) {
@@ -247,11 +248,6 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
     
     @Override
     protected void onShutdown() { }
-    
-    private void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
-        if (!Objects.equals(oldValue, newValue))
-            refreshCanvas();
-    }
     
     //</editor-fold>
 }

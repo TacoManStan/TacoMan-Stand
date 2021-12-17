@@ -1,6 +1,7 @@
 package com.taco.suit_lady.view.ui.ui_internal.contents.mandelbrot;
 
 import javafx.scene.paint.Color;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
@@ -28,6 +29,8 @@ public enum MandelbrotColorScheme {
     private final Function<Integer, Double> green2;
     private final Function<Integer, Double> blue2;
     
+    private Color[] cache;
+    
     MandelbrotColorScheme(
             @Nullable Function<Integer, Double> red1, @Nullable Function<Integer, Double> green1, @Nullable Function<Integer, Double> blue1,
             @Nullable Function<Integer, Double> red2, @Nullable Function<Integer, Double> green2, @Nullable Function<Integer, Double> blue2) {
@@ -39,7 +42,13 @@ public enum MandelbrotColorScheme {
         this.blue2 = blue2 != null ? blue2 : i -> 0.0;
     }
     
-    public final Color[] getColorArray() {
+    public final @NotNull Color @NotNull [] getColorArray() {
+        if (cache == null)
+            this.cache = generateColorArray();
+        return cache;
+    }
+    
+    public final @NotNull Color @NotNull [] generateColorArray() {
         final Color[] colors = new Color[255 * 2];
         for (int i = 0; i < 255; i++) {
             colors[i] = Color.color(red1.apply(i), green1.apply(i), blue1.apply(i));

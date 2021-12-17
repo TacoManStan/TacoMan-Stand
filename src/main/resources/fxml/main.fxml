@@ -22,7 +22,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="root" style="-fx-border-color: green; -fx-border-width: 0;" stylesheets="/css/TRiBot.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.taco.suit_lady.view.ui.AppController">
+<StackPane fx:id="root" style="-fx-border-color: green; -fx-border-width: 0;" stylesheets="/css/main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.taco.suit_lady.view.ui.AppController">
     <children>
         <BorderPane>
             <center>

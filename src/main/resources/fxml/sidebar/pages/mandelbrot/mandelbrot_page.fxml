@@ -1,108 +1,169 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.taco.suit_lady.view.ui.jfx.components.DoubleField2?>
-<?import com.taco.suit_lady.view.ui.jfx.components.IntField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="500.0" prefWidth="250.0" stylesheets="/css/TRiBot.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.taco.suit_lady.view.ui.ui_internal.contents.mandelbrot.MandelbrotPageController">
+<AnchorPane fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="500.0" prefWidth="250.0" stylesheets="/css/main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.taco.suit_lady.view.ui.ui_internal.contents.mandelbrot.MandelbrotPageController">
     <children>
-        <BorderPane layoutX="5.0" layoutY="5.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+        <BorderPane layoutX="5.0" layoutY="5.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
             <bottom>
-                <AnchorPane BorderPane.alignment="CENTER">
-                    <children>
-                        <ProgressBar fx:id="progressBar" minHeight="15.0" prefHeight="15.0" progress="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0" />
-                    </children>
-                </AnchorPane>
+                <AnchorPane BorderPane.alignment="CENTER" />
             </bottom>
             <center>
                 <BorderPane BorderPane.alignment="CENTER">
                <center>
                   <VBox spacing="10.0" BorderPane.alignment="CENTER">
                      <children>
-                        <HBox spacing="5.0">
+                        <HBox spacing="5.0" VBox.vgrow="NEVER">
                            <children>
-                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="X Min" HBox.hgrow="NEVER" />
-                              <DoubleField2 maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" fx:id="xMinTextField" />
-                           </children>
-                        </HBox>
-                        <HBox spacing="5.0">
-                           <children>
-                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Y Min" HBox.hgrow="NEVER" />
-                              <DoubleField2 fx:id="yMinTextField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
-                           </children>
-                        </HBox>
-                        <HBox spacing="5.0">
-                           <children>
-                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="X Max" HBox.hgrow="NEVER" />
-                              <DoubleField2 maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" fx:id="xMaxTextField" />
-                           </children>
-                        </HBox>
-                        <HBox spacing="5.0">
-                           <children>
-                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Y Max" HBox.hgrow="NEVER" />
-                              <DoubleField2 fx:id="yMaxTextField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
-                           </children>
-                        </HBox>
-                        <HBox spacing="5.0">
-                           <children>
-                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Color Scheme" HBox.hgrow="NEVER" />
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Color Scheme" HBox.hgrow="NEVER">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
                               <ChoiceBox fx:id="colorSchemeChoiceBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
-                        <Separator prefWidth="200.0" />
-                        <HBox spacing="5.0">
+                        <Separator maxWidth="1.7976931348623157E308" stylesheets="@../../../../css/sub-main.css" VBox.vgrow="NEVER" />
+                        <HBox spacing="5.0" VBox.vgrow="NEVER">
                            <children>
-                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Int Field Test" HBox.hgrow="NEVER" />
-                              <IntField fx:id="intFieldTest" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="X Min" HBox.hgrow="NEVER">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <DoubleField2 maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" fx:id="xMinTextField" />
                            </children>
                         </HBox>
-                        <Separator prefWidth="200.0" />
-                        <HBox spacing="5.0">
+                        <HBox spacing="5.0" VBox.vgrow="NEVER">
                            <children>
-                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Width" HBox.hgrow="NEVER" />
-                              <Label fx:id="widthLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="&lt; Width Label &gt;" HBox.hgrow="ALWAYS" />
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Y Min" HBox.hgrow="NEVER">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <DoubleField2 fx:id="yMinTextField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
-                        <HBox spacing="5.0">
+                        <HBox spacing="5.0" VBox.vgrow="NEVER">
                            <children>
-                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Height" HBox.hgrow="NEVER" />
-                              <Label fx:id="heightLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="&lt; Height Label &gt;" HBox.hgrow="ALWAYS" />
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="X Max" HBox.hgrow="NEVER">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <DoubleField2 maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" fx:id="xMaxTextField" />
                            </children>
                         </HBox>
-                        <HBox spacing="5.0">
+                        <HBox spacing="5.0" VBox.vgrow="NEVER">
                            <children>
-                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Canvas Width" HBox.hgrow="NEVER" />
-                              <Label fx:id="canvasWidthLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="&lt; Width Label &gt;" HBox.hgrow="ALWAYS" />
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Y Max" HBox.hgrow="NEVER">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <DoubleField2 fx:id="yMaxTextField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
-                        <HBox spacing="5.0">
-                           <children>
-                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="CanvasHeight" HBox.hgrow="NEVER" />
-                              <Label fx:id="canvasHeightLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="&lt; Width Label &gt;" HBox.hgrow="ALWAYS" />
-                           </children>
-                        </HBox>
-                        <Separator prefWidth="200.0" />
-                        <HBox spacing="5.0">
-                           <children>
-                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="X Min Value" HBox.hgrow="NEVER" />
-                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="&lt; X Min Test Label &gt;" HBox.hgrow="ALWAYS" fx:id="xMinLabel" />
-                           </children>
-                        </HBox>
-                        <HBox spacing="5.0">
-                           <children>
-                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Int Field Value" HBox.hgrow="NEVER" />
-                              <Label fx:id="intFieldTestLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="&lt; Int Field Test Label &gt;" HBox.hgrow="ALWAYS" />
-                           </children>
-                        </HBox>
+                        <Separator maxWidth="1.7976931348623157E308" VBox.vgrow="NEVER" />
+                        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Information" VBox.vgrow="NEVER">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" stylesheets="@../../../../css/sub-main.css" VBox.vgrow="SOMETIMES">
+                           <content>
+                              <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0">
+                                 <children>
+                                    <HBox spacing="5.0">
+                                       <children>
+                                          <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Width:" HBox.hgrow="NEVER">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="widthLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                                       </children>
+                                    </HBox>
+                                    <HBox spacing="5.0">
+                                       <children>
+                                          <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Height:" HBox.hgrow="NEVER">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="heightLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                                       </children>
+                                    </HBox>
+                                    <HBox spacing="5.0">
+                                       <children>
+                                          <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Adj. Width:" HBox.hgrow="NEVER">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="adjustedWidthLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                                       </children>
+                                    </HBox>
+                                    <HBox spacing="5.0">
+                                       <children>
+                                          <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Adj. Height:" HBox.hgrow="NEVER">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="adjustedHeightLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                                       </children>
+                                    </HBox>
+                                    <Separator prefWidth="200.0">
+                                       <VBox.margin>
+                                          <Insets bottom="2.0" top="5.0" />
+                                       </VBox.margin>
+                                    </Separator>
+                                    <HBox spacing="5.0">
+                                       <children>
+                                          <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Canvas Width:" HBox.hgrow="NEVER">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="canvasWidthLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                                       </children>
+                                    </HBox>
+                                    <HBox spacing="5.0">
+                                       <children>
+                                          <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Canvas Height:" HBox.hgrow="NEVER">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="canvasHeightLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </content>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </ScrollPane>
+                        <Separator maxWidth="1.7976931348623157E308" />
                      </children>
                      <BorderPane.margin>
                         <Insets bottom="15.0" />
@@ -110,7 +171,21 @@
                   </VBox>
                </center>
                <bottom>
-                  <Button fx:id="regenerateButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Regenerate" BorderPane.alignment="CENTER" />
+                  <VBox spacing="5.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <CheckBox fx:id="autoRegenerateCheckBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" selected="true" text="Auto-Regenerate">
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </CheckBox>
+                        <StackPane prefHeight="25.0">
+                           <children>
+                              <Button fx:id="regenerateButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Regenerate" />
+                                    <ProgressBar fx:id="progressBar" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" progress="0.0" />
+                           </children>
+                        </StackPane>
+                     </children>
+                  </VBox>
                </bottom></BorderPane>
             </center>
         </BorderPane>

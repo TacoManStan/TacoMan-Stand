@@ -19,31 +19,22 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor>
     
     private final StrictSpringable springable;
     
-    
     private final int PRECISION = 1000;
-    
-    private final MandelbrotDimensions dimensions;
-    
-    private final Color[] presetColors;
+    private final MandelbrotData dimensions;
     
     public MandelbrotIterator(Springable springable, MandelbrotColor[][] targetArray, ReentrantLock lock) {
         this(springable, targetArray, null, lock);
     }
     
-    public MandelbrotIterator(Springable springable, MandelbrotColor[][] targetArray, @NotNull MandelbrotDimensions dimensions, ReentrantLock lock) {
+    public MandelbrotIterator(@NotNull Springable springable, MandelbrotColor[][] targetArray, @NotNull MandelbrotData dimensions, ReentrantLock lock) {
         super(targetArray, lock);
-        
         this.springable = springable.asStrict();
         
-        
-        this.dimensions = dimensions != null ? dimensions : MandelbrotDimensions.newDefaultInstance(this, getWidth(), getHeight());
-        
+        this.dimensions = dimensions != null ? dimensions : MandelbrotData.newDefaultInstance(this, getWidth(), getHeight());
         if (dimensions.getCanvasWidth() != getWidth() || dimensions.getCanvasHeight() != getHeight())
             throw ExceptionTools.ex("Dimension Mismatch:  " +
                                     "Dimensions Data [" + dimensions.getCanvasWidth() + ", " + dimensions.getCanvasHeight() + "  " +
                                     "Iterator Data [" + getWidth() + ", " + getHeight());
-        
-        this.presetColors = MandelbrotColorScheme.values()[RandomTools.get().nextInt(6)].getColorArray();
     }
     
     private boolean escapes(double iX, double iY) {
@@ -146,10 +137,10 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor>
             
             final int whole = (int) ((getSmallN() - partWhole) * 20);
             
-            final int total = presetColors.length;
+            final int total = dimensions.getColorScheme().getColorArray().length;
             final int value = whole % total;
             
-            return presetColors[value];
+            return dimensions.getColorScheme().getColorArray()[value];
         }
         
         public java.awt.Color getAwtColor() {

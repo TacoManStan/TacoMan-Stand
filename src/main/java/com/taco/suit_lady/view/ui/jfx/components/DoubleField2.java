@@ -22,15 +22,6 @@ public class DoubleField2 extends TextField {
     
     private void init() {
         setTextFormatter(getFormatter());
-//        getFormatter().valueProperty().addListener((observable, oldValue, newValue) -> {
-//            if (!Objects.equals(oldValue, newValue)) {
-//                System.out.println("DoubleField2 Internal:  [" + oldValue + " -> " + newValue + "]");
-//                setText("" + newValue);
-//            }
-//        });
-//        focusedProperty().addListener((observable, oldValue, newValue) -> {
-//            getFormatter().setValue(Double.parseDouble(getText()));
-//        });
     }
     
     public final DecimalFormatter getFormatter() {

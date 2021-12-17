@@ -23,8 +23,11 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
     
     @FXML private AnchorPane root;
     
+    
     @FXML private ProgressBar progressBar;
+    
     @FXML private Button regenerateButton;
+    @FXML private CheckBox autoRegenerateCheckBox;
     
     @FXML private DoubleField2 xMinTextField;
     @FXML private DoubleField2 yMinTextField;
@@ -36,14 +39,11 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
     
     @FXML private Label widthLabel;
     @FXML private Label heightLabel;
+    @FXML private Label adjustedWidthLabel;
+    @FXML private Label adjustedHeightLabel;
+    
     @FXML private Label canvasWidthLabel;
     @FXML private Label canvasHeightLabel;
-    
-    //
-    
-    @FXML private IntField intFieldTest;
-    @FXML private Label xMinLabel;
-    @FXML private Label intFieldTestLabel;
     
     protected MandelbrotPageController(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         super(weaver, ctx);
@@ -57,6 +57,10 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
     
     protected Button getRegenerateButton() {
         return regenerateButton;
+    }
+    
+    protected CheckBox getAutoRegenerateCheckBox() {
+        return autoRegenerateCheckBox;
     }
     
     protected DoubleField2 getXMinTextField() {
@@ -75,6 +79,10 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
         return yMaxTextField;
     }
     
+    protected ChoiceBox<MandelbrotColorScheme> getColorSchemeChoiceBox() {
+        return colorSchemeChoiceBox;
+    }
+    
     protected Label getWidthLabel() {
         return widthLabel;
     }
@@ -83,24 +91,20 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
         return heightLabel;
     }
     
+    protected Label getAdjustedWidthLabel() {
+        return adjustedWidthLabel;
+    }
+    
+    protected Label getAdjustedHeightLabel() {
+        return adjustedHeightLabel;
+    }
+    
     protected Label getCanvasWidthLabel() {
         return canvasWidthLabel;
     }
     
     protected Label getCanvasHeightLabel() {
         return canvasHeightLabel;
-    }
-    
-    protected IntField getIntFieldTest() {
-        return intFieldTest;
-    }
-    
-    protected Label getXMinLabel() {
-        return xMinLabel;
-    }
-    
-    protected Label getIntFieldTestLabel() {
-        return intFieldTestLabel;
     }
     
     //</editor-fold>
@@ -116,15 +120,25 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
     public void initialize() {
         Arrays.stream(MandelbrotColorScheme.values()).forEach(
                 colorScheme -> colorSchemeChoiceBox.getItems().add(colorScheme));
-  
-//        xMinTextField.setTextFormatter(new DecimalFormatter());
-//        yMinTextField.setTextFormatter(new DecimalFormatter());
-//        xMaxTextField.setTextFormatter(new DecimalFormatter());
-//        yMaxTextField.setTextFormatter(new DecimalFormatter());
         
-//        intFieldTest.valueProperty().addListener((observable, oldValue, newValue) -> {
-//            intFieldTestLabel.setText("" + intFieldTest.getValue());
-//        });
+        progressBar.visibleProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != oldValue) {
+                if (newValue)
+                    regenerateButton.setId("progress-button");
+                else
+                    regenerateButton.setId(null);
+                regenerateButton.applyCss();
+            }
+        });
+        
+        //        xMinTextField.setTextFormatter(new DecimalFormatter());
+        //        yMinTextField.setTextFormatter(new DecimalFormatter());
+        //        xMaxTextField.setTextFormatter(new DecimalFormatter());
+        //        yMaxTextField.setTextFormatter(new DecimalFormatter());
+        
+        //        intFieldTest.valueProperty().addListener((observable, oldValue, newValue) -> {
+        //            intFieldTestLabel.setText("" + intFieldTest.getValue());
+        //        });
     }
     
     //</editor-fold>
