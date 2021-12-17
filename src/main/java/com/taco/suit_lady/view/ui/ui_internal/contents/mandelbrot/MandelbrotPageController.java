@@ -1,9 +1,7 @@
 package com.taco.suit_lady.view.ui.ui_internal.contents.mandelbrot;
 
 import com.taco.suit_lady.view.ui.UIPageController;
-import com.taco.suit_lady.view.ui.jfx.components.DecimalFormatter;
 import com.taco.suit_lady.view.ui.jfx.components.DoubleField2;
-import com.taco.suit_lady.view.ui.jfx.components.IntField;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -39,8 +37,13 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
     
     @FXML private Label widthLabel;
     @FXML private Label heightLabel;
-    @FXML private Label adjustedWidthLabel;
-    @FXML private Label adjustedHeightLabel;
+    @FXML private Label widthScaledLabel;
+    @FXML private Label heightScaledLabel;
+    
+    @FXML private Label xMinScaledLabel;
+    @FXML private Label yMinScaledLabel;
+    @FXML private Label xMaxScaledLabel;
+    @FXML private Label yMaxScaledLabel;
     
     @FXML private Label canvasWidthLabel;
     @FXML private Label canvasHeightLabel;
@@ -63,6 +66,11 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
         return autoRegenerateCheckBox;
     }
     
+    protected ChoiceBox<MandelbrotColorScheme> getColorSchemeChoiceBox() {
+        return colorSchemeChoiceBox;
+    }
+    
+    
     protected DoubleField2 getXMinTextField() {
         return xMinTextField;
     }
@@ -79,9 +87,6 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
         return yMaxTextField;
     }
     
-    protected ChoiceBox<MandelbrotColorScheme> getColorSchemeChoiceBox() {
-        return colorSchemeChoiceBox;
-    }
     
     protected Label getWidthLabel() {
         return widthLabel;
@@ -91,13 +96,31 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
         return heightLabel;
     }
     
-    protected Label getAdjustedWidthLabel() {
-        return adjustedWidthLabel;
+    protected Label getWidthScaledLabel() {
+        return widthScaledLabel;
     }
     
-    protected Label getAdjustedHeightLabel() {
-        return adjustedHeightLabel;
+    protected Label getHeightScaledLabel() {
+        return heightScaledLabel;
     }
+    
+    
+    protected Label getXMinScaledLabel() {
+        return xMinScaledLabel;
+    }
+    
+    protected Label getYMinScaledLabel() {
+        return yMinScaledLabel;
+    }
+    
+    protected Label getXMaxScaledLabel() {
+        return xMaxScaledLabel;
+    }
+    
+    protected Label getYMaxScaledLabel() {
+        return yMaxScaledLabel;
+    }
+    
     
     protected Label getCanvasWidthLabel() {
         return canvasWidthLabel;

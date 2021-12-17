@@ -18,12 +18,10 @@ import com.taco.suit_lady.view.ui.ui_internal.contents.mandelbrot.MandelbrotIter
 import com.taco.suit_lady.view.ui.ui_internal.contents.mandelbrot.MandelbrotContentController.MouseDragData;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
-import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class MandelbrotContent extends Content<MandelbrotContentData, MandelbrotContentController> {
@@ -116,6 +114,19 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
                 Bindings.createStringBinding(() -> "" + data.getWidth(), data.widthBinding()));
         getCoverPage().getController().getHeightLabel().textProperty().bind(
                 Bindings.createStringBinding(() -> "" + data.getHeight(), data.heightBinding()));
+        getCoverPage().getController().getWidthScaledLabel().textProperty().bind(
+                Bindings.createStringBinding(() -> "" + data.getScaledWidth(), data.scaledWidthBinding()));
+        getCoverPage().getController().getHeightScaledLabel().textProperty().bind(
+                Bindings.createStringBinding(() -> "" + data.getScaledHeight(), data.scaledHeightBinding()));
+        
+        getCoverPage().getController().getXMinScaledLabel().textProperty().bind(
+                Bindings.createStringBinding(() -> "" + data.getScaledMinX(), data.scaledXMinBinding()));
+        getCoverPage().getController().getYMinScaledLabel().textProperty().bind(
+                Bindings.createStringBinding(() -> "" + data.getScaledMinY(), data.scaledYMinBinding()));
+        getCoverPage().getController().getXMaxScaledLabel().textProperty().bind(
+                Bindings.createStringBinding(() -> "" + data.getScaledMaxX(), data.scaledXMaxBinding()));
+        getCoverPage().getController().getYMaxScaledLabel().textProperty().bind(
+                Bindings.createStringBinding(() -> "" + data.getScaledMaxY(), data.scaledYMaxBinding()));
         
         getCoverPage().getController().getCanvasWidthLabel().textProperty().bind(
                 Bindings.createStringBinding(() -> "" + data.getCanvasWidth(), data.canvasWidthProperty()));
