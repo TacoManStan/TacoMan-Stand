@@ -154,7 +154,7 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
                 @Override
                 protected Void call() {
                     FXTools.get().runFX(() -> getCoverPage().getController().getProgressBar().setVisible(true), true);
-                    System.out.println("In Refresh Task A...");
+                    debugger().print("In Refresh Task A...");
                     while (!iterator.isComplete()) {
                         iterator.next();
                         if (iterator.getWorkProgress() % 10 == 0)
@@ -168,7 +168,7 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
                 
                 @Override
                 protected void succeeded() {
-                    System.out.println("Generation Successful!");
+                    debugger().print("Generation Successful!");
                     worker = null;
                 }
                 
@@ -184,7 +184,7 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
                     worker = null;
                 }
             };
-            System.out.println("Worker: " + worker);
+            debugger().print("Worker: " + worker);
             
             getCoverPage().getController().getProgressBar().progressProperty().bind(worker.progressProperty());
             new Thread(worker).start(); // Use executor instead?
