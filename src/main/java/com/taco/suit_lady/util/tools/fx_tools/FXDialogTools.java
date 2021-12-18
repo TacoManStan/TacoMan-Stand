@@ -457,7 +457,7 @@ public class FXDialogTools
             dialog_pane = dialog.getDialogPane();
             
             // Apply css to dialog
-            dialog_pane.getStylesheets().add(TB.resources().getResourceURL("css/tribot.css").toExternalForm());
+            dialog_pane.getStylesheets().add(TB.resources().getResourceURL("css/main.css").toExternalForm());
             dialog_pane.getStyleClass().add("dialogFX");
             
             // Set the spacing around the dialog's content
