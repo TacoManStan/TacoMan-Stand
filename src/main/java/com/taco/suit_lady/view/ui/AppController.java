@@ -288,7 +288,7 @@ public class AppController
         final SidebarBookshelf inDevelopmentSidebarBookshelf = new SidebarBookshelf(sidebar, "In Development");
         inDevelopmentSidebarBookshelf.getBooks().add(new UIBook(
                 AppController.this.weaver, AppController.this.ctx,
-                "Entity Debug", "entity_debug",
+                "Entity Debug", "clients",
                 uiBook -> TB.resources().get(
                         "pages", uiBook.getButtonID(),
                         () -> new EntityDebugPage(uiBook)
@@ -299,7 +299,7 @@ public class AppController
         final SidebarBookshelf nyiSidebarBookshelf = new SidebarBookshelf(sidebar, "Not Yet Implemented");
         nyiSidebarBookshelf.getBooks().add(new UIBook(
                 AppController.this.weaver, AppController.this.ctx,
-                "Social", "social",
+                "Social", "play",
                 uiBook -> TB.resources().get(
                         "pages", uiBook.getButtonID(),
                         () -> new ExamplePage(uiBook, "blue")

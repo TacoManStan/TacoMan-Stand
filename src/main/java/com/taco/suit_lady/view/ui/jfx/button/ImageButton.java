@@ -703,6 +703,10 @@ public class ImageButton
         return "buttons/" + getID() + "/";
     }
     
+    private @NotNull String getPathID2() {
+        return "buttons/_small/";
+    }
+    
     /**
      * <P>Returns the {@link ObjectProperty} containing the {@link ImageButtonGroup} that this {@link ImageButton} is in, or {@code null} if this {@link ImageButton} is not in a {@link ImageButtonGroup}.</P>
      * <p><b>Details</b></p>
@@ -1020,14 +1024,16 @@ public class ImageButton
         
         private final ObjectProperty<Color> foregroundColorProperty;
         private final ObjectProperty<Color> backgroundColorProperty;
+        private final ObjectProperty<Color> color1Property;
         
         private final ObjectBinding<Image> imageBinding;
         
         public PaintData(String suffix) {
             this.suffix = suffix;
             
-            this.foregroundColorProperty = new SimpleObjectProperty<>(defaultColor(true));
-            this.backgroundColorProperty = new SimpleObjectProperty<>(defaultColor(false));
+            this.foregroundColorProperty = new SimpleObjectProperty<>(defaultColor(FOREGROUND));
+            this.backgroundColorProperty = new SimpleObjectProperty<>(defaultColor(BACKGROUND));
+            this.color1Property = new SimpleObjectProperty<>(defaultColor(COLOR1));
             
             this.imageBinding = generateImageBinding();
         }
@@ -1064,12 +1070,19 @@ public class ImageButton
         }
         
         
-        public ObjectProperty<Color> getColorProperty(boolean foreground) {
-            return foreground ? foregroundColorProperty : backgroundColorProperty;
+        public ObjectProperty<Color> getColorProperty(@NotNull Color baseColor) {
+            if (baseColor.equals(FOREGROUND))
+                return foregroundColorProperty;
+            else if (baseColor.equals(BACKGROUND))
+                return backgroundColorProperty;
+            else if (baseColor.equals(COLOR1))
+                return color1Property;
+            else
+                return foregroundColorProperty;
         }
         
-        public Color getColor(boolean foreground) {
-            return getColorProperty(foreground).get();
+        public Color getColor(@NotNull Color baseColor) {
+            return getColorProperty(baseColor).get();
         }
         
         
@@ -1094,7 +1107,7 @@ public class ImageButton
         
         private @NotNull ObjectBinding<Image> generateImageBinding() {
             return Bindings.createObjectBinding(() -> {
-                Image image = ResourceTools.get().getImage(ImageButton.this.getPathID(), ImageButton.this.getID() + "_blank", "png");
+                Image image = ResourceTools.get().getImage(ImageButton.this.getPathID2(), ImageButton.this.getID(), "png");
                 if (image != null) {
                     final WritableImage writableImage = new WritableImage((int) image.getWidth(), (int) image.getHeight());
                     PixelReader reader = image.getPixelReader();
@@ -1103,7 +1116,7 @@ public class ImageButton
                         for (int j = 0; j < image.getHeight(); j++) {
                             Color rawColor = reader.getColor(i, j);
                             ImageButton.this.debugger().print("[" + i + ", " + j + "] - Raw Color " + ImageButton.this.getName() + ":  " + rawColor);
-                            Color color = getColor(rawColor.equals(Color.BLACK));
+                            Color color = getColor(rawColor);
                             ImageButton.this.debugger().print("[" + i + ", " + j + "] - Color " + ImageButton.this.getName() + ":  " + color);
                             writableImage.getPixelWriter().setColor(i, j, color);
                         }
@@ -1118,24 +1131,45 @@ public class ImageButton
             }, ImageButton.this.nameBinding(), foregroundColorProperty, backgroundColorProperty);
         }
         
-        private Color defaultColor(boolean foreground) {
-            return foreground ? switch (suffix) {
-                case SUFFIX_STANDARD -> FXTools.Colors.from255(95, 95, 95);
-                case SUFFIX_PRESSED, SUFFIX_HOVERED -> FXTools.Colors.from255(153, 153, 153);
-                case SUFFIX_DISABLED -> FXTools.Colors.from255(50, 50, 50);
-//                case SUFFIX_SELECTED_HOVERED, SUFFIX_SELECTED_PRESSED -> FXTools.Colors.from255(23, 77, 154);
-                case SUFFIX_SELECTED_HOVERED, SUFFIX_SELECTED_PRESSED -> FXTools.Colors.from255(40, 83, 156);
-                case SUFFIX_SELECTED -> FXTools.Colors.from255(30, 62, 117);
-                default -> Color.BLACK;
-            } : switch (suffix) {
-                case SUFFIX_STANDARD, SUFFIX_DISABLED -> Color.TRANSPARENT;
-                case SUFFIX_PRESSED -> FXTools.Colors.from255(64, 64, 64, 70);
-                case SUFFIX_HOVERED -> FXTools.Colors.from255(64, 64, 64, 35);
-                case SUFFIX_SELECTED -> FXTools.Colors.from255(35, 35, 35);
-                case SUFFIX_SELECTED_PRESSED -> FXTools.Colors.from255(45, 45, 45);
-                case SUFFIX_SELECTED_HOVERED -> FXTools.Colors.from255(40, 40, 40);
-                default -> Color.WHITE;
-            };
+        private Color defaultColor(Color baseColor) {
+            if (baseColor.equals(FOREGROUND)) {
+                return switch (suffix) {
+                    case SUFFIX_STANDARD -> FXTools.Colors.from255(95, 95, 95);
+                    case SUFFIX_PRESSED, SUFFIX_HOVERED -> FXTools.Colors.from255(153, 153, 153);
+                    case SUFFIX_DISABLED -> FXTools.Colors.from255(50, 50, 50);
+                    //                case SUFFIX_SELECTED_HOVERED, SUFFIX_SELECTED_PRESSED -> FXTools.Colors.from255(23, 77, 154);
+                    case SUFFIX_SELECTED_HOVERED, SUFFIX_SELECTED_PRESSED -> FXTools.Colors.from255(40, 83, 156);
+                    case SUFFIX_SELECTED -> FXTools.Colors.from255(30, 62, 117);
+                    default -> Color.BLACK;
+                };
+            } else if (baseColor.equals(BACKGROUND)) {
+                return switch (suffix) {
+                    case SUFFIX_STANDARD, SUFFIX_DISABLED -> Color.TRANSPARENT;
+                    case SUFFIX_PRESSED -> FXTools.Colors.from255(64, 64, 64, 70);
+                    case SUFFIX_HOVERED -> FXTools.Colors.from255(64, 64, 64, 35);
+                    case SUFFIX_SELECTED -> FXTools.Colors.from255(35, 35, 35);
+                    case SUFFIX_SELECTED_PRESSED -> FXTools.Colors.from255(45, 45, 45);
+                    case SUFFIX_SELECTED_HOVERED -> FXTools.Colors.from255(40, 40, 40);
+                    default -> Color.WHITE;
+                };
+            } else if (baseColor.equals(COLOR1)) {
+                return switch (suffix) {
+                    case SUFFIX_STANDARD, SUFFIX_DISABLED -> FXTools.Colors.from255(95, 95, 95, 150);
+                    case SUFFIX_PRESSED, SUFFIX_HOVERED -> FXTools.Colors.from255(153, 153, 153, 150);
+                    case SUFFIX_SELECTED -> FXTools.Colors.from255(30, 62, 117, 150);
+                    case SUFFIX_SELECTED_HOVERED, SUFFIX_SELECTED_PRESSED -> FXTools.Colors.from255(40, 83, 156, 150);
+                    default -> Color.WHITE;
+                };
+            } else if (baseColor.equals(COLOR2)) {
+                return switch (suffix) {
+                    case SUFFIX_STANDARD, SUFFIX_DISABLED -> FXTools.Colors.from255(95, 95, 95, 220);
+                    case SUFFIX_PRESSED, SUFFIX_HOVERED -> FXTools.Colors.from255(153, 153, 153, 220);
+                    case SUFFIX_SELECTED -> FXTools.Colors.from255(30, 62, 117, 220);
+                    case SUFFIX_SELECTED_HOVERED, SUFFIX_SELECTED_PRESSED -> FXTools.Colors.from255(40, 83, 156, 220);
+                    default -> Color.WHITE;
+                };
+            }
+            return Color.BLACK;
         }
         
         /**
@@ -1152,6 +1186,15 @@ public class ImageButton
         private Image missingno() {
             return ResourceTools.get().getImage("buttons/missingno/", "missingno" + suffix, "png");
         }
+        
+        public final Color FOREGROUND = Color.BLACK;
+        public final Color BACKGROUND = Color.WHITE;
+        public final Color COLOR1 = Color.RED;
+        public final Color COLOR2 = Color.GREEN;
+        public final Color COLOR3 = Color.BLUE;
+        public final Color COLOR4 = Color.CYAN;
+        public final Color COLOR5 = Color.MAGENTA;
+        public final Color COLOR6 = Color.YELLOW;
         
         //</editor-fold>
     }
