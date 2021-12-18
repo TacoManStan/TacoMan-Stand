@@ -44,7 +44,7 @@ public class MandelbrotData
     private final ObjectProperty<MandelbrotColorScheme> colorSchemeProperty;
     private final BooleanProperty invertColorSchemeProperty;
     
-    private final BooleanProperty autoRegenerateProperty;
+    private final BooleanProperty pauseAutoRegenerationProperty;
     
     
     private int currentCount;
@@ -89,7 +89,7 @@ public class MandelbrotData
         this.colorSchemeProperty = new SimpleObjectProperty<>(MandelbrotColorScheme.RED);
         this.invertColorSchemeProperty = new SimpleBooleanProperty(false);
         
-        this.autoRegenerateProperty = new SimpleBooleanProperty(true);
+        this.pauseAutoRegenerationProperty = new SimpleBooleanProperty(false);
         
         
         this.currentCount = 0;
@@ -220,17 +220,17 @@ public class MandelbrotData
     
     //
     
-    public final BooleanProperty autoRegenerateProperty() {
-        return autoRegenerateProperty;
+    public final BooleanProperty pauseAutoRegenerationProperty() {
+        return pauseAutoRegenerationProperty;
     }
     
-    public final boolean isAutoRegenerateEnabled() {
-        return autoRegenerateProperty.get();
+    public final boolean isAutoRegenerationPaused() {
+        return pauseAutoRegenerationProperty.get();
     }
     
-    public final boolean setAutoRegenerate(boolean newValue) {
-        boolean oldValue = isAutoRegenerateEnabled();
-        autoRegenerateProperty.set(newValue);
+    public final boolean setAutoRegenerationPaused(boolean newValue) {
+        boolean oldValue = isAutoRegenerationPaused();
+        pauseAutoRegenerationProperty.set(newValue);
         return oldValue;
     }
     

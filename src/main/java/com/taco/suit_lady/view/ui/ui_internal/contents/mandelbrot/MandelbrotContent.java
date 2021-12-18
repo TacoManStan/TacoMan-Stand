@@ -99,7 +99,7 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
         getCoverPage().getController().getColorSchemeChoiceBox().valueProperty().bindBidirectional(data.colorSchemeProperty());
         getCoverPage().getController().getInvertColorSchemeImageButton().selectedProperty().bindBidirectional(data.invertColorSchemeProperty());
         
-        getCoverPage().getController().getAutoRegenerateCheckBox().selectedProperty().bindBidirectional(data.autoRegenerateProperty());
+        getCoverPage().getController().getPauseAutoRegenerationImageButton().selectedProperty().bindBidirectional(data.pauseAutoRegenerationProperty());
         
         
         // Refresh the generated image when an applicable MandelbrotData property changes
@@ -142,8 +142,8 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
     }
     
     private void refreshCanvasChecked() {
-        boolean autoRegenerateEnabled = data.isAutoRegenerateEnabled();
-        if (autoRegenerateEnabled)
+        boolean autoRegenerationPaused = data.isAutoRegenerationPaused();
+        if (!autoRegenerationPaused)
             refreshCanvas();
     }
     

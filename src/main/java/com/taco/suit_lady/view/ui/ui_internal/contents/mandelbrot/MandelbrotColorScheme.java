@@ -1,6 +1,5 @@
 package com.taco.suit_lady.view.ui.ui_internal.contents.mandelbrot;
 
-import com.taco.suit_lady.util.tools.ArrayTools;
 import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

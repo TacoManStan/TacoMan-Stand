@@ -23,19 +23,22 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
     
     @FXML private AnchorPane root;
     
+    //
     
     @FXML private ProgressBar progressBar;
     
     @FXML private Button regenerateButton;
-    @FXML private CheckBox autoRegenerateCheckBox;
+    @FXML private ImagePane autoRegenerateImagePane;
+    
+    @FXML private ChoiceBox<MandelbrotColorScheme> colorSchemeChoiceBox;
+    @FXML private ImagePane invertColorSchemeImagePane;
+    
+    //
     
     @FXML private DoubleField2 xMinTextField;
     @FXML private DoubleField2 yMinTextField;
     @FXML private DoubleField2 xMaxTextField;
     @FXML private DoubleField2 yMaxTextField;
-    
-    @FXML private ChoiceBox<MandelbrotColorScheme> colorSchemeChoiceBox;
-    @FXML private ImagePane invertColorSchemeImagePane;
     
     
     @FXML private Label widthLabel;
@@ -55,7 +58,7 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
         super(weaver, ctx);
     }
     
-    //<editor-fold desc="--- FXML FIELD ACCESSORS ---">
+    //<editor-fold desc="--- PROPERTIES ---">
     
     protected ProgressBar getProgressBar() {
         return progressBar;
@@ -66,8 +69,8 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
         return regenerateButton;
     }
     
-    protected CheckBox getAutoRegenerateCheckBox() {
-        return autoRegenerateCheckBox;
+    protected ImagePane getAutoRegenerateImagePane() {
+        return autoRegenerateImagePane;
     }
     
     
@@ -145,6 +148,21 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
     
     //</editor-fold>
     
+    //<editor-fold desc="--- IMAGE BUTTONS ---">
+    
+    private ImageButton invertColorSchemeImageButton;
+    private ImageButton autoRegenerateImageButton;
+    
+    protected final ImageButton getInvertColorSchemeImageButton() {
+        return invertColorSchemeImageButton;
+    }
+    
+    protected final ImageButton getPauseAutoRegenerationImageButton() {
+        return autoRegenerateImageButton;
+    }
+    
+    //</editor-fold>
+    
     //</editor-fold>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
@@ -154,17 +172,8 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
         return root;
     }
     
-    private ImageButton button;
-    
-    protected final ImageButton getInvertColorSchemeImageButton() {
-        return button;
-    }
-    
     @Override
     public void initialize() {
-        Arrays.stream(MandelbrotColorScheme.values()).forEach(
-                colorScheme -> colorSchemeChoiceBox.getItems().add(colorScheme));
-        
         progressBar.visibleProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != oldValue) {
                 if (newValue)
@@ -175,10 +184,23 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
             }
         });
         
-        this.button = new ImageButton(
+        Arrays.stream(MandelbrotColorScheme.values()).forEach(
+                colorScheme -> colorSchemeChoiceBox.getItems().add(colorScheme));
+        
+        this.invertColorSchemeImageButton = new ImageButton(
                 this,
                 invertColorSchemeImagePane,
                 "rerun",
+                null,
+                null,
+                true,
+                ImageButton.SMALL
+        ).initialize();
+        
+        this.autoRegenerateImageButton = new ImageButton(
+                this,
+                autoRegenerateImagePane,
+                "pause",
                 null,
                 null,
                 true,
