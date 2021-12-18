@@ -23,7 +23,10 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,8 +38,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 // TO-DOC
 public class ImageButton
-        implements Nameable, Springable
-{
+        implements Nameable, Springable {
     //<editor-fold desc="--- FIELDS ---">
     
     private final StrictSpringable springable;
@@ -46,10 +48,13 @@ public class ImageButton
     private final StringBinding nameBinding;
     private final ObjectProperty<ImageButtonGroup> buttonGroupProperty;
     
-    private final ReadOnlyObjectWrapper<Image> standardImageProperty;
-    private final ReadOnlyObjectWrapper<Image> hoveredImageProperty;
-    private final ReadOnlyObjectWrapper<Image> pressedImageProperty;
-    private final ReadOnlyObjectWrapper<Image> disabledImageProperty;
+    private final PaintData paintData;
+    private final PaintData hoveredPaintData;
+    private final PaintData pressedPaintData;
+    private final PaintData disabledPaintData;
+    private final PaintData selectedPaintData;
+    private final PaintData selectedHoveredPaintData;
+    private final PaintData selectedPressedPaintData;
     
     private final ObjectProperty<Runnable> actionResponderProperty;
     private final ObjectProperty<Runnable> actionResponderFXProperty;
@@ -76,9 +81,9 @@ public class ImageButton
             @Nullable Runnable actionResponder,
             @Nullable Runnable actionResponderFX,
             boolean toggleable,
-            @Nullable Point2D size)
-    {
-        this(springable, imagePane, BindingTools.createStringBinding(name), actionResponder, actionResponderFX, toggleable, size);
+            @Nullable Point2D size) {
+        this(springable, imagePane,
+             BindingTools.createStringBinding(name), actionResponder, actionResponderFX, toggleable, size);
     }
     
     /**
@@ -139,8 +144,7 @@ public class ImageButton
             @Nullable Runnable actionResponder,
             @Nullable Runnable actionResponderFX,
             boolean toggleable,
-            @Nullable Point2D size)
-    {
+            @Nullable Point2D size) {
         this.springable = springable.asStrict();
         
         this.imagePane = imagePane != null ? imagePane : new ImagePane();
@@ -158,11 +162,6 @@ public class ImageButton
         //        ConsoleBB.CONSOLE.print("Actual Size for Button \"" + getName() + "\": " + "[" + this.imagePane.getWidth() + ", " + this.imagePane.getHeight() + "]");
         
         this.buttonGroupProperty = new ReadOnlyObjectWrapper<>();
-        
-        this.standardImageProperty = new ReadOnlyObjectWrapper<>();
-        this.hoveredImageProperty = new ReadOnlyObjectWrapper<>();
-        this.pressedImageProperty = new ReadOnlyObjectWrapper<>();
-        this.disabledImageProperty = new ReadOnlyObjectWrapper<>();
         
         this.actionResponderProperty = new SimpleObjectProperty<>(actionResponder);
         this.actionResponderFXProperty = new SimpleObjectProperty<>(actionResponderFX);
@@ -192,10 +191,6 @@ public class ImageButton
             }
         });
         
-        this.standardImageProperty.bind(createImageBinding(""));
-        this.hoveredImageProperty.bind(createImageBinding("_hovered"));
-        this.pressedImageProperty.bind(createImageBinding("_pressed"));
-        this.disabledImageProperty.bind(createImageBinding("_disabled"));
         
         this.hoveredBinding = BindingTools.createBooleanBinding(this.imagePane.hoverProperty());
         this.pressedBinding = BindingTools.createBooleanBinding(this.imagePane.pressedProperty());
@@ -205,6 +200,15 @@ public class ImageButton
             if (newValue && !isToggleable())
                 throw ExceptionTools.unsupported("Image Button \"" + getName() + "\" is not toggleable and can therefore not be selected.");
         });
+        
+        
+        this.paintData = new PaintData("");
+        this.hoveredPaintData = new PaintData("_hovered");
+        this.pressedPaintData = new PaintData("_pressed");
+        this.disabledPaintData = new PaintData("_disabled");
+        this.selectedPaintData = new PaintData("_selected");
+        this.selectedHoveredPaintData = new PaintData("_selected_hovered");
+        this.selectedPressedPaintData = new PaintData("_selected_pressed");
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">
@@ -241,19 +245,15 @@ public class ImageButton
      *
      * @return A self-reference ({@code this}) to this {@link ImageButton}.
      */
-    public ImageButton initialize()
-    {
+    public ImageButton initialize() {
         // Note: MUST be called manually after an ImageButton is constructed.
-        
-        //<editor-fold desc="ImagePane Initialization">
         
         final Observable[] observables = new Observable[]{
                 nameBinding,
                 hoveredBinding,
                 pressedBinding,
                 selectedProperty,
-                disabledProperty,
-                standardImageProperty
+                disabledProperty
         };
         
         imagePane.imageProperty().bind(Bindings.createObjectBinding(
@@ -265,7 +265,6 @@ public class ImageButton
         imagePane.setOnMousePressed(Event::consume);
         imagePane.setOnMouseReleased(event -> onMouseReleased(event));
         
-        //</editor-fold>
         return this;
     }
     
@@ -288,8 +287,7 @@ public class ImageButton
      *
      * @param event The triggering {@link MouseEvent} object.
      */
-    private void onMouseReleased(MouseEvent event)
-    {
+    private void onMouseReleased(MouseEvent event) {
         if (Objects.equals(event.getSource(), imagePane) && FXTools.get().isMouseOnEventSource(event) && !isDisabled()) {
             toggle();
             onAction();
@@ -317,8 +315,7 @@ public class ImageButton
      *
      * @see #actionResponderFXProperty()
      */
-    public @NotNull ObjectProperty<Runnable> actionResponderProperty()
-    {
+    public @NotNull ObjectProperty<Runnable> actionResponderProperty() {
         return actionResponderProperty;
     }
     
@@ -329,8 +326,7 @@ public class ImageButton
      *
      * @see #actionResponderProperty()
      */
-    public @Nullable Runnable getActionResponder()
-    {
+    public @Nullable Runnable getActionResponder() {
         return actionResponderProperty.get();
     }
     
@@ -341,8 +337,7 @@ public class ImageButton
      *
      * @see #actionResponderProperty()
      */
-    public void setActionResponder(@Nullable Runnable actionResponder)
-    {
+    public void setActionResponder(@Nullable Runnable actionResponder) {
         actionResponderProperty.set(actionResponder);
     }
     
@@ -360,8 +355,7 @@ public class ImageButton
      *
      * @see #actionResponderProperty()
      */
-    public @NotNull ObjectProperty<Runnable> actionResponderFXProperty()
-    {
+    public @NotNull ObjectProperty<Runnable> actionResponderFXProperty() {
         return actionResponderFXProperty;
     }
     
@@ -372,8 +366,7 @@ public class ImageButton
      *
      * @see #actionResponderFXProperty()
      */
-    public @Nullable Runnable getActionResponderFX()
-    {
+    public @Nullable Runnable getActionResponderFX() {
         return actionResponderFXProperty.get();
     }
     
@@ -384,8 +377,7 @@ public class ImageButton
      *
      * @see #actionResponderFXProperty()
      */
-    public void setActionResponderFX(@Nullable Runnable actionResponder)
-    {
+    public void setActionResponderFX(@Nullable Runnable actionResponder) {
         actionResponderFXProperty.set(actionResponder);
     }
     
@@ -418,16 +410,13 @@ public class ImageButton
      * @see #actionResponderProperty()
      * @see #actionResponderFXProperty()
      */
-    private void onAction()
-    {
+    private void onAction() {
         final Runnable actionResponder = getActionResponder();
         if (actionResponder != null)
             ctx().getBean(LogiCore.class).execute(
-                    new Task<>()
-                    {
+                    new Task<>() {
                         @Override
-                        protected Object call()
-                        {
+                        protected Object call() {
                             actionResponder.run();
                             return null;
                         }
@@ -442,92 +431,26 @@ public class ImageButton
     
     //<editor-fold desc="Image Properties">
     
-    /**
-     * <p>Returns the {@link ReadOnlyObjectProperty property} containing the {@link Image} to be displayed when this {@link ImageButton} is in a {@link ButtonState#STANDARD} state.</p>
-     *
-     * @return The {@link ReadOnlyObjectProperty property} containing the {@link Image} to be displayed when this {@link ImageButton} is in a {@link ButtonState#STANDARD} state.
-     */
-    public ReadOnlyObjectProperty<Image> standardImageProperty()
-    {
-        return standardImageProperty.getReadOnlyProperty();
-    }
+    public final String SUFFIX_STANDARD = "";
+    public final String SUFFIX_HOVERED = "_hovered";
+    public final String SUFFIX_PRESSED = "_pressed";
+    public final String SUFFIX_DISABLED = "_disabled";
+    public final String SUFFIX_SELECTED = "_selected";
+    public final String SUFFIX_SELECTED_HOVERED = "_selected_hovered";
+    public final String SUFFIX_SELECTED_PRESSED = "_selected_pressed";
     
-    /**
-     * <p>Returns the {@link Image} to be displayed when this {@link ImageButton} is in a {@link ButtonState#STANDARD} state.</p>
-     *
-     * @return The {@link Image} to be displayed when this {@link ImageButton} is in a {@link ButtonState#STANDARD} state.
-     *
-     * @see #standardImageProperty()
-     */
-    public Image getStandardImage()
-    {
-        return standardImageProperty.get();
-    }
-    
-    /**
-     * <p>Returns the {@link ReadOnlyObjectProperty property} containing the {@link Image} to be displayed when this {@link ImageButton} is in a {@link ButtonState#HOVERED} state.</p>
-     *
-     * @return The {@link ReadOnlyObjectProperty property} containing the {@link Image} to be displayed when this {@link ImageButton} is in a {@link ButtonState#HOVERED} state.
-     */
-    public ReadOnlyObjectProperty<Image> hoveredImageProperty()
-    {
-        return hoveredImageProperty.getReadOnlyProperty();
-    }
-    
-    /**
-     * <p>Returns the {@link Image} to be displayed when this {@link ImageButton} is in a {@link ButtonState#HOVERED} state.</p>
-     *
-     * @return The {@link Image} to be displayed when this {@link ImageButton} is in a {@link ButtonState#HOVERED} state.
-     *
-     * @see #hoveredImageProperty()
-     */
-    public Image getHoveredImage()
-    {
-        return hoveredImageProperty.get();
-    }
-    
-    /**
-     * <p>Returns the {@link ReadOnlyObjectProperty property} containing the {@link Image} to be displayed when this {@link ImageButton} is in a {@link ButtonState#PRESSED} state.</p>
-     *
-     * @return The {@link ReadOnlyObjectProperty property} containing the {@link Image} to be displayed when this {@link ImageButton} is in a {@link ButtonState#PRESSED} state.
-     */
-    public ReadOnlyObjectProperty<Image> pressedImageProperty()
-    {
-        return pressedImageProperty.getReadOnlyProperty();
-    }
-    
-    /**
-     * <p>Returns the {@link Image} to be displayed when this {@link ImageButton} is in a {@link ButtonState#PRESSED} state.</p>
-     *
-     * @return The {@link Image} to be displayed when this {@link ImageButton} is in a {@link ButtonState#PRESSED} state.
-     *
-     * @see #pressedImageProperty()
-     */
-    public Image getPressedImage()
-    {
-        return pressedImageProperty.get();
-    }
-    
-    /**
-     * <p>Returns the {@link ReadOnlyObjectProperty property} containing the {@link Image} to be displayed when this {@link ImageButton} is in a {@link ButtonState#DISABLED} state.</p>
-     *
-     * @return The {@link ReadOnlyObjectProperty property} containing the {@link Image} to be displayed when this {@link ImageButton} is in a {@link ButtonState#DISABLED} state.
-     */
-    public ReadOnlyObjectProperty<Image> disabledImageProperty()
-    {
-        return disabledImageProperty.getReadOnlyProperty();
-    }
-    
-    /**
-     * <p>Returns the {@link Image} to be displayed when this {@link ImageButton} is in a {@link ButtonState#DISABLED} state.</p>
-     *
-     * @return The {@link Image} to be displayed when this {@link ImageButton} is in a {@link ButtonState#DISABLED} state.
-     *
-     * @see #disabledImageProperty()
-     */
-    public Image getDisabledImage()
-    {
-        return disabledImageProperty.get();
+    public final PaintData paintData(String suffix) {
+        return switch (suffix) {
+            case SUFFIX_STANDARD -> paintData;
+            case SUFFIX_HOVERED -> hoveredPaintData;
+            case SUFFIX_PRESSED -> pressedPaintData;
+            case SUFFIX_DISABLED -> disabledPaintData;
+            case SUFFIX_SELECTED -> selectedPaintData;
+            case SUFFIX_SELECTED_HOVERED -> selectedHoveredPaintData;
+            case SUFFIX_SELECTED_PRESSED -> selectedPressedPaintData;
+            
+            default -> throw ExceptionTools.unsupported("Suffix \"" + suffix + "\" is not supported.");
+        };
     }
     
     //</editor-fold>
@@ -543,8 +466,7 @@ public class ImageButton
      *
      * @return A {@link BooleanBinding binding} bound to reflect if this {@link ImageButton} is in a {@link ButtonState#HOVERED HOVERED} state.
      */
-    public BooleanBinding hoveredBinding()
-    {
+    public BooleanBinding hoveredBinding() {
         return hoveredBinding;
     }
     
@@ -555,8 +477,7 @@ public class ImageButton
      *
      * @see #hoveredBinding()
      */
-    public boolean isHovered()
-    {
+    public boolean isHovered() {
         return hoveredBinding.get();
     }
     
@@ -569,8 +490,7 @@ public class ImageButton
      *
      * @return A {@link BooleanBinding binding} bound to reflect if this {@link ImageButton} is in a {@link ButtonState#PRESSED PRESSED} state.
      */
-    public BooleanBinding pressedBinding()
-    {
+    public BooleanBinding pressedBinding() {
         return pressedBinding;
     }
     
@@ -579,8 +499,7 @@ public class ImageButton
      *
      * @return True if this {@link ImageButton} is toggleable, false if it is not.
      */
-    public boolean isToggleable()
-    {
+    public boolean isToggleable() {
         return toggleable;
     }
     
@@ -591,8 +510,7 @@ public class ImageButton
      *
      * @see #pressedBinding()
      */
-    public boolean isPressed()
-    {
+    public boolean isPressed() {
         return pressedBinding.get();
     }
     
@@ -606,8 +524,7 @@ public class ImageButton
      *
      * @return The {@link BooleanProperty property} containing a boolean that reflects if this {@link ImageButton} is currently selected or not.
      */
-    public final BooleanProperty selectedProperty()
-    {
+    public final BooleanProperty selectedProperty() {
         return selectedProperty;
     }
     
@@ -618,8 +535,7 @@ public class ImageButton
      *
      * @see #selectedProperty()
      */
-    public final boolean isSelected()
-    {
+    public final boolean isSelected() {
         return selectedProperty.get();
     }
     
@@ -642,8 +558,7 @@ public class ImageButton
      *
      * @return True if the {@link #selectedProperty() selection} state of this {@link ImageButton} was successfully changed to the specified value, false if it was not.
      */
-    public final boolean setSelected(boolean selected)
-    {
+    public final boolean setSelected(boolean selected) {
         if (isToggleable()) {
             selectedProperty.set(selected);
             return true;
@@ -663,8 +578,7 @@ public class ImageButton
      *
      * @see #setSelected(boolean)
      */
-    public boolean toggle()
-    {
+    public boolean toggle() {
         return setSelected(!isSelected());
     }
     
@@ -675,8 +589,7 @@ public class ImageButton
      *
      * @see ButtonState#DISABLED
      */
-    public final BooleanProperty disabledProperty()
-    {
+    public final BooleanProperty disabledProperty() {
         return disabledProperty;
     }
     
@@ -687,8 +600,7 @@ public class ImageButton
      *
      * @see #disabledProperty()
      */
-    public final boolean isDisabled()
-    {
+    public final boolean isDisabled() {
         return disabledProperty.get();
     }
     
@@ -699,8 +611,7 @@ public class ImageButton
      *
      * @see #disabledProperty()
      */
-    public final void setDisabled(boolean disabled)
-    {
+    public final void setDisabled(boolean disabled) {
         disabledProperty.set(disabled);
     }
     
@@ -715,8 +626,7 @@ public class ImageButton
      *
      * @return The {@link ImagePane} object containing this {@link ImageButton}.
      */
-    public @NotNull ImagePane getImagePane()
-    {
+    public @NotNull ImagePane getImagePane() {
         return imagePane;
     }
     
@@ -747,8 +657,7 @@ public class ImageButton
      * @see #getID()
      * @see #getPathID()
      */
-    public @NotNull StringBinding nameBinding()
-    {
+    public @NotNull StringBinding nameBinding() {
         // TODO - Dunno how and it isn't necessary yet but you should somehow make it possible to change the name after construction
         return nameBinding;
     }
@@ -762,8 +671,7 @@ public class ImageButton
      * @see #nameBinding()
      */
     @Override
-    public @NotNull String getName()
-    {
+    public @NotNull String getName() {
         return nameBinding.get();
     }
     
@@ -777,8 +685,7 @@ public class ImageButton
      * @see #getPathID()
      * @see ResourceTools#getImage(String, String, String)
      */
-    private @NotNull String getID()
-    {
+    private @NotNull String getID() {
         return getName().replace(" ", "_").toLowerCase();
     }
     
@@ -792,8 +699,7 @@ public class ImageButton
      * @see #getID()
      * @see ResourceTools#getImage(String, String, String)
      */
-    private @NotNull String getPathID()
-    {
+    private @NotNull String getPathID() {
         return "buttons/" + getID() + "/";
     }
     
@@ -807,8 +713,7 @@ public class ImageButton
      *
      * @return The {@link ObjectProperty} containing the {@link ImageButtonGroup} that this {@link ImageButton} is in, or {@code null} if this {@link ImageButton} is not in a {@link ImageButtonGroup}.
      */
-    public @NotNull ObjectProperty<ImageButtonGroup> buttonGroupProperty()
-    {
+    public @NotNull ObjectProperty<ImageButtonGroup> buttonGroupProperty() {
         return buttonGroupProperty;
     }
     
@@ -817,8 +722,7 @@ public class ImageButton
      *
      * @return The {@link ImageButtonGroup} that this {@link ImageButton} is in, or {@code null} if this {@link ImageButton} is not in a {@link ImageButtonGroup}.
      */
-    public @Nullable ImageButtonGroup getButtonGroup()
-    {
+    public @Nullable ImageButtonGroup getButtonGroup() {
         return buttonGroupProperty.get();
     }
     
@@ -827,8 +731,7 @@ public class ImageButton
      *
      * @param buttonGroup The {@link ImageButtonGroup} that this {@link ImageButton} is being added to.
      */
-    public void setButtonGroup(@Nullable ImageButtonGroup buttonGroup)
-    {
+    public void setButtonGroup(@Nullable ImageButtonGroup buttonGroup) {
         buttonGroupProperty.set(buttonGroup);
     }
     
@@ -837,8 +740,7 @@ public class ImageButton
      *
      * @return True  if this {@link ImageButton} is in a {@link ImageButtonGroup}, false if it is not.
      */
-    public boolean isInButtonGroup()
-    {
+    public boolean isInButtonGroup() {
         return getButtonGroup() != null;
     }
     
@@ -847,14 +749,12 @@ public class ImageButton
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override
-    public @NotNull FxWeaver weaver()
-    {
+    public @NotNull FxWeaver weaver() {
         return springable.weaver();
     }
     
     @Override
-    public @NotNull ConfigurableApplicationContext ctx()
-    {
+    public @NotNull ConfigurableApplicationContext ctx() {
         return springable.ctx();
     }
     
@@ -865,8 +765,7 @@ public class ImageButton
     /**
      * An {@code enum} defining the current {@code state} of this {@link ImageButton}.
      */
-    public enum ButtonState
-    {
+    public enum ButtonState {
         /**
          * <p>Represents the standard {@link ImageButton} state.</p>
          * <p><b>Details</b></p>
@@ -930,7 +829,10 @@ public class ImageButton
          *     </li>
          * </ol>
          */
-        DISABLED
+        DISABLED,
+        
+        // TO-DOC
+        SELECTED, SELECTED_HOVERED, SELECTED_PRESSED;
     }
     
     /**
@@ -944,21 +846,28 @@ public class ImageButton
      *
      * @see ButtonState
      */
-    public ButtonState getState()
-    {
-        final Image standardImage = getStandardImage();
-        final Image pressedImage = getPressedImage();
-        final Image hoveredImage = getHoveredImage();
-        final Image disabledImage = getDisabledImage();
+    public ButtonState getState() {
+        final Image standardImage = paintData.getImage();
+        final Image pressedImage = pressedPaintData.getImage();
+        final Image hoveredImage = hoveredPaintData.getImage();
+        final Image disabledImage = disabledPaintData.getImage();
+        final Image selectedImage = selectedPaintData.getImage();
+        final Image selectedHoveredImage = selectedHoveredPaintData.getImage();
+        final Image selectedPressedImage = selectedPressedPaintData.getImage();
         
         if (disabledImage != null && isDisabled())
             return ButtonState.DISABLED;
-        else if (pressedImage != null && isHovered() && isPressed())
+        else if (pressedImage != null && isHovered() && isPressed() && !isSelected())
             return ButtonState.PRESSED;
-        else if (hoveredImage != null && isHovered())
+        else if (hoveredImage != null && isHovered() && !isSelected())
             return ButtonState.HOVERED;
-        else if (pressedImage != null && isToggleable() && isSelected())
-            return ButtonState.PRESSED;
+        else if (isSelected())
+            if (selectedImage != null && !isHovered() && !isPressed())
+                return ButtonState.SELECTED;
+            else if (selectedPressedImage != null && isPressed())
+                return ButtonState.SELECTED_PRESSED;
+            else if (selectedHoveredImage != null && isHovered())
+                return ButtonState.SELECTED_HOVERED;
         return ButtonState.STANDARD;
     }
     
@@ -967,13 +876,15 @@ public class ImageButton
      *
      * @return The {@link Image} matching the current {@link ButtonState state} of this {@link ImageButton}.
      */
-    public Image getImage()
-    {
+    public Image getImage() {
         return switch (getState()) {
-            case HOVERED -> getHoveredImage();
-            case PRESSED -> getPressedImage();
-            case DISABLED -> getDisabledImage();
-            default -> getStandardImage();
+            case HOVERED -> hoveredPaintData.getImage();
+            case PRESSED -> pressedPaintData.getImage();
+            case DISABLED -> disabledPaintData.getImage();
+            case SELECTED -> selectedPaintData.getImage();
+            case SELECTED_HOVERED -> selectedHoveredPaintData.getImage();
+            case SELECTED_PRESSED -> selectedPressedPaintData.getImage();
+            default -> paintData.getImage();
         };
     }
     
@@ -1002,8 +913,7 @@ public class ImageButton
     public static final Point2D VERY_LARGE = new Point2D(150.0, 125.0);
     public static final Point2D VERY_LARGE_BOX = new Point2D(150.0, 150.0);
     
-    public Point2D getSize()
-    {
+    public Point2D getSize() {
         return new Point2D(getImagePane().getWidth(), getImagePane().getHeight());
     }
     
@@ -1014,8 +924,7 @@ public class ImageButton
      *
      * @see #getSize()
      */
-    public String getSizeID()
-    {
+    public String getSizeID() {
         throw ExceptionTools.nyi();
         //        // TODO - Eventually, different size parameters of the same image will be created, and this will allow access to the correct image.
         //        // The purpose of multiple identical image files of different sizes will provide additional size options that are guaranteed to provide a non-warped image.
@@ -1041,55 +950,209 @@ public class ImageButton
     //</editor-fold>
     
     //<editor-fold desc="--- HELPER METHODS ---">
+    //
+    //    /**
+    //     * <p>Constructs a new {@link ObjectBinding} bound to the {@link Image} variation represented by the specified {@link String suffix}.</p>
+    //     * <p><b>Details</b></p>
+    //     * <ol>
+    //     *     <li>The {@link Image} bound to the returned {@link ObjectBinding} is automatically updated when the {@link #nameBinding() name} of this {@link ImageButton} changes.</li>
+    //     *     <li>If the {@link Image} variation with the specified {@link String suffix} does not exist at the file location defined by the {@link Image} {@link #getPathID() mapping} for this {@link ImageButton}, {@link #missingno(String) missingno} is used instead.</li>
+    //     * </ol>
+    //     * <p><b>Missingno</b></p>
+    //     * <ol>
+    //     *     <li>The {@link #missingno(String) missingno} {@link Image images} are universal files displaying an icon indicating the intended {@link Image} could not be found.</li>
+    //     *     <li>The name {@link #missingno(String) "missingno"} comes from the bugged Pokemon that would appear in the 1st Generation games due to a bug where in specific circumstances, a player could encounter a null Pokemon.</li>
+    //     *     <li>{@link #missingno(String) "missingno"} stands for {@code Missing Number}.</li>
+    //     * </ol>
+    //     *
+    //     * @param suffix The {@link String} representing the {@link Image} variation to be bound to the {@link ObjectProperty} returned by {@link #createImageBinding(String) this method}.
+    //     *
+    //     * @return A new {@link ObjectBinding} bound to the {@link Image} variation represented by the specified {@link String suffix}.
+    //     *
+    //     * @throws NullPointerException If the specified {@link String suffix} is {@code null}.
+    //     * @see #missingno(String)
+    //     */
+    //    private @NotNull ObjectBinding<Image> createImageBinding(@NotNull String suffix) {
+    //        ExceptionTools.nullCheck(suffix, "Suffix");
+    //
+    //        return Bindings.createObjectBinding(() -> {
+    //            Image image = ResourceTools.get().getImage(getPathID(), getID() + "_blank", "png");
+    //            if (image != null) {
+    //                final WritableImage writableImage = new WritableImage((int) image.getWidth(), (int) image.getHeight());
+    //                PixelReader reader = image.getPixelReader();
+    //
+    //                for (int i = 0; i < image.getWidth(); i++) {
+    //                    for (int j = 0; j < image.getHeight(); j++) {
+    //                        Color rawColor = reader.getColor(i, j);
+    //                        debugger().print("[" + i + ", " + j + "] - Raw Color " + getName() + ":  " + rawColor);
+    //                        Color color = rawColor.equals(Color.BLACK) ? switch (suffix) {
+    //                            case "" -> FXTools.Colors.from255(95, 95, 95);
+    //                            case "_pressed", "_hovered" -> FXTools.Colors.from255(153, 153, 153);
+    //                            case "_disabled" -> FXTools.Colors.from255(50, 50, 50);
+    //                            default -> Color.BLACK;
+    //                        } : switch (suffix) {
+    //                            case "", "_disabled" -> Color.TRANSPARENT;
+    //                            case "_pressed" -> FXTools.Colors.from255(64, 64, 64, 70);
+    //                            case "_hovered" -> FXTools.Colors.from255(64, 64, 64, 35);
+    //                            default -> Color.WHITE;
+    //                        };
+    //                        debugger().print("[" + i + ", " + j + "] - Raw Color " + getName() + ":  " + color);
+    //                        writableImage.getPixelWriter().setColor(i, j, color);
+    //                    }
+    //                }
+    //
+    //                return writableImage != null ? writableImage : missingno(suffix);
+    //            } else {
+    //                debugger().print("Image is null  [" + getName() + "_" + suffix + "]");
+    //                image = ResourceTools.get().getImage(getPathID(), getID() + suffix, "png");
+    //                return image != null ? image : missingno(suffix);
+    //            }
+    //
+    //        }, nameBinding());
     
-    /**
-     * <p>Constructs a new {@link ObjectBinding} bound to the {@link Image} variation represented by the specified {@link String suffix}.</p>
-     * <p><b>Details</b></p>
-     * <ol>
-     *     <li>The {@link Image} bound to the returned {@link ObjectBinding} is automatically updated when the {@link #nameBinding() name} of this {@link ImageButton} changes.</li>
-     *     <li>If the {@link Image} variation with the specified {@link String suffix} does not exist at the file location defined by the {@link Image} {@link #getPathID() mapping} for this {@link ImageButton}, {@link #missingno(String) missingno} is used instead.</li>
-     * </ol>
-     * <p><b>Missingno</b></p>
-     * <ol>
-     *     <li>The {@link #missingno(String) missingno} {@link Image images} are universal files displaying an icon indicating the intended {@link Image} could not be found.</li>
-     *     <li>The name {@link #missingno(String) "missingno"} comes from the bugged Pokemon that would appear in the 1st Generation games due to a bug where in specific circumstances, a player could encounter a null Pokemon.</li>
-     *     <li>{@link #missingno(String) "missingno"} stands for {@code Missing Number}.</li>
-     * </ol>
-     *
-     * @param suffix The {@link String} representing the {@link Image} variation to be bound to the {@link ObjectProperty} returned by {@link #createImageBinding(String) this method}.
-     *
-     * @return A new {@link ObjectBinding} bound to the {@link Image} variation represented by the specified {@link String suffix}.
-     *
-     * @throws NullPointerException If the specified {@link String suffix} is {@code null}.
-     * @see #missingno(String)
-     */
-    private @NotNull ObjectBinding<Image> createImageBinding(@NotNull String suffix)
-    {
-        ExceptionTools.nullCheck(suffix, "Suffix");
-        
-        return Bindings.createObjectBinding(() -> {
-            final Image image = ResourceTools.get().getImage(getPathID(), getID() + suffix, "png");
-            return image != null ? image : missingno(suffix);
-        }, nameBinding());
-    }
-    
-    /**
-     * <p>Returns the {@code missingno} {@link Image variation} based on the specified {@link String suffix}.</p>
-     * <p><b>Details</b></p>
-     * <ol>
-     *     <li>Refer to <code><i>{@link #createImageBinding(String)}</i></code> for additional information.</li>
-     * </ol>
-     *
-     * @param suffix The {@link String} representing the {@link Image} variation to be bound to the {@link ObjectProperty} returned by {@link #missingno(String) this method}.
-     *
-     * @return The {@code missingno} {@link Image} variation based on the specified {@link String suffix}.
-     *
-     * @see #createImageBinding(String)
-     */
-    private Image missingno(String suffix)
-    {
-        return ResourceTools.get().getImage("buttons/missingno/", "missingno" + suffix, "png");
-    }
     
     //</editor-fold>
+    
+    public final class PaintData {
+        
+        // The suffix
+        private final String suffix;
+        
+        private final ObjectProperty<Color> foregroundColorProperty;
+        private final ObjectProperty<Color> backgroundColorProperty;
+        
+        private final ObjectBinding<Image> imageBinding;
+        
+        public PaintData(String suffix) {
+            this.suffix = suffix;
+            
+            this.foregroundColorProperty = new SimpleObjectProperty<>(defaultColor(true));
+            this.backgroundColorProperty = new SimpleObjectProperty<>(defaultColor(false));
+            
+            this.imageBinding = generateImageBinding();
+        }
+        
+        //<editor-fold desc="--- PROPERTIES ---">
+        
+        public ObjectProperty<Color> foregroundColorProperty() {
+            return foregroundColorProperty;
+        }
+        
+        public Color getForegroundColor() {
+            return foregroundColorProperty.get();
+        }
+        
+        public Color setForegroundColor(Color newValue) {
+            Color oldValue = getForegroundColor();
+            foregroundColorProperty.set(newValue);
+            return oldValue;
+        }
+        
+        
+        public ObjectProperty<Color> backgroundColorProperty() {
+            return backgroundColorProperty;
+        }
+        
+        public Color getBackgroundColor() {
+            return backgroundColorProperty.get();
+        }
+        
+        public Color setBackgroundColor(Color newValue) {
+            Color oldValue = getBackgroundColor();
+            backgroundColorProperty.set(newValue);
+            return oldValue;
+        }
+        
+        
+        public ObjectProperty<Color> getColorProperty(boolean foreground) {
+            return foreground ? foregroundColorProperty : backgroundColorProperty;
+        }
+        
+        public Color getColor(boolean foreground) {
+            return getColorProperty(foreground).get();
+        }
+        
+        
+        //
+        
+        public String getSuffix() {
+            return suffix;
+        }
+        
+        
+        public ObjectBinding<Image> imageProperty() {
+            return imageBinding;
+        }
+        
+        public Image getImage() {
+            return imageBinding.get();
+        }
+        
+        //</editor-fold>
+        
+        //<editor-fold desc="--- HELPER METHODS ---">
+        
+        private @NotNull ObjectBinding<Image> generateImageBinding() {
+            return Bindings.createObjectBinding(() -> {
+                Image image = ResourceTools.get().getImage(ImageButton.this.getPathID(), ImageButton.this.getID() + "_blank", "png");
+                if (image != null) {
+                    final WritableImage writableImage = new WritableImage((int) image.getWidth(), (int) image.getHeight());
+                    PixelReader reader = image.getPixelReader();
+                    
+                    for (int i = 0; i < image.getWidth(); i++) {
+                        for (int j = 0; j < image.getHeight(); j++) {
+                            Color rawColor = reader.getColor(i, j);
+                            ImageButton.this.debugger().print("[" + i + ", " + j + "] - Raw Color " + ImageButton.this.getName() + ":  " + rawColor);
+                            Color color = getColor(rawColor.equals(Color.BLACK));
+                            ImageButton.this.debugger().print("[" + i + ", " + j + "] - Color " + ImageButton.this.getName() + ":  " + color);
+                            writableImage.getPixelWriter().setColor(i, j, color);
+                        }
+                    }
+                    
+                    return writableImage != null ? writableImage : missingno();
+                } else {
+                    ImageButton.this.debugger().print("Image is null  [" + ImageButton.this.getName() + "_" + suffix + "]");
+                    image = ResourceTools.get().getImage(ImageButton.this.getPathID(), ImageButton.this.getID() + suffix, "png");
+                    return image != null ? image : missingno();
+                }
+            }, ImageButton.this.nameBinding(), foregroundColorProperty, backgroundColorProperty);
+        }
+        
+        private Color defaultColor(boolean foreground) {
+            return foreground ? switch (suffix) {
+                case SUFFIX_STANDARD -> FXTools.Colors.from255(95, 95, 95);
+                case SUFFIX_PRESSED, SUFFIX_HOVERED -> FXTools.Colors.from255(153, 153, 153);
+                case SUFFIX_DISABLED -> FXTools.Colors.from255(50, 50, 50);
+                case SUFFIX_SELECTED -> FXTools.Colors.from255(23, 77, 154);
+                case SUFFIX_SELECTED_PRESSED -> FXTools.Colors.from255(40, 83, 156);
+                case SUFFIX_SELECTED_HOVERED -> FXTools.Colors.from255(30, 62, 117);
+                default -> Color.BLACK;
+            } : switch (suffix) {
+                case SUFFIX_STANDARD, SUFFIX_DISABLED -> Color.TRANSPARENT;
+                case SUFFIX_PRESSED -> FXTools.Colors.from255(64, 64, 64, 70);
+                case SUFFIX_HOVERED -> FXTools.Colors.from255(64, 64, 64, 35);
+                case SUFFIX_SELECTED -> FXTools.Colors.from255(35, 35, 35);
+                case SUFFIX_SELECTED_PRESSED -> FXTools.Colors.from255(45, 45, 45);
+                case SUFFIX_SELECTED_HOVERED -> FXTools.Colors.from255(40, 40, 40);
+                default -> Color.WHITE;
+            };
+        }
+        
+        /**
+         * <p>Returns the {@code missingno} {@link Image variation} based on the specified {@link #getSuffix() suffix}.</p>
+         * <p><b>Details</b></p>
+         * <ol>
+         *     <li>Refer to <code><i>{@link #generateImageBinding()}</i></code> for additional information.</li>
+         * </ol>
+         *
+         * @return The {@code missingno} {@link Image} variation based on this {@link PaintData Paint Data's} {@link #getSuffix() suffix (name)}.
+         *
+         * @see #generateImageBinding()
+         */
+        private Image missingno() {
+            return ResourceTools.get().getImage("buttons/missingno/", "missingno" + suffix, "png");
+        }
+        
+        //</editor-fold>
+    }
 }
