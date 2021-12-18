@@ -1123,9 +1123,9 @@ public class ImageButton
                 case SUFFIX_STANDARD -> FXTools.Colors.from255(95, 95, 95);
                 case SUFFIX_PRESSED, SUFFIX_HOVERED -> FXTools.Colors.from255(153, 153, 153);
                 case SUFFIX_DISABLED -> FXTools.Colors.from255(50, 50, 50);
-                case SUFFIX_SELECTED -> FXTools.Colors.from255(23, 77, 154);
-                case SUFFIX_SELECTED_PRESSED -> FXTools.Colors.from255(40, 83, 156);
-                case SUFFIX_SELECTED_HOVERED -> FXTools.Colors.from255(30, 62, 117);
+//                case SUFFIX_SELECTED_HOVERED, SUFFIX_SELECTED_PRESSED -> FXTools.Colors.from255(23, 77, 154);
+                case SUFFIX_SELECTED_HOVERED, SUFFIX_SELECTED_PRESSED -> FXTools.Colors.from255(40, 83, 156);
+                case SUFFIX_SELECTED -> FXTools.Colors.from255(30, 62, 117);
                 default -> Color.BLACK;
             } : switch (suffix) {
                 case SUFFIX_STANDARD, SUFFIX_DISABLED -> Color.TRANSPARENT;
