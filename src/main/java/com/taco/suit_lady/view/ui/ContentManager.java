@@ -143,7 +143,7 @@ public class ContentManager
                 oldContent.getController().root().prefHeightProperty().unbind();
                 oldContent.getController().root().maxWidthProperty().unbind();
                 oldContent.getController().root().maxHeightProperty().unbind();
-    
+                
                 getContentPrimaryPane().getChildren().remove(oldContent.getOverlayHandler().root());
                 oldContent.getOverlayHandler().root().prefWidthProperty().unbind();
                 oldContent.getOverlayHandler().root().prefHeightProperty().unbind();
@@ -153,14 +153,14 @@ public class ContentManager
                 ctx().getBean(LogiCore.class).execute(() -> oldContent.onRemovedInternal());
             }
             if (newContent != null) {
-                FXTools.get().bindToParent(newContent.getController().root(), getContentPrimaryPane(), FXTools.BindOrientation.BOTH, FXTools.BindType.BOTH, true);
+                FXTools.get().bindToParent(newContent.getController().root(), getContentPrimaryPane(), true);
                 FXTools.get().bindToParent(newContent.getOverlayHandler().root(), getContentPrimaryPane(), true);
                 
-//                final List<Overlay> contentOverlays = newContent.getOverlayHandler().overlays().getCopy();
-//                for (Overlay overlay: contentOverlays) {
-//                    System.out.println("Binding overlay... " + overlay.getName());
-//                    FXTools.get().bindToParent(overlay.root(), getContentForegroundPane(), true);
-//                }
+                //                final List<Overlay> contentOverlays = newContent.getOverlayHandler().overlays().getCopy();
+                //                for (Overlay overlay: contentOverlays) {
+                //                    System.out.println("Binding overlay... " + overlay.getName());
+                //                    FXTools.get().bindToParent(overlay.root(), getContentForegroundPane(), true);
+                //                }
                 
                 ctx().getBean(LogiCore.class).execute(() -> newContent.onSetInternal());
             }

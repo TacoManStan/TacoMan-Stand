@@ -31,7 +31,8 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
     @FXML private ImagePane autoRegenerateImagePane;
     
     @FXML private ChoiceBox<MandelbrotColorScheme> colorSchemeChoiceBox;
-    @FXML private ImagePane invertColorSchemeImagePane;
+//    @FXML private ImagePane invertColorSchemeImagePane;
+    @FXML private CheckBox invertColorSchemeCheckBox;
     
     //
     
@@ -78,10 +79,13 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
         return colorSchemeChoiceBox;
     }
     
-    protected ImagePane getInvertColorSchemeImagePane() {
-        return invertColorSchemeImagePane;
-    }
+//    protected ImagePane getInvertColorSchemeImagePane() {
+//        return invertColorSchemeImagePane;
+//    }
     
+    protected CheckBox getInvertColorSchemeCheckBox() {
+        return invertColorSchemeCheckBox;
+    }
     
     // MIN/MAX Input Fields
     
@@ -150,12 +154,12 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
     
     //<editor-fold desc="--- IMAGE BUTTONS ---">
     
-    private ImageButton invertColorSchemeImageButton;
+//    private ImageButton invertColorSchemeImageButton;
     private ImageButton autoRegenerateImageButton;
     
-    protected final ImageButton getInvertColorSchemeImageButton() {
-        return invertColorSchemeImageButton;
-    }
+//    protected final ImageButton getInvertColorSchemeImageButton() {
+//        return invertColorSchemeImageButton;
+//    }
     
     protected final ImageButton getPauseAutoRegenerationImageButton() {
         return autoRegenerateImageButton;
@@ -187,15 +191,15 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
         Arrays.stream(MandelbrotColorScheme.values()).forEach(
                 colorScheme -> colorSchemeChoiceBox.getItems().add(colorScheme));
         
-        this.invertColorSchemeImageButton = new ImageButton(
-                this,
-                invertColorSchemeImagePane,
-                "rerun",
-                null,
-                null,
-                true,
-                ImageButton.SMALL
-        ).initialize();
+//        this.invertColorSchemeImageButton = new ImageButton(
+//                this,
+//                invertColorSchemeImagePane,
+//                "rerun",
+//                null,
+//                null,
+//                true,
+//                ImageButton.SMALL
+//        ).initialize();
         
         this.autoRegenerateImageButton = new ImageButton(
                 this,

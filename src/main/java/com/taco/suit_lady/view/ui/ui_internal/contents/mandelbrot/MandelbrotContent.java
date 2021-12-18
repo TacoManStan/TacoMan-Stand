@@ -97,7 +97,8 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
         getCoverPage().getController().getYMinTextField().getFormatter().valueProperty().bindBidirectional(data.yMinProperty());
         
         getCoverPage().getController().getColorSchemeChoiceBox().valueProperty().bindBidirectional(data.colorSchemeProperty());
-        getCoverPage().getController().getInvertColorSchemeImageButton().selectedProperty().bindBidirectional(data.invertColorSchemeProperty());
+//        getCoverPage().getController().getInvertColorSchemeImageButton().selectedProperty().bindBidirectional(data.invertColorSchemeProperty());
+        getCoverPage().getController().getInvertColorSchemeCheckBox().selectedProperty().bindBidirectional(data.invertColorSchemeProperty());
         
         getCoverPage().getController().getPauseAutoRegenerationImageButton().selectedProperty().bindBidirectional(data.pauseAutoRegenerationProperty());
         

@@ -24,7 +24,10 @@ public class CheckBoxSettingNode extends SettingNode<Boolean, CheckBox, BooleanS
 	//<editor-fold desc="Implementation">
 
 	@Override protected final CheckBox createInputNode(Object... params) {
-		return new CheckBox();
+		CheckBox cb = new CheckBox();
+//		cb.setStyle("-fx-background-color: le-very-dark-gray");
+		cb.setId("dark-check-box");
+		return cb;
 	}
 
 	@Override protected BooleanSetting createSetting() {

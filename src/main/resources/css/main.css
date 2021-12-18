@@ -4,7 +4,15 @@
     disabled-color: gray;
     disabled-background-color: rgb(204, 204, 204);
 
+    jb-accent: rgb(40, 83, 156);
+    jb-accent-hover: rgb(31, 102, 205);
+    jb-accent-darker: rgb(30, 62, 117);
+    jb-accent-darker-hover: rgb(23, 77, 154);
+
     tribot: rgb(39, 103, 174);
+    tribot-darker-1a: rgb(29, 77, 130);
+    tribot-darker-1b: rgb(19, 57, 154);
+    tribot-darker-1c: rgba(39, 103, 174, 0.5);
     tribot-hover: rgb(79, 125, 173);
     tribot-pressed: rgb(119, 142, 173);
 
@@ -75,8 +83,8 @@
     -fx-background-color: transparent;
     -fx-text-fill: faintest-text-color;
 
-    -fx-border-radius: 0em;
-    -fx-background-radius: 0em;
+    -fx-border-radius: 0.0em;
+    -fx-background-radius: 0.0em;
 }
 
 .tool-tip {
@@ -99,15 +107,16 @@
  ******************************************************************************/
 
 .progress-bar {
-    -fx-accent: tribot;
+    -fx-background-color: jb-accent;
 }
 
 .progress-bar .bar {
     -fx-padding: 1px;
     -fx-background-insets: 0;
 
-    -fx-border-radius: 0.1em;
-    -fx-background-radius: 0.1em;
+    -fx-border-radius: 0.0em;
+    -fx-background-radius: 0.0em;
+    -fx-background-color: jb-accent;
 }
 
 .progress-bar > .track {
@@ -116,8 +125,8 @@
     /*-fx-background-color: le-dark-gray;*/
     -fx-background-color: le-gray;
 
-    -fx-border-radius: 0.1em;
-    -fx-background-radius: 0.1em;
+    -fx-border-radius: 0.0em;
+    -fx-background-radius: 0.0em;
 }
 
 /*******************************************************************************
@@ -135,8 +144,8 @@
     -fx-text-fill: text-color;
     -fx-border-color: border-color;
 
-    -fx-border-radius: 0.1em;
-    -fx-background-radius: 0.1em;
+    -fx-border-radius: 0.0em;
+    -fx-background-radius: 0.0em;
 }
 
 .button:hover {
@@ -163,8 +172,8 @@
     -fx-text-fill: text-color;
     -fx-border-color: border-color;
 
-    -fx-border-radius: 0.1em;
-    -fx-background-radius: 0.1em;
+    -fx-border-radius: 0.0em;
+    -fx-background-radius: 0.0em;
 }
 
 #progress-button:hover {
@@ -191,8 +200,8 @@
     -fx-text-fill: text-color;
     -fx-border-style: hidden;
 
-    -fx-border-radius: 0.1em;
-    -fx-background-radius: 0.1em;
+    -fx-border-radius: 0.0em;
+    -fx-background-radius: 0.0em;
 }
 
 .check-box .box {
@@ -202,13 +211,35 @@
     -fx-border-style: hidden;
     -fx-background-insets: 0;
 
-    -fx-border-radius: 0.1em;
-    -fx-background-radius: 0.1em;
+    -fx-border-radius: 0.0em;
+    -fx-background-radius: 0.0em;
 }
 
 .check-box:selected .box .mark {
-    -fx-background-color: selected-text-color;
-    /*-fx-background-color: tribot;*/
+    /*-fx-background-color: selected-text-color;*/
+    -fx-background-color: jb-accent;
+}
+
+.check-box:selected:hover .box .mark {
+    -fx-background-color: jb-accent-hover;
+}
+
+.check-box:hover .box {
+    -fx-background-color: le-dark-gray;
+}
+
+
+#dark-check-box .box {
+    -fx-background-color: le-very-dark-gray;
+}
+
+#dark-check-box:selected .box .mark {
+    /*-fx-background-color: selected-text-color;*/
+    -fx-background-color: jb-accent-darker;
+}
+
+#dark-check-box:selected:hover .box .mark {
+    -fx-background-color: jb-accent-darker-hover;
 }
 
 /*******************************************************************************
@@ -222,12 +253,17 @@
     -fx-border-color: unfocused-highlight-color;
     /*-fx-border-style: solid hidden hidden hidden;*/
     -fx-border-style: hidden;
-    -fx-text-fill: text-color;
+    -fx-text-fill: faintest-text-color;
     -fx-prompt-text-fill: prompt-text-color;
     -fx-highlight-fill: highlight-color;
 
-    -fx-border-radius: 0.1em;
-    -fx-background-radius: 0.1em;
+    -fx-border-radius: 0.0em;
+    -fx-background-radius: 0.0em;
+}
+
+.text-field:hover {
+    -fx-background-color: le-dark-gray;
+    -fx-text-fill: text-color;
 }
 
 .text-field:focused {
@@ -272,18 +308,33 @@
     -fx-background-color: le-gray;
     -fx-border-color: border-color;
     -fx-border-style: hidden;
-    -fx-text-fill: text-color;
+    -fx-text-fill: faintest-text-color;
     -fx-prompt-text-fill: transparent;
     -fx-highlight-fill: highlight-color;
 
-    -fx-border-radius: 0.1em;
-    -fx-background-radius: 0.1em;
+    -fx-border-radius: 0.0em;
+    -fx-background-radius: 0.0em;
+}
+
+.choice-box:hover {
+    -fx-background-color: le-dark-gray;
+    -fx-text-fill: text-color;
+}
+
+.choice-box:selected {
+    -fx-text-fill: selected-text-color;
 }
 
 .choice-box .arrow {
-    -fx-background-color: control-background-color;
+    /*-fx-background-color: control-background-color;*/
+    -fx-background-color: jb-accent-darker;
     -fx-focus-color: focus-color;
     -fx-background-insets: 0, 0, 0, 0;
+}
+
+.choice-box .arrow:hover {
+    /*-fx-background-color: control-background-color;*/
+    -fx-background-color: jb-accent-darker-hover;
 }
 
 /*******************************************************************************
@@ -305,8 +356,8 @@
     -fx-padding: 0 0 0 0;
     -fx-background-insets: 0 0 0 0;
 
-    -fx-border-radius: 0.1em;
-    -fx-background-radius: 0.1em;
+    -fx-border-radius: 0.0em;
+    -fx-background-radius: 0.0em;
 }
 
 .list-cell {
@@ -342,8 +393,8 @@
     -fx-padding: 0 0 0 0;
     -fx-background-insets: 0 0 0 0;
 
-    -fx-border-radius: 0.1em;
-    -fx-background-radius: 0.1em;
+    -fx-border-radius: 0.0em;
+    -fx-background-radius: 0.0em;
 }
 
 .tree-cell {
@@ -380,8 +431,8 @@
     -fx-background-color: le-gray;
     -fx-border-style: hidden;
 
-    -fx-border-radius: 0.1em;
-    -fx-background-radius: 0.1em;
+    -fx-border-radius: 0.0em;
+    -fx-background-radius: 0.0em;
 }
 
 .scroll-pane > .viewport {
@@ -407,13 +458,13 @@
 }
 
 .scroll-bar:horizontal .increment-button, .scroll-bar:horizontal .decrement-button {
-    -fx-background-color: transparent;
+    -fx-background-color: jb-accent-darker;
     -fx-background-radius: 0;
     -fx-padding: 0 0 10 0;
 }
 
 .scroll-bar:vertical .increment-button, .scroll-bar:vertical .decrement-button {
-    -fx-background-color: transparent;
+    -fx-background-color: jb-accent-darker;
     -fx-background-radius: 0;
     -fx-padding: 0 10 0 0;
 }
@@ -424,9 +475,18 @@
 }
 
 .scroll-bar:horizontal .thumb, .scroll-bar:vertical .thumb {
-    -fx-background-color: le-dark-gray;
-    -fx-background-insets: 2, 0, 0;
-    -fx-background-radius: 1em;
+     /*-fx-background-color: le-dark-gray;*/
+     -fx-background-color: jb-accent-darker;
+     /*-fx-background-insets: 2, 0, 0;*/
+    /*-fx-background-image: unfocused-highlight-color;*/
+     -fx-background-radius: 0.3em;
+ }
+
+.scroll-bar:horizontal:hover .thumb, .scroll-bar:vertical:hover .thumb {
+    /*-fx-background-color: le-dark-gray;*/
+    -fx-background-color: jb-accent-darker-hover;
+    /*-fx-background-insets: 2, 0, 0;*/
+    /*-fx-background-image: highlight-color;*/
 }
 
 /*******************************************************************************
@@ -440,7 +500,7 @@
 }
 
 .menu-bar .menu-button:hover, .menu-bar .menu-button:focused, .menu-bar .menu-button:showing {
-    -fx-background-color: tribot;
+    -fx-background-color: jb-accent;
 }
 
 .menu-bar .menu-button > .label {
@@ -462,7 +522,7 @@
 }
 
 .menu-item:focused {
-    -fx-background-color: tribot;
+    -fx-background-color: jb-accent;
 }
 
 .menu-item:focused .label {
@@ -480,8 +540,8 @@
     -fx-padding: 0, 0, 0, 0;
     -fx-background-insets: 0, 0, 0, 0;
 
-    -fx-border-radius: 0.1em;
-    -fx-background-radius: 0.1em;
+    -fx-border-radius: 0.0em;
+    -fx-background-radius: 0.0em;
 }
 
 .button-menu, .button-menu:hover, .button-menu:pressed, .button-menu:armed, .button-menu:selected, .button-menu:disabled, .button-menu:default {
