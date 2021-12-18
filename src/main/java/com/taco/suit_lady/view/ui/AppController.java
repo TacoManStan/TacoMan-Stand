@@ -249,6 +249,7 @@ public class AppController
     
     //
     
+    // TODO
     private void initOverlays()
     {
         selectionOverlayStackPaneBinding = Bindings.createObjectBinding(
@@ -313,7 +314,7 @@ public class AppController
     private void initImageButtons()
     {
         new ImageButton(
-                weaver(), ctx(),
+                this,
                 settingsImagePane,
                 "settings",
                 null,
@@ -323,7 +324,7 @@ public class AppController
         ).initialize();
         
         new ImageButton(
-                weaver(), ctx(),
+                this,
                 sidebarImagePane,
                 "hide_sidebar",
                 null,
@@ -333,7 +334,7 @@ public class AppController
         ).initialize();
         
         new ImageButton(
-                weaver(), ctx(),
+                this,
                 minimizeImagePane,
                 "minimize",
                 null,
@@ -343,7 +344,7 @@ public class AppController
         ).initialize();
         
         new ImageButton(
-                weaver(), ctx(),
+                this,
                 maximizeImagePane,
                 Bindings.createStringBinding(() -> stage.isMaximized() ? "maximize_both" : "maximize", stage.maximizedProperty()),
                 null,
@@ -353,7 +354,7 @@ public class AppController
         ).initialize();
         
         new ImageButton(
-                weaver(), ctx(),
+                this,
                 closeImagePane,
                 "close",
                 null,
@@ -363,7 +364,7 @@ public class AppController
         ).initialize();
         
         new ImageButton(
-                weaver(), ctx(),
+                this,
                 logoImagePane,
                 "logo",
                 () -> TB.web().browse("google", true),

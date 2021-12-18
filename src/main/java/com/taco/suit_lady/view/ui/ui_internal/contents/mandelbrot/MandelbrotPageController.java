@@ -1,7 +1,9 @@
 package com.taco.suit_lady.view.ui.ui_internal.contents.mandelbrot;
 
 import com.taco.suit_lady.view.ui.UIPageController;
+import com.taco.suit_lady.view.ui.jfx.button.ImageButton;
 import com.taco.suit_lady.view.ui.jfx.components.DoubleField2;
+import com.taco.suit_lady.view.ui.jfx.components.ImagePane;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -33,6 +35,7 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
     @FXML private DoubleField2 yMaxTextField;
     
     @FXML private ChoiceBox<MandelbrotColorScheme> colorSchemeChoiceBox;
+    @FXML private ImagePane invertColorSchemeImagePane;
     
     
     @FXML private Label widthLabel;
@@ -58,6 +61,7 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
         return progressBar;
     }
     
+    
     protected Button getRegenerateButton() {
         return regenerateButton;
     }
@@ -66,10 +70,17 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
         return autoRegenerateCheckBox;
     }
     
+    
     protected ChoiceBox<MandelbrotColorScheme> getColorSchemeChoiceBox() {
         return colorSchemeChoiceBox;
     }
     
+    protected ImagePane getInvertColorSchemeImagePane() {
+        return invertColorSchemeImagePane;
+    }
+    
+    
+    // MIN/MAX Input Fields
     
     protected DoubleField2 getXMinTextField() {
         return xMinTextField;
@@ -87,6 +98,8 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
         return yMaxTextField;
     }
     
+    
+    //<editor-fold desc="--- INFORMATION LABELS ---">
     
     protected Label getWidthLabel() {
         return widthLabel;
@@ -132,11 +145,19 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
     
     //</editor-fold>
     
+    //</editor-fold>
+    
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override
     public Pane root() {
         return root;
+    }
+    
+    private ImageButton button;
+    
+    protected final ImageButton getInvertColorSchemeImageButton() {
+        return button;
     }
     
     @Override
@@ -153,6 +174,16 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
                 regenerateButton.applyCss();
             }
         });
+        
+        this.button = new ImageButton(
+                this,
+                invertColorSchemeImagePane,
+                "rerun",
+                null,
+                null,
+                true,
+                ImageButton.SMALL
+        ).initialize();
         
         //        xMinTextField.setTextFormatter(new DecimalFormatter());
         //        yMinTextField.setTextFormatter(new DecimalFormatter());

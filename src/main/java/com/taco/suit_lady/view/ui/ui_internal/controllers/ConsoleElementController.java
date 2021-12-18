@@ -63,7 +63,7 @@ public final class ConsoleElementController extends CellController<WrappingTreeC
     public void initialize()
     {
         this.settingsButton = new ImageButton(
-                weaver(), ctx(),
+                this,
                 settingsImagePane,
                 "details",
                 this::onDetails,

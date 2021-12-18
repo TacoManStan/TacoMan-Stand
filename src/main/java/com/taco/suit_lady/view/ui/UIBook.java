@@ -100,7 +100,7 @@ public class UIBook
         
         buttonViewProperty.addListener((observable, oldValue, newValue) -> newValue.initialize());
         buttonViewProperty.set(new ImageButton(
-                weaver(), ctx(),
+                this,
                 null,
                 buttonIDProperty,
                 () -> onAction(onAction),

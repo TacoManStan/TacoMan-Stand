@@ -9,6 +9,7 @@ import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.*;
 import javafx.geometry.Point2D;
+import javafx.scene.paint.Color;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -41,6 +42,7 @@ public class MandelbrotData
     private final DoubleBinding scaledYMaxBinding;
     
     private final ObjectProperty<MandelbrotColorScheme> colorSchemeProperty;
+    private final BooleanProperty invertColorSchemeProperty;
     
     private final BooleanProperty autoRegenerateProperty;
     
@@ -85,6 +87,7 @@ public class MandelbrotData
         this.scaledYMaxBinding = createDoubleBinding(() -> getMaxY() + ((getScaledHeight() - getHeight()) / 2));
         
         this.colorSchemeProperty = new SimpleObjectProperty<>(MandelbrotColorScheme.RED);
+        this.invertColorSchemeProperty = new SimpleBooleanProperty(false);
         
         this.autoRegenerateProperty = new SimpleBooleanProperty(true);
         
@@ -160,7 +163,6 @@ public class MandelbrotData
         return oldValue;
     }
     
-    //
     
     public final IntegerProperty canvasWidthProperty() {
         return canvasWidthProperty;
@@ -180,6 +182,9 @@ public class MandelbrotData
     }
     
     
+    //
+    
+    
     public final ObjectProperty<MandelbrotColorScheme> colorSchemeProperty() {
         return colorSchemeProperty;
     }
@@ -194,6 +199,26 @@ public class MandelbrotData
         return oldValue;
     }
     
+    public final @NotNull Color @NotNull [] getColors() {
+        return getColorScheme().getColors(isColorSchemeInverted());
+    }
+    
+    
+    public final BooleanProperty invertColorSchemeProperty() {
+        return invertColorSchemeProperty;
+    }
+    
+    public final boolean isColorSchemeInverted() {
+        return invertColorSchemeProperty.get();
+    }
+    
+    public final boolean setInvertColorScheme(boolean newValue) {
+        boolean oldValue = isColorSchemeInverted();
+        invertColorSchemeProperty.set(newValue);
+        return oldValue;
+    }
+    
+    //
     
     public final BooleanProperty autoRegenerateProperty() {
         return autoRegenerateProperty;
@@ -337,28 +362,6 @@ public class MandelbrotData
         canvasHeightProperty.set((int) height);
     }
     
-    @Override
-    public String toString() {
-        return "MandelbrotDimensions{" +
-               "xMin=" + xMinProperty.get() +
-               ", xMax=" + xMaxProperty.get() +
-               ", yMin=" + yMinProperty.get() +
-               ", yMax=" + yMaxProperty.get() +
-               ", canvasWidth=" + canvasWidthProperty.get() +
-               ", canvasHeight=" + canvasHeightProperty.get() +
-               ", width=" + widthBinding.get() +
-               ", height=" + heightBinding.get() +
-               ", xScaling=" + xScalingBinding.get() +
-               ", yScaling=" + yScalingBinding.get() +
-               ", scaledWidth=" + scaledWidthBinding.get() +
-               ", scaledHeight=" + scaledHeightBinding.get() +
-               ", scaledXMin=" + scaledXMinBinding.get() +
-               ", scaledXMax=" + scaledXMaxBinding.get() +
-               ", scaledYMin=" + scaledYMinBinding.get() +
-               ", scaledYMax=" + scaledYMaxBinding.get() +
-               '}';
-    }
-    
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override
@@ -382,6 +385,29 @@ public class MandelbrotData
     @Override
     public @NotNull ConfigurableApplicationContext ctx() {
         return springable.ctx();
+    }
+    
+    
+    @Override
+    public String toString() {
+        return "MandelbrotDimensions{" +
+               "xMin=" + xMinProperty.get() +
+               ", xMax=" + xMaxProperty.get() +
+               ", yMin=" + yMinProperty.get() +
+               ", yMax=" + yMaxProperty.get() +
+               ", canvasWidth=" + canvasWidthProperty.get() +
+               ", canvasHeight=" + canvasHeightProperty.get() +
+               ", width=" + widthBinding.get() +
+               ", height=" + heightBinding.get() +
+               ", xScaling=" + xScalingBinding.get() +
+               ", yScaling=" + yScalingBinding.get() +
+               ", scaledWidth=" + scaledWidthBinding.get() +
+               ", scaledHeight=" + scaledHeightBinding.get() +
+               ", scaledXMin=" + scaledXMinBinding.get() +
+               ", scaledXMax=" + scaledXMaxBinding.get() +
+               ", scaledYMin=" + scaledYMinBinding.get() +
+               ", scaledYMax=" + scaledYMaxBinding.get() +
+               '}';
     }
     
     //</editor-fold>

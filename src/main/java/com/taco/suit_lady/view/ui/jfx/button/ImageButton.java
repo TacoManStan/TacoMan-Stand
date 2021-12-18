@@ -2,6 +2,7 @@ package com.taco.suit_lady.view.ui.jfx.button;
 
 import com.taco.suit_lady.logic.LogiCore;
 import com.taco.suit_lady.util.springable.Springable;
+import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.BindingTools;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.ResourceTools;
@@ -38,8 +39,7 @@ public class ImageButton
 {
     //<editor-fold desc="--- FIELDS ---">
     
-    private final FxWeaver weaver;
-    private final ConfigurableApplicationContext ctx;
+    private final StrictSpringable springable;
     
     private final ImagePane imagePane;
     
@@ -57,7 +57,7 @@ public class ImageButton
     private final BooleanBinding hoveredBinding;
     private final BooleanBinding pressedBinding;
     
-    private final ReadOnlyBooleanWrapper selectedProperty;
+    private final BooleanProperty selectedProperty;
     private final BooleanProperty disabledProperty;
     
     private final boolean toggleable;
@@ -65,13 +65,12 @@ public class ImageButton
     //</editor-fold>
     
     /**
-     * <p>Refer to {@link #ImageButton(FxWeaver, ConfigurableApplicationContext, ImagePane, ObservableStringValue, Runnable, Runnable, boolean, Point2D) Fully-Parameterized Constructor} for details.</p>
+     * <p>Refer to {@link #ImageButton(Springable, ImagePane, ObservableStringValue, Runnable, Runnable, boolean, Point2D) Fully-Parameterized Constructor} for details.</p>
      * <p><b>Identical to...</b></p>
      * <blockquote><code>new ImageButton(imagePane, <u>BindingTools.createStringBinding(name)</u>, actionResponder, actionResponderFX, toggleable, size)</code></blockquote>
      */
     public ImageButton(
-            @NotNull FxWeaver weaver,
-            @NotNull ConfigurableApplicationContext ctx,
+            @NotNull Springable springable,
             @Nullable ImagePane imagePane,
             @Nullable String name,
             @Nullable Runnable actionResponder,
@@ -79,7 +78,7 @@ public class ImageButton
             boolean toggleable,
             @Nullable Point2D size)
     {
-        this(weaver, ctx, imagePane, BindingTools.createStringBinding(name), actionResponder, actionResponderFX, toggleable, size);
+        this(springable, imagePane, BindingTools.createStringBinding(name), actionResponder, actionResponderFX, toggleable, size);
     }
     
     /**
@@ -134,8 +133,7 @@ public class ImageButton
      * @param size              A {@link Point2D} representing the {@link ImagePane#widthProperty() width} and {@link ImagePane#heightProperty() height} of this {@link ImageButton}.
      */
     public ImageButton(
-            @NotNull FxWeaver weaver,
-            @NotNull ConfigurableApplicationContext ctx,
+            @NotNull Springable springable,
             @Nullable ImagePane imagePane,
             @NotNull ObservableStringValue nameBinding,
             @Nullable Runnable actionResponder,
@@ -143,8 +141,7 @@ public class ImageButton
             boolean toggleable,
             @Nullable Point2D size)
     {
-        this.weaver = weaver;
-        this.ctx = ctx;
+        this.springable = springable.asStrict();
         
         this.imagePane = imagePane != null ? imagePane : new ImagePane();
         
@@ -170,7 +167,7 @@ public class ImageButton
         this.actionResponderProperty = new SimpleObjectProperty<>(actionResponder);
         this.actionResponderFXProperty = new SimpleObjectProperty<>(actionResponderFX);
         
-        this.selectedProperty = new ReadOnlyBooleanWrapper();
+        this.selectedProperty = new SimpleBooleanProperty();
         this.disabledProperty = new SimpleBooleanProperty();
         
         this.toggleable = toggleable;
@@ -202,6 +199,12 @@ public class ImageButton
         
         this.hoveredBinding = BindingTools.createBooleanBinding(this.imagePane.hoverProperty());
         this.pressedBinding = BindingTools.createBooleanBinding(this.imagePane.pressedProperty());
+        
+        
+        this.selectedProperty.addListener((observable, oldValue, newValue) -> {
+            if (newValue && !isToggleable())
+                throw ExceptionTools.unsupported("Image Button \"" + getName() + "\" is not toggleable and can therefore not be selected.");
+        });
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">
@@ -594,20 +597,18 @@ public class ImageButton
     }
     
     /**
-     * <p>Returns the {@link ReadOnlyBooleanProperty property} containing a boolean that reflects if this {@link ImageButton} is currently selected or not.</p>
+     * <p>Returns the {@link BooleanProperty property} containing a boolean that reflects if this {@link ImageButton} is currently selected or not.</p>
      * <p><b>Changing the Value</b></p>
      * <ol>
-     *     <li>To modify the value of the returned {@link ReadOnlyBooleanProperty property}, refer to {@link #setSelected(boolean)}.</li>
-     *     <li>Modifications to the returned {@link ReadOnlyBooleanProperty property} can only be modified via the {@link #setSelected(boolean)} method because the value can only be changed if this {@link ImageButton} is {@link #isToggleable() toggleable}.</li>
-     *     <li>Refer to <code><i>{@link #setSelected(boolean)}</i></code> documentation for additional information.</li>
      *     <li>The {@link #getButtonGroup() ImageButtonGroup} {@link ImageButtonGroup#selectedButtonProperty() selection} is automatically updated via listener when this value is changed.</li>
+     *     <li></li>
      * </ol>
      *
-     * @return The {@link ReadOnlyBooleanProperty property} containing a boolean that reflects if this {@link ImageButton} is currently selected or not.
+     * @return The {@link BooleanProperty property} containing a boolean that reflects if this {@link ImageButton} is currently selected or not.
      */
-    public final ReadOnlyBooleanProperty selectedProperty()
+    public final BooleanProperty selectedProperty()
     {
-        return selectedProperty.getReadOnlyProperty();
+        return selectedProperty;
     }
     
     /**
@@ -801,7 +802,7 @@ public class ImageButton
      * <p><b>Details</b></p>
      * <ol>
      *     <li>All logic related to adding or removing an {@link ImageButton} from a {@link ImageButtonGroup} is done via a {@link ChangeListener} that observes the {@link ObjectProperty} returned by {@link #buttonGroupProperty() this method}.</li>
-     *     <li>The aforementioned {@link ChangeListener} is configured in the {@link ImageButton} {@link #ImageButton(FxWeaver, ConfigurableApplicationContext, ImagePane, ObservableStringValue, Runnable, Runnable, boolean, Point2D) constructor}.</li>
+     *     <li>The aforementioned {@link ChangeListener} is configured in the {@link ImageButton} {@link #ImageButton(Springable, ImagePane, ObservableStringValue, Runnable, Runnable, boolean, Point2D) constructor}.</li>
      * </ol>
      *
      * @return The {@link ObjectProperty} containing the {@link ImageButtonGroup} that this {@link ImageButton} is in, or {@code null} if this {@link ImageButton} is not in a {@link ImageButtonGroup}.
@@ -848,13 +849,13 @@ public class ImageButton
     @Override
     public @NotNull FxWeaver weaver()
     {
-        return weaver;
+        return springable.weaver();
     }
     
     @Override
     public @NotNull ConfigurableApplicationContext ctx()
     {
-        return ctx;
+        return springable.ctx();
     }
     
     //</editor-fold>

@@ -97,6 +97,8 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
         getCoverPage().getController().getYMinTextField().getFormatter().valueProperty().bindBidirectional(data.yMinProperty());
         
         getCoverPage().getController().getColorSchemeChoiceBox().valueProperty().bindBidirectional(data.colorSchemeProperty());
+        getCoverPage().getController().getInvertColorSchemeImageButton().selectedProperty().bindBidirectional(data.invertColorSchemeProperty());
+        
         getCoverPage().getController().getAutoRegenerateCheckBox().selectedProperty().bindBidirectional(data.autoRegenerateProperty());
         
         
@@ -107,6 +109,7 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
         data.yMaxProperty().addListener((observable, oldValue, newValue) -> refreshCanvasChecked());
         
         data.colorSchemeProperty().addListener((observable, oldValue, newValue) -> refreshCanvasChecked());
+        data.invertColorSchemeProperty().addListener((observable, oldValue, newValue) -> refreshCanvasChecked());
     
     
         // Bind the text properties of applicable labels to reflect relevant MandelbrotData calculated values (bindings)

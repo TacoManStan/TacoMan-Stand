@@ -4,7 +4,6 @@ import com.taco.suit_lady._to_sort._new.MatrixIterator;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
-import com.taco.suit_lady.util.tools.RandomTools;
 import com.taco.suit_lady.view.ui.ui_internal.contents.mandelbrot.MandelbrotIterator.MandelbrotColor;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
@@ -20,25 +19,25 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor>
     private final StrictSpringable springable;
     
     private final int PRECISION = 1000;
-    private final MandelbrotData dimensions;
+    private final MandelbrotData data;
     
     public MandelbrotIterator(Springable springable, MandelbrotColor[][] targetArray, ReentrantLock lock) {
         this(springable, targetArray, null, lock);
     }
     
-    public MandelbrotIterator(@NotNull Springable springable, MandelbrotColor[][] targetArray, @NotNull MandelbrotData dimensions, ReentrantLock lock) {
+    public MandelbrotIterator(@NotNull Springable springable, MandelbrotColor[][] targetArray, @NotNull MandelbrotData data, ReentrantLock lock) {
         super(targetArray, lock);
         this.springable = springable.asStrict();
         
-        this.dimensions = dimensions != null ? dimensions : MandelbrotData.newDefaultInstance(this, getWidth(), getHeight());
-        if (dimensions.getCanvasWidth() != getWidth() || dimensions.getCanvasHeight() != getHeight())
+        this.data = data != null ? data : MandelbrotData.newDefaultInstance(this, getWidth(), getHeight());
+        if (data.getCanvasWidth() != getWidth() || data.getCanvasHeight() != getHeight())
             throw ExceptionTools.ex("Dimension Mismatch:  " +
-                                    "Dimensions Data [" + dimensions.getCanvasWidth() + ", " + dimensions.getCanvasHeight() + "  " +
+                                    "Dimensions Data [" + data.getCanvasWidth() + ", " + data.getCanvasHeight() + "  " +
                                     "Iterator Data [" + getWidth() + ", " + getHeight());
     }
     
     private boolean escapes(double iX, double iY) {
-        final Point2D convertedPoint = dimensions.convertFromCanvas(iX, iY);
+        final Point2D convertedPoint = data.convertFromCanvas(iX, iY);
         double x = 0, y = 0;
         int n = 0;
         
@@ -60,7 +59,7 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor>
     
     @Override
     protected MandelbrotColor step(int i, int j) {
-        final Point2D scaledPoint = dimensions.convertFromCanvas(i, j);
+        final Point2D scaledPoint = data.convertFromCanvas(i, j);
         double x = 0, y = 0;
         int n = 0;
         int N = (int) Math.pow(10, 100);
@@ -137,10 +136,10 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor>
             
             final int whole = (int) ((getSmallN() - partWhole) * 20);
             
-            final int total = dimensions.getColorScheme().getColorArray().length;
+            final int total = data.getColors().length;
             final int value = whole % total;
             
-            return dimensions.getColorScheme().getColorArray()[value];
+            return data.getColors()[value];
         }
         
         public java.awt.Color getAwtColor() {

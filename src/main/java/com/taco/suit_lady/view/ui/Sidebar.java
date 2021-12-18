@@ -116,7 +116,7 @@ public class Sidebar
         this.childButtonPane = childButtonPane;
         this.contentPane = contentPane;
         this.backImageButton = new ImageButton(
-                weaver(), ctx(),
+                this,
                 backImagePane, "back_arrow",
                 null,
                 this::back,

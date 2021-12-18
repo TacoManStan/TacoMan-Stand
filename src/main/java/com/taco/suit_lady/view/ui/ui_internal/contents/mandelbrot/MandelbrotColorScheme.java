@@ -1,5 +1,6 @@
 package com.taco.suit_lady.view.ui.ui_internal.contents.mandelbrot;
 
+import com.taco.suit_lady.util.tools.ArrayTools;
 import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,6 +31,7 @@ public enum MandelbrotColorScheme {
     private final Function<Integer, Double> blue2;
     
     private Color[] cache;
+    private Color[] reverseCache;
     
     MandelbrotColorScheme(
             @Nullable Function<Integer, Double> red1, @Nullable Function<Integer, Double> green1, @Nullable Function<Integer, Double> blue1,
@@ -42,18 +44,25 @@ public enum MandelbrotColorScheme {
         this.blue2 = blue2 != null ? blue2 : i -> 0.0;
     }
     
-    public final @NotNull Color @NotNull [] getColorArray() {
-        if (cache == null)
-            this.cache = generateColorArray();
-        return cache;
-    }
-    
-    public final @NotNull Color @NotNull [] generateColorArray() {
-        final Color[] colors = new Color[255 * 2];
-        for (int i = 0; i < 255; i++) {
-            colors[i] = Color.color(red1.apply(i), green1.apply(i), blue1.apply(i));
-            colors[i + 255] = Color.color(red2.apply(i), green2.apply(i), blue2.apply(i));
+    public @NotNull Color @NotNull [] getColors(boolean reverse) {
+        if ((reverse && reverseCache == null) || (!reverse && cache == null)) {
+            final Color[] colors = new Color[255 * 2];
+            for (int i = 0; i < 255; i++) {
+                colors[i] = Color.color(
+                        reverse ? red2.apply(i) : red1.apply(i),
+                        reverse ? green2.apply(i) : green1.apply(i),
+                        reverse ? blue2.apply(i) : blue1.apply(i));
+                colors[i + 255] = Color.color(
+                        reverse ? red1.apply(i) : red2.apply(i),
+                        reverse ? green1.apply(i) : green2.apply(i),
+                        reverse ? blue1.apply(i) : blue2.apply(i));
+            }
+            if (reverse)
+                reverseCache = colors;
+            else
+                cache = colors;
         }
-        return colors;
+        
+        return reverse ? reverseCache : cache;
     }
 }
