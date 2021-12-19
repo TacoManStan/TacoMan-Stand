@@ -50,8 +50,7 @@ import org.springframework.stereotype.Component;
 @Component
 @FxmlView("/fxml/main.fxml")
 public class AppController
-        implements Springable
-{
+        implements Springable {
     // <editor-fold desc="--- STATIC CONSTANTS ---">
     
     private static final long TRANSITION_TIME = 350;
@@ -179,8 +178,7 @@ public class AppController
     private ReadOnlyListWrapper<Parent> globalOverlays;
     
     
-    public AppController(FxWeaver weaver, ConfigurableApplicationContext ctx)
-    {
+    public AppController(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         this.weaver = weaver;
         this.ctx = ctx;
     }
@@ -192,15 +190,13 @@ public class AppController
     // Called automatically by FXML loader.
     // As some properties may not yet be finished loading, all actual UI initialization should be done in initialize(Stage).
     @FXML
-    public final void initialize()
-    {
+    public final void initialize() {
         final AppUI ui = ctx().getBean(AppUI.class);
         ui.setController(this);
         ui.setSidebar(new Sidebar(weaver(), ctx(), sidebarChildButtonsPane, sidebarContentPane, backImagePane, sidebarButtonBar));
     }
     
-    public final void initialize(Stage stage)
-    {
+    public final void initialize(Stage stage) {
         this.stage = stage;
         //        this.contentPane = new DummyContentsInstancePane();
         
@@ -232,14 +228,14 @@ public class AppController
         FXTools.get().constructDraggableNode(dragBar);
         FXTools.get().constructResizableNode(getStage(), cornerResizePane, topResizePane, bottomResizePane, leftResizePane, rightResizePane,
                                              minimizeImagePane, maximizeImagePane, closeImagePane, settingsImagePane, sidebarImagePane
-        );
+                                            );
         
         bookshelfTitleLabel.textProperty().bind(
                 Bindings.createStringBinding(() -> {
                     final SidebarBookshelf bookshelf = getAppUI().getSidebar().getSelectedBookshelf();
                     return bookshelf != null ? bookshelf.getName() : "No Bookshelf Selected";
                 }, getAppUI().getSidebar().selectedBookshelfProperty())
-        );
+                                               );
         
         //        initOverlays();
         
@@ -250,8 +246,7 @@ public class AppController
     //
     
     // TODO
-    private void initOverlays()
-    {
+    private void initOverlays() {
         selectionOverlayStackPaneBinding = Bindings.createObjectBinding(
                 () -> getAppUI().getContentManager().getContent().getController().getOverlayPane(),
                 getAppUI().getContentManager().contentProperty());
@@ -262,8 +257,7 @@ public class AppController
         });
     }
     
-    private void initSidebar()
-    {
+    private void initSidebar() {
         final Sidebar sidebar = ctx().getBean(AppUI.class).getSidebar();
         
         final SidebarBookshelf generalSidebarBookshelf = new SidebarBookshelf(sidebar, "General");
@@ -273,15 +267,15 @@ public class AppController
                 uiBook -> TB.resources().get(
                         "pages", uiBook.getUID(uiBook.getButtonID()),
                         () -> new ContentSwitchDemoPage(uiBook)
-                ), null
+                                            ), null
         ));
         generalSidebarBookshelf.getBooks().add(new UIBook(
                 AppController.this.weaver, AppController.this.ctx,
-                "Development", "popout_sidebar",
+                "Development", "social",
                 uiBook -> TB.resources().get(
                         "pages", uiBook.getButtonID(),
                         () -> new ExamplePage(uiBook, "green")
-                ), null
+                                            ), null
         ));
         generalSidebarBookshelf.getButtonGroup().selectFirst();
         
@@ -292,7 +286,7 @@ public class AppController
                 uiBook -> TB.resources().get(
                         "pages", uiBook.getButtonID(),
                         () -> new EntityDebugPage(uiBook)
-                ), null
+                                            ), null
         ));
         inDevelopmentSidebarBookshelf.getButtonGroup().selectFirst();
         
@@ -303,16 +297,69 @@ public class AppController
                 uiBook -> TB.resources().get(
                         "pages", uiBook.getButtonID(),
                         () -> new ExamplePage(uiBook, "blue")
-                ), null
+                                            ), null
         ));
         nyiSidebarBookshelf.getButtonGroup().selectFirst();
         
-        sidebar.bookshelvesProperty().addAll(generalSidebarBookshelf, inDevelopmentSidebarBookshelf, nyiSidebarBookshelf);
+        final SidebarBookshelf demoSidebarBookshelf = new SidebarBookshelf(sidebar, "Demo");
+        demoSidebarBookshelf.getBooks().add(new UIBook(
+                AppController.this.weaver,
+                AppController.this.ctx,
+                "Demo 1",
+                "calendar",
+                uiBook -> TB.resources().get(
+                        "pages",
+                        uiBook.getButtonID(),
+                        () -> new ExamplePage(uiBook, "gray")),
+                null));
+        demoSidebarBookshelf.getBooks().add(new UIBook(
+                AppController.this.weaver,
+                AppController.this.ctx,
+                "Demo 2",
+                "social",
+                uiBook -> TB.resources().get(
+                        "pages",
+                        uiBook.getButtonID(),
+                        () -> new ExamplePage(uiBook, "gray")),
+                null));
+        demoSidebarBookshelf.getBooks().add(new UIBook(
+                AppController.this.weaver,
+                AppController.this.ctx,
+                "Demo 3",
+                "popout_var2",
+                uiBook -> TB.resources().get(
+                        "pages",
+                        uiBook.getButtonID(),
+                        () -> new ExamplePage(uiBook, "gray")),
+                null));
+        demoSidebarBookshelf.getBooks().add(new UIBook(
+                AppController.this.weaver,
+                AppController.this.ctx,
+                "Demo 4",
+                "account_manager",
+                uiBook -> TB.resources().get(
+                        "pages",
+                        uiBook.getButtonID(),
+                        () -> new ExamplePage(uiBook, "gray")),
+                null));
+        demoSidebarBookshelf.getBooks().add(new UIBook(
+                AppController.this.weaver,
+                AppController.this.ctx,
+                "Demo 5",
+                "entity_debug",
+                uiBook -> TB.resources().get(
+                        "pages",
+                        uiBook.getButtonID(),
+                        () -> new ExamplePage(uiBook, "gray")),
+                null));
+        demoSidebarBookshelf.getButtonGroup().selectFirst();
+        
+        sidebar.bookshelvesProperty().addAll(
+                generalSidebarBookshelf, inDevelopmentSidebarBookshelf, nyiSidebarBookshelf, demoSidebarBookshelf);
         sidebar.initialize();
     }
     
-    private void initImageButtons()
-    {
+    private void initImageButtons() {
         new ImageButton(
                 this,
                 settingsImagePane,
@@ -378,8 +425,7 @@ public class AppController
     
     //
     
-    private void onShownInit()
-    {
+    private void onShownInit() {
         Stage stage = getStage();
         sidebarPane.setPrefWidth(PUI_WIDTH);
         STAGE_MIN_WIDTH = stage.getWidth() - PUI_WIDTH;
@@ -391,13 +437,11 @@ public class AppController
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final Stage getStage()
-    {
+    public final Stage getStage() {
         return stage;
     }
     
-    public final TreeView<WrappingTreeCellData<ConsoleMessageable<?>>> getConsoleTree()
-    {
+    public final TreeView<WrappingTreeCellData<ConsoleMessageable<?>>> getConsoleTree() {
         return consoleTree;
     }
     
@@ -408,13 +452,11 @@ public class AppController
      *
      * @return The singleton {@link AppUI} instance for this application runtime instance.
      */
-    public final AppUI getAppUI()
-    {
+    public final AppUI getAppUI() {
         return ctx().getBean(AppUI.class);
     }
     
-    private void toggleSidebar()
-    {
+    private void toggleSidebar() {
         Stage stage = getStage();
         
         boolean hiding = sidebarPaneAnchor.isVisible();
@@ -441,11 +483,9 @@ public class AppController
         };
         stageWidthProperty.addListener(stageWidthChangeListener);
         
-        AnimationTimer animationTimer = new AnimationTimer()
-        {
+        AnimationTimer animationTimer = new AnimationTimer() {
             @Override
-            public void handle(long currentTime)
-            {
+            public void handle(long currentTime) {
                 if (readyProperty.get()) {
                     readyProperty.set(false);
                     stage.setWidth(stageWidthProperty.intValue());
@@ -476,8 +516,7 @@ public class AppController
         animation.play();
     }
     
-    private void openSettings()
-    {
+    private void openSettings() {
         FXDialogTools.showControllableDialog(
                 "Settings",
                 null,
@@ -485,20 +524,18 @@ public class AppController
                 FXDialogTools.OK,
                 true,
                 weaver.loadController(SettingsController.class)
-        );
+                                            );
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override
-    public @NotNull FxWeaver weaver()
-    {
+    public @NotNull FxWeaver weaver() {
         return weaver;
     }
     
     @Override
-    public @NotNull ConfigurableApplicationContext ctx()
-    {
+    public @NotNull ConfigurableApplicationContext ctx() {
         return ctx;
     }
     

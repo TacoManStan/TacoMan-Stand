@@ -46,7 +46,7 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
         injectBookshelf("Mandelbrot Demo", new UIBook(
                 weaver(), ctx(),
                 "Mandelbrot Demo",
-                "mandelbrot",
+                "mandelbrot2",
                 uiBook -> TB.resources().get(
                         "pages",
                         uiBook.getUID(uiBook.getButtonID()),

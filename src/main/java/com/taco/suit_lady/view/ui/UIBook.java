@@ -3,6 +3,7 @@ package com.taco.suit_lady.view.ui;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.springable.Springable;
+import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.ResourceTools;
 import com.taco.suit_lady.view.ui.jfx.button.ButtonViewable;
 import com.taco.suit_lady.view.ui.jfx.button.ImageButton;
@@ -25,8 +26,7 @@ import java.util.function.Function;
 public class UIBook
         implements Displayable, ButtonViewable, Springable, UIDProcessable
 {
-    private final FxWeaver weaver;
-    private final ConfigurableApplicationContext ctx;
+    private final StrictSpringable springable;
     
     //
     
@@ -41,9 +41,9 @@ public class UIBook
     
     private final ReadOnlyObjectWrapper<ImageButton> buttonViewProperty;
     
-    public UIBook(FxWeaver weaver, ConfigurableApplicationContext ctx, String name, String buttonID, Function<UIBook, UIPage<?>> coverPageFunction, Runnable onAction)
+    public UIBook(Springable springable, String name, String buttonID, Function<UIBook, UIPage<?>> coverPageFunction, Runnable onAction)
     {
-        this(weaver, ctx, name, buttonID, coverPageFunction, onAction, null);
+        this(springable, name, buttonID, coverPageFunction, onAction, null);
     }
     
     /**
@@ -77,10 +77,9 @@ public class UIBook
      *                              <li>Accessed via <i>{@link #getContent() getContent()}<b>.</b>{@link Displayer#getDisplayContainer() getDisplayContainer()}</i></li>
      *                          </ul>
      */
-    public UIBook(FxWeaver weaver, ConfigurableApplicationContext ctx, String name, String buttonID, Function<UIBook, UIPage<?>> coverPageFunction, Runnable onAction, StackPane contentPane)
+    public UIBook(Springable springable, String name, String buttonID, Function<UIBook, UIPage<?>> coverPageFunction, Runnable onAction, StackPane contentPane)
     {
-        this.weaver = weaver;
-        this.ctx = ctx;
+        this.springable = springable.asStrict();
         
         this.lock = new ReentrantLock();
         this.uidProcessor = new UIDProcessor("books");
@@ -226,13 +225,13 @@ public class UIBook
     @Override
     public @NotNull FxWeaver weaver()
     {
-        return weaver;
+        return springable.weaver();
     }
     
     @Override
     public @NotNull ConfigurableApplicationContext ctx()
     {
-        return this.ctx;
+        return springable.ctx();
     }
     
     //</editor-fold>

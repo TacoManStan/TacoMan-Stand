@@ -1024,7 +1024,14 @@ public class ImageButton
         
         private final ObjectProperty<Color> foregroundColorProperty;
         private final ObjectProperty<Color> backgroundColorProperty;
+        
         private final ObjectProperty<Color> color1Property;
+        private final ObjectProperty<Color> color2Property;
+        private final ObjectProperty<Color> color3Property;
+        private final ObjectProperty<Color> color4Property;
+        private final ObjectProperty<Color> color5Property;
+        private final ObjectProperty<Color> color6Property;
+        
         
         private final ObjectBinding<Image> imageBinding;
         
@@ -1033,7 +1040,14 @@ public class ImageButton
             
             this.foregroundColorProperty = new SimpleObjectProperty<>(defaultColor(FOREGROUND));
             this.backgroundColorProperty = new SimpleObjectProperty<>(defaultColor(BACKGROUND));
+            
             this.color1Property = new SimpleObjectProperty<>(defaultColor(COLOR1));
+            this.color2Property = new SimpleObjectProperty<>(defaultColor(COLOR2));
+            this.color3Property = new SimpleObjectProperty<>(defaultColor(COLOR3));
+            this.color4Property = new SimpleObjectProperty<>(defaultColor(COLOR4));
+            this.color5Property = new SimpleObjectProperty<>(defaultColor(COLOR5));
+            this.color6Property = new SimpleObjectProperty<>(defaultColor(COLOR6));
+            
             
             this.imageBinding = generateImageBinding();
         }
@@ -1077,8 +1091,17 @@ public class ImageButton
                 return backgroundColorProperty;
             else if (baseColor.equals(COLOR1))
                 return color1Property;
-            else
-                return foregroundColorProperty;
+            else if (baseColor.equals(COLOR2))
+                return color2Property;
+            else if (baseColor.equals(COLOR3))
+                return color3Property;
+            else if (baseColor.equals(COLOR4))
+                return color4Property;
+            else if (baseColor.equals(COLOR5))
+                return color5Property;
+            else if (baseColor.equals(COLOR6))
+                return color6Property;
+            return foregroundColorProperty;
         }
         
         public Color getColor(@NotNull Color baseColor) {
@@ -1162,10 +1185,34 @@ public class ImageButton
                 };
             } else if (baseColor.equals(COLOR2)) {
                 return switch (suffix) {
-                    case SUFFIX_STANDARD, SUFFIX_DISABLED -> FXTools.Colors.from255(95, 95, 95, 220);
-                    case SUFFIX_PRESSED, SUFFIX_HOVERED -> FXTools.Colors.from255(153, 153, 153, 220);
-                    case SUFFIX_SELECTED -> FXTools.Colors.from255(30, 62, 117, 220);
-                    case SUFFIX_SELECTED_HOVERED, SUFFIX_SELECTED_PRESSED -> FXTools.Colors.from255(40, 83, 156, 220);
+                    case SUFFIX_STANDARD, SUFFIX_DISABLED -> FXTools.Colors.from255(95, 95, 95, 210);
+                    case SUFFIX_PRESSED, SUFFIX_HOVERED -> FXTools.Colors.from255(153, 153, 153, 210);
+                    case SUFFIX_SELECTED -> FXTools.Colors.from255(30, 62, 117, 210);
+                    case SUFFIX_SELECTED_HOVERED, SUFFIX_SELECTED_PRESSED -> FXTools.Colors.from255(40, 83, 156, 210);
+                    default -> Color.WHITE;
+                };
+            } else if (baseColor.equals(COLOR3)) {
+                return switch (suffix) {
+                    case SUFFIX_STANDARD, SUFFIX_DISABLED -> FXTools.Colors.from255(95, 95, 95, 100);
+                    case SUFFIX_PRESSED, SUFFIX_HOVERED -> FXTools.Colors.from255(153, 153, 153, 100);
+                    case SUFFIX_SELECTED -> FXTools.Colors.from255(30, 62, 117, 100);
+                    case SUFFIX_SELECTED_HOVERED, SUFFIX_SELECTED_PRESSED -> FXTools.Colors.from255(40, 83, 156, 100);
+                    default -> Color.WHITE;
+                };
+            } else if (baseColor.equals(COLOR4)) {
+                return switch (suffix) {
+                    case SUFFIX_STANDARD, SUFFIX_DISABLED -> FXTools.Colors.from255(95, 95, 95, 65);
+                    case SUFFIX_PRESSED, SUFFIX_HOVERED -> FXTools.Colors.from255(153, 153, 153, 65);
+                    case SUFFIX_SELECTED -> FXTools.Colors.from255(30, 62, 117, 65);
+                    case SUFFIX_SELECTED_HOVERED, SUFFIX_SELECTED_PRESSED -> FXTools.Colors.from255(40, 83, 156, 65);
+                    default -> Color.WHITE;
+                };
+            } else if (baseColor.equals(COLOR5)) {
+                return switch (suffix) {
+                    case SUFFIX_STANDARD, SUFFIX_DISABLED -> FXTools.Colors.from255(95, 95, 95, 30);
+                    case SUFFIX_PRESSED, SUFFIX_HOVERED -> FXTools.Colors.from255(153, 153, 153, 30);
+                    case SUFFIX_SELECTED -> FXTools.Colors.from255(30, 62, 117, 30);
+                    case SUFFIX_SELECTED_HOVERED, SUFFIX_SELECTED_PRESSED -> FXTools.Colors.from255(40, 83, 156, 30);
                     default -> Color.WHITE;
                 };
             }
@@ -1189,11 +1236,11 @@ public class ImageButton
         
         public final Color FOREGROUND = Color.BLACK;
         public final Color BACKGROUND = Color.WHITE;
-        public final Color COLOR1 = Color.RED;
-        public final Color COLOR2 = Color.GREEN;
-        public final Color COLOR3 = Color.BLUE;
-        public final Color COLOR4 = Color.CYAN;
-        public final Color COLOR5 = Color.MAGENTA;
+        public final Color COLOR1 = Color.RED; //150
+        public final Color COLOR2 = Color.GREEN; //210
+        public final Color COLOR3 = Color.BLUE; //100
+        public final Color COLOR4 = Color.CYAN; //65
+        public final Color COLOR5 = Color.MAGENTA; //30
         public final Color COLOR6 = Color.YELLOW;
         
         //</editor-fold>
