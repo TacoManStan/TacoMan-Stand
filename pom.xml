@@ -109,6 +109,12 @@
             <version>22.0.0</version>
             <scope>compile</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.GitHub.cliftonlabs</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>3.1.0</version>
+        </dependency>
     </dependencies>
 
 </project>
