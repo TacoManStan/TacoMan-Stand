@@ -2,7 +2,6 @@ package com.taco.tacository.json;
 
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsoner;
-import com.taco.suit_lady.util.tools.ArrayTools;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -62,11 +61,6 @@ public final class JUtil {
                            jElements);
     }
     
-    private static JsonObject appendTo(JsonObject jsonObject, JElement... jElements) {
-        Arrays.stream(jElements).forEach(jElement -> jsonObject.put(jElement.jID(), jElement.jValue()));
-        return jsonObject;
-    }
-    
     @Contract(value = "_, _, _ -> new", pure = true)
     @SafeVarargs
     public static <T> @NotNull JArray<T> createArray(String jID, Function<T, Object> processor, T... jElements) {
@@ -86,6 +80,11 @@ public final class JUtil {
                 return jID;
             }
         };
+    }
+    
+    private static JsonObject appendTo(JsonObject jsonObject, JElement... jElements) {
+        Arrays.stream(jElements).forEach(jElement -> jsonObject.put(jElement.jID(), jElement.jValue()));
+        return jsonObject;
     }
     
     //

@@ -3,7 +3,7 @@ package com.taco.suit_lady.view.ui;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.view.ui.console.Console;
 import com.taco.suit_lady.view.ui.jfx.components.ContentPane;
-import com.taco.suit_lady.view.ui.ui_internal.contents.test.TestContent;
+import com.taco.suit_lady.view.ui.contents.test.TestContent;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import net.rgielen.fxweaver.core.FxWeaver;

@@ -43,9 +43,9 @@ com.taco.suit_lady.view.ui.jfx.setting
 com.taco.suit_lady.view.ui.jfx.util
 com.taco.suit_lady.view.ui.ui_internal
 com.taco.suit_lady.view.ui.ui_internal.console
-com.taco.suit_lady.view.ui.ui_internal.contents.dummy_instances
-com.taco.suit_lady.view.ui.ui_internal.contents.mandelbrot
-com.taco.suit_lady.view.ui.ui_internal.contents.test
+com.taco.suit_lady.view.ui.contents.dummy_instances
+com.taco.suit_lady.view.ui.contents.mandelbrot
+com.taco.suit_lady.view.ui.contents.test
 com.taco.suit_lady.view.ui.ui_internal.controllers
 com.taco.suit_lady.view.ui.ui_internal.pages.content_switch_demo_page
 com.taco.suit_lady.view.ui.ui_internal.pages.entity_debug_page
