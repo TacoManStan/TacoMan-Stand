@@ -51,6 +51,7 @@ import org.springframework.stereotype.Component;
 @FxmlView("/fxml/main.fxml")
 public class AppController
         implements Springable {
+    
     // <editor-fold desc="--- STATIC CONSTANTS ---">
     
     private static final long TRANSITION_TIME = 350;
@@ -227,15 +228,13 @@ public class AppController
         
         FXTools.get().constructDraggableNode(dragBar);
         FXTools.get().constructResizableNode(getStage(), cornerResizePane, topResizePane, bottomResizePane, leftResizePane, rightResizePane,
-                                             minimizeImagePane, maximizeImagePane, closeImagePane, settingsImagePane, sidebarImagePane
-                                            );
+                                             minimizeImagePane, maximizeImagePane, closeImagePane, settingsImagePane, sidebarImagePane);
         
         bookshelfTitleLabel.textProperty().bind(
                 Bindings.createStringBinding(() -> {
                     final SidebarBookshelf bookshelf = getAppUI().getSidebar().getSelectedBookshelf();
                     return bookshelf != null ? bookshelf.getName() : "No Bookshelf Selected";
-                }, getAppUI().getSidebar().selectedBookshelfProperty())
-                                               );
+                }, getAppUI().getSidebar().selectedBookshelfProperty()));
         
         //        initOverlays();
         
@@ -346,6 +345,15 @@ public class AppController
                 this,
                 "Demo 5",
                 "entity_debug",
+                uiBook -> TB.resources().get(
+                        "pages",
+                        uiBook.getButtonID(),
+                        () -> new ExamplePage(uiBook, "gray")),
+                null));
+        demoSidebarBookshelf.getBooks().add(new UIBook(
+                this,
+                "Demo 6",
+                "graph",
                 uiBook -> TB.resources().get(
                         "pages",
                         uiBook.getButtonID(),
