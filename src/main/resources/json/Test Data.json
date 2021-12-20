@@ -1,0 +1,37 @@
+{
+  "I AM RAAAAALPH": {
+    "sub-var-3": 22,
+    "sub-var-1": "heheXD",
+    "sub-var-2": "i am var2"
+  },
+  "var4": [
+    "Array Element 1",
+    "Array Element 2",
+    "Egggggs",
+    "Walrus",
+    "Random String",
+    "1972 Western Chicago Suburb District High School Championship"
+  ],
+  "var3": [
+    {
+      "sub-var-3": 32,
+      "jID": "I am NOT Ralph.",
+      "sub-var-1": "heheXOOOO",
+      "sub-var-2": "asdf"
+    },
+    {
+      "sub-var-3": 9999,
+      "jID": "I am... maybe Ralph?",
+      "sub-var-1": "asdfasd",
+      "sub-var-2": "eeee"
+    },
+    {
+      "sub-var-3": 333252,
+      "jID": "I am DEFINITIELY Ralph. Maybe.",
+      "sub-var-1": "asdfasdfasdfkasd",
+      "sub-var-2": "fjfjf"
+    }
+  ],
+  "var2": 69,
+  "var1": "Eggplant"
+}

@@ -416,6 +416,11 @@ public class ArrayTools {
         return null;
     }
     
+    @SafeVarargs
+    public static <T> T[] concat(boolean append, T[] arr, T... toConcat) {
+        return append ? concat(arr, toConcat) : concat(toConcat, arr);
+    }
+    
     /**
      * Concatenates the second array onto the first array and returns the
      * result.
