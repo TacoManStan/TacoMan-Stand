@@ -1,7 +1,7 @@
 package com.taco.suit_lady._to_sort._new.interfaces.functional.filter;
 
 import com.taco.suit_lady._to_sort._new.CompareType;
-import com.taco.util.numbers.Numbers;
+import com.taco.tacository.numbers.Numbers;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 

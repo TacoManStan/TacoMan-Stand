@@ -1,6 +1,6 @@
 package com.taco.suit_lady._to_sort._expr.spring.beans.demo;
 
-import com.taco.util.obj_traits.common.Nameable;
+import com.taco.tacository.obj_traits.common.Nameable;
 
 import java.util.concurrent.Callable;
 

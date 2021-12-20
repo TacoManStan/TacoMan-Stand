@@ -6,7 +6,7 @@ import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.view.ui.jfx.util.Bounds2D;
-import com.taco.util.obj_traits.common.Nameable;
+import com.taco.tacository.obj_traits.common.Nameable;
 import javafx.beans.Observable;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;

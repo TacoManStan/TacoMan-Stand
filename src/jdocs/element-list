@@ -16,7 +16,7 @@ com.taco.suit_lady.data.dummy_data.calendar
 com.taco.suit_lady.logic
 com.taco.suit_lady.uncategorized.spring.util
 com.taco.suit_lady.util
-com.taco.util.collections
+com.taco.tacository.collections
 com.taco.suit_lady.util.exceptions
 com.taco.suit_lady.util.initializer
 com.taco.suit_lady.util.settings

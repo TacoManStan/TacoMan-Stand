@@ -7,7 +7,7 @@ import com.taco.suit_lady.util.tools.ArrayTools;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.TaskTools;
 import com.taco.suit_lady.util.tools.list_tools.Operation.OperationType;
-import com.taco.util.obj_traits.common.Nameable;
+import com.taco.tacository.obj_traits.common.Nameable;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleBooleanProperty;

@@ -4,7 +4,7 @@ import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.settings.SavableSetting;
 import com.taco.suit_lady.view.ui.jfx.lists.Listable;
 import com.taco.suit_lady.view.ui.ui_internal.controllers.SettingGroupController;
-import com.taco.util.obj_traits.common.Nameable;
+import com.taco.tacository.obj_traits.common.Nameable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

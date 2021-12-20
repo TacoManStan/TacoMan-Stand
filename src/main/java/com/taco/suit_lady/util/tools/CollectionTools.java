@@ -1,7 +1,7 @@
 package com.taco.suit_lady.util.tools;
 
-import com.taco.util.collections.ReadOnlySelectionList;
-import com.taco.util.collections.SelectionList;
+import com.taco.tacository.collections.ReadOnlySelectionList;
+import com.taco.tacository.collections.SelectionList;
 import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;

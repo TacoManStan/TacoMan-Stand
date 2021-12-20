@@ -8,7 +8,7 @@ import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.ResourceTools;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import com.taco.suit_lady.view.ui.jfx.components.ImagePane;
-import com.taco.util.obj_traits.common.Nameable;
+import com.taco.tacository.obj_traits.common.Nameable;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;

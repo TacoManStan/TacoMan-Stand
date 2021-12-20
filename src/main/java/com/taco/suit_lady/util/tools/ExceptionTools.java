@@ -3,7 +3,7 @@ package com.taco.suit_lady.util.tools;
 import com.taco.suit_lady.util.InternalException;
 import com.taco.suit_lady.util.exceptions.NYIException;
 import com.taco.suit_lady.util.exceptions.ReadOnlyViolationException;
-import com.taco.util.quick.ConsoleBB;
+import com.taco.tacository.quick.ConsoleBB;
 
 import java.util.function.Predicate;
 import java.util.function.Supplier;

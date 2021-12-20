@@ -1,7 +1,7 @@
 package com.taco.suit_lady._to_sort._expr.spring.beans.demo;
 
-import com.taco.util.obj_traits.common.ModifiableNameable;
-import com.taco.util.obj_traits.common.Testable;
+import com.taco.tacository.obj_traits.common.ModifiableNameable;
+import com.taco.tacository.obj_traits.common.Testable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;

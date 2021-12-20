@@ -6,7 +6,7 @@ import com.taco.suit_lady.view.ui.jfx.button.ImageButton;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import com.taco.suit_lady.view.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.view.ui.jfx.lists.treehandler.WrappingTreeCellData;
-import com.taco.util.quick.ConsoleBB;
+import com.taco.tacository.quick.ConsoleBB;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;

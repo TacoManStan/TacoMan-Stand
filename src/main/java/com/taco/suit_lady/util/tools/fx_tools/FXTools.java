@@ -7,7 +7,7 @@ import com.taco.suit_lady.util.tools.*;
 import com.taco.suit_lady.view.ui.jfx.Colorable;
 import com.taco.suit_lady.view.ui.jfx.hyperlink.HyperlinkNodeFX;
 import com.taco.suit_lady.view.ui.jfx.lists.Listable;
-import com.taco.util.quick.ConsoleBB;
+import com.taco.tacository.quick.ConsoleBB;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;

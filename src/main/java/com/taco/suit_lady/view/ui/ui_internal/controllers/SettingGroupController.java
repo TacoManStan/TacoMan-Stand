@@ -1,6 +1,6 @@
 package com.taco.suit_lady.view.ui.ui_internal.controllers;
 
-import com.taco.util.obj_traits.common.Nameable;
+import com.taco.tacository.obj_traits.common.Nameable;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.springframework.context.ConfigurableApplicationContext;
 

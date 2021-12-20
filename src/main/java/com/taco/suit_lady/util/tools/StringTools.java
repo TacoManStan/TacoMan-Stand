@@ -1,6 +1,6 @@
 package com.taco.suit_lady.util.tools;
 
-import com.taco.util.obj_traits.common.Nameable;
+import com.taco.tacository.obj_traits.common.Nameable;
 
 import java.awt.*;
 import java.lang.reflect.Array;

@@ -1,11 +1,13 @@
 package com.taco.suit_lady.util.tools;
 
 import com.taco.suit_lady.util.UID;
-import com.taco.util.quick.ConsoleBB;
+import com.taco.tacository.quick.ConsoleBB;
 import javafx.scene.image.Image;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -241,6 +243,14 @@ public class ResourceTools
         ExceptionTools.nullCheck(resource, "Resource");
         return getClass().getResource(TB.strings().replaceSeparator("/" + resource));
     } // TODO: Load from resource jar file
+    
+    public URI getResourceURI(String resource) {
+        try {
+            return getResourceURL(resource).toURI();
+        } catch (URISyntaxException e) {
+            throw ExceptionTools.ex(e);
+        }
+    }
 }
 
 /*

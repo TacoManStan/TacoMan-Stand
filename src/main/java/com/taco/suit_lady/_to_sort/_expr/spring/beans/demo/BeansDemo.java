@@ -1,6 +1,6 @@
 package com.taco.suit_lady._to_sort._expr.spring.beans.demo;
 
-import com.taco.util.obj_traits.common.Testable;
+import com.taco.tacository.obj_traits.common.Testable;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;

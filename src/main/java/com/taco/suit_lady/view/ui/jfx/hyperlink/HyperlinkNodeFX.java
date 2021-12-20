@@ -1,6 +1,6 @@
 package com.taco.suit_lady.view.ui.jfx.hyperlink;
 
-import com.taco.util.quick.ConsoleBB;
+import com.taco.tacository.quick.ConsoleBB;
 import javafx.scene.Node;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.text.Text;
