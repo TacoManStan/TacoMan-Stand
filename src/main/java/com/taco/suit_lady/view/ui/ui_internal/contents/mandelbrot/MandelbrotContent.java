@@ -44,7 +44,7 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
         this.lock = new ReentrantLock();
         
         injectBookshelf("Mandelbrot Demo", new UIBook(
-                weaver(), ctx(),
+                this,
                 "Mandelbrot Demo",
                 "mandelbrot2",
                 uiBook -> TB.resources().get(

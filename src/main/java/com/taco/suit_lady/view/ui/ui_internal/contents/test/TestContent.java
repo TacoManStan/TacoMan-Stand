@@ -13,8 +13,9 @@ public class TestContent extends Content<TestContentData, TestContentController>
     {
         super(springable);
     
+        
         final UIBook[] books = new UIBook[]{
-                new UIBook(weaver(), ctx(),
+                new UIBook(this,
                            "Repository Red",
                            "invalid_button_id",
                            uiBook -> TB.resources().get(
@@ -22,7 +23,7 @@ public class TestContent extends Content<TestContentData, TestContentController>
                                    uiBook.getUID(uiBook.getButtonID()),
                                    () -> new ExamplePage(uiBook, "red")),
                            null),
-                new UIBook(weaver(), ctx(),
+                new UIBook(this,
                            "Repository Blue",
                            "invalid_button_id",
                            uiBook -> TB.resources().get(
@@ -30,7 +31,7 @@ public class TestContent extends Content<TestContentData, TestContentController>
                                    uiBook.getUID(uiBook.getButtonID()),
                                    () -> new ExamplePage(uiBook, "blue")),
                            null),
-                new UIBook(weaver(), ctx(),
+                new UIBook(this,
                            "Repository Green",
                            "invalid_button_id",
                            uiBook -> TB.resources().get(
@@ -38,6 +39,7 @@ public class TestContent extends Content<TestContentData, TestContentController>
                                    uiBook.getUID(uiBook.getButtonID()),
                                    () -> new ExamplePage(uiBook, "green")),
                            null)};
+        
         injectBookshelf("Demo", books);
     }
     

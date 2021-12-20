@@ -1,4 +1,4 @@
-package com.taco.suit_lady.util.collections;
+package com.taco.util.collections;
 
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;

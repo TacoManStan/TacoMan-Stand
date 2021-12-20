@@ -262,49 +262,52 @@ public class AppController
         
         final SidebarBookshelf generalSidebarBookshelf = new SidebarBookshelf(sidebar, "General");
         generalSidebarBookshelf.getBooks().add(new UIBook(
-                weaver(), ctx(),
-                "Content Switch Demo", "rerun",
+                this,
+                "Content Switch Demo",
+                "rerun",
                 uiBook -> TB.resources().get(
-                        "pages", uiBook.getUID(uiBook.getButtonID()),
-                        () -> new ContentSwitchDemoPage(uiBook)
-                                            ), null
-        ));
+                        "pages",
+                        uiBook.getUID(uiBook.getButtonID()),
+                        () -> new ContentSwitchDemoPage(uiBook)),
+                null));
         generalSidebarBookshelf.getBooks().add(new UIBook(
-                AppController.this.weaver, AppController.this.ctx,
-                "Development", "social",
+                this,
+                "Development",
+                "social",
                 uiBook -> TB.resources().get(
-                        "pages", uiBook.getButtonID(),
-                        () -> new ExamplePage(uiBook, "green")
-                                            ), null
-        ));
+                        "pages",
+                        uiBook.getButtonID(),
+                        () -> new ExamplePage(uiBook, "green")),
+                null));
         generalSidebarBookshelf.getButtonGroup().selectFirst();
         
         final SidebarBookshelf inDevelopmentSidebarBookshelf = new SidebarBookshelf(sidebar, "In Development");
         inDevelopmentSidebarBookshelf.getBooks().add(new UIBook(
-                AppController.this.weaver, AppController.this.ctx,
-                "Entity Debug", "clients",
+                this,
+                "Entity Debug",
+                "clients",
                 uiBook -> TB.resources().get(
-                        "pages", uiBook.getButtonID(),
-                        () -> new EntityDebugPage(uiBook)
-                                            ), null
-        ));
+                        "pages",
+                        uiBook.getButtonID(),
+                        () -> new EntityDebugPage(uiBook)),
+                null));
         inDevelopmentSidebarBookshelf.getButtonGroup().selectFirst();
         
         final SidebarBookshelf nyiSidebarBookshelf = new SidebarBookshelf(sidebar, "Not Yet Implemented");
         nyiSidebarBookshelf.getBooks().add(new UIBook(
-                AppController.this.weaver, AppController.this.ctx,
-                "Social", "play",
+                this,
+                "Social",
+                "play",
                 uiBook -> TB.resources().get(
-                        "pages", uiBook.getButtonID(),
-                        () -> new ExamplePage(uiBook, "blue")
-                                            ), null
-        ));
+                        "pages",
+                        uiBook.getButtonID(),
+                        () -> new ExamplePage(uiBook, "blue")),
+                null));
         nyiSidebarBookshelf.getButtonGroup().selectFirst();
         
         final SidebarBookshelf demoSidebarBookshelf = new SidebarBookshelf(sidebar, "Demo");
         demoSidebarBookshelf.getBooks().add(new UIBook(
-                AppController.this.weaver,
-                AppController.this.ctx,
+                this,
                 "Demo 1",
                 "calendar",
                 uiBook -> TB.resources().get(
@@ -313,8 +316,7 @@ public class AppController
                         () -> new ExamplePage(uiBook, "gray")),
                 null));
         demoSidebarBookshelf.getBooks().add(new UIBook(
-                AppController.this.weaver,
-                AppController.this.ctx,
+                this,
                 "Demo 2",
                 "social",
                 uiBook -> TB.resources().get(
@@ -323,8 +325,7 @@ public class AppController
                         () -> new ExamplePage(uiBook, "gray")),
                 null));
         demoSidebarBookshelf.getBooks().add(new UIBook(
-                AppController.this.weaver,
-                AppController.this.ctx,
+                this,
                 "Demo 3",
                 "popout_var2",
                 uiBook -> TB.resources().get(
@@ -333,8 +334,7 @@ public class AppController
                         () -> new ExamplePage(uiBook, "gray")),
                 null));
         demoSidebarBookshelf.getBooks().add(new UIBook(
-                AppController.this.weaver,
-                AppController.this.ctx,
+                this,
                 "Demo 4",
                 "account_manager",
                 uiBook -> TB.resources().get(
@@ -343,8 +343,7 @@ public class AppController
                         () -> new ExamplePage(uiBook, "gray")),
                 null));
         demoSidebarBookshelf.getBooks().add(new UIBook(
-                AppController.this.weaver,
-                AppController.this.ctx,
+                this,
                 "Demo 5",
                 "entity_debug",
                 uiBook -> TB.resources().get(
