@@ -1,10 +1,10 @@
-package com.taco.suit_lady.view.ui.ui_internal.contents.mandelbrot;
+package com.taco.suit_lady.view.ui.contents.mandelbrot;
 
 import com.taco.suit_lady._to_sort._new.MatrixIterator;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
-import com.taco.suit_lady.view.ui.ui_internal.contents.mandelbrot.MandelbrotIterator.MandelbrotColor;
+import com.taco.suit_lady.view.ui.contents.mandelbrot.MandelbrotIterator.MandelbrotColor;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import net.rgielen.fxweaver.core.FxWeaver;

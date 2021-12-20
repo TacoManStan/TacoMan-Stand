@@ -1,8 +1,7 @@
-package com.taco.suit_lady.view.ui.ui_internal.contents.dummy_instances;
+package com.taco.suit_lady.view.ui.contents.test;
 
 import com.taco.suit_lady.view.ui.ContentController;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import net.rgielen.fxweaver.core.FxWeaver;
@@ -12,15 +11,13 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
-@FxmlView("/fxml/content/dummy_instances/dummy_instances_content.fxml")
+@FxmlView("/fxml/content/test/test_content.fxml")
 @Scope("prototype")
-public class DummyInstancesContentController extends ContentController
+public class TestContentController extends ContentController
 {
     @FXML private AnchorPane root;
     
-    @FXML private Label nameLabel;
-    
-    public DummyInstancesContentController(FxWeaver weaver, ConfigurableApplicationContext ctx)
+    public TestContentController(FxWeaver weaver, ConfigurableApplicationContext ctx)
     {
         super(weaver, ctx);
     }

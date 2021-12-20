@@ -1,4 +1,4 @@
-package com.taco.suit_lady.view.ui.ui_internal.contents.mandelbrot;
+package com.taco.suit_lady.view.ui.contents.mandelbrot;
 
 import com.taco.suit_lady.view.ui.ContentData;
 

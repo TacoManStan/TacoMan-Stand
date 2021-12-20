@@ -1,4 +1,4 @@
-package com.taco.suit_lady.view.ui.ui_internal.contents.test;
+package com.taco.suit_lady.view.ui.contents.test;
 
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.TB;

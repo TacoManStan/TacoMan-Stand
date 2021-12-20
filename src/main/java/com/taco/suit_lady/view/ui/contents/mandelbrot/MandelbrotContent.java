@@ -1,4 +1,4 @@
-package com.taco.suit_lady.view.ui.ui_internal.contents.mandelbrot;
+package com.taco.suit_lady.view.ui.contents.mandelbrot;
 
 import com.taco.suit_lady._to_sort._new.Debugger;
 import com.taco.suit_lady.util.springable.Springable;
@@ -14,8 +14,8 @@ import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import com.taco.suit_lady.view.ui.jfx.components.RectanglePaintCommand;
 import com.taco.suit_lady.view.ui.AppUI;
 import com.taco.suit_lady.view.ui.Content;
-import com.taco.suit_lady.view.ui.ui_internal.contents.mandelbrot.MandelbrotIterator.MandelbrotColor;
-import com.taco.suit_lady.view.ui.ui_internal.contents.mandelbrot.MandelbrotContentController.MouseDragData;
+import com.taco.suit_lady.view.ui.contents.mandelbrot.MandelbrotIterator.MandelbrotColor;
+import com.taco.suit_lady.view.ui.contents.mandelbrot.MandelbrotContentController.MouseDragData;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.concurrent.Task;
