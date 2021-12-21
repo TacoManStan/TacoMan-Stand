@@ -47,8 +47,8 @@ com.taco.suit_lady.view.ui.contents.dummy_instances
 com.taco.suit_lady.view.ui.contents.mandelbrot
 com.taco.suit_lady.view.ui.contents.test
 com.taco.suit_lady.view.ui.ui_internal.controllers
-com.taco.suit_lady.view.ui.ui_internal.pages.content_switch_demo_page
-com.taco.suit_lady.view.ui.ui_internal.pages.entity_debug_page
-com.taco.suit_lady.view.ui.ui_internal.pages.example_page
-com.taco.suit_lady.view.ui.ui_internal.pages.fallback_page
+com.taco.suit_lady.view.ui.pages.content_switch_demo_page
+com.taco.suit_lady.view.ui.pages.entity_debug_page
+com.taco.suit_lady.view.ui.pages.example_page
+com.taco.suit_lady.view.ui.pages.fallback_page
 com.taco.suit_lady.view.ui.ui_internal.settings

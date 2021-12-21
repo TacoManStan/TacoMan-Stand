@@ -1,4 +1,4 @@
-package com.taco.suit_lady.view.ui.ui_internal.pages.content_switch_demo_page;
+package com.taco.suit_lady.view.ui.pages.content_switch_demo_page;
 
 import com.taco.suit_lady.view.ui.UIBook;
 import com.taco.suit_lady.view.ui.UIPage;

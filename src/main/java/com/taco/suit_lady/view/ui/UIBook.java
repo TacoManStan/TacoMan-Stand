@@ -7,7 +7,7 @@ import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.ResourceTools;
 import com.taco.suit_lady.view.ui.jfx.button.ButtonViewable;
 import com.taco.suit_lady.view.ui.jfx.button.ImageButton;
-import com.taco.suit_lady.view.ui.ui_internal.pages.fallback_page.FallbackPage;
+import com.taco.suit_lady.view.ui.pages.fallback_page.FallbackPage;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
