@@ -2,6 +2,7 @@ package com.taco.tacository.json;
 
 import com.github.cliftonlabs.json_simple.JsonObject;
 
+// Identical to JLoadable except JLoadableObject automatically handles saving/loading the jID as a field in the JSON object itself.
 public interface JLoadableObject
         extends JLoadable {
     
