@@ -55,6 +55,9 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
     @FXML private Label canvasWidthLabel;
     @FXML private Label canvasHeightLabel;
     
+    @FXML private Button saveConfigButton;
+    @FXML private Button loadConfigButton;
+    
     protected MandelbrotPageController(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         super(weaver, ctx);
     }
@@ -105,6 +108,14 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
         return yMaxTextField;
     }
     
+    
+    protected Button getSaveConfigButton() {
+        return saveConfigButton;
+    }
+    
+    protected Button getLoadConfigButton() {
+        return loadConfigButton;
+    }
     
     //<editor-fold desc="--- INFORMATION LABELS ---">
     

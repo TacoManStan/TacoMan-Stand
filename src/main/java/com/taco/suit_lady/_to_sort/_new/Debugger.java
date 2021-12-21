@@ -131,31 +131,46 @@ public final class Debugger {
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final ReadOnlyBooleanProperty readOnlyIsPrintEnabledProperty() {
+    public ReadOnlyBooleanProperty readOnlyIsPrintEnabledProperty() {
         return isPrintEnabledProperty.getReadOnlyProperty();
     }
     
-    public final boolean isPrintEnabled() {
+    public boolean isPrintEnabled() {
         return isPrintEnabledProperty.get();
     }
     
-    public final ReadOnlyBooleanProperty readOnlyIsWarnEnabledProperty() {
+    public void setPrintEnabled(boolean printEnabled) {
+        isPrintEnabledProperty.set(printEnabled);
+    }
+    
+    
+    public ReadOnlyBooleanProperty readOnlyIsWarnEnabledProperty() {
         return isWarnEnabledProperty.getReadOnlyProperty();
     }
     
-    public final boolean isWarnEnabled() {
+    public boolean isWarnEnabled() {
         return isWarnEnabledProperty.get();
     }
     
-    public final ReadOnlyBooleanProperty readOnlyIsErrorEnabledProperty() {
+    public void setWarnEnabled(boolean warnEnabled) {
+        isWarnEnabledProperty.set(warnEnabled);
+    }
+    
+    
+    public ReadOnlyBooleanProperty readOnlyIsErrorEnabledProperty() {
         return isErrorEnabledProperty.getReadOnlyProperty();
     }
     
-    public final boolean isErrorEnabled() {
+    public boolean isErrorEnabled() {
         return isErrorEnabledProperty.get();
     }
     
-    public final boolean isTypeEnabled(@NotNull String printType) {
+    public void setErrorEnabled(boolean errorEnabled) {
+        isErrorEnabledProperty.set(errorEnabled);
+    }
+    
+    
+    public boolean isTypeEnabled(@NotNull String printType) {
         ExceptionTools.nullCheck(printType, "Print Type");
         if (printType.equalsIgnoreCase(PRINT))
             return isPrintEnabled();

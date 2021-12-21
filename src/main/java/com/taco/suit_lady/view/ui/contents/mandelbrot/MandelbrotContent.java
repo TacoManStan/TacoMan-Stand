@@ -16,6 +16,7 @@ import com.taco.suit_lady.view.ui.AppUI;
 import com.taco.suit_lady.view.ui.Content;
 import com.taco.suit_lady.view.ui.contents.mandelbrot.MandelbrotIterator.MandelbrotColor;
 import com.taco.suit_lady.view.ui.contents.mandelbrot.MandelbrotContentController.MouseDragData;
+import com.taco.tacository.json.JUtil;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.concurrent.Task;
@@ -136,6 +137,10 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
                 Bindings.createStringBinding(() -> "" + data.getCanvasWidth(), data.canvasWidthProperty()));
         getCoverPage().getController().getCanvasHeightLabel().textProperty().bind(
                 Bindings.createStringBinding(() -> "" + data.getCanvasHeight(), data.canvasHeightProperty()));
+        
+        
+        getCoverPage().getController().getSaveConfigButton().setOnAction(event -> JUtil.save(data));
+        getCoverPage().getController().getLoadConfigButton().setOnAction(event -> JUtil.load(data));
     }
     
     protected MandelbrotPage getCoverPage() {

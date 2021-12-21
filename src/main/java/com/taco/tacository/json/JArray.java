@@ -13,7 +13,7 @@ public interface JArray<T> extends JElement {
     Object convertElement(T jArrayElement);
     
     @Override
-    default Object jValue() {
+    default Object getJValue() {
         return Arrays.stream(jArrayElements()).map(this::convertElement).collect(Collectors.toCollection(JsonArray::new));
     }
 }

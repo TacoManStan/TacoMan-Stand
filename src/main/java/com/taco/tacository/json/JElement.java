@@ -2,7 +2,7 @@ package com.taco.tacository.json;
 
 public interface JElement {
     
-    String jID();
+    String getJID();
     
-    Object jValue();
+    Object getJValue();
 }

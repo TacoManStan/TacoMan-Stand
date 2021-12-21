@@ -1,9 +1,14 @@
 package com.taco.suit_lady.view.ui.contents.mandelbrot;
 
+import com.github.cliftonlabs.json_simple.JsonObject;
 import com.taco.suit_lady._to_sort._new.interfaces.ObservablePropertyContainable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
+import com.taco.tacository.json.JElement;
+import com.taco.tacository.json.JLoadable;
+import com.taco.tacository.json.JObject;
+import com.taco.tacository.json.JUtil;
 import javafx.beans.Observable;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.IntegerBinding;
@@ -15,9 +20,9 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ConfigurableApplicationContext;
 
 public class MandelbrotData
-        implements ObservablePropertyContainable, Springable {
-    private final StrictSpringable springable;
+        implements ObservablePropertyContainable, Springable, JObject, JLoadable {
     
+    private final StrictSpringable springable;
     
     private final ObjectProperty<Double> xMinProperty;
     private final ObjectProperty<Double> xMaxProperty;
@@ -408,6 +413,34 @@ public class MandelbrotData
                ", scaledYMin=" + scaledYMinBinding.get() +
                ", scaledYMax=" + scaledYMaxBinding.get() +
                '}';
+    }
+    
+    
+    @Override
+    public String getJID() {
+        return "test-jid";
+    }
+    
+    @Override
+    public JElement[] jFields() {
+        return new JElement[]{
+                JUtil.create("x-min", getMinX()),
+                JUtil.create("y-min", getMinY()),
+                JUtil.create("x-max", getMaxX()),
+                JUtil.create("y-max", getMaxY()),
+                JUtil.create("color-scheme", getColorScheme().name()),
+                JUtil.create("invert-color-scheme", isColorSchemeInverted())
+        };
+    }
+    
+    @Override
+    public void load(JsonObject parent) {
+        setMinX(JUtil.loadDouble(parent, "x-min"));
+        setMinY(JUtil.loadDouble(parent, "y-min"));
+        setMaxX(JUtil.loadDouble(parent, "x-max"));
+        setMaxY(JUtil.loadDouble(parent, "y-max"));
+        setColorScheme(MandelbrotColorScheme.valueOf((String) parent.get("color-scheme")));
+        setInvertColorScheme(JUtil.loadBoolean(parent, "invert-color-scheme"));
     }
     
     //</editor-fold>

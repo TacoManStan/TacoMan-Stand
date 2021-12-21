@@ -16,17 +16,24 @@ import java.util.Arrays;
 public class Tester {
     
     public static void main(String[] args) {
-        runJsonTest2();
+        runJsonTest3();
+    }
+    
+    private static void runJsonTest3() {
+        TestData testData = new TestData();
+        JUtil.load("HAHAHAHAHAHAHA fart.", testData);
+        testData.print();
     }
     
     private static void runJsonTest2() {
-        TestSubData subData = new TestSubData("I AM RAAAAALPH", "heheXD", "i am var2", 22);
+        TestSubData subData = new TestSubData("var3", "heheXD", "i am var2", 22);
         TestSubData[] subDataArray = new TestSubData[]{
+                new TestSubData("I. Am. RAAAAAAAAALPH.", "54345", "ffffff", 999996),
                 new TestSubData("I am NOT Ralph.", "heheXOOOO", "asdf", 32),
                 new TestSubData("I am... maybe Ralph?", "asdfasd", "eeee", 9999),
                 new TestSubData("I am DEFINITIELY Ralph. Maybe.", "asdfasdfasdfkasd", "fjfjf", 333252)
         };
-        TestData testData = new TestData("Eggplant", 69, subData, subDataArray, "Array Element 1", "Array Element 2", "Egggggs", "Walrus", "Random String", "1972 Western Chicago Suburb District High School Championship");
+        TestData testData = new TestData("HAHAHAHAHAHAHA fart.", "Eggplant", 69, subData, subDataArray, "Array Element 1", "Array Element 2", "Egggggs", "Walrus", "Random String", "1972 Western Chicago Suburb District High School Championship");
         JUtil.save(testData);
     }
     
