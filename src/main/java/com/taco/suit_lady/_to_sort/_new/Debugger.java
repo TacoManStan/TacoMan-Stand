@@ -86,7 +86,6 @@ public final class Debugger {
             System.out.println(printType + ": " + msg);
     }
     
-    
     public <E> void printList(@NotNull List<E> list, @Nullable String footer) {
         printList(PRINT, list, footer);
     }

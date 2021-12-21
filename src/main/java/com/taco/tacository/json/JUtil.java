@@ -59,7 +59,8 @@ public final class JUtil {
         };
     }
     
-    public static @NotNull JObject createObject(String jID, JObject jObject) {
+    @Contract("_, _ -> new")
+    public static @NotNull JObject createObject(String jID, @NotNull JObject jObject) {
         return createObject(jID, jObject.jFields());
     }
     
@@ -140,25 +141,25 @@ public final class JUtil {
         }
     }
     
-    public static void saveMongoDB(JLoadable obj) {
-        String jsonString = JUtil.getAsString(obj);
+    public static void saveMongoDB(String databaseName, String collectionName, JObject obj) {
+        String jsonString = JUtil.getJson(obj);
         System.out.println("Parsing Json String...");
         MongoClient client = MongoClients.create("mongodb://localhost:27017");
-        MongoCollection<Document> collection = client.getDatabase("test").getCollection("test-data");
+        MongoCollection<Document> collection = client.getDatabase(databaseName).getCollection(collectionName);
         System.out.println(jsonString);
         Document doc = Document.parse(jsonString);
         collection.insertOne(doc);
     }
     
-    public static <T extends JLoadable> @NotNull List<T> loadMongoDB(String databaseName, String collectionName) {
+    public static <T extends JLoadable> @NotNull List<T> loadMongoDB(String databaseName, String collectionName, Supplier<T> factory) {
         MongoClient client = MongoClients.create("mongodb://localhost:27017");
         MongoCollection<Document> collection = client.getDatabase(databaseName).getCollection(collectionName);
         FindIterable<Document> iterable = collection.find(Document.class);
         ArrayList<T> elements = new ArrayList<>();
         iterable.forEach(document -> {
-            elements.add(loadFromString((T) new TestData("jid-test"), document.toJson()));
+            elements.add(loadFromString(factory.get(), document.toJson()));
         });
-        Debugger.get().printList(elements, "JLoadables");
+//        Debugger.get().printList(elements, "JLoadables");
         return elements;
     }
     
@@ -185,16 +186,28 @@ public final class JUtil {
         }
     }
     
-    public static String getAsString(JLoadable jLoadable) {
+    public static String getJsonFromFile(String jID) {
         try {
-            return Files.readString(getPath(jLoadable));
+            return Files.readString(getPath(jID));
         } catch (IOException e) {
             throw ExceptionTools.ex(e);
         }
     }
     
-    private static Path getPath(JLoadable jLoadable) {
-        return Paths.get(pathPrefix + jLoadable.getJID() + ".json");
+    public static String getJson(@NotNull JObject jObject) {
+        try {
+            JsonObject jsonObject = jObject.getJValue();
+            StringWriter writer = new StringWriter();
+            Jsoner.serialize(jsonObject, writer);
+            writer.close();
+            return writer.toString();
+        } catch (IOException e) {
+            throw ExceptionTools.ex(e);
+        }
+    }
+    
+    private static @NotNull Path getPath(@NotNull String jID) {
+        return Paths.get(pathPrefix + jID + ".json");
     }
     
     public static <T extends JLoadableObject> @NotNull T load(String jID, @NotNull T jLoadableObject) {
@@ -206,10 +219,15 @@ public final class JUtil {
         return JUtil.load(factory.get());
     }
     
-    public static <T extends JLoadable> @NotNull T loadObject(@NotNull JsonObject root, String jID, T jLoadable) {
+    @Contract("_, _, _ -> param3")
+    public static <T extends JLoadable> @NotNull T loadObject(@NotNull JsonObject root, String jID, @NotNull T jLoadable) {
         JsonObject self = (JsonObject) root.get(jID);
         jLoadable.load(self);
         return jLoadable;
+    }
+    
+    public static <T extends JLoadable> @NotNull T loadObject(@NotNull JsonObject root, @NotNull T jLoadable) {
+        return loadObject(root, jLoadable.getJID(), jLoadable);
     }
     
     public static int loadInt(Object o) {
@@ -244,7 +262,7 @@ public final class JUtil {
         return (String) root.get(jID);
     }
     
-    public static <T> List<T> loadArray(@NotNull JsonObject root, String jID, Function<Object, T> elementFactory) {
+    public static <T> @NotNull List<T> loadArray(@NotNull JsonObject root, String jID, Function<Object, T> elementFactory) {
         ArrayList<T> ts = new ArrayList<>();
         for (Object o: ((JsonArray) root.get(jID))) {
             T t = elementFactory.apply(o);

@@ -1138,9 +1138,7 @@ public class ImageButton
                     for (int i = 0; i < image.getWidth(); i++) {
                         for (int j = 0; j < image.getHeight(); j++) {
                             Color rawColor = reader.getColor(i, j);
-                            ImageButton.this.debugger().print("[" + i + ", " + j + "] - Raw Color " + ImageButton.this.getName() + ":  " + rawColor);
                             Color color = getColor(rawColor);
-                            ImageButton.this.debugger().print("[" + i + ", " + j + "] - Color " + ImageButton.this.getName() + ":  " + color);
                             writableImage.getPixelWriter().setColor(i, j, color);
                         }
                     }
