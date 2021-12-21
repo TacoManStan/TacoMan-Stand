@@ -3,6 +3,7 @@ package com.taco;
 import com.github.cliftonlabs.json_simple.JsonArray;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsoner;
+import com.taco.suit_lady.data._expr.mongodb.test_country.CountryRepository;
 import com.taco.tacository.json.JUtil;
 import com.taco.tacository.json.TestData;
 import com.taco.tacository.json.TestSubData;
@@ -17,6 +18,9 @@ public class Tester {
     
     public static void main(String[] args) {
         runJsonTest3();
+    }
+    
+    private static void runMongoDBTest1() {
     }
     
     private static void runJsonTest3() {

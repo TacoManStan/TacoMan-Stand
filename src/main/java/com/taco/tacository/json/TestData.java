@@ -20,6 +20,10 @@ public class TestData implements JObject, JLoadableObject {
         this(null, null, -1, null, null);
     }
     
+    public TestData(String jID) {
+        this(jID, null, -1, null, null);
+    }
+    
     public TestData(String jID, String var1, int var2, TestSubData var3, TestSubData[] var4, String... var5) {
         this.jID = jID;
         
@@ -99,5 +103,17 @@ public class TestData implements JObject, JLoadableObject {
                 JUtil.createArray("var4", var4),
                 JUtil.createArray("var5", var5)
         };
+    }
+    
+    @Override
+    public String toString() {
+        return "TestData{" +
+               "jID='" + jID + '\'' +
+               ", var1='" + var1 + '\'' +
+               ", var2=" + var2 +
+               ", var3=" + var3 +
+               ", var4=" + Arrays.toString(var4) +
+               ", var5=" + Arrays.toString(var5) +
+               '}';
     }
 }

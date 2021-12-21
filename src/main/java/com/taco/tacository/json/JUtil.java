@@ -4,16 +4,21 @@ import com.github.cliftonlabs.json_simple.JsonArray;
 import com.github.cliftonlabs.json_simple.JsonException;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsoner;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.taco.suit_lady._to_sort._new.Debugger;
 import com.taco.suit_lady.util.tools.ExceptionTools;
+import org.bson.Document;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -135,16 +140,61 @@ public final class JUtil {
         }
     }
     
+    public static void saveMongoDB(JLoadable obj) {
+        String jsonString = JUtil.getAsString(obj);
+        System.out.println("Parsing Json String...");
+        MongoClient client = MongoClients.create("mongodb://localhost:27017");
+        MongoCollection<Document> collection = client.getDatabase("test").getCollection("test-data");
+        System.out.println(jsonString);
+        Document doc = Document.parse(jsonString);
+        collection.insertOne(doc);
+    }
+    
+    public static <T extends JLoadable> @NotNull List<T> loadMongoDB(String databaseName, String collectionName) {
+        MongoClient client = MongoClients.create("mongodb://localhost:27017");
+        MongoCollection<Document> collection = client.getDatabase(databaseName).getCollection(collectionName);
+        FindIterable<Document> iterable = collection.find(Document.class);
+        ArrayList<T> elements = new ArrayList<>();
+        iterable.forEach(document -> {
+            elements.add(loadFromString((T) new TestData("jid-test"), document.toJson()));
+        });
+        Debugger.get().printList(elements, "JLoadables");
+        return elements;
+    }
+    
+    public static <T extends JLoadable> @NotNull T loadFromString(@NotNull T jLoadable, String json) {
+        return load(jLoadable, new StringReader(json));
+    }
+    
     @Contract("_ -> param1")
     public static <T extends JLoadable> @NotNull T load(@NotNull T jLoadable) {
         try {
-            Reader reader = Files.newBufferedReader(Paths.get(pathPrefix + jLoadable.getJID() + ".json"));
+            return load(jLoadable, Files.newBufferedReader(Paths.get(pathPrefix + jLoadable.getJID() + ".json")));
+        } catch (IOException e) {
+            throw ExceptionTools.ex(e);
+        }
+    }
+    
+    private static <T extends JLoadable> @NotNull T load(@NotNull T jLoadable, @NotNull Reader reader) {
+        try {
             JsonObject root = (JsonObject) Jsoner.deserialize(reader);
             jLoadable.load(root);
             return jLoadable;
-        } catch (IOException | JsonException e) {
+        } catch (JsonException e) {
             throw ExceptionTools.ex(e);
         }
+    }
+    
+    public static String getAsString(JLoadable jLoadable) {
+        try {
+            return Files.readString(getPath(jLoadable));
+        } catch (IOException e) {
+            throw ExceptionTools.ex(e);
+        }
+    }
+    
+    private static Path getPath(JLoadable jLoadable) {
+        return Paths.get(pathPrefix + jLoadable.getJID() + ".json");
     }
     
     public static <T extends JLoadableObject> @NotNull T load(String jID, @NotNull T jLoadableObject) {

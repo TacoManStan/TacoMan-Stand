@@ -9,6 +9,7 @@ import com.taco.suit_lady.view.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.util.tools.fx_tools.FXDialogTools;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import com.taco.suit_lady.view.ui.jfx.lists.treehandler.WrappingTreeCellData;
+import com.taco.suit_lady.view.ui.pages.tester_page.TesterPage;
 import com.taco.suit_lady.view.ui.ui_internal.console.ConsoleUIDataContainer;
 import com.taco.suit_lady.view.ui.ui_internal.controllers.SettingsController;
 import com.taco.suit_lady.view.ui.pages.content_switch_demo_page.ContentSwitchDemoPage;
@@ -358,6 +359,15 @@ public class AppController
                         "pages",
                         uiBook.getButtonID(),
                         () -> new ExamplePage(uiBook, "gray")),
+                null));
+        demoSidebarBookshelf.getBooks().add(new UIBook(
+                this,
+                "Tester",
+                "demo",
+                uiBook -> TB.resources().get(
+                        "pages",
+                        uiBook.getButtonID(),
+                        () -> new TesterPage(uiBook)),
                 null));
         demoSidebarBookshelf.getButtonGroup().selectFirst();
         

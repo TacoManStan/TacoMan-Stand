@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+
+<BorderPane fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="500.0" prefWidth="250.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.taco.suit_lady.view.ui.pages.tester_page.TesterPageController">
+   <center>
+      <HBox maxHeight="-Infinity" maxWidth="-Infinity" spacing="5.0" BorderPane.alignment="CENTER">
+         <children>
+              <Button fx:id="test1Button" mnemonicParsing="false" text="Run Test 1" />
+            <Button fx:id="test2Button" mnemonicParsing="false" text="Run Test 2" />
+            <Button fx:id="test3Button" mnemonicParsing="false" text="Run Test 3" />
+         </children>
+      </HBox>
+   </center>
+</BorderPane>

@@ -1,5 +1,6 @@
 package com.taco.suit_lady._to_sort._new;
 
+import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
@@ -13,6 +14,30 @@ import java.util.stream.IntStream;
 @Component
 public final class Debugger {
     
+    //<editor-fold desc="--- STATIC SINGLETON ---">
+    
+    private static final Debugger debugger;
+    
+    static {
+        debugger = new Debugger(true, false, false);
+    }
+    
+    /**
+     * <p>Returns the static singleton {@link Debugger} instance for this application runtime.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>Note that objects that implement {@link Springable} should use the <i>{@link Springable#debugger()}</i> method to access the Spring-managed singleton instance whenever possible.</li>
+     *     <li>While the Spring-managed singleton instance has all print types disabled by default, the static singleton instance returned by {@link #get() this method} has <i>{@link #readOnlyIsPrintEnabledProperty()}</i> set to true by default.</li>
+     * </ol>
+     *
+     * @return The static singleton {@link Debugger} instance for this application runtime.
+     */
+    public static Debugger get() {
+        return debugger;
+    }
+    
+    //</editor-fold>
+    
     public static final String PRINT = "print";
     public static final String WARN = "warn";
     public static final String ERROR = "error";
@@ -22,9 +47,13 @@ public final class Debugger {
     private final ReadOnlyBooleanWrapper isErrorEnabledProperty;
     
     public Debugger() {
-        this.isPrintEnabledProperty = new ReadOnlyBooleanWrapper(false);
-        this.isWarnEnabledProperty = new ReadOnlyBooleanWrapper(false);
-        this.isErrorEnabledProperty = new ReadOnlyBooleanWrapper(false);
+        this(false, false, false);
+    }
+    
+    public Debugger(boolean printEnabled, boolean warnEnabled, boolean errorEnabled) {
+        this.isPrintEnabledProperty = new ReadOnlyBooleanWrapper(printEnabled);
+        this.isWarnEnabledProperty = new ReadOnlyBooleanWrapper(warnEnabled);
+        this.isErrorEnabledProperty = new ReadOnlyBooleanWrapper(errorEnabled);
         
         
         this.isPrintEnabledProperty.addListener((observable, oldValue, newValue) -> {
@@ -88,7 +117,7 @@ public final class Debugger {
     
     public void printBlock(@NotNull String printType, @NotNull Runnable prints, @Nullable String title, @Nullable String footer, boolean box) {
         if (isTypeEnabled(printType)) {
-            footer = "[ " + printType.toUpperCase()  + " ]" + (footer != null ? "  " + footer : "");
+            footer = "[ " + printType.toUpperCase() + " ]" + (footer != null ? "  " + footer : "");
             
             if (box) {
                 System.out.println();
