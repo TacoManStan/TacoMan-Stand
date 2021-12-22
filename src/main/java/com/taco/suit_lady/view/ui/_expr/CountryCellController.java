@@ -1,4 +1,4 @@
-package com.taco.suit_lady.view._nonimported._expr.test_country;
+package com.taco.suit_lady.view.ui._expr;
 
 import com.taco.suit_lady.data._expr.mongodb.test_country.Country;
 import javafx.fxml.FXML;

@@ -1,4 +1,4 @@
-package com.taco.suit_lady.view._nonimported.generic;
+package com.taco.suit_lady.view.ui;
 
 import com.taco.suit_lady._to_sort._expr.spring.beans.BaWT;
 import javafx.fxml.FXML;

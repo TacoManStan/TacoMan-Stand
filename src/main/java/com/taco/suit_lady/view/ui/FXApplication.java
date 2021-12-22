@@ -1,4 +1,4 @@
-package com.taco.suit_lady.view._nonimported;
+package com.taco.suit_lady.view.ui;
 
 import com.mongodb.client.MongoDatabase;
 import com.taco.suit_lady.MainApplication;
