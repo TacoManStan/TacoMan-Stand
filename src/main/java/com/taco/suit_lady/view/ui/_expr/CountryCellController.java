@@ -23,15 +23,14 @@ import org.springframework.stereotype.Component;
  * <p>- To setup a JavaFX Controller for use with {@link FxWeaver}, the {@code JavaFX Controller} must be configured as a {@code Spring Bean} using either the {@link Bean @Bean}
  * or {@link Component @Component} annotation, depending on circumstances.</p>
  * <p>- The {@link FxmlView @FxmlView} annotation completes the configuration process by specifying the {@code FXML} document for this {@code JavaFX Controller}.</p>
- * <hr>
+ * <hr><br>
  * <p><i><b>TODO: </b>Move generic instructional documentation (shown above) to appropriate location.</i></p>
  * <br>
  */
 @Component
 @Scope("prototype")
 @FxmlView("CountryCell.fxml")
-public class CountryCellController extends ListCell<Country>
-{
+public class CountryCellController extends ListCell<Country> {
     @FXML private Pane cellContainer;
     
     @FXML private Label countryNameLabel;
@@ -44,17 +43,13 @@ public class CountryCellController extends ListCell<Country>
     public void initialize() { }
     
     @Override
-    protected void updateItem(Country item, boolean empty)
-    {
+    protected void updateItem(Country item, boolean empty) {
         super.updateItem(item, empty);
         
-        if (empty || item == null)
-        {
+        if (empty || item == null) {
             setText("EMPTY");
             setGraphic(null);
-        }
-        else
-        {
+        } else {
             countryNameLabel.setText(item.getName());
             countryPopulationLabel.setText("" + item.getPopulation());
             if (countryIcon.getImage() == null)
