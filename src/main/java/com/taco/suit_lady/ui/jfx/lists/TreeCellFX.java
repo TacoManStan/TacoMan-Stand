@@ -24,8 +24,8 @@ import java.util.function.Function;
  */
 // TO-EXPAND
 public class TreeCellFX<T, C extends CellController<T>> extends TreeCell<T>
-        implements IndexedCellFXable<T, C>
-{
+        implements IndexedCellFXable<T, C> {
+    
     private final Lock lock;
     
     private final CellControlManager<T, C> cellControlManager;
@@ -40,8 +40,7 @@ public class TreeCellFX<T, C extends CellController<T>> extends TreeCell<T>
      *
      * @throws NullPointerException If the specified {@link Function cellControlManagerFactory} is {@code null}.
      */
-    public TreeCellFX(@NotNull Function<TreeCellFX<T, C>, CellControlManager<T, C>> cellControlManagerFactory)
-    {
+    public TreeCellFX(@NotNull Function<TreeCellFX<T, C>, CellControlManager<T, C>> cellControlManagerFactory) {
         ExceptionTools.nullCheck(cellControlManagerFactory, "Cell Control Manager Factory Function");
         
         this.cellControlManager = cellControlManagerFactory.apply(this);
@@ -70,8 +69,7 @@ public class TreeCellFX<T, C extends CellController<T>> extends TreeCell<T>
      *
      * @return The {@link Lock} object used to provide synchronization to this {@link TreeCellFX} object.
      */
-    protected Lock getLock()
-    {
+    protected Lock getLock() {
         return lock;
     }
     
@@ -86,8 +84,7 @@ public class TreeCellFX<T, C extends CellController<T>> extends TreeCell<T>
      *
      * @return An {@link ObjectBinding} that reflects the parent {@link #itemProperty() Item Property} cast to {@link TreeItemFX}.
      */
-    public ObjectBinding<TreeItemFX<T>> treeItemFXBinding()
-    {
+    public ObjectBinding<TreeItemFX<T>> treeItemFXBinding() {
         return treeItemFXBinding;
     }
     
@@ -97,8 +94,7 @@ public class TreeCellFX<T, C extends CellController<T>> extends TreeCell<T>
      *
      * @return The {@link #getItem() content} of this {@link TreeCellFX} pre-cast to a {@link TreeItemFX}.
      */
-    public TreeItemFX<T> getItemFX()
-    {
+    public TreeItemFX<T> getItemFX() {
         return treeItemFXBinding.get();
     }
     
@@ -113,8 +109,7 @@ public class TreeCellFX<T, C extends CellController<T>> extends TreeCell<T>
      *
      * @return A {@link BooleanBinding} that reflects whether the current {@link #getItemFX() content} of this {@link TreeCellFX} is currently {@link TreeItemFX#visibleProperty() visible} or not.
      */
-    public BooleanBinding contentVisibleBinding()
-    {
+    public BooleanBinding contentVisibleBinding() {
         return contentVisibleBinding;
     }
     
@@ -124,8 +119,7 @@ public class TreeCellFX<T, C extends CellController<T>> extends TreeCell<T>
      *
      * @return Whether the current {@link #getItemFX() content} of this {@link TreeCellFX} is currently {@link TreeItemFX#visibleProperty() visible} or not.
      */
-    public boolean isContentVisible()
-    {
+    public boolean isContentVisible() {
         return contentVisibleBinding.get();
     }
     
@@ -133,15 +127,13 @@ public class TreeCellFX<T, C extends CellController<T>> extends TreeCell<T>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    
     /**
      * <p>Returns the {@link CellControlManager} used by this {@link TreeCellFX} to manage the {@link CellController} used to display and manage the {@link #getItemFX() content} of this {@link TreeCellFX}.</p>
      *
      * @return The {@link CellControlManager} used by this {@link TreeCellFX} to manage the {@link CellController} used to display and manage the {@link #getItemFX() content} of this {@link TreeCellFX}.
      */
     @Override
-    public CellControlManager<T, C> getCellControlManager()
-    {
+    public CellControlManager<T, C> getCellControlManager() {
         return cellControlManager;
     }
     
@@ -162,8 +154,7 @@ public class TreeCellFX<T, C extends CellController<T>> extends TreeCell<T>
      * @see Cell#updateItem(Object, boolean)
      */
     @Override
-    protected void updateItem(T item, boolean empty)
-    {
+    protected void updateItem(T item, boolean empty) {
         super.updateItem(item, empty);
         cellControlManager.doUpdateItem(item, empty);
     }
