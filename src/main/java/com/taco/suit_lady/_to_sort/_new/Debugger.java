@@ -27,7 +27,10 @@ public final class Debugger {
      * <p><b>Details</b></p>
      * <ol>
      *     <li>Note that objects that implement {@link Springable} should use the <i>{@link Springable#debugger()}</i> method to access the Spring-managed singleton instance whenever possible.</li>
-     *     <li>While the Spring-managed singleton instance has all print types disabled by default, the static singleton instance returned by {@link #get() this method} has <i>{@link #readOnlyIsPrintEnabledProperty()}</i> set to true by default.</li>
+     *     <li>
+     *         While the Spring-managed {@link Debugger} singleton instance has only {@link #readOnlyIsWarnEnabledProperty() warn} and {@link #readOnlyIsErrorEnabledProperty() error} printing enabled by default,
+     *         the static singleton {@link Debugger} instance has {@link #readOnlyIsWarnEnabledProperty() warn} and {@link #readOnlyIsErrorEnabledProperty() error} as well as {@link #readOnlyIsStatusEnabledProperty() status} printing enabled as well.
+     *     </li>
      * </ol>
      *
      * @return The static singleton {@link Debugger} instance for this application runtime.
@@ -38,29 +41,29 @@ public final class Debugger {
     
     //</editor-fold>
     
-    public static final String PRINT = "print";
+    public static final String STATUS = "status";
     public static final String WARN = "warn";
     public static final String ERROR = "error";
     
-    private final ReadOnlyBooleanWrapper isPrintEnabledProperty;
+    private final ReadOnlyBooleanWrapper isStatusEnabledProperty;
     private final ReadOnlyBooleanWrapper isWarnEnabledProperty;
     private final ReadOnlyBooleanWrapper isErrorEnabledProperty;
     
     public Debugger() {
-        this(false, false, false);
+        this(false, true, true);
     }
     
-    public Debugger(boolean printEnabled, boolean warnEnabled, boolean errorEnabled) {
-        this.isPrintEnabledProperty = new ReadOnlyBooleanWrapper(printEnabled);
+    public Debugger(boolean statusEnabled, boolean warnEnabled, boolean errorEnabled) {
+        this.isStatusEnabledProperty = new ReadOnlyBooleanWrapper(statusEnabled);
         this.isWarnEnabledProperty = new ReadOnlyBooleanWrapper(warnEnabled);
         this.isErrorEnabledProperty = new ReadOnlyBooleanWrapper(errorEnabled);
         
         
-        this.isPrintEnabledProperty.addListener((observable, oldValue, newValue) -> {
+        this.isStatusEnabledProperty.addListener((observable, oldValue, newValue) -> {
             if (newValue && !oldValue)
-                System.out.println("General Debug Output is now Enabled");
+                System.out.println("Status Debug Output is now Enabled");
             else if (!newValue && oldValue)
-                System.out.println("General Debug Output is now Disabled");
+                System.out.println("Status Debug Output is now Disabled");
         });
         this.isWarnEnabledProperty.addListener((observable, oldValue, newValue) -> {
             if (newValue && !oldValue)
@@ -78,7 +81,7 @@ public final class Debugger {
     
     
     public void print(@NotNull String msg) {
-        print(PRINT, msg);
+        print(STATUS, msg);
     }
     
     public void print(@NotNull String printType, @NotNull String msg) {
@@ -87,7 +90,7 @@ public final class Debugger {
     }
     
     public <E> void printList(@NotNull List<E> list, @Nullable String footer) {
-        printList(PRINT, list, footer);
+        printList(STATUS, list, footer);
     }
     
     public <E> void printList(@NotNull String printType, @NotNull List<E> list, @Nullable String footer) {
@@ -99,12 +102,12 @@ public final class Debugger {
     
     
     public void printBlock(@NotNull Runnable printAction, @Nullable String title, @Nullable String footer, boolean box) {
-        printBlock(PRINT, printAction, title, footer, box);
+        printBlock(STATUS, printAction, title, footer, box);
     }
     
     @SafeVarargs
     public final <E> void printBlock(@Nullable String title, @Nullable String footer, boolean box, E... prints) {
-        printBlock(PRINT, title, footer, box, prints);
+        printBlock(STATUS, title, footer, box, prints);
     }
     
     @SafeVarargs
@@ -159,16 +162,16 @@ public final class Debugger {
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public ReadOnlyBooleanProperty readOnlyIsPrintEnabledProperty() {
-        return isPrintEnabledProperty.getReadOnlyProperty();
+    public ReadOnlyBooleanProperty readOnlyIsStatusEnabledProperty() {
+        return isStatusEnabledProperty.getReadOnlyProperty();
     }
     
-    public boolean isPrintEnabled() {
-        return isPrintEnabledProperty.get();
+    public boolean isStatusEnabled() {
+        return isStatusEnabledProperty.get();
     }
     
-    public void setPrintEnabled(boolean printEnabled) {
-        isPrintEnabledProperty.set(printEnabled);
+    public void setStatusEnabled(boolean printEnabled) {
+        isStatusEnabledProperty.set(printEnabled);
     }
     
     
@@ -200,8 +203,8 @@ public final class Debugger {
     
     public boolean isTypeEnabled(@NotNull String printType) {
         ExceptionTools.nullCheck(printType, "Print Type");
-        if (printType.equalsIgnoreCase(PRINT))
-            return isPrintEnabled();
+        if (printType.equalsIgnoreCase(STATUS))
+            return isStatusEnabled();
         else if (printType.equalsIgnoreCase(WARN))
             return isWarnEnabled();
         else if (printType.equalsIgnoreCase(ERROR))

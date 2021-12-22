@@ -16,6 +16,7 @@ import com.taco.suit_lady.view.ui.AppUI;
 import com.taco.suit_lady.view.ui.Content;
 import com.taco.suit_lady.view.ui.contents.mandelbrot.MandelbrotIterator.MandelbrotColor;
 import com.taco.suit_lady.view.ui.contents.mandelbrot.MandelbrotContentController.MouseDragData;
+import com.taco.tacository.json.JFiles;
 import com.taco.tacository.json.JUtil;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
@@ -139,8 +140,8 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
                 Bindings.createStringBinding(() -> "" + data.getCanvasHeight(), data.canvasHeightProperty()));
         
         
-        getCoverPage().getController().getSaveConfigButton().setOnAction(event -> JUtil.save(data));
-        getCoverPage().getController().getLoadConfigButton().setOnAction(event -> JUtil.load(data));
+        getCoverPage().getController().getSaveConfigButton().setOnAction(event -> JFiles.save(data));
+        getCoverPage().getController().getLoadConfigButton().setOnAction(event -> JFiles.load(data));
     }
     
     protected MandelbrotPage getCoverPage() {
@@ -267,7 +268,15 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
     protected void onDeactivate() { }
     
     @Override
-    protected void onShutdown() { }
+    protected void onShutdown() {
+        if (worker != null) {
+            debugger().print("Cancelling Mandelbrot Worker Task");
+            if (worker.cancel(true))
+                debugger().print("Worker Cancellation Successful!");
+            else
+                debugger().print(Debugger.WARN, "Worker Cancellation Failed!");
+        }
+    }
     
     //</editor-fold>
 }

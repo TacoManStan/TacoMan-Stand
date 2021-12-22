@@ -62,17 +62,17 @@ implements JObject, JLoadableObject{
     
     @Override
     public void doLoad(JsonObject parent) {
-        var1 = JUtil.Objs.loadObject(parent, new ColorJObjectWrapper("var1")).value();
-        var2 = JUtil.Objs.loadString(parent, "var2");
-        var3 = JUtil.Objs.loadInt(parent, "var3");
+        var1 = JUtil.loadObject(parent, new ColorJObjectWrapper("var1")).value();
+        var2 = JUtil.loadString(parent, "var2");
+        var3 = JUtil.loadInt(parent, "var3");
     }
     
     @Override
     public JElement[] jFields() {
         return new JElement[]{
                 new ColorJObjectWrapper("var1", var1),
-                JUtil.Objs.create("var2", var2),
-                JUtil.Objs.create("var3", var3)
+                JUtil.create("var2", var2),
+                JUtil.create("var3", var3)
         };
     }
     

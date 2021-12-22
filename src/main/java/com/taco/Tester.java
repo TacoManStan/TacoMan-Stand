@@ -4,6 +4,7 @@ import com.github.cliftonlabs.json_simple.JsonArray;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsoner;
 import com.taco.suit_lady.data._expr.mongodb.test_country.CountryRepository;
+import com.taco.tacository.json.JFiles;
 import com.taco.tacository.json.JUtil;
 import com.taco.tacository.json.TestData;
 import com.taco.tacository.json.TestSubData;
@@ -25,7 +26,7 @@ public class Tester {
     
     private static void runJsonTest3() {
         TestData testData = new TestData();
-        JUtil.load("HAHAHAHAHAHAHA fart.", testData);
+        JFiles.load("HAHAHAHAHAHAHA fart.", testData);
         testData.print();
     }
     
@@ -38,7 +39,7 @@ public class Tester {
                 new TestSubData("I am DEFINITIELY Ralph. Maybe.", "asdfasdfasdfkasd", "fjfjf", 333252)
         };
         TestData testData = new TestData("HAHAHAHAHAHAHA fart.", "Eggplant", 69, subData, subDataArray, "Array Element 1", "Array Element 2", "Egggggs", "Walrus", "Random String", "1972 Western Chicago Suburb District High School Championship");
-        JUtil.save(testData);
+        JFiles.save(testData);
     }
     
     private static void runJsonTest1() {
