@@ -164,7 +164,7 @@ public class Sidebar
             }
         });
         
-        this.bookshelvesProperty.addListener((ListChangeListener<SidebarBookshelf>) c -> FXTools.get().runFX(() -> {
+        this.bookshelvesProperty.addListener((ListChangeListener<SidebarBookshelf>) c -> FXTools.runFX(() -> {
             while (c.next()) {
                 c.getAddedSubList().forEach(sidebarBookshelf -> {
                     toolBar.getItems().add(sidebarBookshelf.getButton());
@@ -195,7 +195,7 @@ public class Sidebar
      */
     public void initialize()
     {
-        FXTools.get().runFX(() -> {
+        FXTools.runFX(() -> {
             backImageButton.initialize();
             childButtonPane.setAlignment(Pos.TOP_LEFT);
             

@@ -40,7 +40,7 @@ public abstract class SettingNode<V, T extends Region, U extends SavableSetting>
 	private void initialize() {
 		getSetting().createBinding(getInputNode());
 
-		FXTools.get().runFX(() -> {
+		FXTools.runFX(() -> {
 			setFillHeight(true);
 			setSpacing(5);
 

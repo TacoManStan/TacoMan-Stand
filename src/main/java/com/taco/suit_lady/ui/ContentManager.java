@@ -134,7 +134,7 @@ public class ContentManager
     private void onChange(@Nullable Content<?, ?> oldContent, @Nullable Content<?, ?> newContent) {
         // TODO - Execute onRemoved() and onSet via a JavaFX Task implementation. For now, though, this will work.
         // When the above is completed, don't forget to update the onRemoved() and onSet() Javadocs as well.
-        FXTools.get().runFX(() -> {
+        FXTools.runFX(() -> {
             if (oldContent != null) {
                 getContentPrimaryPane().getChildren().remove(oldContent.getController().root());
                 oldContent.getController().root().prefWidthProperty().unbind();
@@ -151,13 +151,13 @@ public class ContentManager
                 ctx().getBean(LogiCore.class).execute(() -> oldContent.onRemovedInternal());
             }
             if (newContent != null) {
-                FXTools.get().bindToParent(newContent.getController().root(), getContentPrimaryPane(), true);
-                FXTools.get().bindToParent(newContent.getOverlayHandler().root(), getContentPrimaryPane(), true);
+                FXTools.bindToParent(newContent.getController().root(), getContentPrimaryPane(), true);
+                FXTools.bindToParent(newContent.getOverlayHandler().root(), getContentPrimaryPane(), true);
                 
                 //                final List<Overlay> contentOverlays = newContent.getOverlayHandler().overlays().getCopy();
                 //                for (Overlay overlay: contentOverlays) {
                 //                    System.out.println("Binding overlay... " + overlay.getName());
-                //                    FXTools.get().bindToParent(overlay.root(), getContentForegroundPane(), true);
+                //                    FXTools.bindToParent(overlay.root(), getContentForegroundPane(), true);
                 //                }
                 
                 ctx().getBean(LogiCore.class).execute(() -> newContent.onSetInternal());

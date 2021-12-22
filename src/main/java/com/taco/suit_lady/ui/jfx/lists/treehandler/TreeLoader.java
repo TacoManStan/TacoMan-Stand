@@ -599,7 +599,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
     //TO-DOC
     public void revalidate()
     {
-        FXTools.get().runFX(() -> items.forEach(this::revalidate), true);
+        FXTools.runFX(() -> items.forEach(this::revalidate), true);
     }
     
     //TO-DOC

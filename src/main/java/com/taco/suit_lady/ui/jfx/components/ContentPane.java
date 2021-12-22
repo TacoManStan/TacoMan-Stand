@@ -25,11 +25,11 @@ public class ContentPane extends StackPane
         this.contentPane = loadContentPane();
         this.backgroundPane = loadBackgroundPane();
         
-        FXTools.get().bindToParent(foregroundPane, this, true);
-        FXTools.get().bindToParent(contentPane, this, true);
-        FXTools.get().bindToParent(backgroundPane, this, true);
+        FXTools.bindToParent(foregroundPane, this, true);
+        FXTools.bindToParent(contentPane, this, true);
+        FXTools.bindToParent(backgroundPane, this, true);
         
-        FXTools.get().togglePickOnBounds(this, false);
+        FXTools.togglePickOnBounds(this, false);
     }
     
     //<editor-fold desc="--- PROPERTIES ---">

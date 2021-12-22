@@ -35,7 +35,7 @@ public abstract class SimplePaintCommand
     
     protected void repaintOwners()
     {
-        owners.forEach(canvas -> FXTools.get().runFX(() -> canvas.repaint(), true));
+        owners.forEach(canvas -> FXTools.runFX(() -> canvas.repaint(), true));
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
@@ -91,7 +91,7 @@ public abstract class SimplePaintCommand
     public final void paint(BoundCanvas canvas)
     {
         if (isActive())
-            FXTools.get().runFX(() -> sync(() -> {
+            FXTools.runFX(() -> sync(() -> {
                 if (getAutoRemoveCondition().test(canvas))
                     canvas.removePaintCommand(this);
                 else

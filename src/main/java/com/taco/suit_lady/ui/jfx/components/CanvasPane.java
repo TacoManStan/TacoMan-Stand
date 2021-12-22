@@ -26,7 +26,7 @@ public class CanvasPane extends AnchorPane
         this.canvas = new BoundCanvas(this);
         
         getChildren().add(canvas);
-        FXTools.get().setAnchors(canvas, left, right, top, bottom);
+        FXTools.setAnchors(canvas, left, right, top, bottom);
     }
     
     public final BoundCanvas canvas()

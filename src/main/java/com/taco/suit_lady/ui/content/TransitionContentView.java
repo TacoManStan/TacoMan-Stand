@@ -145,7 +145,7 @@ public class TransitionContentView<P extends Pane> extends ContentView<P>
                     onShownHandler.handle(event);
             });
             
-            FXTools.get().runFX(() -> {
+            FXTools.runFX(() -> {
                 if (newContent != null) {
                     newContent.maxWidthProperty().bind(rootPane.widthProperty());
                     newContent.maxHeightProperty().bind(rootPane.heightProperty());

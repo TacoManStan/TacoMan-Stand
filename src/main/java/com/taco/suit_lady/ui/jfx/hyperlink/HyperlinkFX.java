@@ -135,8 +135,8 @@ public class HyperlinkFX
             final Hyperlink hyperlinkCopy = hyperlinkProperty.get();
             if (hyperlinkCopy != null)
             {
-                hyperlinkCopy.pseudoClassStateChanged(FXTools.get().INVALID, invalidProperty().get());
-                hyperlinkCopy.pseudoClassStateChanged(FXTools.get().DISABLED, disabledProperty().get());
+                hyperlinkCopy.pseudoClassStateChanged(FXTools.INVALID, invalidProperty().get());
+                hyperlinkCopy.pseudoClassStateChanged(FXTools.DISABLED, disabledProperty().get());
             }
         };
         hyperlinkProperty.addListener(listener);
@@ -272,7 +272,7 @@ public class HyperlinkFX
                                                         @Override public void run()
                                                         {
                                                             if (!doubleClick)
-                                                                FXTools.get().runFX(() -> leftClickHandler.handle(new ActionEvent()), false);
+                                                                FXTools.runFX(() -> leftClickHandler.handle(new ActionEvent()), false);
                                                         }
                                                     }, 250);
                                                 }

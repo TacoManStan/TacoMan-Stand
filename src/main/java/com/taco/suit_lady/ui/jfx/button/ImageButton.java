@@ -288,7 +288,7 @@ public class ImageButton
      * @param event The triggering {@link MouseEvent} object.
      */
     private void onMouseReleased(MouseEvent event) {
-        if (Objects.equals(event.getSource(), imagePane) && FXTools.get().isMouseOnEventSource(event) && !isDisabled()) {
+        if (Objects.equals(event.getSource(), imagePane) && FXTools.isMouseOnEventSource(event) && !isDisabled()) {
             toggle();
             onAction();
         }
@@ -424,7 +424,7 @@ public class ImageButton
         
         final Runnable actionResponderFX = getActionResponderFX();
         if (actionResponderFX != null)
-            FXTools.get().runFX(actionResponderFX, false);
+            FXTools.runFX(actionResponderFX, false);
     }
     
     //</editor-fold>

@@ -151,7 +151,7 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
     }
     
     private void refreshCanvas() {
-        TaskTools.sync(lock, () -> FXTools.get().runFX(() -> {
+        TaskTools.sync(lock, () -> FXTools.runFX(() -> {
             final BoundCanvas canvas = getController().canvas();
             final double newWidth = getController().canvas().getWidth();
             final double newHeight = getController().canvas().getHeight();
@@ -161,7 +161,7 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
                 debugger().print("Cancelling Worker...");
                 worker.cancel(false);
             }
-            FXTools.get().clearCanvasUnsafe(ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas());
+            FXTools.clearCanvasUnsafe(ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas());
             
             debugger().print("In Refresh 2...");
     
@@ -171,7 +171,7 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
             worker = new Task<>() {
                 @Override
                 protected Void call() {
-                    FXTools.get().runFX(() -> getCoverPage().getController().getProgressBar().setVisible(true), true);
+                    FXTools.runFX(() -> getCoverPage().getController().getProgressBar().setVisible(true), true);
                     debugger().print("In Refresh Task A...");
                     while (!iterator.isComplete()) {
                         iterator.next();
@@ -210,7 +210,7 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
     }
     
     private void redraw(MandelbrotIterator.MandelbrotColor[][] colors) {
-        FXTools.get().runFX(() -> TaskTools.sync(lock, () -> {
+        FXTools.runFX(() -> TaskTools.sync(lock, () -> {
             getCoverPage().getController().getProgressBar().setVisible(false);
             for (int i = 0; i < colors.length; i++)
                 for (int j = 0; j < colors[i].length; j++) {
@@ -242,7 +242,7 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
             selectionCirclePaintCommand.setBounds(moveData.getBounds());
         });
         //        final AppUI ui = ctx().getBean(AppUI.class);
-        //        FXTools.get().drawRectangle(ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas(), moveData.getAsPaintable(), true, false);
+        //        FXTools.drawRectangle(ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas(), moveData.getAsPaintable(), true, false);
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">

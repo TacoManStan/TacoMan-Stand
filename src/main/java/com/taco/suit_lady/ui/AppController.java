@@ -213,7 +213,7 @@ public class AppController
         getAppUI().init();
         
         contentAnchorPane.getChildren().add(getAppUI().getContentManager().getContentBasePane());
-        FXTools.get().setAnchors(getAppUI().getContentManager().getContentBasePane(), 0.0);
+        FXTools.setAnchors(getAppUI().getContentManager().getContentBasePane(), 0.0);
         
         initImageButtons();
         initSidebar();
@@ -227,8 +227,8 @@ public class AppController
                         consoleSelectedInstanceOnlyCheckBox.selectedProperty()
                 ));
         
-        FXTools.get().constructDraggableNode(dragBar);
-        FXTools.get().constructResizableNode(getStage(), cornerResizePane, topResizePane, bottomResizePane, leftResizePane, rightResizePane,
+        FXTools.constructDraggableNode(dragBar);
+        FXTools.constructResizableNode(getStage(), cornerResizePane, topResizePane, bottomResizePane, leftResizePane, rightResizePane,
                                              minimizeImagePane, maximizeImagePane, closeImagePane, settingsImagePane, sidebarImagePane);
         
         bookshelfTitleLabel.textProperty().bind(
@@ -560,7 +560,7 @@ public class AppController
         sidebarPane.setPrefWidth(PUI_WIDTH);
         STAGE_MIN_WIDTH = stage.getWidth() - PUI_WIDTH;
         STAGE_MIN_HEIGHT = stage.getHeight();
-        FXTools.get().lockSize(stage, STAGE_MIN_WIDTH + PUI_WIDTH, STAGE_MIN_HEIGHT);
+        FXTools.lockSize(stage, STAGE_MIN_WIDTH + PUI_WIDTH, STAGE_MIN_HEIGHT);
     }
     
     // </editor-fold>
@@ -636,7 +636,7 @@ public class AppController
             
             stageWidthProperty.removeListener(stageWidthChangeListener);
             stage.setWidth(end_stage_width);
-            FXTools.get().lockSize(stage, end_stage_pref_width, FXTools.get().NO_CHANGE_SIZE_LOCK);
+            FXTools.lockSize(stage, end_stage_pref_width, FXTools.NO_CHANGE_SIZE_LOCK);
             
             sidebarPaneAnchor.setVisible(!hiding);
             sidebarPaneAnchor.setPrefWidth(PUI_WIDTH);

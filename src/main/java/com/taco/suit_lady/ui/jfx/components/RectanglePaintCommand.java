@@ -76,6 +76,6 @@ public class RectanglePaintCommand extends SimplePaintCommand
     {
         final Rectangle rect = getRectangle();
         if (rect != null)
-            FXTools.get().drawRectangle(canvas, rect, false, isFill());
+            FXTools.drawRectangle(canvas, rect, false, isFill());
     }
 }

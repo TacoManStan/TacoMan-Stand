@@ -226,7 +226,7 @@ public class BoundCanvas extends Canvas
     protected void repaint()
     {
         sync(() -> {
-            FXTools.get().clearCanvasUnsafe(this);
+            FXTools.clearCanvasUnsafe(this);
             for (PaintCommandable paintCommand: getPaintCommands())
                 paintCommand.paint(this);
             

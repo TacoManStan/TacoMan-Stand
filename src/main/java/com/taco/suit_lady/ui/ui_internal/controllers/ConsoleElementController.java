@@ -119,7 +119,7 @@ public final class ConsoleElementController extends CellController<WrappingTreeC
     
     private void addLabel(Label label)
     {
-        FXTools.get().runFX(() -> contentHBox.getChildren().add(label), true);
+        FXTools.runFX(() -> contentHBox.getChildren().add(label), true);
     }
     
     //</editor-fold>

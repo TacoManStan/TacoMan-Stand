@@ -112,7 +112,7 @@ public class Console
                 final List<WrappingTreeLoader<ConsoleMessageable<?>, ConsoleElementController>> activeConsoleHandlers = getActiveConsoles();
                 while (change.next())
                     if (change.wasAdded())
-                        activeConsoleHandlers.forEach(treeHandler -> FXTools.get().runFX(
+                        activeConsoleHandlers.forEach(treeHandler -> FXTools.runFX(
                                 () -> change.getAddedSubList().forEach(
                                         message -> treeHandler.generateCellData(
                                                 CONSOLE_ROOT_NAME,
@@ -194,7 +194,7 @@ public class Console
     private void append(String str)
     {
         // CHANGE-HERE
-        FXTools.get().runFX(() -> messages.add(new SimpleConsoleMessage(str)), false);
+        FXTools.runFX(() -> messages.add(new SimpleConsoleMessage(str)), false);
     }
     
     //</editor-fold>
@@ -205,7 +205,7 @@ public class Console
     {
         ExceptionTools.nullCheck(consoleContainer, "Console UI Data Container");
     
-        FXTools.get().runFX(() -> {
+        FXTools.runFX(() -> {
             // treeView.setShowRoot(false); // Disabled temporarily because for some reason hiding the root causes messages to be truncated.
         
             // The below binding is used to trigger a refresh whenever a console display checkbox is toggled.

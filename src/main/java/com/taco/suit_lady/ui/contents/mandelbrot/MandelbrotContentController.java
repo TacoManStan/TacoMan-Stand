@@ -78,7 +78,7 @@ public class MandelbrotContentController extends ContentController
     @Override
     public void initialize() {
         canvasAnchorPane.getChildren().add(canvasPane);
-        FXTools.get().setAnchors(canvasPane, 0, 0, 0, 0);
+        FXTools.setAnchors(canvasPane, 0, 0, 0, 0);
         
         canvas().setOnMousePressed(event -> onMousePressed(event));
         canvas().setOnMouseReleased(event -> onMouseReleased(event));
@@ -102,14 +102,14 @@ public class MandelbrotContentController extends ContentController
     
     private void onMouseReleased(MouseEvent e) {
         sync(() -> {
-            if (FXTools.get().isMouseOnNode(canvas()))
+            if (FXTools.isMouseOnNode(canvas()))
                 getDragConsumer().accept(generateDragData(e));
         });
     }
     
     private void onMouseDragged(MouseEvent e) {
         sync(() -> {
-            if (FXTools.get().isMouseOnNode(canvas()))
+            if (FXTools.isMouseOnNode(canvas()))
                 getMoveConsumer().accept(generateDragData(e));
         });
     }

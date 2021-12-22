@@ -8,6 +8,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.IndexedCell;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.TreeCell;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -30,8 +31,8 @@ import java.util.function.Function;
  * @param <C> The type of {@link CellController} assigned to the {@link IndexedCell}.
  */
 // TO-EXPAND
-public class CellControlManager<T, C extends CellController<T>>
-{
+public class CellControlManager<T, C extends CellController<T>> {
+    
     private final Lock lock;
     
     private final IndexedCell<T> wrappedCell;
@@ -65,8 +66,7 @@ public class CellControlManager<T, C extends CellController<T>>
      * @param wrappedCell       The wrapped {@link IndexedCell}.
      * @param controllerFactory The {@link Function} used to retrieve a new {@link CellController} instance for the {@link #getWrappedCell() Wrapped Cell} whenever <code><i>{@link #doUpdateItem(Object, boolean)}</i></code> is called.
      */
-    public CellControlManager(IndexedCell<T> wrappedCell, Function<T, C> controllerFactory)
-    {
+    public CellControlManager(IndexedCell<T> wrappedCell, Function<T, C> controllerFactory) {
         this.lock = new ReentrantLock();
         
         this.wrappedCell = wrappedCell;
@@ -82,8 +82,7 @@ public class CellControlManager<T, C extends CellController<T>>
      *
      * @return The {@link Lock} used to synchronize this {@link CellControlManager}.
      */
-    protected final Lock getLock()
-    {
+    protected final Lock getLock() {
         return lock;
     }
     
@@ -92,8 +91,7 @@ public class CellControlManager<T, C extends CellController<T>>
      *
      * @return The immutable {@link IndexedCell} object wrapped by this {@link CellControlManager}.
      */
-    public final IndexedCell<T> getWrappedCell()
-    {
+    public final IndexedCell<T> getWrappedCell() {
         return wrappedCell;
     }
     
@@ -102,8 +100,7 @@ public class CellControlManager<T, C extends CellController<T>>
      *
      * @return The {@link Function} used to retrieve the appropriate {@link CellController} for the {@link #getWrappedCell() Wrapped Cell} whenever <code><i>{@link #doUpdateItem(Object, boolean)}</i></code> is called.
      */
-    protected final Function<T, C> getControllerFactory()
-    {
+    protected final Function<T, C> getControllerFactory() {
         return controllerFactory;
     }
     
@@ -112,8 +109,7 @@ public class CellControlManager<T, C extends CellController<T>>
      *
      * @return The {@link ReadOnlyObjectProperty} containing the current {@link CellController} assigned to the {@link #getWrappedCell() Wrapped Cell}.
      */
-    public final ReadOnlyObjectProperty<C> controllerProperty()
-    {
+    public final ReadOnlyObjectProperty<C> controllerProperty() {
         return controllerProperty.getReadOnlyProperty();
     }
     
@@ -122,8 +118,7 @@ public class CellControlManager<T, C extends CellController<T>>
      *
      * @return The current {@link CellController} assigned to the {@link #getWrappedCell() Wrapped Cell}.
      */
-    public final C getController()
-    {
+    public final C getController() {
         return controllerProperty.get();
     }
     
@@ -132,8 +127,7 @@ public class CellControlManager<T, C extends CellController<T>>
      *
      * @param controller The {@link CellController} being assigned to the {@link #getWrappedCell() Wrapped Cell}.
      */
-    private void setController(C controller)
-    {
+    private void setController(C controller) {
         controllerProperty.set(controller);
     }
     
@@ -145,9 +139,8 @@ public class CellControlManager<T, C extends CellController<T>>
      * @param item  The new {@link T item} for the {@link IndexedCell}.
      * @param empty Whether this {@link IndexedCell} represents data from the list. If it is empty, then it does not represent any domain data, but is a cell being used to render an "empty" row. *Copied from IndexedCell*
      */
-    protected void doUpdateItem(T item, boolean empty)
-    {
-        FXTools.get().runFX(() -> {
+    protected void doUpdateItem(T item, boolean empty) {
+        FXTools.runFX(() -> {
             if (!empty) {
                 if (item != null) {
                     final C controller = updateController(item);
@@ -170,8 +163,7 @@ public class CellControlManager<T, C extends CellController<T>>
      *
      * @return The newly retrieved and assigned {@link CellController} instance as defined by the {@link #getControllerFactory() Controller Factory}.
      */
-    private C updateController(T item)
-    {
+    private @NotNull C updateController(T item) {
         final C controller = controllerFactory.apply(item);
         
         controller.setContents(item);

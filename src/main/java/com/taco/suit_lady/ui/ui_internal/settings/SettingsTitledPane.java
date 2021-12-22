@@ -23,7 +23,7 @@ public class SettingsTitledPane extends TitledPane
         {
             @Override public void onChanged(Change<? extends SettingGroup<? extends SettingGroupController>> change)
             {
-                FXTools.get().runFX(() -> {
+                FXTools.runFX(() -> {
                     while (change.next())
                     {
                         if (change.wasAdded())
@@ -46,7 +46,7 @@ public class SettingsTitledPane extends TitledPane
         
         //
         
-        FXTools.get().applyCellFactory(settingGroupListView);
+        FXTools.applyCellFactory(settingGroupListView);
         
         textProperty().bind(settingContainer.nameProperty());
         setContent(settingGroupListView);

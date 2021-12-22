@@ -36,7 +36,7 @@ public class OverlayHandler
         this.overlays = new ReadOnlyObservableListWrapper<>(initInitialOverlayList(initialOverlays));
         
         this.root = new StackPane();
-        FXTools.get().togglePickOnBounds(root, false);
+        FXTools.togglePickOnBounds(root, false);
         
         ListTools.applyListener(lock, overlays, (op1, op2, opType, triggerType) -> {
             System.out.println("Operation Event Triggered:  [" + op1 + "  |  " + op2 + "  |  " + opType + "  |  " + triggerType + "]");
@@ -111,11 +111,11 @@ public class OverlayHandler
     private void refreshOverlays() {
         sync(() -> {
             FXCollections.sort(overlays);
-            FXTools.get().runFX(() -> {
+            FXTools.runFX(() -> {
                 root().getChildren().retainAll();
                 for (Overlay overlay: overlays) {
-                    FXTools.get().bindToParent(overlay.root(), root(), true);
-                    FXTools.get().togglePickOnBounds(overlay.root(), false);
+                    FXTools.bindToParent(overlay.root(), root(), true);
+                    FXTools.togglePickOnBounds(overlay.root(), false);
                 }
             }, true);
         });

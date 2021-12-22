@@ -16,13 +16,13 @@ public class CanvasContentPane extends ContentPane
         this.overlayCanvasPane = new CanvasPane(this);
         this.backdropCanvasPane = new CanvasPane(this);
     
-        FXTools.get().bindToParent(overlayCanvasPane, this, false);
-        FXTools.get().bindToParent(backdropCanvasPane, this, false);
+        FXTools.bindToParent(overlayCanvasPane, this, false);
+        FXTools.bindToParent(backdropCanvasPane, this, false);
 
         getChildren().add(overlayCanvasPane);
         getChildren().add(0, backdropCanvasPane);
         
-        FXTools.get().togglePickOnBounds(this, false);
+        FXTools.togglePickOnBounds(this, false);
     }
     
     protected final CanvasPane getOverlayCanvasPane()

@@ -47,6 +47,7 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;
 import javafx.util.StringConverter;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -60,14 +61,8 @@ import java.util.function.Consumer;
 /**
  * Contains a variety of classes that provide JavaFX utility features.
  */
-public class FXTools
-{
-    public static FXTools get()
-    {
-        return TB.fx();
-    }
-    
-    public FXTools() { }
+public class FXTools {
+    private FXTools() { } //No Instance    
     
     //<editor-fold desc="EDT/FX Thread">
     
@@ -78,8 +73,7 @@ public class FXTools
      *
      * @see Platform#isFxApplicationThread()
      */
-    public boolean isFXThread()
-    {
+    public static boolean isFXThread() {
         return Platform.isFxApplicationThread();
     }
     
@@ -90,8 +84,7 @@ public class FXTools
      *
      * @see EventQueue#isDispatchThread()
      */
-    public boolean isEDT()
-    {
+    public static boolean isEDT() {
         return EventQueue.isDispatchThread();
     }
     
@@ -104,8 +97,7 @@ public class FXTools
      * @param wait     True if this method should block until the Runnable is finished execution, false if this method should return as soon as the Runnable has been published.
      *                 //
      */
-    public void runFX(Runnable runnable, boolean wait)
-    {
+    public static void runFX(Runnable runnable, boolean wait) {
         ExceptionTools.nullCheck(runnable, "Runnable cannot be null");
         try {
             if (isFXThread())
@@ -125,8 +117,7 @@ public class FXTools
      *
      * @param callable The Callable to be executed.
      */
-    public <V> V runFX(Callable<V> callable)
-    {
+    public static <V> V runFX(Callable<V> callable) {
         ExceptionTools.nullCheck(callable, "Callable cannot be null");
         try {
             if (isFXThread())
@@ -158,8 +149,7 @@ public class FXTools
      * @param runnable The FXRunnable being executed.
      * @param wait     True if this method should block until the Runnable is finished execution, false if this method should return as soon as the Runnable has been published.
      */
-    public void runEDT(Runnable runnable, boolean wait)
-    {
+    public static void runEDT(Runnable runnable, boolean wait) {
         ExceptionTools.nullCheck(runnable, "Runnable cannot be null");
         try {
             if (EventQueue.isDispatchThread())
@@ -178,8 +168,7 @@ public class FXTools
      *
      * @param callable The Callable to be executed.
      */
-    public <V> V runEDT(Callable<V> callable)
-    {
+    public static <V> V runEDT(Callable<V> callable) {
         ExceptionTools.nullCheck(callable, "Callable cannot be null");
         try {
             if (isFXThread())
@@ -205,8 +194,7 @@ public class FXTools
     /**
      * Throws a {@link RuntimeException} if the current {@link Thread} is not the FX Thread.
      */
-    public void requireFX()
-    {
+    public static void requireFX() {
         if (!isFXThread())
             throw ExceptionTools.ex(new IllegalStateException("Operation must be executed on the FX Thread."));
     }
@@ -214,8 +202,7 @@ public class FXTools
     /**
      * Throws a {@link RuntimeException} if the current {@link Thread} is not the EDT.
      */
-    public void requireEDT()
-    {
+    public static void requireEDT() {
         if (!isEDT())
             throw ExceptionTools.ex(new IllegalStateException("Operation must be executed on the EDT."));
     }
@@ -229,8 +216,7 @@ public class FXTools
      *
      * @return The {@code key code} for the specified {@link KeyCode}.
      */
-    public int getKeyCode(KeyCode keyCode)
-    {
+    public static int getKeyCode(KeyCode keyCode) {
         return ExceptionTools.nullCheck(keyCode, "JFX KeyCode").getCode();
     }
     
@@ -241,12 +227,10 @@ public class FXTools
      *
      * @return The {@code key char} for the specified {@link KeyCode}.
      */
-    public String getKeyChar(KeyCode keyCode)
-    {
+    public static String getKeyChar(KeyCode keyCode) {
         return ExceptionTools.nullCheck(keyCode, "JFX KeyCode").getChar();
     }
     
-    //
     
     /**
      * Returns a custom {@link DataFormat} with the specified id name.
@@ -259,8 +243,7 @@ public class FXTools
      *
      * @return A custom {@link DataFormat} with the specified id name.
      */
-    public DataFormat getDataFormat(String id)
-    {
+    public static @NotNull DataFormat getDataFormat(String id) {
         DataFormat format = DataFormat.lookupMimeType(id);
         if (format != null)
             return format;
@@ -276,8 +259,7 @@ public class FXTools
      *
      * @return True if the removal was successful, false otherwise.
      */
-    public boolean removeFromParent(Node node)
-    {
+    public static boolean removeFromParent(Node node) {
         if (node != null) {
             Parent parent = node.getParent();
             if (parent != null)
@@ -295,8 +277,7 @@ public class FXTools
      * @param node    The {@link Node} being shown/hidden.
      * @param visible True if the {@link Node} should be shown, false if it should be hidden.
      */
-    public void setVisible(Node node, boolean visible)
-    {
+    public static void setVisible(Node node, boolean visible) {
         if (node != null) {
             node.managedProperty().bind(node.visibleProperty());
             node.setVisible(visible);
@@ -316,8 +297,7 @@ public class FXTools
      *
      * @return The children {@link Node Nodes} of the specified {@link TextFlow TextFlows} combined into a single {@link TextFlow}.
      */
-    public TextFlow combineToFlow(TextFlow textFlow, Object... objs)
-    {
+    public static @Nullable TextFlow combineToFlow(TextFlow textFlow, Object @NotNull ... objs) {
         ArrayList<Node> textChildren = new ArrayList<>();
         for (Object obj: objs)
             if (obj == null)
@@ -341,8 +321,7 @@ public class FXTools
      *
      * @return The children {@link Node Nodes} of the specified {@link TextFlow TextFlows} combined into a single {@link TextFlow}.
      */
-    public TextFlow combineToFlow(Object... objs)
-    {
+    public static @Nullable TextFlow combineToFlow(Object @NotNull ... objs) {
         ArrayList<Node> textChildren = new ArrayList<>();
         for (Object obj: objs)
             if (obj == null)
@@ -362,8 +341,7 @@ public class FXTools
      *
      * @see #combineToFlow(Object...)
      */
-    private void addFlowObj(Object obj, ArrayList<Node> children)
-    {
+    private static void addFlowObj(Object obj, ArrayList<Node> children) {
         if (obj != null)
             if (obj instanceof String)
                 addFlowObj(new Text((String) obj), children);
@@ -408,8 +386,8 @@ public class FXTools
      *
      * @return The converted {@code TextField} (the same {@code TextField} that was passed as a parameter).
      */
-    public TextField numberTextField(TextField textField, boolean allowDecimals)
-    {
+    @Contract("_, _ -> param1")
+    public static @NotNull TextField numberTextField(TextField textField, boolean allowDecimals) {
         return numberTextField(textField, allowDecimals, 0);
     }
     
@@ -426,8 +404,8 @@ public class FXTools
      *
      * @return The converted {@code TextField} (the same {@code TextField} that was passed as a parameter).
      */
-    public TextField numberTextField(TextField textField, boolean allowDecimals, double initialValue)
-    {
+    @Contract("_, _, _ -> param1")
+    public static @NotNull TextField numberTextField(TextField textField, boolean allowDecimals, double initialValue) {
         ExceptionTools.nullCheck(textField, "TextField cannot be null.");
         
         textField.addEventFilter(KeyEvent.KEY_TYPED, _keyEvent -> {
@@ -443,7 +421,7 @@ public class FXTools
             Character[] _numbers = ArrayTools.concat(
                     new Character[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', 'k', 'm', 'b'},
                     (allowDecimals ? new Character[]{'.'} : new Character[]{})
-            );
+                                                    );
             int _periodCount = 0;
             
             for (char _c: _nStr.toCharArray())
@@ -494,8 +472,7 @@ public class FXTools
      *                Set the name of the {@link Button} to empty if you want to use the existing name of the {@link Menu}.
      * @param handler The {@link EventHandler} for when the {@link Button} is pressed. Null to use the default handler of the specified {@link Button}.
      */
-    public void constructButtonMenu(Menu menu, Button button, EventHandler<ActionEvent> handler)
-    {
+    public static void constructButtonMenu(Menu menu, Button button, EventHandler<ActionEvent> handler) {
         if (menu != null && button != null) {
             if (handler != null)
                 button.setOnAction(handler);
@@ -522,8 +499,7 @@ public class FXTools
      * @param observable The {@link ObservableStringValue} that will retrieve the information for the {@link WebView}.
      * @param updaters   Any {@link ObservableValue observable values} that will trigger an update when changed. Leave empty to only observe the specified {@link ObservableStringValue}.
      */
-    public void constructUpdatableWebView(WebView webView, ObservableStringValue observable, ObservableValue... updaters)
-    {
+    public static void constructUpdatableWebView(WebView webView, ObservableStringValue observable, ObservableValue... updaters) {
         constructUpdatableWebView(webView, new SimpleObjectProperty<>(observable), updaters);
     }
     
@@ -534,8 +510,7 @@ public class FXTools
      * @param observable The {@link ObservableValue} that will retrieve the information for the {@link WebView}.
      * @param updaters   Any {@link ObservableValue observable values} that will trigger an update when changed. Leave empty to only observe the specified {@link ObservableValue}.
      */
-    public void constructUpdatableWebView(WebView webView, ObservableValue<? extends ObservableStringValue> observable, ObservableValue... updaters)
-    {
+    public static void constructUpdatableWebView(@NotNull WebView webView, @NotNull ObservableValue<? extends ObservableStringValue> observable, ObservableValue @NotNull ... updaters) {
         webView.setFocusTraversable(false);
         webView.setOnMouseClicked(Event::consume);
         webView.setOnMousePressed(Event::consume);
@@ -576,8 +551,7 @@ public class FXTools
      *
      * @return The integer value from the specified {@link TextField}.
      */
-    public int getIntValue(TextField textField)
-    {
+    public static int getIntValue(@NotNull TextField textField) {
         return (int) CalculationTools.getLongkmb(textField.getText(), false);
     }
     
@@ -590,8 +564,7 @@ public class FXTools
      *
      * @return The integer value from the specified {@link TextField}.
      */
-    public long getLongValue(TextField textField)
-    {
+    public static long getLongValue(@NotNull TextField textField) {
         return CalculationTools.getLongkmb(textField.getText(), false);
     }
     
@@ -604,8 +577,7 @@ public class FXTools
      *
      * @return The double value from the specified {@link TextField}.
      */
-    public double getValue(TextField textField)
-    {
+    public static double getValue(@NotNull TextField textField) {
         return CalculationTools.getkmb(textField.getText(), false);
     }
     
@@ -616,8 +588,7 @@ public class FXTools
      * @param clear    True if the specified {@link ComboBox} should be cleared (set to a blank val     false if the specified {@link ComboBox} should be set to its default (first)
      *                 value.
      */
-    public <T> void reset(ComboBox<T> comboBox, boolean clear)
-    {
+    public static <T> void reset(ComboBox<T> comboBox, boolean clear) {
         if (clear || !comboBox.getItems().isEmpty())
             comboBox.setValue(null);
         else
@@ -631,8 +602,7 @@ public class FXTools
      * @param editable       The {@link ChildEditable} that is to be used to edit the children.
      * @param includeParents True if the parents should also be included, false otherwise.
      */
-    public void editChildren(Parent parent, ChildEditable editable, boolean includeParents)
-    {
+    public static void editChildren(Parent parent, @NotNull ChildEditable editable, boolean includeParents) {
         getChildren(parent, includeParents).forEach(editable::edit);
     }
     
@@ -646,8 +616,7 @@ public class FXTools
      *
      * @return All of the children {@link Node Nodes} of the specified {@link Parent}.
      */
-    public ArrayList<Node> getChildren(Parent parent, boolean includeParents)
-    {
+    public static @NotNull ArrayList<Node> getChildren(@NotNull Parent parent, boolean includeParents) {
         ArrayList<Node> children = new ArrayList<>();
         parent.getChildrenUnmodifiable().stream().filter(child -> child instanceof Parent).forEach(child -> {
             Parent childParent = (Parent) child;
@@ -666,8 +635,7 @@ public class FXTools
      * @param enabled  True if all of the editable {@link Node Nodes} should be enabled, false if they should be disabled.
      * @param excludes An array of {@link Node Nodes} that should not be affected by this method.
      */
-    public void setAllEnabled(Parent parent, boolean enabled, Node... excludes)
-    {
+    public static void setAllEnabled(Parent parent, boolean enabled, Node @NotNull ... excludes) {
         ArrayList<Node> excludes_list = new ArrayList<>(excludes.length);
         excludes_list.addAll(java.util.Arrays.asList(excludes));
         for (Node c: excludes)
@@ -690,8 +658,7 @@ public class FXTools
      *                                <p>
      *                                See {@link Tooltip#setConsumeAutoHidingEvents(boolean)}
      */
-    public void showTooltip(Stage owner, Control control, String tooltipText, boolean consumeAutoHidingEvents)
-    {
+    public static void showTooltip(Stage owner, @NotNull Control control, String tooltipText, boolean consumeAutoHidingEvents) {
         Point2D p = control.localToScene(0.0, 0.0);
         
         Tooltip oldTooltip = control.getTooltip();
@@ -705,7 +672,7 @@ public class FXTools
                 owner,
                 p.getX() + control.getScene().getX() + control.getScene().getWindow().getX() + (control.getWidth() - (control.getWidth() / 3.0)),
                 p.getY() + control.getScene().getY() + control.getScene().getWindow().getY() + (control.getHeight() - (control.getHeight() / 3.0))
-        );
+                       );
         newTooltip.setOnHidden((final WindowEvent event) -> control.setTooltip(oldTooltip));
     }
     
@@ -716,8 +683,8 @@ public class FXTools
      *
      * @return A new {@link Tooltip} with the specified text.
      */
-    public Tooltip createTooltip(String text)
-    {
+    @Contract("_ -> new")
+    public static @NotNull Tooltip createTooltip(String text) {
         return new Tooltip(text);
     }
     
@@ -736,13 +703,12 @@ public class FXTools
      *
      * @return The fully implemented {@link ContextMenu popup menu} created for and attached to the specified {@link Node}.
      */
-    public ContextMenu onClick(
-            Node node, boolean handlePrevious,
+    public static @NotNull ContextMenu onClick(
+            @NotNull Node node, boolean handlePrevious,
             EventHandler<MouseEvent> onClick,
             EventHandler<MouseEvent> onDoubleClick,
             EventHandler<MouseEvent> onMiddleClick,
-            SimplePredicate popupCondition, MenuItem... items)
-    {
+            SimplePredicate popupCondition, MenuItem... items) {
         ContextMenu menu = new ContextMenu(items);
         EventHandler<? super MouseEvent> oldOnClick = node.getOnMouseClicked();
         node.setOnMouseClicked(event -> {
@@ -774,8 +740,7 @@ public class FXTools
      *
      * @return A new {@link CustomMenuItem} with the specified text, {@link Tooltip}, and {@link EventHandler}.
      */
-    public CustomMenuItem createMenuItem(String text, Tooltip tooltip, EventHandler<ActionEvent> eventHandler)
-    {
+    public static @NotNull CustomMenuItem createMenuItem(String text, Tooltip tooltip, EventHandler<ActionEvent> eventHandler) {
         return createMenuItem(new Label(text), tooltip, eventHandler);
     }
     
@@ -788,8 +753,7 @@ public class FXTools
      *
      * @return A new {@link CustomMenuItem} with the specified {@link Node}, {@link Tooltip}, and {@link EventHandler}.
      */
-    public CustomMenuItem createMenuItem(Node node, Tooltip tooltip, EventHandler<ActionEvent> eventHandler)
-    {
+    public static @NotNull CustomMenuItem createMenuItem(Node node, Tooltip tooltip, EventHandler<ActionEvent> eventHandler) {
         CustomMenuItem item = new CustomMenuItem(node);
         if (tooltip != null)
             Tooltip.install(node, tooltip);
@@ -807,8 +771,7 @@ public class FXTools
      *
      * @return True if the style class addition/removal was successful, false otherwise.
      */
-    public boolean applyCSS(Node node, boolean active, String... styleClasses)
-    {
+    public static boolean applyCSS(Node node, boolean active, String... styleClasses) {
         if (node != null && styleClasses != null) {
             for (String styleClass: styleClasses)
                 if (styleClass != null)
@@ -835,8 +798,7 @@ public class FXTools
      *
      * @throws NullPointerException If the specified {@link Node} or styles array is null.
      */
-    public void applyCSSInLine(Node node, boolean overwrite, String... styles)
-    {
+    public static void applyCSSInLine(Node node, boolean overwrite, String... styles) {
         Objects.requireNonNull(node, "Node cannot be null");
         Objects.requireNonNull(styles, "Styles cannot be null");
         String css = node.getStyle();
@@ -853,22 +815,20 @@ public class FXTools
      *
      * @return True if the mouse is on the specified {@link Node} based on the specified {@link MouseEvent}, false otherwise.
      */
-    public boolean isMouseOnNode(Node node)
-    {
+    public static boolean isMouseOnNode(Node node) {
         Objects.requireNonNull(node, "Node cannot be null");
         return node.isHover();
     }
     
-    public boolean isMouseOnEventSource(MouseEvent event)
-    {
+    public static boolean isMouseOnEventSource(MouseEvent event) {
         Objects.requireNonNull(event, "Event cannot be null");
         if (event.getSource() instanceof Node)
             return isMouseOnNode((Node) event.getSource());
         return false;
     }
     
-    public <T extends Node> T setAnchors(T node, double left, double right, double top, double bottom)
-    {
+    
+    public static <T extends Node> T setAnchors(T node, double left, double right, double top, double bottom) {
         ExceptionTools.nullCheck(node, "Input Node");
         
         AnchorPane.setLeftAnchor(node, left);
@@ -879,27 +839,24 @@ public class FXTools
         return node;
     }
     
-    public <T extends Node> T setAnchors(T node)
-    {
+    public static <T extends Node> T setAnchors(T node) {
         return setAnchors(node, 0, 0, 0, 0);
     }
     
-    public <T extends Node> T setAnchors(T node, double value)
-    {
+    public static <T extends Node> T setAnchors(T node, double value) {
         return setAnchors(node, value, value, value, value);
     }
     
-    public <T extends Node> T setAnchors(T node, double lr, double tb)
-    {
+    public static <T extends Node> T setAnchors(T node, double lr, double tb) {
         return setAnchors(node, lr, lr, tb, tb);
     }
     
-    public void drawRectangle(Canvas canvas, Rectangle rectangle, boolean wipeCanvas, boolean fill)
-    {
+    
+    public static void drawRectangle(Canvas canvas, Rectangle rectangle, boolean wipeCanvas, boolean fill) {
         ExceptionTools.nullCheck(canvas, "Canvas Input");
         ExceptionTools.nullCheck(rectangle, "Rectangle Input");
         
-        FXTools.get().runFX(() -> {
+        FXTools.runFX(() -> {
             if (wipeCanvas)
                 clearCanvasUnsafe(canvas);
             
@@ -914,8 +871,7 @@ public class FXTools
         }, true);
     }
     
-    public void fillRectangle(Canvas canvas, Rectangle rectangle, boolean wipeCanvas)
-    {
+    public static void fillRectangle(Canvas canvas, Rectangle rectangle, boolean wipeCanvas) {
         ExceptionTools.nullCheck(canvas, "Canvas Input");
         ExceptionTools.nullCheck(rectangle, "Rectangle Input");
         
@@ -924,18 +880,16 @@ public class FXTools
                 rectangle.getWidth(), rectangle.getHeight());
     }
     
-    public Canvas clearCanvasUnsafe(Canvas canvas)
-    {
+    
+    public static Canvas clearCanvasUnsafe(Canvas canvas) {
         return clearCanvas(canvas, null);
     }
     
-    public Canvas clearCanvas(Canvas canvas)
-    {
+    public static Canvas clearCanvas(Canvas canvas) {
         return clearCanvas(canvas, new ReentrantLock());
     }
     
-    public Canvas clearCanvas(Canvas canvas, ReentrantLock lock)
-    {
+    public static Canvas clearCanvas(Canvas canvas, ReentrantLock lock) {
         ExceptionTools.nullCheck(canvas, "Canvas Input");
         
         if (lock != null)
@@ -950,13 +904,12 @@ public class FXTools
         return canvas;
     }
     
-    private void clearCanvasImpl(Canvas canvas)
-    {
+    private static void clearCanvasImpl(@NotNull Canvas canvas) {
         canvas.getGraphicsContext2D().clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
     
-    public void togglePickOnBounds(Node node, boolean pickOnBounds)
-    {
+    
+    public static void togglePickOnBounds(Node node, boolean pickOnBounds) {
         ExceptionTools.nullCheck(node, "Input Node").setPickOnBounds(pickOnBounds);
         if (node instanceof Canvas)
             node.setMouseTransparent(!pickOnBounds);
@@ -964,18 +917,16 @@ public class FXTools
             ((Region) node).getChildrenUnmodifiable().forEach(child -> togglePickOnBounds(child, pickOnBounds));
     }
     
-    public BorderPane progressOverlay(Node parent)
-    {
+    
+    public static @NotNull BorderPane progressOverlay(Node parent) {
         return progressOverlay(parent, null, -1, null);
     }
     
-    public BorderPane progressOverlay(Node parent, ObservableValue<? extends Number> progressProperty)
-    {
+    public static @NotNull BorderPane progressOverlay(Node parent, ObservableValue<? extends Number> progressProperty) {
         return progressOverlay(parent, null, -1, progressProperty);
     }
     
-    public BorderPane progressOverlay(Node parent, Node backgroundContent, int maxSize, ObservableValue<? extends Number> progressProperty)
-    {
+    public static @NotNull BorderPane progressOverlay(Node parent, Node backgroundContent, int maxSize, ObservableValue<? extends Number> progressProperty) {
         if (maxSize == -1)
             maxSize = 60;
         ProgressIndicator indicator = new ProgressIndicator();
@@ -993,8 +944,7 @@ public class FXTools
                                 OverlayResizeType.FILL);
     }
     
-    public ProgressIndicator getOverlayIndicator(BorderPane overlayPane)
-    {
+    public static @Nullable ProgressIndicator getOverlayIndicator(BorderPane overlayPane) {
         Objects.requireNonNull(overlayPane, "Overlay Pane cannot be null");
         Node center = overlayPane.getCenter();
         if (center instanceof StackPane) {
@@ -1014,8 +964,7 @@ public class FXTools
      *
      * @return an constructOverlay {@link Pane} with the specified parent {@link Node} and {@link Node content}.
      */
-    public BorderPane constructOverlay(Node parent, Node content)
-    {
+    public static @NotNull BorderPane constructOverlay(Node parent, Node content) {
         return constructOverlay(parent, content, -1.0, OverlayBackgroundOpacityType.TRANSPARENT, OverlayResizeType.FILL);
     }
     
@@ -1030,8 +979,7 @@ public class FXTools
      *
      * @return an constructOverlay {@link Pane} with the specified parent {@link Node} and {@link Node content}.
      */
-    public BorderPane constructOverlay(Node parent, Node content, double opacity, OverlayBackgroundOpacityType backgroundOpacityType, OverlayResizeType resizeType)
-    {
+    public static @NotNull BorderPane constructOverlay(Node parent, Node content, double opacity, OverlayBackgroundOpacityType backgroundOpacityType, OverlayResizeType resizeType) {
         Objects.requireNonNull(parent, "Parent cannot be null");
         Objects.requireNonNull(backgroundOpacityType, "Background Opacity Type property cannot be null");
         Objects.requireNonNull(resizeType, "Resize Type property cannot be null");
@@ -1106,8 +1054,8 @@ public class FXTools
         return overlay;
     }
     
-    public void constructDraggableNode(Node... nodes)
-    {
+    
+    public void constructDraggableNode(Node... nodes) {
         Objects.requireNonNull(nodes, "Nodes cannot be null");
         ObjectProperty<Stage> stageProperty = new SimpleObjectProperty<>();
         
@@ -1142,15 +1090,13 @@ public class FXTools
         }
     }
     
-    public NodeMover constructResizableNode(Stage stage, Region corner, Region top, Region bottom, Region left, Region right, Node... excludeNodes)
-    {
+    public static @NotNull NodeMover constructResizableNode(Stage stage, Region corner, Region top, Region bottom, Region left, Region right, Node... excludeNodes) {
         NodeMover mover = new NodeMover(stage, corner, top, bottom, left, right, excludeNodes);
         mover.begin();
         return mover;
     }
     
-    public boolean isResizing(InputEvent event)
-    {
+    public static boolean isResizing(InputEvent event) {
         Scene scene = getEventScene(event);
         if (scene != null) {
             Cursor cursor = scene.getCursor();
@@ -1160,8 +1106,8 @@ public class FXTools
         return false;
     }
     
-    public Scene getEventScene(InputEvent event)
-    {
+    
+    public static @Nullable Scene getEventScene(InputEvent event) {
         Objects.requireNonNull(event, "Event cannot be null");
         Object source = event.getSource();
         if (source != null) {
@@ -1174,8 +1120,7 @@ public class FXTools
         return null;
     }
     
-    public Stage getSceneStage(Scene scene)
-    {
+    public static @Nullable Stage getSceneStage(Scene scene) {
         Objects.requireNonNull(scene, "Scene cannot be null");
         Window window = scene.getWindow();
         if (window != null) {
@@ -1186,10 +1131,8 @@ public class FXTools
         return null;
     }
     
-    //
     
-    public void passdownOrder(Node root, Consumer<Node> action)
-    {
+    public static void passdownOrder(Node root, Consumer<Node> action) {
         ExceptionTools.nullCheck(root, "Root node cannot be null");
         ExceptionTools.nullCheck(action, "Task cannot be null");
         if (root instanceof Parent)
@@ -1200,36 +1143,36 @@ public class FXTools
     
     //<editor-fold desc="Node Sizing">
     
-    public <T extends Region> T bindToParent(@NotNull T child, @NotNull Region parent, boolean addTo)
-    {
+    @Contract("_, _, _ -> param1")
+    public static <T extends Region> @NotNull T bindToParent(@NotNull T child, @NotNull Region parent, boolean addTo) {
         return bindToParent(child, parent, BindOrientation.BOTH, BindType.BOTH, addTo);
     }
     
-    public <T extends Region> T bindToParent(@NotNull T child, @NotNull Region parent, @NotNull BindOrientation bindOrientation, @NotNull BindType bindType, boolean addTo)
-    {
+    @Contract("_, _, _, _, _ -> param1")
+    public static <T extends Region> @NotNull T bindToParent(@NotNull T child, @NotNull Region parent, @NotNull BindOrientation bindOrientation, @NotNull BindType bindType, boolean addTo) {
         return bindToParent(child, parent, true, false, bindOrientation, bindType, addTo);
     }
     
-    public <T extends Region> T bindToParent(
+    @Contract("_, _, _, _, _, _ -> param1")
+    public static <T extends Region> @NotNull T bindToParent(
             @NotNull T child,
             @NotNull Region parent,
             @Nullable ObservableDoubleValue observableOffset,
             @NotNull BindOrientation bindOrientation,
             @NotNull BindType bindType,
-            boolean addTo)
-    {
+            boolean addTo) {
         return bindToParent(child, parent, true, false, observableOffset, bindOrientation, bindType, addTo);
     }
     
-    public <T extends Region> T bindToParent(
+    @Contract("_, _, _, _, _, _, _ -> param1")
+    public static <T extends Region> @NotNull T bindToParent(
             @NotNull T child,
             @NotNull Region parent,
             boolean includePadding,
             boolean includeInsets,
             @NotNull BindOrientation bindOrientation,
             @NotNull BindType bindType,
-            boolean addTo)
-    {
+            boolean addTo) {
         return bindToParent(child, parent, includePadding, includeInsets, null, bindOrientation, bindType, addTo);
     }
     
@@ -1262,7 +1205,8 @@ public class FXTools
      * @return The specified {@link Region child} element. Useful in chained method calls, though this method can be thought of as {@code functionally void}.
      */
     // TO-EXPAND
-    public <T extends Region> T bindToParent(
+    @Contract("_, _, _, _, _, _, _, _ -> param1")
+    public static <T extends Region> @NotNull T bindToParent(
             @NotNull T child,
             @NotNull Region parent,
             boolean includePadding,
@@ -1270,8 +1214,7 @@ public class FXTools
             @Nullable ObservableDoubleValue observableOffset,
             @NotNull BindOrientation bindOrientation,
             @NotNull BindType bindType,
-            boolean addTo)
-    {
+            boolean addTo) {
         ExceptionTools.nullCheck(child, "Region");
         ExceptionTools.nullCheck(parent, "Parent Region");
         ExceptionTools.nullCheck(bindOrientation, "Bind Orientation");
@@ -1321,13 +1264,11 @@ public class FXTools
         return child;
     }
     
-    public double getNodeSize(Region region, boolean includePadding, boolean includeInsets, BindOrientation bindOrientation)
-    {
+    public static double getNodeSize(Region region, boolean includePadding, boolean includeInsets, BindOrientation bindOrientation) {
         return getNodeSize(region, includePadding, includeInsets, 0.0, bindOrientation);
     }
     
-    public double getNodeSize(Region region, boolean includePadding, boolean includeInsets, double offset, BindOrientation bindOrientation)
-    {
+    public static double getNodeSize(Region region, boolean includePadding, boolean includeInsets, double offset, BindOrientation bindOrientation) {
         ExceptionTools.nullCheck(region, "Region");
         ExceptionTools.nullCheck(bindOrientation, "BindOrientation");
         
@@ -1341,15 +1282,13 @@ public class FXTools
             throw ExceptionTools.unsupported("BindOrientation \"" + bindOrientation + "\" is not supported.");
     }
     
-    public enum BindOrientation
-    {
+    public enum BindOrientation {
         WIDTH,
         HEIGHT,
         BOTH
     }
     
-    public enum BindType
-    {
+    public enum BindType {
         PREF,
         MAX,
         BOTH
@@ -1357,7 +1296,6 @@ public class FXTools
     
     //</editor-fold>
     
-    //
     
     //<editor-fold desc="Combo Box/List">
     
@@ -1372,8 +1310,7 @@ public class FXTools
      * @see #applyCellFactory(ComboBox)
      * @see AutoCompleteMode
      */
-    public <T> void autoCompleteComboBox(ComboBox<T> comboBox, AutoCompleteMode mode, String promptText)
-    {
+    public static <T> void autoCompleteComboBox(ComboBox<T> comboBox, AutoCompleteMode mode, String promptText) {
         applyCellFactory(comboBox);
         if (mode != null) {
             ObservableList<T> data = comboBox.getItems();
@@ -1385,14 +1322,12 @@ public class FXTools
                     comboBox.getEditor().setText(null);
             });
             comboBox.addEventHandler(KeyEvent.KEY_PRESSED, (KeyEvent event) -> comboBox.hide());
-            comboBox.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>()
-            {
+            comboBox.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
                 
                 private boolean moveCaretToPos = false;
                 private int caretPos;
                 
-                @Override public void handle(KeyEvent event)
-                {
+                @Override public void handle(KeyEvent event) {
                     if (event.getCode() == KeyCode.UP) {
                         caretPos = -1;
                         moveCaret(comboBox.getEditor().getText().length());
@@ -1443,8 +1378,7 @@ public class FXTools
                         comboBox.show();
                 }
                 
-                private boolean isSearchKeyValid(String searchKey, AutoCompleteMode mode)
-                {
+                private boolean isSearchKeyValid(String searchKey, AutoCompleteMode mode) {
                     if (searchKey != null)
                         if (mode == AutoCompleteMode.STARTS_WITH && searchKey.toLowerCase().startsWith(comboBox.getEditor().getText().toLowerCase()))
                             return true;
@@ -1453,8 +1387,7 @@ public class FXTools
                     return false;
                 }
                 
-                private void moveCaret(int textLength)
-                {
+                private void moveCaret(int textLength) {
                     if (caretPos == -1)
                         comboBox.getEditor().positionCaret(textLength);
                     else
@@ -1478,15 +1411,12 @@ public class FXTools
      * @see #getShortText(Object)
      * @see #autoCompleteComboBox(ComboBox, AutoCompleteMode, String)
      */
-    public <T> void applyCellFactory(ComboBox<T> comboBox)
-    {
-        comboBox.setConverter(new StringConverter<T>()
-        {
+    public static <T> void applyCellFactory(@NotNull ComboBox<T> comboBox) {
+        comboBox.setConverter(new StringConverter<T>() {
             
             private final Map<String, T> map = new HashMap<>();
             
-            @Override public String toString(T obj)
-            {
+            @Override public String toString(T obj) {
                 String str = getShortText(obj);
                 if (str != null) {
                     map.put(str, obj);
@@ -1495,8 +1425,7 @@ public class FXTools
                 return "";
             }
             
-            @Override public T fromString(String str)
-            {
+            @Override public T fromString(String str) {
                 if (!map.containsKey(str)) {
                     comboBox.setValue(null);
                     comboBox.getEditor().clear();
@@ -1519,8 +1448,7 @@ public class FXTools
      *
      * @see #getShortText(Object)
      */
-    public <T> void applyCellFactory(ListView<T> listView)
-    {
+    public static <T> void applyCellFactory(@NotNull ListView<T> listView) {
         listView.setCellFactory((ListView<T> param) -> getCell());
     }
     
@@ -1530,8 +1458,7 @@ public class FXTools
      * @param <T>      The type of elements.
      * @param listView The {@link ListView} being refreshed.
      */
-    public <T> void refresh(ListView<T> listView)
-    {
+    public static <T> void refresh(ListView<T> listView) {
         final T selectedItem = getSelectedValue(listView);
         final ObservableList<T> items = FXCollections.observableArrayList();
         items.addAll(listView.getItems());
@@ -1547,12 +1474,10 @@ public class FXTools
      *
      * @return A new {@link ListCell} that can be used to format {@link ListView ListViews} and {@link ComboBox ComboBoxs}.
      */
-    private <T> ListCell<T> getCell()
-    {
-        return new ListCell<T>()
-        {
-            @Override public void updateItem(T item, boolean empty)
-            {
+    @Contract(" -> new")
+    private static <T> @NotNull ListCell<T> getCell() {
+        return new ListCell<T>() {
+            @Override public void updateItem(T item, boolean empty) {
                 super.updateItem(item, empty);
                 if (item != null) {
                     setText(getShortText(item));
@@ -1575,8 +1500,7 @@ public class FXTools
      *
      * @return The currently selected value of the specified {@link ComboBox}, or null if no element is selected.
      */
-    public <T> T getSelectedValue(ComboBox<T> comboBox)
-    {
+    public static <T> @Nullable T getSelectedValue(@NotNull ComboBox<T> comboBox) {
         if (comboBox.getSelectionModel().getSelectedIndex() < 0)
             return null;
         else
@@ -1591,8 +1515,7 @@ public class FXTools
      *
      * @return The currently selected value of the specified {@link ListView}, or null if no element is selected.
      */
-    public <T> T getSelectedValue(ListView<T> listView)
-    {
+    public static <T> @Nullable T getSelectedValue(@NotNull ListView<T> listView) {
         if (listView.getSelectionModel().getSelectedIndex() < 0)
             return null;
         else
@@ -1607,8 +1530,7 @@ public class FXTools
      * @param listView The {@code ListView} being added to.
      * @param focus    True if the {@code ListView} should be focused after the value has been added, false if it should not.
      */
-    public synchronized <T> void addElement(T item, ListView<T> listView, boolean focus)
-    {
+    public static synchronized <T> void addElement(T item, @NotNull ListView<T> listView, boolean focus) {
         listView.getItems().add(item);
         listView.getSelectionModel().select(item);
         if (focus)
@@ -1626,8 +1548,7 @@ public class FXTools
      *
      * @see #addElement(Object, ListView, boolean)
      */
-    public synchronized <T> void addElement(T item, ListView<T> listView)
-    {
+    public static synchronized <T> void addElement(T item, ListView<T> listView) {
         addElement(item, listView, false);
     }
     
@@ -1639,8 +1560,7 @@ public class FXTools
      * @param comboBox The {@code ComboBox} being added to.
      * @param focus    True if the {@code ComboBox} should be focused after the value has been added, false if it should not.
      */
-    public synchronized <T> void addElement(T item, ComboBox<T> comboBox, boolean focus)
-    {
+    public static synchronized <T> void addElement(T item, @NotNull ComboBox<T> comboBox, boolean focus) {
         comboBox.getItems().add(item);
         comboBox.getSelectionModel().select(item);
         if (focus)
@@ -1658,8 +1578,7 @@ public class FXTools
      *
      * @see #addElement(Object, ComboBox, boolean)
      */
-    public synchronized <T> void addElement(T item, ComboBox<T> comboBox)
-    {
+    public static synchronized <T> void addElement(T item, ComboBox<T> comboBox) {
         addElement(item, comboBox, false);
     }
     
@@ -1671,8 +1590,7 @@ public class FXTools
      * @param focus    True if the {@link ListView} should be focused after the value has been deleted, false otherwise.
      */
     @SuppressWarnings("Duplicates")
-    public synchronized <T> void removeSelected(ListView<T> listView, boolean focus)
-    {
+    public static synchronized <T> void removeSelected(ListView<T> listView, boolean focus) {
         runFX(() -> {
             final T selectedItem = getSelectedValue(listView);
             if (selectedItem != null) {
@@ -1700,8 +1618,7 @@ public class FXTools
      * @param focus    True if the {@link ListView} should be focused after the value has been deleted, false otherwise.
      */
     @SuppressWarnings("Duplicates")
-    public synchronized <T> void removeSelected(ComboBox<T> comboBox, boolean focus)
-    {
+    public static synchronized <T> void removeSelected(ComboBox<T> comboBox, boolean focus) {
         runFX(() -> {
             final T selectedItem = getSelectedValue(comboBox);
             if (selectedItem != null) {
@@ -1734,8 +1651,7 @@ public class FXTools
      *
      * @deprecated Because this method is inefficient - O(n^n)
      */
-    public <T extends Enum> void addEnumsToComboBox(ComboBox<T> comboBox, T t, boolean selectFirst, T... excludeValues)
-    {
+    public static <T extends Enum> void addEnumsToComboBox(ComboBox<T> comboBox, T t, boolean selectFirst, T... excludeValues) {
         if (comboBox != null) {
             applyCellFactory(comboBox);
             if (t != null) {
@@ -1763,8 +1679,7 @@ public class FXTools
      *
      * @return A getText representation of the specified {@link Object}, or null if the specified {@link Object} is null.
      */
-    public String getShortText(Object obj)
-    {
+    public static String getShortText(Object obj) {
         if (obj != null) {
             String str;
             if (obj instanceof Listable)
@@ -1785,19 +1700,19 @@ public class FXTools
     /**
      * No minimum size.
      */
-    public final int NO_MIN_SIZE_LOCK = 0;
+    public static final int NO_MIN_SIZE_LOCK = 0;
     /**
      * An unbounded minimum size.
      */
-    public final int UNBOUNDED_SIZE_LOCK = -1;
+    public static final int UNBOUNDED_SIZE_LOCK = -1;
     /**
      * The current size.
      */
-    public final int CURRENT_SIZE_LOCK = -2;
+    public static final int CURRENT_SIZE_LOCK = -2;
     /**
      * The current minimum size.
      */
-    public final int NO_CHANGE_SIZE_LOCK = Integer.MIN_VALUE;
+    public static final int NO_CHANGE_SIZE_LOCK = Integer.MIN_VALUE;
     
     /**
      * Locks the size of the specified {@link Stage} based on the specified {@link FXDialogTools.SizeType}.
@@ -1807,8 +1722,7 @@ public class FXTools
      *
      * @return True if the {@link Stage Stage's} size was locked successfully, false otherwise.
      */
-    public boolean lockSize(Stage stage, FXDialogTools.SizeType sizeType)
-    {
+    public static boolean lockSize(Stage stage, FXDialogTools.SizeType sizeType) {
         if (stage != null && sizeType != null) {
             if (sizeType == FXDialogTools.SizeType.MINIMUM_SIZE) {
                 stage.setMinWidth(stage.getWidth());
@@ -1836,8 +1750,7 @@ public class FXTools
      * @see #CURRENT_SIZE_LOCK
      * @see #NO_CHANGE_SIZE_LOCK
      */
-    public boolean lockSize(Stage stage, double minWidth, double minHeight)
-    {
+    public static boolean lockSize(Stage stage, double minWidth, double minHeight) {
         if (stage != null) {
             if (minWidth == -1)
                 minWidth = Integer.MAX_VALUE;
@@ -1883,8 +1796,7 @@ public class FXTools
      *
      * @return True if the {@link Region Region's} size was locked successfully, false otherwise.
      */
-    public boolean lockSize(Region region, FXDialogTools.SizeType sizeType)
-    {
+    public static boolean lockSize(Region region, FXDialogTools.SizeType sizeType) {
         if (region != null && sizeType != null) {
             double width = region.getWidth();
             double height = region.getHeight();
@@ -1915,8 +1827,7 @@ public class FXTools
      *
      * @return The recently loaded {@link FXMLLoader} for the specified resource path.
      */
-    public <T> FXMLLoader loadFXML(String resource, FXMLLoader loader, T controller)
-    {
+    public static <T> @NotNull FXMLLoader loadFXML(String resource, FXMLLoader loader, T controller) {
         loader = loader == null ? new FXMLLoader() : loader;
         try {
             //				Printing.dev("Initializing FXML Loader for resource: " + resource);
@@ -1932,20 +1843,17 @@ public class FXTools
     
     //</editor-fold>
     
-    //
     
     //<editor-fold desc="Helper Methods">
     
-    private boolean isValidSuffix(String str, String... suffixes)
-    {
+    private static boolean isValidSuffix(String str, String @NotNull ... suffixes) {
         for (final String suffix: suffixes)
             if (str.contains(suffix) && (!str.endsWith(suffix) || StringTools.get().getCount(str, suffix) != 1 || str.length() == suffix.length()))
                 return false;
         return true;
     }
     
-    private boolean isValidPrefix(String str, String... prefixes)
-    {
+    private static boolean isValidPrefix(String str, String @NotNull ... prefixes) {
         for (String prefix: prefixes)
             if (str.contains(prefix) && (!str.startsWith(prefix) || StringTools.get().getCount(str, prefix) != 1))
                 return false;
@@ -1956,8 +1864,8 @@ public class FXTools
     
     //<editor-fold desc="Pseudo Classes">
     
-    public final PseudoClass INVALID = PseudoClass.getPseudoClass("invalid");
-    public final PseudoClass DISABLED = PseudoClass.getPseudoClass("custom_disabled");
+    public static final PseudoClass INVALID = PseudoClass.getPseudoClass("invalid");
+    public static final PseudoClass DISABLED = PseudoClass.getPseudoClass("custom_disabled");
     
     //</editor-fold>
     
@@ -1965,14 +1873,12 @@ public class FXTools
     
     //<editor-fold desc="Overlay Enums">
     
-    public enum OverlayBackgroundOpacityType
-    {
+    public enum OverlayBackgroundOpacityType {
         TRANSPARENT,
         OPAQUE
     }
     
-    public enum OverlayResizeType
-    {
+    public enum OverlayResizeType {
         FILL,
         INHERIT
     }
@@ -1982,14 +1888,11 @@ public class FXTools
     /**
      * Defines the auto-complete mode for an {@link #autoCompleteComboBox(ComboBox, AutoCompleteMode, String) ComboBox}.
      */
-    public enum AutoCompleteMode
-    {
-        STARTS_WITH, CONTAINING,
-        ;
+    public enum AutoCompleteMode {
+        STARTS_WITH, CONTAINING
     }
     
-    public interface ChildEditable
-    {
+    public interface ChildEditable {
         ChildEditable DISABLE = (final Node node) -> node.setDisable(true);
         ChildEditable ENABLE = (final Node node) -> node.setDisable(false);
         ChildEditable HIDE = (final Node node) -> node.setVisible(false);
@@ -1998,8 +1901,7 @@ public class FXTools
         void edit(Node component);
     }
     
-    public class NodeMover
-    {
+    public static class NodeMover {
         
         private static final int RESIZE_AREA = 7;
         private static final int RESIZE_AREA_DIAGONAL = 10;
@@ -2026,8 +1928,7 @@ public class FXTools
         private final DoubleProperty stageWidthProperty;
         private final DoubleProperty stageHeightProperty;
         
-        public NodeMover(Stage stage, Region corner, Region top, Region bottom, Region left, Region right, Node... excludeNodes)
-        {
+        public NodeMover(Stage stage, Region corner, Region top, Region bottom, Region left, Region right, Node... excludeNodes) {
             Objects.requireNonNull(this.stage = stage, "Stage cannot be null");
             
             this.corner = corner;
@@ -2051,15 +1952,13 @@ public class FXTools
         
         //
         
-        public Scene scene()
-        {
+        public Scene scene() {
             return stage.getScene();
         }
         
         //
         
-        private void begin()
-        {
+        private void begin() {
             addEventFilters(corner, resizingCorner, Cursor.SE_RESIZE, true);
             addEventFilters(top, resizingTop, Cursor.V_RESIZE, false);
             addEventFilters(bottom, resizingBottom, Cursor.V_RESIZE, true);
@@ -2067,8 +1966,7 @@ public class FXTools
             addEventFilters(right, resizingRight, Cursor.H_RESIZE, true);
         }
         
-        private void addEventFilters(Region region, ReadOnlyBooleanWrapper wrapper, Cursor cursor, boolean active)
-        {
+        private void addEventFilters(@NotNull Region region, ReadOnlyBooleanWrapper wrapper, Cursor cursor, boolean active) {
             region.setMouseTransparent(!active);
             if (active) {
                 region.addEventFilter(MouseEvent.MOUSE_MOVED, event -> {
@@ -2108,8 +2006,7 @@ public class FXTools
             }
         }
         
-        private void drag(MouseEvent event)
-        {
+        private void drag(MouseEvent event) {
             Cursor cursor = scene().getCursor();
             if (cursor != null) {
                 if (cursor == Cursor.H_RESIZE || cursor == Cursor.SE_RESIZE)
@@ -2119,20 +2016,17 @@ public class FXTools
             }
         }
         
-        private void setWidth(MouseEvent event)
-        {
+        private void setWidth(@NotNull MouseEvent event) {
             stage.setWidth(Math.max(stage.getMinWidth(), stageWidthProperty.get() + (event.getScreenX() - (anchorProperty.get().getX() + stage.getX()))));
             event.consume();
         }
         
-        private void setHeight(MouseEvent event)
-        {
+        private void setHeight(@NotNull MouseEvent event) {
             stage.setHeight(Math.max(stage.getMinHeight(), stageHeightProperty.get() + (event.getScreenY() - (anchorProperty.get().getY() + stage.getY()))));
             event.consume();
         }
         
-        private boolean isOnExcludeNode()
-        {
+        private boolean isOnExcludeNode() {
             if (excludeNodes != null)
                 for (Node node: excludeNodes)
                     if (node != null && isMouseOnNode(node))
@@ -2144,19 +2038,16 @@ public class FXTools
     public static class Colors {
         private Colors() { } // No Instance
         
-        public static Color from255(int r, int g, int b) {
+        @Contract(value = "_, _, _ -> new", pure = true)
+        public static @NotNull Color from255(int r, int g, int b) {
             return from255(r, g, b, 255);
         }
         
-        public static Color from255(int r, int g, int b, int a) {
+        @Contract(value = "_, _, _, _ -> new", pure = true)
+        public static @NotNull Color from255(int r, int g, int b, int a) {
             return Color.color(r / 255.0, g / 255.0, b / 255.0, a / 255.0);
         }
     }
     
     //</editor-fold>
 }
-
-/*
- * TODO:
- * 1.
- */
