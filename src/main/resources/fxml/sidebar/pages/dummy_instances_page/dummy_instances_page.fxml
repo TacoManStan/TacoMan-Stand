@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.taco.suit_lady.view.ui.jfx.components.ImagePane?>
+<?import com.taco.suit_lady.ui.jfx.components.ImagePane?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>

@@ -1,9 +1,9 @@
 package com.taco.suit_lady.util.springable;
 
 import com.taco.suit_lady._to_sort._new.Debugger;
-import com.taco.suit_lady.view.ui.Sidebar;
-import com.taco.suit_lady.view.ui.console.Console;
-import com.taco.suit_lady.view.ui.AppUI;
+import com.taco.suit_lady.ui.Sidebar;
+import com.taco.suit_lady.ui.console.Console;
+import com.taco.suit_lady.ui.AppUI;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

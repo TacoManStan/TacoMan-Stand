@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane fx:id="root" maxHeight="475.0" maxWidth="275.0" minHeight="0.0" minWidth="0.0" prefHeight="475.0" prefWidth="275.0" xmlns="http://javafx.com/javafx/11.0.2"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.taco.suit_lady.view.ui.pages.content_switch_demo_page.ContentSwitchDemoPageController">
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.taco.suit_lady.ui.pages.content_switch_demo_page.ContentSwitchDemoPageController">
     <children>
         <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <top>

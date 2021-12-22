@@ -1,6 +1,6 @@
 package com.taco.suit_lady;
 
-import com.taco.suit_lady.view.ui.FXApplication;
+import com.taco.suit_lady.ui.FXApplication;
 import javafx.application.Application;
 import javafx.scene.text.Font;
 import net.rgielen.fxweaver.core.FxWeaver;
