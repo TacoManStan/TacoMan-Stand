@@ -3,7 +3,6 @@ package com.taco.tacository.json;
 import com.github.cliftonlabs.json_simple.JsonArray;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public interface JArray<T> extends JElement {

@@ -79,10 +79,10 @@ public class TestData implements JObject, JLoadableObject {
     
     @Override
     public void doLoad(JsonObject parent) {
-        var1 = JUtil.loadString(parent, "var1");
-        var2 = JUtil.loadInt(parent, "var2");
-        var3 = JUtil.loadObject(parent, "var3", new TestSubData());
-        List<TestSubData> subDataList = JUtil.loadArray(parent, "var4", o -> {
+        var1 = JUtil.Objs.loadString(parent, "var1");
+        var2 = JUtil.Objs.loadInt(parent, "var2");
+        var3 = JUtil.Objs.loadObject(parent, "var3", new TestSubData());
+        List<TestSubData> subDataList = JUtil.Objs.loadArray(parent, "var4", o -> {
             JsonObject jsonObject = (JsonObject) o;
             TestSubData subData = new TestSubData();
 //            subData.setJID((String) jsonObject.get("jID"));
@@ -90,18 +90,18 @@ public class TestData implements JObject, JLoadableObject {
             return subData;
         });
         var4 = subDataList.toArray(new TestSubData[0]);
-        List<String> stringList = JUtil.loadArray(parent, "var5", o -> (String) o);
+        List<String> stringList = JUtil.Objs.loadArray(parent, "var5", o -> (String) o);
         var5 = stringList.toArray(new String[0]);
     }
     
     @Override
     public JElement[] jFields() {
         return new JElement[]{
-                JUtil.create("var1", var1),
-                JUtil.create("var2", var2),
-                JUtil.createObject("var3", var3),
-                JUtil.createArray("var4", var4),
-                JUtil.createArray("var5", var5)
+                JUtil.Objs.create("var1", var1),
+                JUtil.Objs.create("var2", var2),
+                JUtil.Objs.createObject("var3", var3),
+                JUtil.Objs.createArray("var4", var4),
+                JUtil.Objs.createArray("var5", var5)
         };
     }
     
