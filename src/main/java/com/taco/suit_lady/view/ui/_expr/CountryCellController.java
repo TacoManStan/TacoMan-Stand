@@ -31,6 +31,7 @@ import org.springframework.stereotype.Component;
 @Scope("prototype")
 @FxmlView("CountryCell.fxml")
 public class CountryCellController extends ListCell<Country> {
+    
     @FXML private Pane cellContainer;
     
     @FXML private Label countryNameLabel;
