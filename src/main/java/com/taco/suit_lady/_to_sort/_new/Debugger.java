@@ -209,8 +209,7 @@ public final class Debugger {
             return isWarnEnabled();
         else if (printType.equalsIgnoreCase(ERROR))
             return isErrorEnabled();
-        else
-            throw ExceptionTools.unsupported("Unrecognized Print Type: " + printType);
+        throw ExceptionTools.unsupported("Unrecognized Print Type: " + printType);
     }
     
     //</editor-fold>

@@ -17,8 +17,7 @@ import java.util.Arrays;
 import java.util.concurrent.ThreadPoolExecutor;
 
 public abstract class Content<D extends ContentData, C extends ContentController>
-        implements Springable
-{
+        implements Springable {
     private final Springable strictSpringable;
     
     private final D data;
@@ -28,36 +27,33 @@ public abstract class Content<D extends ContentData, C extends ContentController
     
     private final ReadOnlyListWrapper<SidebarBookshelf> bookshelves;
     
-    public Content(@NotNull Springable springable)
-    {
+    public Content(@NotNull Springable springable) {
         this.strictSpringable = ExceptionTools.nullCheck(springable, "Springable Parent").asStrict();
         
         this.data = ExceptionTools.nullCheck(loadData(), "SLContentData");
         this.controller = ExceptionTools.nullCheckMessage(
                 weaver().loadController(ExceptionTools.nullCheck(controllerDefinition(), "Controller Definition Class")),
                 "Error Loading Controller of Type [" + controllerDefinition() + "] — Ensure controller class is defined in FXML file."
-        );
+                                                         );
         
         this.overlayHandler = new OverlayHandler(this, null);
         this.overlayHandler.addOverlay(new Overlay(this, null, "default", 1));
         
         this.bookshelves = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
-//        ArrayTools.applyChangeHandler(
-//                bookshelves,
-//                bookshelf -> onBookshelfAddedInternal(bookshelf),
-//                bookshelf -> onBookshelfRemovedInternal(bookshelf)
-//        );
+        //        ArrayTools.applyChangeHandler(
+        //                bookshelves,
+        //                bookshelf -> onBookshelfAddedInternal(bookshelf),
+        //                bookshelf -> onBookshelfRemovedInternal(bookshelf)
+        //        );
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final @NotNull D getData()
-    {
+    public final @NotNull D getData() {
         return data;
     }
     
-    public final @NotNull C getController()
-    {
+    public final @NotNull C getController() {
         return controller;
     }
     
@@ -65,8 +61,7 @@ public abstract class Content<D extends ContentData, C extends ContentController
         return overlayHandler;
     }
     
-    protected final @NotNull ReadOnlyListProperty<SidebarBookshelf> getBookshelves()
-    {
+    protected final @NotNull ReadOnlyListProperty<SidebarBookshelf> getBookshelves() {
         return bookshelves.getReadOnlyProperty();
     }
     
@@ -74,8 +69,7 @@ public abstract class Content<D extends ContentData, C extends ContentController
     
     //<editor-fold desc="--- CLASS BODY ---">
     
-    protected SidebarBookshelf injectBookshelf(String name, UIBook... books)
-    {
+    protected SidebarBookshelf injectBookshelf(String name, UIBook... books) {
         if (ArrayTools.isEmpty(ExceptionTools.nullCheck(books, "Book Array"))) throw ExceptionTools.ex("Bookshelf Contents Cannot Be Empty");
         if (ArrayTools.containsNull(books)) throw ExceptionTools.ex("Bookshelf Contents Cannot Contain Null Elements: [" + Arrays.asList(books) + "]");
         
@@ -134,14 +128,12 @@ public abstract class Content<D extends ContentData, C extends ContentController
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override
-    public @NotNull FxWeaver weaver()
-    {
+    public @NotNull FxWeaver weaver() {
         return strictSpringable.weaver();
     }
     
     @Override
-    public @NotNull ConfigurableApplicationContext ctx()
-    {
+    public @NotNull ConfigurableApplicationContext ctx() {
         return strictSpringable.ctx();
     }
     
@@ -149,8 +141,7 @@ public abstract class Content<D extends ContentData, C extends ContentController
     
     //<editor-fold desc="--- PASSTHROUGH METHODS ---">
     
-    protected final Sidebar getSidebar()
-    {
+    protected final @NotNull Sidebar getSidebar() {
         return ctx().getBean(AppUI.class).getSidebar();
     }
     
@@ -158,30 +149,26 @@ public abstract class Content<D extends ContentData, C extends ContentController
     
     //<editor-fold desc="--- INTERNAL ---">
     
-    protected final void onSetInternal()
-    {
+    protected final void onSetInternal() {
         final Sidebar sidebar = ctx().getBean(AppUI.class).getSidebar();
         getBookshelves().forEach(bookshelf -> sidebar.bookshelvesProperty().add(bookshelf));
         
         onActivate();
     }
     
-    protected final void onRemovedInternal()
-    {
+    protected final void onRemovedInternal() {
         final Sidebar sidebar = ctx().getBean(AppUI.class).getSidebar();
         getBookshelves().forEach(bookshelf -> sidebar.bookshelvesProperty().remove(bookshelf));
         
         onDeactivate();
     }
     
-    private void onBookshelfAddedInternal(SidebarBookshelf bookshelf)
-    {
+    private void onBookshelfAddedInternal(SidebarBookshelf bookshelf) {
         bookshelf.initialize();
         onBookshelfAdded(bookshelf);
     }
     
-    private void onBookshelfRemovedInternal(SidebarBookshelf bookshelf)
-    {
+    private void onBookshelfRemovedInternal(SidebarBookshelf bookshelf) {
         onBookshelfRemoved(bookshelf);
     }
     
