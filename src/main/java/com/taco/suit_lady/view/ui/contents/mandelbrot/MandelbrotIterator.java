@@ -19,17 +19,17 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor>
     private final StrictSpringable springable;
     
     private final int PRECISION = 1000;
-    private final MandelbrotData data;
+    private final MandelbrotContentData data;
     
     public MandelbrotIterator(Springable springable, MandelbrotColor[][] targetArray, ReentrantLock lock) {
         this(springable, targetArray, null, lock);
     }
     
-    public MandelbrotIterator(@NotNull Springable springable, MandelbrotColor[][] targetArray, @NotNull MandelbrotData data, ReentrantLock lock) {
+    public MandelbrotIterator(@NotNull Springable springable, MandelbrotColor[][] targetArray, @NotNull MandelbrotContentData data, ReentrantLock lock) {
         super(targetArray, lock);
         this.springable = springable.asStrict();
         
-        this.data = data != null ? data : MandelbrotData.newDefaultInstance(this, getWidth(), getHeight());
+        this.data = data != null ? data : MandelbrotContentData.newDefaultInstance(this, getWidth(), getHeight());
         if (data.getCanvasWidth() != getWidth() || data.getCanvasHeight() != getHeight())
             throw ExceptionTools.ex("Dimension Mismatch:  " +
                                     "Dimensions Data [" + data.getCanvasWidth() + ", " + data.getCanvasHeight() + "  " +
