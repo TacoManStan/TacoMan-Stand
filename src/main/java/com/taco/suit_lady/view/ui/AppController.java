@@ -261,6 +261,14 @@ public class AppController
         final Sidebar sidebar = ctx().getBean(AppUI.class).getSidebar();
         
         final SidebarBookshelf generalSidebarBookshelf = new SidebarBookshelf(sidebar, "General");
+        final SidebarBookshelf nyiSidebarBookshelf = new SidebarBookshelf(sidebar, "Not Yet Implemented");
+        final SidebarBookshelf demoSidebarBookshelf = new SidebarBookshelf(sidebar, "Demo");
+        final SidebarBookshelf numberSidebarBookshelf = new SidebarBookshelf(sidebar, "Num");
+        
+        //<editor-fold desc="Bookshelves">
+        
+        //<editor-fold desc="General SidebarBookshelf">
+        
         generalSidebarBookshelf.getBooks().add(new UIBook(
                 this,
                 "Content Switch Demo",
@@ -293,7 +301,10 @@ public class AppController
                 null));
         inDevelopmentSidebarBookshelf.getButtonGroup().selectFirst();
         
-        final SidebarBookshelf nyiSidebarBookshelf = new SidebarBookshelf(sidebar, "Not Yet Implemented");
+        //</editor-fold>
+        
+        //<editor-fold desc="NYI SidebarBookshelf">
+        
         nyiSidebarBookshelf.getBooks().add(new UIBook(
                 this,
                 "Social",
@@ -305,7 +316,10 @@ public class AppController
                 null));
         nyiSidebarBookshelf.getButtonGroup().selectFirst();
         
-        final SidebarBookshelf demoSidebarBookshelf = new SidebarBookshelf(sidebar, "Demo");
+        //</editor-fold>
+        
+        //<editor-fold desc="Demo SidebarBookshelf">
+        
         demoSidebarBookshelf.getBooks().add(new UIBook(
                 this,
                 "Demo 1",
@@ -371,8 +385,107 @@ public class AppController
                 null));
         demoSidebarBookshelf.getButtonGroup().selectFirst();
         
-        sidebar.bookshelvesProperty().addAll(
-                generalSidebarBookshelf, inDevelopmentSidebarBookshelf, nyiSidebarBookshelf, demoSidebarBookshelf);
+        //</editor-fold>
+        
+        //<editor-fold desc="Number SidebarBookshelf (Test)">
+        
+        //        numberSidebarBookshelf.getBooks().add(new UIBook(
+        //                this,
+        //                "Number One",
+        //                "num_1",
+        //                uiBook -> TB.resources().get(
+        //                        "pages",
+        //                        uiBook.getButtonID(),
+        //                        () -> new ExamplePage(uiBook, "red")),
+        //                null));
+        //        numberSidebarBookshelf.getBooks().add(new UIBook(
+        //                this,
+        //                "Number Two",
+        //                "num_2",
+        //                uiBook -> TB.resources().get(
+        //                        "pages",
+        //                        uiBook.getButtonID(),
+        //                        () -> new ExamplePage(uiBook, "green")),
+        //                null));
+        //        numberSidebarBookshelf.getBooks().add(new UIBook(
+        //                this,
+        //                "Number Three",
+        //                "num_3",
+        //                uiBook -> TB.resources().get(
+        //                        "pages",
+        //                        uiBook.getButtonID(),
+        //                        () -> new ExamplePage(uiBook, "orange")),
+        //                null));
+        //        numberSidebarBookshelf.getBooks().add(new UIBook(
+        //                this,
+        //                "Number Four",
+        //                "num_4",
+        //                uiBook -> TB.resources().get(
+        //                        "pages",
+        //                        uiBook.getButtonID(),
+        //                        () -> new ExamplePage(uiBook, "blue")),
+        //                null));
+        //        numberSidebarBookshelf.getBooks().add(new UIBook(
+        //                this,
+        //                "Number Five",
+        //                "num_5",
+        //                uiBook -> TB.resources().get(
+        //                        "pages",
+        //                        uiBook.getButtonID(),
+        //                        () -> new ExamplePage(uiBook, "purple")),
+        //                null));
+        //        numberSidebarBookshelf.getBooks().add(new UIBook(
+        //                this,
+        //                "Number Six",
+        //                "num_6",
+        //                uiBook -> TB.resources().get(
+        //                        "pages",
+        //                        uiBook.getButtonID(),
+        //                        () -> new ExamplePage(uiBook, "yellow")),
+        //                null));
+        //        numberSidebarBookshelf.getBooks().add(new UIBook(
+        //                this,
+        //                "Number Seven",
+        //                "num_7",
+        //                uiBook -> TB.resources().get(
+        //                        "pages",
+        //                        uiBook.getButtonID(),
+        //                        () -> new ExamplePage(uiBook, "red")),
+        //                null));
+        //        numberSidebarBookshelf.getBooks().add(new UIBook(
+        //                this,
+        //                "Number Eight",
+        //                "num_8",
+        //                uiBook -> TB.resources().get(
+        //                        "pages",
+        //                        uiBook.getButtonID(),
+        //                        () -> new ExamplePage(uiBook, "green")),
+        //                null));
+        //        numberSidebarBookshelf.getBooks().add(new UIBook(
+        //                this,
+        //                "Number Nine",
+        //                "num_9",
+        //                uiBook -> TB.resources().get(
+        //                        "pages",
+        //                        uiBook.getButtonID(),
+        //                        () -> new ExamplePage(uiBook, "orange")),
+        //                null));
+        //        numberSidebarBookshelf.getBooks().add(new UIBook(
+        //                this,
+        //                "Number Zero",
+        //                "num_0",
+        //                uiBook -> TB.resources().get(
+        //                        "pages",
+        //                        uiBook.getButtonID(),
+        //                        () -> new ExamplePage(uiBook, "blue")),
+        //                null));
+        //        numberSidebarBookshelf.getButtonGroup().selectFirst();
+        
+        //</editor-fold>
+        
+        //</editor-fold>
+        
+        sidebar.bookshelvesProperty().addAll(generalSidebarBookshelf, inDevelopmentSidebarBookshelf, nyiSidebarBookshelf, demoSidebarBookshelf);
         sidebar.initialize();
     }
     

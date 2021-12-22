@@ -18,6 +18,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 public abstract class Content<D extends ContentData, C extends ContentController>
         implements Springable {
+    
     private final Springable strictSpringable;
     
     private final D data;
@@ -33,8 +34,7 @@ public abstract class Content<D extends ContentData, C extends ContentController
         this.data = ExceptionTools.nullCheck(loadData(), "SLContentData");
         this.controller = ExceptionTools.nullCheckMessage(
                 weaver().loadController(ExceptionTools.nullCheck(controllerDefinition(), "Controller Definition Class")),
-                "Error Loading Controller of Type [" + controllerDefinition() + "] — Ensure controller class is defined in FXML file."
-                                                         );
+                "Error Loading Controller of Type [" + controllerDefinition() + "] — Ensure controller class is defined in FXML file.");
         
         this.overlayHandler = new OverlayHandler(this, null);
         this.overlayHandler.addOverlay(new Overlay(this, null, "default", 1));
