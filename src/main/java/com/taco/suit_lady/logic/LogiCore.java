@@ -31,6 +31,8 @@ public class LogiCore
     
     //<editor-fold desc="--- EXECUTION ---">
     
+    // TODO: Add "executeAndWait(Runnable... runnables)" and "executeAndWait(Task<T>... tasks)" methods.
+    
     public void execute(@NotNull Runnable runnable)
     {
         executor.execute(ExceptionTools.nullCheck(runnable, "Runnable Task"));

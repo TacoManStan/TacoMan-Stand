@@ -35,8 +35,7 @@ import java.util.function.Predicate;
  * @param <C> The type of {@link CellController} used for each {@link TreeCell} of the {@code TreeView} managed by this {@code TreeLoader}.
  */
 public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellController<E>>
-        implements Serializable
-{
+        implements Serializable {
     //<editor-fold desc="--- STATIC ---">
     
     private static final String DEFAULT_ROOT_NAME;
@@ -63,32 +62,27 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
     private boolean isFinishedConstructing;
     
     // TO-DOC
-    public TreeLoader(TreeView<E> treeView)
-    {
+    public TreeLoader(TreeView<E> treeView) {
         this(treeView, null);
     }
     
     // TO-DOC
-    public TreeLoader(TreeView<E> treeView, Function<E, C> cellControllerFactory)
-    {
+    public TreeLoader(TreeView<E> treeView, Function<E, C> cellControllerFactory) {
         this(treeView, cellControllerFactory, null);
     }
     
     // TO-DOC
-    public TreeLoader(TreeView<E> treeView, Function<E, C> cellControllerFactory, Validatable<T> validator)
-    {
+    public TreeLoader(TreeView<E> treeView, Function<E, C> cellControllerFactory, Validatable<T> validator) {
         this(treeView, cellControllerFactory, validator, null);
     }
     
     // TO-DOC
-    public TreeLoader(TreeView<E> treeView, Function<E, C> cellControllerFactory, Validatable<T> validator, String rootName)
-    {
+    public TreeLoader(TreeView<E> treeView, Function<E, C> cellControllerFactory, Validatable<T> validator, String rootName) {
         this(treeView, cellControllerFactory, validator, null, rootName);
     }
     
     // TO-DOC
-    public TreeLoader(TreeView<E> treeView, Function<E, C> controllerSupplier, Validatable<T> validator, Consumer<TreeItem<E>> settingsApplier, String rootName)
-    {
+    public TreeLoader(TreeView<E> treeView, Function<E, C> controllerSupplier, Validatable<T> validator, Consumer<TreeItem<E>> settingsApplier, String rootName) {
         this.lock = new ReentrantLock();
         
         this.isFinishedConstructing = false;
@@ -116,8 +110,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
      *
      * @return The {@link TreeView} loaded by this {@link TreeLoader}.
      */
-    public final TreeView<E> getTreeView()
-    {
+    public final TreeView<E> getTreeView() {
         return treeView;
     }
     
@@ -126,8 +119,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
      *
      * @return The {@link TreeItemFX} set as the {@link TreeView#rootProperty() root} of the {@link #getTreeView() TreeView} that is loaded by this {@link TreeLoader}.
      */
-    public final TreeItemFX<E> getRootItem()
-    {
+    public final TreeItemFX<E> getRootItem() {
         return rootItem;
     }
     
@@ -140,8 +132,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
      *
      * @return The {@link ReadOnlyMapProperty Map} containing the {@link TreeItemFX folders} in the {@link #getTreeView() TreeView} that is loaded by this {@link TreeLoader}.
      */
-    public final ReadOnlyMapProperty<String, TreeItemFX<E>> folders()
-    {
+    public final ReadOnlyMapProperty<String, TreeItemFX<E>> folders() {
         return folders.getReadOnlyProperty();
     }
     
@@ -150,8 +141,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
      *
      * @return The {@link ReadOnlyListProperty List} containing the {@link TreeItemFX items} in the {@link #getTreeView() TreeView} that is loaded by this {@link TreeLoader}.
      */
-    public final ReadOnlyListProperty<TreeItemFX<E>> items()
-    {
+    public final ReadOnlyListProperty<TreeItemFX<E>> items() {
         return items.getReadOnlyProperty();
     }
     
@@ -165,8 +155,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
      *
      * @return True if this {@link TreeLoader} has finished {@link TreeLoader#TreeLoader(TreeView, Function, Validatable, Consumer, String) construction}, false if it has not.
      */
-    private boolean isFinishedConstructing()
-    {
+    private boolean isFinishedConstructing() {
         return isFinishedConstructing;
     }
     
@@ -175,8 +164,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
      *
      * @return The {@link ObjectProperty} containing the {@link Function} used to construct a {@link CellController} for a provided {@link TreeCellData} input.
      */
-    public final ReadOnlyObjectProperty<Function<E, C>> cellControllerFactoryProperty()
-    {
+    public final ReadOnlyObjectProperty<Function<E, C>> cellControllerFactoryProperty() {
         return cellControllerFactoryProperty.getReadOnlyProperty();
     }
     
@@ -185,8 +173,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
      *
      * @return The {@link Function} used to construct a {@link CellController} for a provided {@link TreeCellData} input.
      */
-    public final Function<E, C> getCellControllerFactory()
-    {
+    public final Function<E, C> getCellControllerFactory() {
         return cellControllerFactoryProperty.get();
     }
     
@@ -195,8 +182,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
      *
      * @param controllerSupplier The new {@link Function} to be set as the {@link Function} used to construct a {@link CellController} for a provided {@link TreeCellData} input
      */
-    public final void setCellControllerFactory(Function<E, C> controllerSupplier)
-    {
+    public final void setCellControllerFactory(Function<E, C> controllerSupplier) {
         cellControllerFactoryProperty.set(controllerSupplier);
     }
     
@@ -205,8 +191,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
     //<editor-fold desc="--- INITIALIZATION ---">
     
     // TO-DOC
-    public void initialize()
-    {
+    public void initialize() {
         treeView.setRoot(rootItem);
         
         while (clearEmptyFolders(rootItem) > 0)
@@ -216,8 +201,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
     }
     
     // TO-DOC
-    public <Z extends TreeLoader<E, T, C>> Z initializeAndGet()
-    {
+    public <Z extends TreeLoader<E, T, C>> Z initializeAndGet() {
         initialize();
         return (Z) this;
     }
@@ -235,8 +219,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
      *
      * @return The total number of {@link TreeItem TreeItems} removed, including those removed by recursive calls.
      */
-    private int clearEmptyFolders(TreeItem<E> item)
-    {
+    private int clearEmptyFolders(TreeItem<E> item) {
         final ArrayList<TreeItem<E>> toRemove = new ArrayList<>();
         int totalRemoved = 0;
         for (TreeItem<E> child: item.getChildren())
@@ -251,8 +234,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
     }
     
     // TO-DOC
-    private void applyCellFactory()
-    {
+    private void applyCellFactory() {
         // TODO [S]: Make sure resources are cleared when the cell is destroyed.
         // NOTE [S]: This might not be applicable for CreationTreeHandlers?
         final Function<E, C> controllerSupplier = getCellControllerFactory();
@@ -262,9 +244,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
                         cellData -> TB.resources().get(
                                 cellData,
                                 () -> controllerSupplier.apply(cellData), // CHANGE-HERE
-                                treeView.hashCode()
-                        )
-                )));
+                                treeView.hashCode()))));
     }
     
     //</editor-fold>
@@ -283,8 +263,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
      *
      * @return The first {@link TreeCellData#getWrappedObject() Wrapped Value} in the {@link TreeView} loaded by this {@link TreeLoader} -- starting with the {@link #getRootItem() Root Item} as the iteration {@code root} -- that matches the specified {@link Predicate filter}.
      */
-    public final T getObj(Predicate<T> filter, Object... wrappedObjConstructorParams)
-    {
+    public final T getObj(Predicate<T> filter, Object... wrappedObjConstructorParams) {
         return getObj(filter, getRootItem(), wrappedObjConstructorParams);
     }
     
@@ -301,8 +280,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
      *
      * @return The first {@link TreeCellData#getWrappedObject() Wrapped Value} in the {@link TreeView} loaded by this {@link TreeLoader} -- starting with the specified {@link TreeItem} as the iteration {@code root} -- that matches the specified {@link Predicate filter}.
      */
-    public T getObj(@Nullable Predicate<T> filter, @Nullable TreeItem<E> treeItem, @Nullable Object... wrappedObjConstructorParams)
-    {
+    public T getObj(@Nullable Predicate<T> filter, @Nullable TreeItem<E> treeItem, @Nullable Object... wrappedObjConstructorParams) {
         return ArrayTools.getAt(0, getObjs(filter, treeItem, null, 1, wrappedObjConstructorParams));
     }
     
@@ -317,8 +295,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
      *
      * @return All {@link TreeCellData#getWrappedObject() Wrapped Values} in the {@link TreeView} loaded by this {@link TreeLoader} -- starting with the {@link #getRootItem() Root Item} as the iteration {@code root} -- that match the specified {@link Predicate filter}.
      */
-    public final ArrayList<T> getAllObjs(Object... wrappedObjConstructorParams)
-    {
+    public final ArrayList<T> getAllObjs(Object... wrappedObjConstructorParams) {
         return getObjs(null, wrappedObjConstructorParams);
     }
     
@@ -334,8 +311,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
      *
      * @return All {@link TreeCellData#getWrappedObject() Wrapped Values} in the {@link TreeView} loaded by this {@link TreeLoader} -- starting with the {@link #getRootItem() Root Item} as the iteration {@code root} -- that match the specified {@link Predicate filter}.
      */
-    public final ArrayList<T> getObjs(Predicate<T> filter, Object... wrappedObjConstructorParams)
-    {
+    public final ArrayList<T> getObjs(Predicate<T> filter, Object... wrappedObjConstructorParams) {
         return getObjs(filter, getRootItem(), null, wrappedObjConstructorParams);
     }
     
@@ -353,8 +329,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
      *
      * @return All {@link TreeCellData#getWrappedObject() Wrapped Values} in the {@link TreeView} loaded by this {@link TreeLoader} -- starting with the specified {@link TreeItem} as the iteration {@code root} -- that match the specified {@link Predicate filter}.
      */
-    public @NotNull ArrayList<T> getObjs(@Nullable Predicate<T> filter, @Nullable TreeItem<E> treeItem, @Nullable ArrayList<T> list, @Nullable Object... wrappedObjConstructorParams)
-    {
+    public @NotNull ArrayList<T> getObjs(@Nullable Predicate<T> filter, @Nullable TreeItem<E> treeItem, @Nullable ArrayList<T> list, @Nullable Object... wrappedObjConstructorParams) {
         return getObjs(filter, treeItem, list, -1, wrappedObjConstructorParams);
     }
     
@@ -384,8 +359,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
      *
      * @return The specified {@link ArrayList} with all {@link TreeCellData#getWrappedObject() Wrapped Values} in the {@link TreeView} loaded by this {@link TreeLoader} that match the specified {@link Predicate filter} {@link ArrayList#add(Object) added} to it.
      */
-    public @NotNull ArrayList<T> getObjs(@Nullable Predicate<T> filter, @Nullable TreeItem<E> treeItem, @Nullable ArrayList<T> list, int maxSize, @Nullable Object... wrappedObjConstructorParams)
-    {
+    public @NotNull ArrayList<T> getObjs(@Nullable Predicate<T> filter, @Nullable TreeItem<E> treeItem, @Nullable ArrayList<T> list, int maxSize, @Nullable Object... wrappedObjConstructorParams) {
         final ArrayList<T> tempList = list != null ? list : new ArrayList<>();
         final Predicate<T> tempFilter = Objects.requireNonNullElseGet(filter, () -> (wrappedInstance -> true));
         final Object[] tempObjParams = wrappedObjConstructorParams != null ? wrappedObjConstructorParams : new Object[0];
@@ -406,8 +380,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
     //
     
     // TO-DOC
-    private boolean testTreeItem(int maxSize, @NotNull ArrayList<T> list, @NotNull Predicate<T> filter, @NotNull TreeItem<E> treeItem, @NotNull Object[] wrappedObjConstructorParams)
-    {
+    private boolean testTreeItem(int maxSize, @NotNull ArrayList<T> list, @NotNull Predicate<T> filter, @NotNull TreeItem<E> treeItem, @NotNull Object[] wrappedObjConstructorParams) {
         final E childCell = treeItem.getValue();
         if (childCell != null) {
             final T wrappedInstance = childCell.createWrappedInstance(wrappedObjConstructorParams);
@@ -427,32 +400,27 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
     protected abstract E createTreeCellData(String name, String parentName, boolean isFolder, Function<Object[], T> provider);
     
     //TO-DOC
-    public E generateCellData(String folder, Function<Object[], T> provider)
-    {
+    public E generateCellData(String folder, Function<Object[], T> provider) {
         return generateCellData(null, folder, provider, null, false);
     }
     
     //TO-DOC
-    public E generateCellData(String folder, Function<Object[], T> provider, Consumer<TreeItem<E>> settingsApplier)
-    {
+    public E generateCellData(String folder, Function<Object[], T> provider, Consumer<TreeItem<E>> settingsApplier) {
         return generateCellData(null, folder, provider, settingsApplier, false);
     }
     
     //TO-DOC
-    public E generateCellData(String name, String folder, Function<Object[], T> provider)
-    {
+    public E generateCellData(String name, String folder, Function<Object[], T> provider) {
         return generateCellData(name, folder, provider, null, false);
     }
     
     //TO-DOC
-    public E generateCellData(String name, String folder, Function<Object[], T> provider, Consumer<TreeItem<E>> settingsApplier)
-    {
+    public E generateCellData(String name, String folder, Function<Object[], T> provider, Consumer<TreeItem<E>> settingsApplier) {
         return generateCellData(name, folder, provider, settingsApplier, false);
     }
     
     //TO-DOC
-    public E generateFolderCellData(String name, String folder, Consumer<TreeItem<E>> settingsApplier)
-    {
+    public E generateFolderCellData(String name, String folder, Consumer<TreeItem<E>> settingsApplier) {
         return generateCellData(name, folder, null, settingsApplier, true);
     }
     
@@ -503,8 +471,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
      * @return
      */
     // TO-EXPAND
-    private E generateCellData(String name, String folder, Function<Object[], T> provider, Consumer<TreeItem<E>> settingsApplier, boolean isFolder)
-    {
+    private E generateCellData(String name, String folder, Function<Object[], T> provider, Consumer<TreeItem<E>> settingsApplier, boolean isFolder) {
         // TODO [S]: Add synchronization here?
         if (!isFolder) {
             // If isFolder is false, ensure that there is a non-null TreeItemValueProvider specified.
@@ -529,8 +496,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
     //
     
     //TO-DOC
-    private boolean addCellData(E cellData, Consumer<TreeItem<E>> settingsApplier)
-    {
+    private boolean addCellData(E cellData, Consumer<TreeItem<E>> settingsApplier) {
         // TODO [S]: Add synchronization here?
         if (cellData != null) {
             TreeItemFX<E> treeItem;
@@ -556,8 +522,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
     //<editor-fold desc="--- FOLDERS ---">
     
     //TO-DOC
-    public TreeItemFX<E> getFolderFor(E element)
-    {
+    public TreeItemFX<E> getFolderFor(E element) {
         final String parentName = ExceptionTools.nullCheck(ExceptionTools.nullCheck(element, "Element").getParentName(), "Parent Name");
         return parentName.equalsIgnoreCase(rootName) ? rootItem : folders.get(element.getParentName());
     }
@@ -570,8 +535,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
      * @return The {@link TreeItem} folder that was created by this method.
      */
     // TO-EXPAND
-    private TreeItemFX<E> putFolder(E element)
-    {
+    private TreeItemFX<E> putFolder(E element) {
         final TreeItemFX<E> item = new TreeItemFX<>(element);
         folders.put(element.getName(), item);
         return item;
@@ -591,20 +555,17 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
      *
      * @return The {@link Validatable validator} used to ensure all {@link TreeItemFX items} added to the {@link #getTreeView() TreeView} that is loaded by this {@link TreeLoader} adhere to the conditions set by the {@link Validatable validator}.
      */
-    public final Validatable<T> getValidator()
-    {
+    public final Validatable<T> getValidator() {
         return validator;
     }
     
     //TO-DOC
-    public void revalidate()
-    {
+    public void revalidate() {
         FXTools.runFX(() -> items.forEach(this::revalidate), true);
     }
     
     //TO-DOC
-    private TreeItemFX<E> revalidate(TreeItemFX<E> item)
-    {
+    private TreeItemFX<E> revalidate(TreeItemFX<E> item) {
         final Validatable<T> tempValidator = getValidator();
         if (tempValidator != null) {
             final E cellData = item.getValue();

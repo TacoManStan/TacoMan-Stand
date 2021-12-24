@@ -3,6 +3,8 @@ package com.taco.suit_lady.ui.contents.mandelbrot;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.taco.suit_lady._to_sort._new.interfaces.ObservablePropertyContainable;
 import com.taco.suit_lady.ui.ContentData;
+import com.taco.suit_lady.util.UIDProcessable;
+import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
@@ -21,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ConfigurableApplicationContext;
 
 public class MandelbrotContentData extends ContentData
-        implements ObservablePropertyContainable, Springable, JObject, JLoadable {
+        implements ObservablePropertyContainable, Springable, JObject, JLoadable, UIDProcessable {
     
     private final StrictSpringable springable;
     
@@ -454,6 +456,15 @@ public class MandelbrotContentData extends ContentData
     
     public static @NotNull MandelbrotContentData newDefaultInstance(Springable springable, double width, double height) {
         return new MandelbrotContentData(springable, -2.2, -1.2, .8, 1.2, width, height);
+    }
+    
+    private UIDProcessor uIDContainer;
+    
+    @Override
+    public UIDProcessor getUIDProcessor() {
+        if (uIDContainer == null)
+            uIDContainer = new UIDProcessor("group-name");
+        return uIDContainer;
     }
     
     //</editor-fold>

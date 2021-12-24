@@ -17,6 +17,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 public class ContentManager
         implements Springable {
+    
     private final FxWeaver weaver;
     private final ConfigurableApplicationContext ctx;
     

@@ -10,7 +10,6 @@ public class TB // Stands for ToolBox
     
     private static final ResourceTools RESOURCE_TOOLS;
     private static final GeneralTools GENERAL_TOOLS;
-    private static final FXTools FX_TOOLS;
     private static final StringTools STRING_TOOLS;
     private static final EnumTools ENUM_TOOLS;
     private static final CollectionTools COLLECTION_TOOLS;
@@ -23,7 +22,6 @@ public class TB // Stands for ToolBox
         
         RESOURCE_TOOLS = new ResourceTools();
         GENERAL_TOOLS = new GeneralTools();
-        FX_TOOLS = new FXTools();
         STRING_TOOLS = new StringTools();
         ENUM_TOOLS = new EnumTools();
         COLLECTION_TOOLS = new CollectionTools();
@@ -41,11 +39,6 @@ public class TB // Stands for ToolBox
     public static GeneralTools general()
     {
         return GENERAL_TOOLS;
-    }
-    
-    public static FXTools fx()
-    {
-        return FX_TOOLS;
     }
     
     public static StringTools strings()

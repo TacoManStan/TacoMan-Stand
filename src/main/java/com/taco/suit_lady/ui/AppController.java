@@ -5,6 +5,7 @@ import com.taco.suit_lady.ui.console.ConsoleMessageable;
 import com.taco.suit_lady.ui.jfx.button.ImageButton;
 import com.taco.suit_lady.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.ui.jfx.lists.treehandler.WrappingTreeCellData;
+import com.taco.suit_lady.ui.pages.client_instance_list_old_demo.ClientInstanceListDemoPage;
 import com.taco.suit_lady.ui.pages.content_switch_demo_page.ContentSwitchDemoPage;
 import com.taco.suit_lady.ui.pages.entity_debug_page.EntityDebugPage;
 import com.taco.suit_lady.ui.pages.example_page.ExamplePage;
@@ -229,7 +230,7 @@ public class AppController
         
         FXTools.constructDraggableNode(dragBar);
         FXTools.constructResizableNode(getStage(), cornerResizePane, topResizePane, bottomResizePane, leftResizePane, rightResizePane,
-                                             minimizeImagePane, maximizeImagePane, closeImagePane, settingsImagePane, sidebarImagePane);
+                                       minimizeImagePane, maximizeImagePane, closeImagePane, settingsImagePane, sidebarImagePane);
         
         bookshelfTitleLabel.textProperty().bind(
                 Bindings.createStringBinding(() -> {
@@ -293,7 +294,7 @@ public class AppController
         inDevelopmentSidebarBookshelf.getBooks().add(new UIBook(
                 this,
                 "Entity Debug",
-                "clients",
+                "entity-debug",
                 uiBook -> TB.resources().get(
                         "pages",
                         uiBook.getButtonID(),
@@ -320,6 +321,15 @@ public class AppController
         
         //<editor-fold desc="Demo SidebarBookshelf">
         
+        demoSidebarBookshelf.getBooks().add(new UIBook(
+                this,
+                "Client List Demo",
+                "clients",
+                uiBook -> TB.resources().get(
+                        "pages",
+                        uiBook.getButtonID(),
+                        () -> new ClientInstanceListDemoPage(uiBook)),
+                null));
         demoSidebarBookshelf.getBooks().add(new UIBook(
                 this,
                 "Demo 1",

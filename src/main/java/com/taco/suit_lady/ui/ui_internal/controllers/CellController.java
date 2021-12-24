@@ -7,12 +7,11 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.Objects;
 
-public abstract class CellController<T> extends Controller
-{
+public abstract class CellController<T> extends Controller {
+    
     private final ReadOnlyObjectWrapper<T> contentsProperty;
     
-    public CellController(FxWeaver weaver, ConfigurableApplicationContext ctx)
-    {
+    public CellController(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         super(weaver, ctx);
         
         this.contentsProperty = new ReadOnlyObjectWrapper<>();
@@ -24,18 +23,15 @@ public abstract class CellController<T> extends Controller
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final ReadOnlyObjectProperty<T> contentsProperty()
-    {
+    public final ReadOnlyObjectProperty<T> contentsProperty() {
         return contentsProperty.getReadOnlyProperty();
     }
     
-    public final T getContents()
-    {
+    public final T getContents() {
         return contentsProperty.get();
     }
     
-    public final void setContents(T cellContents)
-    {
+    public final void setContents(T cellContents) {
         contentsProperty.set(cellContents);
     }
     

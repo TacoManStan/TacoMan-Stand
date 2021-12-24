@@ -1,5 +1,6 @@
 package com.taco.suit_lady.util.tools;
 
+import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.binding.*;
@@ -260,7 +261,7 @@ public class BindingTools
                 {
                     if (property.isBound())
                         throw ExceptionTools.ex("Property is already bound (" + property + ")");
-                    TB.fx().runFX(() -> property.setValue(newValue), true);
+                    FXTools.runFX(() -> property.setValue(newValue), true);
                 });
     }
     

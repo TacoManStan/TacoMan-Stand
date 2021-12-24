@@ -1055,7 +1055,7 @@ public class FXTools {
     }
     
     
-    public void constructDraggableNode(Node... nodes) {
+    public static void constructDraggableNode(Node... nodes) {
         Objects.requireNonNull(nodes, "Nodes cannot be null");
         ObjectProperty<Stage> stageProperty = new SimpleObjectProperty<>();
         
