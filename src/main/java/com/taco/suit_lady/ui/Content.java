@@ -73,7 +73,7 @@ public abstract class Content<D extends ContentData, C extends ContentController
         if (ArrayTools.isEmpty(ExceptionTools.nullCheck(books, "Book Array"))) throw ExceptionTools.ex("Bookshelf Contents Cannot Be Empty");
         if (ArrayTools.containsNull(books)) throw ExceptionTools.ex("Bookshelf Contents Cannot Contain Null Elements: [" + Arrays.asList(books) + "]");
         
-        final SidebarBookshelf bookshelf = new SidebarBookshelf(getSidebar(), name);
+        final SidebarBookshelf bookshelf = new SidebarBookshelf(getSidebar(), name, true);
         
         bookshelf.getBooks().addAll(books);
         bookshelf.getButtonGroup().selectFirst();

@@ -9,6 +9,7 @@ import com.taco.suit_lady.ui.pages.client_instance_list_old_demo.ClientInstanceL
 import com.taco.suit_lady.ui.pages.content_switch_demo_page.ContentSwitchDemoPage;
 import com.taco.suit_lady.ui.pages.entity_debug_page.EntityDebugPage;
 import com.taco.suit_lady.ui.pages.example_page.ExamplePage;
+import com.taco.suit_lady.ui.pages.mandelbrot_data_list_page.MandelbrotContentListPage;
 import com.taco.suit_lady.ui.pages.tester_page.TesterPage;
 import com.taco.suit_lady.ui.ui_internal.console.ConsoleUIDataContainer;
 import com.taco.suit_lady.ui.ui_internal.controllers.SettingsController;
@@ -261,15 +262,24 @@ public class AppController
     private void initSidebar() {
         final Sidebar sidebar = ctx().getBean(AppUI.class).getSidebar();
         
-        final SidebarBookshelf generalSidebarBookshelf = new SidebarBookshelf(sidebar, "General");
-        final SidebarBookshelf nyiSidebarBookshelf = new SidebarBookshelf(sidebar, "Not Yet Implemented");
-        final SidebarBookshelf demoSidebarBookshelf = new SidebarBookshelf(sidebar, "Demo");
-        final SidebarBookshelf numberSidebarBookshelf = new SidebarBookshelf(sidebar, "Num");
+        final SidebarBookshelf generalSidebarBookshelf = new SidebarBookshelf(sidebar, "General", true);
+        final SidebarBookshelf nyiSidebarBookshelf = new SidebarBookshelf(sidebar, "Not Yet Implemented", true);
+        final SidebarBookshelf demoSidebarBookshelf = new SidebarBookshelf(sidebar, "Demo", true);
+        final SidebarBookshelf numberSidebarBookshelf = new SidebarBookshelf(sidebar, "Num", true);
         
         //<editor-fold desc="Bookshelves">
         
         //<editor-fold desc="General SidebarBookshelf">
-        
+    
+        generalSidebarBookshelf.getBooks().add(new UIBook(
+                this,
+                "Mandelbrot List",
+                "mandelbrot2",
+                uiBook -> TB.resources().get(
+                        "pages",
+                        uiBook.getUID(uiBook.getButtonID()),
+                        () -> new MandelbrotContentListPage(uiBook)),
+                null));
         generalSidebarBookshelf.getBooks().add(new UIBook(
                 this,
                 "Content Switch Demo",
@@ -290,7 +300,7 @@ public class AppController
                 null));
         generalSidebarBookshelf.getButtonGroup().selectFirst();
         
-        final SidebarBookshelf inDevelopmentSidebarBookshelf = new SidebarBookshelf(sidebar, "In Development");
+        final SidebarBookshelf inDevelopmentSidebarBookshelf = new SidebarBookshelf(sidebar, "In Development", true);
         inDevelopmentSidebarBookshelf.getBooks().add(new UIBook(
                 this,
                 "Entity Debug",

@@ -21,8 +21,7 @@ import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
 // TODO - Add BooleanProperty bidirectionally-bound to the selected SidebarBookshelf of the parent Sidebar, strictly for convenience.
-public class SidebarBookshelf extends UIBookshelf
-{
+public class SidebarBookshelf extends UIBookshelf {
     private final ReentrantLock lock;
     private final StringProperty nameProperty; // Currently Unused
     
@@ -32,17 +31,16 @@ public class SidebarBookshelf extends UIBookshelf
     
     private final BoundImageButtonGroup<UIBook> bookButtonGroup;
     
-    private boolean selectOnAdd;
+    private final boolean selectOnAdd;
     
     /**
-     * <p>Refer to {@link #SidebarBookshelf(Sidebar, StackPane, String) Fully-Parameterized Constructor} for additional information.</p>
+     * <p>Refer to {@link #SidebarBookshelf(Sidebar, StackPane, String, boolean) Fully-Parameterized Constructor} for additional information.</p>
      * <blockquote><b>Passthrough Definition:</b> <i><code>
-     * new {@link #SidebarBookshelf(Sidebar, StackPane, String) SidebarBookshelf}<b>(</b>owner<b>,</b> menuButton<b>,</b> <u>null</u><b>)</b>
+     * new {@link #SidebarBookshelf(Sidebar, StackPane, String, boolean) SidebarBookshelf}<b>(</b>owner<b>,</b> menuButton<b>,</b> <u>null</u><b>)</b>
      * </code></i></blockquote>
      */
-    public SidebarBookshelf(@NotNull Sidebar owner, @NotNull String name)
-    {
-        this(owner, null, name);
+    public SidebarBookshelf(@NotNull Sidebar owner, @NotNull String name, boolean selectOnAdd) {
+        this(owner, null, name, selectOnAdd);
     }
     
     /**
@@ -56,15 +54,14 @@ public class SidebarBookshelf extends UIBookshelf
      *                    <ul>
      *                          <li>Cannot be {@code null}.</li>
      *                    </ul>
-     * @param name The name of the constructed {@link SidebarBookshelf}. Displayed as the selection button text and internal name property.
+     * @param name        The name of the constructed {@link SidebarBookshelf}. Displayed as the selection button text and internal name property.
      *
      * @throws NullPointerException If the {@code owner} parameter is {@code null}.
      * @throws NullPointerException If the {@code menuButton} parameter is {@code null}.
      * @see UIBookshelf#UIBookshelf(StackPane)
      */
     // TO-UPDATE
-    public SidebarBookshelf(@NotNull Sidebar owner, @Nullable StackPane contentPane, @NotNull String name)
-    {
+    public SidebarBookshelf(@NotNull Sidebar owner, @Nullable StackPane contentPane, @NotNull String name, boolean selectOnAdd) {
         super(contentPane);
         
         ExceptionTools.nullCheck(owner, "Sidebar (Owner/Parent)");
@@ -80,6 +77,8 @@ public class SidebarBookshelf extends UIBookshelf
         this.button.setMaxHeight(20);
         
         this.bookButtonGroup = new BoundImageButtonGroup<>(getBooks(), lock);
+        
+        this.selectOnAdd = selectOnAdd;
         
         //
         
@@ -97,8 +96,7 @@ public class SidebarBookshelf extends UIBookshelf
      *     <li>Defines the {@link Button#setOnAction(EventHandler) functionality} of the {@link #getButton() button} assigned to this {@link SidebarBookshelf}.</li>
      * </ol>
      */
-    public void initialize()
-    {
+    public void initialize() {
         // TODO - It might be a good idea to run the majority (if not all) of this on the JFX Thread.
         // TODO - The synchronization works for making most aspects of SidebarBookshelf Thread-Safe, but if a thread already has a reference to the book list, the list can still be modified asynchronously.
         lock.lock();
@@ -139,8 +137,7 @@ public class SidebarBookshelf extends UIBookshelf
      * @see #getName()
      * @see #setName(String)
      */
-    public @NotNull StringProperty nameProperty()
-    {
+    public @NotNull StringProperty nameProperty() {
         return nameProperty;
     }
     
@@ -153,8 +150,7 @@ public class SidebarBookshelf extends UIBookshelf
      * @see #nameProperty()
      * @see #setName(String)
      */
-    public @Nullable String getName()
-    {
+    public @Nullable String getName() {
         return nameProperty.get();
     }
     
@@ -167,8 +163,7 @@ public class SidebarBookshelf extends UIBookshelf
      * @see #nameProperty()
      * @see #getName()
      */
-    public void setName(@Nullable String name)
-    {
+    public void setName(@Nullable String name) {
         nameProperty.set(name);
     }
     
@@ -177,8 +172,7 @@ public class SidebarBookshelf extends UIBookshelf
      *
      * @return The {@link Sidebar} object containing this {@link SidebarBookshelf} instance.
      */
-    public @NotNull Sidebar getOwner()
-    {
+    public @NotNull Sidebar getOwner() {
         return owner;
     }
     
@@ -186,7 +180,7 @@ public class SidebarBookshelf extends UIBookshelf
      * <p>Returns the {@link VBox} {@link Region container} housing all {@link UIBook#buttonViewProperty() selection buttons} mapped to all {@link UIBook UIBooks} in this {@link SidebarBookshelf}.</p>
      * <p><b>Details</b></p>
      * <ol>
-     *     <li>The {@link VBox} returned by {@link #getButtonBox() this method} is created automatically in the {@link SidebarBookshelf} {@link #SidebarBookshelf(Sidebar, StackPane, String) constructor}.</li>
+     *     <li>The {@link VBox} returned by {@link #getButtonBox() this method} is created automatically in the {@link SidebarBookshelf} {@link #SidebarBookshelf(Sidebar, StackPane, String, boolean) constructor}.</li>
      * </ol>
      * <p><b>Usage in {@link Sidebar}</b></p>
      * <ol>
@@ -199,8 +193,7 @@ public class SidebarBookshelf extends UIBookshelf
      *
      * @see Sidebar#selectedBookshelfProperty()
      */
-    public @NotNull VBox getButtonBox()
-    {
+    public @NotNull VBox getButtonBox() {
         // TODO - In cases such as this — where an object type is of an external source, is not read-only, but needs to be read-only — an inner class containing bindings or read-only properties bound to the internal default properties might be a good solution.
         return buttonBox;
     }
@@ -215,8 +208,7 @@ public class SidebarBookshelf extends UIBookshelf
      *
      * @return The {@link Button} assigned to this {@link SidebarBookshelf} instance.
      */
-    public @NotNull Button getButton()
-    {
+    public @NotNull Button getButton() {
         return button;
     }
     
@@ -232,8 +224,7 @@ public class SidebarBookshelf extends UIBookshelf
      *
      * @return The {@link ImageButtonGroup} responsible for containing and managing the {@link ImageButton ImageButtons} used to switch between {@link ImageButtonGroup#selectedButtonProperty() selected} {@link UIBook UIBooks} in this {@link SidebarBookshelf}.
      */
-    public @NotNull BoundImageButtonGroup<UIBook> getButtonGroup()
-    {
+    public @NotNull BoundImageButtonGroup<UIBook> getButtonGroup() {
         return bookButtonGroup;
     }
     
@@ -243,8 +234,7 @@ public class SidebarBookshelf extends UIBookshelf
      *
      * @return True if the selection was successfully cleared, false if it was not.
      */
-    public boolean clearSelection()
-    {
+    public boolean clearSelection() {
         return getButtonGroup().clearSelection();
     }
     
@@ -252,23 +242,26 @@ public class SidebarBookshelf extends UIBookshelf
      * <p>Sets the {@link Sidebar#selectedBookshelfProperty() selection} of the {@link #getOwner() Sidebar} containing this {@link SidebarBookshelf} instance to this {@link SidebarBookshelf}.</p>
      * <blockquote><b>Passthrough Definition:</b> <i><code>{@link #getOwner()}<b>.</b>{@link Sidebar#setSelectedBookshelf(SidebarBookshelf) setSelectedBookshelf}<b>(</b>this<b>)</b></code></i></blockquote>
      */
-    public void select()
-    {
+    public void select() {
         getOwner().setSelectedBookshelf(this);
+    }
+    
+    
+    // TO-DOC
+    public boolean isSelectOnAdd() {
+        return selectOnAdd;
     }
     
     //</editor-fold>
     
     
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return super.hashCode();
     }
     
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "SidebarBookshelf{" +
                "name=" + nameProperty.get() +
                ", buttonBox=" + buttonBox +

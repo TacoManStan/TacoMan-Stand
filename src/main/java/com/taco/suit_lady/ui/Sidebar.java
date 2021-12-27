@@ -168,7 +168,7 @@ public class Sidebar
             while (c.next()) {
                 c.getAddedSubList().forEach(sidebarBookshelf -> {
                     toolBar.getItems().add(sidebarBookshelf.getButton());
-                    sidebarBookshelf.select();
+//                    sidebarBookshelf.select();
                 });
                 c.getRemoved().forEach(sidebarBookshelf -> toolBar.getItems().remove(sidebarBookshelf.getButton()));
             }

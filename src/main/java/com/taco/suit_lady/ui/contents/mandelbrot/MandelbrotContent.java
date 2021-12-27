@@ -4,11 +4,16 @@ import com.taco.suit_lady._to_sort._new.Debugger;
 import com.taco.suit_lady.ui.AppUI;
 import com.taco.suit_lady.ui.Content;
 import com.taco.suit_lady.ui.UIBook;
+import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotContentController.MouseDragData;
+import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotIterator.MandelbrotColor;
 import com.taco.suit_lady.ui.jfx.components.BoundCanvas;
 import com.taco.suit_lady.ui.jfx.components.RectanglePaintCommand;
+import com.taco.suit_lady.ui.pages.mandelbrot_data_list_page.MandelbrotContentHandler;
 import com.taco.suit_lady.ui.painting.SLEllipsePaintCommand;
 import com.taco.suit_lady.ui.painting.SLImagePaintCommand;
 import com.taco.suit_lady.ui.painting.SLRectanglePaintCommand;
+import com.taco.suit_lady.util.UIDProcessable;
+import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.TB;
@@ -19,11 +24,13 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.concurrent.Task;
 import javafx.scene.paint.Color;
+import org.docx4j.wml.U;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-public class MandelbrotContent extends Content<MandelbrotContentData, MandelbrotContentController> {
+public class MandelbrotContent extends Content<MandelbrotContentData, MandelbrotContentController>
+        implements UIDProcessable {
     
     private final ReentrantLock lock;
     
@@ -95,7 +102,7 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
         getCoverPage().getController().getYMinTextField().getFormatter().valueProperty().bindBidirectional(getData().yMinProperty());
         
         getCoverPage().getController().getColorSchemeChoiceBox().valueProperty().bindBidirectional(getData().colorSchemeProperty());
-//        getCoverPage().getController().getInvertColorSchemeImageButton().selectedProperty().bindBidirectional(data.invertColorSchemeProperty());
+        //        getCoverPage().getController().getInvertColorSchemeImageButton().selectedProperty().bindBidirectional(data.invertColorSchemeProperty());
         getCoverPage().getController().getInvertColorSchemeCheckBox().selectedProperty().bindBidirectional(getData().invertColorSchemeProperty());
         
         getCoverPage().getController().getPauseAutoRegenerationImageButton().selectedProperty().bindBidirectional(getData().pauseAutoRegenerationProperty());
@@ -106,11 +113,11 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
         getData().xMaxProperty().addListener((observable, oldValue, newValue) -> refreshCanvasChecked());
         getData().yMinProperty().addListener((observable, oldValue, newValue) -> refreshCanvasChecked());
         getData().yMaxProperty().addListener((observable, oldValue, newValue) -> refreshCanvasChecked());
-    
+        
         getData().colorSchemeProperty().addListener((observable, oldValue, newValue) -> refreshCanvasChecked());
         getData().invertColorSchemeProperty().addListener((observable, oldValue, newValue) -> refreshCanvasChecked());
-    
-    
+        
+        
         // Bind the text properties of applicable labels to reflect relevant MandelbrotData calculated values (bindings)
         getCoverPage().getController().getWidthLabel().textProperty().bind(
                 Bindings.createStringBinding(() -> "" + getData().getWidth(), getData().widthBinding()));
@@ -164,10 +171,10 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
             FXTools.clearCanvasUnsafe(ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas());
             
             debugger().print("In Refresh 2...");
-    
+            
             getData().resizeTo(newWidth, newHeight);
             final MandelbrotIterator iterator = new MandelbrotIterator(
-                    this, new MandelbrotIterator.MandelbrotColor[(int) newWidth][(int) newHeight], getData(), lock);
+                    this, new MandelbrotColor[(int) newWidth][(int) newHeight], getData(), lock);
             worker = new Task<>() {
                 @Override
                 protected Void call() {
@@ -209,29 +216,29 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
         }, true), true);
     }
     
-    private void redraw(MandelbrotIterator.MandelbrotColor[][] colors) {
+    private void redraw(MandelbrotColor[][] colors) {
         FXTools.runFX(() -> TaskTools.sync(lock, () -> {
             getCoverPage().getController().getProgressBar().setVisible(false);
             for (int i = 0; i < colors.length; i++)
                 for (int j = 0; j < colors[i].length; j++) {
-                    final MandelbrotIterator.MandelbrotColor mandelbrotColor = colors[i][j];
+                    final MandelbrotColor mandelbrotColor = colors[i][j];
                     final Color color = mandelbrotColor != null ? mandelbrotColor.getColor() : Color.BLACK;
                     getController().canvas().getGraphicsContext2D().getPixelWriter().setColor(i, j, color);
                 }
         }), true);
     }
     
-    private void zoom(MandelbrotContentController.MouseDragData dragData) {
+    private void zoom(@NotNull MouseDragData dragData) {
         if (!dragData.isValid())
             throw ExceptionTools.ex("Drag Data is Invalid!");
         selectionBoxPaintCommand.deactivate();
         selectionBoxPaintCommand2.deactivate();
         selectionCirclePaintCommand.deactivate();
-    
+        
         getData().zoomTo(dragData.getStartX(), dragData.getStartY(), dragData.getEndX(), dragData.getEndY());
     }
     
-    private void updateZoomBox(MandelbrotContentController.MouseDragData moveData) {
+    private void updateZoomBox(MouseDragData moveData) {
         TaskTools.sync(lock, () -> {
             selectionBoxPaintCommand.activate();
             selectionBoxPaintCommand2.activate();
@@ -272,6 +279,16 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
             else
                 debugger().print(Debugger.WARN, "Worker Cancellation Failed!");
         }
+    }
+    
+    
+    private UIDProcessor uidProcessor;
+    
+    @Override
+    public UIDProcessor getUIDProcessor() {
+        if (uidProcessor == null)
+            uidProcessor = new UIDProcessor("mandelbrot_content");
+        return uidProcessor;
     }
     
     //</editor-fold>

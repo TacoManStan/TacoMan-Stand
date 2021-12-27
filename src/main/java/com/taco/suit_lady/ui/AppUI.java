@@ -1,6 +1,7 @@
 package com.taco.suit_lady.ui;
 
 import com.taco.suit_lady.ui.jfx.components.ContentPane;
+import com.taco.suit_lady.ui.pages.mandelbrot_data_list_page.MandelbrotContentHandler;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.ui.console.Console;
 import com.taco.suit_lady.ui.contents.test.TestContent;
@@ -15,8 +16,8 @@ import org.springframework.stereotype.Component;
 @Component
 // TO-DOC
 public class AppUI
-        implements Springable
-{
+        implements Springable {
+    
     private final FxWeaver weaver;
     private final ConfigurableApplicationContext ctx;
     
@@ -24,6 +25,8 @@ public class AppUI
     private final ReadOnlyObjectWrapper<Sidebar> sidebarProperty;
     
     private ContentManager contentManager;
+    
+    private MandelbrotContentHandler mandelbrotContentHandler;
     
     /**
      * <p>Constructs a new {@link AppUI} instance.</p>
@@ -36,8 +39,7 @@ public class AppUI
      * @param weaver The {@link Autowired autowired} {@link FxWeaver} variable for this {@link Springable} object.
      * @param ctx    The {@link Autowired autowired} {@link ConfigurableApplicationContext ApplicationContext} variable for this {@link Springable} object.
      */
-    public AppUI(FxWeaver weaver, ConfigurableApplicationContext ctx)
-    {
+    public AppUI(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         this.weaver = weaver;
         this.ctx = ctx;
         
@@ -66,10 +68,11 @@ public class AppUI
      *     </li>
      * </ol>
      */
-    protected void init()
-    {
+    protected void init() {
         ctx().getBean(Console.class).initialize();
         this.contentManager = new ContentManager(weaver(), ctx());
+        
+        this.mandelbrotContentHandler = new MandelbrotContentHandler(this);
     }
     
     //</editor-fold>
@@ -81,8 +84,7 @@ public class AppUI
      *
      * @return The {@link ReadOnlyObjectProperty} containing the {@link AppController} in charge of the {@code FXML UI} of this {@link AppUI}.
      */
-    public final ReadOnlyObjectProperty<AppController> controllerProperty()
-    {
+    public final ReadOnlyObjectProperty<AppController> controllerProperty() {
         return controllerProperty.getReadOnlyProperty();
     }
     
@@ -91,8 +93,7 @@ public class AppUI
      *
      * @return The {@link AppController} in charge of the {@code FXML UI} of this {@link AppUI}.
      */
-    public final AppController getController()
-    {
+    public final AppController getController() {
         return controllerProperty.get();
     }
     
@@ -101,10 +102,10 @@ public class AppUI
      *
      * @param controller The {@link AppController} to be set as the {@link AppController} in charge of the {@code FXML UI} of this {@link AppUI}.
      */
-    protected final void setController(AppController controller)
-    {
+    protected final void setController(AppController controller) {
         controllerProperty.set(controller);
     }
+    
     
     /**
      * <p>Returns the {@link ReadOnlyObjectProperty} containing the {@link Sidebar} of this {@link AppUI}.</p>
@@ -112,8 +113,7 @@ public class AppUI
      * @return The {@link ReadOnlyObjectProperty} containing the {@link Sidebar} of this {@link AppUI}.
      */
     // TO-EXPAND (same with corresponding getter and setter)
-    public final ReadOnlyObjectProperty<Sidebar> sidebarProperty()
-    {
+    public final ReadOnlyObjectProperty<Sidebar> sidebarProperty() {
         return sidebarProperty.getReadOnlyProperty();
     }
     
@@ -122,8 +122,7 @@ public class AppUI
      *
      * @return The {@link Sidebar} of this {@link AppUI}.
      */
-    public final @NotNull Sidebar getSidebar()
-    {
+    public final @NotNull Sidebar getSidebar() {
         return sidebarProperty.get();
     }
     
@@ -132,8 +131,7 @@ public class AppUI
      *
      * @param sidebar The {@link Sidebar} to be set as the {@link Sidebar} of this {@link AppUI}.
      */
-    protected final void setSidebar(Sidebar sidebar)
-    {
+    protected final void setSidebar(Sidebar sidebar) {
         sidebarProperty.set(sidebar);
     }
     
@@ -143,9 +141,13 @@ public class AppUI
      * @return The {@link ContentManager Content Manager} in charge of managing the {@link Content} of this {@link AppUI} instance.
      */
     // TO-EXPAND
-    public final ContentManager getContentManager()
-    {
+    public final ContentManager getContentManager() {
         return contentManager;
+    }
+    
+    // TO-DOC
+    public final MandelbrotContentHandler getMandelbrotContentHandler() {
+        return mandelbrotContentHandler;
     }
     
     // </editor-fold>
@@ -153,26 +155,22 @@ public class AppUI
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override
-    public @NotNull FxWeaver weaver()
-    {
+    public @NotNull FxWeaver weaver() {
         return weaver;
     }
     
     @Override
-    public @NotNull ConfigurableApplicationContext ctx()
-    {
+    public @NotNull ConfigurableApplicationContext ctx() {
         return ctx;
     }
     
     @Override
-    public final @NotNull AppUI ui()
-    {
+    public final @NotNull AppUI ui() {
         return this;
     }
     
     @Override
-    public final @NotNull Sidebar sidebar()
-    {
+    public final @NotNull Sidebar sidebar() {
         return getSidebar();
     }
     
