@@ -40,11 +40,6 @@ public abstract class Content<D extends ContentData, C extends ContentController
         this.overlayHandler.addOverlay(new Overlay(this, null, "default", 1));
         
         this.bookshelves = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
-        //        ArrayTools.applyChangeHandler(
-        //                bookshelves,
-        //                bookshelf -> onBookshelfAddedInternal(bookshelf),
-        //                bookshelf -> onBookshelfRemovedInternal(bookshelf)
-        //        );
     }
     
     //<editor-fold desc="--- PROPERTIES ---">

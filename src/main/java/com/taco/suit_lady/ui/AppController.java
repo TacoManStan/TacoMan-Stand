@@ -10,6 +10,7 @@ import com.taco.suit_lady.ui.pages.content_switch_demo_page.ContentSwitchDemoPag
 import com.taco.suit_lady.ui.pages.entity_debug_page.EntityDebugPage;
 import com.taco.suit_lady.ui.pages.example_page.ExamplePage;
 import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_list_page.MandelbrotContentListPage;
+import com.taco.suit_lady.ui.pages.impl.content_selector.mandelbrot_test.MandelbrotContentSelectorPage;
 import com.taco.suit_lady.ui.pages.tester_page.TesterPage;
 import com.taco.suit_lady.ui.ui_internal.console.ConsoleUIDataContainer;
 import com.taco.suit_lady.ui.ui_internal.controllers.SettingsController;
@@ -270,11 +271,20 @@ public class AppController
         //<editor-fold desc="Bookshelves">
         
         //<editor-fold desc="General SidebarBookshelf">
-    
+        
         generalSidebarBookshelf.getBooks().add(new UIBook(
                 this,
-                "Mandelbrot List",
+                "Mandelbrot Content Selector Demo",
                 "mandelbrot2",
+                uiBook -> TB.resources().get(
+                        "pages",
+                        uiBook.getUID(uiBook.getButtonID()),
+                        () -> new MandelbrotContentSelectorPage(uiBook)),
+                null));
+        generalSidebarBookshelf.getBooks().add(new UIBook(
+                this,
+                "Mandelbrot List Demo (OLD)",
+                "mandelbrot1",
                 uiBook -> TB.resources().get(
                         "pages",
                         uiBook.getUID(uiBook.getButtonID()),

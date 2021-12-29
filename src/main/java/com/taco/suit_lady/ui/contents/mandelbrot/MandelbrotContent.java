@@ -8,6 +8,7 @@ import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotContentController.Mou
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotIterator.MandelbrotColor;
 import com.taco.suit_lady.ui.jfx.components.BoundCanvas;
 import com.taco.suit_lady.ui.jfx.components.RectanglePaintCommand;
+import com.taco.suit_lady.ui.pages.impl.content_selector.ListableContent;
 import com.taco.suit_lady.ui.painting.SLEllipsePaintCommand;
 import com.taco.suit_lady.ui.painting.SLImagePaintCommand;
 import com.taco.suit_lady.ui.painting.SLRectanglePaintCommand;
@@ -28,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class MandelbrotContent extends Content<MandelbrotContentData, MandelbrotContentController>
-        implements UIDProcessable {
+        implements UIDProcessable, ListableContent {
     
     private final ReentrantLock lock;
     
@@ -250,8 +251,9 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
         //        FXTools.drawRectangle(ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas(), moveData.getAsPaintable(), true, false);
     }
     
+    @Override
     public void shutdown() {
-        ui().getMandelbrotContentHandler().shutdown(this);
+    
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">

@@ -29,8 +29,6 @@ public final class ConsoleElementController extends CellController<WrappingTreeC
     
     //</editor-fold>
     
-    //
-    
     //<editor-fold desc="FXML">
     
     @FXML private Pane root;
@@ -40,6 +38,7 @@ public final class ConsoleElementController extends CellController<WrappingTreeC
     @FXML private HBox contentHBox;
     
     //</editor-fold>
+    
     
     private ImageButton settingsButton;
     

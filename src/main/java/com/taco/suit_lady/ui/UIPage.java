@@ -11,8 +11,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 // TO-DOC
 public abstract class UIPage<C extends UIPageController<?>>
-        implements Displayable, Springable
-{
+        implements Displayable, Springable {
+    
     private final FxWeaver weaver;
     private final ConfigurableApplicationContext ctx;
     
@@ -40,8 +40,7 @@ public abstract class UIPage<C extends UIPageController<?>>
      * @throws NullPointerException If the controller {@link #controllerDefinition() definition} is {@code null}.
      * @throws NullPointerException If the {@link UIPageController controller} loaded by the {@link #weaver() FxWeaver} using the controller {@link #controllerDefinition() definition} defined by this {@link UIPage} implementation is {@code null}.
      */
-    public UIPage(@NotNull UIBook owner, Object... constructorParams)
-    {
+    public UIPage(@NotNull UIBook owner, Object... constructorParams) {
         ExceptionTools.nullCheck(owner, "Springable Parent (UIBook Owner)");
         
         this.weaver = ExceptionTools.nullCheck(owner.weaver(), "FxWeaver");
@@ -51,11 +50,10 @@ public abstract class UIPage<C extends UIPageController<?>>
         // Compound expression containing null checks for both the controller definition and the resulting constructor instance itself
         this.controller = ExceptionTools.nullCheckMessage(
                 weaver().loadController(ExceptionTools.nullCheck(controllerDefinition(), "Controller Definition Class")),
-                "Error Loading Controller of Type [" + controllerDefinition() + "] — Ensure controller class is defined in FXML file."
-        );
+                "Error Loading Controller of Type [" + controllerDefinition() + "] — Ensure controller class is defined in FXML file.");
         
-        this.initializePage(constructorParams);
         this.controller.setPage(this);
+        this.initializePage(constructorParams);
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
@@ -66,8 +64,7 @@ public abstract class UIPage<C extends UIPageController<?>>
      *
      * @return The {@link UIBook} instance that contains this {@link UIPage} instance.
      */
-    public final @NotNull UIBook getOwner()
-    {
+    public final @NotNull UIBook getOwner() {
         return owner;
     }
     
@@ -80,8 +77,7 @@ public abstract class UIPage<C extends UIPageController<?>>
      *
      * @return The {@link Controller} that defines and manages the {@link #getContent() content} displayed by this {@link UIPage}.
      */
-    public @NotNull C getController()
-    {
+    public @NotNull C getController() {
         return controller;
     }
     
@@ -93,8 +89,7 @@ public abstract class UIPage<C extends UIPageController<?>>
      * {@inheritDoc}
      */
     @Override
-    public @NotNull FxWeaver weaver()
-    {
+    public @NotNull FxWeaver weaver() {
         return weaver;
     }
     
@@ -102,8 +97,7 @@ public abstract class UIPage<C extends UIPageController<?>>
      * {@inheritDoc}
      */
     @Override
-    public @NotNull ConfigurableApplicationContext ctx()
-    {
+    public @NotNull ConfigurableApplicationContext ctx() {
         return ctx;
     }
     
@@ -118,8 +112,7 @@ public abstract class UIPage<C extends UIPageController<?>>
      * @see Controller#root()
      */
     @Override
-    public @Nullable Pane getContent()
-    {
+    public @Nullable Pane getContent() {
         return getController().root();
     }
     
