@@ -1,4 +1,4 @@
-package com.taco.suit_lady.ui.pages.mandelbrot_data_list_page;
+package com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_list_page;
 
 import com.taco.suit_lady.ui.UIBook;
 import com.taco.suit_lady.ui.UIPage;

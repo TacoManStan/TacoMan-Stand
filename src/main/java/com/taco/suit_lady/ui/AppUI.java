@@ -1,7 +1,7 @@
 package com.taco.suit_lady.ui;
 
 import com.taco.suit_lady.ui.jfx.components.ContentPane;
-import com.taco.suit_lady.ui.pages.mandelbrot_data_list_page.MandelbrotContentHandler;
+import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_list_page.MandelbrotContentHandler;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.ui.console.Console;
 import com.taco.suit_lady.ui.contents.test.TestContent;

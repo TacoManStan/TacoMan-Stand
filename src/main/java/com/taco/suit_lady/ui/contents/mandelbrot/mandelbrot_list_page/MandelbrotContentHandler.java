@@ -1,7 +1,6 @@
-package com.taco.suit_lady.ui.pages.mandelbrot_data_list_page;
+package com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_list_page;
 
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotContent;
-import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotContentData;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
@@ -14,7 +13,6 @@ import javafx.collections.FXCollections;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.stereotype.Component;
 
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -35,9 +33,7 @@ public class MandelbrotContentHandler
         this.selectedContentProperty = new SimpleObjectProperty<>();
         
         
-        this.selectedContentProperty.addListener((observable, oldValue, newValue) -> {
-                ui().getContentManager().setContent(newValue);
-        });
+        this.selectedContentProperty.addListener((observable, oldValue, newValue) -> ui().getContentManager().setContent(newValue));
     }
     
     //<editor-fold desc="--- PROPERTIES ---">

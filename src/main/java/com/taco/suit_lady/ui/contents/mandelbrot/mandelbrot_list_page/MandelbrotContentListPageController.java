@@ -1,8 +1,7 @@
-package com.taco.suit_lady.ui.pages.mandelbrot_data_list_page;
+package com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_list_page;
 
 import com.taco.suit_lady.ui.UIPageController;
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotContent;
-import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotContentData;
 import com.taco.suit_lady.ui.jfx.button.ImageButton;
 import com.taco.suit_lady.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.ui.jfx.lists.CellControlManager;

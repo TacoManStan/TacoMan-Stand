@@ -1,7 +1,6 @@
-package com.taco.suit_lady.ui.pages.mandelbrot_data_list_page;
+package com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_list_page;
 
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotContent;
-import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotContentData;
 import com.taco.suit_lady.ui.jfx.button.ImageButton;
 import com.taco.suit_lady.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.ui.ui_internal.controllers.CellController;
@@ -80,7 +79,7 @@ public class MandelbrotContentElementController extends CellController<Mandelbro
     
     private void close() {
         debugger().print("Close Pressed");
-//        getContents().shutdown();
+        getContents().shutdown();
     }
     
     private void runScript() {

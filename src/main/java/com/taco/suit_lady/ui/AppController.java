@@ -9,7 +9,7 @@ import com.taco.suit_lady.ui.pages.client_instance_list_old_demo.ClientInstanceL
 import com.taco.suit_lady.ui.pages.content_switch_demo_page.ContentSwitchDemoPage;
 import com.taco.suit_lady.ui.pages.entity_debug_page.EntityDebugPage;
 import com.taco.suit_lady.ui.pages.example_page.ExamplePage;
-import com.taco.suit_lady.ui.pages.mandelbrot_data_list_page.MandelbrotContentListPage;
+import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_list_page.MandelbrotContentListPage;
 import com.taco.suit_lady.ui.pages.tester_page.TesterPage;
 import com.taco.suit_lady.ui.ui_internal.console.ConsoleUIDataContainer;
 import com.taco.suit_lady.ui.ui_internal.controllers.SettingsController;

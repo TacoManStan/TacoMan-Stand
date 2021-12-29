@@ -31,6 +31,7 @@ import java.util.function.Consumer;
 @Scope("prototype")
 public class MandelbrotContentController extends ContentController
         implements Lockable {
+    
     //<editor-fold desc="--- FXML FIELDS ---">
     
     @FXML private AnchorPane root;

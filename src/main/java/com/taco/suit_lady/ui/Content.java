@@ -70,8 +70,10 @@ public abstract class Content<D extends ContentData, C extends ContentController
     //<editor-fold desc="--- CLASS BODY ---">
     
     protected SidebarBookshelf injectBookshelf(String name, UIBook... books) {
-        if (ArrayTools.isEmpty(ExceptionTools.nullCheck(books, "Book Array"))) throw ExceptionTools.ex("Bookshelf Contents Cannot Be Empty");
-        if (ArrayTools.containsNull(books)) throw ExceptionTools.ex("Bookshelf Contents Cannot Contain Null Elements: [" + Arrays.asList(books) + "]");
+        if (ArrayTools.isEmpty(ExceptionTools.nullCheck(books, "Book Array")))
+            throw ExceptionTools.ex("Bookshelf Contents Cannot Be Empty");
+        if (ArrayTools.containsNull(books))
+            throw ExceptionTools.ex("Bookshelf Contents Cannot Contain Null Elements: [" + Arrays.asList(books) + "]");
         
         final SidebarBookshelf bookshelf = new SidebarBookshelf(getSidebar(), name, true);
         

@@ -8,7 +8,6 @@ import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotContentController.Mou
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotIterator.MandelbrotColor;
 import com.taco.suit_lady.ui.jfx.components.BoundCanvas;
 import com.taco.suit_lady.ui.jfx.components.RectanglePaintCommand;
-import com.taco.suit_lady.ui.pages.mandelbrot_data_list_page.MandelbrotContentHandler;
 import com.taco.suit_lady.ui.painting.SLEllipsePaintCommand;
 import com.taco.suit_lady.ui.painting.SLImagePaintCommand;
 import com.taco.suit_lady.ui.painting.SLRectanglePaintCommand;
@@ -24,7 +23,6 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.concurrent.Task;
 import javafx.scene.paint.Color;
-import org.docx4j.wml.U;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.locks.ReentrantLock;
@@ -250,6 +248,10 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
         });
         //        final AppUI ui = ctx().getBean(AppUI.class);
         //        FXTools.drawRectangle(ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas(), moveData.getAsPaintable(), true, false);
+    }
+    
+    public void shutdown() {
+        ui().getMandelbrotContentHandler().shutdown(this);
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
