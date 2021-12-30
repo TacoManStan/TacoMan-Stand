@@ -8,10 +8,10 @@ import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotIterator.MandelbrotCo
 import com.taco.suit_lady.ui.jfx.components.BoundCanvas;
 import com.taco.suit_lady.ui.jfx.components.RectanglePaintCommand;
 import com.taco.suit_lady.ui.pages.impl.content_selector.ListableContent;
-import com.taco.suit_lady.ui.pages.impl.content_selector.mandelbrot_test.MandelbrotContentHandler;
-import com.taco.suit_lady.ui.pages.impl.content_selector.mandelbrot_test.MandelbrotContentSelectorPage;
-import com.taco.suit_lady.ui.pages.impl.content_selector.mandelbrot_test.MandelbrotContentSelectorPageController;
-import com.taco.suit_lady.ui.pages.impl.content_selector.mandelbrot_test.MandelbrotElementController;
+import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotContentHandler;
+import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotContentSelectorPage;
+import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotContentSelectorPageController;
+import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotElementController;
 import com.taco.suit_lady.ui.painting.SLEllipsePaintCommand;
 import com.taco.suit_lady.ui.painting.SLImagePaintCommand;
 import com.taco.suit_lady.ui.painting.SLRectanglePaintCommand;
@@ -43,7 +43,6 @@ public class MandelbrotContent extends ListableContent<
     private final ReentrantLock lock;
     
     private Task<Void> worker;
-    private final ReadOnlyBooleanWrapper isGeneratingProperty;
     
     private RectanglePaintCommand selectionBoxPaintCommandOld;
     private final SLRectanglePaintCommand selectionBoxPaintCommand;
@@ -67,7 +66,6 @@ public class MandelbrotContent extends ListableContent<
                 null));
         
         this.worker = null;
-        this.isGeneratingProperty = new ReadOnlyBooleanWrapper(false);
         
         getController().canvas().setCanvasListener((source, newWidth, newHeight) -> refreshCanvas());
         getCoverPage().getController().getRegenerateButton().setOnAction(event -> refreshCanvas());
@@ -98,6 +96,7 @@ public class MandelbrotContent extends ListableContent<
         getController().setDragConsumer(dragData -> zoom(dragData));
         getController().setMoveConsumer(dragData -> updateZoomBox(dragData));
         
+        iconImageProperty().bind(getController().canvas().imageProperty());
         initUIPage();
     }
     
@@ -165,7 +164,6 @@ public class MandelbrotContent extends ListableContent<
     }
     
     private void refreshCanvas() {
-        System.out.println("Refreshing Canvas");
         sync(() -> FXTools.runFX(() -> {
             final BoundCanvas canvas = getController().canvas();
             final double newWidth = getController().canvas().getWidth();
@@ -202,18 +200,19 @@ public class MandelbrotContent extends ListableContent<
                 @Override
                 protected void succeeded() {
                     debugger().print("Generation Successful!");
+                    getController().canvas().refreshImage();
                     worker = null;
                 }
                 
                 @Override
                 protected void cancelled() {
-                    debugger().print(Debugger.WARN, "Generation Cancelled.");
+                    debugger().print("Generation Cancelled.");
                     worker = null;
                 }
                 
                 @Override
                 protected void failed() {
-                    debugger().print(Debugger.ERROR, "Generation Failed!");
+                    debugger().print(Debugger.WARN, "Generation Failed!");
                     worker = null;
                 }
             };

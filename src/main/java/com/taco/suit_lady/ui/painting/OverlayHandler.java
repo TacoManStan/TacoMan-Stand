@@ -38,9 +38,8 @@ public class OverlayHandler
         this.root = new StackPane();
         FXTools.togglePickOnBounds(root, false);
         
-        ListTools.applyListener(lock, overlays, (op1, op2, opType, triggerType) -> {
-            System.out.println("Operation Event Triggered:  [" + op1 + "  |  " + op2 + "  |  " + opType + "  |  " + triggerType + "]");
-        });
+        ListTools.applyListener(lock, overlays, (op1, op2, opType, triggerType)
+                -> debugger().print("Operation Event Triggered:  [" + op1 + "  |  " + op2 + "  |  " + opType + "  |  " + triggerType + "]"));
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">

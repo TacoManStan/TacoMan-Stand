@@ -8,8 +8,11 @@ import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.image.Image;
 import net.rgielen.fxweaver.core.FxWeaver;
+import org.docx4j.wml.R;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -28,11 +31,15 @@ public class BoundCanvas extends Canvas
     private final ReadOnlyObjectWrapper<CanvasListener> canvasListenerProperty;
     private final ReadOnlyListWrapper<PaintCommandable> paintCommands;
     
+    private final ReadOnlyObjectWrapper<Image> imageProperty;
+    
     {
         this.lock = new ReentrantLock();
         
         this.canvasListenerProperty = new ReadOnlyObjectWrapper<>();
         this.paintCommands = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
+        
+        this.imageProperty = new ReadOnlyObjectWrapper<>();
     }
     
     /**
@@ -128,6 +135,19 @@ public class BoundCanvas extends Canvas
         });
     }
     
+    
+    public final ReadOnlyObjectProperty<Image> imageProperty() {
+        return imageProperty.getReadOnlyProperty();
+    }
+    
+    public final Image getImage() {
+        return imageProperty.get();
+    }
+    
+    public void refreshImage() {
+        sync(() -> imageProperty.set(snapshot(new SnapshotParameters(), null)));
+    }
+    
     //</editor-fold>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
@@ -203,7 +223,7 @@ public class BoundCanvas extends Canvas
     //</editor-fold>
     
     protected void repaint() {
-        sync(() -> {
+        sync(() -> FXTools.runFX(() -> {
             FXTools.clearCanvasUnsafe(this);
             for (PaintCommandable paintCommand: getPaintCommands())
                 paintCommand.paint(this);
@@ -211,7 +231,8 @@ public class BoundCanvas extends Canvas
             final CanvasListener listener = getCanvasListener();
             if (listener != null)
                 listener.redraw(this, width, height);
-        });
+            refreshImage();
+        }, true));
     }
     
     public interface CanvasListener {

@@ -1,11 +1,8 @@
-package com.taco.suit_lady.ui.pages.impl.content_selector.mandelbrot_test;
+package com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page;
 
-import com.taco.suit_lady._to_sort._new.Debugger;
 import com.taco.suit_lady.ui.UIBook;
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotContent;
-import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotContentController;
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotContentData;
-import com.taco.suit_lady.ui.pages.impl.content_selector.ContentHandler;
 import com.taco.suit_lady.ui.pages.impl.content_selector.ContentSelectorPage;
 import org.jetbrains.annotations.NotNull;
 

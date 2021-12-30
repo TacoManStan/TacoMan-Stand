@@ -1,8 +1,14 @@
 package com.taco.suit_lady.util.tools.fx_tools;
 
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -80,8 +86,12 @@ public class FXGraphicTools {
 	 * @param image The {@code BufferedImage} being copied.
 	 * @return A deep copy of the specified {@code BufferedImage}.
 	 */
-	public static BufferedImage deepCopy(BufferedImage image) {
+	public static @NotNull BufferedImage deepCopy(@NotNull BufferedImage image) {
 		ColorModel color_model = image.getColorModel();
 		return new BufferedImage(color_model, image.copyData(null), color_model.isAlphaPremultiplied(), null);
+	}
+	
+	public static WritableImage asImage(@NotNull Parent node) {
+		return node.snapshot(new SnapshotParameters(), null);
 	}
 }

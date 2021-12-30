@@ -7,7 +7,7 @@ import com.taco.suit_lady.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.ui.jfx.lists.treehandler.WrappingTreeCellData;
 import com.taco.suit_lady.ui.pages.entity_debug_page.EntityDebugPage;
 import com.taco.suit_lady.ui.pages.example_page.ExamplePage;
-import com.taco.suit_lady.ui.pages.impl.content_selector.mandelbrot_test.MandelbrotContentSelectorPage;
+import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotContentSelectorPage;
 import com.taco.suit_lady.ui.pages.tester_page.TesterPage;
 import com.taco.suit_lady.ui.ui_internal.console.ConsoleUIDataContainer;
 import com.taco.suit_lady.ui.ui_internal.controllers.SettingsController;

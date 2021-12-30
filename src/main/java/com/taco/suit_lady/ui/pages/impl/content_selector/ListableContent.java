@@ -6,10 +6,18 @@ import com.taco.suit_lady.ui.ContentData;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
+import com.taco.suit_lady.util.tools.fx_tools.FXGraphicTools;
+import com.taco.suit_lady.util.tools.fx_tools.FXTools;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.ObjectBinding;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Supplier;
 
 public abstract class ListableContent<
         D extends ContentData,
@@ -23,15 +31,52 @@ public abstract class ListableContent<
     
     private final H contentHandler;
     
+    private final ObjectProperty<EC> elementControllerProperty;
+    private final ObjectProperty<Image> iconImageProperty;
+    
     public ListableContent(@NotNull H contentHandler) {
         super(contentHandler);
+        
         this.contentHandler = contentHandler;
+        
+        this.elementControllerProperty = new SimpleObjectProperty<>();
+        this.iconImageProperty = new SimpleObjectProperty<>();
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
     
     public final H getContentHandler() {
         return contentHandler;
+    }
+    
+    
+    public final ObjectProperty<EC> elementControllerProperty() {
+        return elementControllerProperty;
+    }
+    
+    public final EC getElementController() {
+        return elementControllerProperty.get();
+    }
+    
+    public final EC setElementController(EC newValue) {
+        EC oldValue = getElementController();
+        elementControllerProperty.set(newValue);
+        return oldValue;
+    }
+    
+    
+    public final ObjectProperty<Image> iconImageProperty() {
+        return iconImageProperty;
+    }
+    
+    public final Image getIconImage() {
+        return iconImageProperty.get();
+    }
+    
+    public final Image setIconImage(Image newValue) {
+        Image oldValue = getIconImage();
+        iconImageProperty.set(newValue);
+        return oldValue;
     }
     
     //</editor-fold>

@@ -1,4 +1,4 @@
-package com.taco.suit_lady.ui.pages.impl.content_selector.mandelbrot_test;
+package com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page;
 
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotContent;
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotContentData;
@@ -16,8 +16,6 @@ public class MandelbrotContentHandler extends ContentHandler<
     
     public MandelbrotContentHandler(Springable springable) {
         super(springable);
-        
-        
     }
     
     @Override
