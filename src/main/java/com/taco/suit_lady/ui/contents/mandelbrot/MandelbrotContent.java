@@ -165,7 +165,8 @@ public class MandelbrotContent extends ListableContent<
     }
     
     private void refreshCanvas() {
-        TaskTools.sync(lock, () -> FXTools.runFX(() -> {
+        System.out.println("Refreshing Canvas");
+        sync(() -> FXTools.runFX(() -> {
             final BoundCanvas canvas = getController().canvas();
             final double newWidth = getController().canvas().getWidth();
             final double newHeight = getController().canvas().getHeight();
@@ -220,7 +221,7 @@ public class MandelbrotContent extends ListableContent<
             
             getCoverPage().getController().getProgressBar().progressProperty().bind(worker.progressProperty());
             new Thread(worker).start(); // Use executor instead?
-        }, true), true);
+        }, true));
     }
     
     private void redraw(MandelbrotColor[][] colors) {
@@ -236,7 +237,6 @@ public class MandelbrotContent extends ListableContent<
     }
     
     private void zoom(@NotNull MouseDragData dragData) {
-        System.out.println("On Zoom");
         if (!dragData.isValid())
             throw ExceptionTools.ex("Drag Data is Invalid!");
         selectionBoxPaintCommand.deactivate();
@@ -247,7 +247,6 @@ public class MandelbrotContent extends ListableContent<
     }
     
     private void updateZoomBox(MouseDragData moveData) {
-        System.out.println("On Update Zoom Box");
         TaskTools.sync(lock, () -> {
             selectionBoxPaintCommand.activate();
             selectionBoxPaintCommand2.activate();
@@ -262,6 +261,12 @@ public class MandelbrotContent extends ListableContent<
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+    
+    @Override
+    public boolean isNullableLock() {
+        return true;
+    }
     
     @Override
     protected @NotNull MandelbrotContentData loadData() {
