@@ -1,7 +1,6 @@
 package com.taco.suit_lady.ui;
 
 import com.taco.suit_lady.ui.jfx.components.ContentPane;
-import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_list_page.MandelbrotContentHandlerOLD;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.ui.console.Console;
 import com.taco.suit_lady.ui.contents.test.TestContent;
@@ -25,8 +24,6 @@ public class AppUI
     private final ReadOnlyObjectWrapper<Sidebar> sidebarProperty;
     
     private ContentManager contentManager;
-    
-    private MandelbrotContentHandlerOLD mandelbrotContentHandlerOLD;
     
     /**
      * <p>Constructs a new {@link AppUI} instance.</p>
@@ -71,8 +68,6 @@ public class AppUI
     protected void init() {
         ctx().getBean(Console.class).initialize();
         this.contentManager = new ContentManager(weaver(), ctx());
-        
-        this.mandelbrotContentHandlerOLD = new MandelbrotContentHandlerOLD(this);
     }
     
     //</editor-fold>
@@ -143,11 +138,6 @@ public class AppUI
     // TO-EXPAND
     public final ContentManager getContentManager() {
         return contentManager;
-    }
-    
-    // TO-DOC
-    public final MandelbrotContentHandlerOLD getMandelbrotContentHandler() {
-        return mandelbrotContentHandlerOLD;
     }
     
     // </editor-fold>

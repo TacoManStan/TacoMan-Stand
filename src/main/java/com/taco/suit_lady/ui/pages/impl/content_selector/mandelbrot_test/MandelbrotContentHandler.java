@@ -6,7 +6,6 @@ import com.taco.suit_lady.ui.pages.impl.content_selector.ContentHandler;
 import com.taco.suit_lady.util.springable.Springable;
 import org.jetbrains.annotations.NotNull;
 
-// CURRENTLY UNUSED - ANONYMOUS CLASS USED INSTEAD
 public class MandelbrotContentHandler extends ContentHandler<
         MandelbrotContentData,
         MandelbrotContentSelectorPage,
@@ -17,6 +16,8 @@ public class MandelbrotContentHandler extends ContentHandler<
     
     public MandelbrotContentHandler(Springable springable) {
         super(springable);
+        
+        
     }
     
     @Override

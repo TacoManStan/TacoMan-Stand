@@ -5,10 +5,8 @@ import com.taco.suit_lady.ui.AppUI;
 import com.taco.suit_lady.ui.UIBook;
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotContentController.MouseDragData;
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotIterator.MandelbrotColor;
-import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_list_page.MandelbrotContentHandlerOLD;
 import com.taco.suit_lady.ui.jfx.components.BoundCanvas;
 import com.taco.suit_lady.ui.jfx.components.RectanglePaintCommand;
-import com.taco.suit_lady.ui.pages.impl.content_selector.ContentHandler;
 import com.taco.suit_lady.ui.pages.impl.content_selector.ListableContent;
 import com.taco.suit_lady.ui.pages.impl.content_selector.mandelbrot_test.MandelbrotContentHandler;
 import com.taco.suit_lady.ui.pages.impl.content_selector.mandelbrot_test.MandelbrotContentSelectorPage;
@@ -19,7 +17,6 @@ import com.taco.suit_lady.ui.painting.SLImagePaintCommand;
 import com.taco.suit_lady.ui.painting.SLRectanglePaintCommand;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
-import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.TB;
 import com.taco.suit_lady.util.tools.TaskTools;
@@ -239,7 +236,7 @@ public class MandelbrotContent extends ListableContent<
     }
     
     private void zoom(@NotNull MouseDragData dragData) {
-        debugger().print("On Zoom");
+        System.out.println("On Zoom");
         if (!dragData.isValid())
             throw ExceptionTools.ex("Drag Data is Invalid!");
         selectionBoxPaintCommand.deactivate();
@@ -250,7 +247,7 @@ public class MandelbrotContent extends ListableContent<
     }
     
     private void updateZoomBox(MouseDragData moveData) {
-        debugger().print("On Update Zoom Box");
+        System.out.println("On Update Zoom Box");
         TaskTools.sync(lock, () -> {
             selectionBoxPaintCommand.activate();
             selectionBoxPaintCommand2.activate();

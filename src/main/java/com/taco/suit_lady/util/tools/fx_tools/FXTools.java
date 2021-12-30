@@ -815,15 +815,24 @@ public class FXTools {
      *
      * @return True if the mouse is on the specified {@link Node} based on the specified {@link MouseEvent}, false otherwise.
      */
-    public static boolean isMouseOnNode(Node node) {
+    public static boolean isMouseOnNode(Node node, MouseEvent event) {
         Objects.requireNonNull(node, "Node cannot be null");
+        
+        Point2D local = node.screenToLocal(event.getScreenX(), event.getScreenY());
+        if (local.getX() < 0 || local.getY() < 0)
+            return false;
+        if (node instanceof Canvas canvas)
+            return local.getX() < canvas.getWidth() && local.getY() < canvas.getHeight();
+        else if (node instanceof Region region)
+            return local.getX() < region.getWidth() && local.getY() < region.getHeight();
+        
         return node.isHover();
     }
     
     public static boolean isMouseOnEventSource(MouseEvent event) {
         Objects.requireNonNull(event, "Event cannot be null");
         if (event.getSource() instanceof Node)
-            return isMouseOnNode((Node) event.getSource());
+            return isMouseOnNode((Node) event.getSource(), event);
         return false;
     }
     
@@ -2024,14 +2033,6 @@ public class FXTools {
         private void setHeight(@NotNull MouseEvent event) {
             stage.setHeight(Math.max(stage.getMinHeight(), stageHeightProperty.get() + (event.getScreenY() - (anchorProperty.get().getY() + stage.getY()))));
             event.consume();
-        }
-        
-        private boolean isOnExcludeNode() {
-            if (excludeNodes != null)
-                for (Node node: excludeNodes)
-                    if (node != null && isMouseOnNode(node))
-                        return true;
-            return false;
         }
     }
     

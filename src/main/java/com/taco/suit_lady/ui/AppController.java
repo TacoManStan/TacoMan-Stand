@@ -5,11 +5,8 @@ import com.taco.suit_lady.ui.console.ConsoleMessageable;
 import com.taco.suit_lady.ui.jfx.button.ImageButton;
 import com.taco.suit_lady.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.ui.jfx.lists.treehandler.WrappingTreeCellData;
-import com.taco.suit_lady.ui.pages.client_instance_list_old_demo.ClientInstanceListDemoPage;
-import com.taco.suit_lady.ui.pages.content_switch_demo_page.ContentSwitchDemoPage;
 import com.taco.suit_lady.ui.pages.entity_debug_page.EntityDebugPage;
 import com.taco.suit_lady.ui.pages.example_page.ExamplePage;
-import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_list_page.MandelbrotContentListPage;
 import com.taco.suit_lady.ui.pages.impl.content_selector.mandelbrot_test.MandelbrotContentSelectorPage;
 import com.taco.suit_lady.ui.pages.tester_page.TesterPage;
 import com.taco.suit_lady.ui.ui_internal.console.ConsoleUIDataContainer;
@@ -283,24 +280,6 @@ public class AppController
                 null));
         generalSidebarBookshelf.getBooks().add(new UIBook(
                 this,
-                "Mandelbrot List Demo (OLD)",
-                "mandelbrot1",
-                uiBook -> TB.resources().get(
-                        "pages",
-                        uiBook.getUID(uiBook.getButtonID()),
-                        () -> new MandelbrotContentListPage(uiBook)),
-                null));
-        generalSidebarBookshelf.getBooks().add(new UIBook(
-                this,
-                "Content Switch Demo",
-                "rerun",
-                uiBook -> TB.resources().get(
-                        "pages",
-                        uiBook.getUID(uiBook.getButtonID()),
-                        () -> new ContentSwitchDemoPage(uiBook)),
-                null));
-        generalSidebarBookshelf.getBooks().add(new UIBook(
-                this,
                 "Development",
                 "social",
                 uiBook -> TB.resources().get(
@@ -341,15 +320,6 @@ public class AppController
         
         //<editor-fold desc="Demo SidebarBookshelf">
         
-        demoSidebarBookshelf.getBooks().add(new UIBook(
-                this,
-                "Client List Demo",
-                "clients",
-                uiBook -> TB.resources().get(
-                        "pages",
-                        uiBook.getButtonID(),
-                        () -> new ClientInstanceListDemoPage(uiBook)),
-                null));
         demoSidebarBookshelf.getBooks().add(new UIBook(
                 this,
                 "Demo 1",

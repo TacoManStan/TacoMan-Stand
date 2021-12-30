@@ -5,7 +5,6 @@ import com.taco.suit_lady.logic.LogiCore;
 import com.taco.suit_lady.ui.Sidebar;
 import com.taco.suit_lady.ui.console.Console;
 import com.taco.suit_lady.ui.AppUI;
-import com.taco.suit_lady.ui.pages.client_instance_list_old_demo.DummyClientHandler;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -80,11 +79,6 @@ public interface Springable {
     // TO-DOC
     default @NotNull LogiCore logiCore() {
         return ctx().getBean(LogiCore.class);
-    }
-    
-    // TEMP
-    default @NotNull DummyClientHandler clientHandler() {
-        return ctx().getBean(DummyClientHandler.class);
     }
     
     //

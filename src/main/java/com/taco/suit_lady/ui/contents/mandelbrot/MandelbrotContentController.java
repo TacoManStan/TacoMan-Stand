@@ -56,7 +56,7 @@ public class MandelbrotContentController extends ContentController
         super(weaver, ctx);
         
         this.lock = new ReentrantLock();
-        this.canvasPane = new CanvasPane(this);
+        this.canvasPane = new CanvasPane(this, 0.0);
         
         this.resetDragConsumer();
     }
@@ -96,6 +96,7 @@ public class MandelbrotContentController extends ContentController
     private int mouseY = -1;
     
     private void onMousePressed(MouseEvent e) {
+        System.out.println("Mouse Pressed: " + e);
         sync(() -> {
             this.mouseX = (int) e.getX();
             this.mouseY = (int) e.getY();
@@ -103,16 +104,19 @@ public class MandelbrotContentController extends ContentController
     }
     
     private void onMouseReleased(MouseEvent e) {
-        debugger().print("On Mouse Released: " + e);
         sync(() -> {
-            if (FXTools.isMouseOnNode(canvas()))
+        System.out.println("On Mouse Released: " + FXTools.isMouseOnNode(canvas(), e));
+            if (FXTools.isMouseOnNode(canvas(), e)) {
+                System.out.println("Mouse On Node");
                 getDragConsumer().accept(generateDragData(e));
+            }
         });
     }
     
     private void onMouseDragged(MouseEvent e) {
+        System.out.println("On Mouse Dragged: " + e);
         sync(() -> {
-            if (FXTools.isMouseOnNode(canvas()))
+            if (FXTools.isMouseOnNode(canvas(), e))
                 getMoveConsumer().accept(generateDragData(e));
         });
     }
