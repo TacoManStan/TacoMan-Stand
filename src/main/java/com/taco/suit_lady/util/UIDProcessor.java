@@ -41,7 +41,8 @@ public class UIDProcessor
 	 *               Leave empty or null for no additional UID parameters.
 	 * @return A unique identification String for this {@link UIDProcessor}.
 	 */
-	@Override public String getUID(Object... params) {
+	@Override
+	public String getUID(Object... params) {
 		StringBuilder string_builder = new StringBuilder();
 
 		string_builder.append(globalUID);
@@ -61,7 +62,8 @@ public class UIDProcessor
 		return UID.processUID(string_builder.toString());
 	}
 
-	@Override public String getGroupID() {
+	@Override
+	public String getGroupID() {
 		return UID.processUID(globalUID);
 	}
 }

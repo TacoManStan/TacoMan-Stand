@@ -6,32 +6,48 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
 
-public record Bounds2D(int x, int y, int width, int height)
-{
+public record Bounds2D(int x, int y, int width, int height) {
+    
+    //<editor-fold desc="--- CLASS BODY ---">
+    
+    public int getMinX() {
+        return x();
+    }
+    
+    public int getMinY() {
+        return y();
+    }
+    
+    public int getMaxX() {
+        return x() + width();
+    }
+    
+    public int getMaxY() {
+        return y() + height();
+    }
+    
+    //</editor-fold>
+    
+    
     //<editor-fold desc="--- CONVERSION ---">
     
-    public @NotNull java.awt.Rectangle asAWT()
-    {
+    public @NotNull java.awt.Rectangle asAWT() {
         return new java.awt.Rectangle(x, y, width, height);
     }
     
-    public @NotNull javafx.scene.shape.Rectangle asFX()
-    {
+    public @NotNull javafx.scene.shape.Rectangle asFX() {
         return new javafx.scene.shape.Rectangle(x, y, width, height);
     }
     
-    public @NotNull Bounds asBounds()
-    {
+    public @NotNull Bounds asBounds() {
         return new BoundingBox(x, y, width, height);
     }
     
-    public @NotNull Point2D getLocation()
-    {
+    public @NotNull Point2D getLocation() {
         return new Point2D(x, y);
     }
     
-    public @NotNull Point2D getDimensions()
-    {
+    public @NotNull Point2D getDimensions() {
         return new Point2D(width, height);
     }
     
@@ -39,20 +55,17 @@ public record Bounds2D(int x, int y, int width, int height)
     
     //<editor-fold desc="--- STATIC CONVERSION ---">
     
-    public static @NotNull Bounds2D fromRectAWT(@NotNull java.awt.Rectangle rectangle)
-    {
+    public static @NotNull Bounds2D fromRectAWT(@NotNull java.awt.Rectangle rectangle) {
         ExceptionTools.nullCheck(rectangle, "AWT Rectangle");
         return new Bounds2D(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
     }
     
-    public static @NotNull Bounds2D fromRectFX(@NotNull javafx.scene.shape.Rectangle rectangle)
-    {
+    public static @NotNull Bounds2D fromRectFX(@NotNull javafx.scene.shape.Rectangle rectangle) {
         ExceptionTools.nullCheck(rectangle, "JFX Rectangle");
         return new Bounds2D((int) rectangle.getX(), (int) rectangle.getY(), (int) rectangle.getWidth(), (int) rectangle.getHeight());
     }
     
-    public static @NotNull Bounds2D fromPoints(@NotNull Point2D location, @NotNull Point2D dimensions)
-    {
+    public static @NotNull Bounds2D fromPoints(@NotNull Point2D location, @NotNull Point2D dimensions) {
         ExceptionTools.nullCheck(location, "Location Point2D");
         ExceptionTools.nullCheck(dimensions, "Dimensions Point2D");
         
@@ -61,11 +74,11 @@ public record Bounds2D(int x, int y, int width, int height)
     
     //</editor-fold>
     
+    
     //<editor-fold desc="--- FOUNDATIONAL ---">
     
     @Override
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o) {
         if (this == o)
             return true;
         if (!(o instanceof Bounds2D bounds2D))
@@ -81,8 +94,7 @@ public record Bounds2D(int x, int y, int width, int height)
     }
     
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         int result = x;
         
         result = 31 * result + y;
@@ -93,8 +105,7 @@ public record Bounds2D(int x, int y, int width, int height)
     }
     
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "Bounds2D{" +
                "x=" + x +
                ", y=" + y +

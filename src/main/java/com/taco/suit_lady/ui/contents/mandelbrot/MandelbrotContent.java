@@ -2,13 +2,18 @@ package com.taco.suit_lady.ui.contents.mandelbrot;
 
 import com.taco.suit_lady._to_sort._new.Debugger;
 import com.taco.suit_lady.ui.AppUI;
-import com.taco.suit_lady.ui.Content;
 import com.taco.suit_lady.ui.UIBook;
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotContentController.MouseDragData;
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotIterator.MandelbrotColor;
+import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_list_page.MandelbrotContentHandlerOLD;
 import com.taco.suit_lady.ui.jfx.components.BoundCanvas;
 import com.taco.suit_lady.ui.jfx.components.RectanglePaintCommand;
+import com.taco.suit_lady.ui.pages.impl.content_selector.ContentHandler;
 import com.taco.suit_lady.ui.pages.impl.content_selector.ListableContent;
+import com.taco.suit_lady.ui.pages.impl.content_selector.mandelbrot_test.MandelbrotContentHandler;
+import com.taco.suit_lady.ui.pages.impl.content_selector.mandelbrot_test.MandelbrotContentSelectorPage;
+import com.taco.suit_lady.ui.pages.impl.content_selector.mandelbrot_test.MandelbrotContentSelectorPageController;
+import com.taco.suit_lady.ui.pages.impl.content_selector.mandelbrot_test.MandelbrotElementController;
 import com.taco.suit_lady.ui.painting.SLEllipsePaintCommand;
 import com.taco.suit_lady.ui.painting.SLImagePaintCommand;
 import com.taco.suit_lady.ui.painting.SLRectanglePaintCommand;
@@ -28,8 +33,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-public class MandelbrotContent extends Content<MandelbrotContentData, MandelbrotContentController>
-        implements UIDProcessable, ListableContent {
+public class MandelbrotContent extends ListableContent<
+        MandelbrotContentData,
+        MandelbrotContentController,
+        MandelbrotContentSelectorPage,
+        MandelbrotContentSelectorPageController,
+        MandelbrotElementController,
+        MandelbrotContentHandler,
+        MandelbrotContent>
+        implements UIDProcessable {
     
     private final ReentrantLock lock;
     
@@ -43,9 +55,8 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
     
     private MandelbrotPage coverPage;
     
-    public MandelbrotContent(@NotNull Springable springable) {
-        super(springable);
-        
+    public MandelbrotContent(@NotNull MandelbrotContentHandler contentHandler) {
+        super(contentHandler);
         this.lock = new ReentrantLock();
         
         injectBookshelf("Mandelbrot Demo", new UIBook(
@@ -228,6 +239,7 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
     }
     
     private void zoom(@NotNull MouseDragData dragData) {
+        debugger().print("On Zoom");
         if (!dragData.isValid())
             throw ExceptionTools.ex("Drag Data is Invalid!");
         selectionBoxPaintCommand.deactivate();
@@ -238,6 +250,7 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
     }
     
     private void updateZoomBox(MouseDragData moveData) {
+        debugger().print("On Update Zoom Box");
         TaskTools.sync(lock, () -> {
             selectionBoxPaintCommand.activate();
             selectionBoxPaintCommand2.activate();
@@ -249,11 +262,6 @@ public class MandelbrotContent extends Content<MandelbrotContentData, Mandelbrot
         });
         //        final AppUI ui = ctx().getBean(AppUI.class);
         //        FXTools.drawRectangle(ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas(), moveData.getAsPaintable(), true, false);
-    }
-    
-    @Override
-    public void shutdown() {
-    
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">

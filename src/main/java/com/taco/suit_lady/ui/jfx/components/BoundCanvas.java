@@ -20,8 +20,8 @@ import java.util.concurrent.locks.ReentrantLock;
  * <p>A {@link #isResizable() resizable} implementation of {@link Canvas}.</p>
  */
 public class BoundCanvas extends Canvas
-        implements Springable, Lockable
-{
+        implements Springable, Lockable {
+    
     private final Springable springable;
     private final ReentrantLock lock;
     
@@ -38,10 +38,8 @@ public class BoundCanvas extends Canvas
     /**
      * <p>Constructs a new {@link BoundCanvas} instance with default {@link #widthProperty() width} and {@link #heightProperty() height} values.</p>
      */
-    public BoundCanvas(@NotNull Springable springable)
-    {
+    public BoundCanvas(@NotNull Springable springable) {
         super();
-        
         this.springable = springable;
     }
     
@@ -51,10 +49,8 @@ public class BoundCanvas extends Canvas
      * @param width  The initial {@link #widthProperty() width} of this {@link BoundCanvas}.
      * @param height The initial {@link #heightProperty() height} of this {@link BoundCanvas}.
      */
-    public BoundCanvas(@NotNull Springable springable, double width, double height)
-    {
+    public BoundCanvas(@NotNull Springable springable, double width, double height) {
         super(width, height);
-        
         this.springable = springable;
     }
     
@@ -70,8 +66,7 @@ public class BoundCanvas extends Canvas
      *
      * @return The {@link ReadOnlyObjectProperty} containing the {@link CanvasListener} instance that is called whenever the {@link BoundCanvas canvas} needs to be {@link CanvasListener#redraw(BoundCanvas, double, double) redrawn}.
      */
-    public final @NotNull ReadOnlyObjectProperty<CanvasListener> canvasListenerProperty()
-    {
+    public final @NotNull ReadOnlyObjectProperty<CanvasListener> canvasListenerProperty() {
         return canvasListenerProperty.getReadOnlyProperty();
     }
     
@@ -80,8 +75,7 @@ public class BoundCanvas extends Canvas
      *
      * @return See {@link #canvasListenerProperty()}.
      */
-    public final @Nullable CanvasListener getCanvasListener()
-    {
+    public final @Nullable CanvasListener getCanvasListener() {
         return canvasListenerProperty.get();
     }
     
@@ -99,23 +93,19 @@ public class BoundCanvas extends Canvas
      *
      * @param canvasListener See {@link #canvasListenerProperty()}}.
      */
-    public final void setCanvasListener(@Nullable CanvasListener canvasListener)
-    {
+    public final void setCanvasListener(@Nullable CanvasListener canvasListener) {
         canvasListenerProperty.set(canvasListener);
     }
     
-    protected final @NotNull ReadOnlyListProperty<PaintCommandable> getPaintCommands()
-    {
+    protected final @NotNull ReadOnlyListProperty<PaintCommandable> getPaintCommands() {
         return paintCommands.getReadOnlyProperty();
     }
     
-    public final boolean containsPaintCommand(@Nullable PaintCommandable command)
-    {
+    public final boolean containsPaintCommand(@Nullable PaintCommandable command) {
         return command != null && sync(() -> getPaintCommands().contains(command));
     }
     
-    public final boolean removePaintCommand(@Nullable PaintCommandable command)
-    {
+    public final boolean removePaintCommand(@Nullable PaintCommandable command) {
         return command != null && sync(() -> {
             if (containsPaintCommand(command)) {
                 final boolean removed = getPaintCommands().remove(command);
@@ -126,8 +116,7 @@ public class BoundCanvas extends Canvas
         });
     }
     
-    public final boolean addPaintCommand(@Nullable PaintCommandable command)
-    {
+    public final boolean addPaintCommand(@Nullable PaintCommandable command) {
         return command != null && sync(() -> {
             if (containsPaintCommand(command))
                 return true;
@@ -144,60 +133,51 @@ public class BoundCanvas extends Canvas
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override
-    public final @NotNull ReentrantLock getLock()
-    {
+    public final @NotNull ReentrantLock getLock() {
         return lock;
     }
     
     //
     
     @Override
-    public @NotNull FxWeaver weaver()
-    {
+    public @NotNull FxWeaver weaver() {
         return springable.weaver();
     }
     
     @Override
-    public @NotNull ConfigurableApplicationContext ctx()
-    {
+    public @NotNull ConfigurableApplicationContext ctx() {
         return springable.ctx();
     }
     
     //<editor-fold desc="--- CANVAS ---">
     
     @Override
-    public double minHeight(double width)
-    {
+    public double minHeight(double width) {
         return 64;
     }
     
     @Override
-    public double maxHeight(double width)
-    {
+    public double maxHeight(double width) {
         return 1000;
     }
     
     @Override
-    public double prefHeight(double width)
-    {
+    public double prefHeight(double width) {
         return minHeight(width);
     }
     
     @Override
-    public double minWidth(double height)
-    {
+    public double minWidth(double height) {
         return 0;
     }
     
     @Override
-    public double maxWidth(double height)
-    {
+    public double maxWidth(double height) {
         return 10000;
     }
     
     @Override
-    public boolean isResizable()
-    {
+    public boolean isResizable() {
         return true;
     }
     
@@ -205,8 +185,7 @@ public class BoundCanvas extends Canvas
     private double height;
     
     @Override
-    public void resize(double width, double height)
-    {
+    public void resize(double width, double height) {
         if (this.width == width && this.height == height)
             return;
         
@@ -223,8 +202,7 @@ public class BoundCanvas extends Canvas
     
     //</editor-fold>
     
-    protected void repaint()
-    {
+    protected void repaint() {
         sync(() -> {
             FXTools.clearCanvasUnsafe(this);
             for (PaintCommandable paintCommand: getPaintCommands())
@@ -236,8 +214,7 @@ public class BoundCanvas extends Canvas
         });
     }
     
-    public interface CanvasListener
-    {
+    public interface CanvasListener {
         void redraw(BoundCanvas source, double newWidth, double newHeight);
     }
 }

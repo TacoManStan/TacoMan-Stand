@@ -17,6 +17,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Scope;
@@ -79,7 +80,7 @@ public class MandelbrotContentController extends ContentController
     @Override
     public void initialize() {
         canvasAnchorPane.getChildren().add(canvasPane);
-        FXTools.setAnchors(canvasPane, 0, 0, 0, 0);
+        FXTools.setAnchors(canvasPane);
         
         canvas().setOnMousePressed(event -> onMousePressed(event));
         canvas().setOnMouseReleased(event -> onMouseReleased(event));
@@ -102,6 +103,7 @@ public class MandelbrotContentController extends ContentController
     }
     
     private void onMouseReleased(MouseEvent e) {
+        debugger().print("On Mouse Released: " + e);
         sync(() -> {
             if (FXTools.isMouseOnNode(canvas()))
                 getDragConsumer().accept(generateDragData(e));
@@ -115,7 +117,8 @@ public class MandelbrotContentController extends ContentController
         });
     }
     
-    private MouseDragData generateDragData(MouseEvent e) {
+    @Contract("_ -> new")
+    private @NotNull MouseDragData generateDragData(@NotNull MouseEvent e) {
         return new MouseDragData(mouseX, mouseY, e.getX(), e.getY());
     }
     
@@ -186,15 +189,18 @@ public class MandelbrotContentController extends ContentController
         
         //
         
-        public final Point2D getTopLeft() {
+        @Contract(" -> new")
+        public final @NotNull Point2D getTopLeft() {
             return new Point2D(Math.min(getStartX(), getEndX()), Math.min(getStartY(), getEndY()));
         }
         
-        public final Point2D getDimensions() {
+        @Contract(" -> new")
+        public final @NotNull Point2D getDimensions() {
             return new Point2D(Math.abs(getWidth()), Math.abs(getHeight()));
         }
         
-        public final Bounds2D getBounds() {
+        @Contract(" -> new")
+        public final @NotNull Bounds2D getBounds() {
             return Bounds2D.fromPoints(getTopLeft(), getDimensions());
         }
         

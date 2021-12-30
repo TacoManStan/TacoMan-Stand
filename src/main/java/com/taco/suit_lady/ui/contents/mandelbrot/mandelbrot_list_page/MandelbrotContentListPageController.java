@@ -74,7 +74,7 @@ public class MandelbrotContentListPageController extends UIPageController<Mandel
                                 () -> weaver().loadController(MandelbrotContentElementController.class),
                                 listView.hashCode()))));
         
-        ListTools.applyListener(ui().getMandelbrotContentHandler().contentList(), (op, opType, triggerType) -> {
+        ListTools.applyListener(ui().getMandelbrotContentHandler().getContentHandler().contentList(), (op, opType, triggerType) -> {
             if (triggerType == Operation.TriggerType.CHANGE)
                 switch (opType) {
                     case ADDITION -> onAdded(op.contents());
@@ -90,7 +90,7 @@ public class MandelbrotContentListPageController extends UIPageController<Mandel
                 (observable, oldValue, newValue) -> TaskTools.sync(
                         lock, () -> selectedContentMMProperty.set(newValue)));
         
-        ui().getMandelbrotContentHandler().selectedContentProperty().bindBidirectional(selectedContentMMProperty);
+        ui().getMandelbrotContentHandler().getContentHandler().selectedContentProperty().bindBidirectional(selectedContentMMProperty);
     }
     
     private void initButtonViews() {
@@ -114,6 +114,6 @@ public class MandelbrotContentListPageController extends UIPageController<Mandel
     
     private void addInstance() {
         debugger().print("Add Instance Pressed");
-        logiCore().execute(() -> ui().getMandelbrotContentHandler().newInstance());
+        logiCore().execute(() -> ui().getMandelbrotContentHandler().getContentHandler().addInstance());
     }
 }

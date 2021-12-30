@@ -1,15 +1,11 @@
 package com.taco.suit_lady.ui.pages.impl.content_selector;
 
-import com.taco.suit_lady.ui.Content;
-import com.taco.suit_lady.ui.ContentController;
+import com.taco.suit_lady.ui.ContentData;
 import com.taco.suit_lady.ui.UIPageController;
-import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotContent;
-import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_list_page.MandelbrotContentElementController;
 import com.taco.suit_lady.ui.jfx.button.ImageButton;
 import com.taco.suit_lady.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.ui.jfx.lists.CellControlManager;
 import com.taco.suit_lady.ui.jfx.lists.ListCellFX;
-import com.taco.suit_lady.ui.ui_internal.controllers.CellController;
 import com.taco.suit_lady.util.tools.TB;
 import com.taco.suit_lady.util.tools.TaskTools;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
@@ -21,19 +17,21 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import net.rgielen.fxweaver.core.FxWeaver;
-import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.function.Supplier;
 
-public abstract class ContentSelectorPageController<T extends Content<?, ?> & ListableContent> extends UIPageController<ContentSelectorPage<T, ?, ?>> {
+public abstract class ContentSelectorPageController<
+        D extends ContentData,
+        P extends ContentSelectorPage<D, P, SC, EC, H, T>,
+        SC extends ContentSelectorPageController<D, P, SC, EC, H, T>,
+        EC extends ContentElementController<D, P, SC, EC, H, T>,
+        H extends ContentHandler<D, P, SC, EC, H, T>,
+        T extends ListableContent<D, ?, P, SC, EC, H, T>>
+        extends UIPageController<ContentSelectorPage<D, P, SC, EC, H, T>> {
     
     //<editor-fold desc="--- FXML FIELDS ---">
     

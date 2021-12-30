@@ -63,8 +63,5 @@ public class TestContent extends Content<TestContentData, TestContentController>
     @Override
     protected void onDeactivate() { }
     
-    @Override
-    protected void onShutdown() { }
-    
     //</editor-fold>
 }

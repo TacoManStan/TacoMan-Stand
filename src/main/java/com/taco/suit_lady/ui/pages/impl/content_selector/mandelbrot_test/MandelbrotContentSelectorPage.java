@@ -1,32 +1,27 @@
 package com.taco.suit_lady.ui.pages.impl.content_selector.mandelbrot_test;
 
-import com.taco.suit_lady.ui.Content;
+import com.taco.suit_lady._to_sort._new.Debugger;
 import com.taco.suit_lady.ui.UIBook;
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotContent;
+import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotContentController;
+import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotContentData;
 import com.taco.suit_lady.ui.pages.impl.content_selector.ContentHandler;
 import com.taco.suit_lady.ui.pages.impl.content_selector.ContentSelectorPage;
 import org.jetbrains.annotations.NotNull;
 
-public class MandelbrotContentSelectorPage extends ContentSelectorPage<MandelbrotContent, MandelbrotContentSelectorPageController, MandelbrotElementController> {
+public class MandelbrotContentSelectorPage extends ContentSelectorPage<
+        MandelbrotContentData,
+        MandelbrotContentSelectorPage,
+        MandelbrotContentSelectorPageController,
+        MandelbrotElementController,
+        MandelbrotContentHandler,
+        MandelbrotContent> {
     
     public MandelbrotContentSelectorPage(@NotNull UIBook owner, Object... constructorParams) {
         super(owner, constructorParams);
     }
     
-    @Override
-    protected ContentHandler<MandelbrotContent, MandelbrotElementController> constructContentHandler(ContentSelectorPage<MandelbrotContent, MandelbrotContentSelectorPageController, MandelbrotElementController> parentPage) {
-        return new ContentHandler<>(this) {
-            @Override
-            protected @NotNull MandelbrotContent newInstance() {
-                return new MandelbrotContent(this);
-            }
-    
-            @Override
-            protected void onShutdown(MandelbrotContent mandelbrotContent) {
-            
-            }
-        };
-    }
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override
     protected Class<MandelbrotElementController> elementControllerDefinition() {
@@ -43,4 +38,12 @@ public class MandelbrotContentSelectorPage extends ContentSelectorPage<Mandelbro
         super.initializePage(constructorParams);
         getController().doInit();
     }
+    
+    
+    @Override
+    protected MandelbrotContentHandler constructContentHandler(MandelbrotContentSelectorPage parentPage) {
+        return new MandelbrotContentHandler(this);
+    }
+    
+    //</editor-fold>
 }

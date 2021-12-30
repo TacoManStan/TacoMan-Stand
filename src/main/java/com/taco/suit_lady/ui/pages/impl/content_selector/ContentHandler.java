@@ -1,6 +1,7 @@
 package com.taco.suit_lady.ui.pages.impl.content_selector;
 
-import com.taco.suit_lady.ui.Content;
+import com.taco.suit_lady._to_sort._new.Debugger;
+import com.taco.suit_lady.ui.ContentData;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
@@ -17,13 +18,19 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-public abstract class ContentHandler<T extends Content<?, ?> & ListableContent, EC extends ContentElementController<T>>
+public abstract class ContentHandler<
+        D extends ContentData,
+        P extends ContentSelectorPage<D, P, SC, EC, H, T>,
+        SC extends ContentSelectorPageController<D, P, SC, EC, H, T>,
+        EC extends ContentElementController<D, P, SC, EC, H, T>,
+        H extends ContentHandler<D, P, SC, EC, H, T>,
+        T extends ListableContent<D, ?, P, SC, EC, H, T>>
         implements Springable, Lockable {
     
     private final StrictSpringable springable;
     private final ReentrantLock lock;
     
-    private ContentSelectorPage<T, ?, EC> contentSelectorPage;
+    private P contentSelectorPage;
     
     private final ReadOnlyListWrapper<T> contentList;
     private final ObjectProperty<T> selectedContentProperty;
@@ -41,11 +48,11 @@ public abstract class ContentHandler<T extends Content<?, ?> & ListableContent, 
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final ContentSelectorPage<T, ?, EC> getContentSelectorPage() {
+    public final P getContentSelectorPage() {
         return contentSelectorPage;
     }
     
-    public final void setContentSelectorPage(ContentSelectorPage<T, ?, EC> contentSelectorPage) {
+    public final void setContentSelectorPage(P contentSelectorPage) {
         this.contentSelectorPage = contentSelectorPage;
     }
     
@@ -98,7 +105,6 @@ public abstract class ContentHandler<T extends Content<?, ?> & ListableContent, 
         return content;
     }
     
-    
     public void shutdown() {
         // TODO: Move to separate, synchronized task threads for each DummyClient instance.
         logiCore().execute(() -> {
@@ -112,13 +118,13 @@ public abstract class ContentHandler<T extends Content<?, ?> & ListableContent, 
      * <p>Performs the following actions:</p>
      * <ol>
      *     <li>Removes the specified {@link T content} from this {@link ContentHandler}.</li>
-     *     <li>Calls the <i>{@link ListableContent#shutdown()}</i> method of the specified {@link T content}.</li>
+     *     <li>Calls the <i>{@link ListableContent#onShutdown()}</i> method of the specified {@link T content}.</li>
      *     <li>Calls <i>{@link #onShutdown(T)}</i> on the specified {@link T content}.</li>
      * </ol>
      * <p><b>Shutdown Implementation</b></p>
      * <ul>
      *     <li>
-     *         <i>{@link ListableContent#shutdown()}</i> should perform all instance-specific shutdown operations.
+     *         <i>{@link ListableContent#onShutdown()}</i> should perform all instance-specific shutdown operations.
      *         After the method has been called, the {@link ListableContent} instance should be ready for garbage collection.
      *     </li>
      *     <li><i>{@link ContentHandler#onShutdown(T)}</i> should perform all shutdown operations that are always relevant to every {@link ListableContent} instance located in this {@link ContentHandler}.</li>
@@ -132,9 +138,10 @@ public abstract class ContentHandler<T extends Content<?, ?> & ListableContent, 
      */
     // TO-EXPAND
     public final void shutdown(T content) {
+        debugger().print("Shutting Down.");
         sync(() -> {
             contentList.remove(content);
-            content.shutdown();
+            content.onShutdown();
             onShutdown(content);
         });
     }

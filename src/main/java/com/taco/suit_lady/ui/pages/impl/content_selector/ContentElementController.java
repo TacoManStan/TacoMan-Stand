@@ -1,7 +1,8 @@
 package com.taco.suit_lady.ui.pages.impl.content_selector;
 
-import com.taco.suit_lady.ui.Content;
-import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotContent;
+import com.taco.suit_lady._to_sort._new.Debugger;
+import com.taco.suit_lady.ui.ContentController;
+import com.taco.suit_lady.ui.ContentData;
 import com.taco.suit_lady.ui.jfx.button.ImageButton;
 import com.taco.suit_lady.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.ui.ui_internal.controllers.CellController;
@@ -10,12 +11,16 @@ import javafx.geometry.Point2D;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import net.rgielen.fxweaver.core.FxWeaver;
-import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
-public class ContentElementController<T extends Content<?, ?> & ListableContent> extends CellController<T> {
+public class ContentElementController<
+        D extends ContentData,
+        P extends ContentSelectorPage<D, P, SC, EC, H, T>,
+        SC extends ContentSelectorPageController<D, P, SC, EC, H, T>,
+        EC extends ContentElementController<D, P, SC, EC, H, T>,
+        H extends ContentHandler<D, P, SC, EC, H, T>,
+        T extends ListableContent<D, ?, P, SC, EC, H, T>>
+        extends CellController<T> {
     
     @FXML private AnchorPane root;
     
@@ -58,6 +63,10 @@ public class ContentElementController<T extends Content<?, ?> & ListableContent>
     
     @Override
     public void initialize() {
+        System.out.println("Initializing ContentElementController");
+        
+        System.out.println("Icon Image Pane: " + iconImagePane);
+        
         this.iconButton = new ImageButton(this, iconImagePane, "logo", this::icon, null, false, new Point2D(50, 50)).initialize();
         this.closeButton = new ImageButton(this, closeImagePane, "close", this::close, null, false, new Point2D(15, 15)).initialize();
         
@@ -71,26 +80,26 @@ public class ContentElementController<T extends Content<?, ?> & ListableContent>
     //<editor-fold desc="--- HELPER METHODS ---">
     
     private void icon() {
-        debugger().print("Logo Pressed");
+        debugger().print(Debugger.DEBUG, "Logo Pressed");
     }
     
     private void close() {
-        debugger().print("Close Pressed");
+        debugger().print(Debugger.DEBUG, "Close Pressed");
         getContents().shutdown();
     }
     
     private void runScript() {
-        debugger().print("Run Script Pressed");
+        debugger().print(Debugger.DEBUG, "Run Script Pressed");
 //        getContents().setIsRunning(true);
     }
     
     private void stopScript() {
-        debugger().print("Stop Script Pressed");
+        debugger().print(Debugger.DEBUG, "Stop Script Pressed");
 //        getContents().setIsRunning(false);
     }
     
     private void rerunScript() {
-        debugger().print("Re-Run Script Pressed");
+        debugger().print(Debugger.DEBUG, "Re-Run Script Pressed");
     }
     
     //</editor-fold>

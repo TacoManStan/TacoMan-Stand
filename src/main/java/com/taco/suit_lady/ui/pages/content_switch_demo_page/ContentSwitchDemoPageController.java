@@ -5,6 +5,7 @@ import com.taco.suit_lady.ui.Content;
 import com.taco.suit_lady.ui.UIPageController;
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotContent;
 import com.taco.suit_lady.ui.contents.test.TestContent;
+import com.taco.suit_lady.ui.pages.impl.content_selector.mandelbrot_test.MandelbrotContentHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
@@ -31,12 +32,16 @@ public class ContentSwitchDemoPageController extends UIPageController<ContentSwi
     private final Content<?, ?> content2;
     private final Content<?, ?> content3;
     
+    private final MandelbrotContentHandler contentHandler;
+    
     protected ContentSwitchDemoPageController(FxWeaver weaver, ConfigurableApplicationContext ctx)
     {
         super(weaver, ctx);
         
-        this.content1 = new MandelbrotContent(this);
-        this.content2 = new MandelbrotContent(this);
+        this.contentHandler = new MandelbrotContentHandler(this);
+        
+        this.content1 = new MandelbrotContent(contentHandler);
+        this.content2 = new MandelbrotContent(contentHandler);
         this.content3 = new TestContent(this);
     }
     

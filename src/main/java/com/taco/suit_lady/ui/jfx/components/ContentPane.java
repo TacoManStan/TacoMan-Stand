@@ -9,16 +9,15 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ConfigurableApplicationContext;
 
 public class ContentPane extends StackPane
-        implements Springable
-{
+        implements Springable {
+    
     private final Springable springable;
     
     private final StackPane foregroundPane;
     private final StackPane contentPane;
     private final StackPane backgroundPane;
     
-    public ContentPane(@NotNull Springable springable)
-    {
+    public ContentPane(@NotNull Springable springable) {
         this.springable = ExceptionTools.nullCheck(springable, "Springable Input").asStrict();
         
         this.foregroundPane = loadForegroundPane();
@@ -34,18 +33,15 @@ public class ContentPane extends StackPane
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final @NotNull StackPane getForegroundPane()
-    {
+    public final @NotNull StackPane getForegroundPane() {
         return foregroundPane;
     }
     
-    public final @NotNull StackPane getContentPane()
-    {
+    public final @NotNull StackPane getContentPane() {
         return contentPane;
     }
     
-    public final @NotNull StackPane getBackgroundPane()
-    {
+    public final @NotNull StackPane getBackgroundPane() {
         return backgroundPane;
     }
     
@@ -53,18 +49,15 @@ public class ContentPane extends StackPane
     
     //<editor-fold desc="--- ABSTRACT ---">
     
-    protected @NotNull StackPane loadForegroundPane()
-    {
+    protected @NotNull StackPane loadForegroundPane() {
         return new StackPane();
     }
     
-    protected @NotNull StackPane loadContentPane()
-    {
+    protected @NotNull StackPane loadContentPane() {
         return new StackPane();
     }
     
-    protected @NotNull StackPane loadBackgroundPane()
-    {
+    protected @NotNull StackPane loadBackgroundPane() {
         return new StackPane();
     }
     
@@ -73,14 +66,12 @@ public class ContentPane extends StackPane
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override
-    public @NotNull FxWeaver weaver()
-    {
+    public @NotNull FxWeaver weaver() {
         return springable.weaver();
     }
     
     @Override
-    public @NotNull ConfigurableApplicationContext ctx()
-    {
+    public @NotNull ConfigurableApplicationContext ctx() {
         return springable.ctx();
     }
     

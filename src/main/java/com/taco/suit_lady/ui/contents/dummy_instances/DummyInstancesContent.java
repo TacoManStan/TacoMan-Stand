@@ -31,8 +31,5 @@ public class DummyInstancesContent extends Content<DummyInstancesContentData, Du
     @Override
     protected void onDeactivate() { }
     
-    @Override
-    protected void onShutdown() { }
-    
     //</editor-fold>
 }

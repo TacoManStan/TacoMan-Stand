@@ -19,7 +19,7 @@ public final class Debugger {
     private static final Debugger debugger;
     
     static {
-        debugger = new Debugger(true, false, false);
+        debugger = new Debugger(true, false, false, false);
     }
     
     /**
@@ -42,19 +42,22 @@ public final class Debugger {
     //</editor-fold>
     
     public static final String STATUS = "status";
+    public static final String DEBUG = "debug";
     public static final String WARN = "warn";
     public static final String ERROR = "error";
     
     private final ReadOnlyBooleanWrapper isStatusEnabledProperty;
+    private final ReadOnlyBooleanWrapper isDebugEnabledProperty;
     private final ReadOnlyBooleanWrapper isWarnEnabledProperty;
     private final ReadOnlyBooleanWrapper isErrorEnabledProperty;
     
     public Debugger() {
-        this(false, true, true);
+        this(false, true, true, true);
     }
     
-    public Debugger(boolean statusEnabled, boolean warnEnabled, boolean errorEnabled) {
+    public Debugger(boolean statusEnabled, boolean debugEnabled, boolean warnEnabled, boolean errorEnabled) {
         this.isStatusEnabledProperty = new ReadOnlyBooleanWrapper(statusEnabled);
+        this.isDebugEnabledProperty = new ReadOnlyBooleanWrapper(debugEnabled);
         this.isWarnEnabledProperty = new ReadOnlyBooleanWrapper(warnEnabled);
         this.isErrorEnabledProperty = new ReadOnlyBooleanWrapper(errorEnabled);
         
@@ -64,6 +67,12 @@ public final class Debugger {
                 System.out.println("Status Debug Output is now Enabled");
             else if (!newValue && oldValue)
                 System.out.println("Status Debug Output is now Disabled");
+        });
+        this.isDebugEnabledProperty.addListener((observable, oldValue, newValue) -> {
+            if (newValue && !oldValue)
+                System.out.println("Debug Debug Output is now Enabled");
+            else if (!newValue && oldValue)
+                System.out.println("Debug Debug Output is now Disabled");
         });
         this.isWarnEnabledProperty.addListener((observable, oldValue, newValue) -> {
             if (newValue && !oldValue)
@@ -112,8 +121,12 @@ public final class Debugger {
     
     @SafeVarargs
     public final <E> void printBlock(@Nullable String printType, @Nullable String title, @Nullable String footer, boolean box, E... prints) {
-        printBlock(printType, () -> IntStream.range(0, prints.length).mapToObj(i -> "[" + i + "]: " + prints[i]).forEach(System.out::println),
-                   title, footer, box);
+        printBlock(printType,
+                   () -> IntStream.range(0, prints.length).mapToObj(
+                           i -> "[" + i + "]: " + prints[i]).forEach(System.out::println),
+                   title,
+                   footer,
+                   box);
     }
     
     
@@ -175,6 +188,19 @@ public final class Debugger {
     }
     
     
+    public ReadOnlyBooleanProperty readOnlyIsDebugEnabledProperty() {
+        return isDebugEnabledProperty.getReadOnlyProperty();
+    }
+    
+    public boolean isDebugEnabled() {
+        return isDebugEnabledProperty.get();
+    }
+    
+    public void setDebugEnabled(boolean debugEnabled) {
+        isDebugEnabledProperty.set(debugEnabled);
+    }
+    
+    
     public ReadOnlyBooleanProperty readOnlyIsWarnEnabledProperty() {
         return isWarnEnabledProperty.getReadOnlyProperty();
     }
@@ -205,6 +231,8 @@ public final class Debugger {
         ExceptionTools.nullCheck(printType, "Print Type");
         if (printType.equalsIgnoreCase(STATUS))
             return isStatusEnabled();
+        else if (printType.equalsIgnoreCase(DEBUG))
+            return isDebugEnabled();
         else if (printType.equalsIgnoreCase(WARN))
             return isWarnEnabled();
         else if (printType.equalsIgnoreCase(ERROR))

@@ -1,13 +1,20 @@
 package com.taco.suit_lady.ui.pages.impl.content_selector;
 
-import com.taco.suit_lady.ui.Content;
+import com.taco.suit_lady.ui.ContentData;
 import com.taco.suit_lady.ui.UIBook;
 import com.taco.suit_lady.ui.UIPage;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class ContentSelectorPage<T extends Content<?, ?> & ListableContent, C extends ContentSelectorPageController<T>, EC extends ContentElementController<T>> extends UIPage<C> {
+public abstract class ContentSelectorPage<
+        D extends ContentData,
+        P extends ContentSelectorPage<D, P, SC, EC, H, T>,
+        SC extends ContentSelectorPageController<D, P, SC, EC, H, T>,
+        EC extends ContentElementController<D, P, SC, EC, H, T>,
+        H extends ContentHandler<D, P, SC, EC, H, T>,
+        T extends ListableContent<D, ?, P, SC, EC, H, T>>
+        extends UIPage<SC> {
     
-    private ContentHandler<T, EC> contentHandler;
+    private H contentHandler;
     
     public ContentSelectorPage(@NotNull UIBook owner, Object... constructorParams) {
         super(owner, constructorParams);
@@ -15,7 +22,7 @@ public abstract class ContentSelectorPage<T extends Content<?, ?> & ListableCont
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final ContentHandler<T, EC> getContentHandler() {
+    public final H getContentHandler() {
         return contentHandler;
     }
     
@@ -25,15 +32,15 @@ public abstract class ContentSelectorPage<T extends Content<?, ?> & ListableCont
     
     @Override
     protected void initializePage(@NotNull Object @NotNull [] constructorParams) {
-        this.contentHandler = constructContentHandler(this);
+        this.contentHandler = constructContentHandler((P) this);
     }
     
     //</editor-fold>
     
-    protected abstract ContentHandler<T, EC> constructContentHandler(ContentSelectorPage<T, C, EC> parentPage);
+    protected abstract H constructContentHandler(P parentPage);
     
     protected abstract Class<EC> elementControllerDefinition();
     
     @Override
-    protected abstract @NotNull Class<C> controllerDefinition();
+    protected abstract @NotNull Class<SC> controllerDefinition();
 }

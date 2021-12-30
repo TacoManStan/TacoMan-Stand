@@ -116,8 +116,6 @@ public abstract class Content<D extends ContentData, C extends ContentController
     
     protected void onBookshelfAdded(SidebarBookshelf bookshelf) { }
     
-    protected abstract void onShutdown();
-    
     //</editor-fold>
     
     //</editor-fold>

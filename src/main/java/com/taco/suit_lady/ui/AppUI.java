@@ -1,7 +1,7 @@
 package com.taco.suit_lady.ui;
 
 import com.taco.suit_lady.ui.jfx.components.ContentPane;
-import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_list_page.MandelbrotContentHandler;
+import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_list_page.MandelbrotContentHandlerOLD;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.ui.console.Console;
 import com.taco.suit_lady.ui.contents.test.TestContent;
@@ -26,7 +26,7 @@ public class AppUI
     
     private ContentManager contentManager;
     
-    private MandelbrotContentHandler mandelbrotContentHandler;
+    private MandelbrotContentHandlerOLD mandelbrotContentHandlerOLD;
     
     /**
      * <p>Constructs a new {@link AppUI} instance.</p>
@@ -57,7 +57,7 @@ public class AppUI
      *     <li>
      *         Sets the {@link #contentManager} of this {@link AppUI} to a new {@link ContentManager}.
      *         <ul>
-     *             <li>The {@link ContentPane Content Stack Pane} of this {@link AppUI} is used as the {@link ContentManager#getContentBasePane() Content Base} for the constructed {@link ContentManager} object.</li>
+     *             <li>The {@link ContentPane Content Stack Pane} of this {@link AppUI} is used as the {@link ContentManager#getRootPane() Content Base} for the constructed {@link ContentManager} object.</li>
      *         </ul>
      *     </li>
      *     <li>
@@ -72,7 +72,7 @@ public class AppUI
         ctx().getBean(Console.class).initialize();
         this.contentManager = new ContentManager(weaver(), ctx());
         
-        this.mandelbrotContentHandler = new MandelbrotContentHandler(this);
+        this.mandelbrotContentHandlerOLD = new MandelbrotContentHandlerOLD(this);
     }
     
     //</editor-fold>
@@ -146,8 +146,8 @@ public class AppUI
     }
     
     // TO-DOC
-    public final MandelbrotContentHandler getMandelbrotContentHandler() {
-        return mandelbrotContentHandler;
+    public final MandelbrotContentHandlerOLD getMandelbrotContentHandler() {
+        return mandelbrotContentHandlerOLD;
     }
     
     // </editor-fold>
