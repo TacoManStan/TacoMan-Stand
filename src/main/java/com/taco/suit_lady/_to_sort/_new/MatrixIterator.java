@@ -24,11 +24,8 @@ public abstract class MatrixIterator<T>
     
     private final T[][] values;
     
-    //
-    
     private int iX;
     private int iY;
-    
     private boolean complete;
     
     public MatrixIterator(@NotNull Springable springable, @Nullable Lock lock, @NotNull Object... params) {
@@ -92,11 +89,11 @@ public abstract class MatrixIterator<T>
     
     //<editor-fold desc="--- ABSTRACT METHODS ---">
     
+    protected abstract @NotNull T[][] initMatrix(@NotNull Object... params);
+    
     protected abstract T step(int i, int j);
     
     protected abstract void onComplete();
-    
-    protected abstract @NotNull T[][] initMatrix(@NotNull Object... params);
     
     //</editor-fold>
     
@@ -106,6 +103,7 @@ public abstract class MatrixIterator<T>
     public @NotNull Lock getLock() {
         return lock;
     }
+    
     
     @Override
     public @NotNull FxWeaver weaver() {

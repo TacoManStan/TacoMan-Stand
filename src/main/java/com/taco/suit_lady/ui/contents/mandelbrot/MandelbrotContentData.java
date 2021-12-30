@@ -58,9 +58,8 @@ public class MandelbrotContentData extends ContentData
     private int currentCount;
     private final IntegerBinding changeCounter;
     
-    public MandelbrotContentData(Springable springable, double xMin, double yMin, double xMax, double yMax, double width, double height) {
+    public MandelbrotContentData(@NotNull Springable springable, double xMin, double yMin, double xMax, double yMax, double width, double height) {
         this.springable = springable.asStrict();
-        
         
         this.xMinProperty = new SimpleObjectProperty<>(xMin);
         this.xMaxProperty = new SimpleObjectProperty<>(xMax);
@@ -69,6 +68,12 @@ public class MandelbrotContentData extends ContentData
         
         this.canvasWidthProperty = new SimpleIntegerProperty((int) width);
         this.canvasHeightProperty = new SimpleIntegerProperty((int) height);
+    
+        this.colorSchemeProperty = new SimpleObjectProperty<>(MandelbrotColorScheme.RED);
+        this.invertColorSchemeProperty = new SimpleBooleanProperty(false);
+    
+        this.pauseAutoRegenerationProperty = new SimpleBooleanProperty(false);
+        
         
         this.widthBinding = createDoubleBinding(() -> getMaxX() - getMinX());
         this.heightBinding = createDoubleBinding(() -> getMaxY() - getMinY());
@@ -76,14 +81,12 @@ public class MandelbrotContentData extends ContentData
         this.xScalingBinding = createDoubleBinding(() -> {
             if (((double) getCanvasWidth() / (double) getCanvasHeight()) >= (getWidth() / getHeight()))
                 return (getCanvasWidth() * getHeight()) / (getCanvasHeight() * getWidth());
-            else
-                return 1.0;
+            return 1.0;
         });
         this.yScalingBinding = createDoubleBinding(() -> {
             if (((double) getCanvasWidth() / (double) getCanvasHeight()) <= (getWidth() / getHeight()))
                 return (getCanvasHeight() * getWidth()) / (getCanvasWidth() * getHeight());
-            else
-                return 1.0;
+            return 1.0;
         });
         
         this.scaledWidthBinding = createDoubleBinding(() -> getWidth() * getScalingX());
@@ -93,11 +96,6 @@ public class MandelbrotContentData extends ContentData
         this.scaledXMaxBinding = createDoubleBinding(() -> getMaxX() + ((getScaledWidth() - getWidth()) / 2));
         this.scaledYMinBinding = createDoubleBinding(() -> getMinY() - ((getScaledHeight() - getHeight()) / 2));
         this.scaledYMaxBinding = createDoubleBinding(() -> getMaxY() + ((getScaledHeight() - getHeight()) / 2));
-        
-        this.colorSchemeProperty = new SimpleObjectProperty<>(MandelbrotColorScheme.RED);
-        this.invertColorSchemeProperty = new SimpleBooleanProperty(false);
-        
-        this.pauseAutoRegenerationProperty = new SimpleBooleanProperty(false);
         
         
         this.currentCount = 0;
@@ -337,12 +335,12 @@ public class MandelbrotContentData extends ContentData
     
     //</editor-fold>
     
-    public final Point2D convertFromCanvas(Point2D point) {
+    public final @NotNull Point2D convertFromCanvas(Point2D point) {
         ExceptionTools.nullCheck(point, "Conversion Point");
         return convertFromCanvas(point.getX(), point.getY());
     }
     
-    public final Point2D convertFromCanvas(double canvasX, double canvasY) {
+    public final @NotNull Point2D convertFromCanvas(double canvasX, double canvasY) {
         final int iCanvasX = (int) canvasX;
         final int iCanvasY = (int) canvasY;
         
