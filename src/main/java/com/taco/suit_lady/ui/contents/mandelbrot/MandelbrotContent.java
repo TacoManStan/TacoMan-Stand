@@ -179,8 +179,7 @@ public class MandelbrotContent extends ListableContent<
             debugger().print("In Refresh 2...");
             
             getData().resizeTo(newWidth, newHeight);
-            final MandelbrotIterator iterator = new MandelbrotIterator(
-                    this, new MandelbrotColor[(int) newWidth][(int) newHeight], getData(), lock);
+            final MandelbrotIterator iterator = new MandelbrotIterator(this, lock, getData());
             worker = new Task<>() {
                 @Override
                 protected Void call() {

@@ -9,51 +9,19 @@ import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-public class MandelbrotIterator extends MatrixIterator<MandelbrotColor>
-        implements Springable {
-    
-    private final StrictSpringable springable;
+public class MandelbrotIterator extends MatrixIterator<MandelbrotColor> {
     
     private final int PRECISION = 1000;
-    private final MandelbrotContentData data;
+    private MandelbrotContentData data;
     
-    public MandelbrotIterator(Springable springable, MandelbrotColor[][] targetArray, ReentrantLock lock) {
-        this(springable, targetArray, null, lock);
+    public MandelbrotIterator(@NotNull Springable springable, @Nullable ReentrantLock lock, @NotNull MandelbrotContentData data) {
+        super(springable, lock, data);
     }
-    
-    public MandelbrotIterator(@NotNull Springable springable, MandelbrotColor[][] targetArray, @NotNull MandelbrotContentData data, ReentrantLock lock) {
-        super(targetArray, lock);
-        this.springable = springable.asStrict();
-        
-        this.data = data != null ? data : MandelbrotContentData.newDefaultInstance(this, getWidth(), getHeight());
-        if (data.getCanvasWidth() != getWidth() || data.getCanvasHeight() != getHeight())
-            throw ExceptionTools.ex("Dimension Mismatch:  " +
-                                    "Dimensions Data [" + data.getCanvasWidth() + ", " + data.getCanvasHeight() + "  " +
-                                    "Iterator Data [" + getWidth() + ", " + getHeight());
-    }
-    
-    private boolean escapes(double iX, double iY) {
-        final Point2D convertedPoint = data.convertFromCanvas(iX, iY);
-        double x = 0, y = 0;
-        int n = 0;
-        
-        while (Math.pow(x, 2) + Math.pow(y, 2) < Math.pow(2, 2) && n < PRECISION) {
-            final double xTemp = Math.pow(x, 2) - Math.pow(y, 2) + convertedPoint.getX();
-            y = (2 * x * y) + convertedPoint.getY();
-            x = xTemp;
-            n++;
-            if (Math.pow(x, 2) + Math.pow(y, 2) > Math.pow(2, 2))
-                return true;
-        }
-        
-        return false;
-    }
-    
-    private Color escapeColor = Color.BLACK;
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
@@ -76,20 +44,52 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor>
     }
     
     @Override
-    protected void onComplete() { }
+    protected void onComplete() {
     
-    
-    @Override
-    public @NotNull FxWeaver weaver() {
-        return springable.weaver();
     }
     
     @Override
-    public @NotNull ConfigurableApplicationContext ctx() {
-        return springable.ctx();
+    protected @NotNull MandelbrotColor[][] initMatrix(@NotNull Object @NotNull ... params) {
+        this.data = (MandelbrotContentData) params[0];
+        return new MandelbrotColor[data.getCanvasWidth()][data.getCanvasHeight()];
+    }
+    
+    // UNUSED
+    protected void onConstruct(Object @NotNull ... params) {
+        this.data = (MandelbrotContentData) params[0];
+        if (data.getCanvasWidth() != getWidth() || data.getCanvasHeight() != getHeight())
+            throw ExceptionTools.ex(
+                    "Dimension Mismatch:  " +
+                    "Dimensions Data [" + data.getCanvasWidth() + ", " + data.getCanvasHeight() + "  " +
+                    "Iterator Data [" + getWidth() + ", " + getHeight());
     }
     
     //</editor-fold>
+    
+    //<editor-fold desc="--- HELPER METHODS ---">
+    
+    private boolean escapes(double iX, double iY) {
+        final Point2D convertedPoint = data.convertFromCanvas(iX, iY);
+        double x = 0, y = 0;
+        int n = 0;
+        
+        while (Math.pow(x, 2) + Math.pow(y, 2) < Math.pow(2, 2) && n < PRECISION) {
+            final double xTemp = Math.pow(x, 2) - Math.pow(y, 2) + convertedPoint.getX();
+            y = (2 * x * y) + convertedPoint.getY();
+            x = xTemp;
+            n++;
+            if (Math.pow(x, 2) + Math.pow(y, 2) > Math.pow(2, 2))
+                return true;
+        }
+        
+        return false;
+    }
+    
+    //</editor-fold>
+    
+    //
+    
+    private Color escapeColor = Color.BLACK;
     
     public class MandelbrotColor {
         private final int bigN;
