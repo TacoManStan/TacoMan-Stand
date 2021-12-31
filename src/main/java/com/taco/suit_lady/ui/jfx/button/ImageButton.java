@@ -39,6 +39,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 // TO-DOC
 public class ImageButton
         implements Nameable, Springable {
+    
     //<editor-fold desc="--- FIELDS ---">
     
     private final StrictSpringable springable;
@@ -65,6 +66,9 @@ public class ImageButton
     private final BooleanProperty selectedProperty;
     private final BooleanProperty disabledProperty;
     
+    private final BooleanProperty showTooltipProperty;
+    
+    
     private final boolean toggleable;
     
     //</editor-fold>
@@ -82,8 +86,13 @@ public class ImageButton
             @Nullable Runnable actionResponderFX,
             boolean toggleable,
             @Nullable Point2D size) {
-        this(springable, imagePane,
-             BindingTools.createStringBinding(name), actionResponder, actionResponderFX, toggleable, size);
+        this(springable,
+             imagePane,
+             BindingTools.createStringBinding(name),
+             actionResponder,
+             actionResponderFX,
+             toggleable,
+             size);
     }
     
     /**
@@ -169,6 +178,8 @@ public class ImageButton
         this.selectedProperty = new SimpleBooleanProperty();
         this.disabledProperty = new SimpleBooleanProperty();
         
+        this.showTooltipProperty = new SimpleBooleanProperty(false);
+        
         this.toggleable = toggleable;
         
         //
@@ -218,7 +229,7 @@ public class ImageButton
      * <p><b>Initialization Process</b></p>
      * <ol>
      *     <li>
-     *         Initializes {@link #getImagePane() ImagePane}.
+     *         Initializes {@link #getImagePane() ImagePane} containing this {@link ImageButton}.
      *         <ol>
      *             <li>
      *                 Constructs an {@link Array} of all {@link Observable Observables} that will cause the {@link #getImage() Image} for this {@link ImageButton} to be {@link ObjectBinding#computeValue() Recalculated} upon invalidation.
@@ -287,7 +298,7 @@ public class ImageButton
      *
      * @param event The triggering {@link MouseEvent} object.
      */
-    private void onMouseReleased(MouseEvent event) {
+    private void onMouseReleased(@NotNull MouseEvent event) {
         if (Objects.equals(event.getSource(), imagePane) && FXTools.isMouseOnEventSource(event) && !isDisabled()) {
             toggle();
             onAction();
@@ -381,45 +392,6 @@ public class ImageButton
         actionResponderFXProperty.set(actionResponder);
     }
     
-    /**
-     * <p>Executes the {@link #actionResponderProperty() Background Action Responder} and {@link #actionResponderFXProperty() FX Action Responder} {@link Runnable Runnables}.</p>
-     * <p><b>Details</b></p>
-     * <ol>
-     *     <li>
-     *         Executed automatically when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.
-     *         <br><i>See <code>{@link #onMouseReleased(MouseEvent)}</code> for details.</i>
-     *     </li>
-     *     <li>
-     *         <b>Background Execution</b>
-     *         <ol>
-     *             <li>If the {@link #actionResponderProperty() Background Responder} for this {@link ImageButton} is {@code non-null}, it is {@link ThreadPoolExecutor#execute(Runnable) executed} in a {@link Task Background Task}.</li>
-     *             <li>The {@link #actionResponderProperty() Background Responder} execution is <u>non-blocking</u>.</li>
-     *             <li>Refer to <code><i>{@link #actionResponderProperty()}</i></code> for additional information.</li>
-     *         </ol>
-     *     </li>
-     *     <li>
-     *         <b>FX Execution</b>
-     *         <ol>
-     *             <li>If the {@link #actionResponderFXProperty() FX Responder} for this {@link ImageButton} is {@code non-null}, it is {@link FXTools#runFX(Runnable, boolean) executed} on the {@link FXTools#isFXThread() JavaFX Thread}.</li>
-     *             <li>The {@link #actionResponderFXProperty() FX Responder} execution is <u>blocking</u>.</li>
-     *             <li>Refer to <code><i>{@link #actionResponderFXProperty()}</i></code> for additional information.</li>
-     *         </ol>
-     *     </li>
-     * </ol>
-     *
-     * @see #actionResponderProperty()
-     * @see #actionResponderFXProperty()
-     */
-    private void onAction() {
-        final Runnable actionResponder = getActionResponder();
-        if (actionResponder != null)
-            ctx().getBean(LogiCore.class).executor().execute(actionResponder);
-        
-        final Runnable actionResponderFX = getActionResponderFX();
-        if (actionResponderFX != null)
-            FXTools.runFX(actionResponderFX, false);
-    }
-    
     //</editor-fold>
     
     //<editor-fold desc="Image Properties">
@@ -432,6 +404,13 @@ public class ImageButton
     public final String SUFFIX_SELECTED_HOVERED = "_selected_hovered";
     public final String SUFFIX_SELECTED_PRESSED = "_selected_pressed";
     
+    /**
+     * <p>Returns the {@link PaintData} enum matching the specified {@link String suffix}.</p>
+     *
+     * @param suffix The {@link String suffix} representing the state of this {@link ImageButton} used to determine the {@link PaintData} to be returned.
+     *
+     * @return The {@link PaintData} enum value matching the specified {@link String prefix}.
+     */
     public final PaintData paintData(String suffix) {
         return switch (suffix) {
             case SUFFIX_STANDARD -> paintData;
@@ -639,7 +618,7 @@ public class ImageButton
      * <p><b>Cache ID</b></p>
      * <ol>
      *     <li>To get the cache ID, refer to the <code><i>{@link #getID()}</i></code> method.</li>
-     *     <li>To get the full cache path ID, refer to the <code><i>{@link #getPathID()}</i></code> method.</li>
+     *     <li>To get the full cache path ID, refer to the <code><i>{@link #getPathIdOLD()}</i></code> method.</li>
      * </ol>
      *
      * @return The {@link StringBinding} bound to the {@link #getName() name} of this {@link ImageButton}.
@@ -648,7 +627,7 @@ public class ImageButton
      * @see #getState()
      * @see #getImage()
      * @see #getID()
-     * @see #getPathID()
+     * @see #getPathIdOLD()
      */
     public @NotNull StringBinding nameBinding() {
         // TODO - Dunno how and it isn't necessary yet but you should somehow make it possible to change the name after construction
@@ -675,7 +654,7 @@ public class ImageButton
      * @return The {@link ButtonState#STANDARD vanilla} cache ID for this {@link ImageButton}.
      *
      * @see #nameBinding()
-     * @see #getPathID()
+     * @see #getPathIdOLD()
      * @see ResourceTools#getImage(String, String, String)
      */
     private @NotNull String getID() {
@@ -685,6 +664,8 @@ public class ImageButton
     /**
      * <p>Returns the full {@link ButtonState#STANDARD vanilla} cache path ID for this {@link ImageButton}.</p>
      * <blockquote>Refer to the <code><i>{@link #nameBinding()}</i></code> docs for additional information.</blockquote>
+     * <hr>
+     * <p>Note that this is a legacy method and will be removed in a future release once the new implementation has been fully established/implemented.</p>
      *
      * @return The full {@link ButtonState#STANDARD vanilla} cache path ID for this {@link ImageButton}.
      *
@@ -692,11 +673,22 @@ public class ImageButton
      * @see #getID()
      * @see ResourceTools#getImage(String, String, String)
      */
-    private @NotNull String getPathID() {
+    // TO-REMOVE
+    private @NotNull String getPathIdOLD() {
         return "buttons/" + getID() + "/";
     }
     
-    private @NotNull String getPathID2() {
+    /**
+     * <p>Returns the string {@code "buttons/_small/"} to easily define image resource path prefix.</p>
+     * <p>This method could be implemented as a constant field, but is implemented as a method instead because...</p>
+     * <ol>
+     *     <li>The path id might need to be dynamic in the future when {@link ImageButton} image generation is updated.</li>
+     *     <li>The legacy version of this method — <i>{@link #getPathIdOLD()}</i> — was dynamic and therefore could not be implemented as a constant field.</li>
+     * </ol>
+     *
+     * @return The path id prefix for this (and currently, all) {@link ImageButton ImageButtons}.
+     */
+    private @NotNull String getPathId() {
         return "buttons/_small/";
     }
     
@@ -946,70 +938,54 @@ public class ImageButton
     
     //</editor-fold>
     
-    //<editor-fold desc="--- HELPER METHODS ---">
-    //
-    //    /**
-    //     * <p>Constructs a new {@link ObjectBinding} bound to the {@link Image} variation represented by the specified {@link String suffix}.</p>
-    //     * <p><b>Details</b></p>
-    //     * <ol>
-    //     *     <li>The {@link Image} bound to the returned {@link ObjectBinding} is automatically updated when the {@link #nameBinding() name} of this {@link ImageButton} changes.</li>
-    //     *     <li>If the {@link Image} variation with the specified {@link String suffix} does not exist at the file location defined by the {@link Image} {@link #getPathID() mapping} for this {@link ImageButton}, {@link #missingno(String) missingno} is used instead.</li>
-    //     * </ol>
-    //     * <p><b>Missingno</b></p>
-    //     * <ol>
-    //     *     <li>The {@link #missingno(String) missingno} {@link Image images} are universal files displaying an icon indicating the intended {@link Image} could not be found.</li>
-    //     *     <li>The name {@link #missingno(String) "missingno"} comes from the bugged Pokemon that would appear in the 1st Generation games due to a bug where in specific circumstances, a player could encounter a null Pokemon.</li>
-    //     *     <li>{@link #missingno(String) "missingno"} stands for {@code Missing Number}.</li>
-    //     * </ol>
-    //     *
-    //     * @param suffix The {@link String} representing the {@link Image} variation to be bound to the {@link ObjectProperty} returned by {@link #createImageBinding(String) this method}.
-    //     *
-    //     * @return A new {@link ObjectBinding} bound to the {@link Image} variation represented by the specified {@link String suffix}.
-    //     *
-    //     * @throws NullPointerException If the specified {@link String suffix} is {@code null}.
-    //     * @see #missingno(String)
-    //     */
-    //    private @NotNull ObjectBinding<Image> createImageBinding(@NotNull String suffix) {
-    //        ExceptionTools.nullCheck(suffix, "Suffix");
-    //
-    //        return Bindings.createObjectBinding(() -> {
-    //            Image image = ResourceTools.get().getImage(getPathID(), getID() + "_blank", "png");
-    //            if (image != null) {
-    //                final WritableImage writableImage = new WritableImage((int) image.getWidth(), (int) image.getHeight());
-    //                PixelReader reader = image.getPixelReader();
-    //
-    //                for (int i = 0; i < image.getWidth(); i++) {
-    //                    for (int j = 0; j < image.getHeight(); j++) {
-    //                        Color rawColor = reader.getColor(i, j);
-    //                        debugger().print("[" + i + ", " + j + "] - Raw Color " + getName() + ":  " + rawColor);
-    //                        Color color = rawColor.equals(Color.BLACK) ? switch (suffix) {
-    //                            case "" -> FXTools.Colors.from255(95, 95, 95);
-    //                            case "_pressed", "_hovered" -> FXTools.Colors.from255(153, 153, 153);
-    //                            case "_disabled" -> FXTools.Colors.from255(50, 50, 50);
-    //                            default -> Color.BLACK;
-    //                        } : switch (suffix) {
-    //                            case "", "_disabled" -> Color.TRANSPARENT;
-    //                            case "_pressed" -> FXTools.Colors.from255(64, 64, 64, 70);
-    //                            case "_hovered" -> FXTools.Colors.from255(64, 64, 64, 35);
-    //                            default -> Color.WHITE;
-    //                        };
-    //                        debugger().print("[" + i + ", " + j + "] - Raw Color " + getName() + ":  " + color);
-    //                        writableImage.getPixelWriter().setColor(i, j, color);
-    //                    }
-    //                }
-    //
-    //                return writableImage != null ? writableImage : missingno(suffix);
-    //            } else {
-    //                debugger().print("Image is null  [" + getName() + "_" + suffix + "]");
-    //                image = ResourceTools.get().getImage(getPathID(), getID() + suffix, "png");
-    //                return image != null ? image : missingno(suffix);
-    //            }
-    //
-    //        }, nameBinding());
+    //<editor-fold desc="--- INTERNAL ---">
     
+    /**
+     * <p>Executes the {@link #actionResponderProperty() Background Action Responder} and {@link #actionResponderFXProperty() FX Action Responder} {@link Runnable Runnables}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>
+     *         Executed automatically when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.
+     *         <br><i>See <code>{@link #onMouseReleased(MouseEvent)}</code> for details.</i>
+     *     </li>
+     *     <li>
+     *         <b>Background Execution</b>
+     *         <ol>
+     *             <li>If the {@link #actionResponderProperty() Background Responder} for this {@link ImageButton} is {@code non-null}, it is {@link ThreadPoolExecutor#execute(Runnable) executed} in a {@link Task Background Task}.</li>
+     *             <li>The {@link #actionResponderProperty() Background Responder} execution is <u>non-blocking</u>.</li>
+     *             <li>Refer to <code><i>{@link #actionResponderProperty()}</i></code> for additional information.</li>
+     *         </ol>
+     *     </li>
+     *     <li>
+     *         <b>FX Execution</b>
+     *         <ol>
+     *             <li>If the {@link #actionResponderFXProperty() FX Responder} for this {@link ImageButton} is {@code non-null}, it is {@link FXTools#runFX(Runnable, boolean) executed} on the {@link FXTools#isFXThread() JavaFX Thread}.</li>
+     *             <li>The {@link #actionResponderFXProperty() FX Responder} execution is <u>blocking</u>.</li>
+     *             <li>Refer to <code><i>{@link #actionResponderFXProperty()}</i></code> for additional information.</li>
+     *         </ol>
+     *     </li>
+     * </ol>
+     *
+     * @see #actionResponderProperty()
+     * @see #actionResponderFXProperty()
+     */
+    private void onAction() {
+        final Runnable actionResponder = getActionResponder();
+        if (actionResponder != null)
+            ctx().getBean(LogiCore.class).executor().execute(actionResponder);
+        
+        final Runnable actionResponderFX = getActionResponderFX();
+        if (actionResponderFX != null)
+            FXTools.runFX(actionResponderFX, false);
+    }
     
     //</editor-fold>
     
+    
+    /**
+     * <p>Used to define how a template image should be rendered given the {@link ImageButton ImageButton's} current state(s).</p>
+     */
+    // TO-EXPAND
     public final class PaintData {
         
         // The suffix
@@ -1123,9 +1099,9 @@ public class ImageButton
         
         private @NotNull ObjectBinding<Image> generateImageBinding() {
             return Bindings.createObjectBinding(() -> {
-                Image image = ResourceTools.get().getImage(ImageButton.this.getPathID2(), ImageButton.this.getID(), "png");
+                Image image = ResourceTools.get().getImage(ImageButton.this.getPathId(), ImageButton.this.getID(), "png");
                 if (image != null) {
-                    final WritableImage writableImage = new WritableImage((int) image.getWidth(), (int) image.getHeight());
+                    WritableImage writableImage = new WritableImage((int) image.getWidth(), (int) image.getHeight());
                     PixelReader reader = image.getPixelReader();
                     
                     for (int i = 0; i < image.getWidth(); i++) {
@@ -1139,7 +1115,7 @@ public class ImageButton
                     return writableImage != null ? writableImage : missingno();
                 } else {
                     ImageButton.this.debugger().print("Image is null  [" + ImageButton.this.getName() + "_" + suffix + "]");
-                    image = ResourceTools.get().getImage(ImageButton.this.getPathID(), ImageButton.this.getID() + suffix, "png");
+                    image = ResourceTools.get().getImage(ImageButton.this.getPathIdOLD(), ImageButton.this.getID() + suffix, "png");
                     return image != null ? image : missingno();
                 }
             }, ImageButton.this.nameBinding(), foregroundColorProperty, backgroundColorProperty);

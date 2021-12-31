@@ -112,6 +112,8 @@ public abstract class ContentSelectorPageController<
     
     //</editor-fold>
     
+    //<editor-fold desc="--- INTERNAL ---">
+    
     private void onAdded(T content) {
         FXTools.runFX(() -> FXTools.addElement(content, contentList, true), true);
     }
@@ -121,7 +123,8 @@ public abstract class ContentSelectorPageController<
     }
     
     private void addInstance() {
-        debugger().print("Add Instance Pressed");
         logiCore().executor().execute(() -> getPage().getContentHandler().addInstance());
     }
+    
+    //</editor-fold>
 }
