@@ -179,66 +179,6 @@ public class MandelbrotContent extends ListableContent<
         }, true));
     }
     
-    private void refreshCanvasOLD() {
-        sync(() -> FXTools.runFX(() -> {
-            final BoundCanvas canvas = getController().canvas();
-            final double newWidth = getController().canvas().getWidth();
-            final double newHeight = getController().canvas().getHeight();
-            debugger().print("In Refresh 1...");
-            
-            if (worker != null) {
-                debugger().print("Cancelling Worker...");
-                worker.cancel(false);
-            }
-            FXTools.clearCanvasUnsafe(ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas());
-            
-            debugger().print("In Refresh 2...");
-            
-            getData().resizeTo(newWidth, newHeight);
-            
-            final MandelbrotIterator iterator = new MandelbrotIterator(this, lock, getData(), canvas);
-            worker = new Task<>() {
-                @Override
-                protected Void call() {
-                    FXTools.runFX(() -> getCoverPage().getController().getProgressBar().setVisible(true), true);
-                    debugger().print("In Refresh Task A...");
-                    while (!iterator.isComplete()) {
-                        iterator.next();
-                        if (iterator.getWorkProgress() % 10 == 0)
-                            updateProgress(iterator.getWorkProgress(), iterator.getWorkTotal());
-                        if (isCancelled())
-                            return null;
-                    }
-                    redraw(iterator.getMatrix());
-                    return null;
-                }
-                
-                @Override
-                protected void succeeded() {
-                    debugger().print("Generation Successful!");
-                    getController().canvas().refreshImage();
-                    worker = null;
-                }
-                
-                @Override
-                protected void cancelled() {
-                    debugger().print("Generation Cancelled.");
-                    worker = null;
-                }
-                
-                @Override
-                protected void failed() {
-                    debugger().print(Debugger.WARN, "Generation Failed!");
-                    worker = null;
-                }
-            };
-            debugger().print("Worker: " + worker);
-            
-            getCoverPage().getController().getProgressBar().progressProperty().bind(worker.progressProperty());
-            new Thread(worker).start(); // Use executor instead?
-        }, true));
-    }
-    
     private void redraw(MandelbrotColor[][] colors) {
         FXTools.runFX(() -> TaskTools.sync(lock, () -> {
             getCoverPage().getController().getProgressBar().setVisible(false);

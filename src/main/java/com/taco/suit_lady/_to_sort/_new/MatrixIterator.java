@@ -87,7 +87,7 @@ public abstract class MatrixIterator<T>
     
     //</editor-fold>
     
-    public final void next() {
+    private void next() {
         getMatrix()[iX][iY] = step(iX, iY);
         increment();
     }
