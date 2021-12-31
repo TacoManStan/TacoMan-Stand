@@ -102,6 +102,8 @@ public class MandelbrotContent extends ListableContent<
         this.iterator = new MandelbrotIterator(this, lock, getData(), getController().canvas(), getCoverPage().getController().getProgressBar());
     }
     
+    //<editor-fold desc="--- INITIALIZATION ---">
+    
     private void initUIPage() {
         //Bind the value properties of relevant JFX components to the matching MandelbrotData property bidirectionally
         getCoverPage().getController().getXMaxTextField().getFormatter().valueProperty().bindBidirectional(getData().xMaxProperty());
@@ -155,9 +157,64 @@ public class MandelbrotContent extends ListableContent<
         getCoverPage().getController().getLoadConfigButton().setOnAction(event -> JFiles.load(getData()));
     }
     
+    //</editor-fold>
+    
+    //<editor-fold desc="--- PROPERTIES ---">
+    
     protected MandelbrotPage getCoverPage() {
         return coverPage;
     }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+    
+    @Override
+    public boolean isNullableLock() {
+        return true;
+    }
+    
+    @Override
+    protected @NotNull MandelbrotContentData loadData() {
+        return MandelbrotContentData.newDefaultInstance(this);
+    }
+    
+    @Override
+    protected @NotNull Class<MandelbrotContentController> controllerDefinition() {
+        return MandelbrotContentController.class;
+    }
+    
+    @Override
+    protected void onActivate() { }
+    
+    @Override
+    protected void onDeactivate() { }
+    
+    @Override
+    protected void onShutdown() {
+        if (worker != null) {
+            debugger().print("Cancelling Mandelbrot Worker Task");
+            if (worker.cancel(true))
+                debugger().print("Worker Cancellation Successful!");
+            else
+                debugger().print(Debugger.WARN, "Worker Cancellation Failed!");
+        }
+    }
+    
+    
+    private UIDProcessor uidProcessor;
+    
+    @Override
+    public UIDProcessor getUIDProcessor() {
+        if (uidProcessor == null)
+            uidProcessor = new UIDProcessor("mandelbrot_content");
+        return uidProcessor;
+    }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- INTERNAL ---">
     
     private void refreshCanvasChecked() {
         boolean autoRegenerationPaused = getData().isAutoRegenerationPaused();
@@ -213,51 +270,6 @@ public class MandelbrotContent extends ListableContent<
         });
         //        final AppUI ui = ctx().getBean(AppUI.class);
         //        FXTools.drawRectangle(ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas(), moveData.getAsPaintable(), true, false);
-    }
-    
-    //<editor-fold desc="--- IMPLEMENTATIONS ---">
-    
-    
-    @Override
-    public boolean isNullableLock() {
-        return true;
-    }
-    
-    @Override
-    protected @NotNull MandelbrotContentData loadData() {
-        return MandelbrotContentData.newDefaultInstance(this);
-    }
-    
-    @Override
-    protected @NotNull Class<MandelbrotContentController> controllerDefinition() {
-        return MandelbrotContentController.class;
-    }
-    
-    @Override
-    protected void onActivate() { }
-    
-    @Override
-    protected void onDeactivate() { }
-    
-    @Override
-    protected void onShutdown() {
-        if (worker != null) {
-            debugger().print("Cancelling Mandelbrot Worker Task");
-            if (worker.cancel(true))
-                debugger().print("Worker Cancellation Successful!");
-            else
-                debugger().print(Debugger.WARN, "Worker Cancellation Failed!");
-        }
-    }
-    
-    
-    private UIDProcessor uidProcessor;
-    
-    @Override
-    public UIDProcessor getUIDProcessor() {
-        if (uidProcessor == null)
-            uidProcessor = new UIDProcessor("mandelbrot_content");
-        return uidProcessor;
     }
     
     //</editor-fold>
