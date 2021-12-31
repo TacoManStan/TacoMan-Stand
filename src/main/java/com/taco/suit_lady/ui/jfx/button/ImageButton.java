@@ -413,14 +413,7 @@ public class ImageButton
     private void onAction() {
         final Runnable actionResponder = getActionResponder();
         if (actionResponder != null)
-            ctx().getBean(LogiCore.class).executor().execute(
-                    new Task<>() {
-                        @Override
-                        protected Object call() {
-                            actionResponder.run();
-                            return null;
-                        }
-                    });
+            ctx().getBean(LogiCore.class).executor().execute(actionResponder);
         
         final Runnable actionResponderFX = getActionResponderFX();
         if (actionResponderFX != null)
