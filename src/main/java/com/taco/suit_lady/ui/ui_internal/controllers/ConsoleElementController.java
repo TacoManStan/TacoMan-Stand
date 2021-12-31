@@ -63,14 +63,15 @@ public final class ConsoleElementController extends CellController<WrappingTreeC
     {
         this.settingsButton = new ImageButton(
                 this,
-                settingsImagePane,
+                "Details",
                 "details",
+                settingsImagePane,
                 this::onDetails,
                 null,
                 false,
                 null
         );
-        this.settingsButton.initialize();
+        this.settingsButton.init();
         
         this.settingsImagePane.setMinSize(settingsImagePane.getImage().getWidth(), settingsImagePane.getImage().getHeight());
         

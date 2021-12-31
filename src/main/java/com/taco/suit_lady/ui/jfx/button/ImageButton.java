@@ -9,11 +9,9 @@ import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.ResourceTools;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import com.taco.tacository.obj_traits.common.Nameable;
+import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
-import javafx.beans.binding.ObjectBinding;
-import javafx.beans.binding.StringBinding;
+import javafx.beans.binding.*;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableStringValue;
@@ -22,6 +20,7 @@ import javafx.event.Event;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
@@ -32,6 +31,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import javax.tools.Tool;
 import java.lang.reflect.Array;
 import java.util.Objects;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -44,10 +44,12 @@ public class ImageButton
     
     private final StrictSpringable springable;
     
+    
     private final ImagePane imagePane;
     
-    private final StringBinding nameBinding;
+    private final StringBinding imageIdBinding;
     private final ObjectProperty<ImageButtonGroup> buttonGroupProperty;
+    
     
     private final PaintData paintData;
     private final PaintData hoveredPaintData;
@@ -56,6 +58,7 @@ public class ImageButton
     private final PaintData selectedPaintData;
     private final PaintData selectedHoveredPaintData;
     private final PaintData selectedPressedPaintData;
+    
     
     private final ObjectProperty<Runnable> actionResponderProperty;
     private final ObjectProperty<Runnable> actionResponderFXProperty;
@@ -66,7 +69,12 @@ public class ImageButton
     private final BooleanProperty selectedProperty;
     private final BooleanProperty disabledProperty;
     
+    
+    // TODO: Add constructor option for auto-binding to existing ObservableStringValue
+    private final StringProperty nameProperty;
+    
     private final BooleanProperty showTooltipProperty;
+    private Tooltip tooltip;
     
     
     private final boolean toggleable;
@@ -74,21 +82,23 @@ public class ImageButton
     //</editor-fold>
     
     /**
-     * <p>Refer to {@link #ImageButton(Springable, ImagePane, ObservableStringValue, Runnable, Runnable, boolean, Point2D) Fully-Parameterized Constructor} for details.</p>
+     * <p>Refer to {@link #ImageButton(Springable, String, ObservableStringValue, ImagePane, Runnable, Runnable, boolean, Point2D) Fully-Parameterized Constructor} for details.</p>
      * <p><b>Identical to...</b></p>
      * <blockquote><code>new ImageButton(imagePane, <u>BindingTools.createStringBinding(name)</u>, actionResponder, actionResponderFX, toggleable, size)</code></blockquote>
      */
     public ImageButton(
             @NotNull Springable springable,
-            @Nullable ImagePane imagePane,
             @Nullable String name,
+            @Nullable String imageId,
+            @Nullable ImagePane imagePane,
             @Nullable Runnable actionResponder,
             @Nullable Runnable actionResponderFX,
             boolean toggleable,
             @Nullable Point2D size) {
         this(springable,
+             name,
+             BindingTools.createStringBinding(imageId),
              imagePane,
-             BindingTools.createStringBinding(name),
              actionResponder,
              actionResponderFX,
              toggleable,
@@ -101,17 +111,22 @@ public class ImageButton
      * <p><b>Parameter Details</b></p>
      * <ol>
      *     <li>
+     *         <b>Name:</b> {@literal String}
+     *         <blockquote><i>Refer to <code><i>{@link #nameProperty()}</i></code> for additional information.</i></blockquote>
+     *     </li>
+     *     <li>
+     *         <b>Image ID Binding:</b> {@literal ObservableStringValue}
+     *         <blockquote><i>Refer to <code><i>{@link #imageIdBinding()}</i></code> for additional information.</i></blockquote>
+     *         <ol>
+     *             <li>If the specified {@link ObservableStringValue imageIdBinding} is {@code null}, a {@link NullPointerException} is thrown.</li>
+     *             <li>The {@link ObservableStringValue} specified as a parameter is used as the {@link Binding#getDependencies() dependency} for the {@link StringBinding} returned by {@link #imageIdBinding()}.</li>
+     *         </ol>
+     *     </li>
+     *     <li>
      *         <p><b>Image Pane:</b> {@literal ImagePane}</p>
      *         <blockquote><i>Refer to <code>{@link #getImagePane()}</code> for additional information.</i></blockquote>
      *         <ol>
      *             <li>If the specified {@link ImagePane} is {@code null}, a new {@link ImagePane} is constructed.</li>
-     *         </ol>
-     *     </li>
-     *     <li>
-     *         <b>Name Binding:</b> {@literal ObservableStringValue}
-     *         <blockquote><i>Refer to <code><i>{@link #nameBinding()}</i></code> for additional information.</i></blockquote>
-     *         <ol>
-     *             <li>If the specified {@link ObservableStringValue nameBinding} is {@code null}, a {@link NullPointerException} is thrown.</li>
      *         </ol>
      *     </li>
      *     <li>
@@ -140,7 +155,7 @@ public class ImageButton
      * </ol>
      *
      * @param imagePane         The {@link ImagePane} this {@link ImageButton} will be displayed on.
-     * @param nameBinding       The {@link ObservableStringValue} containing the {@link String name} of this {@link ImageButton}.
+     * @param imageIdBinding    The {@link ObservableStringValue} containing the {@link String name} of this {@link ImageButton}.
      * @param actionResponder   The {@link Runnable} that is executed in a {@link Task Background Task} when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.
      * @param actionResponderFX The {@link Runnable} that is executed on the {@link FXTools#isFXThread() JavaFX Thread} when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.
      * @param toggleable        True if this {@link ImageButton} is {@link #isToggleable() toggleable}, false if it is not.
@@ -148,27 +163,27 @@ public class ImageButton
      */
     public ImageButton(
             @NotNull Springable springable,
+            @Nullable String name,
+            @NotNull ObservableStringValue imageIdBinding,
             @Nullable ImagePane imagePane,
-            @NotNull ObservableStringValue nameBinding,
             @Nullable Runnable actionResponder,
             @Nullable Runnable actionResponderFX,
             boolean toggleable,
             @Nullable Point2D size) {
         this.springable = springable.asStrict();
         
+        
         this.imagePane = imagePane != null ? imagePane : new ImagePane();
+        this.imageIdBinding = Bindings.createStringBinding(() -> {
+            final String idTemp = imageIdBinding.get();
+            return idTemp != null ? idTemp : "missingno";
+        }, imageIdBinding);
         
-        this.nameBinding = Bindings.createStringBinding(() -> {
-            final String name = nameBinding.get();
-            return name != null ? name : "missingno";
-        }, nameBinding);
-        
-        //        ConsoleBB.CONSOLE.print("Size for Button [" + getName() + "]: " + size);
         if (size != null) {
             this.imagePane.setPrefSize(size.getX(), size.getY());
             this.imagePane.setMaxSize(size.getX(), size.getY());
         }
-        //        ConsoleBB.CONSOLE.print("Actual Size for Button \"" + getName() + "\": " + "[" + this.imagePane.getWidth() + ", " + this.imagePane.getHeight() + "]");
+        
         
         this.buttonGroupProperty = new ReadOnlyObjectWrapper<>();
         
@@ -178,7 +193,12 @@ public class ImageButton
         this.selectedProperty = new SimpleBooleanProperty();
         this.disabledProperty = new SimpleBooleanProperty();
         
-        this.showTooltipProperty = new SimpleBooleanProperty(false);
+        
+        this.nameProperty = new SimpleStringProperty(name);
+        
+        this.showTooltipProperty = new SimpleBooleanProperty(true);
+        this.tooltip = null;
+        
         
         this.toggleable = toggleable;
         
@@ -205,12 +225,6 @@ public class ImageButton
         
         this.hoveredBinding = BindingTools.createBooleanBinding(this.imagePane.hoverProperty());
         this.pressedBinding = BindingTools.createBooleanBinding(this.imagePane.pressedProperty());
-        
-        
-        this.selectedProperty.addListener((observable, oldValue, newValue) -> {
-            if (newValue && !isToggleable())
-                throw ExceptionTools.unsupported("Image Button \"" + getName() + "\" is not toggleable and can therefore not be selected.");
-        });
         
         
         this.paintData = new PaintData("");
@@ -251,59 +265,52 @@ public class ImageButton
      *             <li>Sets {@link ImagePane#onMouseReleasedProperty() On Mouse Released} to execute <code><i>{@link #onMouseReleased(MouseEvent)}</i></code>.</li>
      *         </ol>
      *     </li>
+     *     <li>
+     *         Configures the {@link ChangeListener ChangeListeners} and {@link InvalidationListener InvalidationListeners} for this {@link ImageButton}.
+     *         <ol>
+     *             <li>Adds listeners required for automatic {@link Tooltip} settings.</li>
+     *         </ol>
+     *     </li>
      *     <li>Returns a self-reference ({@code this}) to this {@link ImageButton}. Note that the return value is oftentimes superfluous.</li>
      * </ol>
      *
      * @return A self-reference ({@code this}) to this {@link ImageButton}.
      */
-    public ImageButton initialize() {
-        // Note: MUST be called manually after an ImageButton is constructed.
+    public ImageButton init() {
+        initImagePane();
+        initPropertyListeners();
         
+        return this;
+    }
+    
+    private void initImagePane() {
         final Observable[] observables = new Observable[]{
-                nameBinding,
+                imageIdBinding,
                 hoveredBinding,
                 pressedBinding,
                 selectedProperty,
                 disabledProperty
         };
         
-        imagePane.imageProperty().bind(Bindings.createObjectBinding(
-                () -> getImage(), observables));
+        imagePane.imageProperty().bind(Bindings.createObjectBinding(() -> getImage(), observables));
         
         imagePane.setPickOnBounds(true);
         
         imagePane.setOnMouseClicked(Event::consume);
         imagePane.setOnMousePressed(Event::consume);
         imagePane.setOnMouseReleased(event -> onMouseReleased(event));
-        
-        return this;
     }
     
-    /**
-     * <p>A helper method that is executed whenever this {@link ImageButton ImageButton's} {@link #getImagePane() ImagePane} triggers a {@link MouseEvent#MOUSE_RELEASED Mouse Released Event}.</p>
-     * <p><b>Execution Process</b></p>
-     * <ol>
-     *     <li>
-     *         If <i>any</i> of the following conditions are {@code true}, the {@link MouseEvent} is {@link MouseEvent#consume() consumed}, no other actions are taken, and {@link #onMouseReleased(MouseEvent) this method} returns silently.
-     *         <ol>
-     *             <li>The {@link Event#getSource() Event Source} is not this {@link ImageButton ImageButton's} {@link #getImagePane() ImagePane}.</li>
-     *             <li>The {@link MouseEvent} was not triggered while {@link FXTools#isMouseOnEventSource(MouseEvent) on the} {@link Event#getSource() Event Source}.</li>
-     *             <li>This {@link ImageButton} is currently {@link #disabledProperty() disabled}.</li>
-     *         </ol>
-     *     </li>
-     *     <li>The <code><i>{@link #toggle()}</i></code> method is called on this {@link ImageButton} instance.</li>
-     *     <li>The <code><i>{@link #onAction()}</i></code> method is called on this {@link ImageButton} instance.</li>
-     *     <li>The {@link MouseEvent} is {@link MouseEvent#consume() consumed}.</li>
-     * </ol>
-     *
-     * @param event The triggering {@link MouseEvent} object.
-     */
-    private void onMouseReleased(@NotNull MouseEvent event) {
-        if (Objects.equals(event.getSource(), imagePane) && FXTools.isMouseOnEventSource(event) && !isDisabled()) {
-            toggle();
-            onAction();
-        }
-        event.consume();
+    private void initPropertyListeners() {
+        selectedProperty.addListener((observable, oldValue, newValue) -> {
+            if (newValue && !isToggleable())
+                throw ExceptionTools.unsupported("Image Button \"" + getName() + "\" is not toggleable and can therefore not be selected.");
+        });
+        
+        showTooltipProperty.addListener((observable, oldValue, newValue) -> updateTooltip());
+        nameProperty.addListener((observable, oldValue, newValue) -> updateTooltip());
+        
+        updateTooltip();
     }
     
     //</editor-fold>
@@ -589,93 +596,89 @@ public class ImageButton
     
     //</editor-fold>
     
-    /**
-     * <p>Returns the {@link ImagePane} object containing this {@link ImageButton}.</p>
-     * <p><b>Details</b></p>
-     * <ol>
-     *     <li>Required because {@link ImageButton ImageButtons} are not actually {@link Node UI elements} (*cough* yet *cough*).</li>
-     * </ol>
-     *
-     * @return The {@link ImagePane} object containing this {@link ImageButton}.
-     */
-    public @NotNull ImagePane getImagePane() {
-        return imagePane;
-    }
+    //<editor-fold desc="Image ID">
     
     /**
      * <p>Returns the {@link StringBinding} bound to the {@link #getName() name} of this {@link ImageButton}.</p>
      * <p><b>Details</b></p>
      * <ol>
-     *     <li>The {@link #getName() name} is used to load references to the {@link ResourceTools#getImage(String, String, String) Cached} {@link Image Images}.</li>
-     *     <li>Each {@link ButtonState state} results in a different variation of the same {@link Image} referenced by the {@link ImageButton} {@link #nameBinding() name}.</li>
+     *     <li>The {@link #getImageId() Image ID} is used to load references to the {@link ResourceTools#getImage(String, String, String) Cached} {@link Image Images}.</li>
+     *     <li>Each {@link ButtonState state} results in a different variation of the same {@link Image} referenced by the {@link ImageButton} {@link #imageIdBinding() Image ID}.</li>
      *     <li>The <code><i>{@link #getImage()}</i></code> method returns the current {@link Image} variation displayed by this {@link ImageButton} based on its current {@link #getState() state}.</li>
      *     <li>
      *         The {@link Image} variations are essentially each a different styling of the same original image.
      *         // TODO - Eventually have styling be done via code automatically.
      *     </li>
-     *     <li>The {@link StringBinding} returned by this method can never return {@code null} and will instead return {@code "missingno"} if the {@link #nameBinding() name} is undefined.</li>
+     *     <li>The {@link StringBinding} returned by this method can never return {@code null} and will instead return {@code "missingno"} if the {@link #imageIdBinding() Image ID} is undefined.</li>
      * </ol>
      * <p><b>Cache ID</b></p>
      * <ol>
-     *     <li>To get the cache ID, refer to the <code><i>{@link #getID()}</i></code> method.</li>
+     *     <li>To get the cache ID, refer to the <code><i>{@link #getFormattedImageId()}</i></code> method.</li>
      *     <li>To get the full cache path ID, refer to the <code><i>{@link #getPathIdOLD()}</i></code> method.</li>
      * </ol>
      *
-     * @return The {@link StringBinding} bound to the {@link #getName() name} of this {@link ImageButton}.
+     * @return The {@link StringBinding} bound to the {@link #getImageId() Image ID} of this {@link ImageButton}.
      *
-     * @see #getName()
+     * @see #getImageId()
      * @see #getState()
      * @see #getImage()
-     * @see #getID()
+     * @see #getFormattedImageId()
      * @see #getPathIdOLD()
      */
-    public @NotNull StringBinding nameBinding() {
+    public @NotNull StringBinding imageIdBinding() {
         // TODO - Dunno how and it isn't necessary yet but you should somehow make it possible to change the name after construction
-        return nameBinding;
+        return imageIdBinding;
     }
     
     /**
-     * <p>Returns the {@link #nameBinding() name} of this {@link ImageButton}.</p>
-     * <blockquote>Refer to <code><i>{@link #nameBinding()}</i></code> for additional information.</blockquote>
+     * <p>Returns the {@link #imageIdBinding() Image ID} of this {@link ImageButton}.</p>
+     * <blockquote>Refer to <code><i>{@link #imageIdBinding()}</i></code> for additional information.</blockquote>
      *
-     * @return The {@link #nameBinding() name} of this {@link ImageButton}.
+     * @return The {@link #imageIdBinding() Image ID} of this {@link ImageButton}.
      *
-     * @see #nameBinding()
+     * @see #imageIdBinding()
+     * @see #getFormattedImageId()
      */
-    @Override
-    public @NotNull String getName() {
-        return nameBinding.get();
+    public @NotNull String getImageId() {
+        return imageIdBinding.get();
     }
     
     /**
      * <p>Returns the {@link ButtonState#STANDARD vanilla} cache ID for this {@link ImageButton}.</p>
-     * <blockquote>Refer to the <code><i>{@link #nameBinding()}</i></code> docs for additional information.</blockquote>
+     * <blockquote>Refer to the <code><i>{@link #imageIdBinding()}</i></code> docs for additional information.</blockquote>
+     * <br><hr>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>In most cases, the value returned by <i>{@link #getImageId()}</i> will (and should) be identical to the value returned by <i>{@link #getFormattedImageId()} (this method)</i>.</li>
+     *     <li>This method exists simply to make the {@link #getImageId() Image ID} case-insensitive and human-readable (permits spaces rather than underscores).</li>
+     *     <li>That said, it is good practice to enter the {@link #getImageId() Image ID} exactly to make the code more readable and understandable, as {@code ids} can mean different things, especially at a glance.</li>
+     * </ol>
      *
      * @return The {@link ButtonState#STANDARD vanilla} cache ID for this {@link ImageButton}.
      *
-     * @see #nameBinding()
+     * @see #imageIdBinding()
      * @see #getPathIdOLD()
      * @see ResourceTools#getImage(String, String, String)
      */
-    private @NotNull String getID() {
-        return getName().replace(" ", "_").toLowerCase();
+    private @NotNull String getFormattedImageId() {
+        return getImageId().replace(" ", "_").toLowerCase();
     }
     
     /**
      * <p>Returns the full {@link ButtonState#STANDARD vanilla} cache path ID for this {@link ImageButton}.</p>
-     * <blockquote>Refer to the <code><i>{@link #nameBinding()}</i></code> docs for additional information.</blockquote>
+     * <blockquote>Refer to the <code><i>{@link #imageIdBinding()}</i></code> docs for additional information.</blockquote>
      * <hr>
      * <p>Note that this is a legacy method and will be removed in a future release once the new implementation has been fully established/implemented.</p>
      *
      * @return The full {@link ButtonState#STANDARD vanilla} cache path ID for this {@link ImageButton}.
      *
-     * @see #nameBinding()
-     * @see #getID()
+     * @see #imageIdBinding()
+     * @see #getFormattedImageId()
      * @see ResourceTools#getImage(String, String, String)
      */
     // TO-REMOVE
     private @NotNull String getPathIdOLD() {
-        return "buttons/" + getID() + "/";
+        return "buttons/" + getFormattedImageId() + "/";
     }
     
     /**
@@ -692,12 +695,14 @@ public class ImageButton
         return "buttons/_small/";
     }
     
+    //</editor-fold>
+    
     /**
      * <P>Returns the {@link ObjectProperty} containing the {@link ImageButtonGroup} that this {@link ImageButton} is in, or {@code null} if this {@link ImageButton} is not in a {@link ImageButtonGroup}.</P>
      * <p><b>Details</b></p>
      * <ol>
      *     <li>All logic related to adding or removing an {@link ImageButton} from a {@link ImageButtonGroup} is done via a {@link ChangeListener} that observes the {@link ObjectProperty} returned by {@link #buttonGroupProperty() this method}.</li>
-     *     <li>The aforementioned {@link ChangeListener} is configured in the {@link ImageButton} {@link #ImageButton(Springable, ImagePane, ObservableStringValue, Runnable, Runnable, boolean, Point2D) constructor}.</li>
+     *     <li>The aforementioned {@link ChangeListener} is configured in the {@link ImageButton} {@link #ImageButton(Springable, String, ObservableStringValue, ImagePane, Runnable, Runnable, boolean, Point2D) constructor}.</li>
      * </ol>
      *
      * @return The {@link ObjectProperty} containing the {@link ImageButtonGroup} that this {@link ImageButton} is in, or {@code null} if this {@link ImageButton} is not in a {@link ImageButtonGroup}.
@@ -731,6 +736,85 @@ public class ImageButton
      */
     public boolean isInButtonGroup() {
         return getButtonGroup() != null;
+    }
+    
+    
+    /**
+     * <p>Returns the {@code name} of this {@link ImageButton}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>The {@code name} is used primarily (at the time of writing this, exclusively) to define the {@link Tooltip} text displayed upon hovering over the {@link ImageButton}.</li>
+     *     <li>The {@code name} can be null — under such circumstances, the {@link Tooltip} will not be displayed, even if the value returned by <i>{@link #isShowingTooltip()}</i> is true.</li>
+     * </ol>
+     *
+     * @return The {@link StringProperty} containing the {@link #getName() name} of this {@link ImageButton}.
+     */
+    public final @NotNull StringProperty nameProperty() {
+        return nameProperty;
+    }
+    
+    /**
+     * <p>Returns the {@code name} of this {@link ImageButton}.</p>
+     *
+     * @return The {@code name} of this {@link ImageButton}.
+     *
+     * @see #nameProperty()
+     */
+    @Override
+    public final @Nullable String getName() {
+        return nameProperty.get();
+    }
+    
+    /**
+     * <p>Sets the {@link #nameProperty() name} of this {@link ImageButton} to the specified value.</p>
+     *
+     * @param newValue The value to be set as the new {@link #nameProperty() name} of this {@link ImageButton}.
+     *
+     * @return The previous {@link #nameProperty() name} of this {@link ImageButton}.
+     */
+    public final String setName(String newValue) {
+        String oldValue = getName();
+        nameProperty.set(newValue);
+        return oldValue;
+    }
+    
+    
+    /**
+     * <p>Returns the {@link Tooltip} that is to be displayed when the user hovers over this {@link ImageButton}.</p>
+     * <p>Can be null, in which case no {@link Tooltip} will be shown, regardless of the value returned by <i>{@link #isShowingTooltip()}</i>.</p>
+     *
+     * @return The {@link Tooltip} assigned to this {@link ImageButton}, or {@code null} if no {@link Tooltip} is assigned (currently, when <i>{@link #getName()}</i> is {@code null}).
+     */
+    public final @Nullable Tooltip getTooltip() {
+        return tooltip;
+    }
+    
+    public final @NotNull BooleanProperty showTooltipProperty() {
+        return showTooltipProperty;
+    }
+    
+    public final boolean isShowingTooltip() {
+        return showTooltipProperty.get();
+    }
+    
+    public final boolean setShowTooltip(boolean newValue) {
+        boolean oldValue = isShowingTooltip();
+        showTooltipProperty.set(newValue);
+        return oldValue;
+    }
+    
+    
+    /**
+     * <p>Returns the {@link ImagePane} object containing this {@link ImageButton}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>Required because {@link ImageButton ImageButtons} are not actually {@link Node UI elements} (*cough* yet *cough*).</li>
+     * </ol>
+     *
+     * @return The {@link ImagePane} object containing this {@link ImageButton}.
+     */
+    public @NotNull ImagePane getImagePane() {
+        return imagePane;
     }
     
     //</editor-fold>
@@ -979,8 +1063,50 @@ public class ImageButton
             FXTools.runFX(actionResponderFX, false);
     }
     
-    //</editor-fold>
+    /**
+     * <p>A helper method that is executed whenever this {@link ImageButton ImageButton's} {@link #getImagePane() ImagePane} triggers a {@link MouseEvent#MOUSE_RELEASED Mouse Released Event}.</p>
+     * <p><b>Execution Process</b></p>
+     * <ol>
+     *     <li>
+     *         If <i>any</i> of the following conditions are {@code true}, the {@link MouseEvent} is {@link MouseEvent#consume() consumed}, no other actions are taken, and {@link #onMouseReleased(MouseEvent) this method} returns silently.
+     *         <ol>
+     *             <li>The {@link Event#getSource() Event Source} is not this {@link ImageButton ImageButton's} {@link #getImagePane() ImagePane}.</li>
+     *             <li>The {@link MouseEvent} was not triggered while {@link FXTools#isMouseOnEventSource(MouseEvent) on the} {@link Event#getSource() Event Source}.</li>
+     *             <li>This {@link ImageButton} is currently {@link #disabledProperty() disabled}.</li>
+     *         </ol>
+     *     </li>
+     *     <li>The <code><i>{@link #toggle()}</i></code> method is called on this {@link ImageButton} instance.</li>
+     *     <li>The <code><i>{@link #onAction()}</i></code> method is called on this {@link ImageButton} instance.</li>
+     *     <li>The {@link MouseEvent} is {@link MouseEvent#consume() consumed}.</li>
+     * </ol>
+     *
+     * @param event The triggering {@link MouseEvent} object.
+     */
+    private void onMouseReleased(@NotNull MouseEvent event) {
+        if (Objects.equals(event.getSource(), imagePane) && FXTools.isMouseOnEventSource(event) && !isDisabled()) {
+            toggle();
+            onAction();
+        }
+        event.consume();
+    }
     
+    
+    /**
+     * <p>Sets the {@link Tooltip} for this {@link ImageButton} to reflect the correct text (the {@link #getName() name}) and enabled state.</p>
+     * <p>Called internally by various {@link ChangeListener ChangeListeners}.</p>
+     */
+    private synchronized void updateTooltip() {
+        if (showTooltipProperty.get()) {
+            tooltip = new Tooltip(getName());
+            Tooltip.install(imagePane, tooltip);
+        } else {
+            if (tooltip != null)
+                Tooltip.uninstall(imagePane, tooltip);
+            tooltip = null;
+        }
+    }
+    
+    //</editor-fold>
     
     /**
      * <p>Used to define how a template image should be rendered given the {@link ImageButton ImageButton's} current state(s).</p>
@@ -1099,7 +1225,7 @@ public class ImageButton
         
         private @NotNull ObjectBinding<Image> generateImageBinding() {
             return Bindings.createObjectBinding(() -> {
-                Image image = ResourceTools.get().getImage(ImageButton.this.getPathId(), ImageButton.this.getID(), "png");
+                Image image = ResourceTools.get().getImage(ImageButton.this.getPathId(), ImageButton.this.getFormattedImageId(), "png");
                 if (image != null) {
                     WritableImage writableImage = new WritableImage((int) image.getWidth(), (int) image.getHeight());
                     PixelReader reader = image.getPixelReader();
@@ -1115,10 +1241,10 @@ public class ImageButton
                     return writableImage != null ? writableImage : missingno();
                 } else {
                     ImageButton.this.debugger().print("Image is null  [" + ImageButton.this.getName() + "_" + suffix + "]");
-                    image = ResourceTools.get().getImage(ImageButton.this.getPathIdOLD(), ImageButton.this.getID() + suffix, "png");
+                    image = ResourceTools.get().getImage(ImageButton.this.getPathIdOLD(), ImageButton.this.getFormattedImageId() + suffix, "png");
                     return image != null ? image : missingno();
                 }
-            }, ImageButton.this.nameBinding(), foregroundColorProperty, backgroundColorProperty);
+            }, ImageButton.this.imageIdBinding(), foregroundColorProperty, backgroundColorProperty);
         }
         
         private Color defaultColor(Color baseColor) {

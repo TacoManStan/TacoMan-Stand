@@ -490,65 +490,79 @@ public class AppController
     }
     
     private void initImageButtons() {
-        new ImageButton(
+        ImageButton settingsButton = new ImageButton(
                 this,
-                settingsImagePane,
+                "Settings",
                 "settings",
+                settingsImagePane,
                 null,
                 this::openSettings,
                 false,
                 ImageButton.SMALL
-        ).initialize();
+        ).init();
         
-        new ImageButton(
+        ImageButton toggleSidebarButton = new ImageButton(
                 this,
-                sidebarImagePane,
+                "Toggle Sidebar",
                 "hide_sidebar",
+                sidebarImagePane,
                 null,
                 this::toggleSidebar,
                 false,
                 ImageButton.SMALL
-        ).initialize();
+        ).init();
         
-        new ImageButton(
+        ImageButton minimizeButton = new ImageButton(
                 this,
-                minimizeImagePane,
+                "Minimize",
                 "minimize",
+                minimizeImagePane,
                 null,
                 () -> stage.setIconified(!stage.isIconified()),
                 false,
                 ImageButton.SMALL
-        ).initialize();
+        ).init();
         
-        new ImageButton(
+        ImageButton maximizeButton = new ImageButton(
                 this,
-                maximizeImagePane,
+                "Maximize",
                 Bindings.createStringBinding(() -> stage.isMaximized() ? "maximize_both" : "maximize", stage.maximizedProperty()),
+                maximizeImagePane,
                 null,
                 () -> stage.setMaximized(!stage.isMaximized()),
                 false,
                 ImageButton.SMALL
-        ).initialize();
+        ).init();
         
-        new ImageButton(
+        ImageButton closeButton = new ImageButton(
                 this,
-                closeImagePane,
+                "Close",
                 "close",
+                closeImagePane,
                 null,
                 stage::close,
                 false,
                 ImageButton.SMALL
-        ).initialize();
+        ).init();
         
-        new ImageButton(
+        ImageButton logoButton = new ImageButton(
                 this,
-                logoImagePane,
+                "Logo",
                 "logo",
+                logoImagePane,
                 () -> TB.web().browse("google", true),
                 null,
                 false,
                 new Point2D(20.0, 20.0)
-        ).initialize();
+        ).init();
+        
+        
+        minimizeButton.setShowTooltip(false);
+        maximizeButton.setShowTooltip(false);
+        closeButton.setShowTooltip(false);
+        
+        logoButton.setShowTooltip(false);
+        
         
         sidebarImagePane.visibleProperty().bind(Bindings.not(stage.maximizedProperty()));
     }

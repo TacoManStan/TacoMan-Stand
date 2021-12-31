@@ -117,7 +117,9 @@ public class Sidebar
         this.contentPane = contentPane;
         this.backImageButton = new ImageButton(
                 this,
-                backImagePane, "back_arrow",
+                "Back",
+                "back_arrow",
+                backImagePane,
                 null,
                 this::back,
                 false,
@@ -188,7 +190,7 @@ public class Sidebar
      * </ol>
      * <p><b>Initialization</b></p>
      * <ol>
-     *     <li>Calls <code><i>{@link #getBackButton()}<b>.</b>{@link ImageButton#initialize() initialize()}</i></code> to initialize the {@link #back() Back} {@link #getBackButton() Button} assigned to this {@link Sidebar}.</li>
+     *     <li>Calls <code><i>{@link #getBackButton()}<b>.</b>{@link ImageButton#init() initialize()}</i></code> to initialize the {@link #back() Back} {@link #getBackButton() Button} assigned to this {@link Sidebar}.</li>
      *     <li>Calls <code><i>{@link #bookshelvesProperty()}<b>.</b>{@link Iterable#forEach(Consumer) forEach}<b>(</b>{@link SidebarBookshelf#initialize() initialize()}<b>)</b></i></code> to initialize all {@link SidebarBookshelf SidebarBookshelves} in this {@link Sidebar}.</li>
      *     <li>{@link #selectedBookshelfProperty() Selects} the first (<code><i>{@link #bookshelvesProperty() bookshelvesProperty().get(0)}</i></code>) {@link SidebarBookshelf} in this {@link Sidebar}.</li>
      * </ol>
@@ -196,7 +198,7 @@ public class Sidebar
     public void initialize()
     {
         FXTools.runFX(() -> {
-            backImageButton.initialize();
+            backImageButton.init();
             childButtonPane.setAlignment(Pos.TOP_LEFT);
             
             bookshelvesProperty().forEach(SidebarBookshelf::initialize);

@@ -102,12 +102,13 @@ public abstract class ContentSelectorPageController<
     private void initButtonViews() {
         this.addInstanceImageButton = new ImageButton(
                 this,
-                addInstanceImagePane,
+                "Add New Instance",
                 "plus",
+                addInstanceImagePane,
                 this::addInstance,
                 null,
                 false,
-                ImageButton.SMALL).initialize();
+                ImageButton.SMALL).init();
     }
     
     //</editor-fold>

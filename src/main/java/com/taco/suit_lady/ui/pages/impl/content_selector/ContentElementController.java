@@ -7,13 +7,10 @@ import com.taco.suit_lady.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.ui.ui_internal.controllers.CellController;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
-import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.springframework.context.ConfigurableApplicationContext;
-
-import java.util.function.Supplier;
 
 public abstract class ContentElementController<
         D extends ContentData,
@@ -67,7 +64,15 @@ public abstract class ContentElementController<
     @Override
     public void initialize() {
 //        this.iconButton = new ImageButton(this, iconImagePane, "logo", this::icon, null, false, new Point2D(50, 50)).initialize();
-        this.closeButton = new ImageButton(this, closeImagePane, "close", this::close, null, false, new Point2D(15, 15)).initialize();
+        this.closeButton = new ImageButton(
+                this,
+                "Shutdown Instance",
+                "close",
+                closeImagePane,
+                this::close,
+                null,
+                false,
+                new Point2D(15, 15)).init();
     }
     
     //</editor-fold>

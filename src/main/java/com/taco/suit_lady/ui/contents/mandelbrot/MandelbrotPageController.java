@@ -199,37 +199,17 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
             }
         });
         
-        Arrays.stream(MandelbrotColorScheme.values()).forEach(
-                colorScheme -> colorSchemeChoiceBox.getItems().add(colorScheme));
-        
-//        this.invertColorSchemeImageButton = new ImageButton(
-//                this,
-//                invertColorSchemeImagePane,
-//                "rerun",
-//                null,
-//                null,
-//                true,
-//                ImageButton.SMALL
-//        ).initialize();
-        
-        this.autoRegenerateImageButton = new ImageButton(
+        Arrays.stream(MandelbrotColorScheme.values()).forEach(colorScheme -> colorSchemeChoiceBox.getItems().add(colorScheme));
+        autoRegenerateImageButton = new ImageButton(
                 this,
-                autoRegenerateImagePane,
+                "Toggle Auto-Regeneration",
                 "pause",
+                autoRegenerateImagePane,
                 null,
                 null,
                 true,
                 ImageButton.SMALL
-        ).initialize();
-        
-        //        xMinTextField.setTextFormatter(new DecimalFormatter());
-        //        yMinTextField.setTextFormatter(new DecimalFormatter());
-        //        xMaxTextField.setTextFormatter(new DecimalFormatter());
-        //        yMaxTextField.setTextFormatter(new DecimalFormatter());
-        
-        //        intFieldTest.valueProperty().addListener((observable, oldValue, newValue) -> {
-        //            intFieldTestLabel.setText("" + intFieldTest.getValue());
-        //        });
+        ).init();
     }
     
     //</editor-fold>

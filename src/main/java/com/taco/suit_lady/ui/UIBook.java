@@ -70,7 +70,7 @@ public class UIBook
      *                          </ul>
      * @param onAction          A {@link Runnable} that will be {@link Runnable#run() executed} when the {@link #buttonViewProperty() button} for this {@link UIBook} is pressed.
      *                          <ul>
-     *                              <li>See <i>{@link ImageButton#initialize()}</i> for exact implementation.</li>
+     *                              <li>See <i>{@link ImageButton#init()}</i> for exact implementation.</li>
      *                          </ul>
      * @param contentPane       The {@link StackPane} in which the contents ({@link UIPage pages}) of this {@link UIBook} are displayed.
      *                          <ul>
@@ -97,11 +97,12 @@ public class UIBook
         
         displayer.bind(pageHandler.visiblePageBinding());
         
-        buttonViewProperty.addListener((observable, oldValue, newValue) -> newValue.initialize());
+        buttonViewProperty.addListener((observable, oldValue, newValue) -> newValue.init());
         buttonViewProperty.set(new ImageButton(
                 this,
-                null,
+                name,
                 buttonIDProperty,
+                null,
                 () -> onAction(onAction),
                 null,
                 true,
@@ -112,9 +113,9 @@ public class UIBook
     //<editor-fold desc="--- PROPERTIES ---">
     
     /**
-     * <p>Returns the {@link ReadOnlyStringProperty property} defining the {@link ImageButton#nameBinding() file name} of the {@link ImageButton button} for this {@link UIBook}.</p>
+     * <p>Returns the {@link ReadOnlyStringProperty property} defining the {@link ImageButton#imageIdBinding() file name} of the {@link ImageButton button} for this {@link UIBook}.</p>
      *
-     * @return The {@link ReadOnlyStringProperty property} defining the {@link ImageButton#nameBinding() file name} of the {@link ImageButton button} for this {@link UIBook}.
+     * @return The {@link ReadOnlyStringProperty property} defining the {@link ImageButton#imageIdBinding() file name} of the {@link ImageButton button} for this {@link UIBook}.
      *
      * @see #getButtonID()
      */
@@ -124,10 +125,10 @@ public class UIBook
     }
     
     /**
-     * <p>Returns the {@link ImageButton#nameBinding() file name} of the {@link ImageButton button} for this {@link UIBook}.</p>
+     * <p>Returns the {@link ImageButton#imageIdBinding() file name} of the {@link ImageButton button} for this {@link UIBook}.</p>
      * <p>See <i>{@link #buttonIDProperty()}</i> for details.</p>
      *
-     * @return The {@link ImageButton#nameBinding() file name} of the {@link ImageButton button} for this {@link UIBook}.
+     * @return The {@link ImageButton#imageIdBinding() file name} of the {@link ImageButton button} for this {@link UIBook}.
      *
      * @see #buttonIDProperty()
      */
