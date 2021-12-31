@@ -68,10 +68,10 @@ public class MandelbrotContentData extends ContentData
         
         this.canvasWidthProperty = new SimpleIntegerProperty((int) width);
         this.canvasHeightProperty = new SimpleIntegerProperty((int) height);
-    
+        
         this.colorSchemeProperty = new SimpleObjectProperty<>(MandelbrotColorScheme.RED);
         this.invertColorSchemeProperty = new SimpleBooleanProperty(false);
-    
+        
         this.pauseAutoRegenerationProperty = new SimpleBooleanProperty(false);
         
         
@@ -393,11 +393,11 @@ public class MandelbrotContentData extends ContentData
         return springable.ctx();
     }
     
-    
     @Override
     public String toString() {
-        return "MandelbrotDimensions{" +
-               "xMin=" + xMinProperty.get() +
+        return "MandelbrotContentData{" +
+               "springable=" + springable +
+               ", xMin=" + xMinProperty.get() +
                ", xMax=" + xMaxProperty.get() +
                ", yMin=" + yMinProperty.get() +
                ", yMax=" + yMaxProperty.get() +
@@ -413,9 +413,14 @@ public class MandelbrotContentData extends ContentData
                ", scaledXMax=" + scaledXMaxBinding.get() +
                ", scaledYMin=" + scaledYMinBinding.get() +
                ", scaledYMax=" + scaledYMaxBinding.get() +
+               ", colorScheme=" + colorSchemeProperty.get() +
+               ", invertColorScheme=" + invertColorSchemeProperty.get() +
+               ", pauseAutoRegeneration=" + pauseAutoRegenerationProperty.get() +
+               ", currentCount=" + currentCount +
+               ", changeCounter=" + changeCounter +
+               ", uIDContainer=" + uIDContainer +
                '}';
     }
-    
     
     @Override
     public String getJID() {

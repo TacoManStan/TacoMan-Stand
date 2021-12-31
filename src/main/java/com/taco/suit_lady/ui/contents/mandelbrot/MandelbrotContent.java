@@ -42,6 +42,7 @@ public class MandelbrotContent extends ListableContent<
     private final ReentrantLock lock;
     
     private Task<Void> worker;
+    private final MandelbrotIterator iterator;
     
     private RectanglePaintCommand selectionBoxPaintCommandOld;
     private final SLRectanglePaintCommand selectionBoxPaintCommand;
@@ -97,6 +98,8 @@ public class MandelbrotContent extends ListableContent<
         
         iconImageProperty().bind(getController().canvas().imageProperty());
         initUIPage();
+        
+        this.iterator = new MandelbrotIterator(this, lock, getData(), getController().canvas(), getCoverPage().getController().getProgressBar());
     }
     
     private void initUIPage() {
@@ -169,10 +172,10 @@ public class MandelbrotContent extends ListableContent<
             final double newHeight = getController().canvas().getHeight();
             
             FXTools.clearCanvasUnsafe(ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas());
+            
             getData().resizeTo(newWidth, newHeight);
-        
-            final MandelbrotIterator iterator = new MandelbrotIterator(this, lock, getData(), canvas, getCoverPage().getController().getProgressBar());
-            iterator.runTask();
+            
+            iterator.run();
         }, true));
     }
     
@@ -206,7 +209,7 @@ public class MandelbrotContent extends ListableContent<
                         if (isCancelled())
                             return null;
                     }
-                    redraw(iterator.getResult());
+                    redraw(iterator.getMatrix());
                     return null;
                 }
                 

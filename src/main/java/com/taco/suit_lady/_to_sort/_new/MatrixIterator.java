@@ -5,20 +5,21 @@ import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.ArrayTools;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.concurrent.Task;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ProgressIndicator;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 /**
  * <p>Provides tools for traversing a {@code matrix} (2D Array).</p>
@@ -31,31 +32,64 @@ public abstract class MatrixIterator<T>
     private final StrictSpringable springable;
     private final Lock lock;
     
-    private final T[][] values;
+    private final ReadOnlyObjectWrapper<T[][]> matrixProperty;
     private final ProgressIndicator[] progressIndicators;
     
     private int iX;
     private int iY;
-    private boolean complete;
+    private final ReadOnlyBooleanWrapper completeProperty;
     
     public MatrixIterator(@NotNull Springable springable, @Nullable Lock lock, @NotNull Object... params) {
         this.springable = springable.asStrict();
         this.lock = lock != null ? lock : new ReentrantLock();
+        
+        Arrays.stream(params).map(o -> "Param " + ArrayTools.indexOf(o, params) + ": " + o).forEach(msg -> debugger().print(msg));
         
         this.progressIndicators = Arrays.stream(params)
                                         .filter(param -> param instanceof ProgressIndicator)
                                         .map(param -> (ProgressIndicator) param)
                                         .toArray(value -> new ProgressIndicator[value]);
         
-        System.out.println("Printing Indicators");
-        for (ProgressIndicator indicator: progressIndicators)
-            System.out.println("Indicator: " + indicator);
-        this.values = initMatrix(params);
+        this.completeProperty = new ReadOnlyBooleanWrapper(false);
+        this.completeProperty.addListener((observable, oldValue, newValue) -> {
+            if (newValue)
+                onComplete();
+        });
+        
+        construct(params);
+        this.matrixProperty = new ReadOnlyObjectWrapper<>();
+        
+        reset();
     }
+    
+    //<editor-fold desc="--- PROPERTIES ---">
+    
+    public final ReadOnlyObjectProperty<T[][]> matrixProperty() {
+        return matrixProperty.getReadOnlyProperty();
+    }
+    
+    public final T[][] getMatrix() {
+        return matrixProperty.get();
+    }
+    
+    
+    public final ReadOnlyBooleanProperty completeProperty() {
+        return completeProperty.getReadOnlyProperty();
+    }
+    
+    public final boolean isComplete() {
+        return completeProperty.get();
+    }
+    
+    private void setComplete(boolean newValue) {
+        completeProperty.set(newValue);
+    }
+    
+    //</editor-fold>
     
     public final void next() {
         sync(() -> {
-            values[iX][iY] = step(iX, iY);
+            getMatrix()[iX][iY] = step(iX, iY);
             increment();
         });
     }
@@ -68,29 +102,22 @@ public abstract class MatrixIterator<T>
             iY++;
         }
         if (iY == getHeight())
-            complete();
+            setComplete(true);
     }
     
-    
-    public final T[][] getResult() {
-        return values;
+    private void reset() {
+        iX = 0;
+        iY = 0;
+        setComplete(false);
+        matrixProperty.set(newMatrix());
     }
     
     public final int getWidth() {
-        return values.length;
+        return getMatrix().length;
     }
     
     public final int getHeight() {
-        return values[0].length;
-    }
-    
-    private void complete() {
-        complete = true;
-        onComplete();
-    }
-    
-    public final boolean isComplete() {
-        return complete;
+        return getMatrix()[0].length;
     }
     
     public final long getWorkTotal() {
@@ -107,7 +134,9 @@ public abstract class MatrixIterator<T>
     
     //<editor-fold desc="--- ABSTRACT METHODS ---">
     
-    protected abstract @NotNull T[][] initMatrix(@NotNull Object... params);
+    protected abstract void construct(@NotNull Object... params);
+    
+    protected abstract @NotNull T[][] newMatrix();
     
     protected abstract T step(int i, int j);
     
@@ -138,13 +167,13 @@ public abstract class MatrixIterator<T>
     
     //</editor-fold>
     
-    
-    public void runTask() {
+    public void run() {
         sync(() -> {
             if (worker != null) {
                 debugger().print("Cancelling Worker...");
                 worker.cancel(false);
             }
+            reset();
             worker = newTask();
             
             updateProgressOverlays(progressIndicator -> progressIndicator.progressProperty().bind(worker.progressProperty()));
@@ -167,10 +196,16 @@ public abstract class MatrixIterator<T>
         
         @Override
         protected Void call() {
+            if (isCancelled())
+                return null;
+            
             onTaskStart();
             updateProgressOverlays(progressIndicator -> progressIndicator.setVisible(true));
             
+            
             while (!isComplete()) {
+                if (isCancelled())
+                    return null;
                 next();
                 if (getWorkProgress() % 10 == 0)
                     updateProgress(getWorkProgress(), getWorkTotal());
@@ -178,8 +213,10 @@ public abstract class MatrixIterator<T>
                     return null;
             }
             
-            updateProgressOverlays(progressIndicator -> progressIndicator.setVisible(false));
-            onTaskEnd(getResult());
+            FXTools.runFX(() -> sync(() -> {
+                updateProgressOverlays(progressIndicator -> progressIndicator.setVisible(false));
+                onTaskEnd(getMatrix());
+            }), true);
             
             return null;
         }

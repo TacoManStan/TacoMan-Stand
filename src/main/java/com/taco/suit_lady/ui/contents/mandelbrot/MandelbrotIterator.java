@@ -50,6 +50,10 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor> {
             return new MandelbrotColor();
     }
     
+    public MandelbrotContentData getData() {
+        return data;
+    }
+    
     @Override
     protected void onComplete() {
     
@@ -78,14 +82,12 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor> {
             
             @Override
             protected void onTaskEnd(MandelbrotColor[][] result) {
-                FXTools.runFX(() -> sync(() -> {
-                    for (int i = 0; i < result.length; i++)
-                        for (int j = 0; j < result[i].length; j++) {
-                            final MandelbrotColor mandelbrotColor = result[i][j];
-                            final Color color = mandelbrotColor != null ? mandelbrotColor.getColor() : Color.BLACK;
-                            canvas.getGraphicsContext2D().getPixelWriter().setColor(i, j, color);
-                        }
-                }), true);
+                for (int i = 0; i < result.length; i++)
+                    for (int j = 0; j < result[i].length; j++) {
+                        final MandelbrotColor mandelbrotColor = result[i][j];
+                        final Color color = mandelbrotColor != null ? mandelbrotColor.getColor() : Color.BLACK;
+                        canvas.getGraphicsContext2D().getPixelWriter().setColor(i, j, color);
+                    }
             }
             
             @Override
@@ -108,10 +110,13 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor> {
     }
     
     @Override
-    protected @NotNull MandelbrotColor[][] initMatrix(@NotNull Object @NotNull ... params) {
+    protected void construct(@NotNull Object @NotNull ... params) {
         this.data = (MandelbrotContentData) params[0];
         this.canvas = (BoundCanvas) params[1];
-        
+    }
+    
+    @Override
+    protected @NotNull MandelbrotColor[][] newMatrix() {
         return new MandelbrotColor[data.getCanvasWidth()][data.getCanvasHeight()];
     }
     
