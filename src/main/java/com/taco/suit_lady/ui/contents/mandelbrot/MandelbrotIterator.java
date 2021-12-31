@@ -132,7 +132,7 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor> {
     
     //</editor-fold>
     
-    //<editor-fold desc="--- HELPER METHODS ---">
+    //<editor-fold desc="--- INTERNAL ---">
     
     private boolean escapes(double iX, double iY) {
         final Point2D convertedPoint = data.convertFromCanvas(iX, iY);
@@ -153,7 +153,6 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor> {
     
     //</editor-fold>
     
-    //
     
     private Color escapeColor = Color.BLACK;
     

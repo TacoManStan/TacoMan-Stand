@@ -149,7 +149,7 @@ public class ContentManager
                 oldContent.getOverlayHandler().root().maxWidthProperty().unbind();
                 oldContent.getOverlayHandler().root().maxHeightProperty().unbind();
                 
-                ctx().getBean(LogiCore.class).execute(() -> oldContent.onRemovedInternal());
+                ctx().getBean(LogiCore.class).executor().execute(() -> oldContent.onRemovedInternal());
             }
             if (newContent != null) {
                 FXTools.bindToParent(newContent.getController().root(), getContentPrimaryPane(), true);
@@ -161,7 +161,7 @@ public class ContentManager
                 //                    FXTools.bindToParent(overlay.root(), getContentForegroundPane(), true);
                 //                }
                 
-                ctx().getBean(LogiCore.class).execute(() -> newContent.onSetInternal());
+                ctx().getBean(LogiCore.class).executor().execute(() -> newContent.onSetInternal());
             }
         }, true);
     }

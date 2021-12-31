@@ -53,6 +53,7 @@ public class MandelbrotContent extends ListableContent<
     
     public MandelbrotContent(@NotNull MandelbrotContentHandler contentHandler) {
         super(contentHandler);
+        
         this.lock = new ReentrantLock();
         
         injectBookshelf("Mandelbrot Demo", new UIBook(

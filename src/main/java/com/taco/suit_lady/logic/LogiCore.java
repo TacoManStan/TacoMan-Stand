@@ -8,9 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 @Component
 public class LogiCore
@@ -19,31 +17,25 @@ public class LogiCore
     private final FxWeaver weaver;
     private final ConfigurableApplicationContext ctx;
     
-    private final ThreadPoolExecutor executor; // TODO - Implement both asynchronous and synchronous executor options
+    private final ThreadPoolExecutor sequentialExecutor; // TODO - Implement both asynchronous and synchronous executor options
+    private final ScheduledThreadPoolExecutor scheduledExecutor;
     
     public LogiCore(FxWeaver weaver, ConfigurableApplicationContext ctx)
     {
         this.weaver = weaver;
         this.ctx = ctx;
         
-        this.executor = new ThreadPoolExecutor(1, 1, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
+        this.sequentialExecutor = new ThreadPoolExecutor(1, 1, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
+        this.scheduledExecutor = new ScheduledThreadPoolExecutor(10);
     }
     
-    //<editor-fold desc="--- EXECUTION ---">
-    
-    // TODO: Add "executeAndWait(Runnable... runnables)" and "executeAndWait(Task<T>... tasks)" methods.
-    
-    public void execute(@NotNull Runnable runnable)
-    {
-        executor.execute(ExceptionTools.nullCheck(runnable, "Runnable Task"));
+    public final ThreadPoolExecutor executor() {
+        return sequentialExecutor;
     }
     
-    public <T> void execute(@NotNull Task<T> task)
-    {
-        executor.execute(ExceptionTools.nullCheck(task, "Task"));
+    public final ScheduledThreadPoolExecutor scheduledExecutor() {
+        return scheduledExecutor;
     }
-    
-    //</editor-fold>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
