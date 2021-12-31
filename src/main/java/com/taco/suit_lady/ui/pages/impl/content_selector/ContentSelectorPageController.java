@@ -122,6 +122,6 @@ public abstract class ContentSelectorPageController<
     
     private void addInstance() {
         debugger().print("Add Instance Pressed");
-        logiCore().execute(() -> getPage().getContentHandler().addInstance());
+        logiCore().executor().execute(() -> getPage().getContentHandler().addInstance());
     }
 }
