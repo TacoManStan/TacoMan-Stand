@@ -88,10 +88,8 @@ public abstract class MatrixIterator<T>
     //</editor-fold>
     
     public final void next() {
-        sync(() -> {
-            getMatrix()[iX][iY] = step(iX, iY);
-            increment();
-        });
+        getMatrix()[iX][iY] = step(iX, iY);
+        increment();
     }
     
     // Helper method that iterates the values of iX and iY
@@ -105,6 +103,10 @@ public abstract class MatrixIterator<T>
             setComplete(true);
     }
     
+    /**
+     * <p>Resets the values of this {@link MatrixIterator} to default values</p>
+     * <p>Required for reusable {@link MatrixIterator iterators}.</p>
+     */
     private void reset() {
         iX = 0;
         iY = 0;
@@ -173,6 +175,7 @@ public abstract class MatrixIterator<T>
                 debugger().print("Cancelling Worker...");
                 worker.cancel(false);
             }
+            
             reset();
             worker = newTask();
             
