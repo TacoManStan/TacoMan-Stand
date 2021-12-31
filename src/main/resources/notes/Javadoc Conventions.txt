@@ -20,6 +20,13 @@ TAGS
     > TO-UPDATE: Flag for documented members whose functionality is likely (or certain) to change in the future, and therefore will require a documentation update.
         > Oftentimes, members flagged with TO-UPDATE will contain details about future improvement intentions in its documentation, usually flagged by TODO.
     > TO-TEST: Flag for a method that still needs to be tested
+    > TO-REMOVE: Flag for a method that for any reason is likely (or guaranteed) to be removed in the future.
+
+    SUB-TAGS
+        > Sub-tags are additional properties that can be added onto a primary tag.
+        > Some sub-tags are specific to only some tags, whereas others are universal.
+        > Sub-tags are inserted in the following format: "// PRIMARY-TAG [SUB-TAG-1(description) | SUB-TAG-2(description) | SUB-TAG-3:IDENTIFIER | SUB-TAG-4:IDENTIFIER(description)]"
+        > Sub-tags can require an identifier, but no sub-tag should ever require a description.
 
 COPY/PASTE
     1. Springable implementation construction (though using a StrictSpringable is probably ideal)
