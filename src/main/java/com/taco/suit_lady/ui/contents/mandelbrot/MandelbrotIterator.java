@@ -1,11 +1,16 @@
 package com.taco.suit_lady.ui.contents.mandelbrot;
 
 import com.taco.suit_lady._to_sort._new.MatrixIterator;
+import com.taco.suit_lady.ui.jfx.components.BoundCanvas;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
+import com.taco.suit_lady.util.tools.ArrayTools;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotIterator.MandelbrotColor;
+import com.taco.suit_lady.util.tools.TaskTools;
+import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import javafx.geometry.Point2D;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.paint.Color;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
@@ -17,10 +22,12 @@ import java.util.concurrent.locks.ReentrantLock;
 public class MandelbrotIterator extends MatrixIterator<MandelbrotColor> {
     
     private final int PRECISION = 1000;
-    private MandelbrotContentData data;
     
-    public MandelbrotIterator(@NotNull Springable springable, @Nullable ReentrantLock lock, @NotNull MandelbrotContentData data) {
-        super(springable, lock, data);
+    private MandelbrotContentData data;
+    private BoundCanvas canvas;
+    
+    public MandelbrotIterator(@NotNull Springable springable, @Nullable ReentrantLock lock, @NotNull MandelbrotContentData data, @NotNull BoundCanvas canvas, @NotNull ProgressIndicator... progressIndicators) {
+        super(springable, lock, ArrayTools.concat(new Object[]{data, canvas}, progressIndicators));
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
@@ -49,8 +56,62 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor> {
     }
     
     @Override
+    protected IteratorTask newTask() {
+        return new IteratorTask() {
+            
+            //<editor-fold desc="--- IMPLEMENTATIONS ---">
+            
+            @Override
+            protected void onPreTask() {
+            
+            }
+            
+            @Override
+            protected void onPostTask() {
+            
+            }
+            
+            @Override
+            protected void onTaskStart() {
+            
+            }
+            
+            @Override
+            protected void onTaskEnd(MandelbrotColor[][] result) {
+                FXTools.runFX(() -> sync(() -> {
+                    for (int i = 0; i < result.length; i++)
+                        for (int j = 0; j < result[i].length; j++) {
+                            final MandelbrotColor mandelbrotColor = result[i][j];
+                            final Color color = mandelbrotColor != null ? mandelbrotColor.getColor() : Color.BLACK;
+                            canvas.getGraphicsContext2D().getPixelWriter().setColor(i, j, color);
+                        }
+                }), true);
+            }
+            
+            @Override
+            protected void onSucceeded() {
+                canvas.refreshImage();
+            }
+            
+            @Override
+            protected void onCancelled() {
+            
+            }
+            
+            @Override
+            protected void onFailed() {
+            
+            }
+            
+            //</editor-fold>
+        };
+    }
+    
+    @Override
     protected @NotNull MandelbrotColor[][] initMatrix(@NotNull Object @NotNull ... params) {
         this.data = (MandelbrotContentData) params[0];
+        this.canvas = (BoundCanvas) params[1];
+        
         return new MandelbrotColor[data.getCanvasWidth()][data.getCanvasHeight()];
     }
     

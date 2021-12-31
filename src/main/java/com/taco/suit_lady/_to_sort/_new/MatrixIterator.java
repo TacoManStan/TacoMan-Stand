@@ -3,13 +3,22 @@ package com.taco.suit_lady._to_sort._new;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
+import com.taco.suit_lady.util.tools.ArrayTools;
+import com.taco.suit_lady.util.tools.fx_tools.FXTools;
+import javafx.concurrent.Task;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ProgressIndicator;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * <p>Provides tools for traversing a {@code matrix} (2D Array).</p>
@@ -23,6 +32,7 @@ public abstract class MatrixIterator<T>
     private final Lock lock;
     
     private final T[][] values;
+    private final ProgressIndicator[] progressIndicators;
     
     private int iX;
     private int iY;
@@ -32,6 +42,14 @@ public abstract class MatrixIterator<T>
         this.springable = springable.asStrict();
         this.lock = lock != null ? lock : new ReentrantLock();
         
+        this.progressIndicators = Arrays.stream(params)
+                                        .filter(param -> param instanceof ProgressIndicator)
+                                        .map(param -> (ProgressIndicator) param)
+                                        .toArray(value -> new ProgressIndicator[value]);
+        
+        System.out.println("Printing Indicators");
+        for (ProgressIndicator indicator: progressIndicators)
+            System.out.println("Indicator: " + indicator);
         this.values = initMatrix(params);
     }
     
@@ -95,6 +113,8 @@ public abstract class MatrixIterator<T>
     
     protected abstract void onComplete();
     
+    protected abstract IteratorTask newTask();
+    
     //</editor-fold>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
@@ -117,4 +137,91 @@ public abstract class MatrixIterator<T>
     
     
     //</editor-fold>
+    
+    
+    public void runTask() {
+        sync(() -> {
+            if (worker != null) {
+                debugger().print("Cancelling Worker...");
+                worker.cancel(false);
+            }
+            worker = newTask();
+            
+            updateProgressOverlays(progressIndicator -> progressIndicator.progressProperty().bind(worker.progressProperty()));
+            
+            worker.onPreTask();
+            new Thread(worker).start();
+            worker.onPostTask();
+        });
+    }
+    
+    private void updateProgressOverlays(@NotNull Consumer<ProgressIndicator> action) {
+        FXTools.runFX(() -> Arrays.stream(progressIndicators).forEach(action), true);
+    }
+    
+    private IteratorTask worker;
+    
+    public abstract class IteratorTask extends Task<Void> {
+        
+        //<editor-fold desc="--- IMPLEMENTATIONS ---">
+        
+        @Override
+        protected Void call() {
+            onTaskStart();
+            updateProgressOverlays(progressIndicator -> progressIndicator.setVisible(true));
+            
+            while (!isComplete()) {
+                next();
+                if (getWorkProgress() % 10 == 0)
+                    updateProgress(getWorkProgress(), getWorkTotal());
+                if (isCancelled())
+                    return null;
+            }
+            
+            updateProgressOverlays(progressIndicator -> progressIndicator.setVisible(false));
+            onTaskEnd(getResult());
+            
+            return null;
+        }
+        
+        
+        @Override
+        protected void succeeded() {
+            onSucceeded();
+            worker = null;
+        }
+        
+        @Override
+        protected void cancelled() {
+            onCancelled();
+            worker = null;
+        }
+        
+        @Override
+        protected void failed() {
+            onFailed();
+            worker = null;
+        }
+        
+        //</editor-fold>
+        
+        //<editor-fold desc="--- ABSTRACT METHODS ---">
+        
+        protected abstract void onPreTask();
+        
+        protected abstract void onPostTask();
+        
+        protected abstract void onTaskStart();
+        
+        protected abstract void onTaskEnd(T[][] result);
+        
+        
+        protected abstract void onSucceeded();
+        
+        protected abstract void onCancelled();
+        
+        protected abstract void onFailed();
+        
+        //</editor-fold>
+    }
 }

@@ -23,7 +23,6 @@ import com.taco.suit_lady.util.tools.TaskTools;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import com.taco.tacository.json.JFiles;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.concurrent.Task;
 import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
@@ -168,6 +167,20 @@ public class MandelbrotContent extends ListableContent<
             final BoundCanvas canvas = getController().canvas();
             final double newWidth = getController().canvas().getWidth();
             final double newHeight = getController().canvas().getHeight();
+            
+            FXTools.clearCanvasUnsafe(ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas());
+            getData().resizeTo(newWidth, newHeight);
+        
+            final MandelbrotIterator iterator = new MandelbrotIterator(this, lock, getData(), canvas, getCoverPage().getController().getProgressBar());
+            iterator.runTask();
+        }, true));
+    }
+    
+    private void refreshCanvasOLD() {
+        sync(() -> FXTools.runFX(() -> {
+            final BoundCanvas canvas = getController().canvas();
+            final double newWidth = getController().canvas().getWidth();
+            final double newHeight = getController().canvas().getHeight();
             debugger().print("In Refresh 1...");
             
             if (worker != null) {
@@ -179,7 +192,8 @@ public class MandelbrotContent extends ListableContent<
             debugger().print("In Refresh 2...");
             
             getData().resizeTo(newWidth, newHeight);
-            final MandelbrotIterator iterator = new MandelbrotIterator(this, lock, getData());
+            
+            final MandelbrotIterator iterator = new MandelbrotIterator(this, lock, getData(), canvas);
             worker = new Task<>() {
                 @Override
                 protected Void call() {
