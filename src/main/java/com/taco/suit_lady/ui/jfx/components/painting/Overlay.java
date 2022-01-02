@@ -84,6 +84,7 @@ public class Overlay
     public Overlay(@NotNull Springable springable, @Nullable ReentrantLock lock, @Nullable String name, int paintPriority) {
         this.springable = ExceptionTools.nullCheck(springable, "Springable Input").asStrict();
         this.lock = lock; // Null-checking is done in get method via lazy instantiation
+        
         this.nameProperty = new ReadOnlyStringWrapper(name);
         
         this.root = new StackPane();
@@ -216,6 +217,19 @@ public class Overlay
     
     //
     
+    /**
+     * <p>Compares this {@link Overlay} instance to the specified value.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>If the {@link #paintPriorityProperty() paint priority} of this {@link Overlay} is <i>greater than</i> that of the specified {@link Overlay value}, return {@code 1}..</li>
+     *     <li>If the {@link #paintPriorityProperty() paint priority} of this {@link Overlay} is <i>lesser than</i> that of the specified {@link Overlay value}, return {@code -1}.</li>
+     *     <li>If the {@link #paintPriorityProperty() paint priority} of this {@link Overlay} is <i>equal to</i> that of the specified {@link Overlay value}, return {@code 0}.</li>
+     * </ol>
+     *
+     * @param o The {@link Overlay} to be compared to this {@link Overlay}.
+     *
+     * @return An {@code int} representing the result of the {@link #compareTo(Overlay) compare} operation. See above for details.
+     */
     @Override
     public int compareTo(@NotNull Overlay o) {
         return Integer.compare((Math.abs(getPaintPriority())), Math.abs(o.getPaintPriority()));
