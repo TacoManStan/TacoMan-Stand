@@ -23,6 +23,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
 
+// TO-DOC
 public class OverlayHandler
         implements Springable, Lockable {
     
@@ -55,6 +56,18 @@ public class OverlayHandler
     
     //<editor-fold desc="--- INITIALIZATION ---">
     
+    /**
+     * <p>Initializes the {@link ReadOnlyObservableListWrapper} containing the {@link Overlay Overlays} managed by this {@link OverlayHandler}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>The specified {@code array} can be both {@code null} or {@code empty}, in which case this {@link OverlayHandler} will be {@code empty} upon construction.</li>
+     *     <li>The {@code array} is defined as a {@code parameter} passed to the {@link OverlayHandler} {@link OverlayHandler#OverlayHandler(Springable, ReentrantLock, Overlay...) constructor}.</li>
+     * </ol>
+     *
+     * @param initialOverlays An {@code array} containing any {@link Overlay Overlays} to be added to this {@link OverlayHandler} upon its construction.
+     *
+     * @return The newly-initialized {@link ObservableList} to be used as the {@code backing list} for the {@link ReadOnlyObservableListWrapper} containing the {@link Overlay Overlays} managed by this {@link OverlayHandler}.
+     */
     private @NotNull ObservableList<Overlay> initInitialOverlayList(@Nullable Overlay[] initialOverlays) {
         return initialOverlays != null ? FXCollections.observableArrayList(initialOverlays) : FXCollections.observableArrayList();
     }
