@@ -63,34 +63,92 @@ public class OverlayHandler
     
     //<editor-fold desc="--- PROPERTIES ---">
     
+    /**
+     * <p>Returns the {@link StackPane} used as the {@code root} for displaying all {@link Overlay Overlays} added to this {@link OverlayHandler}.</p>
+     *
+     * @return The {@link StackPane} used as the {@code root} for displaying all {@link Overlay Overlays} added to this {@link OverlayHandler}.
+     */
     public final StackPane root() {
         return root;
     }
     
     //<editor-fold desc="--- OVERLAYS ---">
     
+    /**
+     * <p>Returns the {@link ReadOnlyObservableList} containing the {@link Overlay Overlays} that have been {@link #addOverlay(Overlay) added} to this {@link OverlayHandler}.</p>
+     *
+     * @return The {@link ReadOnlyObservableList} containing the {@link Overlay Overlays} that have been {@link #addOverlay(Overlay) added} to this {@link OverlayHandler}.
+     */
     public final ReadOnlyObservableList<Overlay> overlays() {
         return overlays.readOnlyList();
     }
     
-    
+    /**
+     * <p>Adds the specified {@link Overlay} to this {@link OverlayHandler} and then {@link #resort(Runnable) resorts} its contents.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>All operations contained within this method are executed via the <i>{@link #resort(Runnable)}</i> utility method.</li>
+     * </ol>
+     *
+     * @param overlay The {@link Overlay} being added.
+     */
     public final void addOverlay(@NotNull Overlay overlay) {
         resort(() -> overlays.add(overlay));
     }
     
+    /**
+     * <p>{@link ReadOnlyObservableListWrapper#add(int, Comparable) Inserts} the specified {@link Overlay} into this {@link OverlayHandler} at the specified {@code index}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>All operations contained within this method are executed via the <i>{@link #resort(Runnable)}</i> utility method.</li>
+     * </ol>
+     *
+     * @param index   The {@code index} at which the specified {@link Overlay} is to be {@link ReadOnlyObservableListWrapper#add(int, Comparable) inserted}.
+     * @param overlay The {@link Overlay} to be {@link ReadOnlyObservableListWrapper#add(int, Comparable) inserted} into this {@link OverlayHandler}.
+     *
+     * @throws IndexOutOfBoundsException If the specified {@code index} is invalid: <u>{@code index < 0}</u> or <u>{@code index > size()}</u>.
+     */
     public final void addOverlayAt(int index, @NotNull Overlay overlay) {
         resort(() -> overlays.add(index, overlay));
     }
     
+    /**
+     * <p>{@link ReadOnlyObservableListWrapper#remove(Object) Removes} the specified {@link Overlay} from this {@link OverlayHandler}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>All operations contained within this method are executed via the <i>{@link #resort(Runnable)}</i> utility method.</li>
+     * </ol>
+     *
+     * @param overlay The {@link Overlay} to be {@link ReadOnlyObservableListWrapper#remove(Object) removed}.
+     */
     public final void removeOverlay(@NotNull Overlay overlay) {
         resort(() -> overlays.remove(overlay));
     }
     
+    /**
+     * <p>{@link ReadOnlyObservableListWrapper#remove(int) Removes} the {@link Overlay} located at the specified {@code index} from this {@link OverlayHandler}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>All operations contained within this method are executed via the <i>{@link #resort(Runnable)}</i> utility method.</li>
+     * </ol>
+     *
+     * @param index The {@code index} at which to remove the {@link Overlay} from.
+     */
     public final void removeOverlayAt(int index) {
         resort(() -> overlays.remove(index));
     }
     
-    public final Overlay getOverlay(String name) {
+    /**
+     * <p>
+     * Returns the {@link Overlay} contained within this {@link OverlayHandler} matching the specified {@link Overlay#nameProperty() name}
+     * or {@code null} if no such {@link Overlay} can be found.
+     * </p>
+     *
+     * @param name The {@link Overlay#nameProperty() name} of the {@link Overlay} to be retrieved.
+     *
+     * @return The {@link Overlay} contained within this {@link OverlayHandler} matching the specified {@link Overlay#nameProperty() name}.
+     */
+    public final @Nullable Overlay getOverlay(String name) {
         return sync(() -> {
             for (Overlay overlay: overlays)
                 if (name.equalsIgnoreCase(overlay.getName()))
@@ -196,6 +254,7 @@ public class OverlayHandler
     public @NotNull ConfigurableApplicationContext ctx() {
         return springable.ctx();
     }
+    
     
     @Override
     public @NotNull Lock getLock() {
