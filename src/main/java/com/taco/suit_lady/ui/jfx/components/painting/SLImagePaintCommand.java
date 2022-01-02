@@ -1,6 +1,5 @@
 package com.taco.suit_lady.ui.jfx.components.painting;
 
-import com.taco.suit_lady.ui.jfx.util.Bounds2D;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ResourceTools;
 import javafx.scene.image.Image;
