@@ -1,4 +1,4 @@
-package com.taco.suit_lady.ui.jfx.button;
+package com.taco.suit_lady.ui.jfx.components.button;
 
 import com.taco.suit_lady.util.tools.TB;
 import javafx.beans.property.ListProperty;

@@ -1,10 +1,10 @@
 package com.taco.suit_lady.ui;
 
-import com.taco.suit_lady.ui.jfx.button.BoundImageButtonGroup;
-import com.taco.suit_lady.ui.jfx.button.ButtonViewable;
-import com.taco.suit_lady.ui.jfx.button.ImageButtonGroup;
+import com.taco.suit_lady.ui.jfx.components.button.BoundImageButtonGroup;
+import com.taco.suit_lady.ui.jfx.components.button.ButtonViewable;
+import com.taco.suit_lady.ui.jfx.components.button.ImageButtonGroup;
 import com.taco.suit_lady.util.tools.ExceptionTools;
-import com.taco.suit_lady.ui.jfx.button.ImageButton;
+import com.taco.suit_lady.ui.jfx.components.button.ImageButton;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.EventHandler;

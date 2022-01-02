@@ -1,4 +1,4 @@
-package com.taco.suit_lady.ui.painting;
+package com.taco.suit_lady.ui.jfx.components.painting;
 
 import com.taco.suit_lady._to_sort._new.interfaces.ObservablePropertyContainable;
 import com.taco.suit_lady.util.springable.Springable;

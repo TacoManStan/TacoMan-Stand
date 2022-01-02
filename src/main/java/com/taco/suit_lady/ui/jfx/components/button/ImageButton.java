@@ -1,4 +1,4 @@
-package com.taco.suit_lady.ui.jfx.button;
+package com.taco.suit_lady.ui.jfx.components.button;
 
 import com.taco.suit_lady.logic.LogiCore;
 import com.taco.suit_lady.ui.jfx.components.ImagePane;
@@ -31,7 +31,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import javax.tools.Tool;
 import java.lang.reflect.Array;
 import java.util.Objects;
 import java.util.concurrent.ThreadPoolExecutor;

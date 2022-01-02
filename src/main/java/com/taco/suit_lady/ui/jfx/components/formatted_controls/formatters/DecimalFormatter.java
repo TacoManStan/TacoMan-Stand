@@ -1,4 +1,4 @@
-package com.taco.suit_lady.ui.jfx.components.formatters;
+package com.taco.suit_lady.ui.jfx.components.formatted_controls.formatters;
 
 import javafx.scene.control.TextFormatter;
 import javafx.util.StringConverter;

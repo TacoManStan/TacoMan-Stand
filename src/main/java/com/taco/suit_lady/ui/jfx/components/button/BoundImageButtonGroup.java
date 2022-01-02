@@ -1,4 +1,4 @@
-package com.taco.suit_lady.ui.jfx.button;
+package com.taco.suit_lady.ui.jfx.components.button;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;

@@ -1,10 +1,10 @@
 package com.taco.suit_lady.ui.contents.mandelbrot;
 
 import com.taco.suit_lady.ui.UIPageController;
-import com.taco.suit_lady.ui.jfx.button.ImageButton;
-import com.taco.suit_lady.ui.jfx.components.DoubleField2;
+import com.taco.suit_lady.ui.jfx.components.button.ImageButton;
+import com.taco.suit_lady.ui.jfx.components.formatted_controls.DoubleField;
 import com.taco.suit_lady.ui.jfx.components.ImagePane;
-import com.taco.suit_lady.ui.jfx.components.IntField2;
+import com.taco.suit_lady.ui.jfx.components.formatted_controls.IntField;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -31,7 +31,7 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
     @FXML private Button regenerateButton;
     @FXML private ImagePane autoRegenerateImagePane;
     
-    @FXML private IntField2 precisionTextField;
+    @FXML private IntField precisionTextField;
     
     @FXML private ChoiceBox<MandelbrotColorScheme> colorSchemeChoiceBox;
     @FXML private ImagePane invertColorSchemeImagePane;
@@ -39,10 +39,10 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
     
     //
     
-    @FXML private DoubleField2 xMinTextField;
-    @FXML private DoubleField2 yMinTextField;
-    @FXML private DoubleField2 xMaxTextField;
-    @FXML private DoubleField2 yMaxTextField;
+    @FXML private DoubleField xMinTextField;
+    @FXML private DoubleField yMinTextField;
+    @FXML private DoubleField xMaxTextField;
+    @FXML private DoubleField yMaxTextField;
     
     
     @FXML private Label widthLabel;
@@ -81,7 +81,7 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
     }
     
     
-    protected IntField2 getPrecisionTextField() {
+    protected IntField getPrecisionTextField() {
         return precisionTextField;
     }
     
@@ -100,19 +100,19 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
     
     // MIN/MAX Input Fields
     
-    protected DoubleField2 getXMinTextField() {
+    protected DoubleField getXMinTextField() {
         return xMinTextField;
     }
     
-    protected DoubleField2 getYMinTextField() {
+    protected DoubleField getYMinTextField() {
         return yMinTextField;
     }
     
-    protected DoubleField2 getXMaxTextField() {
+    protected DoubleField getXMaxTextField() {
         return xMaxTextField;
     }
     
-    protected DoubleField2 getYMaxTextField() {
+    protected DoubleField getYMaxTextField() {
         return yMaxTextField;
     }
     

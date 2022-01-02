@@ -2,7 +2,7 @@ package com.taco.suit_lady.ui.ui_internal.controllers;
 
 import com.taco.suit_lady.util.timing.Timing;
 import com.taco.suit_lady.ui.console.ConsoleMessageable;
-import com.taco.suit_lady.ui.jfx.button.ImageButton;
+import com.taco.suit_lady.ui.jfx.components.button.ImageButton;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import com.taco.suit_lady.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.ui.jfx.lists.treehandler.WrappingTreeCellData;

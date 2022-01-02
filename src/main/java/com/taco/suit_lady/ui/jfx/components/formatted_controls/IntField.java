@@ -1,19 +1,19 @@
-package com.taco.suit_lady.ui.jfx.components;
+package com.taco.suit_lady.ui.jfx.components.formatted_controls;
 
-import com.taco.suit_lady.ui.jfx.components.formatters.IntegerFormatter;
+import com.taco.suit_lady.ui.jfx.components.formatted_controls.formatters.IntegerFormatter;
 import javafx.scene.control.TextField;
 
-public class IntField2 extends TextField {
+public class IntField extends TextField {
     
     private final IntegerFormatter formatter;
     
-    public IntField2() {
+    public IntField() {
         super();
         this.formatter = new IntegerFormatter();
         init();
     }
     
-    public IntField2(String text) {
+    public IntField(String text) {
         super(text);
         this.formatter = new IntegerFormatter();
         init();

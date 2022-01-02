@@ -29,7 +29,6 @@ public class BoundCanvas extends Canvas
     private final ReentrantLock lock;
     
     private final ReadOnlyObjectWrapper<CanvasListener> canvasListenerProperty;
-    private final ReadOnlyListWrapper<PaintCommandable> paintCommands;
     
     private final ReadOnlyObjectWrapper<Image> imageProperty;
     
@@ -37,7 +36,6 @@ public class BoundCanvas extends Canvas
         this.lock = new ReentrantLock();
         
         this.canvasListenerProperty = new ReadOnlyObjectWrapper<>();
-        this.paintCommands = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
         
         this.imageProperty = new ReadOnlyObjectWrapper<>();
     }
@@ -102,37 +100,6 @@ public class BoundCanvas extends Canvas
      */
     public final void setCanvasListener(@Nullable CanvasListener canvasListener) {
         canvasListenerProperty.set(canvasListener);
-    }
-    
-    protected final @NotNull ReadOnlyListProperty<PaintCommandable> getPaintCommands() {
-        return paintCommands.getReadOnlyProperty();
-    }
-    
-    public final boolean containsPaintCommand(@Nullable PaintCommandable command) {
-        return command != null && sync(() -> getPaintCommands().contains(command));
-    }
-    
-    public final boolean removePaintCommand(@Nullable PaintCommandable command) {
-        return command != null && sync(() -> {
-            if (containsPaintCommand(command)) {
-                final boolean removed = getPaintCommands().remove(command);
-                command.onRemoved(this);
-                return removed;
-            } else
-                return false;
-        });
-    }
-    
-    public final boolean addPaintCommand(@Nullable PaintCommandable command) {
-        return command != null && sync(() -> {
-            if (containsPaintCommand(command))
-                return true;
-            else {
-                final boolean added = getPaintCommands().add(command);
-                command.onAdded(this);
-                return added;
-            }
-        });
     }
     
     
@@ -225,9 +192,6 @@ public class BoundCanvas extends Canvas
     protected void repaint() {
         sync(() -> FXTools.runFX(() -> {
             FXTools.clearCanvasUnsafe(this);
-            for (PaintCommandable paintCommand: getPaintCommands())
-                paintCommand.paint(this);
-            
             final CanvasListener listener = getCanvasListener();
             if (listener != null)
                 listener.redraw(this, width, height);

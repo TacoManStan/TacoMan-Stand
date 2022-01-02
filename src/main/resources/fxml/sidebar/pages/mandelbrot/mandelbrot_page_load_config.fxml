@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.taco.suit_lady.ui.jfx.components.DoubleField2?>
+<?import com.taco.suit_lady.ui.jfx.components.formatted_controls.DoubleField?>
 <?import com.taco.suit_lady.ui.jfx.components.ImagePane?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
@@ -47,7 +47,7 @@
                                     <Font name="System Bold" size="12.0" />
                                  </font>
                               </Label>
-                              <DoubleField2 maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" fx:id="xMinTextField" />
+                              <DoubleField maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" fx:id="xMinTextField" />
                            </children>
                         </HBox>
                         <HBox spacing="5.0" VBox.vgrow="NEVER">
@@ -57,7 +57,7 @@
                                     <Font name="System Bold" size="12.0" />
                                  </font>
                               </Label>
-                              <DoubleField2 fx:id="yMinTextField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                              <DoubleField fx:id="yMinTextField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
                         <HBox spacing="5.0" VBox.vgrow="NEVER">
@@ -67,7 +67,7 @@
                                     <Font name="System Bold" size="12.0" />
                                  </font>
                               </Label>
-                              <DoubleField2 maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" fx:id="xMaxTextField" />
+                              <DoubleField maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" fx:id="xMaxTextField" />
                            </children>
                         </HBox>
                         <HBox spacing="5.0" VBox.vgrow="NEVER">
@@ -77,7 +77,7 @@
                                     <Font name="System Bold" size="12.0" />
                                  </font>
                               </Label>
-                              <DoubleField2 fx:id="yMaxTextField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                              <DoubleField fx:id="yMaxTextField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
                         <Separator maxWidth="1.7976931348623157E308" VBox.vgrow="NEVER" />

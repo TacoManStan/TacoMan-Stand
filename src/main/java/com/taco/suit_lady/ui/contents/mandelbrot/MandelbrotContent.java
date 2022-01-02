@@ -1,20 +1,18 @@
 package com.taco.suit_lady.ui.contents.mandelbrot;
 
-import com.taco.suit_lady._to_sort._new.Debugger;
 import com.taco.suit_lady.ui.AppUI;
 import com.taco.suit_lady.ui.UIBook;
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotContentController.MouseDragData;
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotIterator.MandelbrotColor;
 import com.taco.suit_lady.ui.jfx.components.BoundCanvas;
-import com.taco.suit_lady.ui.jfx.components.RectanglePaintCommand;
 import com.taco.suit_lady.ui.pages.impl.content_selector.ListableContent;
 import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotContentHandler;
 import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotContentSelectorPage;
 import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotContentSelectorPageController;
 import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotElementController;
-import com.taco.suit_lady.ui.painting.SLEllipsePaintCommand;
-import com.taco.suit_lady.ui.painting.SLImagePaintCommand;
-import com.taco.suit_lady.ui.painting.SLRectanglePaintCommand;
+import com.taco.suit_lady.ui.jfx.components.painting.SLEllipsePaintCommand;
+import com.taco.suit_lady.ui.jfx.components.painting.SLImagePaintCommand;
+import com.taco.suit_lady.ui.jfx.components.painting.SLRectanglePaintCommand;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.tools.ExceptionTools;
@@ -23,7 +21,6 @@ import com.taco.suit_lady.util.tools.TaskTools;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import com.taco.tacository.json.JFiles;
 import javafx.beans.binding.Bindings;
-import javafx.concurrent.Task;
 import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,7 +40,6 @@ public class MandelbrotContent extends ListableContent<
     
     private final MandelbrotIterator iterator;
     
-    private RectanglePaintCommand selectionBoxPaintCommandOld;
     private final SLRectanglePaintCommand selectionBoxPaintCommand;
     private final SLImagePaintCommand selectionBoxPaintCommand2;
     private final SLEllipsePaintCommand selectionCirclePaintCommand;

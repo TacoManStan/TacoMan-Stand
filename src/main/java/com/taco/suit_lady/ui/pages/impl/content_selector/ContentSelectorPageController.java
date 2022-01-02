@@ -2,7 +2,7 @@ package com.taco.suit_lady.ui.pages.impl.content_selector;
 
 import com.taco.suit_lady.ui.ContentData;
 import com.taco.suit_lady.ui.UIPageController;
-import com.taco.suit_lady.ui.jfx.button.ImageButton;
+import com.taco.suit_lady.ui.jfx.components.button.ImageButton;
 import com.taco.suit_lady.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.ui.jfx.lists.CellControlManager;
 import com.taco.suit_lady.ui.jfx.lists.ListCellFX;

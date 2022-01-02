@@ -1,19 +1,19 @@
-package com.taco.suit_lady.ui.jfx.components;
+package com.taco.suit_lady.ui.jfx.components.formatted_controls;
 
-import com.taco.suit_lady.ui.jfx.components.formatters.DecimalFormatter;
+import com.taco.suit_lady.ui.jfx.components.formatted_controls.formatters.DecimalFormatter;
 import javafx.scene.control.TextField;
 
-public class DoubleField2 extends TextField {
+public class DoubleField extends TextField {
     
     private final DecimalFormatter formatter;
     
-    public DoubleField2() {
+    public DoubleField() {
         super();
         this.formatter = new DecimalFormatter();
         init();
     }
     
-    public DoubleField2(String text) {
+    public DoubleField(String text) {
         super(text);
         this.formatter = new DecimalFormatter();
         init();
