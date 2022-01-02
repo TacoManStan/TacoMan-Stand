@@ -4,6 +4,7 @@ import com.taco.suit_lady.ui.UIPageController;
 import com.taco.suit_lady.ui.jfx.button.ImageButton;
 import com.taco.suit_lady.ui.jfx.components.DoubleField2;
 import com.taco.suit_lady.ui.jfx.components.ImagePane;
+import com.taco.suit_lady.ui.jfx.components.IntField2;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -30,9 +31,11 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
     @FXML private Button regenerateButton;
     @FXML private ImagePane autoRegenerateImagePane;
     
+    @FXML private IntField2 precisionTextField;
+    
     @FXML private ChoiceBox<MandelbrotColorScheme> colorSchemeChoiceBox;
-//    @FXML private ImagePane invertColorSchemeImagePane;
-    @FXML private CheckBox invertColorSchemeCheckBox;
+    @FXML private ImagePane invertColorSchemeImagePane;
+    private ImageButton invertColorSchemeImageButton;
     
     //
     
@@ -78,16 +81,21 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
     }
     
     
+    protected IntField2 getPrecisionTextField() {
+        return precisionTextField;
+    }
+    
+    
     protected ChoiceBox<MandelbrotColorScheme> getColorSchemeChoiceBox() {
         return colorSchemeChoiceBox;
     }
     
-//    protected ImagePane getInvertColorSchemeImagePane() {
-//        return invertColorSchemeImagePane;
-//    }
+    protected ImagePane getInvertColorSchemeImagePane() {
+        return invertColorSchemeImagePane;
+    }
     
-    protected CheckBox getInvertColorSchemeCheckBox() {
-        return invertColorSchemeCheckBox;
+    protected ImageButton getInvertColorSchemeImageButton() {
+        return invertColorSchemeImageButton;
     }
     
     // MIN/MAX Input Fields
@@ -165,12 +173,12 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
     
     //<editor-fold desc="--- IMAGE BUTTONS ---">
     
-//    private ImageButton invertColorSchemeImageButton;
+    //    private ImageButton invertColorSchemeImageButton;
     private ImageButton autoRegenerateImageButton;
     
-//    protected final ImageButton getInvertColorSchemeImageButton() {
-//        return invertColorSchemeImageButton;
-//    }
+    //    protected final ImageButton getInvertColorSchemeImageButton() {
+    //        return invertColorSchemeImageButton;
+    //    }
     
     protected final ImageButton getPauseAutoRegenerationImageButton() {
         return autoRegenerateImageButton;
@@ -205,6 +213,17 @@ public class MandelbrotPageController extends UIPageController<MandelbrotPage> {
                 "Toggle Auto-Regeneration",
                 "pause",
                 autoRegenerateImagePane,
+                null,
+                null,
+                true,
+                ImageButton.SMALL
+        ).init();
+        
+        invertColorSchemeImageButton = new ImageButton(
+                this,
+                "Invert Color Scheme",
+                "rerun",
+                invertColorSchemeImagePane,
                 null,
                 null,
                 true,

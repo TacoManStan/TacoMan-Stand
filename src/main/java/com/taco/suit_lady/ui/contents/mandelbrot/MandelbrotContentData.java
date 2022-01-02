@@ -35,6 +35,14 @@ public class MandelbrotContentData extends ContentData
     private final IntegerProperty canvasWidthProperty;
     private final IntegerProperty canvasHeightProperty;
     
+    private final ObjectProperty<Integer> precisionProperty;
+    
+    private final ObjectProperty<MandelbrotColorScheme> colorSchemeProperty;
+    private final BooleanProperty invertColorSchemeProperty;
+    
+    private final BooleanProperty pauseAutoRegenerationProperty;
+    
+    
     private final DoubleBinding widthBinding;
     private final DoubleBinding heightBinding;
     
@@ -49,11 +57,7 @@ public class MandelbrotContentData extends ContentData
     private final DoubleBinding scaledYMinBinding;
     private final DoubleBinding scaledYMaxBinding;
     
-    private final ObjectProperty<MandelbrotColorScheme> colorSchemeProperty;
-    private final BooleanProperty invertColorSchemeProperty;
-    
-    private final BooleanProperty pauseAutoRegenerationProperty;
-    
+    //
     
     private int currentCount;
     private final IntegerBinding changeCounter;
@@ -68,6 +72,8 @@ public class MandelbrotContentData extends ContentData
         
         this.canvasWidthProperty = new SimpleIntegerProperty((int) width);
         this.canvasHeightProperty = new SimpleIntegerProperty((int) height);
+        
+        this.precisionProperty = new SimpleObjectProperty<>(1000);
         
         this.colorSchemeProperty = new SimpleObjectProperty<>(MandelbrotColorScheme.RED);
         this.invertColorSchemeProperty = new SimpleBooleanProperty(false);
@@ -110,7 +116,7 @@ public class MandelbrotContentData extends ContentData
     }
     
     
-    public final Property<Double> xMinProperty() {
+    public final ObjectProperty<Double> xMinProperty() {
         return xMinProperty;
     }
     
@@ -125,7 +131,7 @@ public class MandelbrotContentData extends ContentData
     }
     
     
-    public final Property<Double> xMaxProperty() {
+    public final ObjectProperty<Double> xMaxProperty() {
         return xMaxProperty;
     }
     
@@ -140,7 +146,7 @@ public class MandelbrotContentData extends ContentData
     }
     
     
-    public final Property<Double> yMinProperty() {
+    public final ObjectProperty<Double> yMinProperty() {
         return yMinProperty;
     }
     
@@ -155,7 +161,7 @@ public class MandelbrotContentData extends ContentData
     }
     
     
-    public final Property<Double> yMaxProperty() {
+    public final ObjectProperty<Double> yMaxProperty() {
         return yMaxProperty;
     }
     
@@ -188,7 +194,19 @@ public class MandelbrotContentData extends ContentData
     }
     
     
-    //
+    public final ObjectProperty<Integer> precisionProperty() {
+        return precisionProperty;
+    }
+    
+    public final int getPrecision() {
+        return precisionProperty.get();
+    }
+    
+    public final int setPrecision(int newValue) {
+        int oldValue = getPrecision();
+        precisionProperty.set(newValue);
+        return oldValue;
+    }
     
     
     public final ObjectProperty<MandelbrotColorScheme> colorSchemeProperty() {
@@ -204,6 +222,7 @@ public class MandelbrotContentData extends ContentData
         colorSchemeProperty.set(newValue);
         return oldValue;
     }
+    
     
     public final @NotNull Color @NotNull [] getColors() {
         return getColorScheme().getColors(isColorSchemeInverted());
@@ -224,7 +243,6 @@ public class MandelbrotContentData extends ContentData
         return oldValue;
     }
     
-    //
     
     public final BooleanProperty pauseAutoRegenerationProperty() {
         return pauseAutoRegenerationProperty;
@@ -378,7 +396,8 @@ public class MandelbrotContentData extends ContentData
                 yMinProperty,
                 yMaxProperty,
                 canvasWidthProperty,
-                canvasHeightProperty
+                canvasHeightProperty,
+                precisionProperty
         };
     }
     
@@ -403,6 +422,7 @@ public class MandelbrotContentData extends ContentData
                ", yMax=" + yMaxProperty.get() +
                ", canvasWidth=" + canvasWidthProperty.get() +
                ", canvasHeight=" + canvasHeightProperty.get() +
+               ", precision=" + precisionProperty.get() +
                ", width=" + widthBinding.get() +
                ", height=" + heightBinding.get() +
                ", xScaling=" + xScalingBinding.get() +
@@ -434,6 +454,7 @@ public class MandelbrotContentData extends ContentData
                 JUtil.create("y-min", getMinY()),
                 JUtil.create("x-max", getMaxX()),
                 JUtil.create("y-max", getMaxY()),
+                JUtil.create("precision", getPrecision()),
                 JUtil.create("color-scheme", getColorScheme().name()),
                 JUtil.create("invert-color-scheme", isColorSchemeInverted())
         };
@@ -445,6 +466,7 @@ public class MandelbrotContentData extends ContentData
         setMinY(JUtil.loadDouble(parent, "y-min"));
         setMaxX(JUtil.loadDouble(parent, "x-max"));
         setMaxY(JUtil.loadDouble(parent, "y-max"));
+        setPrecision(JUtil.loadInt(parent, "precision"));
         setColorScheme(MandelbrotColorScheme.valueOf((String) parent.get("color-scheme")));
         setInvertColorScheme(JUtil.loadBoolean(parent, "invert-color-scheme"));
     }

@@ -21,8 +21,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class MandelbrotIterator extends MatrixIterator<MandelbrotColor> {
     
-    private final int PRECISION = 1000;
-    
     private MandelbrotContentData data;
     private BoundCanvas canvas;
     
@@ -139,7 +137,7 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor> {
         double x = 0, y = 0;
         int n = 0;
         
-        while (Math.pow(x, 2) + Math.pow(y, 2) < Math.pow(2, 2) && n < PRECISION) {
+        while (Math.pow(x, 2) + Math.pow(y, 2) < Math.pow(2, 2) && n < data.getPrecision()) {
             final double xTemp = Math.pow(x, 2) - Math.pow(y, 2) + convertedPoint.getX();
             y = (2 * x * y) + convertedPoint.getY();
             x = xTemp;

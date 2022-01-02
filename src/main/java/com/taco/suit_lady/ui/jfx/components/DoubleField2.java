@@ -1,5 +1,6 @@
 package com.taco.suit_lady.ui.jfx.components;
 
+import com.taco.suit_lady.ui.jfx.components.formatters.DecimalFormatter;
 import javafx.scene.control.TextField;
 
 public class DoubleField2 extends TextField {

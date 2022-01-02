@@ -107,6 +107,8 @@ public class MandelbrotContent extends ListableContent<
     
     private void initUIPage() {
         //Bind the value properties of relevant JFX components to the matching MandelbrotData property bidirectionally
+        getCoverPage().getController().getPrecisionTextField().getFormatter().valueProperty().bindBidirectional(getData().precisionProperty());
+        
         getCoverPage().getController().getXMaxTextField().getFormatter().valueProperty().bindBidirectional(getData().xMaxProperty());
         getCoverPage().getController().getYMaxTextField().getFormatter().valueProperty().bindBidirectional(getData().yMaxProperty());
         getCoverPage().getController().getXMinTextField().getFormatter().valueProperty().bindBidirectional(getData().xMinProperty());
@@ -114,12 +116,14 @@ public class MandelbrotContent extends ListableContent<
         
         getCoverPage().getController().getColorSchemeChoiceBox().valueProperty().bindBidirectional(getData().colorSchemeProperty());
         //        getCoverPage().getController().getInvertColorSchemeImageButton().selectedProperty().bindBidirectional(data.invertColorSchemeProperty());
-        getCoverPage().getController().getInvertColorSchemeCheckBox().selectedProperty().bindBidirectional(getData().invertColorSchemeProperty());
+        getCoverPage().getController().getInvertColorSchemeImageButton().selectedProperty().bindBidirectional(getData().invertColorSchemeProperty());
         
         getCoverPage().getController().getPauseAutoRegenerationImageButton().selectedProperty().bindBidirectional(getData().pauseAutoRegenerationProperty());
         
         
         // Refresh the generated image when an applicable MandelbrotData property changes
+        getData().precisionProperty().addListener((observable, oldValue, newValue) -> refreshCanvasChecked());
+        
         getData().xMinProperty().addListener((observable, oldValue, newValue) -> refreshCanvasChecked());
         getData().xMaxProperty().addListener((observable, oldValue, newValue) -> refreshCanvasChecked());
         getData().yMinProperty().addListener((observable, oldValue, newValue) -> refreshCanvasChecked());
