@@ -43,18 +43,22 @@ public class Overlay
     
     //<editor-fold desc="--- CONSTRUCTORS ---">
     
+    // TO-DOC
     public Overlay(@NotNull Springable springable) {
         this(springable, null, null, 1);
     }
     
+    // TO-DOC
     public Overlay(@NotNull Springable springable, @Nullable String name) {
         this(springable, null, name, 1);
     }
     
+    // TO-DOC
     public Overlay(@NotNull Springable springable, @Nullable ReentrantLock lock) {
         this(springable, lock, null, 1);
     }
     
+    // TO-DOC
     public Overlay(@NotNull Springable springable, @Nullable ReentrantLock lock, @Nullable String name) {
         this(springable, lock, name, 1);
     }
@@ -99,6 +103,11 @@ public class Overlay
     
     //<editor-fold desc="--- PROPERTIES ---">
     
+    /**
+     * <p>Returns the {@link StackPane} instance on which all {@link SLPaintCommand Paint Commands} assigned to this {@link Overlay} are displayed.</p>
+     *
+     * @return The {@link StackPane} instance on which all {@link SLPaintCommand Paint Commands} assigned to this {@link Overlay} are displayed.
+     */
     protected final StackPane root() {
         return root;
     }
