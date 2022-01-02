@@ -27,13 +27,16 @@ public class Overlay
     
     private final Springable springable;
     private final ReentrantLock lock;
+    
     private final ReadOnlyStringWrapper nameProperty;
+    
     
     private final StackPane root;
     
     private final ReadOnlyIntegerWrapper paintPriorityProperty;
-    
     private final ReadOnlyObservableListWrapper<SLPaintCommand<?>> paintCommands;
+    
+    //<editor-fold desc="--- CONSTRUCTORS ---">
     
     public Overlay(@NotNull Springable springable) {
         this(springable, null, null, 1);
@@ -50,6 +53,7 @@ public class Overlay
     public Overlay(@NotNull Springable springable, @Nullable ReentrantLock lock, @Nullable String name) {
         this(springable, lock, name, 1);
     }
+    
     
     public Overlay(@NotNull Springable springable, @Nullable ReentrantLock lock, @Nullable String name, int paintPriority) {
         this.springable = ExceptionTools.nullCheck(springable, "Springable Input").asStrict();
@@ -69,6 +73,8 @@ public class Overlay
         });
     }
     
+    //</editor-fold>
+    
     //<editor-fold desc="--- PROPERTIES ---">
     
     protected final StackPane root() {
@@ -86,20 +92,19 @@ public class Overlay
     }
     
     public final void setPaintPriority(int paintPriority) {
-        if (paintPriority < 0)
-            throw ExceptionTools.ex(new IndexOutOfBoundsException("Paint Priority Must Be Non-Negative! [" + paintPriority + "]"));
+        if (paintPriority <= 0)
+            throw ExceptionTools.ex(new IndexOutOfBoundsException("Paint Priority Must Be Greater Than Zero! [" + paintPriority + "]"));
         paintPriorityProperty.set(paintPriority);
     }
     
-    //
     
     public final ReadOnlyObservableList<SLPaintCommand<?>> paintCommands() {
         return paintCommands.readOnlyList();
     }
     
     public final void addPaintCommand(@NotNull SLPaintCommand<?> paintCommand) {
-        ExceptionTools.nullCheck(paintCommand, "Paint Command Input").setOwner(this); // TODO: Move to listener & also track remove events
         sync(() -> {
+            ExceptionTools.nullCheck(paintCommand, "Paint Command Input").setOwner(this); // TODO: Move to listener & also track remove events
             paintCommands.add(paintCommand);
             FXCollections.sort(paintCommands);
             debugger().printList(paintCommands, "Paint Commands (Added)");
@@ -129,10 +134,12 @@ public class Overlay
         return springable.ctx();
     }
     
+    
     @Override
     public final @NotNull Lock getLock() {
         return lock != null ? lock : new ReentrantLock();
     }
+    
     
     @Override
     public final ReadOnlyStringProperty nameProperty() {
