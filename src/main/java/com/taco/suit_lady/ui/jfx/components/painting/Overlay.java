@@ -35,6 +35,22 @@ public class Overlay
     
     private final ReadOnlyObservableListWrapper<SLPaintCommand<?>> paintCommands;
     
+    public Overlay(@NotNull Springable springable) {
+        this(springable, null, null, 1);
+    }
+    
+    public Overlay(@NotNull Springable springable, @Nullable String name) {
+        this(springable, null, name, 1);
+    }
+    
+    public Overlay(@NotNull Springable springable, @Nullable ReentrantLock lock) {
+        this(springable, lock, null, 1);
+    }
+    
+    public Overlay(@NotNull Springable springable, @Nullable ReentrantLock lock, @Nullable String name) {
+        this(springable, lock, name, 1);
+    }
+    
     public Overlay(@NotNull Springable springable, @Nullable ReentrantLock lock, @Nullable String name, int paintPriority) {
         this.springable = ExceptionTools.nullCheck(springable, "Springable Input").asStrict();
         this.lock = lock; // Null-checking is done in get method via lazy instantiation
