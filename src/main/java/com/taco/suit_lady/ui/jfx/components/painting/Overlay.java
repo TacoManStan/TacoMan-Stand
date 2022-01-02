@@ -3,6 +3,9 @@ package com.taco.suit_lady.ui.jfx.components.painting;
 import com.taco.suit_lady._to_sort._new.ReadOnlyObservableList;
 import com.taco.suit_lady._to_sort._new.ReadOnlyObservableListWrapper;
 import com.taco.suit_lady._to_sort._new.interfaces.ReadOnlyNameableProperty;
+import com.taco.suit_lady.ui.*;
+import com.taco.suit_lady.ui.jfx.components.ImagePane;
+import com.taco.suit_lady.ui.jfx.components.button.ImageButton;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
@@ -13,6 +16,8 @@ import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
@@ -22,6 +27,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+// TO-DOC
 public class Overlay
         implements Springable, Lockable, ReadOnlyNameableProperty, Comparable<Overlay> {
     
@@ -29,7 +35,6 @@ public class Overlay
     private final ReentrantLock lock;
     
     private final ReadOnlyStringWrapper nameProperty;
-    
     
     private final StackPane root;
     
@@ -55,6 +60,23 @@ public class Overlay
     }
     
     
+    /**
+     * <p><b>Fully-Parameterized Constructor</b></p>
+     * <p>Constructs a new {@link Overlay} instance used to display a set of {@link SLPaintCommand Paint Commands}.</p>
+     * <p><hr>
+     * <p><b>Parameter Details</b></p>
+     * <ol>
+     *     <li>
+     *         <b>Name:</b> {@literal String} — Refer to <code><i>{@link #nameProperty()}</i></code> for additional information.
+     *     </li>
+     *     <li>
+     *         <b>Paint Priority:</b> {@literal int} — Refer to <code><i>{@link #paintPriorityProperty()}</i></code> for additional information.
+     *     </li>
+     * </ol>
+     *
+     * @param name          The {@link String name} of this {@link Overlay}.
+     * @param paintPriority The priority of this {@link Overlay}.
+     */
     public Overlay(@NotNull Springable springable, @Nullable ReentrantLock lock, @Nullable String name, int paintPriority) {
         this.springable = ExceptionTools.nullCheck(springable, "Springable Input").asStrict();
         this.lock = lock; // Null-checking is done in get method via lazy instantiation
@@ -83,14 +105,36 @@ public class Overlay
     
     //
     
+    /**
+     * <p>Returns the {@link ReadOnlyIntegerProperty} representing the priority at which this {@link Overlay} is to be painted.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>The {@link #paintPriorityProperty() paint priority} is used by the {@link OverlayHandler} to overlap its {@link OverlayHandler#overlays() overlays} based on their {@link #getPaintPriority() priorities}..</li>
+     *     <li>The {@link #getPaintPriority() paint priority} is an {@code int} with acceptable bounds of {@code 1} to {@link Integer#MAX_VALUE}.</li>
+     *     <li>
+     *         {@link Overlay Overlays} with larger {@link #getPaintPriority() paint priority} values are painted {@code first}.
+     *         Subsequent {@link Overlay Overlays} are then painted on top, with {@link Overlay Overlays} of a {@link #getPaintPriority() paint priority} of {@code 1} being painted last (on top).
+     *     </li>
+     * </ol>
+     *
+     * @return The {@link ReadOnlyIntegerProperty} representing the priority at which this {@link Overlay} is to be painted.
+     */
     public final ReadOnlyIntegerProperty paintPriorityProperty() {
         return paintPriorityProperty.getReadOnlyProperty();
     }
     
+    /**
+     * <p><b>Passthrough Definition:</b></p>
+     * <blockquote><i><code>{@link #paintPriorityProperty()}<b>.</b>{@link ReadOnlyIntegerProperty#get() get()}</code></i></blockquote>
+     */
     public final int getPaintPriority() {
         return paintPriorityProperty.get();
     }
     
+    /**
+     * <p><b>Passthrough Definition:</b></p>
+     * <blockquote><i><code>{@link #paintPriorityProperty}<b>.</b>{@link ReadOnlyIntegerWrapper#set(int) set}<b>(</b>paintPriority<b>)</b></code></i></blockquote>
+     */
     public final void setPaintPriority(int paintPriority) {
         if (paintPriority <= 0)
             throw ExceptionTools.ex(new IndexOutOfBoundsException("Paint Priority Must Be Greater Than Zero! [" + paintPriority + "]"));
@@ -98,10 +142,20 @@ public class Overlay
     }
     
     
+    /**
+     * <p>Returns the {@link ReadOnlyObservableList} containing the {@link SLPaintCommand Paint Commands} assigned to this {@link Overlay}.</p>
+     *
+     * @return The {@link ReadOnlyObservableList} containing the {@link SLPaintCommand Paint Commands} assigned to this {@link Overlay}.
+     */
     public final ReadOnlyObservableList<SLPaintCommand<?>> paintCommands() {
         return paintCommands.readOnlyList();
     }
     
+    /**
+     * <p>{@link ReadOnlyObservableListWrapper#add(Object) Adds} the specified {@link SLPaintCommand} to this {@link Overlay}.</p>
+     *
+     * @param paintCommand The {@link SLPaintCommand} to be {@link ReadOnlyObservableListWrapper#add(Object) added}.
+     */
     public final void addPaintCommand(@NotNull SLPaintCommand<?> paintCommand) {
         sync(() -> {
             ExceptionTools.nullCheck(paintCommand, "Paint Command Input").setOwner(this); // TODO: Move to listener & also track remove events
@@ -111,6 +165,11 @@ public class Overlay
         });
     }
     
+    /**
+     * <p>{@link ReadOnlyObservableListWrapper#remove(Object) Removes} the specified {@link SLPaintCommand} to this {@link Overlay}.</p>
+     *
+     * @param paintCommand The {@link SLPaintCommand} to be {@link ReadOnlyObservableListWrapper#remove(Object) removed}.
+     */
     public final boolean removePaintCommand(@NotNull SLPaintCommand<?> paintCommand) {
         ExceptionTools.nullCheck(paintCommand, "Paint Command Input");
         return sync(() -> {
