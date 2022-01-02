@@ -29,7 +29,7 @@ public class SLEllipsePaintCommand extends SLShapePaintCommand<Ellipse> {
     }
     
     @Override
-    protected void syncBounds(@NotNull Ellipse ellipse, @NotNull Bounds2D newBounds) {
+    protected void syncBounds(@NotNull Ellipse ellipse) {
         ellipse.setCenterX(getX() + ((double) getWidthSafe() / 2));
         ellipse.setCenterY(getY() + ((double) getHeightSafe() / 2));
         ellipse.setRadiusX((double) getWidthSafe() / 2);

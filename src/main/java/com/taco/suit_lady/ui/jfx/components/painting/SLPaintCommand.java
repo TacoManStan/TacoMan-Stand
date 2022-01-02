@@ -102,6 +102,7 @@ public abstract class SLPaintCommand<N extends Node>
         });
     }
     
+    
     protected final @NotNull ReadOnlyObjectProperty<N> nodeProperty() {
         return nodeProperty.getReadOnlyProperty();
     }
@@ -116,9 +117,11 @@ public abstract class SLPaintCommand<N extends Node>
         });
     }
     
+    
     protected final @NotNull Predicate<? super SLPaintCommand<N>> getAutoRemoveCondition() {
         return autoRemoveCondition;
     }
+    
     
     public final @NotNull BooleanProperty activeProperty() {
         return activeProperty;
@@ -133,6 +136,7 @@ public abstract class SLPaintCommand<N extends Node>
         activeProperty.set(false);
         return this;
     }
+    
     
     public final @NotNull IntegerProperty paintPriorityProperty() {
         return paintPriorityProperty;
@@ -156,7 +160,6 @@ public abstract class SLPaintCommand<N extends Node>
         xProperty.set((int) x);
     }
     
-    //
     
     public final @NotNull IntegerProperty yProperty() {
         return yProperty;
@@ -170,7 +173,6 @@ public abstract class SLPaintCommand<N extends Node>
         yProperty.set((int) y);
     }
     
-    //
     
     public final @NotNull IntegerProperty widthProperty() {
         return widthProperty;
@@ -188,7 +190,6 @@ public abstract class SLPaintCommand<N extends Node>
         widthProperty.set((int) width);
     }
     
-    //
     
     public final @NotNull IntegerProperty heightProperty() {
         return heightProperty;
@@ -206,7 +207,6 @@ public abstract class SLPaintCommand<N extends Node>
         heightProperty.set((int) height);
     }
     
-    //
     
     public final void setBounds(@NotNull Bounds2D bounds) {
         ExceptionTools.nullCheck(bounds, "Bounds");
@@ -241,14 +241,13 @@ public abstract class SLPaintCommand<N extends Node>
     protected abstract N refreshNode();
     
     protected void applyRefresh(@NotNull N n) {
-        //        System.out.println("Applying refresh settings...");
         n.setManaged(false);
         n.visibleProperty().bind(activeProperty);
         
-        syncBounds(n, getBounds());
+        syncBounds(n);
     }
     
-    protected void syncBounds(@NotNull N n, @NotNull Bounds2D newBounds) {
+    protected void syncBounds(@NotNull N n) {
         sync(() -> getNode().resizeRelocate(getX(), getY(), getWidthSafe(), getHeightSafe()));
     }
     
@@ -271,11 +270,6 @@ public abstract class SLPaintCommand<N extends Node>
         return lock != null ? lock : new ReentrantLock();
     }
     
-    @Override
-    public final String getName() {
-        return name;
-    }
-    
     
     @Override
     public @NotNull FxWeaver weaver() {
@@ -289,9 +283,17 @@ public abstract class SLPaintCommand<N extends Node>
     
     
     @Override
+    public final String getName() {
+        return name;
+    }
+    
+    
+    @Override
     public Observable[] properties() {
         return new Observable[]{ownerProperty, nodeProperty, paintPriorityProperty, xProperty, yProperty, widthProperty, heightProperty};
     }
+    
+    //
     
     @Override
     public int compareTo(@NotNull SLPaintCommand<?> o) {
@@ -300,12 +302,15 @@ public abstract class SLPaintCommand<N extends Node>
     
     //</editor-fold>
     
+    //<editor-fold desc="--- INTERNAL ---">
+    
     private N refreshNodeImpl() {
         final N n = refreshNode();
         applyRefresh(n);
         return n;
     }
     
+    // CURRENTLY UNUSED
     private boolean autoRemove() {
         return sync(() -> {
             final Overlay overlay = getOwner();
@@ -314,4 +319,6 @@ public abstract class SLPaintCommand<N extends Node>
             return false;
         });
     }
+    
+    //</editor-fold>
 }

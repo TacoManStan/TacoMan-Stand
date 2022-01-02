@@ -32,7 +32,7 @@ public class SLRectanglePaintCommand extends SLShapePaintCommand<Rectangle> {
     }
     
     @Override
-    protected void syncBounds(@NotNull Rectangle rectangle, @NotNull Bounds2D newBounds) {
+    protected void syncBounds(@NotNull Rectangle rectangle) {
         rectangle.setX(getX());
         rectangle.setY(getY());
         rectangle.setWidth(getWidthSafe());

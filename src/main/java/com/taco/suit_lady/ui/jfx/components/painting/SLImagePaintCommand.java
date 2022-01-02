@@ -56,7 +56,7 @@ public class SLImagePaintCommand extends SLPaintCommand<ImageView> {
     }
     
     @Override
-    protected void syncBounds(@NotNull ImageView imageView, @NotNull Bounds2D newBounds) {
+    protected void syncBounds(@NotNull ImageView imageView) {
         imageView.setX(getX());
         imageView.setY(getY());
         imageView.setFitWidth(getWidthSafe());
