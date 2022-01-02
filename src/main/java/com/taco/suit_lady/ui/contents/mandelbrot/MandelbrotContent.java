@@ -41,7 +41,6 @@ public class MandelbrotContent extends ListableContent<
     
     private final ReentrantLock lock;
     
-    private Task<Void> worker;
     private final MandelbrotIterator iterator;
     
     private RectanglePaintCommand selectionBoxPaintCommandOld;
@@ -65,8 +64,6 @@ public class MandelbrotContent extends ListableContent<
                         uiBook.getUID(uiBook.getButtonID()),
                         () -> coverPage = new MandelbrotPage(uiBook, this)),
                 null));
-        
-        this.worker = null;
         
         getController().canvas().setCanvasListener((source, newWidth, newHeight) -> refreshCanvas());
         getCoverPage().getController().getRegenerateButton().setOnAction(event -> refreshCanvas());
@@ -198,13 +195,7 @@ public class MandelbrotContent extends ListableContent<
     
     @Override
     protected void onShutdown() {
-        if (worker != null) {
-            debugger().print("Cancelling Mandelbrot Worker Task");
-            if (worker.cancel(true))
-                debugger().print("Worker Cancellation Successful!");
-            else
-                debugger().print(Debugger.WARN, "Worker Cancellation Failed!");
-        }
+        iterator.shutdown();
     }
     
     

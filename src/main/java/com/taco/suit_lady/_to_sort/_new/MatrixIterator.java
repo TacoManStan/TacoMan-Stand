@@ -39,6 +39,8 @@ public abstract class MatrixIterator<T>
     private int iY;
     private final ReadOnlyBooleanWrapper completeProperty;
     
+    private boolean isShutdown;
+    
     public MatrixIterator(@NotNull Springable springable, @Nullable Lock lock, @NotNull Object... params) {
         this.springable = springable.asStrict();
         this.lock = lock != null ? lock : new ReentrantLock();
@@ -58,6 +60,8 @@ public abstract class MatrixIterator<T>
         
         construct(params);
         this.matrixProperty = new ReadOnlyObjectWrapper<>();
+        
+        this.isShutdown = false;
         
         reset();
     }
@@ -85,34 +89,12 @@ public abstract class MatrixIterator<T>
         completeProperty.set(newValue);
     }
     
+    
+    public final boolean isShutdown() {
+        return isShutdown;
+    }
+    
     //</editor-fold>
-    
-    private void next() {
-        getMatrix()[iX][iY] = step(iX, iY);
-        increment();
-    }
-    
-    // Helper method that iterates the values of iX and iY
-    private void increment() {
-        iX++;
-        if (iX == getWidth()) {
-            iX = 0;
-            iY++;
-        }
-        if (iY == getHeight())
-            setComplete(true);
-    }
-    
-    /**
-     * <p>Resets the values of this {@link MatrixIterator} to default values</p>
-     * <p>Required for reusable {@link MatrixIterator iterators}.</p>
-     */
-    private void reset() {
-        iX = 0;
-        iY = 0;
-        setComplete(false);
-        matrixProperty.set(newMatrix());
-    }
     
     public final int getWidth() {
         return getMatrix().length;
@@ -169,6 +151,41 @@ public abstract class MatrixIterator<T>
     
     //</editor-fold>
     
+    //<editor-fold desc="--- INTERNAL ---">
+    
+    private void next() {
+        getMatrix()[iX][iY] = step(iX, iY);
+        increment();
+    }
+    
+    // Helper method that iterates the values of iX and iY
+    private void increment() {
+        iX++;
+        if (iX == getWidth()) {
+            iX = 0;
+            iY++;
+        }
+        if (iY == getHeight())
+            setComplete(true);
+    }
+    
+    /**
+     * <p>Resets the values of this {@link MatrixIterator} to default values</p>
+     * <p>Required for reusable {@link MatrixIterator iterators}.</p>
+     */
+    private void reset() {
+        iX = 0;
+        iY = 0;
+        setComplete(false);
+        matrixProperty.set(newMatrix());
+    }
+    
+    private void updateProgressOverlays(@NotNull Consumer<ProgressIndicator> action) {
+        FXTools.runFX(() -> Arrays.stream(progressIndicators).forEach(action), true);
+    }
+    
+    //</editor-fold>
+    
     public void run() {
         sync(() -> {
             if (worker != null) {
@@ -187,9 +204,28 @@ public abstract class MatrixIterator<T>
         });
     }
     
-    private void updateProgressOverlays(@NotNull Consumer<ProgressIndicator> action) {
-        FXTools.runFX(() -> Arrays.stream(progressIndicators).forEach(action), true);
+    public final void shutdown() {
+        sync(() -> {
+            if (isShutdown)
+                debugger().print(Debugger.WARN, "MatrixIterator has already been shut down!");
+            isShutdown = true;
+            
+            preShutdown();
+            if (worker != null) {
+                debugger().print("Cancelling Mandelbrot Worker Task");
+                if (worker.cancel(true))
+                    debugger().print("Worker Cancellation Successful!");
+                else
+                    debugger().print(Debugger.WARN, "Worker Cancellation Failed!");
+            }
+            postShutdown();
+        });
     }
+    
+    protected void preShutdown() { }
+    
+    protected void postShutdown() { }
+    
     
     private IteratorTask worker;
     
