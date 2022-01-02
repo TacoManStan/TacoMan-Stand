@@ -244,11 +244,11 @@ public abstract class SLPaintCommand<N extends Node>
         n.setManaged(false);
         n.visibleProperty().bind(activeProperty);
         
-        syncBounds(n);
+        sync(() -> syncBounds(n));
     }
     
     protected void syncBounds(@NotNull N n) {
-        sync(() -> getNode().resizeRelocate(getX(), getY(), getWidthSafe(), getHeightSafe()));
+        getNode().resizeRelocate(getX(), getY(), getWidthSafe(), getHeightSafe());
     }
     
     protected abstract void onAdded(@NotNull Overlay owner);
