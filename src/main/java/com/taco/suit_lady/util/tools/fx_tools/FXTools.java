@@ -918,12 +918,13 @@ public class FXTools {
     }
     
     
-    public static void togglePickOnBounds(Node node, boolean pickOnBounds) {
+    public static <T extends Node> T togglePickOnBounds(T node, boolean pickOnBounds) {
         ExceptionTools.nullCheck(node, "Input Node").setPickOnBounds(pickOnBounds);
         if (node instanceof Canvas)
             node.setMouseTransparent(!pickOnBounds);
         if (node instanceof Region)
             ((Region) node).getChildrenUnmodifiable().forEach(child -> togglePickOnBounds(child, pickOnBounds));
+        return node;
     }
     
     
