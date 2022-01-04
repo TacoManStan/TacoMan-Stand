@@ -108,7 +108,6 @@ public class MandelbrotContent extends ListableContent<
         getCoverPage().getController().getYMinTextField().getFormatter().valueProperty().bindBidirectional(getData().yMinProperty());
         
         getCoverPage().getController().getColorSchemeChoiceBox().valueProperty().bindBidirectional(getData().colorSchemeProperty());
-        //        getCoverPage().getController().getInvertColorSchemeImageButton().selectedProperty().bindBidirectional(data.invertColorSchemeProperty());
         getCoverPage().getController().getInvertColorSchemeImageButton().selectedProperty().bindBidirectional(getData().invertColorSchemeProperty());
         
         getCoverPage().getController().getPauseAutoRegenerationImageButton().selectedProperty().bindBidirectional(getData().pauseAutoRegenerationProperty());
@@ -167,11 +166,12 @@ public class MandelbrotContent extends ListableContent<
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    
     @Override
     public boolean isNullableLock() {
         return true;
     }
+    
+    //
     
     @Override
     protected @NotNull MandelbrotContentData loadData() {
@@ -182,6 +182,7 @@ public class MandelbrotContent extends ListableContent<
     protected @NotNull Class<MandelbrotContentController> controllerDefinition() {
         return MandelbrotContentController.class;
     }
+    
     
     @Override
     protected void onActivate() { }
@@ -194,6 +195,7 @@ public class MandelbrotContent extends ListableContent<
         iterator.shutdown();
     }
     
+    //
     
     private UIDProcessor uidProcessor;
     
@@ -260,8 +262,6 @@ public class MandelbrotContent extends ListableContent<
             selectionBoxPaintCommand2.setBounds(moveData.getBounds());
             selectionCirclePaintCommand.setBounds(moveData.getBounds());
         });
-        //        final AppUI ui = ctx().getBean(AppUI.class);
-        //        FXTools.drawRectangle(ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas(), moveData.getAsPaintable(), true, false);
     }
     
     //</editor-fold>
