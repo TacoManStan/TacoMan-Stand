@@ -1,7 +1,6 @@
-package com.taco.suit_lady.logic.game.entities;
+package com.taco.suit_lady.logic.game.objects;
 
 import com.taco.suit_lady.logic.game.GMap;
-import org.plutext.jaxb.svg11.G;
 
 public class GTile {
     

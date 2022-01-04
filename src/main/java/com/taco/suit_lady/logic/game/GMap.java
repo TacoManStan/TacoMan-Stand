@@ -1,12 +1,12 @@
 package com.taco.suit_lady.logic.game;
 
-import com.taco.suit_lady.logic.game.entities.GTile;
+import com.taco.suit_lady.logic.game.objects.GTile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GMap {
     
-    private final int tileSize = 20;
+    private final int tileSize = 20; // The number of "pixels" comprising each tile.
     
     //
     
