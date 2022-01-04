@@ -1,26 +1,27 @@
 package com.taco.suit_lady.util.tools.list_tools;
 
+import com.taco.suit_lady.util.tools.ArrayTools;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public record Operation<E>(int movedFromIndex, int movedToIndex, E contents) {
     
-    public Inferred infer() {
+    public InferredType infer() {
         if (movedFromIndex == -1 && movedToIndex == -1 && contents == null)
-            return Inferred.DATA_EMPTY;
+            return InferredType.DATA_EMPTY;
         else if (movedFromIndex == -1 && movedToIndex == -1 && contents != null)
-            return Inferred.DATA_VALUE;
+            return InferredType.DATA_VALUE;
         else if (contents == null)
-            return Inferred.DATA_INDEX;
+            return InferredType.DATA_INDEX;
         else if (movedFromIndex == -1 && movedToIndex >= 0)
-            return Inferred.EVENT_ADD;
+            return InferredType.EVENT_ADD;
         else if (movedFromIndex >= 0 && movedToIndex == -1)
-            return Inferred.EVENT_REMOVE;
+            return InferredType.EVENT_REMOVE;
         else if (movedFromIndex == movedToIndex && movedFromIndex >= 0 && movedToIndex >= 0)
-            return Inferred.EVENT_NO_CHANGE;
+            return InferredType.EVENT_NO_CHANGE;
         else if (movedFromIndex >= 0 && movedToIndex >= 0)
-            return Inferred.EVENT_MOVE;
-        return Inferred.UNKNOWN;
+            return InferredType.EVENT_MOVE;
+        return InferredType.UNKNOWN;
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
@@ -78,7 +79,7 @@ public record Operation<E>(int movedFromIndex, int movedToIndex, E contents) {
     
     //</editor-fold>
     
-    public enum Inferred {
+    public enum InferredType {
         UNKNOWN, INVALID,
         DATA_EMPTY, DATA_INDEX, DATA_VALUE,
         EVENT_NO_CHANGE, EVENT_ADD, EVENT_REMOVE, EVENT_MOVE
@@ -90,5 +91,41 @@ public record Operation<E>(int movedFromIndex, int movedToIndex, E contents) {
     
     public enum TriggerType {
         PRE_CHANGE, POST_CHANGE, CHANGE, UPDATE
+    }
+    
+    
+    public enum OpReturnType {
+        
+        /**
+         * Indicates that a reference to the specified list object should be returned.
+         */
+        SELF(OperationType.ADDITION, OperationType.PERMUTATION),
+        
+        /**
+         * Indicates that a reference to the previous list object occupying the element changed by the operation should be returned.
+         */
+        PRIOR(OperationType.ADDITION, OperationType.REMOVAL, OperationType.PERMUTATION),
+        
+        /**
+         * Indicates that a reference to the default value for the list should be returned.
+         */
+        DEFAULT(OperationType.values()),
+        
+        /**
+         * Indicates that null should always be returned.
+         */
+        NONE(OperationType.values());
+        
+        //
+        
+        private final OperationType[] validOperations;
+        
+        OpReturnType(OperationType... validOperations) {
+            this.validOperations = validOperations;
+        }
+        
+        public boolean isOpValid(OperationType opType) {
+            return ArrayTools.contains(opType, validOperations);
+        }
     }
 }
