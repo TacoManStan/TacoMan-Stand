@@ -3,8 +3,6 @@ TODO - Code
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     > Add fully-formatted code examples to applicable Javadocs comments.
     > Move .txt note files such as this one into .java files that can be viewed via JFX UI Frame (and/or website?).
-    > Look into annotation flags, such as @NotNull.
-        > On that note, look into how you can create your own custom annotations (e.g., @PassthroughMethod).
     > Look into Git Blame annotations & when to use them.
     > Make Console hideable
     > Learn how to use @Contract(...) annotation
