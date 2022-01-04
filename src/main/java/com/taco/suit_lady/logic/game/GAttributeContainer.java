@@ -1,5 +1,6 @@
 package com.taco.suit_lady.logic.game;
 
+import com.taco.suit_lady.logic.game.interfaces.GAttributable;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
@@ -16,7 +17,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 
 public class GAttributeContainer
-        implements Springable, Lockable {
+        implements Springable, Lockable, GAttributable {
     
     private final StrictSpringable springable;
     private final ReentrantLock lock;
@@ -44,12 +45,19 @@ public class GAttributeContainer
     
     //<editor-fold desc="--- ATTRIBUTES ---">
     
-    public final MapProperty<String, Object> attributes() {
+    public final MapProperty<String, Object> attributeMap() {
         return attributes;
     }
     
     //
     
+    @Override
+    public final <V> V get(@NotNull String key, @Nullable V defaultValue) {
+        return sync(() -> (V) attributes.getOrDefault(key, defaultValue));
+    }
+    
+    
+    @Override
     public final <V> V add(String key, V attribute, boolean replaceIfPresent) {
         return sync(() -> {
             if (attributes.containsKey(ExceptionTools.nullCheck(key, "Property Key")))
@@ -62,32 +70,22 @@ public class GAttributeContainer
     }
     
     
+    @Override
     public final <V> V remove(@NotNull String key) {
         return sync(() -> (V) attributes.remove(key));
     }
     
+    @Override
     public final <V> V remove(@NotNull String key, V attribute) {
         return (V) sync(() -> attributes.remove(key, attribute));
     }
     
-    public final <V> V removeIf(@NotNull String key, @NotNull Predicate<V> filter) {
-        return removeIf(key, null, filter);
-    }
-    
+    @Override
     public final <V> V removeIf(@NotNull String key, @Nullable V defaultValue, @NotNull Predicate<V> filter) {
         return sync(() -> {
             final V attribute = get(key);
             return attribute != null && filter.test(attribute) ? (V) attributes.remove(key) : null;
         });
-    }
-    
-    
-    public final <V> V get(@NotNull String key) {
-        return get(key, null);
-    }
-    
-    public final <V> V get(@NotNull String key, @Nullable V defaultValue) {
-        return sync(() -> (V) attributes.getOrDefault(key, defaultValue));
     }
     
     //</editor-fold>

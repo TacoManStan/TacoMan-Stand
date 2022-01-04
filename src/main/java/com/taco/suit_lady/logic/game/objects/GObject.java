@@ -2,6 +2,7 @@ package com.taco.suit_lady.logic.game.objects;
 
 import com.taco.suit_lady.logic.game.GAttributeContainer;
 import com.taco.suit_lady.logic.game.GEntity;
+import com.taco.suit_lady.logic.game.interfaces.GAttributeContainable;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
@@ -14,7 +15,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class GObject
-        implements GEntity, Lockable {
+        implements Lockable, GAttributeContainable, GEntity {
     
     private final StrictSpringable springable;
     private final ReentrantLock lock;
