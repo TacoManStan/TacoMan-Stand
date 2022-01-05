@@ -14,7 +14,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class Object
+public class GameObject
         implements Lockable, AttributeContainable, Entity {
     
     private final StrictSpringable springable;
@@ -22,7 +22,7 @@ public class Object
     
     private final AttributeContainer attributes;
     
-    public Object(@NotNull Springable springable, @Nullable ReentrantLock lock) {
+    public GameObject(@NotNull Springable springable, @Nullable ReentrantLock lock) {
         this.springable = springable.asStrict();
         this.lock = lock != null ? lock : new ReentrantLock();
         

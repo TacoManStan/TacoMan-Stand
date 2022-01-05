@@ -1,6 +1,6 @@
 package com.taco.suit_lady.logic.game;
 
-import com.taco.suit_lady.logic.game.objects.Object;
+import com.taco.suit_lady.logic.game.objects.GameObject;
 import com.taco.suit_lady.logic.game.objects.Tile;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
@@ -25,7 +25,7 @@ public class GameMap
     private final int height;
     
     private final Tile[][] tileMap;
-    private final ArrayList<Object> mapObjects;
+    private final ArrayList<GameObject> mapObjects;
     
     public GameMap(@NotNull Springable springable, int width, int height) {
         this.springable = springable.asStrict();
@@ -85,7 +85,7 @@ public class GameMap
         return tileMap;
     }
     
-    public final ArrayList<Object> mapObjects() {
+    public final ArrayList<GameObject> mapObjects() {
         return mapObjects;
     }
     
