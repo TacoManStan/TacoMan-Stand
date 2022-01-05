@@ -100,6 +100,19 @@ public class GameMap
         return tileMap[xTemp][yTemp];
     }
     
+    @SuppressWarnings("ManualArrayCopy")
+    public final @NotNull Tile[][] getNeighbors(@NotNull Tile tile, int xReach, int yReach) {
+        // Reach parameters define how many tiles in each direction should be returned, excluding the host tile.
+        // Therefore, the reach value must be doubled to account for opposite directions and then 1 must be added to account for the host tile.
+        final Tile[][] neighbors = new Tile[(xReach * 2) + 1][(yReach * 2) + 1];
+    
+        for (int i = -xReach; i < xReach; i++)
+            for (int j = -yReach; j < yReach; j++)
+                neighbors[i][j] = tileMap[tile.getXLoc() + i][tile.getYLoc() + j];
+        
+        return neighbors;
+    }
+    
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override
