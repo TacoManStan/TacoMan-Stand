@@ -1,8 +1,8 @@
 package com.taco.suit_lady.logic.game.items;
 
-import com.taco.suit_lady.logic.game.GAttributeContainer;
-import com.taco.suit_lady.logic.game.GEntity;
-import com.taco.suit_lady.logic.game.interfaces.GAttributeContainable;
+import com.taco.suit_lady.logic.game.AttributeContainer;
+import com.taco.suit_lady.logic.game.Entity;
+import com.taco.suit_lady.logic.game.interfaces.AttributeContainable;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
@@ -14,34 +14,34 @@ import org.springframework.context.ConfigurableApplicationContext;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * <p>{@link GItem} objects are game entities that are displayed via an inventory grid.</p>
- * <p>Items can be dropped, at which point they are no longer {@link GItem} objects, but rather a {@link GEntity} implementation that carries a reference to the {@link GItem} that it represents.</p>
+ * <p>{@link Item} objects are game entities that are displayed via an inventory grid.</p>
+ * <p>Items can be dropped, at which point they are no longer {@link Item} objects, but rather a {@link Entity} implementation that carries a reference to the {@link Item} that it represents.</p>
  * <br>
  * <p><b>UPDATE 1</b></p>
  * <ol>
- *     <li>{@link GItem} now implements {@link GEntity} directly, as {@link GEntity} now defines universal game entity definitions, such as name & attributes.</li>
+ *     <li>{@link Item} now implements {@link Entity} directly, as {@link Entity} now defines universal game entity definitions, such as name & attributes.</li>
  * </ol>
  */
 // TO-IMPROVE
-public class GItem
-        implements Lockable, GAttributeContainable, GEntity {
+public class Item
+        implements Lockable, AttributeContainable, Entity {
     
     private final StrictSpringable springable;
     private final ReentrantLock lock;
     
-    private final GAttributeContainer attributes;
+    private final AttributeContainer attributes;
     
-    public GItem(@NotNull Springable springable, @Nullable ReentrantLock lock) {
+    public Item(@NotNull Springable springable, @Nullable ReentrantLock lock) {
         this.springable = springable.asStrict();
         this.lock = lock != null ? lock : new ReentrantLock();
         
-        this.attributes = new GAttributeContainer(this, lock, this);
+        this.attributes = new AttributeContainer(this, lock, this);
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override
-    public @NotNull GAttributeContainer attributes() {
+    public @NotNull AttributeContainer attributes() {
         return attributes;
     }
     

@@ -1,15 +1,15 @@
 package com.taco.suit_lady.logic.game.interfaces;
 
-import com.taco.suit_lady.logic.game.GAttributeContainer;
+import com.taco.suit_lady.logic.game.AttributeContainer;
 import com.taco.suit_lady.util.Lockable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Predicate;
 
-public interface GAttributeContainable
-        extends GAttributable, Lockable {
+public interface AttributeContainable
+        extends Attributable, Lockable {
     
-    @NotNull GAttributeContainer attributes();
+    @NotNull AttributeContainer attributes();
     
     //<editor-fold desc="--- DEFAULT METHODS ---">
     

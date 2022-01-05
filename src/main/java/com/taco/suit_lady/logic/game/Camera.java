@@ -11,31 +11,32 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * <p>An object that does not implement/extend any abstract game concept, but is rather a unique object that is assigned to a game window to define how the game is viewed.</p>
- * <p>All {@link GEntity} objects should be able to generate a new {@link GCamera} object that is bound to their location.</p>
+ * <p>All {@link Entity} objects should be able to generate a new {@link Camera} object that is bound to their location.</p>
  * <p>
- * {@link GCamera} objects should also permit an unbounded view, in which case the {@link GCamera} is not bound to the location of a {@link GEntity}, but rather follows a pre-defined set of rules.
+ * {@link Camera} objects should also permit an unbounded view, in which case the {@link Camera} is not bound to the location of a {@link Entity}, but rather follows a pre-defined set of rules.
  *     <ul>
- *         <li>For example, an unbounded {@link GCamera} could be used via a CameraTransition (not yet available) to pan/move/zoom/etc. to any location on the map given a set of movement instructions.</li>
+ *         <li>For example, an unbounded {@link Camera} could be used via a CameraTransition (not yet available) to pan/move/zoom/etc. to any location on the map given a set of movement instructions.</li>
  *     </ul>
  * </p>
- * <p>{@link GCamera} objects should be able to have tints, zoom values, vision radius, etc.</p>
+ * <p>{@link Camera} objects should be able to have tints, zoom values, vision radius, etc.</p>
  * <p><b>Details</b></p>
  * <ol>
- *     <li>The location of the {@link GCamera} represents the <i>center</i> of the {@link GCamera camera's} view region, <i>not</i> the top-left corner as is the case with most {@code rectangle-based} implementations.</li>
+ *     <li>The location of the {@link Camera} represents the <i>center</i> of the {@link Camera camera's} view region, <i>not</i> the top-left corner as is the case with most {@code rectangle-based} implementations.</li>
  * </ol>
  */
-public class GCamera
+public class Camera
         implements SpringableWrapper {
     
     private final StrictSpringable springable;
     
+    //
     
-    private final ReadOnlyObjectWrapper<GMap> gameMapProperty;
+    private final ReadOnlyObjectWrapper<GameMap> gameMapProperty;
     
     private final ReadOnlyIntegerWrapper xOffsetProperty;
     private final ReadOnlyIntegerWrapper yOffsetProperty;
     
-    public GCamera(@NotNull Springable springable) {
+    public Camera(@NotNull Springable springable) {
         this.springable = springable.asStrict();
         
         
@@ -47,20 +48,20 @@ public class GCamera
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    protected final ReadOnlyObjectWrapper<GMap> gameMapModifiableProperty() {
+    protected final ReadOnlyObjectWrapper<GameMap> gameMapModifiableProperty() {
         return gameMapProperty;
     }
     
-    public final ReadOnlyObjectProperty<GMap> gameMapProperty() {
+    public final ReadOnlyObjectProperty<GameMap> gameMapProperty() {
         return gameMapProperty.getReadOnlyProperty();
     }
     
-    public final GMap getGameMap() {
+    public final GameMap getGameMap() {
         return gameMapProperty.get();
     }
     
-    protected final GMap setGameMap(GMap newValue) {
-        GMap oldValue = getGameMap();
+    protected final GameMap setGameMap(GameMap newValue) {
+        GameMap oldValue = getGameMap();
         gameMapProperty.set(newValue);
         return oldValue;
     }

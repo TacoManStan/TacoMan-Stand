@@ -1,6 +1,6 @@
 package com.taco.suit_lady.logic.game;
 
-import com.taco.suit_lady.logic.game.interfaces.GAttributable;
+import com.taco.suit_lady.logic.game.interfaces.Attributable;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
@@ -16,19 +16,19 @@ import org.springframework.context.ConfigurableApplicationContext;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 
-public class GAttributeContainer
-        implements Springable, Lockable, GAttributable {
+public class AttributeContainer
+        implements Springable, Lockable, Attributable {
     
     private final StrictSpringable springable;
     private final ReentrantLock lock;
     
     //
     
-    private final GAttributable owner;
+    private final Attributable owner;
     
     private final MapProperty<String, Object> attributes;
     
-    public GAttributeContainer(@NotNull Springable springable, @Nullable ReentrantLock lock, @NotNull GAttributable owner) {
+    public AttributeContainer(@NotNull Springable springable, @Nullable ReentrantLock lock, @NotNull Attributable owner) {
         this.springable = springable.asStrict();
         this.lock = lock != null ? lock : new ReentrantLock();
         
@@ -39,7 +39,7 @@ public class GAttributeContainer
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final GAttributable getOwner() {
+    public final Attributable getOwner() {
         return owner;
     }
     

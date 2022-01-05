@@ -1,8 +1,8 @@
 package com.taco.suit_lady.logic.game.objects;
 
-import com.taco.suit_lady.logic.game.GAttributeContainer;
-import com.taco.suit_lady.logic.game.GEntity;
-import com.taco.suit_lady.logic.game.interfaces.GAttributeContainable;
+import com.taco.suit_lady.logic.game.AttributeContainer;
+import com.taco.suit_lady.logic.game.Entity;
+import com.taco.suit_lady.logic.game.interfaces.AttributeContainable;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
@@ -14,25 +14,25 @@ import org.springframework.context.ConfigurableApplicationContext;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class GObject
-        implements Lockable, GAttributeContainable, GEntity {
+public class Object
+        implements Lockable, AttributeContainable, Entity {
     
     private final StrictSpringable springable;
     private final ReentrantLock lock;
     
-    private final GAttributeContainer attributes;
+    private final AttributeContainer attributes;
     
-    public GObject(@NotNull Springable springable, @Nullable ReentrantLock lock) {
+    public Object(@NotNull Springable springable, @Nullable ReentrantLock lock) {
         this.springable = springable.asStrict();
         this.lock = lock != null ? lock : new ReentrantLock();
         
-        this.attributes = new GAttributeContainer(this, lock, this);
+        this.attributes = new AttributeContainer(this, lock, this);
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override
-    public final @NotNull GAttributeContainer attributes() {
+    public final @NotNull AttributeContainer attributes() {
         return attributes;
     }
     

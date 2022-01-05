@@ -1,4 +1,4 @@
 package com.taco.suit_lady.logic.game.objects.units;
 
-public class GUnit {
+public class Unit {
 }

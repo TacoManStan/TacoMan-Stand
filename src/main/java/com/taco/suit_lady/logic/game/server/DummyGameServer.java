@@ -1,7 +1,7 @@
 package com.taco.suit_lady.logic.game.server;
 
-public class GDummyServer
-        implements GServer {
+public class DummyGameServer
+        implements GameServer {
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     

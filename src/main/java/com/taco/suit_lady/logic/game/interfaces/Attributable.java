@@ -1,10 +1,8 @@
 package com.taco.suit_lady.logic.game.interfaces;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.function.Predicate;
 
-public interface GAttributable {
+public interface Attributable {
     
     default <V> V get(String key) {
         return get(key, null);
