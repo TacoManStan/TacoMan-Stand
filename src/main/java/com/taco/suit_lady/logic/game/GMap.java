@@ -1,12 +1,15 @@
 package com.taco.suit_lady.logic.game;
 
+import com.taco.suit_lady.logic.game.objects.GObject;
 import com.taco.suit_lady.logic.game.objects.GTile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+
 public class GMap {
     
-    private final int tileSize = 20; // The number of "pixels" comprising each tile.
+    private final int tileSize = 25; // The number of "pixels" comprising each tile.
     
     //
     
@@ -14,19 +17,20 @@ public class GMap {
     private final int height;
     
     private final GTile[][] tileMap;
+    private final ArrayList<GObject> mapObjects;
     
     public GMap(int width, int height) {
         this.width = width;
         this.height = height;
         
         this.tileMap = new GTile[width][height];
+        this.mapObjects = new ArrayList<>();
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">
     
     public final GMap init() {
         initTiles();
-        
         return this;
     }
     
@@ -68,6 +72,10 @@ public class GMap {
     
     public final GTile[][] getTileMap() {
         return tileMap;
+    }
+    
+    public final ArrayList<GObject> mapObjects() {
+        return mapObjects;
     }
     
     //</editor-fold>
