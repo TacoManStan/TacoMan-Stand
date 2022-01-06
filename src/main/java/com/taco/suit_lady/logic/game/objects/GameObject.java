@@ -16,7 +16,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -77,7 +76,7 @@ public class GameObject
         this.tickable = new AutoManagedTickable<>(this) {
             @Override
             protected void step() {
-            
+                commander.tick();
             }
         };
         
