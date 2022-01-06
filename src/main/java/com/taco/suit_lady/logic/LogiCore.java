@@ -12,16 +12,17 @@ import java.util.concurrent.*;
 
 @Component
 public class LogiCore
-        implements Springable
-{
+        implements Springable {
+    
     private final FxWeaver weaver;
     private final ConfigurableApplicationContext ctx;
+    
+    //
     
     private final ThreadPoolExecutor sequentialExecutor; // TODO - Implement both asynchronous and synchronous executor options
     private final ScheduledThreadPoolExecutor scheduledExecutor;
     
-    public LogiCore(FxWeaver weaver, ConfigurableApplicationContext ctx)
-    {
+    public LogiCore(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         this.weaver = weaver;
         this.ctx = ctx;
         
@@ -40,14 +41,12 @@ public class LogiCore
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override
-    public @NotNull FxWeaver weaver()
-    {
+    public @NotNull FxWeaver weaver() {
         return weaver;
     }
     
     @Override
-    public @NotNull ConfigurableApplicationContext ctx()
-    {
+    public @NotNull ConfigurableApplicationContext ctx() {
         return ctx;
     }
     
