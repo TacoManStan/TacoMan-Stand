@@ -194,6 +194,10 @@ public class ResourceTools
         });
     }
     
+    public Image getDummyImage() {
+        return getImage("/", "Flork_of_Taco", "png");
+    }
+    
     // Update
     
     public <V> V update(String groupKey, String lookupKey, V newValue)
