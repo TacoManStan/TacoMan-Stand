@@ -2,21 +2,21 @@ package com.taco.suit_lady.logic.game.objects;
 
 import com.taco.suit_lady.logic.game.GameMap;
 
-public class Tile {
+public class GameTile {
     
     private final GameMap owner;
     
     private final int xLoc;
     private final int yLoc;
     
-    public Tile(GameMap owner, int xLoc, int yLoc) {
+    public GameTile(GameMap owner, int xLoc, int yLoc) {
         this.owner = owner;
         
         this.xLoc = xLoc;
         this.yLoc = yLoc;
     }
     
-    public final Tile getNeighbor(int x, int y) {
+    public final GameTile getNeighbor(int x, int y) {
         return owner.getNeighbor(this, x, y);
     }
     

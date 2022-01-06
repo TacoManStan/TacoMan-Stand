@@ -10,7 +10,6 @@ import java.lang.reflect.Array;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -235,7 +234,7 @@ public class ArrayTools {
      * @return True if the specified values can be retrieved from the specified
      * array, false otherwise.
      */
-    public static boolean isValidArray(Object[][] array, int i, int j) {
+    public static boolean isInMatrixBounds(Object[][] array, int i, int j) {
         return i >= 0 && j >= 0 && i < array.length && j < array[i].length;
     }
     

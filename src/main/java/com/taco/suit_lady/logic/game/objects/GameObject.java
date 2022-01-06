@@ -246,17 +246,17 @@ public class GameObject
     
     //</editor-fold>
     
-    public final @NotNull Tile[][] getOccupyingTiles() {
+    public final @NotNull GameTile[][] getOccupyingTiles() {
         final int adjustedMinX = getXLocation() / getGameMap().getTileSize();
         final int adjustedMinY = getYLocation() / getGameMap().getTileSize();
         final int adjustedMaxX = (getWidth() + getXLocation()) / getGameMap().getTileSize();
         final int adjustedMaxY = (getHeight() + getYLocation()) / getGameMap().getTileSize();
         
-        final Tile[][] occupyingTiles = new Tile[(adjustedMaxX - adjustedMinX) + 1][(adjustedMaxY - adjustedMinY) + 1];
-        for (int i = 0; i < occupyingTiles.length; i++)
-            for (int j = 0; j < occupyingTiles[i].length; j++)
-                occupyingTiles[i][j] = getGameMap().getTileMap()[i + adjustedMinX][j + adjustedMinY];
+        final GameTile[][] occupyingGameTiles = new GameTile[(adjustedMaxX - adjustedMinX) + 1][(adjustedMaxY - adjustedMinY) + 1];
+        for (int i = 0; i < occupyingGameTiles.length; i++)
+            for (int j = 0; j < occupyingGameTiles[i].length; j++)
+                occupyingGameTiles[i][j] = getGameMap().getTileMap()[i + adjustedMinX][j + adjustedMinY];
         
-        return occupyingTiles;
+        return occupyingGameTiles;
     }
 }

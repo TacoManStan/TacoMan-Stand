@@ -1,60 +1,48 @@
 package com.taco.suit_lady.logic.game;
 
 import com.taco.suit_lady.ui.AppUI;
+import com.taco.suit_lady.ui.Content;
 import com.taco.suit_lady.ui.UIBook;
-import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotContentController.MouseDragData;
-import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotIterator;
-import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotIterator.MandelbrotColor;
 import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotContentHandler;
-import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotContentSelectorPage;
-import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotContentSelectorPageController;
-import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotElementController;
 import com.taco.suit_lady.ui.jfx.components.BoundCanvas;
-import com.taco.suit_lady.ui.jfx.components.painting.SLEllipsePaintCommand;
-import com.taco.suit_lady.ui.jfx.components.painting.SLImagePaintCommand;
-import com.taco.suit_lady.ui.jfx.components.painting.SLRectanglePaintCommand;
-import com.taco.suit_lady.ui.pages.impl.content_selector.ListableContent;
+import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
-import com.taco.suit_lady.util.tools.ExceptionTools;
+import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.TB;
-import com.taco.suit_lady.util.tools.TaskTools;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import com.taco.tacository.json.JFiles;
 import javafx.beans.binding.Bindings;
-import javafx.scene.paint.Color;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.*;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class GameViewContent extends ListableContent<
-        GameViewContentData,
-        GameViewContentController,
-        MandelbrotContentSelectorPage,
-        MandelbrotContentSelectorPageController,
-        MandelbrotElementController,
-        MandelbrotContentHandler,
-        GameViewContent>
-        implements UIDProcessable {
+public class GameViewContent extends Content<GameViewContentData, GameViewContentController>
+        implements UIDProcessable, Lockable {
     
     private final ReentrantLock lock;
     
-    private final MandelbrotIterator iterator;
-    
-    private final SLRectanglePaintCommand selectionBoxPaintCommand;
-    private final SLImagePaintCommand selectionBoxPaintCommand2;
-    private final SLEllipsePaintCommand selectionCirclePaintCommand;
+    //
     
     private GameViewPage coverPage;
     
-    public GameViewContent(@NotNull MandelbrotContentHandler contentHandler) {
-        super(contentHandler);
+    //
+    
+    private final ObjectProperty<GameMap> gameMapProperty;
+    
+    public GameViewContent(@NotNull Springable springable) {
+        super(springable);
         
         this.lock = new ReentrantLock();
         
-        injectBookshelf("Mandelbrot Demo", new UIBook(
+        //
+        
+        injectBookshelf("Game View", new UIBook(
                 this,
-                "Mandelbrot Demo",
+                "Game View",
                 "mandelbrot2",
                 uiBook -> TB.resources().get(
                         "pages",
@@ -65,36 +53,13 @@ public class GameViewContent extends ListableContent<
         getController().canvas().setCanvasListener((source, newWidth, newHeight) -> refreshCanvas());
         getCoverPage().getController().getRegenerateButton().setOnAction(event -> refreshCanvas());
         
-        this.selectionBoxPaintCommand = new SLRectanglePaintCommand(
-                lock, this, "selection-box",
-                null, 1,
-                null, Color.BLACK);
-        this.selectionBoxPaintCommand2 = new SLImagePaintCommand(
-                lock, this, "selection-box2",
-                null, 3);
-        this.selectionCirclePaintCommand = new SLEllipsePaintCommand(
-                lock, this, "selection-circle",
-                null, 2);
-        
-        this.selectionBoxPaintCommand.deactivate();
-        this.selectionBoxPaintCommand2.deactivate();
-        this.selectionCirclePaintCommand.deactivate();
-        
-        
-        getOverlayHandler().getOverlay("default").addPaintCommand(selectionBoxPaintCommand);
-        //        getOverlayHandler().getOverlay("default").addPaintCommand(selectionBoxPaintCommand2);
-        //        getOverlayHandler().getOverlay("default").addPaintCommand(selectionCirclePaintCommand);
-        
-        //        this.selectionBoxPaintCommand = new RectanglePaintCommand(false, lock);
-        //        ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas().addPaintCommand(selectionBoxPaintCommand);
-        
-        getController().setDragConsumer(dragData -> zoom(dragData));
-        getController().setMoveConsumer(dragData -> updateZoomBox(dragData));
-        
-        iconImageProperty().bind(getController().canvas().imageProperty());
         initUIPage();
         
-        this.iterator = new MandelbrotIterator(this, lock, getData(), getController().canvas(), getCoverPage().getController().getProgressBar());
+        //
+        
+        this.gameMapProperty = new SimpleObjectProperty<>();
+        
+        initGame();
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">
@@ -155,6 +120,13 @@ public class GameViewContent extends ListableContent<
         getCoverPage().getController().getLoadConfigButton().setOnAction(event -> JFiles.load(getData()));
     }
     
+    private void initGame() {
+        int pxWidth = (int) getController().canvas().getWidth();
+        int pxHeight = (int) getController().canvas().getHeight();
+        
+        
+    }
+    
     //</editor-fold>
     
     //<editor-fold desc="--- PROPERTIES ---">
@@ -163,9 +135,30 @@ public class GameViewContent extends ListableContent<
         return coverPage;
     }
     
+    //
+    
+    public final ObjectProperty<GameMap> gameMapProperty() {
+        return gameMapProperty;
+    }
+    
+    public final GameMap getGameMap() {
+        return gameMapProperty.get();
+    }
+    
+    public final GameMap setGameMap(GameMap newValue) {
+        GameMap oldValue = getGameMap();
+        gameMapProperty.set(newValue);
+        return oldValue;
+    }
+    
     //</editor-fold>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+    @Override
+    public @NotNull ReentrantLock getLock() {
+        return lock;
+    }
     
     @Override
     public boolean isNullableLock() {
@@ -191,11 +184,6 @@ public class GameViewContent extends ListableContent<
     @Override
     protected void onDeactivate() { }
     
-    @Override
-    protected void onShutdown() {
-        iterator.shutdown();
-    }
-    
     //
     
     private UIDProcessor uidProcessor;
@@ -219,50 +207,8 @@ public class GameViewContent extends ListableContent<
     
     private void refreshCanvas() {
         sync(() -> FXTools.runFX(() -> {
-            final BoundCanvas canvas = getController().canvas();
-            final double newWidth = getController().canvas().getWidth();
-            final double newHeight = getController().canvas().getHeight();
-            
             FXTools.clearCanvasUnsafe(ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas());
-            
-            getData().resizeTo(newWidth, newHeight);
-            
-            iterator.run();
         }, true));
-    }
-    
-    private void redraw(MandelbrotColor[][] colors) {
-        FXTools.runFX(() -> TaskTools.sync(lock, () -> {
-            getCoverPage().getController().getProgressBar().setVisible(false);
-            for (int i = 0; i < colors.length; i++)
-                for (int j = 0; j < colors[i].length; j++) {
-                    final MandelbrotColor mandelbrotColor = colors[i][j];
-                    final Color color = mandelbrotColor != null ? mandelbrotColor.getColor() : Color.BLACK;
-                    getController().canvas().getGraphicsContext2D().getPixelWriter().setColor(i, j, color);
-                }
-        }), true);
-    }
-    
-    private void zoom(@NotNull MouseDragData dragData) {
-        if (!dragData.isValid())
-            throw ExceptionTools.ex("Drag Data is Invalid!");
-        selectionBoxPaintCommand.deactivate();
-        selectionBoxPaintCommand2.deactivate();
-        selectionCirclePaintCommand.deactivate();
-        
-        getData().zoomTo(dragData.getStartX(), dragData.getStartY(), dragData.getEndX(), dragData.getEndY());
-    }
-    
-    private void updateZoomBox(MouseDragData moveData) {
-        TaskTools.sync(lock, () -> {
-            selectionBoxPaintCommand.activate();
-            selectionBoxPaintCommand2.activate();
-            selectionCirclePaintCommand.activate();
-            
-            selectionBoxPaintCommand.setBounds(moveData.getBounds());
-            selectionBoxPaintCommand2.setBounds(moveData.getBounds());
-            selectionCirclePaintCommand.setBounds(moveData.getBounds());
-        });
     }
     
     //</editor-fold>
