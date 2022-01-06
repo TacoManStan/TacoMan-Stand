@@ -1,4 +1,4 @@
-package com.taco.suit_lady.logic.game.ui.content;
+package com.taco.suit_lady.logic.game;
 
 import com.taco.suit_lady.ui.ContentController;
 import com.taco.suit_lady.ui.jfx.components.BoundCanvas;
