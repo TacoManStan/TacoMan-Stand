@@ -114,8 +114,6 @@ public class Camera
      *     <li>For example, to center the camera around its target point, you would bind the x offset value to half of the viewport width.</li>
      *     <li>Negative values will result in the target point of the camera being off-screen (which is entirely legal and could potentially be useful in the future).</li>
      * </ol>
-     *
-     * @return
      */
     public final IntegerProperty xOffsetProperty() {
         return xOffsetProperty;
