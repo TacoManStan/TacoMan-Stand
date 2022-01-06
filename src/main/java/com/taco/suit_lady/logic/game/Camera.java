@@ -3,10 +3,7 @@ package com.taco.suit_lady.logic.game;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.springable.StrictSpringable;
-import javafx.beans.property.ReadOnlyIntegerProperty;
-import javafx.beans.property.ReadOnlyIntegerWrapper;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.*;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -33,8 +30,10 @@ public class Camera
     
     private final ReadOnlyObjectWrapper<GameMap> gameMapProperty;
     
-    private final ReadOnlyIntegerWrapper xOffsetProperty;
-    private final ReadOnlyIntegerWrapper yOffsetProperty;
+    private final IntegerProperty xLocationProperty;
+    private final IntegerProperty yLocationProperty;
+    private final IntegerProperty xOffsetProperty;
+    private final IntegerProperty yOffsetProperty;
     
     public Camera(@NotNull Springable springable) {
         this.springable = springable.asStrict();
@@ -42,8 +41,10 @@ public class Camera
         
         this.gameMapProperty = new ReadOnlyObjectWrapper<>();
         
-        this.xOffsetProperty = new ReadOnlyIntegerWrapper(0);
-        this.yOffsetProperty = new ReadOnlyIntegerWrapper(0);
+        this.xLocationProperty = new SimpleIntegerProperty(0);
+        this.yLocationProperty = new SimpleIntegerProperty(0);
+        this.xOffsetProperty = new SimpleIntegerProperty(0);
+        this.yOffsetProperty = new SimpleIntegerProperty(0);
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
@@ -66,14 +67,58 @@ public class Camera
         return oldValue;
     }
     
-    //
+    //<editor-fold desc="--- COORDINATES ---">
     
-    protected final ReadOnlyIntegerWrapper xOffsetModifiableProperty() {
-        return xOffsetProperty;
+    /**
+     * <p>Defines the x coordinate at which this camera is assigned.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>Location values represent the coordinates at the top left (0, 0) point of the viewport (e.g., Canvas).</li>
+     *     <li>Location values are represented in pixels, not tiles.</li>
+     * </ol>
+     */
+    public final IntegerProperty xLocationProperty() {
+        return xLocationProperty;
     }
     
-    public final ReadOnlyIntegerProperty xOffsetProperty() {
-        return xOffsetProperty.getReadOnlyProperty();
+    public final int getXLocation() {
+        return xLocationProperty.get();
+    }
+    
+    public final int setXLocation(int newValue) {
+        int oldValue = getXLocation();
+        xLocationProperty.set(newValue);
+        return oldValue;
+    }
+    
+    
+    public final IntegerProperty yLocationProperty() {
+        return yLocationProperty;
+    }
+    
+    public final int getYLocation() {
+        return yLocationProperty.get();
+    }
+    
+    public final int setYLocation(int newValue) {
+        int oldValue = getYLocation();
+        yLocationProperty.set(newValue);
+        return oldValue;
+    }
+    
+    
+    /**
+     * <p>Represents the number of units (pixels, not tiles) this camera's view is shifted.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>For example, to center the camera around its target point, you would bind the x offset value to half of the viewport width.</li>
+     *     <li>Negative values will result in the target point of the camera being off-screen (which is entirely legal and could potentially be useful in the future).</li>
+     * </ol>
+     *
+     * @return
+     */
+    public final IntegerProperty xOffsetProperty() {
+        return xOffsetProperty;
     }
     
     public final int getXOffset() {
@@ -87,12 +132,8 @@ public class Camera
     }
     
     
-    public final ReadOnlyIntegerWrapper yOffsetModifiableProperty() {
+    public final IntegerProperty yOffsetProperty() {
         return yOffsetProperty;
-    }
-    
-    public final ReadOnlyIntegerProperty yOffsetProperty() {
-        return yOffsetProperty.getReadOnlyProperty();
     }
     
     public final int getYOffset() {
@@ -104,6 +145,8 @@ public class Camera
         yOffsetProperty.set(newValue);
         return oldValue;
     }
+    
+    //</editor-fold>
     
     //</editor-fold>
     
