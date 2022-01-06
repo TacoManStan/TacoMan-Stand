@@ -103,7 +103,6 @@ public class GameMap
         return tileMap[xTemp][yTemp];
     }
     
-    @SuppressWarnings("ManualArrayCopy")
     public final @NotNull GameTile[][] getNeighbors(@NotNull GameTile gameTile, int xReach, int yReach) {
         // Reach parameters define how many tiles in each direction should be returned, excluding the host tile.
         // Therefore, the reach value must be doubled to account for opposite directions and then 1 must be added to account for the host tile.
@@ -119,6 +118,7 @@ public class GameMap
         
         return neighbors;
     }
+    
     
     /**
      * <p>Returns a {@link List} of {@link GameTile tiles} partially or entirely visible in the specified {@link Camera Camera's} bounds.</p>

@@ -29,15 +29,15 @@ public class GameObject
     
     private final AutoManagedTickable<GameObject> tickable;
     
-    private final ReadOnlyObjectWrapper<GameMap> gameMapProperty;
+    private final ObjectProperty<GameMap> gameMapProperty;
     private final AttributeContainer attributes;
     
     
-    private final ReadOnlyIntegerWrapper xLocProperty;
-    private final ReadOnlyIntegerWrapper yLocProperty;
+    private final IntegerProperty xLocProperty;
+    private final IntegerProperty yLocProperty;
     
-    private final ReadOnlyIntegerWrapper widthProperty;
-    private final ReadOnlyIntegerWrapper heightProperty;
+    private final IntegerProperty widthProperty;
+    private final IntegerProperty heightProperty;
     
     //
     
@@ -77,18 +77,19 @@ public class GameObject
             @Override
             protected void step() {
                 commander.tick();
+                //TODO: Update Graphics Loop?
             }
         };
         
-        this.gameMapProperty = new ReadOnlyObjectWrapper<>(gameMap);
+        this.gameMapProperty = new SimpleObjectProperty<>(gameMap);
         this.attributes = new AttributeContainer(this, lock, this);
         
         
-        this.xLocProperty = new ReadOnlyIntegerWrapper();
-        this.yLocProperty = new ReadOnlyIntegerWrapper();
+        this.xLocProperty = new SimpleIntegerProperty();
+        this.yLocProperty = new SimpleIntegerProperty();
         
-        this.widthProperty = new ReadOnlyIntegerWrapper();
-        this.heightProperty = new ReadOnlyIntegerWrapper();
+        this.widthProperty = new SimpleIntegerProperty();
+        this.heightProperty = new SimpleIntegerProperty();
         
         //
         
@@ -101,19 +102,15 @@ public class GameObject
     
     //<editor-fold desc="--- MAP PROPERTIES ---">
     
-    protected final ReadOnlyObjectWrapper<GameMap> gameMapModifiableProperty() {
+    public final ObjectProperty<GameMap> gameMapProperty() {
         return gameMapProperty;
-    }
-    
-    public final ReadOnlyObjectProperty<GameMap> gameMapProperty() {
-        return gameMapProperty.getReadOnlyProperty();
     }
     
     public final GameMap getGameMap() {
         return gameMapProperty.get();
     }
     
-    protected final GameMap setGameMap(GameMap newValue) {
+    public final GameMap setGameMap(GameMap newValue) {
         GameMap oldValue = getGameMap();
         gameMapProperty.set(newValue);
         return oldValue;
@@ -121,76 +118,60 @@ public class GameObject
     
     //
     
-    protected final ReadOnlyIntegerWrapper xLocModifiableProperty() {
+    public final IntegerProperty xLocProperty() {
         return xLocProperty;
-    }
-    
-    public final ReadOnlyIntegerProperty xLocProperty() {
-        return xLocProperty.getReadOnlyProperty();
     }
     
     public final int getXLocation() {
         return xLocProperty.get();
     }
     
-    protected final int setXLocation(int newValue) {
+    public final int setXLocation(int newValue) {
         int oldValue = getXLocation();
         xLocProperty.set(newValue);
         return oldValue;
     }
     
     
-    protected final ReadOnlyIntegerWrapper yLocModifiableProperty() {
+    public final IntegerProperty yLocProperty() {
         return yLocProperty;
-    }
-    
-    public final ReadOnlyIntegerProperty yLocProperty() {
-        return yLocProperty.getReadOnlyProperty();
     }
     
     public final int getYLocation() {
         return yLocProperty.get();
     }
     
-    protected final int setYLocation(int newValue) {
+    public final int setYLocation(int newValue) {
         int oldValue = getYLocation();
         yLocProperty.set(newValue);
         return oldValue;
     }
     
     
-    protected final ReadOnlyIntegerWrapper widthModifiableProperty() {
+    public final IntegerProperty widthProperty() {
         return widthProperty;
-    }
-    
-    public final ReadOnlyIntegerProperty widthProperty() {
-        return widthProperty.getReadOnlyProperty();
     }
     
     public final int getWidth() {
         return widthProperty.get();
     }
     
-    protected final int setWidth(int newValue) {
+    public final int setWidth(int newValue) {
         int oldValue = getWidth();
         widthProperty.set(newValue);
         return oldValue;
     }
     
     
-    protected final ReadOnlyIntegerWrapper heightModifiableProperty() {
+    public final IntegerProperty heightProperty() {
         return heightProperty;
-    }
-    
-    public final ReadOnlyIntegerProperty heightProperty() {
-        return heightProperty.getReadOnlyProperty();
     }
     
     public final int getHeight() {
         return heightProperty.get();
     }
     
-    protected final int setHeight(int newValue) {
+    public final int setHeight(int newValue) {
         int oldValue = getHeight();
         heightProperty.set(newValue);
         return oldValue;
