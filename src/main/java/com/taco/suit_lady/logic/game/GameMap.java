@@ -30,15 +30,22 @@ public class GameMap
     private final GameTile[][] tileMap;
     private final ArrayList<GameObject> mapObjects;
     
+    
+    private final GameMapModel model;
+    
     public GameMap(@NotNull Springable springable, int width, int height) {
         this.springable = springable.asStrict();
         
+        //
         
         this.width = width;
         this.height = height;
         
         this.tileMap = new GameTile[width][height];
         this.mapObjects = new ArrayList<>();
+        
+        
+        this.model = new GameMapModel(this);
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">
@@ -90,6 +97,11 @@ public class GameMap
     
     public final ArrayList<GameObject> mapObjects() {
         return mapObjects;
+    }
+    
+    
+    public final GameMapModel getModel() {
+        return model;
     }
     
     //</editor-fold>
