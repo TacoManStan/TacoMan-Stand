@@ -110,8 +110,12 @@ public class GameMap
         final GameTile[][] neighbors = new GameTile[(xReach * 2) + 1][(yReach * 2) + 1];
         
         for (int i = -xReach; i < xReach; i++)
-            for (int j = -yReach; j < yReach; j++)
-                neighbors[i][j] = tileMap[gameTile.getXLoc() + i][gameTile.getYLoc() + j];
+            for (int j = -yReach; j < yReach; j++) {
+                int xLoc = gameTile.getXLoc() + i;
+                int yLoc = gameTile.getYLoc() + j;
+                if (ArrayTools.isInMatrixBounds(getTileMap(), xLoc, yLoc))
+                    neighbors[i][j] = tileMap[gameTile.getXLoc() + i][gameTile.getYLoc() + j];
+            }
         
         return neighbors;
     }
