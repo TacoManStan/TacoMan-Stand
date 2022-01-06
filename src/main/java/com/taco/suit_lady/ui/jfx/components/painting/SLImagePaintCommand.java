@@ -19,7 +19,7 @@ public class SLImagePaintCommand extends SLPaintCommand<ImageView> {
             @Nullable Predicate<? super SLPaintCommand<ImageView>> autoRemoveCondition, int priority) {
         super(lock, springable, name, autoRemoveCondition, priority);
         
-        this.imageView = new ImageView(ResourceTools.get().getDummyImage());
+        this.imageView = new ImageView(ResourceTools.get().getDummyImage(ResourceTools.AVATAR));
     }
     
     public SLImagePaintCommand(

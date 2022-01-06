@@ -169,7 +169,7 @@ public class FXMainController
     
     private final int AVATAR_WIDTH = 50;
     private final int AVATAR_HEIGHT = 50;
-    private final String AVATAR_PATH = "images/Flork_of_Taco.png";
+    private final String AVATAR_PATH = "images/Avatar.png";
     
     private void initializeAvatar()
     {

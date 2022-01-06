@@ -194,8 +194,11 @@ public class ResourceTools
         });
     }
     
-    public Image getDummyImage() {
-        return getImage("/", "Flork_of_Taco", "png");
+    public static final String AVATAR = "Avatar";
+    public static final String MAP = "Map";
+    
+    public Image getDummyImage(String name) {
+        return getImage("/", name, "png");
     }
     
     // Update
