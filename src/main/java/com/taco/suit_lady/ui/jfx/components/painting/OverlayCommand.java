@@ -21,8 +21,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 
-public abstract class SLPaintCommand<N extends Node>
-        implements Lockable, Springable, Nameable, Comparable<SLPaintCommand<?>>, ObservablePropertyContainable {
+public abstract class OverlayCommand<N extends Node>
+        implements Lockable, Springable, Nameable, Comparable<OverlayCommand<?>>, ObservablePropertyContainable {
     
     private final ReentrantLock lock;
     private final StrictSpringable springable;
@@ -31,7 +31,7 @@ public abstract class SLPaintCommand<N extends Node>
     private final ReadOnlyObjectWrapper<Overlay> ownerProperty; // Try to decouple this if you can.
     private final ReadOnlyObjectWrapper<N> nodeProperty;
     
-    private final Predicate<? super SLPaintCommand<N>> autoRemoveCondition;
+    private final Predicate<? super OverlayCommand<N>> autoRemoveCondition;
     private final BooleanProperty activeProperty;
     private final IntegerProperty paintPriorityProperty;
     
@@ -43,24 +43,26 @@ public abstract class SLPaintCommand<N extends Node>
     
     private final ObjectBinding<Bounds2D> boundsBinding;
     
-    public SLPaintCommand(@NotNull Springable springable, @NotNull String name, int priority) {
+    public OverlayCommand(@NotNull Springable springable, @NotNull String name, int priority) {
         this(null, springable, name, null, priority);
     }
     
-    public SLPaintCommand(@NotNull Springable springable, @NotNull String name, @Nullable Predicate<? super SLPaintCommand<N>> autoRemoveCondition, int priority) {
+    public OverlayCommand(@NotNull Springable springable, @NotNull String name, @Nullable Predicate<? super OverlayCommand<N>> autoRemoveCondition, int priority) {
         this(null, springable, name, autoRemoveCondition, priority);
     }
     
-    public SLPaintCommand(@Nullable ReentrantLock lock, @NotNull Springable springable, @NotNull String name, int priority) {
+    public OverlayCommand(@Nullable ReentrantLock lock, @NotNull Springable springable, @NotNull String name, int priority) {
         this(lock, springable, name, null, priority);
     }
     
-    public SLPaintCommand(
+    public OverlayCommand(
             @Nullable ReentrantLock lock, @NotNull Springable springable, @NotNull String name,
-            @Nullable Predicate<? super SLPaintCommand<N>> autoRemoveCondition, int priority) {
+            @Nullable Predicate<? super OverlayCommand<N>> autoRemoveCondition, int priority) {
         this.lock = lock;
         this.springable = ExceptionTools.nullCheck(springable, "Springable Input").asStrict();
+        
         this.name = name;
+        
         
         this.ownerProperty = new ReadOnlyObjectWrapper<>();
         this.nodeProperty = new ReadOnlyObjectWrapper<>();
@@ -118,7 +120,7 @@ public abstract class SLPaintCommand<N extends Node>
     }
     
     
-    protected final @NotNull Predicate<? super SLPaintCommand<N>> getAutoRemoveCondition() {
+    protected final @NotNull Predicate<? super OverlayCommand<N>> getAutoRemoveCondition() {
         return autoRemoveCondition;
     }
     
@@ -127,12 +129,12 @@ public abstract class SLPaintCommand<N extends Node>
         return activeProperty;
     }
     
-    public final @NotNull SLPaintCommand<N> activate() {
+    public final @NotNull OverlayCommand<N> activate() {
         activeProperty.set(true);
         return this;
     }
     
-    public final @NotNull SLPaintCommand<N> deactivate() {
+    public final @NotNull OverlayCommand<N> deactivate() {
         activeProperty.set(false);
         return this;
     }
@@ -296,7 +298,7 @@ public abstract class SLPaintCommand<N extends Node>
     //
     
     @Override
-    public int compareTo(@NotNull SLPaintCommand<?> o) {
+    public int compareTo(@NotNull OverlayCommand<?> o) {
         return Integer.compare((Math.abs(getPaintPriority())), Math.abs(o.getPaintPriority()));
     }
     

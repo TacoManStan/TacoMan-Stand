@@ -4,15 +4,16 @@ import com.taco.suit_lady.ui.AppUI;
 import com.taco.suit_lady.ui.UIBook;
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotContentController.MouseDragData;
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotIterator.MandelbrotColor;
-import com.taco.suit_lady.ui.jfx.components.BoundCanvas;
+import com.taco.suit_lady.ui.jfx.components.canvas.BoundCanvas;
+import com.taco.suit_lady.ui.jfx.components.canvas.shapes.ArcPaintCommand;
 import com.taco.suit_lady.ui.pages.impl.content_selector.ListableContent;
 import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotContentHandler;
 import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotContentSelectorPage;
 import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotContentSelectorPageController;
 import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotElementController;
-import com.taco.suit_lady.ui.jfx.components.painting.SLEllipsePaintCommand;
-import com.taco.suit_lady.ui.jfx.components.painting.SLImagePaintCommand;
-import com.taco.suit_lady.ui.jfx.components.painting.SLRectanglePaintCommand;
+import com.taco.suit_lady.ui.jfx.components.painting.EllipseOverlayCommand;
+import com.taco.suit_lady.ui.jfx.components.painting.ImageOverlayCommand;
+import com.taco.suit_lady.ui.jfx.components.painting.RectangleOverlayCommand;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.tools.ExceptionTools;
@@ -40,9 +41,11 @@ public class MandelbrotContent extends ListableContent<
     
     private final MandelbrotIterator iterator;
     
-    private final SLRectanglePaintCommand selectionBoxPaintCommand;
-    private final SLImagePaintCommand selectionBoxPaintCommand2;
-    private final SLEllipsePaintCommand selectionCirclePaintCommand;
+    private final RectangleOverlayCommand selectionBoxPaintCommand;
+    private final ImageOverlayCommand selectionBoxPaintCommand2;
+    private final EllipseOverlayCommand selectionCirclePaintCommand;
+    
+    private final ArcPaintCommand testPaintCommand;
     
     private MandelbrotPage coverPage;
     
@@ -64,16 +67,18 @@ public class MandelbrotContent extends ListableContent<
         getController().canvas().setCanvasListener((source, newWidth, newHeight) -> refreshCanvas());
         getCoverPage().getController().getRegenerateButton().setOnAction(event -> refreshCanvas());
         
-        this.selectionBoxPaintCommand = new SLRectanglePaintCommand(
+        this.selectionBoxPaintCommand = new RectangleOverlayCommand(
                 lock, this, "selection-box",
                 null, 1,
                 null, Color.BLACK);
-        this.selectionBoxPaintCommand2 = new SLImagePaintCommand(
+        this.selectionBoxPaintCommand2 = new ImageOverlayCommand(
                 lock, this, "selection-box2",
                 null, 3);
-        this.selectionCirclePaintCommand = new SLEllipsePaintCommand(
+        this.selectionCirclePaintCommand = new EllipseOverlayCommand(
                 lock, this, "selection-circle",
                 null, 2);
+        
+        this.testPaintCommand = new ArcPaintCommand(this, lock, 50, 120, null);
         
         this.selectionBoxPaintCommand.deactivate();
         this.selectionBoxPaintCommand2.deactivate();
@@ -81,6 +86,7 @@ public class MandelbrotContent extends ListableContent<
         
         
         getOverlayHandler().getOverlay("default").addPaintCommand(selectionBoxPaintCommand);
+        getController().canvas().addPaintCommand(testPaintCommand);
         //        getOverlayHandler().getOverlay("default").addPaintCommand(selectionBoxPaintCommand2);
         //        getOverlayHandler().getOverlay("default").addPaintCommand(selectionCirclePaintCommand);
         
@@ -261,6 +267,8 @@ public class MandelbrotContent extends ListableContent<
             selectionBoxPaintCommand.setBounds(moveData.getBounds());
             selectionBoxPaintCommand2.setBounds(moveData.getBounds());
             selectionCirclePaintCommand.setBounds(moveData.getBounds());
+            
+            testPaintCommand.boundsProperty().setBounds(moveData.getBounds());
         });
     }
     

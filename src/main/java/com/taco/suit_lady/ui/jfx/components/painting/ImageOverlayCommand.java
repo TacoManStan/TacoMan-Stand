@@ -10,39 +10,39 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 
-public class SLImagePaintCommand extends SLPaintCommand<ImageView> {
+public class ImageOverlayCommand extends OverlayCommand<ImageView> {
     
     private final ImageView imageView;
     
-    public SLImagePaintCommand(
+    public ImageOverlayCommand(
             @Nullable ReentrantLock lock, @NotNull Springable springable, @NotNull String name,
-            @Nullable Predicate<? super SLPaintCommand<ImageView>> autoRemoveCondition, int priority) {
+            @Nullable Predicate<? super OverlayCommand<ImageView>> autoRemoveCondition, int priority) {
         super(lock, springable, name, autoRemoveCondition, priority);
         
         this.imageView = new ImageView(ResourceTools.get().getDummyImage(ResourceTools.AVATAR));
     }
     
-    public SLImagePaintCommand(
+    public ImageOverlayCommand(
             @Nullable ReentrantLock lock, @NotNull Springable springable, @NotNull String name,
-            @Nullable Predicate<? super SLPaintCommand<ImageView>> autoRemoveCondition, int priority,
+            @Nullable Predicate<? super OverlayCommand<ImageView>> autoRemoveCondition, int priority,
             String imageID, String pathID) {
         super(lock, springable, name, autoRemoveCondition, priority);
         
         this.imageView = new ImageView(ResourceTools.get().getImage(pathID, imageID, "png"));
     }
     
-    public SLImagePaintCommand(
+    public ImageOverlayCommand(
             @Nullable ReentrantLock lock, @NotNull Springable springable, @NotNull String name,
-            @Nullable Predicate<? super SLPaintCommand<ImageView>> autoRemoveCondition, int priority,
+            @Nullable Predicate<? super OverlayCommand<ImageView>> autoRemoveCondition, int priority,
             String url) {
         super(lock, springable, name, autoRemoveCondition, priority);
         
         this.imageView = new ImageView(url);
     }
     
-    public SLImagePaintCommand(
+    public ImageOverlayCommand(
             @Nullable ReentrantLock lock, @NotNull Springable springable, @NotNull String name,
-            @Nullable Predicate<? super SLPaintCommand<ImageView>> autoRemoveCondition, int priority,
+            @Nullable Predicate<? super OverlayCommand<ImageView>> autoRemoveCondition, int priority,
             Image image) {
         super(lock, springable, name, autoRemoveCondition, priority);
         

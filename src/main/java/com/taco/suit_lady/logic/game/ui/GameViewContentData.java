@@ -1,4 +1,4 @@
-package com.taco.suit_lady.logic.game;
+package com.taco.suit_lady.logic.game.ui;
 
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.taco.suit_lady._to_sort._new.interfaces.ObservablePropertyContainable;

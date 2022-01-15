@@ -1,6 +1,7 @@
 package com.taco.suit_lady.util.tools.fx_tools;
 
 import com.sun.javafx.application.PlatformImpl;
+import com.taco.suit_lady.ui.jfx.util.Bounds2D;
 import com.taco.suit_lady.util.SimplePredicate;
 import com.taco.suit_lady.util.UndefinedRuntimeException;
 import com.taco.suit_lady.util.tools.*;
@@ -39,7 +40,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.ArcType;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.scene.web.WebView;
@@ -861,32 +862,52 @@ public class FXTools {
     }
     
     
-    public static void drawRectangle(Canvas canvas, Rectangle rectangle, boolean wipeCanvas, boolean fill) {
-        ExceptionTools.nullCheck(canvas, "Canvas Input");
-        ExceptionTools.nullCheck(rectangle, "Rectangle Input");
-        
+    public static void drawRectangle(Canvas canvas, Bounds2D bounds, boolean wipeCanvas, boolean fill) {
         FXTools.runFX(() -> {
             if (wipeCanvas)
                 clearCanvasUnsafe(canvas);
             
             if (fill)
                 canvas.getGraphicsContext2D().fillRect(
-                        rectangle.getX(), rectangle.getY(),
-                        rectangle.getWidth(), rectangle.getHeight());
+                        bounds.getX(), bounds.getY(),
+                        bounds.getWidth(), bounds.getHeight());
             else
                 canvas.getGraphicsContext2D().strokeRect(
-                        rectangle.getX(), rectangle.getY(),
-                        rectangle.getWidth(), rectangle.getHeight());
+                        bounds.getX(), bounds.getY(),
+                        bounds.getWidth(), bounds.getHeight());
         }, true);
     }
     
-    public static void fillRectangle(Canvas canvas, Rectangle rectangle, boolean wipeCanvas) {
-        ExceptionTools.nullCheck(canvas, "Canvas Input");
-        ExceptionTools.nullCheck(rectangle, "Rectangle Input");
-        
-        canvas.getGraphicsContext2D().fillRect(
-                rectangle.getX(), rectangle.getY(),
-                rectangle.getWidth(), rectangle.getHeight());
+    public static void drawOval(Canvas canvas, Bounds2D bounds, boolean wipeCanvas, boolean fill) {
+        FXTools.runFX(() -> {
+            if (wipeCanvas)
+                clearCanvasUnsafe(canvas);
+            
+            if (fill)
+                canvas.getGraphicsContext2D().fillOval(
+                        bounds.getX(), bounds.getY(),
+                        bounds.getWidth(), bounds.getHeight());
+            else
+                canvas.getGraphicsContext2D().strokeOval(
+                        bounds.getX(), bounds.getY(),
+                        bounds.getWidth(), bounds.getHeight());
+        }, true);
+    }
+    
+    public static void drawArc(Canvas canvas, Bounds2D bounds, double startAngle, double arcExtent, ArcType closure, boolean wipeCanvas, boolean fill) {
+        FXTools.runFX(() -> {
+            if (wipeCanvas)
+                clearCanvasUnsafe(canvas);
+            
+            if (fill)
+                canvas.getGraphicsContext2D().fillArc(
+                        bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight(),
+                        startAngle, arcExtent, closure);
+            else
+                canvas.getGraphicsContext2D().strokeArc(
+                        bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight(),
+                        startAngle, arcExtent, closure);
+        }, true);
     }
     
     

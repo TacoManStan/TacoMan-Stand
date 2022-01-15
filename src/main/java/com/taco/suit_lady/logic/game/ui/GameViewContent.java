@@ -1,10 +1,9 @@
-package com.taco.suit_lady.logic.game;
+package com.taco.suit_lady.logic.game.ui;
 
+import com.taco.suit_lady.logic.game.GameMap;
 import com.taco.suit_lady.ui.AppUI;
 import com.taco.suit_lady.ui.Content;
 import com.taco.suit_lady.ui.UIBook;
-import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotContentHandler;
-import com.taco.suit_lady.ui.jfx.components.BoundCanvas;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
@@ -17,7 +16,6 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class GameViewContent extends Content<GameViewContentData, GameViewContentController>
@@ -50,15 +48,11 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
                         () -> coverPage = new GameViewPage(uiBook, this)),
                 null));
         
-        getController().canvas().setCanvasListener((source, newWidth, newHeight) -> refreshCanvas());
-        getCoverPage().getController().getRegenerateButton().setOnAction(event -> refreshCanvas());
-        
-        initUIPage();
+        this.gameMapProperty = new SimpleObjectProperty<>();
         
         //
         
-        this.gameMapProperty = new SimpleObjectProperty<>();
-        
+        initUIPage();
         initGame();
     }
     
@@ -121,10 +115,7 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
     }
     
     private void initGame() {
-        int pxWidth = (int) getController().canvas().getWidth();
-        int pxHeight = (int) getController().canvas().getHeight();
-        
-        
+        setGameMap(new GameMap(this, lock, 40, 20));
     }
     
     //</editor-fold>

@@ -9,8 +9,6 @@ import java.util.function.Predicate;
 //TODO: You're going to have to implement either A* or Dijkstra pathing for this to work for AI-controlled units.
 public class TargetedMoveCommand extends AutoManagedTickable<GameObject> {
     
-    private final
-    
     public TargetedMoveCommand(@Nullable GameObject owner) {
         super(owner);
     }

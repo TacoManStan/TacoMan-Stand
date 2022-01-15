@@ -1,6 +1,5 @@
 package com.taco.suit_lady.ui.jfx.components.painting;
 
-import com.taco.suit_lady.ui.jfx.util.Bounds2D;
 import com.taco.suit_lady.util.springable.Springable;
 import javafx.scene.shape.Ellipse;
 import org.jetbrains.annotations.NotNull;
@@ -9,13 +8,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 
-public class SLEllipsePaintCommand extends SLShapePaintCommand<Ellipse> {
+public class EllipseOverlayCommand extends ShapeOverlayCommand<Ellipse> {
     
     private final Ellipse ellipse;
     
-    public SLEllipsePaintCommand(
+    public EllipseOverlayCommand(
             @Nullable ReentrantLock lock, @NotNull Springable springable, @NotNull String name,
-            @Nullable Predicate<? super SLPaintCommand<Ellipse>> autoRemoveCondition, int priority) {
+            @Nullable Predicate<? super OverlayCommand<Ellipse>> autoRemoveCondition, int priority) {
         super(lock, springable, name, autoRemoveCondition, priority);
         
         this.ellipse = new Ellipse();

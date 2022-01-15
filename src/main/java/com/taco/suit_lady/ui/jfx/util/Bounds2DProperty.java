@@ -5,8 +5,10 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import org.jetbrains.annotations.NotNull;
 
-public class Bounds2DProperty {
+public class Bounds2DProperty
+        implements Boundable {
     
     private final IntegerProperty xProperty;
     private final IntegerProperty yProperty;
@@ -32,6 +34,7 @@ public class Bounds2DProperty {
         return xProperty;
     }
     
+    @Override
     public final int getX() {
         return xProperty.get();
     }
@@ -45,6 +48,7 @@ public class Bounds2DProperty {
         return yProperty;
     }
     
+    @Override
     public final int getY() {
         return yProperty.get();
     }
@@ -58,6 +62,7 @@ public class Bounds2DProperty {
         return widthProperty;
     }
     
+    @Override
     public final int getWidth() {
         return widthProperty.get();
     }
@@ -71,6 +76,7 @@ public class Bounds2DProperty {
         return heightProperty;
     }
     
+    @Override
     public final int getHeight() {
         return heightProperty.get();
     }
@@ -84,8 +90,16 @@ public class Bounds2DProperty {
         return boundsBinding;
     }
     
+    @Override
     public final Bounds2D getBounds() {
         return boundsBinding.get();
+    }
+    
+    public final void setBounds(@NotNull Bounds2D newValue) {
+        setX(newValue.getX());
+        setY(newValue.getY());
+        setWidth(newValue.getWidth());
+        setHeight(newValue.getHeight());
     }
     
     //</editor-fold>

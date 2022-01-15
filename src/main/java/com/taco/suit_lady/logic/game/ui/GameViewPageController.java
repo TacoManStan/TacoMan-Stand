@@ -1,4 +1,4 @@
-package com.taco.suit_lady.logic.game;
+package com.taco.suit_lady.logic.game.ui;
 
 import com.taco.suit_lady.ui.UIPageController;
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotColorScheme;

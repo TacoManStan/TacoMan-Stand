@@ -2,6 +2,7 @@ package com.taco.suit_lady.logic.game;
 
 import com.taco.suit_lady.logic.game.objects.GameObject;
 import com.taco.suit_lady.logic.game.objects.GameTile;
+import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.springable.StrictSpringable;
@@ -12,15 +13,18 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class GameMap
-        implements SpringableWrapper {
+        implements SpringableWrapper, Lockable {
     
     private final int tileSize = 25; // The number of "pixels" comprising each tile.
     
     //
     
     private final StrictSpringable springable;
+    private final ReentrantLock lock;
     
     //
     
@@ -33,8 +37,9 @@ public class GameMap
     
     private final GameMapModel model;
     
-    public GameMap(@NotNull Springable springable, int width, int height) {
+    public GameMap(@NotNull Springable springable, @Nullable ReentrantLock lock, int width, int height) {
         this.springable = springable.asStrict();
+        this.lock = lock != null ? lock : new ReentrantLock();
         
         //
         
@@ -45,7 +50,7 @@ public class GameMap
         this.mapObjects = new ArrayList<>();
         
         
-        this.model = new GameMapModel(this);
+        this.model = new GameMapModel(this, getLock());
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">
@@ -162,6 +167,11 @@ public class GameMap
     @Override
     public @NotNull Springable springable() {
         return springable;
+    }
+    
+    @Override
+    public @NotNull ReentrantLock getLock() {
+        return lock;
     }
     
     //</editor-fold>

@@ -1,21 +1,16 @@
 package com.taco.suit_lady.ui.contents.mandelbrot;
 
 import com.taco.suit_lady._to_sort._new.MatrixIterator;
-import com.taco.suit_lady.ui.jfx.components.BoundCanvas;
+import com.taco.suit_lady.ui.jfx.components.canvas.BoundCanvas;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.ArrayTools;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotIterator.MandelbrotColor;
-import com.taco.suit_lady.util.tools.TaskTools;
-import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import javafx.geometry.Point2D;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.paint.Color;
-import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.concurrent.locks.ReentrantLock;
 

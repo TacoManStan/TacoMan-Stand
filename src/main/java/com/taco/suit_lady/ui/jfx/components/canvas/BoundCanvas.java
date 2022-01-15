@@ -1,4 +1,4 @@
-package com.taco.suit_lady.ui.jfx.components;
+package com.taco.suit_lady.ui.jfx.components.canvas;
 
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
@@ -12,7 +12,6 @@ import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import net.rgielen.fxweaver.core.FxWeaver;
-import org.docx4j.wml.R;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -29,6 +28,7 @@ public class BoundCanvas extends Canvas
     private final ReentrantLock lock;
     
     private final ReadOnlyObjectWrapper<CanvasListener> canvasListenerProperty;
+    private final ReadOnlyListWrapper<PaintCommand> paintCommands;
     
     private final ReadOnlyObjectWrapper<Image> imageProperty;
     
@@ -36,6 +36,7 @@ public class BoundCanvas extends Canvas
         this.lock = new ReentrantLock();
         
         this.canvasListenerProperty = new ReadOnlyObjectWrapper<>();
+        this.paintCommands = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
         
         this.imageProperty = new ReadOnlyObjectWrapper<>();
     }
@@ -100,6 +101,38 @@ public class BoundCanvas extends Canvas
      */
     public final void setCanvasListener(@Nullable CanvasListener canvasListener) {
         canvasListenerProperty.set(canvasListener);
+    }
+    
+    
+    public final @NotNull ReadOnlyListProperty<PaintCommand> paintCommands() {
+        return paintCommands.getReadOnlyProperty();
+    }
+    
+    public final boolean containsPaintCommand(@Nullable PaintCommand paintCommand) {
+        return paintCommand != null && sync(() -> paintCommands.contains(paintCommand));
+    }
+    
+    public final boolean removePaintCommand(@Nullable PaintCommand paintCommand) {
+        return paintCommand != null && sync(() -> {
+            if (containsPaintCommand(paintCommand)) {
+                final boolean removed = paintCommands.remove(paintCommand);
+                paintCommand.onRemove(this);
+                return removed;
+            } else
+                return false;
+        });
+    }
+    
+    public final boolean addPaintCommand(@Nullable PaintCommand paintCommand) {
+        return paintCommand != null && sync(() -> {
+            if (containsPaintCommand(paintCommand))
+                return true;
+            else {
+                final boolean added = paintCommands.add(paintCommand);
+                paintCommand.onAdd(this);
+                return added;
+            }
+        });
     }
     
     
@@ -192,9 +225,13 @@ public class BoundCanvas extends Canvas
     protected void repaint() {
         sync(() -> FXTools.runFX(() -> {
             FXTools.clearCanvasUnsafe(this);
+            
+            paintCommands().forEach(uiCommand -> uiCommand.paint(this));
+            
             final CanvasListener listener = getCanvasListener();
             if (listener != null)
                 listener.redraw(this, width, height);
+            
             refreshImage();
         }, true));
     }

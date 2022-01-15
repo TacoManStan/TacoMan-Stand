@@ -6,7 +6,8 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
 
-public record Bounds2D(int x, int y, int width, int height) {
+public record Bounds2D(int x, int y, int width, int height)
+        implements Boundable {
     
     //<editor-fold desc="--- CLASS BODY ---">
     
@@ -70,6 +71,36 @@ public record Bounds2D(int x, int y, int width, int height) {
         ExceptionTools.nullCheck(dimensions, "Dimensions Point2D");
         
         return new Bounds2D((int) location.getX(), (int) location.getY(), (int) dimensions.getX(), (int) dimensions.getY());
+    }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+    @Override
+    public int getX() {
+        return x();
+    }
+    
+    @Override
+    public int getY() {
+        return y();
+    }
+    
+    @Override
+    public int getWidth() {
+        return width();
+    }
+    
+    @Override
+    public int getHeight() {
+        return height();
+    }
+    
+    
+    @Override
+    public Bounds2D getBounds() {
+        return this;
     }
     
     //</editor-fold>

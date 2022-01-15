@@ -3,9 +3,6 @@ package com.taco.suit_lady.ui.jfx.components.painting;
 import com.taco.suit_lady._to_sort._new.ReadOnlyObservableList;
 import com.taco.suit_lady._to_sort._new.ReadOnlyObservableListWrapper;
 import com.taco.suit_lady._to_sort._new.interfaces.ReadOnlyNameableProperty;
-import com.taco.suit_lady.ui.*;
-import com.taco.suit_lady.ui.jfx.components.ImagePane;
-import com.taco.suit_lady.ui.jfx.components.button.ImageButton;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
@@ -16,8 +13,6 @@ import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +34,7 @@ public class Overlay
     private final StackPane root;
     
     private final ReadOnlyIntegerWrapper paintPriorityProperty;
-    private final ReadOnlyObservableListWrapper<SLPaintCommand<?>> paintCommands;
+    private final ReadOnlyObservableListWrapper<OverlayCommand<?>> paintCommands;
     
     //<editor-fold desc="--- CONSTRUCTORS ---">
     
@@ -66,7 +61,7 @@ public class Overlay
     
     /**
      * <p><b>Fully-Parameterized Constructor</b></p>
-     * <p>Constructs a new {@link Overlay} instance used to display a set of {@link SLPaintCommand Paint Commands}.</p>
+     * <p>Constructs a new {@link Overlay} instance used to display a set of {@link OverlayCommand Paint Commands}.</p>
      * <p><hr>
      * <p><b>Parameter Details</b></p>
      * <ol>
@@ -105,9 +100,9 @@ public class Overlay
     //<editor-fold desc="--- PROPERTIES ---">
     
     /**
-     * <p>Returns the {@link StackPane} instance on which all {@link SLPaintCommand Paint Commands} assigned to this {@link Overlay} are displayed.</p>
+     * <p>Returns the {@link StackPane} instance on which all {@link OverlayCommand Paint Commands} assigned to this {@link Overlay} are displayed.</p>
      *
-     * @return The {@link StackPane} instance on which all {@link SLPaintCommand Paint Commands} assigned to this {@link Overlay} are displayed.
+     * @return The {@link StackPane} instance on which all {@link OverlayCommand Paint Commands} assigned to this {@link Overlay} are displayed.
      */
     protected final StackPane root() {
         return root;
@@ -153,40 +148,12 @@ public class Overlay
     
     
     /**
-     * <p>Returns the {@link ReadOnlyObservableList} containing the {@link SLPaintCommand Paint Commands} assigned to this {@link Overlay}.</p>
+     * <p>Returns the {@link ReadOnlyObservableList} containing the {@link OverlayCommand Paint Commands} assigned to this {@link Overlay}.</p>
      *
-     * @return The {@link ReadOnlyObservableList} containing the {@link SLPaintCommand Paint Commands} assigned to this {@link Overlay}.
+     * @return The {@link ReadOnlyObservableList} containing the {@link OverlayCommand Paint Commands} assigned to this {@link Overlay}.
      */
-    public final ReadOnlyObservableList<SLPaintCommand<?>> paintCommands() {
+    public final ReadOnlyObservableList<OverlayCommand<?>> paintCommands() {
         return paintCommands.readOnlyList();
-    }
-    
-    /**
-     * <p>{@link ReadOnlyObservableListWrapper#add(Object) Adds} the specified {@link SLPaintCommand} to this {@link Overlay}.</p>
-     *
-     * @param paintCommand The {@link SLPaintCommand} to be {@link ReadOnlyObservableListWrapper#add(Object) added}.
-     */
-    public final void addPaintCommand(@NotNull SLPaintCommand<?> paintCommand) {
-        sync(() -> {
-            ExceptionTools.nullCheck(paintCommand, "Paint Command Input").setOwner(this); // TODO: Move to listener & also track remove events
-            paintCommands.add(paintCommand);
-            FXCollections.sort(paintCommands);
-            debugger().printList(paintCommands, "Paint Commands (Added)");
-        });
-    }
-    
-    /**
-     * <p>{@link ReadOnlyObservableListWrapper#remove(Object) Removes} the specified {@link SLPaintCommand} to this {@link Overlay}.</p>
-     *
-     * @param paintCommand The {@link SLPaintCommand} to be {@link ReadOnlyObservableListWrapper#remove(Object) removed}.
-     */
-    public final boolean removePaintCommand(@NotNull SLPaintCommand<?> paintCommand) {
-        ExceptionTools.nullCheck(paintCommand, "Paint Command Input");
-        return sync(() -> {
-            paintCommands.remove(paintCommand);
-            debugger().printList(paintCommands, "Paint Commands (Removed)");
-            return !paintCommands.contains(paintCommand);
-        });
     }
     
     //</editor-fold>
@@ -236,4 +203,32 @@ public class Overlay
     }
     
     //</editor-fold>
+    
+    /**
+     * <p>{@link ReadOnlyObservableListWrapper#add(Object) Adds} the specified {@link OverlayCommand} to this {@link Overlay}.</p>
+     *
+     * @param paintCommand The {@link OverlayCommand} to be {@link ReadOnlyObservableListWrapper#add(Object) added}.
+     */
+    public final void addPaintCommand(@NotNull OverlayCommand<?> paintCommand) {
+        sync(() -> {
+            ExceptionTools.nullCheck(paintCommand, "Paint Command Input").setOwner(this); // TODO: Move to listener & also track remove events
+            paintCommands.add(paintCommand);
+            FXCollections.sort(paintCommands);
+            debugger().printList(paintCommands, "Paint Commands (Added)");
+        });
+    }
+    
+    /**
+     * <p>{@link ReadOnlyObservableListWrapper#remove(Object) Removes} the specified {@link OverlayCommand} to this {@link Overlay}.</p>
+     *
+     * @param paintCommand The {@link OverlayCommand} to be {@link ReadOnlyObservableListWrapper#remove(Object) removed}.
+     */
+    public final boolean removePaintCommand(@NotNull OverlayCommand<?> paintCommand) {
+        ExceptionTools.nullCheck(paintCommand, "Paint Command Input");
+        return sync(() -> {
+            paintCommands.remove(paintCommand);
+            debugger().printList(paintCommands, "Paint Commands (Removed)");
+            return !paintCommands.contains(paintCommand);
+        });
+    }
 }

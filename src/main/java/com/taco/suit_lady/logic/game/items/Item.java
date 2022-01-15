@@ -63,6 +63,14 @@ public class Item
         return lock;
     }
     
+    @Override public void tick() {
+        //TODO
+    }
+    
+    @Override public long getTickCount() {
+        return 0; //TODO
+    }
+    
     //</editor-fold>
     
     //</editor-fold>

@@ -1,6 +1,5 @@
 package com.taco.suit_lady.ui.jfx.components.painting;
 
-import com.taco.suit_lady.ui.jfx.util.Bounds2D;
 import com.taco.suit_lady.util.springable.Springable;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
@@ -10,13 +9,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 
-public class SLRectanglePaintCommand extends SLShapePaintCommand<Rectangle> {
+public class RectangleOverlayCommand extends ShapeOverlayCommand<Rectangle> {
     
     private final Rectangle rectangle;
     
-    public SLRectanglePaintCommand(
+    public RectangleOverlayCommand(
             @Nullable ReentrantLock lock, @NotNull Springable springable, @NotNull String name,
-            @Nullable Predicate<? super SLPaintCommand<Rectangle>> autoRemoveCondition, int priority,
+            @Nullable Predicate<? super OverlayCommand<Rectangle>> autoRemoveCondition, int priority,
             @Nullable Paint fill, @Nullable Paint stroke) {
         super(lock, springable, name, autoRemoveCondition, priority);
         
