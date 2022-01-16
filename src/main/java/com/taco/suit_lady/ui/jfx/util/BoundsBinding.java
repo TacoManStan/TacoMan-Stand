@@ -1,30 +1,34 @@
 package com.taco.suit_lady.ui.jfx.util;
 
 import com.taco.suit_lady.util.tools.PropertyTools;
+import javafx.beans.InvalidationListener;
+import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.collections.ObservableList;
 import org.jetbrains.annotations.NotNull;
 
-public class Bounds2DProperty
-        implements Boundable {
+public class BoundsBinding
+        implements Boundable, Binding<Bounds> {
     
     private final IntegerProperty xProperty;
     private final IntegerProperty yProperty;
     private final IntegerProperty widthProperty;
     private final IntegerProperty heightProperty;
     
-    private final ObjectBinding<Bounds2D> boundsBinding;
+    private final ObjectBinding<Bounds> boundsBinding;
     
-    public Bounds2DProperty() {
+    public BoundsBinding() {
         this.xProperty = new SimpleIntegerProperty();
         this.yProperty = new SimpleIntegerProperty();
         this.widthProperty = new SimpleIntegerProperty();
         this.heightProperty = new SimpleIntegerProperty();
         
         this.boundsBinding = Bindings.createObjectBinding(
-                () -> new Bounds2D(getX(), getY(), getWidth(), getHeight()),
+                () -> new Bounds(getX(), getY(), getWidth(), getHeight()),
                 xProperty, yProperty, widthProperty, heightProperty);
     }
     
@@ -86,20 +90,69 @@ public class Bounds2DProperty
     }
     
     
-    public final ObjectBinding<Bounds2D> boundsBinding() {
+    public final ObjectBinding<Bounds> boundsBinding() {
         return boundsBinding;
     }
     
     @Override
-    public final Bounds2D getBounds() {
+    public final Bounds getBounds() {
         return boundsBinding.get();
     }
     
-    public final void setBounds(@NotNull Bounds2D newValue) {
+    public final void setBounds(@NotNull Bounds newValue) {
         setX(newValue.getX());
         setY(newValue.getY());
         setWidth(newValue.getWidth());
         setHeight(newValue.getHeight());
+    }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+    @Override
+    public final boolean isValid() {
+        return boundsBinding.isValid();
+    }
+    
+    @Override
+    public final void invalidate() {
+        boundsBinding.invalidate();
+    }
+    
+    @Override
+    public final ObservableList<?> getDependencies() {
+        return boundsBinding.getDependencies();
+    }
+    
+    @Override
+    public final void dispose() {
+        boundsBinding.dispose();
+    }
+    
+    @Override
+    public final void addListener(ChangeListener<? super Bounds> listener) {
+        boundsBinding.addListener(listener);
+    }
+    
+    @Override
+    public final void removeListener(ChangeListener<? super Bounds> listener) {
+        boundsBinding.removeListener(listener);
+    }
+    
+    @Override
+    public final Bounds getValue() {
+        return boundsBinding.getValue();
+    }
+    
+    @Override
+    public final void addListener(InvalidationListener listener) {
+        boundsBinding.addListener(listener);
+    }
+    
+    @Override
+    public final void removeListener(InvalidationListener listener) {
+        boundsBinding.removeListener(listener);
     }
     
     //</editor-fold>

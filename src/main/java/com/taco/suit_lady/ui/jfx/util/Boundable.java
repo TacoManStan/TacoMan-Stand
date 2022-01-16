@@ -10,8 +10,8 @@ public interface Boundable {
     
     //<editor-fold desc="--- DEFAULT ---">
     
-    default Bounds2D getBounds() {
-        return new Bounds2D(getX(), getY(), getWidth(), getHeight());
+    default Bounds getBounds() {
+        return new Bounds(getX(), getY(), getWidth(), getHeight());
     }
     
     //</editor-fold>

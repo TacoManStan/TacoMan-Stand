@@ -35,6 +35,8 @@ public abstract class PaintCommand
         
         this.autoRemoveConditionProperty = new ReadOnlyObjectWrapper<>();
         this.disabledProperty = new SimpleBooleanProperty(false);
+        
+        this.disabledProperty.addListener((observable, oldValue, newValue) -> repaintOwners());
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">

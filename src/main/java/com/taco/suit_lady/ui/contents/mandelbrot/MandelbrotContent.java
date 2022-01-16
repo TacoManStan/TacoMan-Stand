@@ -6,6 +6,7 @@ import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotContentController.Mou
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotIterator.MandelbrotColor;
 import com.taco.suit_lady.ui.jfx.components.canvas.BoundCanvas;
 import com.taco.suit_lady.ui.jfx.components.canvas.shapes.ArcPaintCommand;
+import com.taco.suit_lady.ui.jfx.components.canvas.shapes.RectanglePaintCommand;
 import com.taco.suit_lady.ui.pages.impl.content_selector.ListableContent;
 import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotContentHandler;
 import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotContentSelectorPage;
@@ -23,6 +24,7 @@ import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import com.taco.tacository.json.JFiles;
 import javafx.beans.binding.Bindings;
 import javafx.scene.paint.Color;
+import org.docx4j.wml.R;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.locks.ReentrantLock;
@@ -46,6 +48,7 @@ public class MandelbrotContent extends ListableContent<
     private final EllipseOverlayCommand selectionCirclePaintCommand;
     
     private final ArcPaintCommand testPaintCommand;
+    private final RectanglePaintCommand testPaintCommand2;
     
     private MandelbrotPage coverPage;
     
@@ -79,14 +82,18 @@ public class MandelbrotContent extends ListableContent<
                 null, 2);
         
         this.testPaintCommand = new ArcPaintCommand(this, lock, 50, 120, null);
+        this.testPaintCommand2 = new RectanglePaintCommand(this, lock);
+//        this.testPaintCommand2.setIsFill(true);
         
         this.selectionBoxPaintCommand.deactivate();
         this.selectionBoxPaintCommand2.deactivate();
         this.selectionCirclePaintCommand.deactivate();
         
         
-        getOverlayHandler().getOverlay("default").addPaintCommand(selectionBoxPaintCommand);
-        getController().canvas().addPaintCommand(testPaintCommand);
+//        getOverlayHandler().getOverlay("default").addPaintCommand(selectionBoxPaintCommand);
+//        ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas().addPaintCommand(testPaintCommand);
+        ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas().addPaintCommand(testPaintCommand2);
+//        getController().canvas().addPaintCommand(testPaintCommand);
         //        getOverlayHandler().getOverlay("default").addPaintCommand(selectionBoxPaintCommand2);
         //        getOverlayHandler().getOverlay("default").addPaintCommand(selectionCirclePaintCommand);
         
@@ -268,7 +275,8 @@ public class MandelbrotContent extends ListableContent<
             selectionBoxPaintCommand2.setBounds(moveData.getBounds());
             selectionCirclePaintCommand.setBounds(moveData.getBounds());
             
-            testPaintCommand.boundsProperty().setBounds(moveData.getBounds());
+            testPaintCommand.boundsBinding().setBounds(moveData.getBounds());
+            testPaintCommand2.boundsBinding().setBounds(moveData.getBounds());
         });
     }
     

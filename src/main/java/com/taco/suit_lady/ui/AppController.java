@@ -243,20 +243,6 @@ public class AppController
         onShownInit();
     }
     
-    //
-    
-    // TODO
-    private void initOverlays() {
-        selectionOverlayStackPaneBinding = Bindings.createObjectBinding(
-                () -> getAppUI().getContentManager().getContent().getController().getOverlayPane(),
-                getAppUI().getContentManager().contentProperty());
-        selectionOverlayStackPaneBinding.addListener((observable, oldValue, newValue) -> {
-            if (oldValue != null) {
-            
-            }
-        });
-    }
-    
     private void initSidebar() {
         final Sidebar sidebar = ctx().getBean(AppUI.class).getSidebar();
         

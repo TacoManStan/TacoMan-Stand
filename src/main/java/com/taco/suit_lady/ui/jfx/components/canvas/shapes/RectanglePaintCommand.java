@@ -1,7 +1,7 @@
 package com.taco.suit_lady.ui.jfx.components.canvas.shapes;
 
 import com.taco.suit_lady.ui.jfx.components.canvas.BoundCanvas;
-import com.taco.suit_lady.ui.jfx.util.Bounds2D;
+import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +19,7 @@ public class RectanglePaintCommand extends ShapePaintCommand {
     
     @Override
     protected void onPaint(BoundCanvas canvas) {
-        Bounds2D bounds = getBounds();
+        Bounds bounds = getBounds();
         if (isValidDimensions())
             FXTools.drawRectangle(canvas, bounds, false, isFill());
     }

@@ -1,7 +1,7 @@
 package com.taco.suit_lady.ui.jfx.components.painting;
 
 import com.taco.suit_lady._to_sort._new.interfaces.ObservablePropertyContainable;
-import com.taco.suit_lady.ui.jfx.util.Bounds2D;
+import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
@@ -41,7 +41,7 @@ public abstract class OverlayCommand<N extends Node>
     private final IntegerProperty widthProperty;
     private final IntegerProperty heightProperty;
     
-    private final ObjectBinding<Bounds2D> boundsBinding;
+    private final ObjectBinding<Bounds> boundsBinding;
     
     public OverlayCommand(@NotNull Springable springable, @NotNull String name, int priority) {
         this(null, springable, name, null, priority);
@@ -78,7 +78,7 @@ public abstract class OverlayCommand<N extends Node>
         this.heightProperty = new SimpleIntegerProperty();
         
         
-        this.boundsBinding = createObjectBinding(() -> new Bounds2D(getX(), getY(), getWidth(), getHeight()));
+        this.boundsBinding = createObjectBinding(() -> new Bounds(getX(), getY(), getWidth(), getHeight()));
         this.boundsBinding.addListener((observable, oldValue, newValue) -> nodeProperty.set(refreshNodeImpl()));
     }
     
@@ -210,7 +210,7 @@ public abstract class OverlayCommand<N extends Node>
     }
     
     
-    public final void setBounds(@NotNull Bounds2D bounds) {
+    public final void setBounds(@NotNull Bounds bounds) {
         ExceptionTools.nullCheck(bounds, "Bounds");
         setBounds(bounds.x(), bounds.y(), bounds.width(), bounds.height());
     }
@@ -228,11 +228,11 @@ public abstract class OverlayCommand<N extends Node>
     
     //<editor-fold desc="--- BINDINGS ---">
     
-    public final ObjectBinding<Bounds2D> boundsBinding() {
+    public final ObjectBinding<Bounds> boundsBinding() {
         return boundsBinding;
     }
     
-    public final Bounds2D getBounds() {
+    public final Bounds getBounds() {
         return boundsBinding.get();
     }
     

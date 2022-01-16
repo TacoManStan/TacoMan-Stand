@@ -1,7 +1,7 @@
 package com.taco.suit_lady.util.tools.fx_tools;
 
 import com.sun.javafx.application.PlatformImpl;
-import com.taco.suit_lady.ui.jfx.util.Bounds2D;
+import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.util.SimplePredicate;
 import com.taco.suit_lady.util.UndefinedRuntimeException;
 import com.taco.suit_lady.util.tools.*;
@@ -862,7 +862,7 @@ public class FXTools {
     }
     
     
-    public static void drawRectangle(Canvas canvas, Bounds2D bounds, boolean wipeCanvas, boolean fill) {
+    public static void drawRectangle(Canvas canvas, Bounds bounds, boolean wipeCanvas, boolean fill) {
         FXTools.runFX(() -> {
             if (wipeCanvas)
                 clearCanvasUnsafe(canvas);
@@ -878,7 +878,7 @@ public class FXTools {
         }, true);
     }
     
-    public static void drawOval(Canvas canvas, Bounds2D bounds, boolean wipeCanvas, boolean fill) {
+    public static void drawOval(Canvas canvas, Bounds bounds, boolean wipeCanvas, boolean fill) {
         FXTools.runFX(() -> {
             if (wipeCanvas)
                 clearCanvasUnsafe(canvas);
@@ -894,7 +894,7 @@ public class FXTools {
         }, true);
     }
     
-    public static void drawArc(Canvas canvas, Bounds2D bounds, double startAngle, double arcExtent, ArcType closure, boolean wipeCanvas, boolean fill) {
+    public static void drawArc(Canvas canvas, Bounds bounds, double startAngle, double arcExtent, ArcType closure, boolean wipeCanvas, boolean fill) {
         FXTools.runFX(() -> {
             if (wipeCanvas)
                 clearCanvasUnsafe(canvas);

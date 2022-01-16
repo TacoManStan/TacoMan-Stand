@@ -1,6 +1,6 @@
 package com.taco.suit_lady.ui.jfx.components.canvas;
 
-import com.taco.suit_lady.ui.jfx.util.Bounds2D;
+import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import javafx.scene.layout.AnchorPane;
@@ -23,7 +23,7 @@ public class CanvasPane extends AnchorPane
         this(springable, anchor, anchor, anchor, anchor);
     }
     
-    public CanvasPane(@NotNull Springable springable, @NotNull Bounds2D bounds) {
+    public CanvasPane(@NotNull Springable springable, @NotNull Bounds bounds) {
         this(springable, bounds.getMinX(), bounds.getMinY(), bounds.getMaxX(), bounds.getMaxY());
     }
     

@@ -2,7 +2,7 @@ package com.taco.suit_lady.ui.jfx.components.canvas.shapes;
 
 import com.taco.suit_lady.ui.jfx.components.canvas.PaintCommand;
 import com.taco.suit_lady.ui.jfx.util.Boundable;
-import com.taco.suit_lady.ui.jfx.util.Bounds2DProperty;
+import com.taco.suit_lady.ui.jfx.util.BoundsBinding;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.PropertyTools;
 import javafx.beans.property.BooleanProperty;
@@ -15,20 +15,23 @@ import java.util.concurrent.locks.ReentrantLock;
 public abstract class ShapePaintCommand extends PaintCommand
         implements Boundable {
     
-    private final Bounds2DProperty bounds;
+    private final BoundsBinding boundsBinding;
     private final BooleanProperty isFillProperty;
     
     public ShapePaintCommand(@NotNull Springable springable, @Nullable ReentrantLock lock) {
         super(springable, lock);
         
-        this.bounds = new Bounds2DProperty();
+        this.boundsBinding = new BoundsBinding();
         this.isFillProperty = new SimpleBooleanProperty(false);
+        
+        isFillProperty.addListener((observable, oldValue, newValue) -> repaintOwners());
+        boundsBinding.addListener((observable, oldValue, newValue) -> repaintOwners());
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final Bounds2DProperty boundsProperty() {
-        return bounds;
+    public final BoundsBinding boundsBinding() {
+        return boundsBinding;
     }
     
     
@@ -50,32 +53,32 @@ public abstract class ShapePaintCommand extends PaintCommand
     
     @Override
     public int getX() {
-        return boundsProperty().getX();
+        return boundsBinding().getX();
     }
     
     @Override
     public int getY() {
-        return boundsProperty().getY();
+        return boundsBinding().getY();
     }
     
     @Override
     public int getWidth() {
-        return boundsProperty().getWidth();
+        return boundsBinding().getWidth();
     }
     
     @Override
     public int getHeight() {
-        return boundsProperty().getHeight();
+        return boundsBinding().getHeight();
     }
     
     //</editor-fold>
     
     /**
-     * <p>Checks if the dimensions represented by the {@link Bounds2DProperty bounds} of this {@link ShapePaintCommand} are valid.</p>
+     * <p>Checks if the dimensions represented by the {@link BoundsBinding bounds} of this {@link ShapePaintCommand} are valid.</p>
      * <p><b>Details</b></p>
      * <ol>
-     *     <li>{@link Bounds2DProperty bounds} location values are ignored.</li>
-     *     <li>This may change in the future, but, for now, dimensions are valid if both the {@link Bounds2DProperty#getWidth() width} and {@link Bounds2DProperty#getHeight() height} are greater than 0.</li>
+     *     <li>{@link BoundsBinding bounds} location values are ignored.</li>
+     *     <li>This may change in the future, but, for now, dimensions are valid if both the {@link BoundsBinding#getWidth() width} and {@link BoundsBinding#getHeight() height} are greater than 0.</li>
      * </ol>
      *
      * @return True if the dimensions are valid, false if they are not.
