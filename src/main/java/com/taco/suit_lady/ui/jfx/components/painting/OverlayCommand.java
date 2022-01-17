@@ -261,7 +261,7 @@ public abstract class OverlayCommand<N extends Node>
     
     protected ObservableValue<?>[] regenerateTriggers() {
         return new ObservableValue<?>[]{boundsBinding};
-    }
+    } //wtf is this supposed to do
     
     //</editor-fold>
     
