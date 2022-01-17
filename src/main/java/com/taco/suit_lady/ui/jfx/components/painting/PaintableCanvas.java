@@ -1,5 +1,9 @@
 package com.taco.suit_lady.ui.jfx.components.painting;
 
+import com.taco.suit_lady.ui.jfx.util.Boundable;
+import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.springable.Springable;
+import com.taco.tacository.obj_traits.common.Nameable;
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.IntegerBinding;
 import javafx.collections.ListChangeListener;
@@ -17,7 +21,7 @@ import java.util.stream.Stream;
 
 @SuppressWarnings({"SuspiciousToArrayCall", "NullableProblems"})
 public interface PaintableCanvas
-        extends ObservableList<Paintable> {
+        extends Springable, Lockable, Nameable, ObservableList<Paintable> {
     
     ObservableList<Paintable> paintables();
     
@@ -29,7 +33,6 @@ public interface PaintableCanvas
     default int getWidth() {
         return widthBinding().get();
     }
-    
     default int getHeight() {
         return heightBinding().get();
     }
