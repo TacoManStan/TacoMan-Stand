@@ -1,12 +1,13 @@
 package com.taco.suit_lady.ui.jfx.components.canvas;
 
-import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.ui.jfx.components.painting.Paintable;
+import com.taco.suit_lady.ui.jfx.components.painting.PaintableCanvas;
+import com.taco.suit_lady.ui.jfx.util.BoundsBinding;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import javafx.beans.property.*;
-import javafx.collections.FXCollections;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,118 +16,90 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 
 public abstract class PaintCommand
-        implements SpringableWrapper, Lockable {
+        implements SpringableWrapper, Paintable<PaintCommand, BoundCanvas> {
     
     private final StrictSpringable springable;
     private final ReentrantLock lock;
     
     
-    private final ReadOnlyListWrapper<BoundCanvas> owners;
+    private final ObjectProperty<BoundCanvas> ownerProperty;
     
-    private final ReadOnlyObjectWrapper<Predicate<BoundCanvas>> autoRemoveConditionProperty;
+    private final ObjectProperty<Predicate<BoundCanvas>> autoRemoveConditionProperty;
     private final BooleanProperty disabledProperty;
+    private final IntegerProperty paintPrioritiyProperty;
+    
+    private final BoundsBinding boundsBinding;
     
     public PaintCommand(@NotNull Springable springable, @Nullable ReentrantLock lock) {
         this.springable = springable.asStrict();
         this.lock = lock != null ? lock : new ReentrantLock();
         
-        
-        this.owners = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
+        this.ownerProperty = new SimpleObjectProperty<>();
         
         this.autoRemoveConditionProperty = new ReadOnlyObjectWrapper<>();
         this.disabledProperty = new SimpleBooleanProperty(false);
+        this.paintPrioritiyProperty = new SimpleIntegerProperty(1);
         
-        this.disabledProperty.addListener((observable, oldValue, newValue) -> repaintOwners());
+        this.boundsBinding = new BoundsBinding();
+        
+        //
+        
+        this.disabledProperty.addListener((observable, oldValue, newValue) -> repaintOwner());
     }
     
-    //<editor-fold desc="--- INITIALIZATION ---">
+    //<editor-fold desc="--- ABSTRACT ---">
     
-    public PaintCommand init() {
-        return this;
-    }
+    protected abstract void onPaint();
     
     //</editor-fold>
-    
-    //<editor-fold desc="--- PROPERTIES ---">
-    
-    public final @NotNull ReadOnlyListProperty<BoundCanvas> owners() {
-        return owners.getReadOnlyProperty();
-    }
-    
-    
-    public final @NotNull ReadOnlyObjectProperty<Predicate<BoundCanvas>> autoRemoveConditionProperty() {
-        return autoRemoveConditionProperty.getReadOnlyProperty();
-    }
-    
-    public final @Nullable Predicate<BoundCanvas> getAutoRemoveCondition() {
-        return autoRemoveConditionProperty.get();
-    }
-    
-    public final @Nullable Predicate<BoundCanvas> setAutoRemoveCondition(@Nullable Predicate<BoundCanvas> newValue) {
-        Predicate<BoundCanvas> oldValue = getAutoRemoveCondition();
-        autoRemoveConditionProperty.set(newValue);
-        return oldValue;
-    }
-    
-    
-    public final @NotNull BooleanProperty disabledProperty() {
-        return disabledProperty;
-    }
-    
-    public final boolean isDisabled() {
-        return disabledProperty.get();
-    }
-    
-    public final boolean setDisabled(boolean newValue) {
-        boolean oldValue = isDisabled();
-        disabledProperty.set(newValue);
-        return oldValue;
-    }
-    
-    //</editor-fold>
-    
-    protected abstract void onPaint(BoundCanvas canvas);
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
-
-    public void paint(BoundCanvas canvas) {
+    
+    //<editor-fold desc="> Paintable">
+    
+    @Override public ObjectProperty<BoundCanvas> ownerProperty() { return ownerProperty; }
+    
+    @Override public ObjectProperty<Predicate<BoundCanvas>> autoRemoveConditionProperty() { return autoRemoveConditionProperty; }
+    @Override public BooleanProperty disabledProperty() { return disabledProperty; }
+    @Override public IntegerProperty paintPriorityProperty() { return paintPrioritiyProperty; }
+    
+    @Override public BoundsBinding boundsBinding() { return boundsBinding; }
+    
+    
+    @Override
+    public void paint() {
         if (!isDisabled())
             FXTools.runFX(() -> sync(() -> {
                 Predicate<BoundCanvas> autoRemoveCondition = getAutoRemoveCondition();
-                if (autoRemoveCondition != null && autoRemoveCondition.test(canvas))
-                    canvas.removePaintCommand(this);
+                if (autoRemoveCondition != null && autoRemoveCondition.test(getOwner()))
+                    getOwner().removePaintable(this);
                 else
-                    onPaint(canvas);
+                    onPaint();
             }), true);
     }
     
-
-    public void onAdd(BoundCanvas canvas) {
-        sync(() -> { owners.add(canvas); });
-    }
     
-    public void onRemove(BoundCanvas canvas) {
-        sync(() -> { owners.remove(canvas); });
-    }
+    @Override public void onAdd(BoundCanvas owner) { }
+    @Override public void onRemove(BoundCanvas owner) { }
     
-    //
     
-    @Override
-    public @NotNull Springable springable() {
-        return springable;
-    }
+    //</editor-fold>
     
-    @Override
-    public @NotNull Lock getLock() {
-        return lock;
+    @Override public @NotNull Springable springable() { return springable; }
+    @Override public @NotNull Lock getLock() { return lock; }
+    
+    @Override public int compareTo(@NotNull PaintCommand o) {
+        return Integer.compare((Math.abs(getPaintPriority())), Math.abs(o.getPaintPriority()));
     }
     
     //</editor-fold>
     
     //<editor-fold desc="--- INTERNAL ---">
     
-    protected void repaintOwners() {
-        sync(() -> FXTools.runFX(() -> owners.forEach(canvas -> canvas.repaint()), true));
+    @Override public void repaintOwner() {
+        BoundCanvas owner = getOwner();
+        if (owner != null)
+            sync(() -> FXTools.runFX(() -> owner.repaint(), true));
     }
     
     //</editor-fold>

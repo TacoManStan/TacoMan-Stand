@@ -1,7 +1,7 @@
 package com.taco.suit_lady.ui.jfx.components.canvas.shapes;
 
-import com.taco.suit_lady.ui.jfx.components.canvas.BoundCanvas;
 import com.taco.suit_lady.util.springable.Springable;
+import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,7 +14,8 @@ public class OvalPaintCommand extends ShapePaintCommand {
     }
     
     @Override
-    protected void onPaint(BoundCanvas canvas) {
-    
+    protected void onPaint() {
+        if (isValidDimensions())
+            FXTools.drawOval(getOwner(), getBounds(), false, isFill());
     }
 }

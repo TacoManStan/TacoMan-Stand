@@ -74,10 +74,10 @@ public class ArcPaintCommand extends ShapePaintCommand {
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override
-    protected void onPaint(BoundCanvas canvas) {
+    protected void onPaint() {
         Bounds bounds = getBounds();
         if (isValidDimensions())
-            FXTools.drawArc(canvas, bounds, getStartAngle(), getArcExtent(), getClosure(), false, isFill());
+            FXTools.drawArc(getOwner(), bounds, getStartAngle(), getArcExtent(), getClosure(), false, isFill());
     }
     
     //</editor-fold>

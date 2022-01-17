@@ -12,36 +12,20 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-public abstract class ShapePaintCommand extends PaintCommand
-        implements Boundable {
+public abstract class ShapePaintCommand extends PaintCommand {
     
-    private final BoundsBinding boundsBinding;
     private final BooleanProperty isFillProperty;
     
     public ShapePaintCommand(@NotNull Springable springable, @Nullable ReentrantLock lock) {
         super(springable, lock);
-        
-        this.boundsBinding = new BoundsBinding();
         this.isFillProperty = new SimpleBooleanProperty(false);
-        
-        isFillProperty.addListener((observable, oldValue, newValue) -> repaintOwners());
-        boundsBinding.addListener((observable, oldValue, newValue) -> repaintOwners());
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final BoundsBinding boundsBinding() {
-        return boundsBinding;
-    }
+    public final BooleanProperty isFillProperty() { return isFillProperty; }
     
-    
-    public final BooleanProperty isFillProperty() {
-        return isFillProperty;
-    }
-    
-    public final boolean isFill() {
-        return isFillProperty.get();
-    }
+    public final boolean isFill() { return isFillProperty.get(); }
     
     public final boolean setIsFill(boolean newValue) {
         return PropertyTools.setProperty(isFillProperty, newValue);
@@ -51,24 +35,11 @@ public abstract class ShapePaintCommand extends PaintCommand
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override
-    public int getX() {
-        return boundsBinding().getX();
-    }
-    
-    @Override
-    public int getY() {
-        return boundsBinding().getY();
-    }
-    
-    @Override
-    public int getWidth() {
-        return boundsBinding().getWidth();
-    }
-    
-    @Override
-    public int getHeight() {
-        return boundsBinding().getHeight();
+    @Override public PaintCommand init() {
+        super.init();
+        
+        isFillProperty.addListener((observable, oldValue, newValue) -> repaintOwner());
+        return this;
     }
     
     //</editor-fold>

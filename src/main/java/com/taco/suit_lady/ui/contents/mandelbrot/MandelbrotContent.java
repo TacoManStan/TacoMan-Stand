@@ -92,7 +92,7 @@ public class MandelbrotContent extends ListableContent<
         
 //        getOverlayHandler().getOverlay("default").addPaintCommand(selectionBoxPaintCommand);
 //        ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas().addPaintCommand(testPaintCommand);
-        ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas().addPaintCommand(testPaintCommand2);
+        ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas().init().addPaintable(testPaintCommand2.init());
 //        getController().canvas().addPaintCommand(testPaintCommand);
         //        getOverlayHandler().getOverlay("default").addPaintCommand(selectionBoxPaintCommand2);
         //        getOverlayHandler().getOverlay("default").addPaintCommand(selectionCirclePaintCommand);

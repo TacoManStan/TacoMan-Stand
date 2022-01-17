@@ -1,6 +1,7 @@
 package com.taco.suit_lady.ui.jfx.components.canvas.shapes;
 
 import com.taco.suit_lady.ui.jfx.components.canvas.BoundCanvas;
+import com.taco.suit_lady.ui.jfx.components.canvas.PaintCommand;
 import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
@@ -18,10 +19,19 @@ public class RectanglePaintCommand extends ShapePaintCommand {
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override
-    protected void onPaint(BoundCanvas canvas) {
+    protected void onPaint() {
         Bounds bounds = getBounds();
         if (isValidDimensions())
-            FXTools.drawRectangle(canvas, bounds, false, isFill());
+            FXTools.drawRectangle(getOwner(), bounds, false, isFill());
+    }
+    @Override public void onAdd(BoundCanvas owner) {
+    
+    }
+    @Override public void onRemove(BoundCanvas owner) {
+    
+    }
+    @Override public int compareTo(@NotNull PaintCommand o) {
+        return 0;
     }
     
     //</editor-fold>
