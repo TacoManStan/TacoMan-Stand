@@ -91,7 +91,6 @@ public abstract class PaintCommand
     
     @Override
     public void paint(BoundCanvas canvas) {
-        System.out.println("Painting");
         if (!isDisabled())
             FXTools.runFX(() -> sync(() -> {
                 Predicate<BoundCanvas> autoRemoveCondition = getAutoRemoveCondition();

@@ -146,7 +146,6 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor> {
     
     //</editor-fold>
     
-    
     private Color escapeColor = Color.BLACK;
     
     public class MandelbrotColor {
