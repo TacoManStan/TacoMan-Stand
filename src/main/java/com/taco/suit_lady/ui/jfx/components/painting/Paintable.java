@@ -20,6 +20,9 @@ public interface Paintable<O extends PaintableCanvas> {
     
     //
     
+    void onAdd(O owner);
+    void onRemove(O owner);
+    
     void paint();
     
     //<editor-fold desc="--- DEFAULT IMPLEMENTATIONS ---">
