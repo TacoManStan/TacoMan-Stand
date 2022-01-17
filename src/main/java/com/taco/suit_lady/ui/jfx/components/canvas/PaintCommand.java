@@ -15,7 +15,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 
 public abstract class PaintCommand
-        implements SpringableWrapper, Lockable, CanvasUICommand {
+        implements SpringableWrapper, Lockable {
     
     private final StrictSpringable springable;
     private final ReentrantLock lock;
@@ -88,8 +88,7 @@ public abstract class PaintCommand
     protected abstract void onPaint(BoundCanvas canvas);
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
-    
-    @Override
+
     public void paint(BoundCanvas canvas) {
         if (!isDisabled())
             FXTools.runFX(() -> sync(() -> {
@@ -101,13 +100,11 @@ public abstract class PaintCommand
             }), true);
     }
     
-    
-    @Override
+
     public void onAdd(BoundCanvas canvas) {
         sync(() -> { owners.add(canvas); });
     }
     
-    @Override
     public void onRemove(BoundCanvas canvas) {
         sync(() -> { owners.remove(canvas); });
     }

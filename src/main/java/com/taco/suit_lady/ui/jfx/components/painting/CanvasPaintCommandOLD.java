@@ -1,6 +1,5 @@
 package com.taco.suit_lady.ui.jfx.components.painting;
 
-import com.taco.suit_lady.ui.jfx.components.canvas.CanvasUICommand;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.PropertyTools;
@@ -13,7 +12,7 @@ import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class CanvasPaintCommandOLD
-        implements SpringableWrapper, CanvasUICommand {
+        implements SpringableWrapper {
     
     private final ObjectProperty<CanvasOverlay> overlayProperty;
     
