@@ -1,7 +1,6 @@
 package com.taco.suit_lady.ui.jfx.components.canvas;
 
 import com.taco.suit_lady.ui.jfx.components.painting.Paintable;
-import com.taco.suit_lady.ui.jfx.components.painting.PaintableCanvas;
 import com.taco.suit_lady.ui.jfx.util.BoundsBinding;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
@@ -26,7 +25,7 @@ public abstract class PaintCommand
     
     private final ObjectProperty<Predicate<BoundCanvas>> autoRemoveConditionProperty;
     private final BooleanProperty disabledProperty;
-    private final IntegerProperty paintPrioritiyProperty;
+    private final IntegerProperty paintPriorityProperty;
     
     private final BoundsBinding boundsBinding;
     
@@ -38,13 +37,9 @@ public abstract class PaintCommand
         
         this.autoRemoveConditionProperty = new ReadOnlyObjectWrapper<>();
         this.disabledProperty = new SimpleBooleanProperty(false);
-        this.paintPrioritiyProperty = new SimpleIntegerProperty(1);
+        this.paintPriorityProperty = new SimpleIntegerProperty(1);
         
         this.boundsBinding = new BoundsBinding();
-        
-        //
-        
-        this.disabledProperty.addListener((observable, oldValue, newValue) -> repaintOwner());
     }
     
     //<editor-fold desc="--- ABSTRACT ---">
@@ -61,7 +56,7 @@ public abstract class PaintCommand
     
     @Override public ObjectProperty<Predicate<BoundCanvas>> autoRemoveConditionProperty() { return autoRemoveConditionProperty; }
     @Override public BooleanProperty disabledProperty() { return disabledProperty; }
-    @Override public IntegerProperty paintPriorityProperty() { return paintPrioritiyProperty; }
+    @Override public IntegerProperty paintPriorityProperty() { return paintPriorityProperty; }
     
     @Override public BoundsBinding boundsBinding() { return boundsBinding; }
     

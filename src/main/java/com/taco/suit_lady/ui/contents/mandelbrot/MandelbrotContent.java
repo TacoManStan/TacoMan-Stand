@@ -89,6 +89,8 @@ public class MandelbrotContent extends ListableContent<
         this.selectionBoxPaintCommand2.deactivate();
         this.selectionCirclePaintCommand.deactivate();
         
+        this.testPaintCommand.setDisabled(true);
+        this.testPaintCommand2.setDisabled(true);
         
 //        getOverlayHandler().getOverlay("default").addPaintCommand(selectionBoxPaintCommand);
 //        ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas().addPaintCommand(testPaintCommand);
@@ -262,6 +264,9 @@ public class MandelbrotContent extends ListableContent<
         selectionBoxPaintCommand2.deactivate();
         selectionCirclePaintCommand.deactivate();
         
+        testPaintCommand.setDisabled(true);
+        testPaintCommand2.setDisabled(true);
+        
         getData().zoomTo(dragData.getStartX(), dragData.getStartY(), dragData.getEndX(), dragData.getEndY());
     }
     
@@ -275,8 +280,13 @@ public class MandelbrotContent extends ListableContent<
             selectionBoxPaintCommand2.setBounds(moveData.getBounds());
             selectionCirclePaintCommand.setBounds(moveData.getBounds());
             
+            //
+            
             testPaintCommand.boundsBinding().setBounds(moveData.getBounds());
             testPaintCommand2.boundsBinding().setBounds(moveData.getBounds());
+            
+            testPaintCommand.setDisabled(false);
+            testPaintCommand2.setDisabled(false);
         });
     }
     
