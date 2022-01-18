@@ -3,6 +3,8 @@ package com.taco.suit_lady.ui.jfx.components.painting;
 import com.taco.suit_lady._to_sort._new.ReadOnlyObservableList;
 import com.taco.suit_lady._to_sort._new.ReadOnlyObservableListWrapper;
 import com.taco.suit_lady._to_sort._new.interfaces.ReadOnlyNameableProperty;
+import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.OverlayComponentV2;
+import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.PaintableSurfaceV2;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
@@ -27,7 +29,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 // TO-DOC
 public class Overlay
-        implements Springable, Lockable, ReadOnlyNameableProperty, Comparable<Overlay>, PaintableCanvas {
+        implements Springable, Lockable, ReadOnlyNameableProperty, Comparable<Overlay>, PaintableCanvas, PaintableSurfaceV2<OverlayComponentV2, Overlay> {
     
     private final Springable springable;
     private final ReentrantLock lock;
@@ -170,7 +172,7 @@ public class Overlay
     @Override public @NotNull IntegerBinding heightBinding() { return heightBinding; }
     
     
-    @Override public void repaint() {
+    @NotNull @Override public void repaint() {
     
     }
     

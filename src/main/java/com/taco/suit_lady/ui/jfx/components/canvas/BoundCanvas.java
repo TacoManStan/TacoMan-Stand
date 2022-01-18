@@ -1,5 +1,7 @@
 package com.taco.suit_lady.ui.jfx.components.canvas;
 
+import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.PaintCommandV2;
+import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.PaintableSurfaceV2;
 import com.taco.suit_lady.ui.jfx.components.painting.Paintable;
 import com.taco.suit_lady.ui.jfx.components.painting.PaintableCanvas;
 import com.taco.suit_lady.util.Lockable;
@@ -25,7 +27,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * <p>A {@link #isResizable() resizable} implementation of {@link Canvas}.</p>
  */
 public class BoundCanvas extends Canvas
-        implements PaintableCanvas {
+        implements PaintableCanvas, PaintableSurfaceV2<PaintCommandV2, BoundCanvas> {
     
     private final Springable springable;
     private final ReentrantLock lock;
@@ -227,7 +229,7 @@ public class BoundCanvas extends Canvas
     
     //</editor-fold>
     
-    @Override
+    @NotNull @Override
     public void repaint() {
         sync(() -> FXTools.runFX(() -> {
             FXTools.clearCanvasUnsafe(this);
