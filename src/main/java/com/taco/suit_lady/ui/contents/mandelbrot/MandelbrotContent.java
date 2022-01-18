@@ -23,7 +23,9 @@ import com.taco.suit_lady.util.tools.TaskTools;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import com.taco.tacository.json.JFiles;
 import javafx.beans.binding.Bindings;
+import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.ArcType;
 import org.docx4j.wml.R;
 import org.jetbrains.annotations.NotNull;
 
@@ -81,9 +83,8 @@ public class MandelbrotContent extends ListableContent<
                 lock, this, "selection-circle",
                 null, 2);
         
-        this.testPaintCommand = new ArcPaintCommand(this, lock, 50, 120, null);
+        this.testPaintCommand = new ArcPaintCommand(this, lock, 50, 120, ArcType.ROUND);
         this.testPaintCommand2 = new RectanglePaintCommand(this, lock);
-//        this.testPaintCommand2.setIsFill(true);
         
         this.selectionBoxPaintCommand.deactivate();
         this.selectionBoxPaintCommand2.deactivate();
@@ -94,6 +95,7 @@ public class MandelbrotContent extends ListableContent<
         
 //        getOverlayHandler().getOverlay("default").addPaintCommand(selectionBoxPaintCommand);
 //        ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas().addPaintCommand(testPaintCommand);
+        ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas().init().addPaintable(testPaintCommand.init());
         ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas().init().addPaintable(testPaintCommand2.init());
 //        getController().canvas().addPaintCommand(testPaintCommand);
         //        getOverlayHandler().getOverlay("default").addPaintCommand(selectionBoxPaintCommand2);
