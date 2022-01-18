@@ -1,6 +1,7 @@
 package com.taco.suit_lady.ui.jfx.components.painting;
 
 import com.taco.suit_lady.ui.jfx.components.canvas.BoundCanvas;
+import com.taco.suit_lady.ui.jfx.components.canvas.PaintCommand;
 import com.taco.suit_lady.ui.jfx.util.Boundable;
 import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.ui.jfx.util.BoundsBinding;
@@ -11,7 +12,9 @@ import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.function.Predicate;
 
 public interface Paintable<P extends Paintable<P, O>, O extends PaintableCanvas<P, O>>
@@ -77,6 +80,25 @@ public interface Paintable<P extends Paintable<P, O>, O extends PaintableCanvas<
     
     
     @Override default Bounds getBounds() { return boundsBinding().getBounds(); }
+    
+    //
+    
+    /**
+     * <p>The default compare operation for comparing this {@link Paintable} instance to the specified value, used primarily in sorting {@link Collection collections} and other such internal operations that rely on a {@link Comparable} implementation to function properly.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>If the {@link #paintPriorityProperty() Paint Priority} of this {@link Paintable} is <b>greater than</b> that of the specified {@link Paintable value}, return <b>{@code 1}</b>.</li>
+     *     <li>If the {@link #paintPriorityProperty() Paint Priority} of this {@link Paintable} is <b>lesser than</b> that of the specified {@link Paintable value}, return <b>{@code -1}</b>.</li>
+     *     <li>If the {@link #paintPriorityProperty() Paint Priority} of this {@link Paintable} is <b>equal to</b> that of the specified {@link Paintable value}, return <b>{@code 0}</b>.</li>
+     * </ol>
+     *
+     * @param o The other {@link Paintable} instance this {@link Paintable} instance is being compared to.
+     *
+     * @return An {@code int} representing the result of the {@link #compareTo(Paintable) compare} operation. See above for details.
+     */
+    @Override default int compareTo(@NotNull P o) {
+        return Integer.compare((Math.abs(getPaintPriority())), Math.abs(o.getPaintPriority()));
+    }
     
     //</editor-fold>
     

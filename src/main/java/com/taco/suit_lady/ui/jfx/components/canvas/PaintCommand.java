@@ -1,5 +1,6 @@
 package com.taco.suit_lady.ui.jfx.components.canvas;
 
+import com.taco.suit_lady.ui.jfx.components.painting.Overlay;
 import com.taco.suit_lady.ui.jfx.components.painting.Paintable;
 import com.taco.suit_lady.ui.jfx.util.BoundsBinding;
 import com.taco.suit_lady.util.springable.Springable;
@@ -82,10 +83,6 @@ public abstract class PaintCommand
     
     @Override public @NotNull Springable springable() { return springable; }
     @Override public @NotNull Lock getLock() { return lock; }
-    
-    @Override public int compareTo(@NotNull PaintCommand o) {
-        return Integer.compare((Math.abs(getPaintPriority())), Math.abs(o.getPaintPriority()));
-    }
     
     //</editor-fold>
     
