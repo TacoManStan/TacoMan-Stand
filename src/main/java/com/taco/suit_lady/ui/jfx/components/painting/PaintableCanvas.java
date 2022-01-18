@@ -8,14 +8,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.jetbrains.annotations.NotNull;
 
-public interface PaintableCanvas<P extends Paintable<P, O>, O extends PaintableCanvas<P, O>>
+public interface PaintableCanvas
         extends Springable, Lockable, Nameable {
     
-    ObservableList<P> paintables();
+    @NotNull ObservableList<Paintable> paintables();
     
-    default boolean addPaintable(@NotNull P paintable) {
+    default boolean addPaintable(@NotNull Paintable paintable) {
         return paintable != null && sync(() -> {
-            final ObservableList<P> paintables = paintables();
+            final ObservableList<Paintable> paintables = paintables();
             if (paintable.hasOwner()) {
                 if (paintable.getOwner().equals(this))
                     return true;
@@ -28,21 +28,21 @@ public interface PaintableCanvas<P extends Paintable<P, O>, O extends PaintableC
             else {
                 final boolean added = paintables.add(paintable);
                 
-                paintable.setOwner((O) this);
-                paintable.onAdd((O) this);
+                paintable.setOwner(this);
+                paintable.onAdd(this);
                 
                 return added;
             }
         });
     }
-    default boolean removePaintable(@NotNull P paintable) {
+    default boolean removePaintable(@NotNull Paintable paintable) {
         return paintable != null && sync(() -> {
-            final ObservableList<P> paintables = paintables();
+            final ObservableList<Paintable> paintables = paintables();
             if (paintables.contains(paintable)) {
                 final boolean removed = paintables.remove(paintable);
                 
                 paintable.setOwner(null);
-                paintable.onRemove((O) this);
+                paintable.onRemove(this);
                 
                 return removed;
             } else
@@ -50,17 +50,18 @@ public interface PaintableCanvas<P extends Paintable<P, O>, O extends PaintableC
         });
     }
     
-    IntegerBinding widthBinding();
-    IntegerBinding heightBinding();
+    @NotNull IntegerBinding widthBinding();
+    @NotNull IntegerBinding heightBinding();
     
     
     void repaint();
     
     //<editor-fold desc="--- DEFAULT ---">
     
-    default O init() { return (O) this; }
+    default @NotNull PaintableCanvas init() { return this; }
+    default boolean validatePaintable(@NotNull Paintable paintable) { return true; }
     
-    default ObservableList<P> sortAndGet() {
+    default @NotNull ObservableList<Paintable> sortAndGet() {
         return sync(() -> {
             FXCollections.sort(paintables());
             return paintables();

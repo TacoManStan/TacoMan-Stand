@@ -25,13 +25,13 @@ import java.util.concurrent.locks.ReentrantLock;
  * <p>A {@link #isResizable() resizable} implementation of {@link Canvas}.</p>
  */
 public class BoundCanvas extends Canvas
-        implements PaintableCanvas<PaintCommand, BoundCanvas> {
+        implements PaintableCanvas {
     
     private final Springable springable;
     private final ReentrantLock lock;
     
     private final ReadOnlyObjectWrapper<CanvasListener> canvasListenerProperty;
-    private final ListProperty<PaintCommand> paintCommands;
+    private final ListProperty<Paintable> paintCommands;
     
     private final ReadOnlyObjectWrapper<Image> imageProperty;
     
@@ -66,14 +66,14 @@ public class BoundCanvas extends Canvas
         
         this.springable = springable;
         this.lock = lock != null ? lock : new ReentrantLock();
-    
+        
         //
-    
+        
         this.canvasListenerProperty = new ReadOnlyObjectWrapper<>();
         this.paintCommands = new SimpleListProperty<>(FXCollections.observableArrayList());
-    
+        
         this.imageProperty = new ReadOnlyObjectWrapper<>();
-    
+        
         this.widthBinding = Bindings.createIntegerBinding(() -> (int) getWidth(), widthProperty());
         this.heightBinding = Bindings.createIntegerBinding(() -> (int) getHeight(), heightProperty());
     }
@@ -112,38 +112,38 @@ public class BoundCanvas extends Canvas
     public final void setCanvasListener(@Nullable CanvasListener canvasListener) { canvasListenerProperty.set(canvasListener); }
     
     
-//    public final boolean containsPaintCommand(@Nullable PaintCommand paintCommand) {
-//        return paintCommand != null && sync(() -> paintCommands.contains(paintCommand));
-//    }
-//
-//    public final boolean removePaintCommand(@Nullable PaintCommand paintCommand) {
-//        return paintCommand != null && sync(() -> {
-//            if (containsPaintCommand(paintCommand)) {
-//                final boolean removed = paintCommands.remove(paintCommand);
-//
-//                paintCommand.setOwner(null);
-//                paintCommand.onRemove(this);
-//
-//                return removed;
-//            } else
-//                return false;
-//        });
-//    }
-//
-//    public final boolean addPaintCommand(@Nullable PaintCommand paintCommand) {
-//        return paintCommand != null && sync(() -> {
-//            if (containsPaintCommand(paintCommand))
-//                return true;
-//            else {
-//                final boolean added = paintCommands.add(paintCommand);
-//
-//                paintCommand.setOwner(this);
-//                paintCommand.onAdd(this);
-//
-//                return added;
-//            }
-//        });
-//    }
+    //    public final boolean containsPaintCommand(@Nullable PaintCommand paintCommand) {
+    //        return paintCommand != null && sync(() -> paintCommands.contains(paintCommand));
+    //    }
+    //
+    //    public final boolean removePaintCommand(@Nullable PaintCommand paintCommand) {
+    //        return paintCommand != null && sync(() -> {
+    //            if (containsPaintCommand(paintCommand)) {
+    //                final boolean removed = paintCommands.remove(paintCommand);
+    //
+    //                paintCommand.setOwner(null);
+    //                paintCommand.onRemove(this);
+    //
+    //                return removed;
+    //            } else
+    //                return false;
+    //        });
+    //    }
+    //
+    //    public final boolean addPaintCommand(@Nullable PaintCommand paintCommand) {
+    //        return paintCommand != null && sync(() -> {
+    //            if (containsPaintCommand(paintCommand))
+    //                return true;
+    //            else {
+    //                final boolean added = paintCommands.add(paintCommand);
+    //
+    //                paintCommand.setOwner(this);
+    //                paintCommand.onAdd(this);
+    //
+    //                return added;
+    //            }
+    //        });
+    //    }
     
     
     public final ReadOnlyObjectProperty<Image> imageProperty() { return imageProperty.getReadOnlyProperty(); }
@@ -164,10 +164,12 @@ public class BoundCanvas extends Canvas
     
     //
     
-    @Override public ListProperty<PaintCommand> paintables() { return paintCommands; }
+    @Override public @NotNull ListProperty<Paintable> paintables() { return paintCommands; }
     
-    @Override public IntegerBinding widthBinding() { return widthBinding; }
-    @Override public IntegerBinding heightBinding() { return heightBinding; }
+    @Override public @NotNull IntegerBinding widthBinding() { return widthBinding; }
+    @Override public @NotNull IntegerBinding heightBinding() { return heightBinding; }
+    
+    @Override public boolean validatePaintable(@NotNull Paintable paintable) { return paintable instanceof PaintCommand; }
     
     
     @Override public String getName() { throw ExceptionTools.nyi(); }

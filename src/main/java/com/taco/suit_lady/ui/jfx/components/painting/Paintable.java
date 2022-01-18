@@ -17,18 +17,18 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.function.Predicate;
 
-public interface Paintable<P extends Paintable<P, O>, O extends PaintableCanvas<P, O>>
-        extends Springable, Lockable, Comparable<P>, Boundable {
+public interface Paintable
+        extends Springable, Lockable, Comparable<Paintable>, Boundable {
     
     //For paint commands that you want to be painted on multiple surfaces, create a "PaintableGroup" implementation of PaintableCanvas that passes
     // all commands sent to it to its list of wrapped PaintableCanvas objects (e.g., Overlay or BoundCanvas).
-    ObjectProperty<O> ownerProperty();
-    default O getOwner() { return ownerProperty().get(); }
-    default O setOwner(O newValue) { return PropertyTools.setProperty(ownerProperty(), newValue); }
+    ObjectProperty<PaintableCanvas> ownerProperty();
+    default PaintableCanvas getOwner() { return ownerProperty().get(); }
+    default PaintableCanvas setOwner(PaintableCanvas newValue) { return PropertyTools.setProperty(ownerProperty(), newValue); }
     
-    ObjectProperty<Predicate<O>> autoRemoveConditionProperty();
-    default Predicate<O> getAutoRemoveCondition() { return autoRemoveConditionProperty().get(); }
-    default Predicate<O> setAutoRemoveCondition(Predicate<O> newValue) { return PropertyTools.setProperty(autoRemoveConditionProperty(), newValue); }
+    ObjectProperty<Predicate<PaintableCanvas>> autoRemoveConditionProperty();
+    default Predicate<PaintableCanvas> getAutoRemoveCondition() { return autoRemoveConditionProperty().get(); }
+    default Predicate<PaintableCanvas> setAutoRemoveCondition(Predicate<PaintableCanvas> newValue) { return PropertyTools.setProperty(autoRemoveConditionProperty(), newValue); }
     
     BooleanProperty disabledProperty();
     default boolean isDisabled() { return disabledProperty().get(); }
@@ -42,14 +42,14 @@ public interface Paintable<P extends Paintable<P, O>, O extends PaintableCanvas<
     
     //
     
-    void onAdd(O owner);
-    void onRemove(O owner);
+    void onAdd(PaintableCanvas owner);
+    void onRemove(PaintableCanvas owner);
     
     void paint();
     
     //<editor-fold desc="--- DEFAULT ---">
     
-    default P init() {
+    default Paintable init() {
         autoRemoveConditionProperty().addListener((observable, oldValue, newValue) -> repaintOwner());
         disabledProperty().addListener((observable, oldValue, newValue) -> repaintOwner());
         paintPriorityProperty().addListener((observable, oldValue, newValue) -> repaintOwner());
@@ -57,7 +57,7 @@ public interface Paintable<P extends Paintable<P, O>, O extends PaintableCanvas<
         boundsBinding().addListener((observable, oldValue, newValue) -> repaintOwner());
         
         
-        return (P) this;
+        return this;
     }
     
     //
@@ -65,7 +65,7 @@ public interface Paintable<P extends Paintable<P, O>, O extends PaintableCanvas<
     default boolean hasOwner() { return getOwner() != null; }
     
     default void repaintOwner() {
-        O owner = getOwner();
+        PaintableCanvas owner = getOwner();
         if (owner != null)
             sync(() -> FXTools.runFX(() -> owner.repaint(), true));
     }
@@ -96,7 +96,7 @@ public interface Paintable<P extends Paintable<P, O>, O extends PaintableCanvas<
      *
      * @return An {@code int} representing the result of the {@link #compareTo(Paintable) compare} operation. See above for details.
      */
-    @Override default int compareTo(@NotNull P o) {
+    @Override default int compareTo(@NotNull Paintable o) {
         return Integer.compare((Math.abs(getPaintPriority())), Math.abs(o.getPaintPriority()));
     }
     

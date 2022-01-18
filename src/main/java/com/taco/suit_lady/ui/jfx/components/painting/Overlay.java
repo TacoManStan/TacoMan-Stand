@@ -7,11 +7,14 @@ import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.list_tools.ListTools;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.layout.StackPane;
 import net.rgielen.fxweaver.core.FxWeaver;
@@ -24,7 +27,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 // TO-DOC
 public class Overlay
-        implements Springable, Lockable, ReadOnlyNameableProperty, Comparable<Overlay> {
+        implements Springable, Lockable, ReadOnlyNameableProperty, Comparable<Overlay>, PaintableCanvas {
     
     private final Springable springable;
     private final ReentrantLock lock;
@@ -34,7 +37,10 @@ public class Overlay
     private final StackPane root;
     
     private final ReadOnlyIntegerWrapper paintPriorityProperty;
-    private final ReadOnlyObservableListWrapper<OverlayCommand<?>> paintCommands;
+    private final ReadOnlyObservableListWrapper<Paintable> paintCommands;
+    
+    private final IntegerBinding widthBinding;
+    private final IntegerBinding heightBinding;
     
     //<editor-fold desc="--- CONSTRUCTORS ---">
     
@@ -89,9 +95,17 @@ public class Overlay
         
         this.paintCommands = new ReadOnlyObservableListWrapper<>();
         
+        this.widthBinding = Bindings.createIntegerBinding(() -> (int) root.getWidth(), root.widthProperty());
+        this.heightBinding = Bindings.createIntegerBinding(() -> (int) root.getHeight(), root.heightProperty());
+        
+        //
+        
         ListTools.applyListener(lock, paintCommands, (op1, op2, opType, triggerType) -> {
             root.getChildren().retainAll();
-            paintCommands.forEach(paintCommand -> root.getChildren().add(paintCommand.getNode()));
+            paintCommands.forEach(paintable -> {
+                if (paintable instanceof OverlayCommand command)
+                    root.getChildren().add(command.getNode());
+            });
         });
     }
     
@@ -146,77 +160,73 @@ public class Overlay
         paintPriorityProperty.set(paintPriority);
     }
     
-    
-    /**
-     * <p>Returns the {@link ReadOnlyObservableList} containing the {@link OverlayCommand Paint Commands} assigned to this {@link Overlay}.</p>
-     *
-     * @return The {@link ReadOnlyObservableList} containing the {@link OverlayCommand Paint Commands} assigned to this {@link Overlay}.
-     */
-    public final ReadOnlyObservableList<OverlayCommand<?>> paintCommands() {
-        return paintCommands.readOnlyList();
-    }
-    
     //</editor-fold>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override
-    public final @NotNull FxWeaver weaver() {
+    @Override public @NotNull ObservableList<Paintable> paintables() { return paintCommands; }
+    
+    @Override public @NotNull IntegerBinding widthBinding() { return widthBinding; }
+    @Override public @NotNull IntegerBinding heightBinding() { return heightBinding; }
+    
+    
+    @Override public void repaint() {
+    
+    }
+    
+    //
+    
+    @Override public final @NotNull FxWeaver weaver() {
         return springable.weaver();
     }
     
-    @Override
-    public final @NotNull ConfigurableApplicationContext ctx() {
+    @Override public final @NotNull ConfigurableApplicationContext ctx() {
         return springable.ctx();
     }
     
     
-    @Override
-    public final @NotNull Lock getLock() {
+    @Override public final @NotNull Lock getLock() {
         return lock != null ? lock : new ReentrantLock();
     }
     
     
-    @Override
-    public final ReadOnlyStringProperty nameProperty() {
+    @Override public final ReadOnlyStringProperty nameProperty() {
         return nameProperty.getReadOnlyProperty();
     }
     
     //
     
-
-    @Override
-    public int compareTo(@NotNull Overlay o) {
+    @Override public int compareTo(@NotNull Overlay o) {
         return Integer.compare((Math.abs(getPaintPriority())), Math.abs(o.getPaintPriority()));
     }
     
     //</editor-fold>
     
-    /**
-     * <p>{@link ReadOnlyObservableListWrapper#add(Object) Adds} the specified {@link OverlayCommand} to this {@link Overlay}.</p>
-     *
-     * @param paintCommand The {@link OverlayCommand} to be {@link ReadOnlyObservableListWrapper#add(Object) added}.
-     */
-    public final void addPaintCommand(@NotNull OverlayCommand<?> paintCommand) {
-        sync(() -> {
-            ExceptionTools.nullCheck(paintCommand, "Paint Command Input").setOwner(this); // TODO: Move to listener & also track remove events
-            paintCommands.add(paintCommand);
-            FXCollections.sort(paintCommands);
-            debugger().printList(paintCommands, "Paint Commands (Added)");
-        });
-    }
-    
-    /**
-     * <p>{@link ReadOnlyObservableListWrapper#remove(Object) Removes} the specified {@link OverlayCommand} to this {@link Overlay}.</p>
-     *
-     * @param paintCommand The {@link OverlayCommand} to be {@link ReadOnlyObservableListWrapper#remove(Object) removed}.
-     */
-    public final boolean removePaintCommand(@NotNull OverlayCommand<?> paintCommand) {
-        ExceptionTools.nullCheck(paintCommand, "Paint Command Input");
-        return sync(() -> {
-            paintCommands.remove(paintCommand);
-            debugger().printList(paintCommands, "Paint Commands (Removed)");
-            return !paintCommands.contains(paintCommand);
-        });
-    }
+//    /**
+//     * <p>{@link ReadOnlyObservableListWrapper#add(Object) Adds} the specified {@link OverlayCommand} to this {@link Overlay}.</p>
+//     *
+//     * @param paintCommand The {@link OverlayCommand} to be {@link ReadOnlyObservableListWrapper#add(Object) added}.
+//     */
+//    public final void addPaintCommand(@NotNull OverlayCommand<?> paintCommand) {
+//        sync(() -> {
+//            ExceptionTools.nullCheck(paintCommand, "Paint Command Input").setOwner(this); // TODO: Move to listener & also track remove events
+//            paintCommands.add(paintCommand);
+//            FXCollections.sort(paintCommands);
+//            debugger().printList(paintCommands, "Paint Commands (Added)");
+//        });
+//    }
+//
+//    /**
+//     * <p>{@link ReadOnlyObservableListWrapper#remove(Object) Removes} the specified {@link OverlayCommand} to this {@link Overlay}.</p>
+//     *
+//     * @param paintCommand The {@link OverlayCommand} to be {@link ReadOnlyObservableListWrapper#remove(Object) removed}.
+//     */
+//    public final boolean removePaintCommand(@NotNull OverlayCommand<?> paintCommand) {
+//        ExceptionTools.nullCheck(paintCommand, "Paint Command Input");
+//        return sync(() -> {
+//            paintCommands.remove(paintCommand);
+//            debugger().printList(paintCommands, "Paint Commands (Removed)");
+//            return !paintCommands.contains(paintCommand);
+//        });
+//    }
 }

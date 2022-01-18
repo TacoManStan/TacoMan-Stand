@@ -44,7 +44,7 @@ public class CanvasOverlay extends Overlay {
     
     //<editor-fold desc="--- INITIALIZATION ---">
     
-    public CanvasOverlay init() {
+    public @NotNull CanvasOverlay init() {
         FXTools.bindToParent(canvasPane, root(), true);
         return this;
     }

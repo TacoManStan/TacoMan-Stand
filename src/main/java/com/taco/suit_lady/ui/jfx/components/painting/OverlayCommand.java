@@ -2,6 +2,7 @@ package com.taco.suit_lady.ui.jfx.components.painting;
 
 import com.taco.suit_lady._to_sort._new.interfaces.ObservablePropertyContainable;
 import com.taco.suit_lady.ui.jfx.util.Bounds;
+import com.taco.suit_lady.ui.jfx.util.BoundsBinding;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
@@ -21,8 +22,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 
-public abstract class OverlayCommand<N extends Node>
-        implements Lockable, Springable, Nameable, Comparable<OverlayCommand<?>>, ObservablePropertyContainable {
+public class OverlayCommand<N extends Node>
+        implements Lockable, Springable, Nameable, Comparable<OverlayCommand<?>>, ObservablePropertyContainable, Paintable {
     
     private final ReentrantLock lock;
     private final StrictSpringable springable;
@@ -84,27 +85,6 @@ public abstract class OverlayCommand<N extends Node>
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final @NotNull ReadOnlyObjectProperty<Overlay> ownerProperty() {
-        return ownerProperty.getReadOnlyProperty();
-    }
-    
-    public final @Nullable Overlay getOwner() {
-        return ownerProperty.get();
-    }
-    
-    protected final @NotNull ReadOnlyObjectWrapper<Overlay> ownerPropertyImpl() {
-        return ownerProperty;
-    }
-    
-    public final @Nullable Overlay setOwner(@Nullable Overlay overlay) {
-        return sync(() -> {
-            Overlay oldOverlay = getOwner();
-            ownerProperty.set(overlay);
-            return oldOverlay;
-        });
-    }
-    
-    
     protected final @NotNull ReadOnlyObjectProperty<N> nodeProperty() {
         return nodeProperty.getReadOnlyProperty();
     }
@@ -119,121 +99,33 @@ public abstract class OverlayCommand<N extends Node>
         });
     }
     
-    
-    protected final @NotNull Predicate<? super OverlayCommand<N>> getAutoRemoveCondition() {
-        return autoRemoveCondition;
-    }
-    
-    
-    public final @NotNull BooleanProperty activeProperty() {
-        return activeProperty;
-    }
-    
-    public final @NotNull OverlayCommand<N> activate() {
-        activeProperty.set(true);
-        return this;
-    }
-    
-    public final @NotNull OverlayCommand<N> deactivate() {
-        activeProperty.set(false);
-        return this;
-    }
-    
-    
-    public final @NotNull IntegerProperty paintPriorityProperty() {
-        return paintPriorityProperty;
-    }
-    
-    public final int getPaintPriority() {
-        return paintPriorityProperty.get();
-    }
-    
-    //
-    
-    public final @NotNull IntegerProperty xProperty() {
-        return xProperty;
-    }
-    
-    public final int getX() {
-        return xProperty.get();
-    }
-    
-    public final void setX(double x) {
-        xProperty.set((int) x);
-    }
-    
-    
-    public final @NotNull IntegerProperty yProperty() {
-        return yProperty;
-    }
-    
-    public final int getY() {
-        return yProperty.get();
-    }
-    
-    public final void setY(double y) {
-        yProperty.set((int) y);
-    }
-    
-    
-    public final @NotNull IntegerProperty widthProperty() {
-        return widthProperty;
-    }
-    
-    public final int getWidth() {
-        return widthProperty.get();
-    }
-    
-    public final int getWidthSafe() {
-        return getWidth() > 0 ? getWidth() : 1;
-    }
-    
-    public final void setWidth(double width) {
-        widthProperty.set((int) width);
-    }
-    
-    
-    public final @NotNull IntegerProperty heightProperty() {
-        return heightProperty;
-    }
-    
-    public final int getHeight() {
-        return heightProperty.get();
-    }
-    
-    public final int getHeightSafe() {
-        return getHeight() > 0 ? getHeight() : 1;
-    }
-    
-    public final void setHeight(double height) {
-        heightProperty.set((int) height);
-    }
-    
-    
-    public final void setBounds(@NotNull Bounds bounds) {
-        ExceptionTools.nullCheck(bounds, "Bounds");
-        setBounds(bounds.x(), bounds.y(), bounds.width(), bounds.height());
-    }
-    
-    public final void setBounds(double x, double y, double width, double height) {
-        sync(() -> {
-            setX(x);
-            setY(y);
-            setWidth(width);
-            setHeight(height);
-        });
-    }
-    
     //</editor-fold>
     
     //<editor-fold desc="--- BINDINGS ---">
     
-    public final ObjectBinding<Bounds> boundsBinding() {
-        return boundsBinding;
+    @Override public ObjectProperty<PaintableCanvas> ownerProperty() {
+        return null;
     }
+    @Override public ObjectProperty<Predicate<PaintableCanvas>> autoRemoveConditionProperty() {
+        return null;
+    }
+    @Override public BooleanProperty disabledProperty() {
+        return null;
+    }
+    @Override public IntegerProperty paintPriorityProperty() {
+        return null;
+    }
+    @Override public BoundsBinding boundsBinding() {
+        return null;
+    }
+    @Override public void onAdd(PaintableCanvas owner) {
     
-    public final Bounds getBounds() {
-        return boundsBinding.get();
+    }
+    @Override public void onRemove(PaintableCanvas owner) {
+    
+    }
+    @Override public void paint() {
+    
     }
     
     //</editor-fold>
@@ -250,12 +142,8 @@ public abstract class OverlayCommand<N extends Node>
     }
     
     protected void syncBounds(@NotNull N n) {
-        getNode().resizeRelocate(getX(), getY(), getWidthSafe(), getHeightSafe());
+        getNode().resizeRelocate(getX(), getY(), getWidth(), getHeight());
     }
-    
-    protected abstract void onAdded(@NotNull Overlay owner);
-    
-    protected abstract void onRemoved(@NotNull Overlay owner);
     
     //
     
@@ -302,6 +190,10 @@ public abstract class OverlayCommand<N extends Node>
         return Integer.compare((Math.abs(getPaintPriority())), Math.abs(o.getPaintPriority()));
     }
     
+    //
+    
+    
+    
     //</editor-fold>
     
     //<editor-fold desc="--- INTERNAL ---">
@@ -317,7 +209,7 @@ public abstract class OverlayCommand<N extends Node>
         return sync(() -> {
             final Overlay overlay = getOwner();
             if (overlay != null && autoRemoveCondition.test(this))
-                return overlay.removePaintCommand(this);
+                return overlay.removePaintable(this);
             return false;
         });
     }

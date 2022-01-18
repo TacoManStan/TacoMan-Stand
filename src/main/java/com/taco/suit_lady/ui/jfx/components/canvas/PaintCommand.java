@@ -2,6 +2,7 @@ package com.taco.suit_lady.ui.jfx.components.canvas;
 
 import com.taco.suit_lady.ui.jfx.components.painting.Overlay;
 import com.taco.suit_lady.ui.jfx.components.painting.Paintable;
+import com.taco.suit_lady.ui.jfx.components.painting.PaintableCanvas;
 import com.taco.suit_lady.ui.jfx.util.BoundsBinding;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
@@ -16,15 +17,15 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 
 public abstract class PaintCommand
-        implements SpringableWrapper, Paintable<PaintCommand, BoundCanvas> {
+        implements SpringableWrapper, Paintable {
     
     private final StrictSpringable springable;
     private final ReentrantLock lock;
     
     
-    private final ObjectProperty<BoundCanvas> ownerProperty;
+    private final ObjectProperty<PaintableCanvas> ownerProperty;
     
-    private final ObjectProperty<Predicate<BoundCanvas>> autoRemoveConditionProperty;
+    private final ObjectProperty<Predicate<PaintableCanvas>> autoRemoveConditionProperty;
     private final BooleanProperty disabledProperty;
     private final IntegerProperty paintPriorityProperty;
     
@@ -43,6 +44,12 @@ public abstract class PaintCommand
         this.boundsBinding = new BoundsBinding();
     }
     
+    //<editor-fold desc="--- PROPERTIES ---">
+    
+    public BoundCanvas getCanvas() { return (BoundCanvas) getOwner(); }
+    
+    //</editor-fold>
+    
     //<editor-fold desc="--- ABSTRACT ---">
     
     protected abstract void onPaint();
@@ -53,9 +60,9 @@ public abstract class PaintCommand
     
     //<editor-fold desc="> Paintable">
     
-    @Override public ObjectProperty<BoundCanvas> ownerProperty() { return ownerProperty; }
+    @Override public ObjectProperty<PaintableCanvas> ownerProperty() { return ownerProperty; }
     
-    @Override public ObjectProperty<Predicate<BoundCanvas>> autoRemoveConditionProperty() { return autoRemoveConditionProperty; }
+    @Override public ObjectProperty<Predicate<PaintableCanvas>> autoRemoveConditionProperty() { return autoRemoveConditionProperty; }
     @Override public BooleanProperty disabledProperty() { return disabledProperty; }
     @Override public IntegerProperty paintPriorityProperty() { return paintPriorityProperty; }
     
@@ -66,7 +73,7 @@ public abstract class PaintCommand
     public void paint() {
         if (!isDisabled())
             FXTools.runFX(() -> sync(() -> {
-                Predicate<BoundCanvas> autoRemoveCondition = getAutoRemoveCondition();
+                Predicate<PaintableCanvas> autoRemoveCondition = getAutoRemoveCondition();
                 if (autoRemoveCondition != null && autoRemoveCondition.test(getOwner()))
                     getOwner().removePaintable(this);
                 else
@@ -75,8 +82,8 @@ public abstract class PaintCommand
     }
     
     
-    @Override public void onAdd(BoundCanvas owner) { }
-    @Override public void onRemove(BoundCanvas owner) { }
+    @Override public void onAdd(PaintableCanvas owner) { }
+    @Override public void onRemove(PaintableCanvas owner) { }
     
     
     //</editor-fold>
@@ -89,7 +96,7 @@ public abstract class PaintCommand
     //<editor-fold desc="--- INTERNAL ---">
     
     @Override public void repaintOwner() {
-        BoundCanvas owner = getOwner();
+        PaintableCanvas owner = getOwner();
         if (owner != null)
             sync(() -> FXTools.runFX(() -> owner.repaint(), true));
     }
