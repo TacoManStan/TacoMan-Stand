@@ -1,5 +1,6 @@
 package com.taco.suit_lady.ui.jfx.components.canvas.paintingV2;
 
+import com.taco.suit_lady.ui.jfx.util.DimensionsBinding;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
@@ -24,18 +25,24 @@ public class PaintableSurfaceDataContainerV2<P extends PaintableV2<P, S>, S exte
     private final S owner;
     private final ListProperty<P> paintables;
     
+    private final DimensionsBinding dimensionsBinding;
+    
     public PaintableSurfaceDataContainerV2(@NotNull Springable springable, @Nullable ReentrantLock lock, @NotNull S owner) {
         this.springable = springable.asStrict();
         this.lock = lock != null ? lock : new ReentrantLock();
         
         this.owner = owner;
         this.paintables = new SimpleListProperty<>(FXCollections.observableArrayList());
+        
+        this.dimensionsBinding = new DimensionsBinding();
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
     
     public final @NotNull S getOwner() { return owner; }
     public final @NotNull ListProperty<P> paintables() { return paintables; }
+    
+    public final @NotNull DimensionsBinding dimensionsBinding() { return dimensionsBinding; }
     
     //</editor-fold>
     

@@ -34,8 +34,8 @@ public class RectangleOverlayCommand extends ShapeOverlayCommand<Rectangle> {
     protected void syncBounds(@NotNull Rectangle rectangle) {
         rectangle.setX(getX());
         rectangle.setY(getY());
-        rectangle.setWidth(getWidthSafe());
-        rectangle.setHeight(getHeightSafe());
+//        rectangle.setWidth(getWidthSafe());
+//        rectangle.setHeight(getHeightSafe());
     }
     
     @Override

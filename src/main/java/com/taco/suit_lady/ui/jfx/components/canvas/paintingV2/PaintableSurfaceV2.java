@@ -1,22 +1,25 @@
 package com.taco.suit_lady.ui.jfx.components.canvas.paintingV2;
 
 import com.taco.suit_lady._to_sort._new.Self;
-import com.taco.suit_lady.ui.jfx.components.painting.Paintable;
-import com.taco.suit_lady.ui.jfx.util.Boundable;
-import com.taco.suit_lady.ui.jfx.util.Bounds;
+import com.taco.suit_lady.ui.jfx.util.DimensionsBinding;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import javafx.beans.property.ListProperty;
-import javafx.collections.ObservableList;
 import org.jetbrains.annotations.NotNull;
 
 public interface PaintableSurfaceV2<P extends PaintableV2<P, S>, S extends PaintableSurfaceV2<P, S>>
         extends Self<S>, SpringableWrapper, Lockable {
     
+    @NotNull PaintableSurfaceDataContainerV2<P, S> data();
+    
     @NotNull ListProperty<P> paintablesV2();
     @NotNull S repaintV2();
     
     //<editor-fold desc="--- DEFAULT ---">
+    
+    default @NotNull DimensionsBinding dimensionsBinding() { return data().dimensionsBinding(); }
+    
+    //<editor-fold desc="> Operations">
     
     default @NotNull S init() {
         //TODO
@@ -59,6 +62,8 @@ public interface PaintableSurfaceV2<P extends PaintableV2<P, S>, S extends Paint
                 return false;
         });
     }
+    
+    //</editor-fold>
     
     //</editor-fold>
 }
