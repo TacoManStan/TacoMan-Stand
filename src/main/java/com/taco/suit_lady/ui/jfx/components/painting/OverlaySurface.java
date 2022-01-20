@@ -2,8 +2,8 @@ package com.taco.suit_lady.ui.jfx.components.painting;
 
 import com.taco.suit_lady._to_sort._new.interfaces.ReadOnlyNameableProperty;
 import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.OverlayPainter;
-import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.PaintableSurfaceDataContainerV2;
-import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.PaintableSurfaceV2;
+import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.SurfaceData;
+import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.Surface;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
@@ -22,7 +22,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 // TO-DOC
 public class OverlaySurface
-        implements SpringableWrapper, Lockable, ReadOnlyNameableProperty, Comparable<OverlaySurface>, PaintableSurfaceV2<OverlayPainter, OverlaySurface> {
+        implements SpringableWrapper, Lockable, ReadOnlyNameableProperty, Comparable<OverlaySurface>, Surface<OverlayPainter, OverlaySurface> {
     
     private final Springable springable;
     private final ReentrantLock lock;
@@ -33,7 +33,7 @@ public class OverlaySurface
     
     private final ReadOnlyIntegerWrapper paintPriorityProperty;
     
-    private final PaintableSurfaceDataContainerV2<OverlayPainter, OverlaySurface> data;
+    private final SurfaceData<OverlayPainter, OverlaySurface> data;
     
     //<editor-fold desc="--- CONSTRUCTORS ---">
     
@@ -86,7 +86,7 @@ public class OverlaySurface
         
         this.paintPriorityProperty = new ReadOnlyIntegerWrapper(paintPriority);
         
-        this.data = new PaintableSurfaceDataContainerV2<>(springable, lock, this, root.widthProperty(), root.heightProperty());
+        this.data = new SurfaceData<>(springable, lock, this, root.widthProperty(), root.heightProperty());
         
         //
         
@@ -152,7 +152,7 @@ public class OverlaySurface
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull PaintableSurfaceDataContainerV2<OverlayPainter, OverlaySurface> data() { return data; }
+    @Override public @NotNull SurfaceData<OverlayPainter, OverlaySurface> data() { return data; }
     
     @Override public @NotNull OverlaySurface repaint() {
         //TODO

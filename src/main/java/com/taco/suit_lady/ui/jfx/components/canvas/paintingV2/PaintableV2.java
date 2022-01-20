@@ -17,10 +17,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.locks.Lock;
 import java.util.function.Predicate;
 
-public interface PaintableV2<P extends PaintableV2<P, S>, S extends PaintableSurfaceV2<P, S>>
+public interface PaintableV2<P extends PaintableV2<P, S>, S extends Surface<P, S>>
         extends Self<P>, SpringableWrapper, Lockable, Comparable<P>, Boundable {
     
-    @NotNull PaintableDataContainerV2<P, S> data();
+    @NotNull PaintableData<P, S> data();
     
     void onAdd(S surface);
     void onRemove(S surface);

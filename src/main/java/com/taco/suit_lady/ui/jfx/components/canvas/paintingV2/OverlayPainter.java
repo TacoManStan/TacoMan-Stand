@@ -16,12 +16,12 @@ import java.util.concurrent.locks.ReentrantLock;
 public abstract class OverlayPainter
         implements SpringableWrapper, PaintableV2<OverlayPainter, OverlaySurface> {
     
-    private final PaintableDataContainerV2<OverlayPainter, OverlaySurface> data;
+    private final PaintableData<OverlayPainter, OverlaySurface> data;
     
     private final ObjectProperty<Node> nodeProperty;
     
     public OverlayPainter(@NotNull Springable springable, @Nullable ReentrantLock lock) {
-        this.data = new PaintableDataContainerV2<>(springable, lock, this);
+        this.data = new PaintableData<>(springable, lock, this);
         
         this.nodeProperty = new SimpleObjectProperty<>();
     }
@@ -42,7 +42,7 @@ public abstract class OverlayPainter
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull PaintableDataContainerV2<OverlayPainter, OverlaySurface> data() { return data; }
+    @Override public @NotNull PaintableData<OverlayPainter, OverlaySurface> data() { return data; }
     
     @Override public void onAdd(OverlaySurface surface) { }
     @Override public void onRemove(OverlaySurface surface) { }

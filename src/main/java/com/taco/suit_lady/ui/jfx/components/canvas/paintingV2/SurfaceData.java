@@ -1,6 +1,5 @@
 package com.taco.suit_lady.ui.jfx.components.canvas.paintingV2;
 
-import com.taco.suit_lady.ui.jfx.util.DimensionsBinding;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
@@ -9,7 +8,6 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
-import javafx.beans.value.ObservableIntegerValue;
 import javafx.beans.value.ObservableNumberValue;
 import javafx.collections.FXCollections;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class PaintableSurfaceDataContainerV2<P extends PaintableV2<P, S>, S extends PaintableSurfaceV2<P, S>>
+public class SurfaceData<P extends PaintableV2<P, S>, S extends Surface<P, S>>
         implements SpringableWrapper, Lockable {
     
     private final StrictSpringable springable;
@@ -32,7 +30,7 @@ public class PaintableSurfaceDataContainerV2<P extends PaintableV2<P, S>, S exte
     private final IntegerBinding widthBinding;
     private final IntegerBinding heightBinding;
     
-    public PaintableSurfaceDataContainerV2(
+    public SurfaceData(
             @NotNull Springable springable, @Nullable ReentrantLock lock, @NotNull S owner,
             @NotNull ObservableNumberValue observableWidth, @NotNull ObservableNumberValue observableHeight) {
         this.springable = springable.asStrict();

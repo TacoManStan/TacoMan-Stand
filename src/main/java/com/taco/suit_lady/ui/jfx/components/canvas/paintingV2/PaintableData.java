@@ -13,7 +13,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 
-public class PaintableDataContainerV2<P extends PaintableV2<P, S>, S extends PaintableSurfaceV2<P, S>>
+public class PaintableData<P extends PaintableV2<P, S>, S extends Surface<P, S>>
         implements SpringableWrapper, Lockable {
     
     private final StrictSpringable springable;
@@ -28,7 +28,7 @@ public class PaintableDataContainerV2<P extends PaintableV2<P, S>, S extends Pai
     
     private final BoundsBinding boundsBinding;
     
-    public PaintableDataContainerV2(@NotNull Springable springable, @Nullable ReentrantLock lock, @NotNull P owner) {
+    public PaintableData(@NotNull Springable springable, @Nullable ReentrantLock lock, @NotNull P owner) {
         this.springable = springable.asStrict();
         this.lock = lock != null ? lock : new ReentrantLock();
         

@@ -13,10 +13,10 @@ import java.util.function.Predicate;
 public abstract class CanvasPainter
         implements SpringableWrapper, PaintableV2<CanvasPainter, CanvasSurface> {
     
-    private final PaintableDataContainerV2<CanvasPainter, CanvasSurface> data;
+    private final PaintableData<CanvasPainter, CanvasSurface> data;
     
     public CanvasPainter(@NotNull Springable springable, @Nullable ReentrantLock lock) {
-        this.data = new PaintableDataContainerV2<>(springable, lock, this);
+        this.data = new PaintableData<>(springable, lock, this);
     }
     
     
@@ -28,7 +28,7 @@ public abstract class CanvasPainter
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull PaintableDataContainerV2<CanvasPainter, CanvasSurface> data() { return data; }
+    @Override public @NotNull PaintableData<CanvasPainter, CanvasSurface> data() { return data; }
     
     @Override public void onAdd(CanvasSurface surface) { }
     @Override public void onRemove(CanvasSurface surface) { }

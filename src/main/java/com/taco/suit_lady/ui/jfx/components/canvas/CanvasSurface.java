@@ -1,8 +1,8 @@
 package com.taco.suit_lady.ui.jfx.components.canvas;
 
 import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.CanvasPainter;
-import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.PaintableSurfaceDataContainerV2;
-import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.PaintableSurfaceV2;
+import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.SurfaceData;
+import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.Surface;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import javafx.beans.property.*;
@@ -18,12 +18,12 @@ import java.util.concurrent.locks.ReentrantLock;
  * <p>A {@link #isResizable() resizable} implementation of {@link Canvas}.</p>
  */
 public class CanvasSurface extends Canvas
-        implements PaintableSurfaceV2<CanvasPainter, CanvasSurface> {
+        implements Surface<CanvasPainter, CanvasSurface> {
     
     private final ReadOnlyObjectWrapper<CanvasListener> canvasListenerProperty;
     private final ReadOnlyObjectWrapper<Image> imageProperty;
     
-    private final PaintableSurfaceDataContainerV2<CanvasPainter, CanvasSurface> data;
+    private final SurfaceData<CanvasPainter, CanvasSurface> data;
     
     //<editor-fold desc="--- CONSTRUCTORS ---">
     
@@ -54,7 +54,7 @@ public class CanvasSurface extends Canvas
         this.canvasListenerProperty = new ReadOnlyObjectWrapper<>();
         this.imageProperty = new ReadOnlyObjectWrapper<>();
         
-        this.data = new PaintableSurfaceDataContainerV2<>(
+        this.data = new SurfaceData<>(
                 springable, lock, this,
                 widthProperty(), heightProperty());
     }
@@ -103,7 +103,7 @@ public class CanvasSurface extends Canvas
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull PaintableSurfaceDataContainerV2<CanvasPainter, CanvasSurface> data() { return data; }
+    @Override public @NotNull SurfaceData<CanvasPainter, CanvasSurface> data() { return data; }
     
     @Override public @NotNull CanvasSurface repaint() {
         return sync(() -> FXTools.runFX(() -> {

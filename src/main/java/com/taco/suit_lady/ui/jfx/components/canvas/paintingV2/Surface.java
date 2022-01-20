@@ -10,10 +10,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.locks.Lock;
 
-public interface PaintableSurfaceV2<P extends PaintableV2<P, S>, S extends PaintableSurfaceV2<P, S>>
+public interface Surface<P extends PaintableV2<P, S>, S extends Surface<P, S>>
         extends Self<S>, SpringableWrapper, Lockable {
     
-    @NotNull PaintableSurfaceDataContainerV2<P, S> data();
+    @NotNull SurfaceData<P, S> data();
     
     @NotNull S repaint();
     
