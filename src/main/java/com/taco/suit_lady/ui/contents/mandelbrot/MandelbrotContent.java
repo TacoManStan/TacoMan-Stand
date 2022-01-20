@@ -4,11 +4,11 @@ import com.taco.suit_lady.ui.AppUI;
 import com.taco.suit_lady.ui.UIBook;
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotContentController.MouseDragData;
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotIterator.MandelbrotColor;
-import com.taco.suit_lady.ui.jfx.components.canvas.painting.BoxOverlayPainter;
-import com.taco.suit_lady.ui.jfx.components.canvas.painting.surface.CanvasSurface;
-import com.taco.suit_lady.ui.jfx.components.canvas.painting.ArcPainter;
-import com.taco.suit_lady.ui.jfx.components.canvas.painting.BoxPainter;
-import com.taco.suit_lady.ui.jfx.components.canvas.painting.OvalPainter;
+import com.taco.suit_lady.ui.jfx.components.painting.paintables.overlay.BoxOverlayPaintNode;
+import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasSurface;
+import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.ArcPainter;
+import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.BoxPainter;
+import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.OvalPainter;
 import com.taco.suit_lady.ui.pages.impl.content_selector.ListableContent;
 import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotContentHandler;
 import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotContentSelectorPage;
@@ -53,7 +53,7 @@ public class MandelbrotContent extends ListableContent<
     private final OvalPainter ovalPainter;
     private final ArcPainter arcPainter;
     
-    private final BoxOverlayPainter boxOverlayPainter;
+    private final BoxOverlayPaintNode boxOverlayPainter;
     
     private MandelbrotPage coverPage;
     
@@ -98,7 +98,7 @@ public class MandelbrotContent extends ListableContent<
         this.arcPainter.setDisabled(true);
         
         
-        this.boxOverlayPainter = new BoxOverlayPainter(this, lock);
+        this.boxOverlayPainter = new BoxOverlayPaintNode(this, lock);
         this.boxOverlayPainter.setDisabled(false);
         
         
