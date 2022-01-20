@@ -107,7 +107,7 @@ public class CanvasSurface extends Canvas
         return sync(() -> FXTools.runFX(() -> {
             FXTools.clearCanvasUnsafe(this);
             
-            paintablesV2().forEach(uiCommand -> uiCommand.paint());
+            paintables().forEach(uiCommand -> uiCommand.paint());
             
             final CanvasListener listener = getCanvasListener();
             if (listener != null)

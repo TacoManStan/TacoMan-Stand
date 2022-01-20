@@ -4,6 +4,7 @@ import com.taco.suit_lady.ui.AppUI;
 import com.taco.suit_lady.ui.UIBook;
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotContentController.MouseDragData;
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotIterator.MandelbrotColor;
+import com.taco.suit_lady.ui.jfx.components.canvas.painting.BoxOverlayPainter;
 import com.taco.suit_lady.ui.jfx.components.canvas.painting.surface.CanvasSurface;
 import com.taco.suit_lady.ui.jfx.components.canvas.painting.ArcPainter;
 import com.taco.suit_lady.ui.jfx.components.canvas.painting.BoxPainter;
@@ -52,6 +53,8 @@ public class MandelbrotContent extends ListableContent<
     private final OvalPainter ovalPainter;
     private final ArcPainter arcPainter;
     
+    private final BoxOverlayPainter boxOverlayPainter;
+    
     private MandelbrotPage coverPage;
     
     public MandelbrotContent(@NotNull MandelbrotContentHandler contentHandler) {
@@ -87,9 +90,20 @@ public class MandelbrotContent extends ListableContent<
         this.ovalPainter = new OvalPainter(this, lock);
         this.arcPainter = new ArcPainter(this, lock, 30, 30, ArcType.ROUND);
         
-        ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas().init().addPaintableV2(boxPainter.init());
-        ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas().init().addPaintableV2(ovalPainter.init());
-        ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas().init().addPaintableV2(arcPainter.init());
+        this.boxPainter.setDisabled(true);
+        this.ovalPainter.setDisabled(true);
+        this.arcPainter.setDisabled(true);
+        
+        this.boxOverlayPainter = new BoxOverlayPainter(this, lock);
+        
+        this.boxOverlayPainter.setDisabled(false);
+        
+//        ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas().init().addPaintable(boxPainter.init());
+//        getOverlayHandler().getOverlay("default").getForegroundCanvasPane().canvas().addPaintable(boxPainter.init());
+//        ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas().init().addPaintable(ovalPainter.init());
+//        ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas().init().addPaintable(arcPainter.init());
+        
+        System.out.println("Added: " + getOverlayHandler().getOverlay("default").addPaintable(boxOverlayPainter.init()));
         
         //        getController().canvas().addPaintCommand(testPaintCommand);
         //        getOverlayHandler().getOverlay("default").addPaintCommand(selectionBoxPaintCommand2);
@@ -257,6 +271,8 @@ public class MandelbrotContent extends ListableContent<
         ovalPainter.setDisabled(true);
         arcPainter.setDisabled(true);
         
+        boxOverlayPainter.setDisabled(true);
+        
         getData().zoomTo(dragData.getStartX(), dragData.getStartY(), dragData.getEndX(), dragData.getEndY());
     }
     
@@ -266,9 +282,13 @@ public class MandelbrotContent extends ListableContent<
             ovalPainter.setDisabled(false);
             arcPainter.setDisabled(false);
             
+            boxOverlayPainter.setDisabled(false);
+            
             boxPainter.boundsBinding().setBounds(moveData.getBounds());
             ovalPainter.boundsBinding().setBounds(moveData.getBounds());
             arcPainter.boundsBinding().setBounds(moveData.getBounds());
+            
+            boxOverlayPainter.boundsBinding().setBounds(moveData.getBounds());
         });
     }
     

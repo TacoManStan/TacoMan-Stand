@@ -245,8 +245,8 @@ public class OverlayHandler
             FXTools.runFX(() -> {
                 root().getChildren().retainAll();
                 for (OverlaySurface overlay: overlays) {
-                    FXTools.bindToParent(overlay.root(), root(), true);
-                    FXTools.togglePickOnBounds(overlay.root(), false);
+                    FXTools.bindToParent(overlay.getRoot(), root(), true);
+                    FXTools.togglePickOnBounds(overlay.getRoot(), false);
                 }
             }, true);
         });

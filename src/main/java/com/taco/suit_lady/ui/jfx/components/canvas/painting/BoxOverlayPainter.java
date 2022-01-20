@@ -14,19 +14,16 @@ public class BoxOverlayPainter extends OverlayPainter {
     
     public BoxOverlayPainter(@NotNull Springable springable, @Nullable ReentrantLock lock) {
         super(springable, lock);
-        
         this.shape = new Rectangle();
     }
-    @Override protected Node refreshNode() {
-        return null;
-    }
     
+    @Override protected Node refreshNode() { return shape; }
     @Override protected Node syncBounds(@NotNull Node n) {
+        System.out.println("Syncing Bounds");
         shape.setX(getX());
         shape.setY(getY());
         shape.setWidth(getWidth());
         shape.setHeight(getHeight());
-        
         return shape;
     }
 }

@@ -51,16 +51,12 @@ public abstract class OverlayPainter
     
     @Override public @NotNull PaintableData<OverlayPainter, OverlaySurface> data() { return data; }
     
-    @Override public void onAdd(OverlaySurface surface) { }
+    @Override public void onAdd(OverlaySurface surface) { System.out.println("Adding"); }
     @Override public void onRemove(OverlaySurface surface) { }
     
     
     @Override public @NotNull OverlayPainter paint() {
-        //TODO
         return this;
-    }
-    @Override public boolean isValidDimensions() {
-        return false; //TODO
     }
     
     //</editor-fold>

@@ -1,11 +1,13 @@
 package com.taco.suit_lady.ui.jfx.components.canvas.painting.surface;
 
 import com.taco.suit_lady._to_sort._new.interfaces.ReadOnlyNameableProperty;
+import com.taco.suit_lady.ui.jfx.components.canvas.CanvasPane;
 import com.taco.suit_lady.ui.jfx.components.canvas.painting.OverlayPainter;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.ExceptionTools;
+import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import com.taco.suit_lady.util.tools.list_tools.ListTools;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
@@ -28,6 +30,9 @@ public class OverlaySurface
     private final ReadOnlyStringWrapper nameProperty;
     
     private final StackPane root;
+    private final StackPane overlayPane;
+    private final CanvasPane foregroundCanvasPane;
+    private final CanvasPane backgroundCanvasPane;
     
     private final ReadOnlyIntegerWrapper paintPriorityProperty;
     
@@ -82,33 +87,41 @@ public class OverlaySurface
         this.root = new StackPane();
         this.root.setAlignment(Pos.TOP_LEFT);
         
+        this.overlayPane = new StackPane();
+        this.foregroundCanvasPane = new CanvasPane(springable);
+        this.backgroundCanvasPane = new CanvasPane(springable);
+    
+        this.data = new SurfaceData<>(springable, lock, this, root.widthProperty(), root.heightProperty());
         this.paintPriorityProperty = new ReadOnlyIntegerWrapper(paintPriority);
         
-        this.data = new SurfaceData<>(springable, lock, this, root.widthProperty(), root.heightProperty());
+        initPainting();
         
         //
         
         //TODO
-        ListTools.applyListener(lock, paintablesV2(), (op1, op2, opType, triggerType) -> {
-            root.getChildren().retainAll();
-            paintablesV2().forEach(paintable -> root.getChildren().add(paintable.getNode()));
+        ListTools.applyListener(lock, paintables(), (op1, op2, opType, triggerType) -> {
+            overlayPane.getChildren().retainAll();
+            paintables().forEach(paintable -> overlayPane.getChildren().add(paintable.getAndRefreshNode()));
         });
+    }
+    
+    private void initPainting() {
+        FXTools.bindToParent(backgroundCanvasPane, root, true);
+        FXTools.bindToParent(overlayPane, root, true);
+        FXTools.bindToParent(foregroundCanvasPane, root, true);
+        
+        FXTools.togglePickOnBounds(root, false);
     }
     
     //</editor-fold>
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    /**
-     * <p>Returns the {@link StackPane} instance on which all {@link OverlayPainter Paint Commands} assigned to this {@link OverlaySurface} are displayed.</p>
-     *
-     * @return The {@link StackPane} instance on which all {@link OverlayPainter Paint Commands} assigned to this {@link OverlaySurface} are displayed.
-     */
-    protected final StackPane root() {
-        return root;
-    }
+    protected final StackPane getRoot() { return root; }
     
-    //
+    protected final StackPane getOverlayPane() { return overlayPane; }
+    public final CanvasPane getForegroundCanvasPane() { return foregroundCanvasPane; }
+    public final CanvasPane getBackgroundCanvasPane() { return backgroundCanvasPane; }
     
     /**
      * <p>Returns the {@link ReadOnlyIntegerProperty} representing the priority at which this {@link OverlaySurface} is to be painted.</p>
@@ -124,22 +137,8 @@ public class OverlaySurface
      *
      * @return The {@link ReadOnlyIntegerProperty} representing the priority at which this {@link OverlaySurface} is to be painted.
      */
-    public final ReadOnlyIntegerProperty paintPriorityProperty() {
-        return paintPriorityProperty.getReadOnlyProperty();
-    }
-    
-    /**
-     * <p><b>Passthrough Definition:</b></p>
-     * <blockquote><i><code>{@link #paintPriorityProperty()}<b>.</b>{@link ReadOnlyIntegerProperty#get() get()}</code></i></blockquote>
-     */
-    public final int getPaintPriority() {
-        return paintPriorityProperty.get();
-    }
-    
-    /**
-     * <p><b>Passthrough Definition:</b></p>
-     * <blockquote><i><code>{@link #paintPriorityProperty}<b>.</b>{@link ReadOnlyIntegerWrapper#set(int) set}<b>(</b>paintPriority<b>)</b></code></i></blockquote>
-     */
+    public final ReadOnlyIntegerProperty paintPriorityProperty() { return paintPriorityProperty.getReadOnlyProperty(); }
+    public final int getPaintPriority() { return paintPriorityProperty.get(); }
     public final void setPaintPriority(int paintPriority) {
         if (paintPriority <= 0)
             throw ExceptionTools.ex(new IndexOutOfBoundsException("Paint Priority Must Be Greater Than Zero! [" + paintPriority + "]"));
@@ -148,12 +147,10 @@ public class OverlaySurface
     
     //</editor-fold>
     
-    //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">3.
     
     @Override public @NotNull SurfaceData<OverlayPainter, OverlaySurface> data() { return data; }
-    
     @Override public @NotNull OverlaySurface repaint() {
-        //TODO
         return this;
     }
     

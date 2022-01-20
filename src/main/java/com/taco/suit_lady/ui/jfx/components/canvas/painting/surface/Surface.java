@@ -20,7 +20,7 @@ public interface Surface<P extends Paintable<P, S>, S extends Surface<P, S>>
     
     //<editor-fold desc="--- DEFAULT ---">
     
-    default @NotNull ListProperty<P> paintablesV2() { return data().paintables(); }
+    default @NotNull ListProperty<P> paintables() { return data().paintables(); }
     
     default @NotNull IntegerBinding widthBinding() { return data().widthBinding(); }
     default @NotNull IntegerBinding heightBinding() { return data().heightBinding(); }
@@ -37,9 +37,9 @@ public interface Surface<P extends Paintable<P, S>, S extends Surface<P, S>>
         return self();
     }
     
-    default boolean addPaintableV2(@NotNull P paintable) {
+    default boolean addPaintable(@NotNull P paintable) {
         return paintable != null && sync(() -> {
-            final ListProperty<P> paintables = paintablesV2();
+            final ListProperty<P> paintables = paintables();
             if (paintable.getSurface() != null) {
                 if (paintable.getSurface().equals(this))
                     return true;
@@ -61,7 +61,7 @@ public interface Surface<P extends Paintable<P, S>, S extends Surface<P, S>>
     }
     default boolean removePaintableV2(@NotNull P paintable) {
         return paintable != null && sync(() -> {
-            final ListProperty<P> paintables = paintablesV2();
+            final ListProperty<P> paintables = paintables();
             if (paintables.contains(paintable)) {
                 final boolean removed = paintables.remove(paintable);
                 
