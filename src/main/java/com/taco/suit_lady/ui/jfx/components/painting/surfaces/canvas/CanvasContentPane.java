@@ -1,7 +1,6 @@
-package com.taco.suit_lady.ui.jfx.components.canvas;
+package com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas;
 
 import com.taco.suit_lady.ui.jfx.components.ContentPane;
-import com.taco.suit_lady.ui.jfx.components.canvas.painting.surface.CanvasSurface;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import org.jetbrains.annotations.NotNull;

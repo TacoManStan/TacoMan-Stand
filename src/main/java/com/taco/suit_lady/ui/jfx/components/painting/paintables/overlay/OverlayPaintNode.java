@@ -1,6 +1,8 @@
-package com.taco.suit_lady.ui.jfx.components.canvas.painting;
+package com.taco.suit_lady.ui.jfx.components.painting.paintables.overlay;
 
-import com.taco.suit_lady.ui.jfx.components.canvas.painting.surface.OverlaySurface;
+import com.taco.suit_lady.ui.jfx.components.painting.paintables.Paintable;
+import com.taco.suit_lady.ui.jfx.components.painting.paintables.PaintableData;
+import com.taco.suit_lady.ui.jfx.components.painting.surfaces.OverlaySurface;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import javafx.beans.binding.Bindings;
@@ -12,14 +14,14 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-public abstract class OverlayPainter
-        implements SpringableWrapper, Paintable<OverlayPainter, OverlaySurface> {
+public abstract class OverlayPaintNode
+        implements SpringableWrapper, Paintable<OverlayPaintNode, OverlaySurface> {
     
-    private final PaintableData<OverlayPainter, OverlaySurface> data;
+    private final PaintableData<OverlayPaintNode, OverlaySurface> data;
     
     private final ReadOnlyObjectWrapper<Node> nodeProperty;
     
-    public OverlayPainter(@NotNull Springable springable, @Nullable ReentrantLock lock) {
+    public OverlayPaintNode(@NotNull Springable springable, @Nullable ReentrantLock lock) {
         this.data = new PaintableData<>(springable, lock, this);
         
         this.nodeProperty = new ReadOnlyObjectWrapper<>();
@@ -49,13 +51,13 @@ public abstract class OverlayPainter
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull PaintableData<OverlayPainter, OverlaySurface> data() { return data; }
+    @Override public @NotNull PaintableData<OverlayPaintNode, OverlaySurface> data() { return data; }
     
     @Override public void onAdd(OverlaySurface surface) { }
     @Override public void onRemove(OverlaySurface surface) { }
     
     
-    @Override public @NotNull OverlayPainter paint() {
+    @Override public @NotNull OverlayPaintNode paint() {
         refreshNodeImpl();
         return this;
     }

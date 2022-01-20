@@ -1,8 +1,9 @@
-package com.taco.suit_lady.ui.jfx.components.canvas.painting.surface;
+package com.taco.suit_lady.ui.jfx.components.painting.surfaces;
 
 import com.taco.suit_lady._to_sort._new.interfaces.ReadOnlyNameableProperty;
-import com.taco.suit_lady.ui.jfx.components.canvas.CanvasPane;
-import com.taco.suit_lady.ui.jfx.components.canvas.painting.OverlayPainter;
+import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasPane;
+import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasSurface;
+import com.taco.suit_lady.ui.jfx.components.painting.paintables.overlay.OverlayPaintNode;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
@@ -13,7 +14,6 @@ import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +23,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 // TO-DOC
 public class OverlaySurface
-        implements SpringableWrapper, Lockable, ReadOnlyNameableProperty, Comparable<OverlaySurface>, Surface<OverlayPainter, OverlaySurface> {
+        implements SpringableWrapper, Lockable, ReadOnlyNameableProperty, Comparable<OverlaySurface>, Surface<OverlayPaintNode, OverlaySurface> {
     
     private final Springable springable;
     private final ReentrantLock lock;
@@ -37,7 +37,7 @@ public class OverlaySurface
     
     private final ReadOnlyIntegerWrapper paintPriorityProperty;
     
-    private final SurfaceData<OverlayPainter, OverlaySurface> data;
+    private final SurfaceData<OverlayPaintNode, OverlaySurface> data;
     
     //<editor-fold desc="--- CONSTRUCTORS ---">
     
@@ -64,7 +64,7 @@ public class OverlaySurface
     
     /**
      * <p><b>Fully-Parameterized Constructor</b></p>
-     * <p>Constructs a new {@link OverlaySurface} instance used to display a set of {@link OverlayPainter Paint Commands}.</p>
+     * <p>Constructs a new {@link OverlaySurface} instance used to display a set of {@link OverlayPaintNode Paint Commands}.</p>
      * <p><hr>
      * <p><b>Parameter Details</b></p>
      * <ol>
@@ -156,7 +156,7 @@ public class OverlaySurface
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">3.
     
-    @Override public @NotNull SurfaceData<OverlayPainter, OverlaySurface> data() { return data; }
+    @Override public @NotNull SurfaceData<OverlayPaintNode, OverlaySurface> data() { return data; }
     @Override public @NotNull OverlaySurface repaint() {
         sync(() -> paintables().forEach(paintable -> paintable.paint()));
         return this;

@@ -1,4 +1,4 @@
-package com.taco.suit_lady.ui.jfx.components.canvas.painting;
+package com.taco.suit_lady.ui.jfx.components.painting.paintables.overlay;
 
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ResourceTools;
@@ -9,11 +9,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-public class ImageOverlayPainter extends OverlayPainter {
+public class ImageOverlayPaintNode extends OverlayPaintNode {
     
     private final ImageView imageView;
     
-    public ImageOverlayPainter(@NotNull Springable springable, @Nullable ReentrantLock lock) {
+    public ImageOverlayPaintNode(@NotNull Springable springable, @Nullable ReentrantLock lock) {
         super(springable, lock);
         this.imageView = new ImageView(ResourceTools.get().getDummyImage(ResourceTools.AVATAR));
     }

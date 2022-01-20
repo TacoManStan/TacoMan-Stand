@@ -1,4 +1,4 @@
-package com.taco.suit_lady.ui.jfx.components.canvas.painting;
+package com.taco.suit_lady.ui.jfx.components.painting.paintables.overlay;
 
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.PropertyTools;
@@ -13,12 +13,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-public abstract class ShapeOverlayPainter extends OverlayPainter {
+public abstract class ShapeOverlayPaintNode extends OverlayPaintNode {
     
     private final ObjectProperty<Paint> fillProperty;
     private final ObjectProperty<Paint> strokeProperty;
     
-    public ShapeOverlayPainter(@NotNull Springable springable, @Nullable ReentrantLock lock) {
+    public ShapeOverlayPaintNode(@NotNull Springable springable, @Nullable ReentrantLock lock) {
         super(springable, lock);
         
         this.fillProperty = new SimpleObjectProperty<>(Color.TRANSPARENT);

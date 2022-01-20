@@ -1,4 +1,4 @@
-package com.taco.suit_lady.ui.jfx.components.canvas.painting;
+package com.taco.suit_lady.ui.jfx.components.painting.paintables.overlay;
 
 import com.taco.suit_lady.util.springable.Springable;
 import javafx.scene.Node;
@@ -8,18 +8,18 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-public class BoxOverlayPainter extends ShapeOverlayPainter {
+public class BoxOverlayPaintNode extends ShapeOverlayPaintNode {
     
     private final Rectangle shape;
     
-    public BoxOverlayPainter(@NotNull Springable springable, @Nullable ReentrantLock lock) {
+    public BoxOverlayPaintNode(@NotNull Springable springable, @Nullable ReentrantLock lock) {
         super(springable, lock);
         this.shape = new Rectangle();
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull OverlayPainter init() {
+    @Override public @NotNull OverlayPaintNode init() {
         super.init();
         
         this.shape.fillProperty().bind(fillProperty());

@@ -1,7 +1,7 @@
-package com.taco.suit_lady.ui.jfx.components.canvas.painting;
+package com.taco.suit_lady.ui.jfx.components.painting.paintables;
 
 import com.taco.suit_lady._to_sort._new.Self;
-import com.taco.suit_lady.ui.jfx.components.canvas.painting.surface.Surface;
+import com.taco.suit_lady.ui.jfx.components.painting.surfaces.Surface;
 import com.taco.suit_lady.ui.jfx.util.Boundable;
 import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.ui.jfx.util.BoundsBinding;
