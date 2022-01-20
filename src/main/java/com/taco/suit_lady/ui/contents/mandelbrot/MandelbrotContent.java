@@ -86,27 +86,26 @@ public class MandelbrotContent extends ListableContent<
         //                lock, this, "selection-circle",
         //                null, 2);
         
-        this.boxPainter = new BoxPainter(this, lock);
-        this.ovalPainter = new OvalPainter(this, lock);
-        this.arcPainter = new ArcPainter(this, lock, 30, 30, ArcType.ROUND);
+        //
         
+        this.boxPainter = new BoxPainter(this, lock);
         this.boxPainter.setDisabled(true);
+        
+        this.ovalPainter = new OvalPainter(this, lock);
         this.ovalPainter.setDisabled(true);
+        
+        this.arcPainter = new ArcPainter(this, lock, 30, 30, ArcType.ROUND);
         this.arcPainter.setDisabled(true);
+        
         
         this.boxOverlayPainter = new BoxOverlayPainter(this, lock);
         this.boxOverlayPainter.setDisabled(false);
         
-//        ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas().init().addPaintable(boxPainter.init());
-//        getOverlayHandler().getOverlay("default").getForegroundCanvasPane().canvas().addPaintable(boxPainter.init());
-//        ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas().init().addPaintable(ovalPainter.init());
-//        ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas().init().addPaintable(arcPainter.init());
         
         getOverlayHandler().getOverlay("default").addPaintable(boxOverlayPainter.init());
         getOverlayHandler().getOverlay("default").getForegroundCanvas().addPaintable(ovalPainter.init());
         
-        //        getController().canvas().addPaintCommand(testPaintCommand);
-        //        getOverlayHandler().getOverlay("default").addPaintCommand(selectionBoxPaintCommand2);
+        //
         
         getController().setDragConsumer(dragData -> zoom(dragData));
         getController().setMoveConsumer(dragData -> updateZoomBox(dragData));
@@ -279,15 +278,16 @@ public class MandelbrotContent extends ListableContent<
     private void updateZoomBox(MouseDragData moveData) {
         TaskTools.sync(lock, () -> {
             boxPainter.setDisabled(false);
-            ovalPainter.setDisabled(false);
-            arcPainter.setDisabled(false);
-            
-            boxOverlayPainter.setDisabled(false);
-            
             boxPainter.boundsBinding().setBounds(moveData.getBounds());
+            
+            ovalPainter.setDisabled(false);
             ovalPainter.boundsBinding().setBounds(moveData.getBounds());
+            
+            arcPainter.setDisabled(false);
             arcPainter.boundsBinding().setBounds(moveData.getBounds());
             
+            
+            boxOverlayPainter.setDisabled(false);
             boxOverlayPainter.boundsBinding().setBounds(moveData.getBounds());
         });
     }
