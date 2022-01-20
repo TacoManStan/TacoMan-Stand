@@ -90,7 +90,7 @@ public class OverlaySurface
         
         this.overlayPane = new StackPane();
         this.overlayPane.setAlignment(Pos.TOP_LEFT);
-//        this.overlayPane.setStyle("-fx-border-color: blue");
+        //        this.overlayPane.setStyle("-fx-border-color: blue");
         
         this.foregroundCanvasPane = new CanvasPane(springable);
         this.backgroundCanvasPane = new CanvasPane(springable);
@@ -124,8 +124,11 @@ public class OverlaySurface
     protected final StackPane getRoot() { return root; }
     
     protected final StackPane getOverlayPane() { return overlayPane; }
-    public final CanvasPane getForegroundCanvasPane() { return foregroundCanvasPane; }
-    public final CanvasPane getBackgroundCanvasPane() { return backgroundCanvasPane; }
+    protected final CanvasPane getForegroundCanvasPane() { return foregroundCanvasPane; }
+    protected final CanvasPane getBackgroundCanvasPane() { return backgroundCanvasPane; }
+    
+    public final CanvasSurface getForegroundCanvas() { return foregroundCanvasPane.canvas(); }
+    public final CanvasSurface getBackgroundCanvas() { return backgroundCanvasPane.canvas(); }
     
     /**
      * <p>Returns the {@link ReadOnlyIntegerProperty} representing the priority at which this {@link OverlaySurface} is to be painted.</p>

@@ -95,7 +95,6 @@ public class MandelbrotContent extends ListableContent<
         this.arcPainter.setDisabled(true);
         
         this.boxOverlayPainter = new BoxOverlayPainter(this, lock);
-        
         this.boxOverlayPainter.setDisabled(false);
         
 //        ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas().init().addPaintable(boxPainter.init());
@@ -104,7 +103,7 @@ public class MandelbrotContent extends ListableContent<
 //        ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas().init().addPaintable(arcPainter.init());
         
         getOverlayHandler().getOverlay("default").addPaintable(boxOverlayPainter.init());
-        getOverlayHandler().getOverlay("default").getForegroundCanvasPane().canvas().addPaintable(ovalPainter.init());
+        getOverlayHandler().getOverlay("default").getForegroundCanvas().addPaintable(ovalPainter.init());
         
         //        getController().canvas().addPaintCommand(testPaintCommand);
         //        getOverlayHandler().getOverlay("default").addPaintCommand(selectionBoxPaintCommand2);
