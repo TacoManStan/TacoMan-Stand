@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-public class BoxOverlayPainter extends OverlayPainter {
+public class BoxOverlayPainter extends ShapeOverlayPainter {
     
     private final Rectangle shape;
     
@@ -17,13 +17,25 @@ public class BoxOverlayPainter extends OverlayPainter {
         this.shape = new Rectangle();
     }
     
-    @Override protected Node refreshNode() { return shape; }
-    @Override protected Node syncBounds(@NotNull Node n) {
-        System.out.println("Syncing Bounds");
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+    @Override public @NotNull OverlayPainter init() {
+        super.init();
+        
+        this.shape.fillProperty().bind(fillProperty());
+        this.shape.strokeProperty().bind(strokeProperty());
+        
+        return this;
+    }
+    
+    @Override protected Rectangle refreshNode() { return shape; }
+    @Override protected Rectangle syncBounds(@NotNull Node n) {
         shape.setX(getX());
         shape.setY(getY());
         shape.setWidth(getWidth());
         shape.setHeight(getHeight());
         return shape;
     }
+    
+    //</editor-fold>
 }

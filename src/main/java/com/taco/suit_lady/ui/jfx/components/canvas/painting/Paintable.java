@@ -49,6 +49,7 @@ public interface Paintable<P extends Paintable<P, S>, S extends Surface<P, S>>
     }
     
     default P repaintSurface() {
+//        System.out.println("Repainting Surface w/ Bounds : " + getBounds() + " for Paintable: " + this);
         S surface = getSurface();
         if (surface != null)
             sync(() -> FXTools.runFX(() -> surface.repaint(), true));

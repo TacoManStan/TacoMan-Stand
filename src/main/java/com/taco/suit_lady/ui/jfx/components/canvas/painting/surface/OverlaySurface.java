@@ -13,6 +13,7 @@ import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;
@@ -88,9 +89,12 @@ public class OverlaySurface
         this.root.setAlignment(Pos.TOP_LEFT);
         
         this.overlayPane = new StackPane();
+        this.overlayPane.setAlignment(Pos.TOP_LEFT);
+//        this.overlayPane.setStyle("-fx-border-color: blue");
+        
         this.foregroundCanvasPane = new CanvasPane(springable);
         this.backgroundCanvasPane = new CanvasPane(springable);
-    
+        
         this.data = new SurfaceData<>(springable, lock, this, root.widthProperty(), root.heightProperty());
         this.paintPriorityProperty = new ReadOnlyIntegerWrapper(paintPriority);
         
@@ -151,6 +155,7 @@ public class OverlaySurface
     
     @Override public @NotNull SurfaceData<OverlayPainter, OverlaySurface> data() { return data; }
     @Override public @NotNull OverlaySurface repaint() {
+        sync(() -> paintables().forEach(paintable -> paintable.paint()));
         return this;
     }
     

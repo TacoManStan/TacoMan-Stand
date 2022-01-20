@@ -28,8 +28,8 @@ public abstract class OverlayPainter
     //<editor-fold desc="--- PROPERTIES ---">
     
     public final ReadOnlyObjectProperty<Node> nodeProperty() { return nodeProperty.getReadOnlyProperty(); }
-    public final Node getNode() { return nodeProperty.get(); }
-    public final Node getAndRefreshNode() {
+    public Node getNode() { return nodeProperty.get(); }
+    public Node getAndRefreshNode() {
         return sync(() -> {
             Node n = getNode();
             if (n != null)
@@ -51,11 +51,12 @@ public abstract class OverlayPainter
     
     @Override public @NotNull PaintableData<OverlayPainter, OverlaySurface> data() { return data; }
     
-    @Override public void onAdd(OverlaySurface surface) { System.out.println("Adding"); }
+    @Override public void onAdd(OverlaySurface surface) { }
     @Override public void onRemove(OverlaySurface surface) { }
     
     
     @Override public @NotNull OverlayPainter paint() {
+        refreshNodeImpl();
         return this;
     }
     
@@ -69,7 +70,7 @@ public abstract class OverlayPainter
     }
     
     protected Node syncBounds(@NotNull Node n) {
-        getNode().resizeRelocate(getX(), getY(), getWidth(), getHeight());
+        n.resizeRelocate(getX(), getY(), getWidth(), getHeight());
         return n;
     }
     
