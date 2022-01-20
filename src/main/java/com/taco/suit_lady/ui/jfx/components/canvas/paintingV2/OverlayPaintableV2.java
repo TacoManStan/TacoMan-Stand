@@ -52,6 +52,9 @@ public abstract class OverlayPaintableV2
         //TODO
         return this;
     }
+    @Override public boolean isValidDimensions() {
+        return false; //TODO
+    }
     
     //</editor-fold>
     

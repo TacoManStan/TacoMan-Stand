@@ -22,22 +22,16 @@ public class EllipseOverlayCommand extends ShapeOverlayCommand<Ellipse> {
         //        this.ellipse.setStroke(Color.BLACK);
     }
     
-    @Override
     protected Ellipse refreshNode() {
         return ellipse;
     }
     
     @Override
     protected void syncBounds(@NotNull Ellipse ellipse) {
-        ellipse.setCenterX(getX() + ((double) getWidthSafe() / 2));
-        ellipse.setCenterY(getY() + ((double) getHeightSafe() / 2));
-        ellipse.setRadiusX((double) getWidthSafe() / 2);
-        ellipse.setRadiusY((double) getHeightSafe() / 2);
+        //TODO
+//        ellipse.setCenterX(getX() + ((double) getWidthSafe() / 2));
+//        ellipse.setCenterY(getY() + ((double) getHeightSafe() / 2));
+//        ellipse.setRadiusX((double) getWidthSafe() / 2);
+//        ellipse.setRadiusY((double) getHeightSafe() / 2);
     }
-    
-    @Override
-    protected void onAdded(@NotNull Overlay owner) { }
-    
-    @Override
-    protected void onRemoved(@NotNull Overlay owner) { }
 }

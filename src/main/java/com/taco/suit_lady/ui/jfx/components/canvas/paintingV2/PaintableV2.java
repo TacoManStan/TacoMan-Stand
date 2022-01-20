@@ -43,6 +43,10 @@ public interface PaintableV2<P extends PaintableV2<P, S>, S extends PaintableSur
     
     //
     
+    default boolean isValidDimensions() {
+        return getBounds().getWidth() > 0 && getBounds().getHeight() > 0;
+    }
+    
     default P repaintSurface() {
         S surface = getSurface();
         if (surface != null)

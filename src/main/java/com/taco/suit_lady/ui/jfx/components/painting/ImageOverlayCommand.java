@@ -49,7 +49,6 @@ public class ImageOverlayCommand extends OverlayCommand<ImageView> {
         this.imageView = new ImageView(image);
     }
     
-    @Override
     protected ImageView refreshNode() {
         return imageView;
     }
@@ -58,13 +57,8 @@ public class ImageOverlayCommand extends OverlayCommand<ImageView> {
     protected void syncBounds(@NotNull ImageView imageView) {
         imageView.setX(getX());
         imageView.setY(getY());
-        imageView.setFitWidth(getWidthSafe());
-        imageView.setFitHeight(getHeightSafe());
+        //TODO
+//        imageView.setFitWidth(getWidthSafe());
+//        imageView.setFitHeight(getHeightSafe());
     }
-    
-    @Override
-    protected void onAdded(@NotNull Overlay owner) { }
-    
-    @Override
-    protected void onRemoved(@NotNull Overlay owner) { }
 }

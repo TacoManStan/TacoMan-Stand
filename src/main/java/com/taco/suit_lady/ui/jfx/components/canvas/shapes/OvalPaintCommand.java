@@ -15,7 +15,8 @@ public class OvalPaintCommand extends ShapePaintCommand {
     
     @Override
     protected void onPaint() {
-        if (isValidDimensions())
-            FXTools.drawOval(getOwner(), getBounds(), false, isFill());
+        //TODO
+//        if (isValidDimensions())
+//            FXTools.drawOval(getOwner(), getBounds(), false, isFill());
     }
 }

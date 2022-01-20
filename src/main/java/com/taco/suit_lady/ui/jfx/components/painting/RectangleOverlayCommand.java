@@ -25,7 +25,6 @@ public class RectangleOverlayCommand extends ShapeOverlayCommand<Rectangle> {
     }
     
     // TODO: Add additional painting properties, probably to the parent intermediary SLShapePaintCommand class
-    @Override
     protected Rectangle refreshNode() {
         return rectangle;
     }
@@ -37,10 +36,4 @@ public class RectangleOverlayCommand extends ShapeOverlayCommand<Rectangle> {
 //        rectangle.setWidth(getWidthSafe());
 //        rectangle.setHeight(getHeightSafe());
     }
-    
-    @Override
-    protected void onAdded(@NotNull Overlay owner) { }
-    
-    @Override
-    protected void onRemoved(@NotNull Overlay owner) { }
 }

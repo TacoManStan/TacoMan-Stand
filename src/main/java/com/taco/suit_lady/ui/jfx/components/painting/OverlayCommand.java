@@ -23,7 +23,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 
 public class OverlayCommand<N extends Node>
-        implements Lockable, Springable, Nameable, Comparable<OverlayCommand<?>>, ObservablePropertyContainable, Paintable {
+        implements Lockable, Springable, Nameable, ObservablePropertyContainable, Paintable {
     
     private final ReentrantLock lock;
     private final StrictSpringable springable;
@@ -132,8 +132,6 @@ public class OverlayCommand<N extends Node>
     
     //<editor-fold desc="--- ABSTRACT ---">
     
-    protected abstract N refreshNode();
-    
     protected void applyRefresh(@NotNull N n) {
         n.setManaged(false);
         n.visibleProperty().bind(activeProperty);
@@ -185,10 +183,10 @@ public class OverlayCommand<N extends Node>
     
     //
     
-    @Override
-    public int compareTo(@NotNull OverlayCommand<?> o) {
-        return Integer.compare((Math.abs(getPaintPriority())), Math.abs(o.getPaintPriority()));
-    }
+
+//    public int compareTo(@NotNull OverlayCommand<?> o) {
+//        return Integer.compare((Math.abs(getPaintPriority())), Math.abs(o.getPaintPriority()));
+//    }
     
     //
     
@@ -199,19 +197,21 @@ public class OverlayCommand<N extends Node>
     //<editor-fold desc="--- INTERNAL ---">
     
     private N refreshNodeImpl() {
-        final N n = refreshNode();
-        applyRefresh(n);
-        return n;
+        return null;
+//        final N n = refreshNode();
+//        applyRefresh(n);
+//        return n;
     }
     
     // CURRENTLY UNUSED
     private boolean autoRemove() {
-        return sync(() -> {
-            final Overlay overlay = getOwner();
-            if (overlay != null && autoRemoveCondition.test(this))
-                return overlay.removePaintable(this);
-            return false;
-        });
+        return false;
+//        return sync(() -> {
+//            final Overlay overlay = getOwner();
+//            if (overlay != null && autoRemoveCondition.test(this))
+//                return overlay.removePaintable(this);
+//            return false;
+//        });
     }
     
     //</editor-fold>
