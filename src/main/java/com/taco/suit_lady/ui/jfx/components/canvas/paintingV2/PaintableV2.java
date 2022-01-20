@@ -51,7 +51,6 @@ public interface PaintableV2<P extends PaintableV2<P, S>, S extends Surface<P, S
         S surface = getSurface();
         if (surface != null)
             sync(() -> FXTools.runFX(() -> surface.repaint(), true));
-        
         return self();
     }
     

@@ -1,13 +1,11 @@
 package com.taco.suit_lady.logic.game;
 
-import com.taco.suit_lady.ui.jfx.components.painting.ImageOverlayCommand;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.BindingTools;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.ResourceTools;
-import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -37,7 +35,7 @@ public class GameMapModel
     private ObjectBinding<Image> visibleMapImageBinding;
     private final ObjectProperty<StackPane> parentPaneProperty;
     
-    private final ImageOverlayCommand paintCommand;
+//    private final ImageOverlayCommand paintCommand;
     
     public GameMapModel(@NotNull GameMap owner, @NotNull ReentrantLock lock) {
         this.lock = ExceptionTools.nullCheck(lock, "Lock");
@@ -47,7 +45,7 @@ public class GameMapModel
         
         this.parentPaneProperty = new SimpleObjectProperty<>();
         
-        this.paintCommand = new ImageOverlayCommand(lock, this, "map", null, 1);
+//        this.paintCommand = new ImageOverlayCommand(lock, this, "map", null, 1);
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">
@@ -90,9 +88,9 @@ public class GameMapModel
     }
     
     
-    public final ImageOverlayCommand getPaintCommand() {
-        return paintCommand;
-    }
+//    public final ImageOverlayCommand getPaintCommand() {
+//        return paintCommand;
+//    }
     
     //</editor-fold>
     

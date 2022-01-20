@@ -6,6 +6,8 @@ import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.PropertyTools;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
 import org.jetbrains.annotations.NotNull;
@@ -18,19 +20,27 @@ public abstract class OverlayPainter
     
     private final PaintableData<OverlayPainter, OverlaySurface> data;
     
-    private final ObjectProperty<Node> nodeProperty;
+    private final ReadOnlyObjectWrapper<Node> nodeProperty;
     
     public OverlayPainter(@NotNull Springable springable, @Nullable ReentrantLock lock) {
         this.data = new PaintableData<>(springable, lock, this);
         
-        this.nodeProperty = new SimpleObjectProperty<>();
+        this.nodeProperty = new ReadOnlyObjectWrapper<>();
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final ObjectProperty<Node> nodeProperty() { return nodeProperty; }
+    public final ReadOnlyObjectProperty<Node> nodeProperty() { return nodeProperty.getReadOnlyProperty(); }
     public final Node getNode() { return nodeProperty.get(); }
-    public final Node setNode(Node n) { return PropertyTools.setProperty(nodeProperty, n); }
+    public final Node getAndRefreshNode() {
+        return sync(() -> {
+            Node n = getNode();
+            if (n != null)
+                return n;
+            nodeProperty.set(refreshNodeImpl());
+            return getNode();
+        });
+    }
     
     //</editor-fold>
     
@@ -73,5 +83,15 @@ public abstract class OverlayPainter
     private Node refreshNodeImpl() {
         final Node n = refreshNode();
         return applyRefresh(n);
+    }
+    
+    //Currently Unused
+    private boolean autoRemove() {
+        return sync(() -> {
+            OverlaySurface surface = getSurface();
+            if (surface != null && getAutoRemoveCondition().test(surface))
+                return surface.removePaintableV2(this);
+            return false;
+        });
     }
 }
