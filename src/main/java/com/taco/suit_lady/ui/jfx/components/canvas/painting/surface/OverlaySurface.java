@@ -58,7 +58,7 @@ public class OverlaySurface
     
     /**
      * <p><b>Fully-Parameterized Constructor</b></p>
-     * <p>Constructs a new {@link OverlaySurface} instance used to display a set of {@link OverlayCommand Paint Commands}.</p>
+     * <p>Constructs a new {@link OverlaySurface} instance used to display a set of {@link OverlayPainter Paint Commands}.</p>
      * <p><hr>
      * <p><b>Parameter Details</b></p>
      * <ol>
@@ -100,9 +100,9 @@ public class OverlaySurface
     //<editor-fold desc="--- PROPERTIES ---">
     
     /**
-     * <p>Returns the {@link StackPane} instance on which all {@link OverlayCommand Paint Commands} assigned to this {@link OverlaySurface} are displayed.</p>
+     * <p>Returns the {@link StackPane} instance on which all {@link OverlayPainter Paint Commands} assigned to this {@link OverlaySurface} are displayed.</p>
      *
-     * @return The {@link StackPane} instance on which all {@link OverlayCommand Paint Commands} assigned to this {@link OverlaySurface} are displayed.
+     * @return The {@link StackPane} instance on which all {@link OverlayPainter Paint Commands} assigned to this {@link OverlaySurface} are displayed.
      */
     protected final StackPane root() {
         return root;
