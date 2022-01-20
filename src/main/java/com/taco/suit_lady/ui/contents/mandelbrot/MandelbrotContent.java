@@ -102,8 +102,8 @@ public class MandelbrotContent extends ListableContent<
         this.boxOverlayPainter.setDisabled(false);
         
         
-        getOverlayHandler().getOverlay("default").addPaintable(boxOverlayPainter.init());
-        getOverlayHandler().getOverlay("default").getForegroundCanvas().addPaintable(ovalPainter.init());
+        getOverlayHandler().getOverlay("default").add(boxOverlayPainter.init());
+        getOverlayHandler().getOverlay("default").add(ovalPainter.init());
         
         //
         
