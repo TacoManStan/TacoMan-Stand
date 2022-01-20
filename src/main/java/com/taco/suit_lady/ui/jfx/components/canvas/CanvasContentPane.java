@@ -33,11 +33,11 @@ public class CanvasContentPane extends ContentPane {
         return backdropCanvasPane;
     }
     
-    public final BoundCanvas getOverlayCanvas() {
+    public final CanvasSurface getOverlayCanvas() {
         return getOverlayCanvasPane().canvas();
     }
     
-    public final BoundCanvas getBackdropCanvas() {
+    public final CanvasSurface getBackdropCanvas() {
         return getBackdropCanvasPane().canvas();
     }
 }

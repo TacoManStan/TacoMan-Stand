@@ -1,9 +1,5 @@
 package com.taco.suit_lady.ui.jfx.components.canvas.shapes;
 
-import com.taco.suit_lady.ui.jfx.components.canvas.BoundCanvas;
-import com.taco.suit_lady.ui.jfx.components.canvas.PaintCommand;
-import com.taco.suit_lady.ui.jfx.components.painting.Paintable;
-import com.taco.suit_lady.ui.jfx.components.painting.PaintableCanvas;
 import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;

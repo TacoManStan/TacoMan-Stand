@@ -1,6 +1,6 @@
 package com.taco.suit_lady.ui.jfx.components.canvas.paintingV2;
 
-import com.taco.suit_lady.ui.jfx.components.painting.Overlay;
+import com.taco.suit_lady.ui.jfx.components.painting.OverlaySurface;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.PropertyTools;
@@ -13,14 +13,14 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-public abstract class OverlayPaintableV2
-        implements SpringableWrapper, PaintableV2<OverlayPaintableV2, Overlay> {
+public abstract class OverlayPainter
+        implements SpringableWrapper, PaintableV2<OverlayPainter, OverlaySurface> {
     
-    private final PaintableDataContainerV2<OverlayPaintableV2, Overlay> data;
+    private final PaintableDataContainerV2<OverlayPainter, OverlaySurface> data;
     
     private final ObjectProperty<Node> nodeProperty;
     
-    public OverlayPaintableV2(@NotNull Springable springable, @Nullable ReentrantLock lock) {
+    public OverlayPainter(@NotNull Springable springable, @Nullable ReentrantLock lock) {
         this.data = new PaintableDataContainerV2<>(springable, lock, this);
         
         this.nodeProperty = new SimpleObjectProperty<>();
@@ -42,13 +42,13 @@ public abstract class OverlayPaintableV2
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull PaintableDataContainerV2<OverlayPaintableV2, Overlay> data() { return data; }
+    @Override public @NotNull PaintableDataContainerV2<OverlayPainter, OverlaySurface> data() { return data; }
     
-    @Override public void onAdd(Overlay surface) { }
-    @Override public void onRemove(Overlay surface) { }
+    @Override public void onAdd(OverlaySurface surface) { }
+    @Override public void onRemove(OverlaySurface surface) { }
     
     
-    @Override public @NotNull OverlayPaintableV2 paint() {
+    @Override public @NotNull OverlayPainter paint() {
         //TODO
         return this;
     }

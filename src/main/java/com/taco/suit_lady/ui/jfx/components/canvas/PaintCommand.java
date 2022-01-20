@@ -1,6 +1,5 @@
 package com.taco.suit_lady.ui.jfx.components.canvas;
 
-import com.taco.suit_lady.ui.jfx.components.painting.Overlay;
 import com.taco.suit_lady.ui.jfx.components.painting.Paintable;
 import com.taco.suit_lady.ui.jfx.components.painting.PaintableCanvas;
 import com.taco.suit_lady.ui.jfx.util.BoundsBinding;
@@ -46,7 +45,7 @@ public abstract class PaintCommand
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public BoundCanvas getCanvas() { return (BoundCanvas) getOwner(); }
+    public CanvasSurface getCanvas() { return (CanvasSurface) getOwner(); }
     
     //</editor-fold>
     

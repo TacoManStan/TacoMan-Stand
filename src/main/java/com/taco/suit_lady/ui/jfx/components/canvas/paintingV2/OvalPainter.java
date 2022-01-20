@@ -8,9 +8,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-public class OvalCanvasPaintableV2 extends CanvasShapePaintableV2 {
+public class OvalPainter extends ShapePainter {
     
-    public OvalCanvasPaintableV2(@NotNull Springable springable, @Nullable ReentrantLock lock) {
+    public OvalPainter(@NotNull Springable springable, @Nullable ReentrantLock lock) {
         super(springable, lock);
     }
     
@@ -20,7 +20,7 @@ public class OvalCanvasPaintableV2 extends CanvasShapePaintableV2 {
             FXTools.drawOval(getSurface(), bounds, false, isFill());
     }
     
-    @Override public @NotNull OvalCanvasPaintableV2 init() {
-        return (OvalCanvasPaintableV2) super.init();
+    @Override public @NotNull OvalPainter init() {
+        return (OvalPainter) super.init();
     }
 }

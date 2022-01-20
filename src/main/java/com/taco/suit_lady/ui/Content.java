@@ -4,7 +4,7 @@ import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ArrayTools;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.TB;
-import com.taco.suit_lady.ui.jfx.components.painting.Overlay;
+import com.taco.suit_lady.ui.jfx.components.painting.OverlaySurface;
 import com.taco.suit_lady.ui.jfx.components.painting.OverlayHandler;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
@@ -37,7 +37,7 @@ public abstract class Content<D extends ContentData, C extends ContentController
                 "Error Loading Controller of Type [" + controllerDefinition() + "] — Ensure controller class is defined in FXML file.");
         
         this.overlayHandler = new OverlayHandler(this, null);
-        this.overlayHandler.addOverlay(new Overlay(this, null, "default", 1));
+        this.overlayHandler.addOverlay(new OverlaySurface(this, null, "default", 1));
         
         this.bookshelves = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
     }

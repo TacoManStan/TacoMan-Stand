@@ -1,6 +1,6 @@
 package com.taco.suit_lady.ui.jfx.components.canvas.paintingV2;
 
-import com.taco.suit_lady.ui.jfx.components.canvas.BoundCanvas;
+import com.taco.suit_lady.ui.jfx.components.canvas.CanvasSurface;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
@@ -10,12 +10,12 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 
-public abstract class CanvasPaintableV2
-        implements SpringableWrapper, PaintableV2<CanvasPaintableV2, BoundCanvas> {
+public abstract class CanvasPainter
+        implements SpringableWrapper, PaintableV2<CanvasPainter, CanvasSurface> {
     
-    private final PaintableDataContainerV2<CanvasPaintableV2, BoundCanvas> data;
+    private final PaintableDataContainerV2<CanvasPainter, CanvasSurface> data;
     
-    public CanvasPaintableV2(@NotNull Springable springable, @Nullable ReentrantLock lock) {
+    public CanvasPainter(@NotNull Springable springable, @Nullable ReentrantLock lock) {
         this.data = new PaintableDataContainerV2<>(springable, lock, this);
     }
     
@@ -28,16 +28,16 @@ public abstract class CanvasPaintableV2
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull PaintableDataContainerV2<CanvasPaintableV2, BoundCanvas> data() { return data; }
+    @Override public @NotNull PaintableDataContainerV2<CanvasPainter, CanvasSurface> data() { return data; }
     
-    @Override public void onAdd(BoundCanvas surface) { }
-    @Override public void onRemove(BoundCanvas surface) { }
+    @Override public void onAdd(CanvasSurface surface) { }
+    @Override public void onRemove(CanvasSurface surface) { }
     
     
-    @Override public @NotNull CanvasPaintableV2 paint() {
+    @Override public @NotNull CanvasPainter paint() {
         if (!isDisabled())
             FXTools.runFX(() -> sync(() -> {
-                Predicate<BoundCanvas> autoRemoveCondition = getAutoRemoveCondition();
+                Predicate<CanvasSurface> autoRemoveCondition = getAutoRemoveCondition();
                 if (autoRemoveCondition != null && autoRemoveCondition.test(getSurface()))
                     getSurface().removePaintableV2(this);
                 else

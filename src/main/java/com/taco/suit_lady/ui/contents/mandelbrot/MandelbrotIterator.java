@@ -1,7 +1,7 @@
 package com.taco.suit_lady.ui.contents.mandelbrot;
 
 import com.taco.suit_lady._to_sort._new.MatrixIterator;
-import com.taco.suit_lady.ui.jfx.components.canvas.BoundCanvas;
+import com.taco.suit_lady.ui.jfx.components.canvas.CanvasSurface;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ArrayTools;
 import com.taco.suit_lady.util.tools.ExceptionTools;
@@ -17,9 +17,9 @@ import java.util.concurrent.locks.ReentrantLock;
 public class MandelbrotIterator extends MatrixIterator<MandelbrotColor> {
     
     private MandelbrotContentData data;
-    private BoundCanvas canvas;
+    private CanvasSurface canvas;
     
-    public MandelbrotIterator(@NotNull Springable springable, @Nullable ReentrantLock lock, @NotNull MandelbrotContentData data, @NotNull BoundCanvas canvas, @NotNull ProgressIndicator... progressIndicators) {
+    public MandelbrotIterator(@NotNull Springable springable, @Nullable ReentrantLock lock, @NotNull MandelbrotContentData data, @NotNull CanvasSurface canvas, @NotNull ProgressIndicator... progressIndicators) {
         super(springable, lock, ArrayTools.concat(new Object[]{data, canvas}, progressIndicators));
     }
     
@@ -105,7 +105,7 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor> {
     @Override
     protected void construct(@NotNull Object @NotNull ... params) {
         this.data = (MandelbrotContentData) params[0];
-        this.canvas = (BoundCanvas) params[1];
+        this.canvas = (CanvasSurface) params[1];
     }
     
     @Override

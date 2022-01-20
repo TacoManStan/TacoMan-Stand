@@ -1,6 +1,6 @@
 package com.taco.suit_lady.ui.jfx.components.canvas;
 
-import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.CanvasPaintableV2;
+import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.CanvasPainter;
 import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.PaintableSurfaceDataContainerV2;
 import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.PaintableSurfaceV2;
 import com.taco.suit_lady.util.springable.Springable;
@@ -17,38 +17,38 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * <p>A {@link #isResizable() resizable} implementation of {@link Canvas}.</p>
  */
-public class BoundCanvas extends Canvas
-        implements PaintableSurfaceV2<CanvasPaintableV2, BoundCanvas> {
+public class CanvasSurface extends Canvas
+        implements PaintableSurfaceV2<CanvasPainter, CanvasSurface> {
     
     private final ReadOnlyObjectWrapper<CanvasListener> canvasListenerProperty;
     private final ReadOnlyObjectWrapper<Image> imageProperty;
     
-    private final PaintableSurfaceDataContainerV2<CanvasPaintableV2, BoundCanvas> data;
+    private final PaintableSurfaceDataContainerV2<CanvasPainter, CanvasSurface> data;
     
     //<editor-fold desc="--- CONSTRUCTORS ---">
     
-    public BoundCanvas(@NotNull Springable springable) {
+    public CanvasSurface(@NotNull Springable springable) {
         this(springable, null);
     }
     
-    public BoundCanvas(@NotNull Springable springable, double width, double height) {
+    public CanvasSurface(@NotNull Springable springable, double width, double height) {
         this(springable, null, width, height);
     }
     
     /**
-     * <p>Constructs a new {@link BoundCanvas} instance with default {@link #widthProperty() width} and {@link #heightProperty() height} values.</p>
+     * <p>Constructs a new {@link CanvasSurface} instance with default {@link #widthProperty() width} and {@link #heightProperty() height} values.</p>
      */
-    public BoundCanvas(@NotNull Springable springable, @Nullable ReentrantLock lock) {
+    public CanvasSurface(@NotNull Springable springable, @Nullable ReentrantLock lock) {
         this(springable, lock, 0, 0);
     }
     
     /**
-     * <p>Constructs a new {@link BoundCanvas} instance with the specified initial {@link #heightProperty() height} and {@code width}.</p>
+     * <p>Constructs a new {@link CanvasSurface} instance with the specified initial {@link #heightProperty() height} and {@code width}.</p>
      *
-     * @param width  The initial {@link #widthProperty() width} of this {@link BoundCanvas}.
-     * @param height The initial {@link #heightProperty() height} of this {@link BoundCanvas}.
+     * @param width  The initial {@link #widthProperty() width} of this {@link CanvasSurface}.
+     * @param height The initial {@link #heightProperty() height} of this {@link CanvasSurface}.
      */
-    public BoundCanvas(@NotNull Springable springable, @Nullable ReentrantLock lock, double width, double height) {
+    public CanvasSurface(@NotNull Springable springable, @Nullable ReentrantLock lock, double width, double height) {
         super(width, height);
         
         this.canvasListenerProperty = new ReadOnlyObjectWrapper<>();
@@ -64,14 +64,14 @@ public class BoundCanvas extends Canvas
     //<editor-fold desc="--- PROPERTIES ---">
     
     /**
-     * <p>Returns the {@link ReadOnlyObjectProperty} containing the {@link CanvasListener} instance that is called to {@link CanvasListener#redraw(BoundCanvas, double, double) redraw} whenever this {@link BoundCanvas} is {@link #repaint() repainted}.</p>
+     * <p>Returns the {@link ReadOnlyObjectProperty} containing the {@link CanvasListener} instance that is called to {@link CanvasListener#redraw(CanvasSurface, double, double) redraw} whenever this {@link CanvasSurface} is {@link #repaint() repainted}.</p>
      * <p><b>Details</b></p>
      * <ol>
-     *     <li>If the {@link CanvasListener} is set to {@code null}, no additional {@link CanvasListener#redraw(BoundCanvas, double, double) redrawing} operations will be executed.</li>
+     *     <li>If the {@link CanvasListener} is set to {@code null}, no additional {@link CanvasListener#redraw(CanvasSurface, double, double) redrawing} operations will be executed.</li>
      *     <li>Default {@link #repaint() repaint} operations are still performed.</li>
      * </ol>
      *
-     * @return The {@link ReadOnlyObjectProperty} containing the {@link CanvasListener} instance that is called whenever the {@link BoundCanvas canvas} needs to be {@link CanvasListener#redraw(BoundCanvas, double, double) redrawn}.
+     * @return The {@link ReadOnlyObjectProperty} containing the {@link CanvasListener} instance that is called whenever the {@link CanvasSurface canvas} needs to be {@link CanvasListener#redraw(CanvasSurface, double, double) redrawn}.
      */
     public final @NotNull ReadOnlyObjectProperty<CanvasListener> canvasListenerProperty() { return canvasListenerProperty.getReadOnlyProperty(); }
     public final @Nullable CanvasListener getCanvasListener() { return canvasListenerProperty.get(); }
@@ -82,7 +82,7 @@ public class BoundCanvas extends Canvas
      *     <li>
      *         <i>{@link #canvasListenerProperty()}</i> returns a {@link ReadOnlyObjectProperty}, not a {@link ReadOnlyObjectWrapper}.
      *         <ul>
-     *             <li>As such, {@link #setCanvasListener(CanvasListener) this method} is the only way to {@link ReadOnlyObjectWrapper#set(Object) change} the {@link CanvasListener} for this {@link BoundCanvas}.</li>
+     *             <li>As such, {@link #setCanvasListener(CanvasListener) this method} is the only way to {@link ReadOnlyObjectWrapper#set(Object) change} the {@link CanvasListener} for this {@link CanvasSurface}.</li>
      *         </ul>
      *     </li>
      * </ol>
@@ -103,9 +103,9 @@ public class BoundCanvas extends Canvas
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull PaintableSurfaceDataContainerV2<CanvasPaintableV2, BoundCanvas> data() { return data; }
+    @Override public @NotNull PaintableSurfaceDataContainerV2<CanvasPainter, CanvasSurface> data() { return data; }
     
-    @Override public @NotNull BoundCanvas repaint() {
+    @Override public @NotNull CanvasSurface repaint() {
         return sync(() -> FXTools.runFX(() -> {
             FXTools.clearCanvasUnsafe(this);
             
@@ -175,6 +175,6 @@ public class BoundCanvas extends Canvas
     //</editor-fold>
     
     public interface CanvasListener {
-        void redraw(BoundCanvas source, double newWidth, double newHeight);
+        void redraw(CanvasSurface source, double newWidth, double newHeight);
     }
 }

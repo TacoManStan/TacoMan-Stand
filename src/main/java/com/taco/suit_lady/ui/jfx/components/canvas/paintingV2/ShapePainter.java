@@ -9,11 +9,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-public abstract class CanvasShapePaintableV2 extends CanvasPaintableV2 {
+public abstract class ShapePainter extends CanvasPainter {
     
     private final BooleanProperty isFillProperty;
     
-    public CanvasShapePaintableV2(@NotNull Springable springable, @Nullable ReentrantLock lock) {
+    public ShapePainter(@NotNull Springable springable, @Nullable ReentrantLock lock) {
         super(springable, lock);
         this.isFillProperty = new SimpleBooleanProperty(false);
     }

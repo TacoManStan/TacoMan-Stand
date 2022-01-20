@@ -4,19 +4,14 @@ import com.taco.suit_lady.ui.AppUI;
 import com.taco.suit_lady.ui.UIBook;
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotContentController.MouseDragData;
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotIterator.MandelbrotColor;
-import com.taco.suit_lady.ui.jfx.components.canvas.BoundCanvas;
-import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.BoxCanvasPaintableV2;
-import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.OvalCanvasPaintableV2;
-import com.taco.suit_lady.ui.jfx.components.canvas.shapes.ArcPaintCommand;
-import com.taco.suit_lady.ui.jfx.components.canvas.shapes.RectanglePaintCommand;
+import com.taco.suit_lady.ui.jfx.components.canvas.CanvasSurface;
+import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.BoxPainter;
+import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.OvalPainter;
 import com.taco.suit_lady.ui.pages.impl.content_selector.ListableContent;
 import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotContentHandler;
 import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotContentSelectorPage;
 import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotContentSelectorPageController;
 import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotElementController;
-import com.taco.suit_lady.ui.jfx.components.painting.EllipseOverlayCommand;
-import com.taco.suit_lady.ui.jfx.components.painting.ImageOverlayCommand;
-import com.taco.suit_lady.ui.jfx.components.painting.RectangleOverlayCommand;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.tools.ExceptionTools;
@@ -25,10 +20,7 @@ import com.taco.suit_lady.util.tools.TaskTools;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import com.taco.tacository.json.JFiles;
 import javafx.beans.binding.Bindings;
-import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.ArcType;
-import org.docx4j.wml.R;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.locks.ReentrantLock;
@@ -54,8 +46,8 @@ public class MandelbrotContent extends ListableContent<
     //    private final ArcPaintCommand testPaintCommand;
     //    private final RectanglePaintCommand testPaintCommand2;
     
-    private final BoxCanvasPaintableV2 boxPaintCommandV2;
-    private final OvalCanvasPaintableV2 ovalPaintCommandV2;
+    private final BoxPainter boxPaintCommandV2;
+    private final OvalPainter ovalPaintCommandV2;
     
     private MandelbrotPage coverPage;
     
@@ -88,8 +80,8 @@ public class MandelbrotContent extends ListableContent<
         //                lock, this, "selection-circle",
         //                null, 2);
         
-        this.boxPaintCommandV2 = new BoxCanvasPaintableV2(this, lock);
-        this.ovalPaintCommandV2 = new OvalCanvasPaintableV2(this, lock);
+        this.boxPaintCommandV2 = new BoxPainter(this, lock);
+        this.ovalPaintCommandV2 = new OvalPainter(this, lock);
         
         ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas().init().addPaintableV2(boxPaintCommandV2.init());
         ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas().init().addPaintableV2(ovalPaintCommandV2.init());
@@ -228,7 +220,7 @@ public class MandelbrotContent extends ListableContent<
     
     private void refreshCanvas() {
         sync(() -> FXTools.runFX(() -> {
-            final BoundCanvas canvas = getController().canvas();
+            final CanvasSurface canvas = getController().canvas();
             final double newWidth = getController().canvas().getWidth();
             final double newHeight = getController().canvas().getHeight();
             
