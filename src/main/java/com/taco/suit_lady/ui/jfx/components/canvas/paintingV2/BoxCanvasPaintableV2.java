@@ -19,4 +19,8 @@ public class BoxCanvasPaintableV2 extends CanvasShapePaintableV2 {
         if (isValidDimensions())
             FXTools.drawRectangle(getSurface(), bounds, false, isFill());
     }
+    
+    @Override public @NotNull BoxCanvasPaintableV2 init() {
+        return (BoxCanvasPaintableV2) super.init();
+    }
 }

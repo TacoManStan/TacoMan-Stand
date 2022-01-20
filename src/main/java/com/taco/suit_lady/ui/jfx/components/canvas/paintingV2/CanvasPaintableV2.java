@@ -19,6 +19,7 @@ public abstract class CanvasPaintableV2
         this.data = new PaintableDataContainerV2<>(springable, lock, this);
     }
     
+    
     //<editor-fold desc="--- ABSTRACT ---">
     
     protected abstract void onPaint();

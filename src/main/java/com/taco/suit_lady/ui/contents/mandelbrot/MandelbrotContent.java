@@ -6,6 +6,7 @@ import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotContentController.Mou
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotIterator.MandelbrotColor;
 import com.taco.suit_lady.ui.jfx.components.canvas.BoundCanvas;
 import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.BoxCanvasPaintableV2;
+import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.OvalCanvasPaintableV2;
 import com.taco.suit_lady.ui.jfx.components.canvas.shapes.ArcPaintCommand;
 import com.taco.suit_lady.ui.jfx.components.canvas.shapes.RectanglePaintCommand;
 import com.taco.suit_lady.ui.pages.impl.content_selector.ListableContent;
@@ -46,14 +47,15 @@ public class MandelbrotContent extends ListableContent<
     
     private final MandelbrotIterator iterator;
     
-//    private final RectangleOverlayCommand selectionBoxPaintCommand;
-//    private final ImageOverlayCommand selectionBoxPaintCommand2;
-//    private final EllipseOverlayCommand selectionCirclePaintCommand;
+    //    private final RectangleOverlayCommand selectionBoxPaintCommand;
+    //    private final ImageOverlayCommand selectionBoxPaintCommand2;
+    //    private final EllipseOverlayCommand selectionCirclePaintCommand;
     
-//    private final ArcPaintCommand testPaintCommand;
-//    private final RectanglePaintCommand testPaintCommand2;
+    //    private final ArcPaintCommand testPaintCommand;
+    //    private final RectanglePaintCommand testPaintCommand2;
     
     private final BoxCanvasPaintableV2 boxPaintCommandV2;
+    private final OvalCanvasPaintableV2 ovalPaintCommandV2;
     
     private MandelbrotPage coverPage;
     
@@ -75,40 +77,25 @@ public class MandelbrotContent extends ListableContent<
         getController().canvas().setCanvasListener((source, newWidth, newHeight) -> refreshCanvas());
         getCoverPage().getController().getRegenerateButton().setOnAction(event -> refreshCanvas());
         
-//        this.selectionBoxPaintCommand = new RectangleOverlayCommand(
-//                lock, this, "selection-box",
-//                null, 1,
-//                null, Color.BLACK);
-//        this.selectionBoxPaintCommand2 = new ImageOverlayCommand(
-//                lock, this, "selection-box2",
-//                null, 3);
-//        this.selectionCirclePaintCommand = new EllipseOverlayCommand(
-//                lock, this, "selection-circle",
-//                null, 2);
+        //        this.selectionBoxPaintCommand = new RectangleOverlayCommand(
+        //                lock, this, "selection-box",
+        //                null, 1,
+        //                null, Color.BLACK);
+        //        this.selectionBoxPaintCommand2 = new ImageOverlayCommand(
+        //                lock, this, "selection-box2",
+        //                null, 3);
+        //        this.selectionCirclePaintCommand = new EllipseOverlayCommand(
+        //                lock, this, "selection-circle",
+        //                null, 2);
         
-//        this.testPaintCommand = new ArcPaintCommand(this, lock, 50, 120, ArcType.ROUND);
-//        this.testPaintCommand2 = new RectanglePaintCommand(this, lock);
-//
         this.boxPaintCommandV2 = new BoxCanvasPaintableV2(this, lock);
+        this.ovalPaintCommandV2 = new OvalCanvasPaintableV2(this, lock);
         
-//        this.selectionBoxPaintCommand.setDisabled(true);
-//        this.selectionBoxPaintCommand2.setDisabled(true);
-//        this.selectionCirclePaintCommand.setDisabled(true);
-        
-//        this.testPaintCommand.setDisabled(true);
-//        this.testPaintCommand2.setDisabled(true);
-        
-//        getOverlayHandler().getOverlay("default").addPaintCommand(selectionBoxPaintCommand);
-//        ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas().addPaintCommand(testPaintCommand);
-//        ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas().init().addPaintable(testPaintCommand.init());
-//        ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas().init().addPaintable(testPaintCommand2.init());
         ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas().init().addPaintableV2(boxPaintCommandV2.init());
-//        getController().canvas().addPaintCommand(testPaintCommand);
-        //        getOverlayHandler().getOverlay("default").addPaintCommand(selectionBoxPaintCommand2);
-        //        getOverlayHandler().getOverlay("default").addPaintCommand(selectionCirclePaintCommand);
+        ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas().init().addPaintableV2(ovalPaintCommandV2.init());
         
-        //        this.selectionBoxPaintCommand = new RectanglePaintCommand(false, lock);
-        //        ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas().addPaintCommand(selectionBoxPaintCommand);
+        //        getController().canvas().addPaintCommand(testPaintCommand);
+        //        getOverlayHandler().getOverlay("default").addPaintCommand(selectionBoxPaintCommand2);
         
         getController().setDragConsumer(dragData -> zoom(dragData));
         getController().setMoveConsumer(dragData -> updateZoomBox(dragData));
@@ -268,39 +255,20 @@ public class MandelbrotContent extends ListableContent<
     private void zoom(@NotNull MouseDragData dragData) {
         if (!dragData.isValid())
             throw ExceptionTools.ex("Drag Data is Invalid!");
-//        selectionBoxPaintCommand.setDisabled(true);
-//        selectionBoxPaintCommand2.setDisabled(true);
-//        selectionCirclePaintCommand.setDisabled(true);
-//
-//        testPaintCommand.setDisabled(true);
-//        testPaintCommand2.setDisabled(true);
         
         boxPaintCommandV2.setDisabled(true);
+        ovalPaintCommandV2.setDisabled(true);
         
         getData().zoomTo(dragData.getStartX(), dragData.getStartY(), dragData.getEndX(), dragData.getEndY());
     }
     
     private void updateZoomBox(MouseDragData moveData) {
         TaskTools.sync(lock, () -> {
-//            selectionBoxPaintCommand.setDisabled(false);
-//            selectionBoxPaintCommand2.setDisabled(false);
-//            selectionCirclePaintCommand.setDisabled(false);
-            
-//            selectionBoxPaintCommand.setBounds(moveData.getBounds());
-//            selectionBoxPaintCommand2.setBounds(moveData.getBounds());
-//            selectionCirclePaintCommand.setBounds(moveData.getBounds());
-            
-            //
-    
-//            testPaintCommand.setDisabled(false);
-//            testPaintCommand2.setDisabled(false);
-            
             boxPaintCommandV2.setDisabled(false);
-            
-//            testPaintCommand.boundsBinding().setBounds(moveData.getBounds());
-//            testPaintCommand2.boundsBinding().setBounds(moveData.getBounds());
+            ovalPaintCommandV2.setDisabled(false);
             
             boxPaintCommandV2.boundsBinding().setBounds(moveData.getBounds());
+            ovalPaintCommandV2.boundsBinding().setBounds(moveData.getBounds());
         });
     }
     
