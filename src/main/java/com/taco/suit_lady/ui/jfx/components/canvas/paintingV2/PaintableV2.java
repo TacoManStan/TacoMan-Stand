@@ -1,8 +1,6 @@
 package com.taco.suit_lady.ui.jfx.components.canvas.paintingV2;
 
 import com.taco.suit_lady._to_sort._new.Self;
-import com.taco.suit_lady.ui.jfx.components.painting.Paintable;
-import com.taco.suit_lady.ui.jfx.components.painting.PaintableCanvas;
 import com.taco.suit_lady.ui.jfx.util.Boundable;
 import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.ui.jfx.util.BoundsBinding;
@@ -27,6 +25,10 @@ public interface PaintableV2<P extends PaintableV2<P, S>, S extends PaintableSur
     void onAdd(S surface);
     void onRemove(S surface);
     
+    //
+    
+    @NotNull P paint();
+    
     //<editor-fold desc="--- DEFAULT ---">
     
     default @NotNull P init() {
@@ -44,7 +46,7 @@ public interface PaintableV2<P extends PaintableV2<P, S>, S extends PaintableSur
     default P repaintSurface() {
         S surface = getSurface();
         if (surface != null)
-            sync(() -> FXTools.runFX(() -> surface.repaintV2(), true));
+            sync(() -> FXTools.runFX(() -> surface.repaint(), true));
         
         return self();
     }

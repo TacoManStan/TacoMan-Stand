@@ -5,8 +5,12 @@ import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.springable.StrictSpringable;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
+import javafx.beans.value.ObservableIntegerValue;
+import javafx.beans.value.ObservableNumberValue;
 import javafx.collections.FXCollections;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,24 +29,30 @@ public class PaintableSurfaceDataContainerV2<P extends PaintableV2<P, S>, S exte
     private final S owner;
     private final ListProperty<P> paintables;
     
-    private final DimensionsBinding dimensionsBinding;
+    private final IntegerBinding widthBinding;
+    private final IntegerBinding heightBinding;
     
-    public PaintableSurfaceDataContainerV2(@NotNull Springable springable, @Nullable ReentrantLock lock, @NotNull S owner) {
+    public PaintableSurfaceDataContainerV2(
+            @NotNull Springable springable, @Nullable ReentrantLock lock, @NotNull S owner,
+            @NotNull ObservableNumberValue observableWidth, @NotNull ObservableNumberValue observableHeight) {
         this.springable = springable.asStrict();
         this.lock = lock != null ? lock : new ReentrantLock();
         
         this.owner = owner;
         this.paintables = new SimpleListProperty<>(FXCollections.observableArrayList());
         
-        this.dimensionsBinding = new DimensionsBinding();
+        this.widthBinding = Bindings.createIntegerBinding(() -> observableWidth.intValue(), observableWidth);
+        this.heightBinding = Bindings.createIntegerBinding(() -> observableHeight.intValue(), observableHeight);
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
     
     public final @NotNull S getOwner() { return owner; }
+    
     public final @NotNull ListProperty<P> paintables() { return paintables; }
     
-    public final @NotNull DimensionsBinding dimensionsBinding() { return dimensionsBinding; }
+    public final @NotNull IntegerBinding widthBinding() { return widthBinding; }
+    public final @NotNull IntegerBinding heightBinding() { return heightBinding; }
     
     //</editor-fold>
     

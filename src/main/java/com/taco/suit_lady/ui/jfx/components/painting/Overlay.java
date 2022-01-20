@@ -1,12 +1,13 @@
 package com.taco.suit_lady.ui.jfx.components.painting;
 
-import com.taco.suit_lady._to_sort._new.ReadOnlyObservableList;
 import com.taco.suit_lady._to_sort._new.ReadOnlyObservableListWrapper;
 import com.taco.suit_lady._to_sort._new.interfaces.ReadOnlyNameableProperty;
-import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.OverlayComponentV2;
+import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.OverlayPaintableV2;
+import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.PaintableSurfaceDataContainerV2;
 import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.PaintableSurfaceV2;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
+import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.list_tools.ListTools;
 import javafx.beans.binding.Bindings;
@@ -15,7 +16,6 @@ import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.layout.StackPane;
@@ -29,7 +29,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 // TO-DOC
 public class Overlay
-        implements Springable, Lockable, ReadOnlyNameableProperty, Comparable<Overlay>, PaintableCanvas, PaintableSurfaceV2<OverlayComponentV2, Overlay> {
+        implements SpringableWrapper, Lockable, ReadOnlyNameableProperty, Comparable<Overlay>, PaintableSurfaceV2<OverlayPaintableV2, Overlay> {
     
     private final Springable springable;
     private final ReentrantLock lock;
@@ -39,10 +39,8 @@ public class Overlay
     private final StackPane root;
     
     private final ReadOnlyIntegerWrapper paintPriorityProperty;
-    private final ReadOnlyObservableListWrapper<Paintable> paintCommands;
     
-    private final IntegerBinding widthBinding;
-    private final IntegerBinding heightBinding;
+    private final PaintableSurfaceDataContainerV2<OverlayPaintableV2, Overlay> data;
     
     //<editor-fold desc="--- CONSTRUCTORS ---">
     
@@ -95,19 +93,14 @@ public class Overlay
         
         this.paintPriorityProperty = new ReadOnlyIntegerWrapper(paintPriority);
         
-        this.paintCommands = new ReadOnlyObservableListWrapper<>();
-        
-        this.widthBinding = Bindings.createIntegerBinding(() -> (int) root.getWidth(), root.widthProperty());
-        this.heightBinding = Bindings.createIntegerBinding(() -> (int) root.getHeight(), root.heightProperty());
+        this.data = new PaintableSurfaceDataContainerV2<>(springable, lock, this, root.widthProperty(), root.heightProperty());
         
         //
         
-        ListTools.applyListener(lock, paintCommands, (op1, op2, opType, triggerType) -> {
+        //TODO
+        ListTools.applyListener(lock, paintablesV2(), (op1, op2, opType, triggerType) -> {
             root.getChildren().retainAll();
-            paintCommands.forEach(paintable -> {
-                if (paintable instanceof OverlayCommand command)
-                    root.getChildren().add(command.getNode());
-            });
+            paintablesV2().forEach(paintable -> root.getChildren().add(paintable.getNode()));
         });
     }
     
@@ -166,31 +159,14 @@ public class Overlay
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull ObservableList<Paintable> paintables() { return paintCommands; }
+    @Override public @NotNull PaintableSurfaceDataContainerV2<OverlayPaintableV2, Overlay> data() { return data; }
     
-    @Override public @NotNull IntegerBinding widthBinding() { return widthBinding; }
-    @Override public @NotNull IntegerBinding heightBinding() { return heightBinding; }
-    
-    
-    @NotNull @Override public void repaint() {
-    
+    @Override public @NotNull Overlay repaint() {
+        //TODO
+        return this;
     }
     
     //
-    
-    @Override public final @NotNull FxWeaver weaver() {
-        return springable.weaver();
-    }
-    
-    @Override public final @NotNull ConfigurableApplicationContext ctx() {
-        return springable.ctx();
-    }
-    
-    
-    @Override public final @NotNull Lock getLock() {
-        return lock != null ? lock : new ReentrantLock();
-    }
-    
     
     @Override public final ReadOnlyStringProperty nameProperty() {
         return nameProperty.getReadOnlyProperty();
@@ -203,32 +179,4 @@ public class Overlay
     }
     
     //</editor-fold>
-    
-//    /**
-//     * <p>{@link ReadOnlyObservableListWrapper#add(Object) Adds} the specified {@link OverlayCommand} to this {@link Overlay}.</p>
-//     *
-//     * @param paintCommand The {@link OverlayCommand} to be {@link ReadOnlyObservableListWrapper#add(Object) added}.
-//     */
-//    public final void addPaintCommand(@NotNull OverlayCommand<?> paintCommand) {
-//        sync(() -> {
-//            ExceptionTools.nullCheck(paintCommand, "Paint Command Input").setOwner(this); // TODO: Move to listener & also track remove events
-//            paintCommands.add(paintCommand);
-//            FXCollections.sort(paintCommands);
-//            debugger().printList(paintCommands, "Paint Commands (Added)");
-//        });
-//    }
-//
-//    /**
-//     * <p>{@link ReadOnlyObservableListWrapper#remove(Object) Removes} the specified {@link OverlayCommand} to this {@link Overlay}.</p>
-//     *
-//     * @param paintCommand The {@link OverlayCommand} to be {@link ReadOnlyObservableListWrapper#remove(Object) removed}.
-//     */
-//    public final boolean removePaintCommand(@NotNull OverlayCommand<?> paintCommand) {
-//        ExceptionTools.nullCheck(paintCommand, "Paint Command Input");
-//        return sync(() -> {
-//            paintCommands.remove(paintCommand);
-//            debugger().printList(paintCommands, "Paint Commands (Removed)");
-//            return !paintCommands.contains(paintCommand);
-//        });
-//    }
 }

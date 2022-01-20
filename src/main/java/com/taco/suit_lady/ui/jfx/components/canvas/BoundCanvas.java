@@ -1,25 +1,16 @@
 package com.taco.suit_lady.ui.jfx.components.canvas;
 
-import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.PaintCommandV2;
+import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.CanvasPaintableV2;
+import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.PaintableSurfaceDataContainerV2;
 import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.PaintableSurfaceV2;
-import com.taco.suit_lady.ui.jfx.components.painting.Paintable;
-import com.taco.suit_lady.ui.jfx.components.painting.PaintableCanvas;
-import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.ExceptionTools;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
-import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -27,18 +18,12 @@ import java.util.concurrent.locks.ReentrantLock;
  * <p>A {@link #isResizable() resizable} implementation of {@link Canvas}.</p>
  */
 public class BoundCanvas extends Canvas
-        implements PaintableCanvas, PaintableSurfaceV2<PaintCommandV2, BoundCanvas> {
-    
-    private final Springable springable;
-    private final ReentrantLock lock;
+        implements PaintableSurfaceV2<CanvasPaintableV2, BoundCanvas> {
     
     private final ReadOnlyObjectWrapper<CanvasListener> canvasListenerProperty;
-    private final ListProperty<Paintable> paintCommands;
-    
     private final ReadOnlyObjectWrapper<Image> imageProperty;
     
-    private final IntegerBinding widthBinding;
-    private final IntegerBinding heightBinding;
+    private final PaintableSurfaceDataContainerV2<CanvasPaintableV2, BoundCanvas> data;
     
     //<editor-fold desc="--- CONSTRUCTORS ---">
     
@@ -66,18 +51,12 @@ public class BoundCanvas extends Canvas
     public BoundCanvas(@NotNull Springable springable, @Nullable ReentrantLock lock, double width, double height) {
         super(width, height);
         
-        this.springable = springable;
-        this.lock = lock != null ? lock : new ReentrantLock();
-        
-        //
-        
         this.canvasListenerProperty = new ReadOnlyObjectWrapper<>();
-        this.paintCommands = new SimpleListProperty<>(FXCollections.observableArrayList());
-        
         this.imageProperty = new ReadOnlyObjectWrapper<>();
         
-        this.widthBinding = Bindings.createIntegerBinding(() -> (int) getWidth(), widthProperty());
-        this.heightBinding = Bindings.createIntegerBinding(() -> (int) getHeight(), heightProperty());
+        this.data = new PaintableSurfaceDataContainerV2<>(
+                springable, lock, this,
+                widthProperty(), heightProperty());
     }
     
     //</editor-fold>
@@ -96,7 +75,6 @@ public class BoundCanvas extends Canvas
      */
     public final @NotNull ReadOnlyObjectProperty<CanvasListener> canvasListenerProperty() { return canvasListenerProperty.getReadOnlyProperty(); }
     public final @Nullable CanvasListener getCanvasListener() { return canvasListenerProperty.get(); }
-    
     /**
      * <b>Passthrough Definition:</b> <i><code>{@code canvasListenerProperty}<b>.</b>{@link ReadOnlyObjectWrapper#set(Object) set}<b>(</b>{@link CanvasListener}</code><b>)</b></i>
      * <p><b>Note That...</b></p>
@@ -114,40 +92,6 @@ public class BoundCanvas extends Canvas
     public final void setCanvasListener(@Nullable CanvasListener canvasListener) { canvasListenerProperty.set(canvasListener); }
     
     
-    //    public final boolean containsPaintCommand(@Nullable PaintCommand paintCommand) {
-    //        return paintCommand != null && sync(() -> paintCommands.contains(paintCommand));
-    //    }
-    //
-    //    public final boolean removePaintCommand(@Nullable PaintCommand paintCommand) {
-    //        return paintCommand != null && sync(() -> {
-    //            if (containsPaintCommand(paintCommand)) {
-    //                final boolean removed = paintCommands.remove(paintCommand);
-    //
-    //                paintCommand.setOwner(null);
-    //                paintCommand.onRemove(this);
-    //
-    //                return removed;
-    //            } else
-    //                return false;
-    //        });
-    //    }
-    //
-    //    public final boolean addPaintCommand(@Nullable PaintCommand paintCommand) {
-    //        return paintCommand != null && sync(() -> {
-    //            if (containsPaintCommand(paintCommand))
-    //                return true;
-    //            else {
-    //                final boolean added = paintCommands.add(paintCommand);
-    //
-    //                paintCommand.setOwner(this);
-    //                paintCommand.onAdd(this);
-    //
-    //                return added;
-    //            }
-    //        });
-    //    }
-    
-    
     public final ReadOnlyObjectProperty<Image> imageProperty() { return imageProperty.getReadOnlyProperty(); }
     public final Image getImage() { return imageProperty.get(); }
     
@@ -159,22 +103,23 @@ public class BoundCanvas extends Canvas
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public final @NotNull ReentrantLock getLock() { return lock; }
+    @Override public @NotNull PaintableSurfaceDataContainerV2<CanvasPaintableV2, BoundCanvas> data() { return data; }
     
-    @Override public @NotNull FxWeaver weaver() { return springable.weaver(); }
-    @Override public @NotNull ConfigurableApplicationContext ctx() { return springable.ctx(); }
-    
-    //
-    
-    @Override public @NotNull ListProperty<Paintable> paintables() { return paintCommands; }
-    
-    @Override public @NotNull IntegerBinding widthBinding() { return widthBinding; }
-    @Override public @NotNull IntegerBinding heightBinding() { return heightBinding; }
-    
-    @Override public boolean validatePaintable(@NotNull Paintable paintable) { return paintable instanceof PaintCommand; }
-    
-    
-    @Override public String getName() { throw ExceptionTools.nyi(); }
+    @Override public @NotNull BoundCanvas repaint() {
+        return sync(() -> FXTools.runFX(() -> {
+            FXTools.clearCanvasUnsafe(this);
+            
+            paintablesV2().forEach(uiCommand -> uiCommand.paint());
+            
+            final CanvasListener listener = getCanvasListener();
+            if (listener != null)
+                listener.redraw(this, width, height);
+            
+            refreshImage();
+            
+            return this;
+        }));
+    }
     
     //<editor-fold desc="--- CANVAS ---">
     
@@ -228,21 +173,6 @@ public class BoundCanvas extends Canvas
     //</editor-fold>
     
     //</editor-fold>
-    
-    @NotNull @Override
-    public void repaint() {
-        sync(() -> FXTools.runFX(() -> {
-            FXTools.clearCanvasUnsafe(this);
-            
-            paintables().forEach(uiCommand -> uiCommand.paint());
-            
-            final CanvasListener listener = getCanvasListener();
-            if (listener != null)
-                listener.redraw(this, width, height);
-            
-            refreshImage();
-        }, true));
-    }
     
     public interface CanvasListener {
         void redraw(BoundCanvas source, double newWidth, double newHeight);

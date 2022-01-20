@@ -1,25 +1,35 @@
 package com.taco.suit_lady.ui.jfx.components.canvas.paintingV2;
 
 import com.taco.suit_lady._to_sort._new.Self;
-import com.taco.suit_lady.ui.jfx.util.DimensionsBinding;
 import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
+import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.ListProperty;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.concurrent.locks.Lock;
 
 public interface PaintableSurfaceV2<P extends PaintableV2<P, S>, S extends PaintableSurfaceV2<P, S>>
         extends Self<S>, SpringableWrapper, Lockable {
     
     @NotNull PaintableSurfaceDataContainerV2<P, S> data();
     
-    @NotNull ListProperty<P> paintablesV2();
-    @NotNull S repaintV2();
+    @NotNull S repaint();
     
     //<editor-fold desc="--- DEFAULT ---">
     
-    default @NotNull DimensionsBinding dimensionsBinding() { return data().dimensionsBinding(); }
+    default @NotNull ListProperty<P> paintablesV2() { return data().paintables(); }
     
-    //<editor-fold desc="> Operations">
+    default @NotNull IntegerBinding widthBinding() { return data().widthBinding(); }
+    default @NotNull IntegerBinding heightBinding() { return data().heightBinding(); }
+    
+    //<editor-fold desc="> Implementations">
+    
+    default @Override @NotNull Lock getLock() { return data().getLock(); }
+    default @Override @NotNull Springable springable() { return data().springable(); }
+    
+    //</editor-fold>
     
     default @NotNull S init() {
         //TODO
@@ -62,8 +72,6 @@ public interface PaintableSurfaceV2<P extends PaintableV2<P, S>, S extends Paint
                 return false;
         });
     }
-    
-    //</editor-fold>
     
     //</editor-fold>
 }
