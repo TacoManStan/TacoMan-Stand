@@ -1,4 +1,4 @@
-package com.taco.suit_lady.ui.jfx.components.painting;
+package com.taco.suit_lady.ui.jfx.components.canvas.painting.surface;
 
 import com.taco.suit_lady.ui.jfx.components.canvas.CanvasPane;
 import com.taco.suit_lady.util.springable.Springable;

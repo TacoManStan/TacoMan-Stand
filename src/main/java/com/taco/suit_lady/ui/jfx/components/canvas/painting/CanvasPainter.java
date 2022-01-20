@@ -1,6 +1,6 @@
-package com.taco.suit_lady.ui.jfx.components.canvas.paintingV2;
+package com.taco.suit_lady.ui.jfx.components.canvas.painting;
 
-import com.taco.suit_lady.ui.jfx.components.canvas.CanvasSurface;
+import com.taco.suit_lady.ui.jfx.components.canvas.painting.surface.CanvasSurface;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
@@ -11,7 +11,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 
 public abstract class CanvasPainter
-        implements SpringableWrapper, PaintableV2<CanvasPainter, CanvasSurface> {
+        implements SpringableWrapper, Paintable<CanvasPainter, CanvasSurface> {
     
     private final PaintableData<CanvasPainter, CanvasSurface> data;
     

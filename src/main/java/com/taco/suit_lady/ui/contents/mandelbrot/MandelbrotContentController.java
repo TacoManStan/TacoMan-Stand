@@ -1,7 +1,7 @@
 package com.taco.suit_lady.ui.contents.mandelbrot;
 
 import com.taco.suit_lady.ui.ContentController;
-import com.taco.suit_lady.ui.jfx.components.canvas.CanvasSurface;
+import com.taco.suit_lady.ui.jfx.components.canvas.painting.surface.CanvasSurface;
 import com.taco.suit_lady.ui.jfx.components.canvas.CanvasPane;
 import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.util.Lockable;

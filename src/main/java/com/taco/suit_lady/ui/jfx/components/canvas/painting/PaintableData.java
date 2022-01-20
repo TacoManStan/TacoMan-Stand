@@ -1,5 +1,6 @@
-package com.taco.suit_lady.ui.jfx.components.canvas.paintingV2;
+package com.taco.suit_lady.ui.jfx.components.canvas.painting;
 
+import com.taco.suit_lady.ui.jfx.components.canvas.painting.surface.Surface;
 import com.taco.suit_lady.ui.jfx.util.BoundsBinding;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
@@ -13,7 +14,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 
-public class PaintableData<P extends PaintableV2<P, S>, S extends Surface<P, S>>
+public class PaintableData<P extends Paintable<P, S>, S extends Surface<P, S>>
         implements SpringableWrapper, Lockable {
     
     private final StrictSpringable springable;

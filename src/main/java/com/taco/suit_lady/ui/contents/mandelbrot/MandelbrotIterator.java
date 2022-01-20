@@ -1,7 +1,7 @@
 package com.taco.suit_lady.ui.contents.mandelbrot;
 
 import com.taco.suit_lady._to_sort._new.MatrixIterator;
-import com.taco.suit_lady.ui.jfx.components.canvas.CanvasSurface;
+import com.taco.suit_lady.ui.jfx.components.canvas.painting.surface.CanvasSurface;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ArrayTools;
 import com.taco.suit_lady.util.tools.ExceptionTools;

@@ -1,14 +1,11 @@
-package com.taco.suit_lady.ui.jfx.components.canvas.paintingV2;
+package com.taco.suit_lady.ui.jfx.components.canvas.painting;
 
-import com.taco.suit_lady.ui.jfx.components.painting.OverlaySurface;
+import com.taco.suit_lady.ui.jfx.components.canvas.painting.surface.OverlaySurface;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
-import com.taco.suit_lady.util.tools.PropertyTools;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.locks.ReentrantLock;
 
 public abstract class OverlayPainter
-        implements SpringableWrapper, PaintableV2<OverlayPainter, OverlaySurface> {
+        implements SpringableWrapper, Paintable<OverlayPainter, OverlaySurface> {
     
     private final PaintableData<OverlayPainter, OverlaySurface> data;
     

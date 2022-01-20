@@ -1,6 +1,7 @@
-package com.taco.suit_lady.ui.jfx.components.canvas.paintingV2;
+package com.taco.suit_lady.ui.jfx.components.canvas.painting;
 
 import com.taco.suit_lady._to_sort._new.Self;
+import com.taco.suit_lady.ui.jfx.components.canvas.painting.surface.Surface;
 import com.taco.suit_lady.ui.jfx.util.Boundable;
 import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.ui.jfx.util.BoundsBinding;
@@ -17,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.locks.Lock;
 import java.util.function.Predicate;
 
-public interface PaintableV2<P extends PaintableV2<P, S>, S extends Surface<P, S>>
+public interface Paintable<P extends Paintable<P, S>, S extends Surface<P, S>>
         extends Self<P>, SpringableWrapper, Lockable, Comparable<P>, Boundable {
     
     @NotNull PaintableData<P, S> data();

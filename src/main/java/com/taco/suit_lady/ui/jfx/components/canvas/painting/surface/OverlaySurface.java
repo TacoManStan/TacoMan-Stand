@@ -1,9 +1,7 @@
-package com.taco.suit_lady.ui.jfx.components.painting;
+package com.taco.suit_lady.ui.jfx.components.canvas.painting.surface;
 
 import com.taco.suit_lady._to_sort._new.interfaces.ReadOnlyNameableProperty;
-import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.OverlayPainter;
-import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.SurfaceData;
-import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.Surface;
+import com.taco.suit_lady.ui.jfx.components.canvas.painting.OverlayPainter;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;

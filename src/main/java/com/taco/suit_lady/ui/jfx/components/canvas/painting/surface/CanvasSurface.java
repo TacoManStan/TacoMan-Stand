@@ -1,8 +1,6 @@
-package com.taco.suit_lady.ui.jfx.components.canvas;
+package com.taco.suit_lady.ui.jfx.components.canvas.painting.surface;
 
-import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.CanvasPainter;
-import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.SurfaceData;
-import com.taco.suit_lady.ui.jfx.components.canvas.paintingV2.Surface;
+import com.taco.suit_lady.ui.jfx.components.canvas.painting.CanvasPainter;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import javafx.beans.property.*;
