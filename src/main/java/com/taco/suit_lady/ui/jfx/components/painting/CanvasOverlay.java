@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-public class CanvasOverlay extends Overlay {
+public class CanvasOverlay extends OverlaySurface {
     
     private final CanvasPane canvasPane;
     

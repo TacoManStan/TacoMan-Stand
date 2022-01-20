@@ -29,7 +29,7 @@ public class OverlayCommand<N extends Node>
     private final StrictSpringable springable;
     private final String name;
     
-    private final ReadOnlyObjectWrapper<Overlay> ownerProperty; // Try to decouple this if you can.
+    private final ReadOnlyObjectWrapper<OverlaySurface> ownerProperty; // Try to decouple this if you can.
     private final ReadOnlyObjectWrapper<N> nodeProperty;
     
     private final Predicate<? super OverlayCommand<N>> autoRemoveCondition;

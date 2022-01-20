@@ -1,10 +1,7 @@
 package com.taco.suit_lady.ui.jfx.components.canvas.shapes;
 
-import com.taco.suit_lady.ui.jfx.components.canvas.BoundCanvas;
-import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.PropertyTools;
-import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;

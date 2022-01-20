@@ -3,7 +3,7 @@ package com.taco.suit_lady.ui;
 import com.taco.suit_lady.logic.LogiCore;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ExceptionTools;
-import com.taco.suit_lady.ui.jfx.components.canvas.BoundCanvas;
+import com.taco.suit_lady.ui.jfx.components.canvas.CanvasSurface;
 import com.taco.suit_lady.ui.jfx.components.canvas.CanvasContentPane;
 import com.taco.suit_lady.ui.jfx.components.ContentPane;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
@@ -93,11 +93,11 @@ public class ContentManager
     
     //
     
-    public final @NotNull BoundCanvas getContentOverlayCanvas() {
+    public final @NotNull CanvasSurface getContentOverlayCanvas() {
         return getInternalContentBasePane().getOverlayCanvas();
     }
     
-    public final @NotNull BoundCanvas getContentBackdropCanvas() {
+    public final @NotNull CanvasSurface getContentBackdropCanvas() {
         return getInternalContentBasePane().getBackdropCanvas();
     }
     

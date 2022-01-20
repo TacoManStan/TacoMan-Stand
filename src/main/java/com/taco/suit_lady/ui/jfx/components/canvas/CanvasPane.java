@@ -13,7 +13,7 @@ public class CanvasPane extends AnchorPane
     
     private final Springable springable;
     
-    private final BoundCanvas canvas;
+    private final CanvasSurface canvas;
     
     public CanvasPane(@NotNull Springable springable) {
         this(springable, 0, 0, 0, 0);
@@ -30,7 +30,7 @@ public class CanvasPane extends AnchorPane
     public CanvasPane(@NotNull Springable springable, double leftAnchor, double rightAnchor, double topAnchor, double bottomAnchor) {
         this.springable = springable.asStrict();
         
-        this.canvas = new BoundCanvas(this);
+        this.canvas = new CanvasSurface(this);
 //        this.canvas.setStyle("-fx-border-color: red");
 //        this.setStyle("-fx-border-color: blue");
         
@@ -38,7 +38,7 @@ public class CanvasPane extends AnchorPane
         FXTools.setAnchors(canvas, leftAnchor, rightAnchor, topAnchor, bottomAnchor);
     }
     
-    public final BoundCanvas canvas() {
+    public final CanvasSurface canvas() {
         return canvas;
     }
     
