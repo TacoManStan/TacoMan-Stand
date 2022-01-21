@@ -12,6 +12,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import javax.swing.*;
+
 /**
  * <p>Guarantees that all implementing classes will have direct access to...</p>
  * <ol>
@@ -89,11 +91,14 @@ public interface Springable {
      * <ol>
      *     <li>By passing the value of {@link #asSimple() this method} wherever a {@link Springable} is required permits this {@link Springable} instance to be garbage collected when no longer used.</li>
      *     <li>This prevents the possibility of an unnecessary reference to this {@link Springable} instance from accidentally being stored as a {@link Springable}, preventing garbage collection.</li>
+     *     <li>If the specified {@link Springable} is already an instance of {@link SimpleSpringable}, a reference to {@code this} {@link Springable} instance is returned instead.</li>
      * </ol>
      *
      * @return A new {@link SimpleSpringable} instance wrapping the contents of this {@link Springable}.
      */
     default @NotNull SimpleSpringable asSimple() {
+        if (this instanceof SimpleSpringable simpleSpringable)
+            return simpleSpringable;
         return new SimpleSpringable(weaver(), ctx());
     }
     
@@ -104,6 +109,8 @@ public interface Springable {
      * @return A new {@link StrictSpringable} instance wrapping the contents of this {@link Springable}.
      */
     default @NotNull StrictSpringable asStrict() {
+        if (this instanceof StrictSpringable strictSpringable)
+            return strictSpringable;
         return new StrictSpringable(weaver(), ctx());
     }
     

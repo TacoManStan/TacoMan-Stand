@@ -16,8 +16,8 @@ import org.springframework.context.ConfigurableApplicationContext;
  * @see SimpleSpringable
  */
 public record StrictSpringable(@NotNull FxWeaver weaver, @NotNull ConfigurableApplicationContext ctx)
-        implements Springable
-{
+        implements Springable {
+    
     /**
      * <p>Constructs a new {@link StrictSpringable} instance containing the specified {@link FxWeaver} and {@link ConfigurableApplicationContext Context}.</p>
      *
@@ -27,8 +27,7 @@ public record StrictSpringable(@NotNull FxWeaver weaver, @NotNull ConfigurableAp
      * @throws NullPointerException If the specified {@link FxWeaver} is {@code null}.
      * @throws NullPointerException If the specified {@link ConfigurableApplicationContext} is {@code null}.
      */
-    public StrictSpringable(@NotNull FxWeaver weaver, @NotNull ConfigurableApplicationContext ctx)
-    {
+    public StrictSpringable(@NotNull FxWeaver weaver, @NotNull ConfigurableApplicationContext ctx) {
         this.weaver = ExceptionTools.nullCheck(weaver, "FxWeaver");
         this.ctx = ExceptionTools.nullCheck(ctx, "Application Context");
     }
