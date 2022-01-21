@@ -38,7 +38,7 @@ public interface Boundable {
      */
     default Point2D getLocation(@Nullable LocationDefinition locationDefinition) {
         locationDefinition = locationDefinition != null ? locationDefinition : LocationDefinition.getDefault();
-        switch (locationDefinition) {
+        return switch (locationDefinition) {
             default -> new Point2D(getMinX(), getMinY());
             
             case TOP_RIGHT -> new Point2D(getMaxX(), getMinY());
@@ -50,7 +50,7 @@ public interface Boundable {
             case CENTER_RIGHT -> new Point2D(getMaxX(), getMidY());
             case CENTER_TOP -> new Point2D(getMidX(), getMinY());
             case CENTER_BOTTOM -> new Point2D(getMidX(), getMaxY());
-        }
+        };
     }
     
     //<editor-fold desc="> Safe/Fallback Accessors">
@@ -94,7 +94,7 @@ public interface Boundable {
      */
     enum LocationDefinition {
         TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT,
-        CENTER, CENTER_LEFT, CENTER_RIGHT, CENTER_TOP, CENTER_BOTTOM
+        CENTER, CENTER_LEFT, CENTER_RIGHT, CENTER_TOP, CENTER_BOTTOM;
         
         public static LocationDefinition getDefault() { return LocationDefinition.TOP_LEFT; }
         
