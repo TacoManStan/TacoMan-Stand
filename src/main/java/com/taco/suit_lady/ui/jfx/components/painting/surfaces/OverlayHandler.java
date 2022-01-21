@@ -190,6 +190,15 @@ public class OverlayHandler
     
     //<editor-fold desc="--- INTERNAL ---">
     
+    //<editor-fold desc="> Resorting">
+    
+    /**
+     * <p><b>Passthrough Definition:</b> <i>{@link #resort(Runnable, Runnable) resort}<b>(</b>{@link Runnable runnable}<b>,</b> <u>null</u><b>)</b></i></p>
+     */
+    private void resort(@NotNull Runnable runnable) {
+        resort(runnable, null);
+    }
+    
     /**
      * <p>Identical to <i>{@link #resort(Supplier, Consumer)}</i> except {@link Runnable Runnables} are used instead of {@link Supplier Suppliers} and no value is returned.</p>
      */
@@ -204,13 +213,7 @@ public class OverlayHandler
     
     
     /**
-     * <p><b>Passthrough Definition</b></p>
-     * <blockquote><i>{@link #resort(Supplier, Consumer) resort}<b>(</b>{@link Supplier supplier}<b>,</b> <u>null</u><b>)</b></i></blockquote>
-     *
-     * @param supplier
-     * @param <T>
-     *
-     * @return
+     * <p><b>Passthrough Definition:</b> <i>{@link #resort(Supplier, Consumer) resort}<b>(</b>{@link Supplier supplier}<b>,</b> <u>null</u><b>)</b></i></p>
      */
     private <T> T resort(@NotNull Supplier<T> supplier) {
         return resort(supplier, null);
@@ -257,6 +260,8 @@ public class OverlayHandler
         });
     }
     
+    //</editor-fold>
+    
     /**
      * <p>Refreshes the contents of all {@link OverlaySurface Overlays} contained within this {@link OverlayHandler}.</p>
      * <p><b>Execution Steps</b></p>
@@ -299,21 +304,11 @@ public class OverlayHandler
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override
-    public @NotNull FxWeaver weaver() {
-        return springable.weaver();
-    }
-    
-    @Override
-    public @NotNull ConfigurableApplicationContext ctx() {
-        return springable.ctx();
-    }
+    @Override public @NotNull FxWeaver weaver() { return springable.weaver(); }
+    @Override public @NotNull ConfigurableApplicationContext ctx() { return springable.ctx(); }
     
     
-    @Override
-    public @NotNull Lock getLock() {
-        return lock != null ? lock : new ReentrantLock();
-    }
+    @Override public @NotNull Lock getLock() { return lock != null ? lock : new ReentrantLock(); }
     
     //</editor-fold>
 }
