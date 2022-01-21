@@ -35,10 +35,12 @@ public interface Paintable<P extends Paintable<P, S>, S extends Surface<P, S>>
     
     default @NotNull P init() {
         autoRemoveConditionProperty().addListener((observable, oldValue, newValue) -> repaintSurface());
-        disabledProperty().addListener((observable, oldValue, newValue) -> repaintSurface());
+        activeBinding().addListener((observable, oldValue, newValue) -> repaintSurface());
         paintPriorityProperty().addListener((observable, oldValue, newValue) -> repaintSurface());
         
         boundsBinding().addListener((observable, oldValue, newValue) -> repaintSurface());
+        
+        setDisabled(false);
         
         return self();
     }
@@ -50,6 +52,7 @@ public interface Paintable<P extends Paintable<P, S>, S extends Surface<P, S>>
     }
     
     default P repaintSurface() {
+        //        System.out.println("Repainting Surface w/ Bounds : " + getBounds() + " for Paintable: " + this);
         S surface = getSurface();
         if (surface != null)
             sync(() -> FXTools.runFX(() -> surface.repaint(), true));
@@ -70,11 +73,20 @@ public interface Paintable<P extends Paintable<P, S>, S extends Surface<P, S>>
     default boolean isDisabled() { return disabledProperty().get(); }
     default boolean setDisabled(boolean newValue) { return PropertyTools.setProperty(disabledProperty(), newValue); }
     
+    default @NotNull BooleanProperty pausedProperty() { return data().pausedProperty(); }
+    default boolean isPaused() { return pausedProperty().get(); }
+    default boolean setPaused(boolean newValue) { return PropertyTools.setProperty(pausedProperty(), newValue); }
+    default boolean pause() { return setPaused(true); }
+    default boolean resume() { return setPaused(false); }
+    
     default @NotNull IntegerProperty paintPriorityProperty() { return data().paintPriorityProperty(); }
     default int getPaintPriority() { return paintPriorityProperty().get(); }
     default int setPaintPriority(int newValue) { return PropertyTools.setProperty(paintPriorityProperty(), newValue); }
     
     default @NotNull BoundsBinding boundsBinding() { return data().boundsBinding(); }
+    
+    default @NotNull BooleanBinding activeBinding() { return data().activeBinding(); }
+    default boolean isActive() { return activeBinding().get(); }
     
     //
     

@@ -168,6 +168,21 @@ public class OverlayHandler
         });
     }
     
+    /**
+     * <p>Returns the default {@link OverlaySurface} contained within this {@link OverlayHandler}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>The {@code default} {@link OverlaySurface} will always have the {@link OverlaySurface#nameProperty() name} of {@code "default"}.</li>
+     *     <li>In most circumstances — especially in applications that are minimally graphics-intensive — the {@code default} {@link OverlaySurface} is the only {@link OverlaySurface} that is required.</li>
+     * </ol>
+     * <p><b>Passthrough Definition:</b> <i>{@link #getOverlay(String) getOverlay}<b>(</b>"default"<b>)</b></i>.</p>
+     *
+     * @return The {@code default} {@link OverlaySurface} for this {@link OverlayHandler}.
+     */
+    public final @NotNull OverlaySurface defaultOverlay() {
+        return getOverlay("default");
+    }
+    
     //</editor-fold>
     
     //</editor-fold>

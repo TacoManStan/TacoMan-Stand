@@ -37,7 +37,7 @@ public abstract class CanvasPainter
     
     
     @Override public @NotNull CanvasPainter paint() {
-        if (!isDisabled())
+        if (isActive())
             FXTools.runFX(() -> sync(() -> {
                 Predicate<CanvasSurface> autoRemoveCondition = getAutoRemoveCondition();
                 if (autoRemoveCondition != null && autoRemoveCondition.test(getSurface()))

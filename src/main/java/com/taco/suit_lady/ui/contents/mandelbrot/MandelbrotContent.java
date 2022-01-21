@@ -4,7 +4,10 @@ import com.taco.suit_lady.ui.AppUI;
 import com.taco.suit_lady.ui.UIBook;
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotContentController.MouseDragData;
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotIterator.MandelbrotColor;
+import com.taco.suit_lady.ui.jfx.components.painting.paintables.Paintable;
+import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.ImagePainter;
 import com.taco.suit_lady.ui.jfx.components.painting.paintables.overlay.BoxOverlayPaintNode;
+import com.taco.suit_lady.ui.jfx.components.painting.paintables.overlay.ImageOverlayPaintNode;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasSurface;
 import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.ArcPainter;
 import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.BoxPainter;
@@ -26,6 +29,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcType;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class MandelbrotContent extends ListableContent<
@@ -52,8 +56,12 @@ public class MandelbrotContent extends ListableContent<
     private final BoxPainter boxPainter;
     private final OvalPainter ovalPainter;
     private final ArcPainter arcPainter;
+    private final ImagePainter imagePainter;
     
     private final BoxOverlayPaintNode boxOverlayPainter;
+    private final ImageOverlayPaintNode imageOverlayPainter;
+    
+    private final Paintable<?, ?>[] paintables;
     
     private MandelbrotPage coverPage;
     
@@ -89,23 +97,18 @@ public class MandelbrotContent extends ListableContent<
         //
         
         this.boxPainter = new BoxPainter(this, lock);
-        this.boxPainter.setDisabled(true);
-        
         this.ovalPainter = new OvalPainter(this, lock);
-        this.ovalPainter.setDisabled(true);
-        
         this.arcPainter = new ArcPainter(this, lock, 30, 30, ArcType.ROUND);
-        this.arcPainter.setDisabled(true);
-        
+        this.imagePainter = new ImagePainter(this, lock);
         
         this.boxOverlayPainter = new BoxOverlayPaintNode(this, lock);
-        this.boxOverlayPainter.setDisabled(false);
+        this.imageOverlayPainter = new ImageOverlayPaintNode(this, lock);
         
-        
-        getOverlayHandler().getOverlay("default").add(boxOverlayPainter.init());
-        getOverlayHandler().getOverlay("default").add(ovalPainter.init());
-        
-        //
+        this.paintables = new Paintable[]{
+                ovalPainter, imagePainter,
+                boxOverlayPainter};
+    
+        Arrays.stream(paintables).forEach(paintable -> getOverlayHandler().defaultOverlay().add(paintable.init()));
         
         getController().setDragConsumer(dragData -> zoom(dragData));
         getController().setMoveConsumer(dragData -> updateZoomBox(dragData));
@@ -266,29 +269,14 @@ public class MandelbrotContent extends ListableContent<
         if (!dragData.isValid())
             throw ExceptionTools.ex("Drag Data is Invalid!");
         
-        boxPainter.setDisabled(true);
-        ovalPainter.setDisabled(true);
-        arcPainter.setDisabled(true);
-        
-        boxOverlayPainter.setDisabled(true);
-        
+        Arrays.stream(paintables).forEach(paintable -> paintable.setPaused(true));
         getData().zoomTo(dragData.getStartX(), dragData.getStartY(), dragData.getEndX(), dragData.getEndY());
     }
     
     private void updateZoomBox(MouseDragData moveData) {
         TaskTools.sync(lock, () -> {
-            boxPainter.setDisabled(false);
-            boxPainter.boundsBinding().setBounds(moveData.getBounds());
-            
-            ovalPainter.setDisabled(false);
-            ovalPainter.boundsBinding().setBounds(moveData.getBounds());
-            
-            arcPainter.setDisabled(false);
-            arcPainter.boundsBinding().setBounds(moveData.getBounds());
-            
-            
-            boxOverlayPainter.setDisabled(false);
-            boxOverlayPainter.boundsBinding().setBounds(moveData.getBounds());
+            Arrays.stream(paintables).forEach(paintable -> paintable.setPaused(false));
+            Arrays.stream(paintables).forEach(paintable -> paintable.boundsBinding().setBounds(moveData.getBounds()));
         });
     }
     

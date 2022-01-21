@@ -7,6 +7,8 @@ import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.springable.StrictSpringable;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,9 +28,11 @@ public class PaintableData<P extends Paintable<P, S>, S extends Surface<P, S>>
     
     private final ObjectProperty<Predicate<S>> autoRemoveConditionProperty;
     private final BooleanProperty disabledProperty;
+    private final BooleanProperty pausedProperty;
     private final IntegerProperty paintPriorityProperty;
     
     private final BoundsBinding boundsBinding;
+    private final BooleanBinding activeBinding;
     
     public PaintableData(@NotNull Springable springable, @Nullable ReentrantLock lock, @NotNull P owner) {
         this.springable = springable.asStrict();
@@ -38,32 +42,34 @@ public class PaintableData<P extends Paintable<P, S>, S extends Surface<P, S>>
         this.surfaceProperty = new SimpleObjectProperty<>();
         
         this.autoRemoveConditionProperty = new SimpleObjectProperty<>();
-        this.disabledProperty = new SimpleBooleanProperty(false);
+        this.disabledProperty = new SimpleBooleanProperty(true);
+        this.pausedProperty = new SimpleBooleanProperty(false);
         this.paintPriorityProperty = new SimpleIntegerProperty(1);
         
         this.boundsBinding = new BoundsBinding();
+        this.activeBinding = Bindings.and(Bindings.not(disabledProperty), Bindings.not(pausedProperty));
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
     
     public final P getOwner() { return owner; }
     
-    //</editor-fold>
-    
-    //<editor-fold desc="--- IMPLEMENTATIONS ---">
-    
     public @NotNull ObjectProperty<S> surfaceProperty() { return surfaceProperty; }
     
     public @NotNull ObjectProperty<Predicate<S>> autoRemoveConditionProperty() { return autoRemoveConditionProperty; }
     public @NotNull BooleanProperty disabledProperty() { return disabledProperty; }
+    public @NotNull BooleanProperty pausedProperty() { return pausedProperty; }
     public @NotNull IntegerProperty paintPriorityProperty() { return paintPriorityProperty; }
     
     public @NotNull BoundsBinding boundsBinding() { return boundsBinding; }
+    public @NotNull BooleanBinding activeBinding() { return activeBinding; }
     
-    //
+    //</editor-fold>
     
-    public @NotNull Lock getLock() { return lock; }
-    public @NotNull Springable springable() { return springable; }
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+    @Override public @NotNull Lock getLock() { return lock; }
+    @Override public @NotNull Springable springable() { return springable; }
     
     //</editor-fold>
 }

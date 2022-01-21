@@ -36,6 +36,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
@@ -907,6 +908,33 @@ public class FXTools {
                 canvas.getGraphicsContext2D().strokeArc(
                         bounds.x(), bounds.y(), bounds.width(), bounds.height(),
                         startAngle, arcExtent, closure);
+        }, true);
+    }
+    
+    public static void drawImage(@NotNull Canvas canvas, int x, int y, @NotNull Image image, boolean safe, boolean wipeCanvas) {
+        FXTools.runFX(() -> {
+            if (wipeCanvas)
+                clearCanvasUnsafe(canvas);
+            canvas.getGraphicsContext2D().drawImage(image, x, y);
+        }, true);
+    }
+    
+    public static void drawImage(@NotNull Canvas canvas, @NotNull Bounds bounds, @NotNull Image image, boolean safe, boolean wipeCanvas) {
+        FXTools.runFX(() -> {
+            if (wipeCanvas)
+                clearCanvasUnsafe(canvas);
+            canvas.getGraphicsContext2D().drawImage(image, bounds.getX(safe), bounds.getY(safe), bounds.getWidth(safe), bounds.getHeight(safe));
+        }, true);
+    }
+    
+    public static void drawImage(@NotNull Canvas canvas, @NotNull Bounds source, @NotNull Bounds destination, Image image, boolean safe, boolean wipeCanvas) {
+        FXTools.runFX(() -> {
+            if (wipeCanvas)
+                clearCanvasUnsafe(canvas);
+            canvas.getGraphicsContext2D().drawImage(
+                    image,
+                    source.getX(safe), source.getY(safe), source.getWidth(safe), source.getHeight(safe),
+                    destination.getX(safe), destination.getY(safe), destination.getWidth(safe), destination.getHeight(safe));
         }, true);
     }
     

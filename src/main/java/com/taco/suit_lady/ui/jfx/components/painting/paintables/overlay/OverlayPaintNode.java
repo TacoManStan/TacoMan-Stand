@@ -66,7 +66,7 @@ public abstract class OverlayPaintNode
     
     protected Node applyRefresh(@NotNull Node n) {
         n.setManaged(false);
-        n.visibleProperty().bind(Bindings.not(disabledProperty()));
+        n.visibleProperty().bind(activeBinding());
         
         return sync(() -> syncBounds(n));
     }
