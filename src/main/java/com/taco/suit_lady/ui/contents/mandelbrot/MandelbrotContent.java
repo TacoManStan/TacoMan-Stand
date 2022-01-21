@@ -94,7 +94,7 @@ public class MandelbrotContent extends ListableContent<
         this.imageOverlayPainter = new ImageOverlayPaintNode(this, lock);
         
         Arrays.stream(paintables = new Paintable[]{ovalPainter, imagePainter, boxOverlayPainter})
-              .forEach(paintable -> getOverlayHandler().defaultOverlay().add(paintable.init()));
+              .forEach(paintable -> getOverlayHandler().getDefaultOverlay().add(paintable.init()));
         
         //
         
