@@ -41,13 +41,13 @@ public class ImagePainter extends CanvasPainter {
     
     @Override protected void onPaint() {
         Image image = getImage();
-//        System.out.println("Image: " + getImage());
-//        System.out.println("Image Dimensions: " + getImage().getWidth() + ", " + getImage().getHeight());
-//        System.out.println("Is Valid Dimensions: " + isValidDimensions());
         Bounds bounds = getBounds();
-//        System.out.println("Bounds: " + bounds);
         if (image != null && isValidDimensions())
             FXTools.drawImage(getSurface(), bounds, image, true, false);
+        
+        // Below is example use case for both source & target Bounds.
+        // The example clips the image to show only the top left quadrant of the image
+        // FXTools.drawImage(getSurface(), new Bounds(0, 0, (int) (image.getWidth() / 2), (int) (image.getHeight() / 2)), bounds, image, true, false);
     }
     
     //</editor-fold>

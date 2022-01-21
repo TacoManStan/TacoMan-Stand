@@ -83,17 +83,6 @@ public class MandelbrotContent extends ListableContent<
         getController().canvas().setCanvasListener((source, newWidth, newHeight) -> refreshCanvas());
         getCoverPage().getController().getRegenerateButton().setOnAction(event -> refreshCanvas());
         
-        //        this.selectionBoxPaintCommand = new RectangleOverlayCommand(
-        //                lock, this, "selection-box",
-        //                null, 1,
-        //                null, Color.BLACK);
-        //        this.selectionBoxPaintCommand2 = new ImageOverlayCommand(
-        //                lock, this, "selection-box2",
-        //                null, 3);
-        //        this.selectionCirclePaintCommand = new EllipseOverlayCommand(
-        //                lock, this, "selection-circle",
-        //                null, 2);
-        
         //
         
         this.boxPainter = new BoxPainter(this, lock);
@@ -104,11 +93,10 @@ public class MandelbrotContent extends ListableContent<
         this.boxOverlayPainter = new BoxOverlayPaintNode(this, lock);
         this.imageOverlayPainter = new ImageOverlayPaintNode(this, lock);
         
-        this.paintables = new Paintable[]{
-                ovalPainter, imagePainter,
-                boxOverlayPainter};
-    
-        Arrays.stream(paintables).forEach(paintable -> getOverlayHandler().defaultOverlay().add(paintable.init()));
+        Arrays.stream(paintables = new Paintable[]{ovalPainter, imagePainter, boxOverlayPainter})
+              .forEach(paintable -> getOverlayHandler().defaultOverlay().add(paintable.init()));
+        
+        //
         
         getController().setDragConsumer(dragData -> zoom(dragData));
         getController().setMoveConsumer(dragData -> updateZoomBox(dragData));
