@@ -19,6 +19,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 // TO-DOC
@@ -103,8 +104,8 @@ public class OverlayHandler
      *
      * @param overlay The {@link OverlaySurface} being added.
      */
-    public final void addOverlay(@NotNull OverlaySurface overlay) {
-        resort(() -> overlays.add(overlay));
+    public final boolean addOverlay(@NotNull OverlaySurface overlay) {
+        return resort(() -> overlays.add(overlay));
     }
     
     /**
@@ -132,8 +133,8 @@ public class OverlayHandler
      *
      * @param overlay The {@link OverlaySurface} to be {@link ReadOnlyObservableListWrapper#remove(Object) removed}.
      */
-    public final void removeOverlay(@NotNull OverlaySurface overlay) {
-        resort(() -> overlays.remove(overlay));
+    public final boolean removeOverlay(@NotNull OverlaySurface overlay) {
+        return resort(() -> overlays.remove(overlay));
     }
     
     /**
@@ -145,8 +146,8 @@ public class OverlayHandler
      *
      * @param index The {@code index} at which to remove the {@link OverlaySurface} from.
      */
-    public final void removeOverlayAt(int index) {
-        resort(() -> overlays.remove(index));
+    public final OverlaySurface removeOverlayAt(int index) {
+        return resort(() -> overlays.remove(index));
     }
     
     /**
@@ -190,41 +191,68 @@ public class OverlayHandler
     //<editor-fold desc="--- INTERNAL ---">
     
     /**
-     * <p>Executes the specified {@link Runnable}.</p>
-     * <p>Upon {@link Runnable} completion, <i>{@link #refreshOverlays()}}</i> is called.</p>
-     * <p><b>Details</b></p>
-     * <ol>
-     *     <li>Both of the aforementioned actions are performed in the same {@code synchronization} block.</li>
-     *     <li>If a return value is required, refer to <i>{@link #resort(Supplier)}</i>.</li>
-     * </ol>
-     *
-     * @param runnable The {@link Runnable} to be executed.
+     * <p>Identical to <i>{@link #resort(Supplier, Consumer)}</i> except {@link Runnable Runnables} are used instead of {@link Supplier Suppliers} and no value is returned.</p>
      */
-    private void resort(Runnable runnable) {
+    private void resort(@NotNull Runnable runnable, @Nullable Runnable postAddOperation) {
         sync(() -> {
             runnable.run();
             refreshOverlays();
+            if (postAddOperation != null)
+                postAddOperation.run();
         });
     }
     
+    
     /**
-     * <p>Executes the specified {@link Supplier}.</p>
-     * <p>Upon completion, <i>{@link #refreshOverlays()}</i> is called.</p>
+     * <p><b>Passthrough Definition</b></p>
+     * <blockquote><i>{@link #resort(Supplier, Consumer) resort}<b>(</b>{@link Supplier supplier}<b>,</b> <u>null</u><b>)</b></i></blockquote>
+     *
+     * @param supplier
+     * @param <T>
+     *
+     * @return
+     */
+    private <T> T resort(@NotNull Supplier<T> supplier) {
+        return resort(supplier, null);
+    }
+    
+    /**
+     * <p>Executes the actions contained within the specified {@link Supplier}.</p>
+     * <br><hr>
+     * <p><b>Order of Operations</b></p>
+     * <ol>
+     *     <li>Executes the actions contained within the specified {@link Supplier}.</li>
+     *     <li>Stores the result in a temporary local variable.</li>
+     *     <li>Calls the <i>{@link #refreshOverlays()}</i> method on this {@link OverlayHandler} instance.</li>
+     *     <li>
+     *         Checks if the specified {@link Consumer} is {@code null}.
+     *         <ol>
+     *             <li>If the value is {@code null}, post-add operations are skipped and the method continues normally.</li>
+     *             <li>If the value is <i>not</i> {@code null}, the specified {@link Consumer} is executed using the value returned by the specified {@link Supplier} as the {@link Consumer#accept(Object) parameter}.</li>
+     *         </ol>
+     *     </li>
+     *     <li>Returns the local variable containing the value previously returned by the specified {@link Consumer}.</li>
+     * </ol>
+     * <br>
      * <p><b>Details</b></p>
      * <ol>
-     *     <li>Both of the aforementioned actions are performed in the same {@code synchronization} block.</li>
-     *     <li>If no return value is required, refer to <i>{@link #resort(Runnable)}</i>.</li>
+     *     <li>All operations are contained within a thread-safe {@link #sync(Supplier, Consumer[]) synchronization} block.</li>
+     *     <li>If the specified {@link Supplier} is {@code null}, throw a {@link NullPointerException}.</li>
+     *     <li>If the specified {@link Consumer} is {@code null}, no additional post-add operations will be executed and execution will continue normally.</li>
      * </ol>
      *
-     * @param supplier The {@link Supplier} to be executed and returned.
-     * @param <T>      The type of value returned by the specified {@link Supplier}.
+     * @param supplier         The {@link Supplier} to be called and subsequently returned.
+     * @param postAddOperation An optional {@link Consumer} that, if non-null, will be executed after the <i>{@link #refreshOverlays()}</i> method is called but before the method and returns and while still in the synchronization block.
+     * @param <T>              The type of {@link Object} expected to be returned by the specified {@link Supplier} parameter.
      *
-     * @return The value returned by the specified {@link Supplier}.
+     * @return The value returned by the specified {@link Supplier}, after all aforementioned actions have been executed.
      */
-    private <T> T resort(Supplier<T> supplier) {
+    private <T> T resort(@NotNull Supplier<T> supplier, @Nullable Consumer<T> postAddOperation) {
         return sync(() -> {
             final T t = supplier.get();
             refreshOverlays();
+            if (postAddOperation != null)
+                postAddOperation.accept(t);
             return t;
         });
     }
