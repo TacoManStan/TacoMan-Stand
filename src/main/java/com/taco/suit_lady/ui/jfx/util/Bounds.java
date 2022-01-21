@@ -10,31 +10,6 @@ import java.awt.*;
 public record Bounds(int x, int y, int width, int height)
         implements Boundable {
     
-    //<editor-fold desc="--- CLASS BODY ---">
-    
-    public int getMinX() { return x(); }
-    public int getMinY() { return y(); }
-    
-    public int getMaxX() { return x() + width(); }
-    public int getMaxY() { return y() + height(); }
-    
-    //</editor-fold>
-    
-    
-    //<editor-fold desc="--- CONVERSION ---">
-    
-    public @NotNull java.awt.Rectangle asAWT() { return new java.awt.Rectangle(x, y, width, height); }
-    public @NotNull javafx.scene.shape.Rectangle asFX() { return new javafx.scene.shape.Rectangle(x, y, width, height); }
-    
-    public @NotNull javafx.geometry.Bounds asBounds() { return new BoundingBox(x, y, width, height); }
-    
-    public @NotNull Point2D getLocation() { return new Point2D(x, y); }
-    public @NotNull Point2D getDimensions() { return new Point2D(width, height); }
-    
-    public @NotNull Dimensions asDimensions() { return new Dimensions(width(), height()); }
-    
-    //</editor-fold>
-    
     //<editor-fold desc="--- STATIC CONVERSION ---">
     
     public static @NotNull Bounds fromRectAWT(@NotNull java.awt.Rectangle rectangle) {
@@ -58,31 +33,7 @@ public record Bounds(int x, int y, int width, int height)
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override
-    public int getX() {
-        return x();
-    }
-    
-    @Override
-    public int getY() {
-        return y();
-    }
-    
-    @Override
-    public int getWidth() {
-        return width();
-    }
-    
-    @Override
-    public int getHeight() {
-        return height();
-    }
-    
-    
-    @Override
-    public Bounds getBounds() {
-        return this;
-    }
+    @Override public Bounds getBounds() { return this; }
     
     //</editor-fold>
     

@@ -10,6 +10,7 @@ import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.PropertyTools;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -45,11 +46,10 @@ public interface Paintable<P extends Paintable<P, S>, S extends Surface<P, S>>
     //
     
     default boolean isValidDimensions() {
-        return getBounds().getWidth() > 0 && getBounds().getHeight() > 0;
+        return getBounds().width() > 0 && getBounds().height() > 0;
     }
     
     default P repaintSurface() {
-//        System.out.println("Repainting Surface w/ Bounds : " + getBounds() + " for Paintable: " + this);
         S surface = getSurface();
         if (surface != null)
             sync(() -> FXTools.runFX(() -> surface.repaint(), true));
@@ -78,11 +78,11 @@ public interface Paintable<P extends Paintable<P, S>, S extends Surface<P, S>>
     
     //
     
-    default @Override int getX() { return boundsBinding().getX(); }
-    default @Override int getY() { return boundsBinding().getY(); }
+    default @Override int x() { return boundsBinding().x(); }
+    default @Override int y() { return boundsBinding().y(); }
     
-    default @Override int getWidth() { return boundsBinding().getWidth(); }
-    default @Override int getHeight() { return boundsBinding().getHeight(); }
+    default @Override int width() { return boundsBinding().width(); }
+    default @Override int height() { return boundsBinding().height(); }
     
     
     default @Override @NotNull Bounds getBounds() { return boundsBinding().getBounds(); }

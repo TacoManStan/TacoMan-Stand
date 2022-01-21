@@ -1,28 +1,46 @@
 package com.taco.suit_lady.ui.jfx.util;
 
+import com.taco.suit_lady.util.tools.ArrayTools;
+import javafx.geometry.BoundingBox;
 import javafx.geometry.Point2D;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface Boundable {
     
-    int getX();
-    int getY();
+    int x();
+    int y();
     
-    int getWidth();
-    int getHeight();
+    int width();
+    int height();
     
     //<editor-fold desc="--- DEFAULT ---">
     
-    default Bounds getBounds() { return new Bounds(getX(), getY(), getWidth(), getHeight()); }
-    default Point2D getDimensions() { return new Point2D(getWidth(), getHeight()); }
+    default Bounds getBounds() { return new Bounds(x(), y(), width(), height()); }
+    default Point2D getDimensions() { return new Point2D(width(), height()); }
+    
+    default int getMinX(boolean... safe) { return getX(safe); }
+    default int getMaxX(boolean... safe) { return getMinX(safe) + getWidth(safe); }
+    default int getMinY(boolean... safe) { return getY(safe); }
+    default int getMaxY(boolean... safe) { return getMinY(safe) + getHeight(safe); }
+    default double getMidX(boolean... safe) { return getMinX(safe) + (getWidth(safe) / 2d); }
+    default double getMidY(boolean... safe) { return getMinY(safe) + (getHeight(safe) / 2d); }
     
     
-    default int getMinX() { return getX(); }
-    default int getMaxX() { return getMinX() + getWidth(); }
-    default int getMinY() { return getY(); }
-    default int getMaxY() { return getMinY() + getHeight(); }
-    default double getMidX() { return getMinX() + (getWidth() / 2d); }
-    default double getMidY() { return getMinY() + (getHeight() / 2d); }
+    default @NotNull java.awt.Rectangle asAWT(boolean... safe) { return new java.awt.Rectangle(x(), y(), width(), height()); }
+    default @NotNull javafx.scene.shape.Rectangle asJFX(boolean... safe) { return new javafx.scene.shape.Rectangle(x(), y(), width(), height()); }
+    
+    default @NotNull java.awt.Dimension asDimensionsAWT(boolean... safe) { return new java.awt.Dimension(width(), height()); }
+    default @NotNull javafx.geometry.Dimension2D asDimensionsJFX(boolean... safe) { return new javafx.geometry.Dimension2D(width(), height()); }
+    
+    default @NotNull BoundingBox asBoundingBox(boolean... safe) { return new BoundingBox(x(), y(), width(), height()); }
+    
+    
+    default double getCrossDistance(boolean... safe) {
+        return getLocation(LocationDefinition.TOP_LEFT, safe)
+                .distance(getLocation(LocationDefinition.BOTTOM_LEFT, safe));
+    }
+    default double getArea(boolean... safe) { return getWidth(safe) * getHeight(safe); }
     
     
     /**
@@ -36,41 +54,40 @@ public interface Boundable {
      *
      * @return A {@link Point2D} object representing a coordinate point on this {@link Boundable} instance, defined by the specified {@link LocationDefinition LocationDefinition}.
      */
-    default Point2D getLocation(@Nullable LocationDefinition locationDefinition) {
+    default Point2D getLocation(@Nullable LocationDefinition locationDefinition, boolean... safe) {
         locationDefinition = locationDefinition != null ? locationDefinition : LocationDefinition.getDefault();
         return switch (locationDefinition) {
-            default -> new Point2D(getMinX(), getMinY());
+            default -> new Point2D(getMinX(safe), getMinY(safe));
             
-            case TOP_RIGHT -> new Point2D(getMaxX(), getMinY());
-            case BOTTOM_LEFT -> new Point2D(getMinX(), getMaxY());
-            case BOTTOM_RIGHT -> new Point2D(getMaxX(), getMaxY());
+            case TOP_RIGHT -> new Point2D(getMaxX(safe), getMinY(safe));
+            case BOTTOM_LEFT -> new Point2D(getMinX(safe), getMaxY(safe));
+            case BOTTOM_RIGHT -> new Point2D(getMaxX(safe), getMaxY(safe));
             
-            case CENTER -> new Point2D(getMidX(), getMidY());
-            case CENTER_LEFT -> new Point2D(getMinX(), getMidY());
-            case CENTER_RIGHT -> new Point2D(getMaxX(), getMidY());
-            case CENTER_TOP -> new Point2D(getMidX(), getMinY());
-            case CENTER_BOTTOM -> new Point2D(getMidX(), getMaxY());
+            case CENTER -> new Point2D(getMidX(safe), getMidY(safe));
+            case CENTER_LEFT -> new Point2D(getMinX(safe), getMidY(safe));
+            case CENTER_RIGHT -> new Point2D(getMaxX(safe), getMidY(safe));
+            case CENTER_TOP -> new Point2D(getMidX(safe), getMinY(safe));
+            case CENTER_BOTTOM -> new Point2D(getMidX(safe), getMaxY(safe));
         };
     }
     
     //<editor-fold desc="> Safe/Fallback Accessors">
     
-    default int getSafeX() {
-        int x = getX();
-        return x > 0 ? x : fallbackX();
+    default int getX(boolean... safe) {
+        int x = x();
+        return vargs(safe) ? (x > 0 ? x : fallbackX()) : x;
     }
-    default int getSafeY() {
-        int y = getY();
-        return y > 0 ? y : fallbackY();
+    default int getY(boolean... safe) {
+        int y = y();
+        return vargs(safe) ? (y > 0 ? y : fallbackY()) : y;
     }
-    
-    default int getSafeWidth() {
-        int width = getWidth();
-        return width > 0 ? width : fallbackWidth();
+    default int getWidth(boolean... safe) {
+        int width = width();
+        return vargs(safe) ? (width > 0 ? width : fallbackWidth()) : width;
     }
-    default int getSafeHeight() {
-        int height = getHeight();
-        return height > 0 ? height : fallbackHeight();
+    default int getHeight(boolean... safe) {
+        int height = height();
+        return vargs(safe) ? (height > 0 ? height : fallbackHeight()) : height;
     }
     
     //
@@ -89,7 +106,7 @@ public interface Boundable {
      * <p>An {@code enum} that defines a {@link Point2D point} on this {@link Boundable}.</p>
      * <p><b>Details</b></p>
      * <ol>
-     *     <li>Used in calculation methods such as <i>{@link #getLocation(LocationDefinition) getLocation(LocationType)}</i>.</li>
+     *     <li>Used in calculation methods such as <i>{@link #getLocation(LocationDefinition, boolean...) getLocation(LocationType)}</i>.</li>
      * </ol>
      */
     enum LocationDefinition {
@@ -97,6 +114,22 @@ public interface Boundable {
         CENTER, CENTER_LEFT, CENTER_RIGHT, CENTER_TOP, CENTER_BOTTOM;
         
         public static LocationDefinition getDefault() { return LocationDefinition.TOP_LEFT; }
-        
-        }
+    }
+    
+    /**
+     * <p>A helper method that converts an {@code array} of {@code booleans} to a single {@code boolean} value.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>If the specified {@code array} is {@code null}, return {@code false}.</li>
+     *     <li>If the specified {@code array} is {@code empty} (length of {@code 0}, return {@code false}.</li>
+     *     <li>In all other cases, return the {@code first} element in the {@code array}, regardless of its length.</li>
+     * </ol>
+     *
+     * @param varArgs The {@code varargs} of {@code booleans} to be converted into a single {@code boolean} primitive.
+     *
+     * @return A single {@code boolean} primitive based on the specified {@code varargs array} and the rules listed above.
+     */
+    private boolean vargs(boolean... varArgs) {
+        return varArgs != null && !ArrayTools.isEmpty(varArgs) && varArgs[0];
+    }
 }
