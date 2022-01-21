@@ -157,35 +157,12 @@ public class ArrayTools {
         return value;
     }
     
-    /**
-     * Checks if the specified {@code array} is empty.
-     * <p>
-     * An array is considered empty when it has a length of {@code 0}.
-     *
-     * @param arr The {@code array}.
-     *
-     * @return True if the specified {@code array} is empty, false otherwise.
-     */
-    public static boolean isEmpty(Object[] arr) {
-        return ExceptionTools.nullCheck(arr, "Array").length == 0;
-    }
-    
-    /**
-     * Checks if the specified {@code array} is null or empty.
-     * <p>
-     * An array is considered empty when it has a length of {@code 0}.
-     * <p>
-     * This method is particularly useful for detecting optional varargs
-     * arguments.
-     *
-     * @param arr The {@code array}.
-     *
-     * @return True if the specified {@code array} is null or empty, false
-     * otherwise.
-     */
-    public static boolean isNullOrEmpty(Object[] arr) {
-        return arr == null || arr.length == 0;
-    }
+    public static boolean isEmpty(boolean @NotNull [] arr) { return arr.length == 0; }
+    public static boolean isEmpty(int @NotNull [] arr) { return arr.length == 0; }
+    public static boolean isEmpty(double @NotNull [] arr) { return arr.length == 0; }
+    public static boolean isEmpty(float @NotNull [] arr) { return arr.length == 0; }
+    @Contract(pure = true) public static boolean isEmpty(@NotNull Object @NotNull [] arr) { return arr.length == 0; }
+    public static boolean isNullOrEmpty(@Nullable Object @Nullable [] arr) { return arr == null || arr.length == 0; }
     
     /**
      * Filters any duplicates in the specified array and returns a new array
@@ -199,7 +176,6 @@ public class ArrayTools {
      *
      * @return An array with the duplicates filtered out.
      */
-    @SuppressWarnings("unchecked")
     public static <T> T[] filterDuplicatesArray(T[] arr) {
         if (arr.length < 1)
             return arr;
@@ -612,7 +588,6 @@ public class ArrayTools {
         return targetList;
     }
     
-
     
     // <editor-fold desc="Add/Remove">
     
