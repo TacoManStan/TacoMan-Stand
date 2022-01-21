@@ -51,7 +51,7 @@ public class OverlayHandler
         
         //
         
-        addOverlay()
+        addOverlay(new OverlaySurface(springable, lock, "default", 1));
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">
@@ -205,7 +205,7 @@ public class OverlayHandler
             if (!addOverlay(newSurface))
                 throw ExceptionTools.ex("Could not add Overlay — " + newSurface);
             else if (!newSurface.getName().equals(name))
-                throw ExceptionTools.unsupported("Specified name (" + name + ") does not match factory name (" +);
+                throw ExceptionTools.unsupported("Specified name (" + name + ") does not match factory name (" + newSurface.getName() + ")");
             
             return newSurface;
         });
@@ -223,7 +223,7 @@ public class OverlayHandler
      * @return The {@code default} {@link OverlaySurface} for this {@link OverlayHandler}.
      */
     public final @NotNull OverlaySurface getDefaultOverlay() {
-        return getOverlay("default", () -> new OverlaySurface(springable, lock, "default", 1));
+        return getOverlay("default");
     }
     
     //</editor-fold>
