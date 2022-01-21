@@ -95,6 +95,7 @@ public class OverlayHandler
         return overlays.readOnlyList();
     }
     
+    
     /**
      * <p>Adds the specified {@link OverlaySurface} to this {@link OverlayHandler} and then {@link #resort(Runnable) resorts} its contents.</p>
      * <p><b>Details</b></p>
@@ -124,6 +125,7 @@ public class OverlayHandler
         resort(() -> overlays.add(index, overlay));
     }
     
+    
     /**
      * <p>{@link ReadOnlyObservableListWrapper#remove(Object) Removes} the specified {@link OverlaySurface} from this {@link OverlayHandler}.</p>
      * <p><b>Details</b></p>
@@ -150,6 +152,7 @@ public class OverlayHandler
         return resort(() -> overlays.remove(index));
     }
     
+    
     /**
      * <p>
      * Returns the {@link OverlaySurface} contained within this {@link OverlayHandler} matching the specified {@link OverlaySurface#nameProperty() name}
@@ -166,6 +169,42 @@ public class OverlayHandler
                 if (name.equalsIgnoreCase(overlay.getName()))
                     return overlay;
             return null;
+        });
+    }
+    
+    /**
+     * <p>Returns the {@link OverlaySurface} contained within this {@link OverlayHandler} matching the specified {@link OverlaySurface#nameProperty() name}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>
+     *         If no {@link OverlaySurface} matching the specified {@link OverlaySurface#nameProperty() name} exists in this {@link OverlayHandler},
+     *         the specified {@link Supplier factory} is used to construct a new {@link OverlaySurface}.
+     *         <ol>
+     *             <li>The newly-constructed {@link OverlaySurface} is then {@link #addOverlay(OverlaySurface) added} to this {@link OverlayHandler}.</li>
+     *             <li>If {@link OverlaySurface} could not be added to this {@link OverlayHandler}, throw a {@link RuntimeException}.</li>
+     *             <li>If the {@link OverlaySurface} was successfully added to this {@link OverlayHandler}, return a reference to the {@link OverlaySurface}. </li>
+     *             <li>This method can be thought of a way to lazily initialize {@link OverlaySurface}, as they will not exist until an external source attempts to retrieve them.</li>
+     *             <li>Note that a {@link #defaultOverlay() default overlay} is automatically added to every {@link OverlayHandler} upon {@link #OverlayHandler(Springable, ReentrantLock, OverlaySurface...) construction}.</li>
+     *         </ol>
+     *     </li>
+     * </ol>
+     *
+     * @param name    The {@link String} representing the {@link OverlaySurface#nameProperty() name} to be used as the {@code key} to retrieve the corresponding {@link OverlaySurface} (if it exists in this {@link OverlayHandler}).
+     * @param factory The {@link Supplier} instance that is used to construct a new {@link OverlaySurface} with the given {@link OverlaySurface#nameProperty() name} if no matching {@link OverlaySurface} matching the {@code name} parameter exists.
+     *
+     * @return The {@link OverlaySurface} contained within this {@link OverlayHandler} matching the specified {@link OverlaySurface#nameProperty() name}, or the newly-constructed {@link OverlaySurface} instance if no {@link OverlaySurface} matching the specified {@link OverlaySurface#nameProperty() name} existed upon method call.
+     */
+    public final @NotNull OverlaySurface getOverlay(@NotNull String name, @NotNull Supplier<OverlaySurface> factory) {
+        return sync(() -> {
+            final OverlaySurface overlaySurface = getOverlay(name);
+            if (overlaySurface != null)
+                return overlaySurface;
+            
+            final OverlaySurface newSurface = ExceptionTools.nullCheck(factory.get(), "Factory Result");
+            if (!addOverlay(newSurface))
+                throw ExceptionTools.ex("Error: Could not add Overlay — " + newSurface);
+            
+            return newSurface;
         });
     }
     
