@@ -36,31 +36,31 @@ public class BoundsBinding
         
         
         this.boundsBinding = Bindings.createObjectBinding(
-                () -> new Bounds(getX(), getY(), getWidth(), getHeight()),
+                () -> new Bounds(x(), y(), width(), height()),
                 xProperty, yProperty, widthProperty, heightProperty);
         
-        this.xSafeBinding = Bindings.createIntegerBinding(() -> getSafeX(), xProperty);
-        this.ySafeBinding = Bindings.createIntegerBinding(() -> getSafeY(), yProperty);
-        this.widthSafeBinding = Bindings.createIntegerBinding(() -> getSafeWidth(), widthProperty);
-        this.heightSafeBinding = Bindings.createIntegerBinding(() -> getSafeHeight(), heightProperty);
+        this.xSafeBinding = Bindings.createIntegerBinding(() -> getX(true), xProperty);
+        this.ySafeBinding = Bindings.createIntegerBinding(() -> getY(true), yProperty);
+        this.widthSafeBinding = Bindings.createIntegerBinding(() -> getWidth(true), widthProperty);
+        this.heightSafeBinding = Bindings.createIntegerBinding(() -> getHeight(true), heightProperty);
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
     
     public final IntegerProperty xProperty() { return xProperty; }
-    @Override public final int getX() { return xProperty.get(); }
+    @Override public final int x() { return xProperty.get(); }
     public final int setX(int newValue) { return PropertyTools.setProperty(xProperty, newValue); }
     
     public final IntegerProperty yProperty() { return yProperty; }
-    @Override public final int getY() { return yProperty.get(); }
+    @Override public final int y() { return yProperty.get(); }
     public final int setY(int newValue) { return PropertyTools.setProperty(yProperty, newValue); }
     
     public final IntegerProperty widthProperty() { return widthProperty; }
-    @Override public final int getWidth() { return widthProperty.get(); }
+    @Override public final int width() { return widthProperty.get(); }
     public final int setWidth(int newValue) { return PropertyTools.setProperty(widthProperty, newValue); }
     
     public final IntegerProperty heightProperty() { return heightProperty; }
-    @Override public final int getHeight() { return heightProperty.get(); }
+    @Override public final int height() { return heightProperty.get(); }
     public final int setHeight(int newValue) { return PropertyTools.setProperty(heightProperty, newValue); }
     
     //<editor-fold desc="> Bindings">
@@ -68,10 +68,10 @@ public class BoundsBinding
     public final ObjectBinding<Bounds> boundsBinding() { return boundsBinding; }
     @Override public final Bounds getBounds() { return boundsBinding.get(); }
     public final void setBounds(@NotNull Bounds newValue) {
-        setX(newValue.getX());
-        setY(newValue.getY());
-        setWidth(newValue.getWidth());
-        setHeight(newValue.getHeight());
+        setX(newValue.x());
+        setY(newValue.y());
+        setWidth(newValue.width());
+        setHeight(newValue.height());
     }
     
     public final IntegerBinding xSafeBinding() { return xSafeBinding; }

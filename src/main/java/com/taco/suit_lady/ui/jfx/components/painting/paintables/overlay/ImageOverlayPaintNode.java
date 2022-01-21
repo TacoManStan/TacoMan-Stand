@@ -22,10 +22,10 @@ public class ImageOverlayPaintNode extends OverlayPaintNode {
     
     @Override protected Node refreshNode() { return imageView; }
     @Override protected Node syncBounds(@NotNull Node n) {
-        imageView.setX(getX());
-        imageView.setY(getY());
-        imageView.setFitWidth(getWidth());
-        imageView.setFitHeight(getHeight());
+        imageView.setX(x());
+        imageView.setY(y());
+        imageView.setFitWidth(width());
+        imageView.setFitHeight(height());
         return imageView;
     }
     

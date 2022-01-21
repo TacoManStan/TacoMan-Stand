@@ -30,10 +30,10 @@ public class BoxOverlayPaintNode extends ShapeOverlayPaintNode {
     
     @Override protected Rectangle refreshNode() { return shape; }
     @Override protected Rectangle syncBounds(@NotNull Node n) {
-        shape.setX(getX());
-        shape.setY(getY());
-        shape.setWidth(getWidth());
-        shape.setHeight(getHeight());
+        shape.setX(x());
+        shape.setY(y());
+        shape.setWidth(width());
+        shape.setHeight(height());
         return shape;
     }
     

@@ -869,12 +869,12 @@ public class FXTools {
             
             if (fill)
                 canvas.getGraphicsContext2D().fillRect(
-                        bounds.getX(), bounds.getY(),
-                        bounds.getWidth(), bounds.getHeight());
+                        bounds.x(), bounds.y(),
+                        bounds.width(), bounds.height());
             else
                 canvas.getGraphicsContext2D().strokeRect(
-                        bounds.getX(), bounds.getY(),
-                        bounds.getWidth(), bounds.getHeight());
+                        bounds.x(), bounds.y(),
+                        bounds.width(), bounds.height());
         }, true);
     }
     
@@ -885,12 +885,12 @@ public class FXTools {
             
             if (fill)
                 canvas.getGraphicsContext2D().fillOval(
-                        bounds.getX(), bounds.getY(),
-                        bounds.getWidth(), bounds.getHeight());
+                        bounds.x(), bounds.y(),
+                        bounds.width(), bounds.height());
             else
                 canvas.getGraphicsContext2D().strokeOval(
-                        bounds.getX(), bounds.getY(),
-                        bounds.getWidth(), bounds.getHeight());
+                        bounds.x(), bounds.y(),
+                        bounds.width(), bounds.height());
         }, true);
     }
     
@@ -901,11 +901,11 @@ public class FXTools {
             
             if (fill)
                 canvas.getGraphicsContext2D().fillArc(
-                        bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight(),
+                        bounds.x(), bounds.y(), bounds.width(), bounds.height(),
                         startAngle, arcExtent, closure);
             else
                 canvas.getGraphicsContext2D().strokeArc(
-                        bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight(),
+                        bounds.x(), bounds.y(), bounds.width(), bounds.height(),
                         startAngle, arcExtent, closure);
         }, true);
     }

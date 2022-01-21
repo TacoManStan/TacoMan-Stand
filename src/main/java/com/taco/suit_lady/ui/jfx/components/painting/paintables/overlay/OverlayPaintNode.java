@@ -72,7 +72,7 @@ public abstract class OverlayPaintNode
     }
     
     protected Node syncBounds(@NotNull Node n) {
-        n.resizeRelocate(getX(), getY(), getWidth(), getHeight());
+        n.resizeRelocate(x(), y(), width(), height());
         return n;
     }
     
