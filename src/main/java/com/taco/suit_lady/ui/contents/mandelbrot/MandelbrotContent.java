@@ -5,13 +5,10 @@ import com.taco.suit_lady.ui.UIBook;
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotContentController.MouseDragData;
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotIterator.MandelbrotColor;
 import com.taco.suit_lady.ui.jfx.components.painting.paintables.Paintable;
-import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.ImagePainter;
+import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.*;
 import com.taco.suit_lady.ui.jfx.components.painting.paintables.overlay.BoxOverlayPaintNode;
 import com.taco.suit_lady.ui.jfx.components.painting.paintables.overlay.ImageOverlayPaintNode;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasSurface;
-import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.ArcPainter;
-import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.BoxPainter;
-import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.OvalPainter;
 import com.taco.suit_lady.ui.pages.impl.content_selector.ListableContent;
 import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotContentHandler;
 import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotContentSelectorPage;
@@ -57,6 +54,7 @@ public class MandelbrotContent extends ListableContent<
     private final OvalPainter ovalPainter;
     private final ArcPainter arcPainter;
     private final ImagePainter imagePainter;
+    private final TextPainter textPainter;
     
     private final BoxOverlayPaintNode boxOverlayPainter;
     private final ImageOverlayPaintNode imageOverlayPainter;
@@ -89,6 +87,7 @@ public class MandelbrotContent extends ListableContent<
         this.ovalPainter = new OvalPainter(this, lock);
         this.arcPainter = new ArcPainter(this, lock, 30, 30, ArcType.ROUND);
         this.imagePainter = new ImagePainter(this, lock);
+        this.textPainter = new TextPainter(this, lock, "Test Text");
         
         this.boxOverlayPainter = new BoxOverlayPaintNode(this, lock);
         this.imageOverlayPainter = new ImageOverlayPaintNode(this, lock);

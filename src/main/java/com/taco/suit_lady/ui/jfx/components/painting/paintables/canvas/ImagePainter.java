@@ -22,13 +22,6 @@ public class ImagePainter extends CanvasPainter {
         this.imageProperty = new SimpleObjectProperty<>();
     }
     
-    @Override public @NotNull CanvasPainter init() {
-        imageProperty.addListener((observable, oldValue, newValue) -> repaintSurface());
-        imageProperty.set(ResourceTools.get().getDummyImage(ResourceTools.MAP));
-        
-        return super.init();
-    }
-    
     //<editor-fold desc="--- PROPERTIES ---">
     
     public final ObjectProperty<Image> imageProperty() { return imageProperty; }
@@ -38,6 +31,13 @@ public class ImagePainter extends CanvasPainter {
     //</editor-fold>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+    @Override public @NotNull ImagePainter init() {
+        imageProperty.addListener((observable, oldValue, newValue) -> repaintSurface());
+        imageProperty.set(ResourceTools.get().getDummyImage(ResourceTools.MAP));
+        
+        return (ImagePainter) super.init();
+    }
     
     @Override protected void onPaint() {
         Image image = getImage();
