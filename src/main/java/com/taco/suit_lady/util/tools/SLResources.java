@@ -16,9 +16,9 @@ import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
 
-public class ResourceTools
+public class SLResources
 {
-    public static ResourceTools get()
+    public static SLResources get()
     {
         return TB.resources();
     }
@@ -26,7 +26,7 @@ public class ResourceTools
     private final ReentrantLock lock;
     private final HashMap<String, HashMap<String, Object>> resources;
     
-    ResourceTools()
+    SLResources()
     {
         this.lock = new ReentrantLock();
         this.resources = new HashMap<>();
@@ -56,7 +56,7 @@ public class ResourceTools
     {
         return get(groupKey, lookupKey, () ->
         {
-            throw ExceptionTools.unsupported("Value \"" + groupKey + " -> " + lookupKey + "\" has not yet been defined");
+            throw SLExceptions.unsupported("Value \"" + groupKey + " -> " + lookupKey + "\" has not yet been defined");
         });
     }
     
@@ -78,13 +78,13 @@ public class ResourceTools
     {
         groupKey = groupKey != null ? groupKey : "default";
         
-        ExceptionTools.nullCheck(lookupKey, "UID Lookup Key");
-        ExceptionTools.nullCheckMessage(defaultValueSupplier, "Default value returner is null for type \" + groupKey + \" using lookup key \" + lookupKey + \"");
+        SLExceptions.nullCheck(lookupKey, "UID Lookup Key");
+        SLExceptions.nullCheckMessage(defaultValueSupplier, "Default value returner is null for type \" + groupKey + \" using lookup key \" + lookupKey + \"");
         
         final String tempTypeKey = groupKey.toLowerCase();
         final String tempLookupKey = lookupKey.toLowerCase();
         
-        HashMap<String, V> map = ExceptionTools.nullCheck(getMap(tempTypeKey), debugMessage(tempTypeKey, tempLookupKey, "Map"));
+        HashMap<String, V> map = SLExceptions.nullCheck(getMap(tempTypeKey), debugMessage(tempTypeKey, tempLookupKey, "Map"));
         
         V value;// A Supplier is used so resources are only used getting the new value if necessary.
         if (map.containsKey(tempLookupKey))
@@ -104,8 +104,8 @@ public class ResourceTools
     
     public <V> V get(UID uID, Supplier<V> defaultValueSupplier, Object... params)
     {
-        ExceptionTools.nullCheck(uID, "UID");
-        ExceptionTools.nullCheck(defaultValueSupplier, "Default Value Supplier");
+        SLExceptions.nullCheck(uID, "UID");
+        SLExceptions.nullCheck(defaultValueSupplier, "Default Value Supplier");
         
         return get(uID.getGroupID(), uID.getUID(params), defaultValueSupplier);
     }
@@ -119,12 +119,12 @@ public class ResourceTools
     
     public <V> List<Object> getAll(String groupKey, Class<V> typeReq)
     {
-        ExceptionTools.nullCheck(groupKey, "Lookup Key");
+        SLExceptions.nullCheck(groupKey, "Lookup Key");
         ArrayList<Object> returnList = new ArrayList<>();
-        List<HashMap<String, Object>> maps = ExceptionTools.nullCheck(ArrayTools.getMapValues(resources), debugMessage(groupKey, "N/A", "Map Values"));
+        List<HashMap<String, Object>> maps = SLExceptions.nullCheck(SLArrays.getMapValues(resources), debugMessage(groupKey, "N/A", "Map Values"));
         maps.stream().filter(Objects::nonNull).forEach(map -> {
             Object element = map.get(groupKey);
-            if (element != null && (typeReq == null || GeneralTools.get().instanceOf(element, typeReq)))
+            if (element != null && (typeReq == null || SLTools.get().instanceOf(element, typeReq)))
                 returnList.add(element);
         });
         return returnList;
@@ -146,7 +146,7 @@ public class ResourceTools
     
     public Image getImage(String pathID, String imageID, String extension)
     {
-        ExceptionTools.nullCheck(extension, "File Extension");
+        SLExceptions.nullCheck(extension, "File Extension");
         
         String hashID = TB.strings().replaceSeparator((pathID != null ? pathID : "") + imageID);
         String filePath = TB.strings().replaceSeparator("images/" + hashID + "." + extension);
@@ -173,7 +173,7 @@ public class ResourceTools
     @Deprecated
     public Image getImage(String pathID, String imageID, String extension, boolean isTheme)
     {
-        ExceptionTools.nullCheck(extension, "File Extension");
+        SLExceptions.nullCheck(extension, "File Extension");
         
         String theme = isTheme ? "themes/dark/" : ""; // TODO [S]: Load the theme from settings.
         String hashID = TB.strings().replaceSeparator((pathID != null ? pathID : "") + imageID);
@@ -205,33 +205,33 @@ public class ResourceTools
     
     public <V> V update(String groupKey, String lookupKey, V newValue)
     {
-        ExceptionTools.nullCheck(groupKey, "Group Key");
-        ExceptionTools.nullCheck(lookupKey, "Lookup Key");
-        ExceptionTools.nullCheckMessage(newValue, debugMessage(groupKey, lookupKey, "New Value is null"));
+        SLExceptions.nullCheck(groupKey, "Group Key");
+        SLExceptions.nullCheck(lookupKey, "Lookup Key");
+        SLExceptions.nullCheckMessage(newValue, debugMessage(groupKey, lookupKey, "New Value is null"));
         
-        HashMap<String, V> map = ExceptionTools.nullCheck(getMap(groupKey), debugMessage(groupKey, lookupKey, "Map is null"));
+        HashMap<String, V> map = SLExceptions.nullCheck(getMap(groupKey), debugMessage(groupKey, lookupKey, "Map is null"));
         return map.put(lookupKey, newValue);
     }
     
     public <V> V update(UID uID, String lookupKey, V newValue, Object... params)
     {
-        ExceptionTools.nullCheck(uID, "UID Type Key");
-        ExceptionTools.nullCheck(lookupKey, "Lookup Key");
-        ExceptionTools.nullCheckMessage(newValue, debugMessage(uID.getUID(params), lookupKey, "New Value is null"));
+        SLExceptions.nullCheck(uID, "UID Type Key");
+        SLExceptions.nullCheck(lookupKey, "Lookup Key");
+        SLExceptions.nullCheckMessage(newValue, debugMessage(uID.getUID(params), lookupKey, "New Value is null"));
         
         return update(uID.getUID(params), lookupKey, newValue);
     }
     
     public <V> V updateLater(UID uID, String lookupKey, Supplier<V> valueSupplier, Object... params)
     {
-        throw ExceptionTools.nyi();
+        throw SLExceptions.nyi();
     } // TODO
     
     // Get Map
     
     protected <V> HashMap<String, V> getMap(String typeKey)
     {
-        ExceptionTools.nullCheck(typeKey, "Type Key");
+        SLExceptions.nullCheck(typeKey, "Type Key");
         if (!resources.containsKey(typeKey))
             resources.put(typeKey, new HashMap<>());
         return (HashMap<String, V>) resources.get(typeKey);
@@ -241,13 +241,13 @@ public class ResourceTools
     
     public InputStream getResourceStream(String resource) throws IOException
     {
-        ExceptionTools.nullCheck(resource, "Resource");
+        SLExceptions.nullCheck(resource, "Resource");
         return getClass().getResourceAsStream(TB.strings().replaceSeparator("/" + resource));
     } // TODO: Load from resource jar file
     
     public URL getResourceURL(String resource)
     {
-        ExceptionTools.nullCheck(resource, "Resource");
+        SLExceptions.nullCheck(resource, "Resource");
         return getClass().getResource(TB.strings().replaceSeparator("/" + resource));
     } // TODO: Load from resource jar file
     
@@ -255,7 +255,7 @@ public class ResourceTools
         try {
             return getResourceURL(resource).toURI();
         } catch (URISyntaxException e) {
-            throw ExceptionTools.ex(e);
+            throw SLExceptions.ex(e);
         }
     }
 }

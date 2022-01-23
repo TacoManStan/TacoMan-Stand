@@ -3,7 +3,7 @@ package com.taco.suit_lady._to_sort._new;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
-import com.taco.suit_lady.util.tools.ArrayTools;
+import com.taco.suit_lady.util.tools.SLArrays;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
@@ -16,7 +16,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import java.util.Arrays;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
@@ -45,12 +44,12 @@ public abstract class MatrixIterator<T>
         this.springable = springable.asStrict();
         this.lock = lock != null ? lock : new ReentrantLock();
         
-        Arrays.stream(params).map(o -> "Param " + ArrayTools.indexOf(o, params) + ": " + o).forEach(msg -> debugger().print(msg));
+        java.util.Arrays.stream(params).map(o -> "Param " + SLArrays.indexOf(o, params) + ": " + o).forEach(msg -> debugger().print(msg));
         
-        this.progressIndicators = Arrays.stream(params)
-                                        .filter(param -> param instanceof ProgressIndicator)
-                                        .map(param -> (ProgressIndicator) param)
-                                        .toArray(value -> new ProgressIndicator[value]);
+        this.progressIndicators = java.util.Arrays.stream(params)
+                                                  .filter(param -> param instanceof ProgressIndicator)
+                                                  .map(param -> (ProgressIndicator) param)
+                                                  .toArray(value -> new ProgressIndicator[value]);
         
         this.completeProperty = new ReadOnlyBooleanWrapper(false);
         this.completeProperty.addListener((observable, oldValue, newValue) -> {
@@ -181,7 +180,7 @@ public abstract class MatrixIterator<T>
     }
     
     private void updateProgressOverlays(@NotNull Consumer<ProgressIndicator> action) {
-        FXTools.runFX(() -> Arrays.stream(progressIndicators).forEach(action), true);
+        FXTools.runFX(() -> java.util.Arrays.stream(progressIndicators).forEach(action), true);
     }
     
     //</editor-fold>

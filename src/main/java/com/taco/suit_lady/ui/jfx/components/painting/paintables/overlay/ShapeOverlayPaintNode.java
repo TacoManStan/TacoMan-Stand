@@ -1,7 +1,7 @@
 package com.taco.suit_lady.ui.jfx.components.painting.paintables.overlay;
 
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.PropertyTools;
+import com.taco.suit_lady.util.tools.SLProperties;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
@@ -29,11 +29,11 @@ public abstract class ShapeOverlayPaintNode extends OverlayPaintNode {
     
     public final ObjectProperty<Paint> fillProperty() { return fillProperty; }
     public final Paint getFill() { return fillProperty.get(); }
-    public final Paint setFill(Paint newValue) { return PropertyTools.setProperty(fillProperty, newValue); }
+    public final Paint setFill(Paint newValue) { return SLProperties.setProperty(fillProperty, newValue); }
     
     public final ObjectProperty<Paint> strokeProperty() { return strokeProperty; }
     public final Paint getStroke() { return strokeProperty.get(); }
-    public final Paint setStroke(Paint newValue) { return PropertyTools.setProperty(strokeProperty, newValue); }
+    public final Paint setStroke(Paint newValue) { return SLProperties.setProperty(strokeProperty, newValue); }
     
     //</editor-fold>
     

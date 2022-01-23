@@ -7,14 +7,14 @@ import java.util.function.Predicate;
 /**
  * Contains a variety of classes that provide utility features.
  */
-public class GeneralTools
+public class SLTools
 {
-    public static GeneralTools get()
+    public static SLTools get()
     {
         return TB.general();
     }
     
-    GeneralTools() { }
+    SLTools() { }
     
     /**
      * Checks if the specified {@link Predicate} is valid for the specified {@code Object},
@@ -29,7 +29,7 @@ public class GeneralTools
      */
     public <T> boolean test(T obj, Predicate<T> predicate)
     {
-        ExceptionTools.nullCheck(predicate, "Predicate");
+        SLExceptions.nullCheck(predicate, "Predicate");
         return obj != null && predicate.test(obj);
     }
     
@@ -92,7 +92,7 @@ public class GeneralTools
      */
     public <T> Class<? extends T> getClass(T[] param)
     {
-        ExceptionTools.nullCheck(param, "Param Array");
+        SLExceptions.nullCheck(param, "Param Array");
         return (Class<T>) param.getClass().getComponentType();
     }
     
@@ -124,7 +124,7 @@ public class GeneralTools
                     }
                     catch (ClassNotFoundException e)
                     {
-                        throw ExceptionTools.ex(e);
+                        throw SLExceptions.ex(e);
                     }
             }
             return param.getClass();
@@ -171,7 +171,7 @@ public class GeneralTools
             if (indexOf < c.getName().length() - 1)
                 indexOf++;
             String name = c.getName().substring(indexOf);
-            if (StringTools.get().isNumber(name))
+            if (SLStrings.get().isNumber(name))
                 name = c.getName().substring(c.getName().lastIndexOf(".") + 1, c.getName().lastIndexOf("$"));
             return name;
         }

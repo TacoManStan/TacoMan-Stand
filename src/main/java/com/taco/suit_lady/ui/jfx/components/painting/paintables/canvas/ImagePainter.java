@@ -2,8 +2,8 @@ package com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas;
 
 import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.PropertyTools;
-import com.taco.suit_lady.util.tools.ResourceTools;
+import com.taco.suit_lady.util.tools.SLProperties;
+import com.taco.suit_lady.util.tools.SLResources;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -26,7 +26,7 @@ public class ImagePainter extends CanvasPainter {
     
     public final ObjectProperty<Image> imageProperty() { return imageProperty; }
     public final Image getImage() { return imageProperty.get(); }
-    public final Image setImage(Image newValue) { return PropertyTools.setProperty(imageProperty, newValue); }
+    public final Image setImage(Image newValue) { return SLProperties.setProperty(imageProperty, newValue); }
     
     //</editor-fold>
     
@@ -34,7 +34,7 @@ public class ImagePainter extends CanvasPainter {
     
     @Override public @NotNull ImagePainter init() {
         imageProperty.addListener((observable, oldValue, newValue) -> repaintSurface());
-        imageProperty.set(ResourceTools.get().getDummyImage(ResourceTools.MAP));
+        imageProperty.set(SLResources.get().getDummyImage(SLResources.MAP));
         
         return (ImagePainter) super.init();
     }

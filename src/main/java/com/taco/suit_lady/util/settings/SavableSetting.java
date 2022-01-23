@@ -1,6 +1,6 @@
 package com.taco.suit_lady.util.settings;
 
-import com.taco.suit_lady.util.tools.ExceptionTools;
+import com.taco.suit_lady.util.tools.SLExceptions;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
@@ -127,7 +127,7 @@ public abstract class SavableSetting<T, Z extends Property<T>>
 	 */
 	public void propertyBinding(Z observable) {
 		if (this.observable != null)
-			throw ExceptionTools.ex("The observing property has already been set.");
+			throw SLExceptions.ex("The observing property has already been set.");
 		this.observable = observable;
 		bindBidirectional(this.observable);
 	}

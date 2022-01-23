@@ -1,6 +1,6 @@
 package com.taco.suit_lady.util.timing;
 
-import com.taco.suit_lady.util.tools.ExceptionTools;
+import com.taco.suit_lady.util.tools.SLExceptions;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.ReadOnlyLongWrapper;
 import javafx.beans.property.ReadOnlyProperty;
@@ -48,7 +48,7 @@ public class Duration extends Number
 	}
 
 	public Duration(Lock lock, long duration, TimeUnit inputTimeUnit) {
-		ExceptionTools.nullCheck(inputTimeUnit, "Input Time Unit");
+		SLExceptions.nullCheck(inputTimeUnit, "Input Time Unit");
 
 		this.lock = lock; // Lockable.isNullable() is true, so allow the Lock to be null.
 		this.durationProperty = new ReadOnlyLongWrapper();
@@ -86,7 +86,7 @@ public class Duration extends Number
 	 * @return The time of this {@code Duration} in the specified {@link TimeUnit}.
 	 */
 	public long getIn(TimeUnit outputTimeUnit) {
-		ExceptionTools.nullCheck(outputTimeUnit, "Output Time Unit");
+		SLExceptions.nullCheck(outputTimeUnit, "Output Time Unit");
 		if (outputTimeUnit == TimeUnit.MILLISECONDS)
 			return get(); // No need for conversion if TimeUnit is MILLISECONDS
 		return TimeUnit.MILLISECONDS.convert(durationProperty.get(), outputTimeUnit);
@@ -97,13 +97,13 @@ public class Duration extends Number
 
 	@Override
 	public void set(long duration) {
-		ExceptionTools.boundsCheckZero(duration, "Duration");
+		SLExceptions.boundsCheckZero(duration, "Duration");
 		durationProperty.set(duration);
 	}
 
 	public void set(long duration, TimeUnit inputTimeUnit) {
-		ExceptionTools.boundsCheckZero(duration, "Duration");
-		ExceptionTools.nullCheck(inputTimeUnit, "Input Time Unit");
+		SLExceptions.boundsCheckZero(duration, "Duration");
+		SLExceptions.nullCheck(inputTimeUnit, "Input Time Unit");
 		if (inputTimeUnit != TimeUnit.MILLISECONDS) // No need for conversion if TimeUnit is MILLISECONDS
 			durationProperty.set(duration);
 		durationProperty.set(TimeUnit.MILLISECONDS.convert(duration, inputTimeUnit));
@@ -116,7 +116,7 @@ public class Duration extends Number
 	// Copyable
 	
 	public boolean copyOf(Duration toCopy, Object... objs) {
-		ExceptionTools.nullCheck(toCopy, "Copying Duration");
+		SLExceptions.nullCheck(toCopy, "Copying Duration");
 		set(toCopy.get());
 		return true;
 	}
@@ -144,25 +144,25 @@ public class Duration extends Number
 	}
 
 	@Override public void setValue(Number value) {
-		set(ExceptionTools.nullCheck(value).longValue());
+		set(SLExceptions.nullCheck(value).longValue());
 	}
 
 	//
 
 	@Override public void addListener(InvalidationListener listener) {
-		durationProperty.addListener(ExceptionTools.nullCheck(listener, "Invalidation Listener"));
+		durationProperty.addListener(SLExceptions.nullCheck(listener, "Invalidation Listener"));
 	}
 
 	@Override public void removeListener(InvalidationListener listener) {
-		durationProperty.removeListener(ExceptionTools.nullCheck(listener, "Invalidation Listener"));
+		durationProperty.removeListener(SLExceptions.nullCheck(listener, "Invalidation Listener"));
 	}
 
 	@Override public void addListener(ChangeListener<? super Number> listener) {
-		durationProperty.addListener(ExceptionTools.nullCheck(listener, "Change Listener"));
+		durationProperty.addListener(SLExceptions.nullCheck(listener, "Change Listener"));
 	}
 
 	@Override public void removeListener(ChangeListener<? super Number> listener) {
-		durationProperty.removeListener(ExceptionTools.nullCheck(listener, "Change Listener"));
+		durationProperty.removeListener(SLExceptions.nullCheck(listener, "Change Listener"));
 	}
 
 	//</editor-fold>

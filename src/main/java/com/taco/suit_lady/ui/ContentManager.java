@@ -2,7 +2,7 @@ package com.taco.suit_lady.ui;
 
 import com.taco.suit_lady.logic.LogiCore;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.ExceptionTools;
+import com.taco.suit_lady.util.tools.SLExceptions;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasSurface;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasContentPane;
 import com.taco.suit_lady.ui.jfx.components.ContentPane;
@@ -25,8 +25,8 @@ public class ContentManager
     private final ReadOnlyObjectWrapper<Content<?, ?>> contentProperty; // Add support for a list of overlapping Content, each overlapping on the Content Base StackPane?
     
     public ContentManager(@NotNull FxWeaver weaver, @NotNull ConfigurableApplicationContext ctx) {
-        this.weaver = ExceptionTools.nullCheck(weaver, "FxWeaver");
-        this.ctx = ExceptionTools.nullCheck(ctx, "Application Context");
+        this.weaver = SLExceptions.nullCheck(weaver, "FxWeaver");
+        this.ctx = SLExceptions.nullCheck(ctx, "Application Context");
         
         this.contentBase = new ContentPane(this) {
             @Override

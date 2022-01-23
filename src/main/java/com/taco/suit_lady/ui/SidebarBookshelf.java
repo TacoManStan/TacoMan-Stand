@@ -3,7 +3,7 @@ package com.taco.suit_lady.ui;
 import com.taco.suit_lady.ui.jfx.components.button.BoundImageButtonGroup;
 import com.taco.suit_lady.ui.jfx.components.button.ButtonViewable;
 import com.taco.suit_lady.ui.jfx.components.button.ImageButtonGroup;
-import com.taco.suit_lady.util.tools.ExceptionTools;
+import com.taco.suit_lady.util.tools.SLExceptions;
 import com.taco.suit_lady.ui.jfx.components.button.ImageButton;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -64,7 +64,7 @@ public class SidebarBookshelf extends UIBookshelf {
     public SidebarBookshelf(@NotNull Sidebar owner, @Nullable StackPane contentPane, @NotNull String name, boolean selectOnAdd) {
         super(contentPane);
         
-        ExceptionTools.nullCheck(owner, "Sidebar (Owner/Parent)");
+        SLExceptions.nullCheck(owner, "Sidebar (Owner/Parent)");
         
         this.lock = owner.getLock();
         this.nameProperty = new SimpleStringProperty(name);

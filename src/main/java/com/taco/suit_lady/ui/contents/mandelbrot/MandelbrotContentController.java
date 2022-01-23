@@ -5,7 +5,7 @@ import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasSurfa
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasPane;
 import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.util.Lockable;
-import com.taco.suit_lady.util.tools.ExceptionTools;
+import com.taco.suit_lady.util.tools.SLExceptions;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
@@ -122,7 +122,7 @@ public class MandelbrotContentController extends ContentController
     }
     
     public final void setDragConsumer(Consumer<MouseDragData> dragConsumer) {
-        this.dragConsumer = ExceptionTools.nullCheck(dragConsumer, "Mouse DRAG Consumer");
+        this.dragConsumer = SLExceptions.nullCheck(dragConsumer, "Mouse DRAG Consumer");
     }
     
     public final void resetDragConsumer() {
@@ -134,7 +134,7 @@ public class MandelbrotContentController extends ContentController
     }
     
     public final void setMoveConsumer(Consumer<MouseDragData> moveConsumer) {
-        this.moveConsumer = ExceptionTools.nullCheck(moveConsumer, "Mouse MOVE Consumer");
+        this.moveConsumer = SLExceptions.nullCheck(moveConsumer, "Mouse MOVE Consumer");
     }
     
     public final void resetMoveConsumer() {

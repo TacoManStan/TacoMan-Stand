@@ -3,9 +3,9 @@ package com.taco.suit_lady.ui;
 import com.taco.suit_lady.ui.jfx.components.button.ImageButtonGroup;
 import com.taco.suit_lady.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.BindingTools;
-import com.taco.suit_lady.util.tools.ExceptionTools;
-import com.taco.suit_lady.util.tools.ObjectTools;
+import com.taco.suit_lady.util.tools.SLBindings;
+import com.taco.suit_lady.util.tools.SLExceptions;
+import com.taco.suit_lady.util.tools.SLObjects;
 import com.taco.suit_lady.ui.jfx.components.button.ImageButton;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import javafx.beans.binding.Bindings;
@@ -105,13 +105,13 @@ public class Sidebar
             @Nullable ImagePane backImagePane,
             @NotNull ToolBar toolBar)
     {
-        this.weaver = ExceptionTools.nullCheck(weaver, "FxWeaver");
-        this.ctx = ExceptionTools.nullCheck(ctx, "Application Context");
+        this.weaver = SLExceptions.nullCheck(weaver, "FxWeaver");
+        this.ctx = SLExceptions.nullCheck(ctx, "Application Context");
         
         this.lock = new ReentrantLock();
         
-        ExceptionTools.nullCheck(childButtonPane, "Sidebar Child Button Pane");
-        ExceptionTools.nullCheck(contentPane, "Sidebar Content Pane");
+        SLExceptions.nullCheck(childButtonPane, "Sidebar Child Button Pane");
+        SLExceptions.nullCheck(contentPane, "Sidebar Content Pane");
         
         this.childButtonPane = childButtonPane;
         this.contentPane = contentPane;
@@ -133,7 +133,7 @@ public class Sidebar
         //
         
         this.backImageButton.getImagePane().visibleProperty().bind(
-                BindingTools.createRecursiveBinding(selectedBookshelf -> {
+                SLBindings.createRecursiveBinding(selectedBookshelf -> {
                     if (selectedBookshelf != null)
                         return Bindings.and(Bindings.not(selectedBookshelf.isEmptyBinding()), selectedBookshelf.getBookDisplayer().visibleBinding());
                     return null;
@@ -317,11 +317,11 @@ public class Sidebar
      * @see #selectedBookshelfProperty()
      * @see #getSelectedBookshelf()
      * @see #setSelectedBookshelf(SidebarBookshelf)
-     * @see ObjectTools#equalsExcludeNull(Object, Object)
+     * @see SLObjects#equalsExcludeNull(Object, Object)
      */
     public boolean isBookshelfSelected(SidebarBookshelf menu)
     {
-        return ObjectTools.equalsExcludeNull(menu, getSelectedBookshelf());
+        return SLObjects.equalsExcludeNull(menu, getSelectedBookshelf());
     }
     
     //</editor-fold>

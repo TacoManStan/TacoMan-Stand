@@ -2,8 +2,8 @@ package com.taco.suit_lady.logic.game.objects;
 
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
-import com.taco.suit_lady.util.tools.BindingTools;
-import com.taco.suit_lady.util.tools.ResourceTools;
+import com.taco.suit_lady.util.tools.SLBindings;
+import com.taco.suit_lady.util.tools.SLResources;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -26,7 +26,7 @@ public class GameObjectModel
         //
         
         this.imageIdProperty = new SimpleObjectProperty<>();
-        this.imageBinding = BindingTools.createObjectBinding(ResourceTools.get().getDummyImage(ResourceTools.AVATAR));
+        this.imageBinding = SLBindings.createObjectBinding(SLResources.get().getDummyImage(SLResources.AVATAR));
     }
     
     //<editor-fold desc="--- PROPERTIES ---">

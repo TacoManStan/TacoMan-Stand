@@ -1,12 +1,11 @@
 package com.taco.suit_lady.ui.pages.impl.content_selector;
 
-import com.taco.suit_lady._to_sort._new.Debugger;
 import com.taco.suit_lady.ui.ContentData;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
-import com.taco.suit_lady.util.tools.ExceptionTools;
-import com.taco.suit_lady.util.tools.TaskTools;
+import com.taco.suit_lady.util.tools.SLExceptions;
+import com.taco.suit_lady.util.tools.SLTasks;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
@@ -108,9 +107,9 @@ public abstract class ContentHandler<
     public void shutdown() {
         // TODO: Move to separate, synchronized task threads for each DummyClient instance.
         logiCore().executor().execute(() -> {
-            TaskTools.sync(lock, () -> contentList.forEach(client -> onShutdown(client)));
+            SLTasks.sync(lock, () -> contentList.forEach(client -> onShutdown(client)));
             if (!contentList.isEmpty())
-                throw ExceptionTools.ex("Mandelbrot Content List should be empty! (" + contentList + ")");
+                throw SLExceptions.ex("Mandelbrot Content List should be empty! (" + contentList + ")");
         });
     }
     

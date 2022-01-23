@@ -1,6 +1,6 @@
 package com.taco.suit_lady.logic.game.execution;
 
-import com.taco.suit_lady.util.tools.ExceptionTools;
+import com.taco.suit_lady.util.tools.SLExceptions;
 
 public interface Tickable {
     
@@ -15,6 +15,6 @@ public interface Tickable {
      */
     // DO NOT IMPLEMENT THIS UNTIL THE CORE LOOP SYSTEM HAS BEEN FULLY ESTABLISHED AND POLISHED
     default void interpolate(float progress) {
-        throw ExceptionTools.nyi();
+        throw SLExceptions.nyi();
     }
 }

@@ -6,8 +6,8 @@ import com.taco.suit_lady.ui.jfx.lists.treehandler.TreeLoader;
 import com.taco.suit_lady.ui.jfx.lists.treehandler.WrappingTreeLoader;
 import com.taco.suit_lady.ui.ui_internal.controllers.ConsoleElementController;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.BindingTools;
-import com.taco.suit_lady.util.tools.ExceptionTools;
+import com.taco.suit_lady.util.tools.SLBindings;
+import com.taco.suit_lady.util.tools.SLExceptions;
 import com.taco.suit_lady.util.tools.TB;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import com.taco.suit_lady.ui.ui_internal.console.ConsolePage;
@@ -85,7 +85,7 @@ public class Console
      * <p><b>Initialization Process</b></p>
      * <ol>
      *     <li>Locks the synchronization {@link ReentrantLock lock}.</li>
-     *     <li>Throws an {@link ExceptionTools#ex(String) exception} if this {@link Console} has already been {@link #isInitialized() initialized}.</li>
+     *     <li>Throws an {@link SLExceptions#ex(String) exception} if this {@link Console} has already been {@link #isInitialized() initialized}.</li>
      *     <li>Calls the <code><i>{@link #initStreams()}</i></code> method.</li>
      *     <li>
      *         Adds a {@link ListChangeListener} to the {@link #getMessages() Message List}:
@@ -102,7 +102,7 @@ public class Console
         lock.lock();
         try {
             if (initialized)
-                throw ExceptionTools.ex("Console has already been created.");
+                throw SLExceptions.ex("Console has already been created.");
             initialized = true;
             
             initStreams();
@@ -203,19 +203,19 @@ public class Console
     
     public void consolify(ConsoleUIDataContainer consoleContainer)
     {
-        ExceptionTools.nullCheck(consoleContainer, "Console UI Data Container");
+        SLExceptions.nullCheck(consoleContainer, "Console UI Data Container");
     
         FXTools.runFX(() -> {
             // treeView.setShowRoot(false); // Disabled temporarily because for some reason hiding the root causes messages to be truncated.
         
             // The below binding is used to trigger a refresh whenever a console display checkbox is toggled.
-            final IntegerBinding incrementingBinding = BindingTools.incrementingBinding(
+            final IntegerBinding incrementingBinding = SLBindings.incrementingBinding(
                     consoleContainer.showTRiBotProperty(),
                     consoleContainer.showClientProperty(),
                     consoleContainer.showScriptProperty(),
                     consoleContainer.showSelectedInstanceOnlyProperty()
                     //                    ctx.getBean(DummyContentsHandler.class).readOnlySelectedClientProperty()
-            );
+                                                                                     );
         
             final WrappingTreeLoader<ConsoleMessageable<?>, ConsoleElementController> treeLoader = new WrappingTreeLoader<>(
                     consoleContainer.getTreeView(),

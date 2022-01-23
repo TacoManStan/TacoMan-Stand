@@ -6,14 +6,13 @@ import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.springable.StrictSpringable;
-import com.taco.suit_lady.util.tools.ArrayTools;
-import com.taco.suit_lady.util.tools.MathTools;
+import com.taco.suit_lady.util.tools.SLArrays;
+import com.taco.suit_lady.util.tools.SLMath;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class GameMap
@@ -129,7 +128,7 @@ public class GameMap
             for (int j = -yReach; j < yReach; j++) {
                 int xLoc = gameTile.getXLoc() + i;
                 int yLoc = gameTile.getYLoc() + j;
-                if (ArrayTools.isInMatrixBounds(getTileMap(), xLoc, yLoc))
+                if (SLArrays.isInMatrixBounds(getTileMap(), xLoc, yLoc))
                     neighbors[i][j] = tileMap[gameTile.getXLoc() + i][gameTile.getYLoc() + j];
             }
         
@@ -151,13 +150,13 @@ public class GameMap
         
         int tileMinX = Math.floorDiv(xLoc, getTileSize());
         int tileMinY = Math.floorDiv(yLoc, getTileSize());
-        int tileMaxX = MathTools.ceil(xLoc + pxMapWidth, getTileSize());
-        int tileMaxY = MathTools.ceil(yLoc + pxMapHeight, getTileSize());
+        int tileMaxX = SLMath.ceil(xLoc + pxMapWidth, getTileSize());
+        int tileMaxY = SLMath.ceil(yLoc + pxMapHeight, getTileSize());
         
         ArrayList<GameTile> returnTiles = new ArrayList<>();
         for (int i = tileMinX; i <= tileMaxX; i++)
             for (int j = tileMinY; j <= tileMaxY; j++)
-                if (ArrayTools.isInMatrixBounds(getTileMap(), i, j))
+                if (SLArrays.isInMatrixBounds(getTileMap(), i, j))
                     returnTiles.add(getTileMap()[i][j]);
         return returnTiles;
     }

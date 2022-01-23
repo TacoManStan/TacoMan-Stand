@@ -1,6 +1,6 @@
 package com.taco.suit_lady.util.timing;
 
-import com.taco.suit_lady.util.tools.ExceptionTools;
+import com.taco.suit_lady.util.tools.SLExceptions;
 import com.taco.suit_lady.util.SimplePredicate;
 import com.taco.suit_lady.util.tools.TB;
 
@@ -39,7 +39,7 @@ public final class Timing
      */
     public static long currentTime(TimeUnit timeUnit)
     {
-        return ExceptionTools.nullCheck(timeUnit, "Time Unit").convert(currentTimeMillis(), TimeUnit.MILLISECONDS);
+        return SLExceptions.nullCheck(timeUnit, "Time Unit").convert(currentTimeMillis(), TimeUnit.MILLISECONDS);
     }
     
     //
@@ -88,7 +88,7 @@ public final class Timing
     
     public static Duration createDurationMillis(Number duration)
     {
-        ExceptionTools.nullCheck(duration, "Duration");
+        SLExceptions.nullCheck(duration, "Duration");
         return new Duration();
     }
     

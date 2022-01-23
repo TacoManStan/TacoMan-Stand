@@ -1,8 +1,8 @@
 package com.taco.suit_lady.ui;
 
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.ArrayTools;
-import com.taco.suit_lady.util.tools.ExceptionTools;
+import com.taco.suit_lady.util.tools.SLArrays;
+import com.taco.suit_lady.util.tools.SLExceptions;
 import com.taco.suit_lady.util.tools.TB;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.OverlaySurface;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.OverlayHandler;
@@ -13,7 +13,6 @@ import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import java.util.Arrays;
 import java.util.concurrent.ThreadPoolExecutor;
 
 public abstract class Content<D extends ContentData, C extends ContentController>
@@ -29,11 +28,11 @@ public abstract class Content<D extends ContentData, C extends ContentController
     private final ReadOnlyListWrapper<SidebarBookshelf> bookshelves;
     
     public Content(@NotNull Springable springable) {
-        this.strictSpringable = ExceptionTools.nullCheck(springable, "Springable Parent").asStrict();
+        this.strictSpringable = SLExceptions.nullCheck(springable, "Springable Parent").asStrict();
         
-        this.data = ExceptionTools.nullCheck(loadData(), "SLContentData");
-        this.controller = ExceptionTools.nullCheckMessage(
-                weaver().loadController(ExceptionTools.nullCheck(controllerDefinition(), "Controller Definition Class")),
+        this.data = SLExceptions.nullCheck(loadData(), "SLContentData");
+        this.controller = SLExceptions.nullCheckMessage(
+                weaver().loadController(SLExceptions.nullCheck(controllerDefinition(), "Controller Definition Class")),
                 "Error Loading Controller of Type [" + controllerDefinition() + "] — Ensure controller class is defined in FXML file.");
         
         this.overlayHandler = new OverlayHandler(this, null);
@@ -65,10 +64,10 @@ public abstract class Content<D extends ContentData, C extends ContentController
     //<editor-fold desc="--- CLASS BODY ---">
     
     protected SidebarBookshelf injectBookshelf(String name, UIBook... books) {
-        if (ArrayTools.isEmpty(ExceptionTools.nullCheck(books, "Book Array")))
-            throw ExceptionTools.ex("Bookshelf Contents Cannot Be Empty");
-        if (ArrayTools.containsNull(books))
-            throw ExceptionTools.ex("Bookshelf Contents Cannot Contain Null Elements: [" + Arrays.asList(books) + "]");
+        if (SLArrays.isEmpty(SLExceptions.nullCheck(books, "Book Array")))
+            throw SLExceptions.ex("Bookshelf Contents Cannot Be Empty");
+        if (SLArrays.containsNull(books))
+            throw SLExceptions.ex("Bookshelf Contents Cannot Contain Null Elements: [" + java.util.Arrays.asList(books) + "]");
         
         final SidebarBookshelf bookshelf = new SidebarBookshelf(getSidebar(), name, true);
         

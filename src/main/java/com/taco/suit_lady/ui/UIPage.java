@@ -1,7 +1,7 @@
 package com.taco.suit_lady.ui;
 
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.ExceptionTools;
+import com.taco.suit_lady.util.tools.SLExceptions;
 import com.taco.suit_lady.ui.ui_internal.controllers.Controller;
 import javafx.scene.layout.Pane;
 import net.rgielen.fxweaver.core.FxWeaver;
@@ -41,15 +41,15 @@ public abstract class UIPage<C extends UIPageController<?>>
      * @throws NullPointerException If the {@link UIPageController controller} loaded by the {@link #weaver() FxWeaver} using the controller {@link #controllerDefinition() definition} defined by this {@link UIPage} implementation is {@code null}.
      */
     public UIPage(@NotNull UIBook owner, Object... constructorParams) {
-        ExceptionTools.nullCheck(owner, "Springable Parent (UIBook Owner)");
+        SLExceptions.nullCheck(owner, "Springable Parent (UIBook Owner)");
         
-        this.weaver = ExceptionTools.nullCheck(owner.weaver(), "FxWeaver");
-        this.ctx = ExceptionTools.nullCheck(owner.ctx(), "ApplicationContext");
+        this.weaver = SLExceptions.nullCheck(owner.weaver(), "FxWeaver");
+        this.ctx = SLExceptions.nullCheck(owner.ctx(), "ApplicationContext");
         this.owner = owner;
         
         // Compound expression containing null checks for both the controller definition and the resulting constructor instance itself
-        this.controller = ExceptionTools.nullCheckMessage(
-                weaver().loadController(ExceptionTools.nullCheck(controllerDefinition(), "Controller Definition Class")),
+        this.controller = SLExceptions.nullCheckMessage(
+                weaver().loadController(SLExceptions.nullCheck(controllerDefinition(), "Controller Definition Class")),
                 "Error Loading Controller of Type [" + controllerDefinition() + "] — Ensure controller class is defined in FXML file.");
         
         this.controller.setPage(this);

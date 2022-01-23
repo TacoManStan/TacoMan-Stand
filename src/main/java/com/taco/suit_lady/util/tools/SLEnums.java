@@ -3,14 +3,14 @@ package com.taco.suit_lady.util.tools;
 /**
  * Contains utility methods related to enums.
  */
-public class EnumTools
+public class SLEnums
 {
-	public static EnumTools get()
+	public static SLEnums get()
 	{
 		return TB.enums();
 	}
 	
-	EnumTools() {}
+	SLEnums() {}
 
 	//
 
@@ -21,7 +21,7 @@ public class EnumTools
 	 * @return An array containing all of the enums that are part of the specified enum.
 	 */
 	public <T extends Enum> T[] list(Enum e) {
-		ExceptionTools.nullCheck(e, "Enum");
+		SLExceptions.nullCheck(e, "Enum");
 
 		Enum[] declaring;
 		declaring = e.getClass().getEnumConstants();
@@ -37,7 +37,7 @@ public class EnumTools
 	 * @return An array containing all of the enums that are part of the specified enum {@link Class}.
 	 */
 	public <T extends Enum> T[] list(Class<T> enumClass) {
-		return ExceptionTools.nullCheck(enumClass, "Enum Class").getEnumConstants();
+		return SLExceptions.nullCheck(enumClass, "Enum Class").getEnumConstants();
 	}
 
 	//
@@ -53,15 +53,15 @@ public class EnumTools
 	 * @return The {@link Enum} that equals the specified enum name.
 	 */
 	public <T extends Enum> T valueOf(String enumName, T t) {
-		ExceptionTools.nullCheck(enumName, "Enum Name");
-		ExceptionTools.nullCheck(t, "Enum");
+		SLExceptions.nullCheck(enumName, "Enum Name");
+		SLExceptions.nullCheck(t, "Enum");
 
 		Enum[] enums = list(t);
 		for (Enum e : enums)
 			if (e == null)
-				throw ExceptionTools.ex("e is null for enum: " + t.name());
-			else if (!GeneralTools.get().instanceOf(t, e.getClass()))
-				throw ExceptionTools.ex("e is not instance of T for enum: " + t.name());
+				throw SLExceptions.ex("e is null for enum: " + t.name());
+			else if (!SLTools.get().instanceOf(t, e.getClass()))
+				throw SLExceptions.ex("e is not instance of T for enum: " + t.name());
 			else if (e.name().equals(enumName))
 				return (T) e;
 		return null;
@@ -78,13 +78,13 @@ public class EnumTools
 	 * @return The {@link Enum} that equals the specified enum name.
 	 */
 	public <T extends Enum> T valueOf(String enumName, Class<T> enumClass) {
-		ExceptionTools.nullCheck(enumName, "Enum Name");
-		ExceptionTools.nullCheck(enumClass, "Enum Class");
+		SLExceptions.nullCheck(enumName, "Enum Name");
+		SLExceptions.nullCheck(enumClass, "Enum Class");
 
 		T[] enums = list(enumClass);
 		for (T e : enums)
 			if (e == null)
-				throw ExceptionTools.ex("e is null for enum: " + GeneralTools.get().getSimpleName(enumClass));
+				throw SLExceptions.ex("e is null for enum: " + SLTools.get().getSimpleName(enumClass));
 			else if (e.name().equals(enumName))
 				return e;
 		return null;
@@ -100,7 +100,7 @@ public class EnumTools
 	 * @return The first {@code enum value} for the specified {@code enum class}.
 	 */
 	public <T extends Enum> T first(Class<T> enumClass) {
-		return ArrayTools.getFirstNonNullElement(list(ExceptionTools.nullCheck(enumClass, "Enum Class")));
+		return SLArrays.getFirstNonNullElement(list(SLExceptions.nullCheck(enumClass, "Enum Class")));
 	}
 
 	/**
@@ -111,7 +111,7 @@ public class EnumTools
 	 * @return The first {@code enum value} for the specified {@code enum}.
 	 */
 	public <T extends Enum> T first(T e) {
-		return ArrayTools.getFirstNonNullElement(list(ExceptionTools.nullCheck(e, "Enum")));
+		return SLArrays.getFirstNonNullElement(list(SLExceptions.nullCheck(e, "Enum")));
 	}
 
 	//
@@ -128,13 +128,13 @@ public class EnumTools
 	 * @see #fullName(Enum)
 	 */
 	public String name(Enum anEnum) {
-		return ExceptionTools.nullCheck(anEnum, "Enum").name();
+		return SLExceptions.nullCheck(anEnum, "Enum").name();
 	}
 
 	/**
 	 * Returns the name of the specified enum (<i>not</i> the enum's value name).
 	 * <p>
-	 * Equivalent to '{@link GeneralTools#getSimpleName(Object) GeneralTools.getSimpleName(anEnum)}'.
+	 * Equivalent to '{@link SLTools#getSimpleName(Object) GeneralTools.getSimpleName(anEnum)}'.
 	 *
 	 * @param anEnum The {@link Enum}.
 	 * @return The name of the specified enum (<i>not</i> the enum's value name).
@@ -143,7 +143,7 @@ public class EnumTools
 	 * @see #fullName(Enum)
 	 */
 	public String enumName(Enum anEnum) {
-		return GeneralTools.get().getSimpleName(ExceptionTools.nullCheck(anEnum, "Enum"));
+		return SLTools.get().getSimpleName(SLExceptions.nullCheck(anEnum, "Enum"));
 	}
 
 	/**
@@ -158,7 +158,7 @@ public class EnumTools
 	 * @see #name(Enum)
 	 */
 	public String fullName(Enum anEnum) {
-		ExceptionTools.nullCheck(anEnum, "Enum");
+		SLExceptions.nullCheck(anEnum, "Enum");
 		return enumName(anEnum) + "." + name(anEnum);
 	}
 }

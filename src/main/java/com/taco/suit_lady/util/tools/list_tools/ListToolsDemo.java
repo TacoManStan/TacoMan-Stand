@@ -1,8 +1,8 @@
 package com.taco.suit_lady.util.tools.list_tools;
 
 import com.taco.suit_lady._to_sort._new.Debugger;
-import com.taco.suit_lady.util.tools.ArrayTools;
-import com.taco.suit_lady.util.tools.ExceptionTools;
+import com.taco.suit_lady.util.tools.SLArrays;
+import com.taco.suit_lady.util.tools.SLExceptions;
 import com.taco.suit_lady.util.tools.list_tools.Operation.OperationType;
 import com.taco.suit_lady.util.tools.list_tools.Operation.TriggerType;
 import javafx.collections.FXCollections;
@@ -36,7 +36,7 @@ public class ListToolsDemo {
         
         System.out.println("Sorting...");
         
-        ArrayTools.sort(list);
+        SLArrays.sort(list);
         
         debugger.printList(list, footer);
         
@@ -64,7 +64,7 @@ public class ListToolsDemo {
         
         System.out.println("Resorting...");
         
-        ArrayTools.sort(list);
+        SLArrays.sort(list);
         
         debugger.printList(list, footer);
         
@@ -163,7 +163,7 @@ public class ListToolsDemo {
             footerI = null;
             boxI = false;
         } else
-            throw ExceptionTools.ex("BLAH BLAH BLAH");
+            throw SLExceptions.ex("BLAH BLAH BLAH");
         
         debugger.printBlock(printsI, titleI, footerI, boxI);
     }

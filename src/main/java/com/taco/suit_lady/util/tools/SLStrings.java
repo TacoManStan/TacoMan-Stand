@@ -8,21 +8,20 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Locale;
 
 /**
  * Contains methods related to manipulating strings.
  */
-public class StringTools
+public class SLStrings
 {
-    public static StringTools get()
+    public static SLStrings get()
     {
         return TB.strings();
     }
     
-    StringTools() { }
+    SLStrings() { }
     
     /**
      * A constant representing one thousand (1,000).
@@ -130,7 +129,7 @@ public class StringTools
     
     private boolean matches(int index, char[] chars1, char... chars2)
     {
-        final Character[] reverse = ArrayTools.getReverse(ArrayTools.toArray(chars2));
+        final Character[] reverse = SLArrays.getReverse(SLArrays.toArray(chars2));
         for (int i = 0; i < reverse.length; i++)
             if (chars1[index - i] != reverse[i])
                 return false;
@@ -180,9 +179,9 @@ public class StringTools
     {
         if (aClass != null)
         {
-            String simpleName = GeneralTools.get().getSimpleName(aClass);
+            String simpleName = SLTools.get().getSimpleName(aClass);
             ArrayList<Integer> indexes = new ArrayList<>();
-            ArrayList<Character> characters = new ArrayList<>(Arrays.asList(ArrayTools.toArray(simpleName.toCharArray())));
+            ArrayList<Character> characters = new ArrayList<>(java.util.Arrays.asList(SLArrays.toArray(simpleName.toCharArray())));
             if (characters.size() > 1)
             {
                 boolean succeeded = false;
@@ -198,7 +197,7 @@ public class StringTools
                         }
                     }
                 }
-                return String.valueOf(ArrayTools.toArray(characters.toArray(new Character[characters.size()])));
+                return String.valueOf(SLArrays.toArray(characters.toArray(new Character[characters.size()])));
             }
         }
         return null;
@@ -393,9 +392,9 @@ public class StringTools
      */
     public String replace(String host, String replaceWith, boolean useRegex, String... toReplaceValues)
     {
-        ExceptionTools.nullCheck(host, "Host string cannot be null.");
-        ExceptionTools.nullCheck(replaceWith, "To-Replace string cannot be null.");
-        ExceptionTools.nullCheck(toReplaceValues, "Replace with array cannot be null.");
+        SLExceptions.nullCheck(host, "Host string cannot be null.");
+        SLExceptions.nullCheck(replaceWith, "To-Replace string cannot be null.");
+        SLExceptions.nullCheck(toReplaceValues, "Replace with array cannot be null.");
         for (String toReplace: toReplaceValues)
             if (toReplace != null)
                 if (useRegex)
@@ -459,7 +458,7 @@ public class StringTools
             throw new NullPointerException("Host String cannot be null.");
         ArrayList<Character> chars = new ArrayList<>();
         for (char c: host.toCharArray())
-            if (ArrayTools.contains(c, toKeeps))
+            if (SLArrays.contains(c, toKeeps))
                 chars.add(0, c);
         char[] charsArr = new char[chars.size()];
         for (int i = 0; i < chars.size(); i++)
@@ -565,7 +564,7 @@ public class StringTools
         String text = "";
         if (components != null)
         {
-            ArrayList<String> componentsList = new ArrayList<>(ArrayTools.removeNull(components));
+            ArrayList<String> componentsList = new ArrayList<>(SLArrays.removeNull(components));
             if (componentsList.size() > 1 || alwaysList)
             {
                 text += "<ol>";
@@ -693,7 +692,7 @@ public class StringTools
     public String replaceSeparator(String filePath)
     {
         String separator = "/";
-        return StringTools.get().replace(filePath, separator, false, "/", "\\");
+        return SLStrings.get().replace(filePath, separator, false, "/", "\\");
     }
     
     //

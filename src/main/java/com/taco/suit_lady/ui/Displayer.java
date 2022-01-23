@@ -1,6 +1,6 @@
 package com.taco.suit_lady.ui;
 
-import com.taco.suit_lady.util.tools.ExceptionTools;
+import com.taco.suit_lady.util.tools.SLExceptions;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
@@ -245,7 +245,7 @@ public class Displayer<T extends Displayable>
      */
     public void bind(ObservableValue<T> observable)
     {
-        ExceptionTools.nullCheck(observable, "Observable cannot be null");
+        SLExceptions.nullCheck(observable, "Observable cannot be null");
         lock.lock();
         try {
             displayProperty.bind(observable);

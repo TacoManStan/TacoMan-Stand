@@ -9,9 +9,9 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * A utility for generating pseudo-random numbers.
  */
-public class RandomTools
+public class SLRandom
 {
-    public static RandomTools get()
+    public static SLRandom get()
     {
         return TB.random();
     }
@@ -32,7 +32,7 @@ public class RandomTools
     private final Random random;
     private String source;
     
-    RandomTools()
+    SLRandom()
     {
         this.random = new Random();
         this.source = GLOBAL_SOURCE;
@@ -46,13 +46,13 @@ public class RandomTools
     public Random getRandomBySource(String source)
     {
         switch (source) {
-            case RandomTools.GLOBAL_SOURCE -> {
+            case SLRandom.GLOBAL_SOURCE -> {
                 return this.random;
             }
-            case RandomTools.THREAD_SOURCE -> {
+            case SLRandom.THREAD_SOURCE -> {
                 return ThreadLocalRandom.current();
             }
-            case RandomTools.METHOD_SOURCE -> {
+            case SLRandom.METHOD_SOURCE -> {
                 return new Random();
             }
         }
@@ -325,7 +325,7 @@ public class RandomTools
      */
     public <T> @Nullable T getRandomElement(@NotNull T[] arr)
     {
-        if (ExceptionTools.nullCheck(arr, "Input Array").length == 0)
+        if (SLExceptions.nullCheck(arr, "Input Array").length == 0)
             return null;
         return arr[nextInt(arr.length - 1)];
     }

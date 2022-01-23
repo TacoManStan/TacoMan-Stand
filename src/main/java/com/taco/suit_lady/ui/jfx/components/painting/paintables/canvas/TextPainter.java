@@ -2,8 +2,8 @@ package com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas;
 
 import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.ExceptionTools;
-import com.taco.suit_lady.util.tools.PropertyTools;
+import com.taco.suit_lady.util.tools.SLExceptions;
+import com.taco.suit_lady.util.tools.SLProperties;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -11,7 +11,6 @@ import javafx.beans.property.StringProperty;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class TextPainter extends ShapePainter {
@@ -47,11 +46,11 @@ public class TextPainter extends ShapePainter {
     
     public final StringProperty textProperty() { return textProperty; }
     public final String getText() { return textProperty.get(); }
-    public final String setText(@Nullable String newValue) { return PropertyTools.setProperty(textProperty, newValue); }
+    public final String setText(@Nullable String newValue) { return SLProperties.setProperty(textProperty, newValue); }
     
     public final IntegerProperty maxWidthProperty() { return maxWidthProperty; }
     public final int getMaxWidth() { return maxWidthProperty.get(); }
-    public final int setMaxWidth(int newValue) { return PropertyTools.setProperty(maxWidthProperty, newValue); }
+    public final int setMaxWidth(int newValue) { return SLProperties.setProperty(maxWidthProperty, newValue); }
     
     //</editor-fold>
     
@@ -60,7 +59,7 @@ public class TextPainter extends ShapePainter {
     @Override public @NotNull TextPainter init() {
         maxWidthProperty.addListener((observable, oldValue, newValue) -> {
             if (newValue.intValue() < 0)
-                throw ExceptionTools.unsupported("Max Width must be non-negative (" + newValue.intValue() + ")");
+                throw SLExceptions.unsupported("Max Width must be non-negative (" + newValue.intValue() + ")");
         });
         
         return (TextPainter) super.init();

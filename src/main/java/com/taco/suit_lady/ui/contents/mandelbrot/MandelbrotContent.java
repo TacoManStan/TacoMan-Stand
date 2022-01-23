@@ -16,9 +16,9 @@ import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_pag
 import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotElementController;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
-import com.taco.suit_lady.util.tools.ExceptionTools;
+import com.taco.suit_lady.util.tools.SLExceptions;
 import com.taco.suit_lady.util.tools.TB;
-import com.taco.suit_lady.util.tools.TaskTools;
+import com.taco.suit_lady.util.tools.SLTasks;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import com.taco.tacository.json.JFiles;
 import javafx.beans.binding.Bindings;
@@ -42,13 +42,6 @@ public class MandelbrotContent extends ListableContent<
     private final ReentrantLock lock;
     
     private final MandelbrotIterator iterator;
-    
-    //    private final RectangleOverlayCommand selectionBoxPaintCommand;
-    //    private final ImageOverlayCommand selectionBoxPaintCommand2;
-    //    private final EllipseOverlayCommand selectionCirclePaintCommand;
-    
-    //    private final ArcPaintCommand testPaintCommand;
-    //    private final RectanglePaintCommand testPaintCommand2;
     
     private final BoxPainter boxPainter;
     private final OvalPainter ovalPainter;
@@ -241,7 +234,7 @@ public class MandelbrotContent extends ListableContent<
     }
     
     private void redraw(MandelbrotColor[][] colors) {
-        FXTools.runFX(() -> TaskTools.sync(lock, () -> {
+        FXTools.runFX(() -> SLTasks.sync(lock, () -> {
             getCoverPage().getController().getProgressBar().setVisible(false);
             for (int i = 0; i < colors.length; i++)
                 for (int j = 0; j < colors[i].length; j++) {
@@ -254,14 +247,14 @@ public class MandelbrotContent extends ListableContent<
     
     private void zoom(@NotNull MouseDragData dragData) {
         if (!dragData.isValid())
-            throw ExceptionTools.ex("Drag Data is Invalid!");
+            throw SLExceptions.ex("Drag Data is Invalid!");
         
         Arrays.stream(paintables).forEach(paintable -> paintable.setPaused(true));
         getData().zoomTo(dragData.getStartX(), dragData.getStartY(), dragData.getEndX(), dragData.getEndY());
     }
     
     private void updateZoomBox(MouseDragData moveData) {
-        TaskTools.sync(lock, () -> {
+        SLTasks.sync(lock, () -> {
             Arrays.stream(paintables).forEach(paintable -> paintable.setPaused(false));
             Arrays.stream(paintables).forEach(paintable -> paintable.boundsBinding().setBounds(moveData.getBounds()));
         });

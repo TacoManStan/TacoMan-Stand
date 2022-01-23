@@ -8,6 +8,7 @@ import com.taco.suit_lady.util.tools.*;
 import com.taco.suit_lady.ui.jfx.Colorable;
 import com.taco.suit_lady.ui.jfx.hyperlink.HyperlinkNodeFX;
 import com.taco.suit_lady.ui.jfx.lists.Listable;
+import com.taco.suit_lady.util.tools.SLArrays;
 import com.taco.tacository.quick.ConsoleBB;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -100,7 +101,7 @@ public class FXTools {
      *                 //
      */
     public static void runFX(Runnable runnable, boolean wait) {
-        ExceptionTools.nullCheck(runnable, "Runnable cannot be null");
+        SLExceptions.nullCheck(runnable, "Runnable cannot be null");
         try {
             if (isFXThread())
                 runnable.run();
@@ -110,7 +111,7 @@ public class FXTools {
                 Platform.runLater(runnable);
         } catch (Exception e) {
             if (!e.getMessage().equalsIgnoreCase("toolkit has exited"))
-                throw ExceptionTools.ex(e);
+                throw SLExceptions.ex(e);
         }
     }
     
@@ -120,7 +121,7 @@ public class FXTools {
      * @param callable The Callable to be executed.
      */
     public static <V> V runFX(Callable<V> callable) {
-        ExceptionTools.nullCheck(callable, "Callable cannot be null");
+        SLExceptions.nullCheck(callable, "Callable cannot be null");
         try {
             if (isFXThread())
                 return callable.call();
@@ -131,13 +132,13 @@ public class FXTools {
                         _objProperty.set(callable.call());
                     } catch (Exception e) {
                         if (!e.getMessage().equalsIgnoreCase("toolkit has exited"))
-                            throw ExceptionTools.ex(e);
+                            throw SLExceptions.ex(e);
                     }
                 });
                 return _objProperty.get();
             }
         } catch (Exception e) {
-            throw ExceptionTools.ex(e);
+            throw SLExceptions.ex(e);
         }
     }
     
@@ -152,7 +153,7 @@ public class FXTools {
      * @param wait     True if this method should block until the Runnable is finished execution, false if this method should return as soon as the Runnable has been published.
      */
     public static void runEDT(Runnable runnable, boolean wait) {
-        ExceptionTools.nullCheck(runnable, "Runnable cannot be null");
+        SLExceptions.nullCheck(runnable, "Runnable cannot be null");
         try {
             if (EventQueue.isDispatchThread())
                 runnable.run();
@@ -161,7 +162,7 @@ public class FXTools {
             else
                 EventQueue.invokeLater(runnable);
         } catch (Exception e) {
-            throw ExceptionTools.ex(e);
+            throw SLExceptions.ex(e);
         }
     }
     
@@ -171,7 +172,7 @@ public class FXTools {
      * @param callable The Callable to be executed.
      */
     public static <V> V runEDT(Callable<V> callable) {
-        ExceptionTools.nullCheck(callable, "Callable cannot be null");
+        SLExceptions.nullCheck(callable, "Callable cannot be null");
         try {
             if (isFXThread())
                 return callable.call();
@@ -181,13 +182,13 @@ public class FXTools {
                     try {
                         _objProperty.set(callable.call());
                     } catch (Exception e) {
-                        throw ExceptionTools.ex(e);
+                        throw SLExceptions.ex(e);
                     }
                 });
                 return _objProperty.get();
             }
         } catch (Exception e) {
-            throw ExceptionTools.ex(e);
+            throw SLExceptions.ex(e);
         }
     }
     
@@ -198,7 +199,7 @@ public class FXTools {
      */
     public static void requireFX() {
         if (!isFXThread())
-            throw ExceptionTools.ex(new IllegalStateException("Operation must be executed on the FX Thread."));
+            throw SLExceptions.ex(new IllegalStateException("Operation must be executed on the FX Thread."));
     }
     
     /**
@@ -206,7 +207,7 @@ public class FXTools {
      */
     public static void requireEDT() {
         if (!isEDT())
-            throw ExceptionTools.ex(new IllegalStateException("Operation must be executed on the EDT."));
+            throw SLExceptions.ex(new IllegalStateException("Operation must be executed on the EDT."));
     }
     
     //</editor-fold>
@@ -219,7 +220,7 @@ public class FXTools {
      * @return The {@code key code} for the specified {@link KeyCode}.
      */
     public static int getKeyCode(KeyCode keyCode) {
-        return ExceptionTools.nullCheck(keyCode, "JFX KeyCode").getCode();
+        return SLExceptions.nullCheck(keyCode, "JFX KeyCode").getCode();
     }
     
     /**
@@ -230,7 +231,7 @@ public class FXTools {
      * @return The {@code key char} for the specified {@link KeyCode}.
      */
     public static String getKeyChar(KeyCode keyCode) {
-        return ExceptionTools.nullCheck(keyCode, "JFX KeyCode").getChar();
+        return SLExceptions.nullCheck(keyCode, "JFX KeyCode").getChar();
     }
     
     
@@ -408,7 +409,7 @@ public class FXTools {
      */
     @Contract("_, _, _ -> param1")
     public static @NotNull TextField numberTextField(TextField textField, boolean allowDecimals, double initialValue) {
-        ExceptionTools.nullCheck(textField, "TextField cannot be null.");
+        SLExceptions.nullCheck(textField, "TextField cannot be null.");
         
         textField.addEventFilter(KeyEvent.KEY_TYPED, _keyEvent -> {
             String _str = _keyEvent.getCharacter().toLowerCase();
@@ -420,10 +421,10 @@ public class FXTools {
                 return;
             }
             
-            Character[] _numbers = ArrayTools.concat(
+            Character[] _numbers = SLArrays.concat(
                     new Character[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', 'k', 'm', 'b'},
                     (allowDecimals ? new Character[]{'.'} : new Character[]{})
-                                                    );
+                                                  );
             int _periodCount = 0;
             
             for (char _c: _nStr.toCharArray())
@@ -524,7 +525,7 @@ public class FXTools {
             if (observableString != null) {
                 String string = observableString.get();
                 if (string != null) {
-                    webView.getEngine().loadContent(StringTools.get().html(string, true));
+                    webView.getEngine().loadContent(SLStrings.get().html(string, true));
                     return;
                 }
             }
@@ -554,7 +555,7 @@ public class FXTools {
      * @return The integer value from the specified {@link TextField}.
      */
     public static int getIntValue(@NotNull TextField textField) {
-        return (int) CalculationTools.getLongkmb(textField.getText(), false);
+        return (int) SLCalculations.getLongkmb(textField.getText(), false);
     }
     
     /**
@@ -567,7 +568,7 @@ public class FXTools {
      * @return The integer value from the specified {@link TextField}.
      */
     public static long getLongValue(@NotNull TextField textField) {
-        return CalculationTools.getLongkmb(textField.getText(), false);
+        return SLCalculations.getLongkmb(textField.getText(), false);
     }
     
     /**
@@ -580,7 +581,7 @@ public class FXTools {
      * @return The double value from the specified {@link TextField}.
      */
     public static double getValue(@NotNull TextField textField) {
-        return CalculationTools.getkmb(textField.getText(), false);
+        return SLCalculations.getkmb(textField.getText(), false);
     }
     
     /**
@@ -643,7 +644,7 @@ public class FXTools {
         for (Node c: excludes)
             if (c instanceof Parent)
                 excludes_list.addAll(getChildren((Parent) c, true));
-        getChildren(parent, true).stream().filter(c -> !ArrayTools.contains(c, excludes_list.toArray())).forEach(c -> c.setDisable(!enabled));
+        getChildren(parent, true).stream().filter(c -> !SLArrays.contains(c, excludes_list.toArray())).forEach(c -> c.setDisable(!enabled));
     }
     
     /**
@@ -783,8 +784,8 @@ public class FXTools {
                     } else
                         node.getStyleClass().remove(styleClass);
             if (active)
-                ArrayTools.containsAll(node.getStyleClass(), styleClasses);
-            return !ArrayTools.containsAny(node.getStyleClass(), styleClasses);
+                SLArrays.containsAll(node.getStyleClass(), styleClasses);
+            return !SLArrays.containsAny(node.getStyleClass(), styleClasses);
         }
         return false;
     }
@@ -840,7 +841,7 @@ public class FXTools {
     
     
     public static <T extends Node> T setAnchors(T node, double left, double right, double top, double bottom) {
-        ExceptionTools.nullCheck(node, "Input Node");
+        SLExceptions.nullCheck(node, "Input Node");
         
         AnchorPane.setLeftAnchor(node, left);
         AnchorPane.setRightAnchor(node, right);
@@ -948,7 +949,7 @@ public class FXTools {
     }
     
     public static Canvas clearCanvas(Canvas canvas, ReentrantLock lock) {
-        ExceptionTools.nullCheck(canvas, "Canvas Input");
+        SLExceptions.nullCheck(canvas, "Canvas Input");
         
         if (lock != null)
             try {
@@ -968,7 +969,7 @@ public class FXTools {
     
     
     public static <T extends Node> T togglePickOnBounds(T node, boolean pickOnBounds) {
-        ExceptionTools.nullCheck(node, "Input Node").setPickOnBounds(pickOnBounds);
+        SLExceptions.nullCheck(node, "Input Node").setPickOnBounds(pickOnBounds);
         if (node instanceof Canvas)
             node.setMouseTransparent(!pickOnBounds);
         if (node instanceof Region)
@@ -1071,7 +1072,7 @@ public class FXTools {
                         else
                             throw new RuntimeException("If root is a BorderPane, then root center must be a Stack Pane (center=" + center + ")");
                     } else
-                        throw new ClassCastException("Root must be instance of Stack Pane or BorderPane (root=" + GeneralTools.get().getSimpleName(root) + ")");
+                        throw new ClassCastException("Root must be instance of Stack Pane or BorderPane (root=" + SLTools.get().getSimpleName(root) + ")");
                 } else
                     throw new NullPointerException("Root cannot be null");
             } else
@@ -1192,8 +1193,8 @@ public class FXTools {
     
     
     public static void passdownOrder(Node root, Consumer<Node> action) {
-        ExceptionTools.nullCheck(root, "Root node cannot be null");
-        ExceptionTools.nullCheck(action, "Task cannot be null");
+        SLExceptions.nullCheck(root, "Root node cannot be null");
+        SLExceptions.nullCheck(action, "Task cannot be null");
         if (root instanceof Parent)
             ((Parent) root).getChildrenUnmodifiable().forEach(child -> passdownOrder(child, action));
     }
@@ -1274,10 +1275,10 @@ public class FXTools {
             @NotNull BindOrientation bindOrientation,
             @NotNull BindType bindType,
             boolean addTo) {
-        ExceptionTools.nullCheck(child, "Region");
-        ExceptionTools.nullCheck(parent, "Parent Region");
-        ExceptionTools.nullCheck(bindOrientation, "Bind Orientation");
-        ExceptionTools.nullCheck(bindType, "Bind Type");
+        SLExceptions.nullCheck(child, "Region");
+        SLExceptions.nullCheck(parent, "Parent Region");
+        SLExceptions.nullCheck(bindOrientation, "Bind Orientation");
+        SLExceptions.nullCheck(bindType, "Bind Type");
         
         final ObservableDoubleValue observableOffsetImpl = observableOffset == null ? new SimpleDoubleProperty(0.0) : observableOffset;
         final DoubleProperty widthProperty;
@@ -1285,7 +1286,7 @@ public class FXTools {
         
         if (addTo)
             if (parent instanceof Pane) ((Pane) parent).getChildren().add(child);
-            else throw ExceptionTools.ex("Parent must be an implementation of Pane!  (" + parent.getClass() + ")");
+            else throw SLExceptions.ex("Parent must be an implementation of Pane!  (" + parent.getClass() + ")");
         
         if (bindType == BindType.PREF || bindType == BindType.BOTH) {
             widthProperty = child.prefWidthProperty();
@@ -1294,7 +1295,7 @@ public class FXTools {
             widthProperty = child.maxWidthProperty();
             heightProperty = child.maxHeightProperty();
         } else
-            throw ExceptionTools.unsupported("Unknown BindType: " + bindType);
+            throw SLExceptions.unsupported("Unknown BindType: " + bindType);
         
         if (bindOrientation == BindOrientation.WIDTH || bindOrientation == BindOrientation.BOTH) {
             widthProperty.bind(Bindings.createDoubleBinding(
@@ -1328,8 +1329,8 @@ public class FXTools {
     }
     
     public static double getNodeSize(Region region, boolean includePadding, boolean includeInsets, double offset, BindOrientation bindOrientation) {
-        ExceptionTools.nullCheck(region, "Region");
-        ExceptionTools.nullCheck(bindOrientation, "BindOrientation");
+        SLExceptions.nullCheck(region, "Region");
+        SLExceptions.nullCheck(bindOrientation, "BindOrientation");
         
         Insets _insets = region.getInsets();
         Insets _padding = region.getPadding();
@@ -1338,7 +1339,7 @@ public class FXTools {
         else if (bindOrientation == BindOrientation.HEIGHT)
             return region.getHeight() + offset - (includePadding ? _padding.getTop() + _padding.getBottom() : 0) + (includeInsets ? _insets.getTop() + _insets.getBottom() : 0);
         else
-            throw ExceptionTools.unsupported("BindOrientation \"" + bindOrientation + "\" is not supported.");
+            throw SLExceptions.unsupported("BindOrientation \"" + bindOrientation + "\" is not supported.");
     }
     
     public enum BindOrientation {
@@ -1714,9 +1715,9 @@ public class FXTools {
         if (comboBox != null) {
             applyCellFactory(comboBox);
             if (t != null) {
-                final Enum[] e_list = EnumTools.get().list(t);
+                final Enum[] e_list = SLEnums.get().list(t);
                 for (Enum e: e_list)
-                    if (!ArrayTools.contains(e, excludeValues))
+                    if (!SLArrays.contains(e, excludeValues))
                         comboBox.getItems().add((T) e);
                 
                 comboBox.setValue(selectFirst ? (T) e_list[0] : t);
@@ -1730,7 +1731,7 @@ public class FXTools {
      * This method supports the following:
      * <ol>
      * <li>The {@link Listable} interface (uses the {@link Listable#getShortText()} method</li>
-     * <li>Enums (uses the {@link StringTools#enumToString(Enum)} method)</li>
+     * <li>Enums (uses the {@link SLStrings#enumToString(Enum)} method)</li>
      * <li>Non-null Objects (uses the {@link Object#toString()} method)</li>
      * </ol>
      *
@@ -1744,7 +1745,7 @@ public class FXTools {
             if (obj instanceof Listable)
                 str = ((Listable) obj).getShortText();
             else if (obj instanceof Enum)
-                str = StringTools.get().enumToString((Enum) obj);
+                str = SLStrings.get().enumToString((Enum) obj);
             else
                 str = obj.toString();
             return str;
@@ -1907,14 +1908,14 @@ public class FXTools {
     
     private static boolean isValidSuffix(String str, String @NotNull ... suffixes) {
         for (final String suffix: suffixes)
-            if (str.contains(suffix) && (!str.endsWith(suffix) || StringTools.get().getCount(str, suffix) != 1 || str.length() == suffix.length()))
+            if (str.contains(suffix) && (!str.endsWith(suffix) || SLStrings.get().getCount(str, suffix) != 1 || str.length() == suffix.length()))
                 return false;
         return true;
     }
     
     private static boolean isValidPrefix(String str, String @NotNull ... prefixes) {
         for (String prefix: prefixes)
-            if (str.contains(prefix) && (!str.startsWith(prefix) || StringTools.get().getCount(str, prefix) != 1))
+            if (str.contains(prefix) && (!str.startsWith(prefix) || SLStrings.get().getCount(str, prefix) != 1))
                 return false;
         return true;
     }

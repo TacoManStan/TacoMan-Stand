@@ -1,6 +1,6 @@
 package com.taco.suit_lady.util.timing;
 
-import com.taco.suit_lady.util.tools.CalculationTools;
+import com.taco.suit_lady.util.tools.SLCalculations;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -161,7 +161,7 @@ public class DebugTimer
     private String hlpr_getText(String message)
     {
         return "[TIMER] " + (name == null ? "NONE" : name) + ":" + (message != null ? " " + message : "")
-               + " (" + CalculationTools.roundD(getElapsedTimeDbl(), 0, 2) + " ms)";
+               + " (" + SLCalculations.roundD(getElapsedTimeDbl(), 0, 2) + " ms)";
     }
 }
 

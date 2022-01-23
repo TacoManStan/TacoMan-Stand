@@ -1,6 +1,6 @@
 package com.taco.suit_lady.util.tools.list_tools;
 
-import com.taco.suit_lady.util.tools.ArrayTools;
+import com.taco.suit_lady.util.tools.SLArrays;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -125,7 +125,7 @@ public record Operation<E>(int movedFromIndex, int movedToIndex, E contents) {
         }
         
         public boolean isOpValid(OperationType opType) {
-            return ArrayTools.contains(opType, validOperations);
+            return SLArrays.contains(opType, validOperations);
         }
     }
 }

@@ -10,11 +10,11 @@ import javafx.collections.ObservableMap;
 import java.util.ArrayList;
 import java.util.concurrent.locks.Lock;
 
-public class CollectionTools
+public class SLCollections
 {
     private final Presets presets;
     
-    CollectionTools()
+    SLCollections()
     {
         this.presets = new Presets();
     }
@@ -28,7 +28,7 @@ public class CollectionTools
     
     public <E> ReadOnlyListWrapper<E> boundList(ObservableMap<?, E> map, Lock lock)
     {
-        ExceptionTools.nullCheck(map, "Map");
+        SLExceptions.nullCheck(map, "Map");
         
         ReadOnlyListWrapper<E> bound_list = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
         if (lock != null)

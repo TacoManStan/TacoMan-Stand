@@ -3,9 +3,9 @@ package com.taco.suit_lady.util.tools.list_tools;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
-import com.taco.suit_lady.util.tools.ArrayTools;
-import com.taco.suit_lady.util.tools.ExceptionTools;
-import com.taco.suit_lady.util.tools.TaskTools;
+import com.taco.suit_lady.util.tools.SLArrays;
+import com.taco.suit_lady.util.tools.SLExceptions;
+import com.taco.suit_lady.util.tools.SLTasks;
 import com.taco.suit_lady.util.tools.list_tools.Operation.OperationType;
 import com.taco.tacository.obj_traits.common.Nameable;
 import javafx.beans.property.BooleanProperty;
@@ -60,7 +60,7 @@ import java.util.stream.IntStream;
  * </ol>
  * <h4>With <u>Native</u> Permutation Event Support</h4>
  * <ol>
- *     <li>{@link ArrayTools#sort(List)}</li>
+ *     <li>{@link SLArrays#sort(List)}</li>
  * </ol>
  * <h3>Example Output</h3>
  * <p>Refer to {@link ListToolsDemo}.</p>
@@ -119,7 +119,7 @@ public abstract class OperationHandler<E>
     
     @Override
     public final void onChanged(Change<? extends E> change) {
-        TaskTools.sync(lock, () -> {
+        SLTasks.sync(lock, () -> {
             while (change.next())
                 if (change.wasPermutated()) {
                     onPermutateOperationInternal(true);
@@ -242,32 +242,32 @@ public abstract class OperationHandler<E>
     //<editor-fold desc="--- INTERNAL ---">
     
     private void onPermutateInternal(Operation<E> op1, Operation<E> op2) {
-        TaskTools.sync(lock, () -> onPermutate(op1, op2), true);
+        SLTasks.sync(lock, () -> onPermutate(op1, op2), true);
     }
     
     private void onUpdateInternal(int from, int to) {
-        TaskTools.sync(lock, () -> onUpdate(from, to), true);
+        SLTasks.sync(lock, () -> onUpdate(from, to), true);
     }
     
     private void onAddInternal(Operation<E> op) {
-        TaskTools.sync(lock, () -> onAdd(op), true);
+        SLTasks.sync(lock, () -> onAdd(op), true);
     }
     
     private void onRemoveInternal(Operation<E> op) {
-        TaskTools.sync(lock, () -> onRemove(op), true);
+        SLTasks.sync(lock, () -> onRemove(op), true);
     }
     
     //
     
     private void onPermutateOperationInternal(boolean before) {
-        TaskTools.sync(lock, () -> {
+        SLTasks.sync(lock, () -> {
             if (before) onPrePermutate();
             else onPostPermutate();
         }, true);
     }
     
     private void onAddOrRemoveOperationInternal(boolean before, boolean add) {
-        TaskTools.sync(lock, () -> {
+        SLTasks.sync(lock, () -> {
             if (add)
                 if (before)
                     onPreAdd();
@@ -284,7 +284,7 @@ public abstract class OperationHandler<E>
     //
     
     private void refresh() {
-        TaskTools.sync(lock, () -> backingListProperty.set(ArrayTools.copy(list)), true);
+        SLTasks.sync(lock, () -> backingListProperty.set(SLArrays.copy(list)), true);
     }
     
     //</editor-fold>
@@ -316,7 +316,7 @@ public abstract class OperationHandler<E>
      */
     public final OperationHandler<E> apply() {
         refresh();
-        ExceptionTools.nullCheck(list, "Observable List").addListener(ExceptionTools.nullCheck(this, "List Listener"));
+        SLExceptions.nullCheck(list, "Observable List").addListener(SLExceptions.nullCheck(this, "List Listener"));
         return this;
     }
 }

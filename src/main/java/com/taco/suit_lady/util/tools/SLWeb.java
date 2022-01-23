@@ -4,21 +4,21 @@ import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 
-public class WebTools
+public class SLWeb
 {
-    public static WebTools get()
+    public static SLWeb get()
     {
         return TB.web();
     }
     
-    WebTools() { }
+    SLWeb() { }
     
     public void browse(String rawUrl)
     {
         try {
             Desktop.getDesktop().browse(URI.create(rawUrl));
         } catch (IOException e) {
-            throw ExceptionTools.ex(e);
+            throw SLExceptions.ex(e);
         }
     }
     

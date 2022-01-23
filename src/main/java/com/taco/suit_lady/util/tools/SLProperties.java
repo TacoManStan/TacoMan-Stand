@@ -3,8 +3,8 @@ package com.taco.suit_lady.util.tools;
 import javafx.beans.property.*;
 import org.jetbrains.annotations.NotNull;
 
-public class PropertyTools {
-    private PropertyTools() { } //No Instance
+public class SLProperties {
+    private SLProperties() { } //No Instance
     
     public static boolean setProperty(@NotNull BooleanProperty property, boolean newValue) {
         boolean oldValue = property.get();

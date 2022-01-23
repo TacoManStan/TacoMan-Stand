@@ -17,7 +17,7 @@ import java.util.function.Function;
 /**
  * Utility methods related to {@link Property Properties} and {@link Bindings}.
  */
-public class BindingTools
+public class SLBindings
 {
     //<editor-fold desc="--- BASIC BINDINGS ---">
     
@@ -230,7 +230,7 @@ public class BindingTools
      */
     public static BooleanBinding createNullCheckBinding(Binding<?> binding)
     {
-        ExceptionTools.nullCheck(binding, "Binding");
+        SLExceptions.nullCheck(binding, "Binding");
         return Bindings.createBooleanBinding(() -> binding.getValue() != null, binding);
     }
     
@@ -260,7 +260,7 @@ public class BindingTools
                 (observable, oldValue, newValue) ->
                 {
                     if (property.isBound())
-                        throw ExceptionTools.ex("Property is already bound (" + property + ")");
+                        throw SLExceptions.ex("Property is already bound (" + property + ")");
                     FXTools.runFX(() -> property.setValue(newValue), true);
                 });
     }
@@ -369,8 +369,8 @@ public class BindingTools
          * @param updateBindings   Any additional {@code Observables} that should trigger an update (call to the {@code Function}) upon changing.
          *                         <i>Optional</i>.
          *
-         * @see BindingTools#createRecursiveBinding(Function, ObservableValue, Observable...)}
-         * @see BindingTools#createRecursiveBinding(Lock, Function, ObservableValue, Observable...)}
+         * @see SLBindings#createRecursiveBinding(Function, ObservableValue, Observable...)}
+         * @see SLBindings#createRecursiveBinding(Lock, Function, ObservableValue, Observable...)}
          */
         protected RecursiveBinding(Lock lock, Function<U, ObservableValue<V>> function, ObservableValue<U> updateObservable, Observable[] updateBindings)
         {
@@ -545,7 +545,7 @@ public class BindingTools
             updateObservable.addListener((observable, oldValue, newValue) -> update(oldValue, newValue));
             binding = Bindings.createObjectBinding(
                     backingBindingProperty::get,
-                    ArrayTools.concat(new Observable[]{backingBindingProperty}, updateBindings)
+                    SLArrays.concat(new Observable[]{backingBindingProperty}, updateBindings)
             );
             binding.invalidate();
             update(updateObservable.getValue(), updateObservable.getValue());
@@ -560,7 +560,7 @@ public class BindingTools
         private void update(U oldValue, U newValue)
         {
             Function<U, ObservableValue<V>> function = getFunction();
-            ExceptionTools.nullCheck(function, "Function");
+            SLExceptions.nullCheck(function, "Function");
             ObservableValue<V> observableValue = function.apply(newValue);
             if (observableValue != null)
                 backingBindingProperty.bind(observableValue);

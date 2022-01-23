@@ -3,9 +3,9 @@ package com.taco.suit_lady.logic.game;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
-import com.taco.suit_lady.util.tools.BindingTools;
-import com.taco.suit_lady.util.tools.ExceptionTools;
-import com.taco.suit_lady.util.tools.ResourceTools;
+import com.taco.suit_lady.util.tools.SLBindings;
+import com.taco.suit_lady.util.tools.SLExceptions;
+import com.taco.suit_lady.util.tools.SLResources;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -38,10 +38,10 @@ public class GameMapModel
 //    private final ImageOverlayCommand paintCommand;
     
     public GameMapModel(@NotNull GameMap owner, @NotNull ReentrantLock lock) {
-        this.lock = ExceptionTools.nullCheck(lock, "Lock");
-        this.owner = ExceptionTools.nullCheck(owner, "GameMap Owner");
+        this.lock = SLExceptions.nullCheck(lock, "Lock");
+        this.owner = SLExceptions.nullCheck(owner, "GameMap Owner");
         
-        this.mapImageBinding = BindingTools.createObjectBinding(ResourceTools.get().getDummyImage(ResourceTools.MAP));
+        this.mapImageBinding = SLBindings.createObjectBinding(SLResources.get().getDummyImage(SLResources.MAP));
         
         this.parentPaneProperty = new SimpleObjectProperty<>();
         

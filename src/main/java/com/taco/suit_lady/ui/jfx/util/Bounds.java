@@ -1,11 +1,8 @@
 package com.taco.suit_lady.ui.jfx.util;
 
-import com.taco.suit_lady.util.tools.ExceptionTools;
-import javafx.geometry.BoundingBox;
+import com.taco.suit_lady.util.tools.SLExceptions;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
-
-import java.awt.*;
 
 public record Bounds(int x, int y, int width, int height)
         implements Boundable {
@@ -13,18 +10,18 @@ public record Bounds(int x, int y, int width, int height)
     //<editor-fold desc="--- STATIC CONVERSION ---">
     
     public static @NotNull Bounds fromRectAWT(@NotNull java.awt.Rectangle rectangle) {
-        ExceptionTools.nullCheck(rectangle, "AWT Rectangle");
+        SLExceptions.nullCheck(rectangle, "AWT Rectangle");
         return new Bounds(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
     }
     
     public static @NotNull Bounds fromRectFX(@NotNull javafx.scene.shape.Rectangle rectangle) {
-        ExceptionTools.nullCheck(rectangle, "JFX Rectangle");
+        SLExceptions.nullCheck(rectangle, "JFX Rectangle");
         return new Bounds((int) rectangle.getX(), (int) rectangle.getY(), (int) rectangle.getWidth(), (int) rectangle.getHeight());
     }
     
     public static @NotNull Bounds fromPoints(@NotNull Point2D location, @NotNull Point2D dimensions) {
-        ExceptionTools.nullCheck(location, "Location Point2D");
-        ExceptionTools.nullCheck(dimensions, "Dimensions Point2D");
+        SLExceptions.nullCheck(location, "Location Point2D");
+        SLExceptions.nullCheck(dimensions, "Dimensions Point2D");
         
         return new Bounds((int) location.getX(), (int) location.getY(), (int) dimensions.getX(), (int) dimensions.getY());
     }

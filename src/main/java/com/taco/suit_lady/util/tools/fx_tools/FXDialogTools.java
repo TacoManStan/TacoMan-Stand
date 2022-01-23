@@ -1,7 +1,7 @@
 package com.taco.suit_lady.util.tools.fx_tools;
 
-import com.taco.suit_lady.util.tools.EnumTools;
-import com.taco.suit_lady.util.tools.StringTools;
+import com.taco.suit_lady.util.tools.SLEnums;
+import com.taco.suit_lady.util.tools.SLStrings;
 import com.taco.suit_lady.util.tools.TB;
 import com.taco.suit_lady.ui.jfx.dialog.DialogCallback;
 import com.taco.suit_lady.ui.jfx.dialog.DialogController;
@@ -242,8 +242,8 @@ public class FXDialogTools {
      * @see #showChooseOptionDialog(String, String, FXTools.AutoCompleteMode, Object, boolean, String, Object[])
      */
     public static <T extends Enum> T showChooseEnumDialog(String title, String message, FXTools.AutoCompleteMode autoCompleteMode, T defaultOption, String promptText, boolean selectFirst) {
-        if (promptText != null && promptText.isEmpty()) promptText = "Start typing " + StringTools.get().classToString(defaultOption.getClass());
-        return showChooseOptionDialog(title, message, autoCompleteMode, defaultOption, selectFirst, promptText, (T[]) EnumTools.get().list(defaultOption));
+        if (promptText != null && promptText.isEmpty()) promptText = "Start typing " + SLStrings.get().classToString(defaultOption.getClass());
+        return showChooseOptionDialog(title, message, autoCompleteMode, defaultOption, selectFirst, promptText, (T[]) SLEnums.get().list(defaultOption));
     }
     
     /**

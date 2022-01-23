@@ -2,7 +2,7 @@ package com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas;
 
 import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.PropertyTools;
+import com.taco.suit_lady.util.tools.SLProperties;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
@@ -33,15 +33,15 @@ public class ArcPainter extends ShapePainter {
     
     public final DoubleProperty startAngleProperty() { return startAngleProperty; }
     public final double getStartAngle() { return startAngleProperty.get(); }
-    public final double setStartAngle(double newValue) { return PropertyTools.setProperty(startAngleProperty, newValue); }
+    public final double setStartAngle(double newValue) { return SLProperties.setProperty(startAngleProperty, newValue); }
     
     public final DoubleProperty arcExtentProperty() { return arcExtentProperty; }
     public final double getArcExtent() { return arcExtentProperty.get(); }
-    public final double setArcExtent(double newValue) { return PropertyTools.setProperty(arcExtentProperty, newValue); }
+    public final double setArcExtent(double newValue) { return SLProperties.setProperty(arcExtentProperty, newValue); }
     
     public final ObjectProperty<ArcType> closureProperty() { return closureProperty; }
     public final ArcType getClosure() { return closureProperty.get(); }
-    public final ArcType setClosure(ArcType newValue) { return PropertyTools.setProperty(closureProperty, newValue); }
+    public final ArcType setClosure(ArcType newValue) { return SLProperties.setProperty(closureProperty, newValue); }
     
     //</editor-fold>
     

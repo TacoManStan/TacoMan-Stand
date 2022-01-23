@@ -13,8 +13,8 @@ import java.util.function.Supplier;
  * <p>
  * <i>It is recommended that you only use this class if you are experienced with synchronization.</i>
  */
-public class TaskTools {
-    private TaskTools() { }
+public class SLTasks {
+    private SLTasks() { }
     
     public static Thread start(Thread thread) {
         if (thread == null)
@@ -24,7 +24,7 @@ public class TaskTools {
     }
     
     public static Thread start(Thread thread, Lock lock) {
-        throw new UndefinedRuntimeException(ExceptionTools.nyi());
+        throw new UndefinedRuntimeException(SLExceptions.nyi());
     }
     
     /**
@@ -39,7 +39,7 @@ public class TaskTools {
      * @throws NullPointerException if the specified {@code Supplier} is null.
      */
     public static Thread start(Supplier<Runnable> threadSupplier) {
-        Runnable runnable = ExceptionTools.nullCheck(threadSupplier, "Thread Supplier").get();
+        Runnable runnable = SLExceptions.nullCheck(threadSupplier, "Thread Supplier").get();
         return start(runnable instanceof Thread ? (Thread) runnable : new Thread(runnable));
     }
     
@@ -69,10 +69,10 @@ public class TaskTools {
      */
     @SafeVarargs
     public static void sync(Lock lock, Runnable runnable, Consumer<Throwable>... onFinallyActions) {
-        ExceptionTools.nullCheck(runnable, "Runnable");
-        ExceptionTools.nullCheck(onFinallyActions, "On-Finally Actions", "leave empty for no actions");
+        SLExceptions.nullCheck(runnable, "Runnable");
+        SLExceptions.nullCheck(onFinallyActions, "On-Finally Actions", "leave empty for no actions");
         
-        TaskTools.sync(lock, runnable, false, onFinallyActions);
+        SLTasks.sync(lock, runnable, false, onFinallyActions);
     }
     
     /**
@@ -102,10 +102,10 @@ public class TaskTools {
      */
     @SafeVarargs
     public static void sync(Lock lock, Runnable runnable, boolean allowNull, Consumer<Throwable>... onFinallyActions) {
-        ExceptionTools.nullCheck(runnable, "Runnable");
-        ExceptionTools.nullCheck(onFinallyActions, "On-Finally Actions", "leave empty for no actions");
+        SLExceptions.nullCheck(runnable, "Runnable");
+        SLExceptions.nullCheck(onFinallyActions, "On-Finally Actions", "leave empty for no actions");
         
-        TaskTools.sync(lock, ignored -> {
+        SLTasks.sync(lock, ignored -> {
             runnable.run();
             return null;
         }, () -> null, allowNull);
@@ -136,10 +136,10 @@ public class TaskTools {
      */
     @SafeVarargs
     public static <R> R sync(Lock lock, Supplier<R> runnableSupplier, Consumer<Throwable>... onFinallyActions) {
-        ExceptionTools.nullCheck(runnableSupplier, "Runnable Supplier");
-        ExceptionTools.nullCheck(onFinallyActions, "On-Finally Actions", "leave empty for no actions");
+        SLExceptions.nullCheck(runnableSupplier, "Runnable Supplier");
+        SLExceptions.nullCheck(onFinallyActions, "On-Finally Actions", "leave empty for no actions");
         
-        return TaskTools.sync(lock, runnableSupplier, false, onFinallyActions);
+        return SLTasks.sync(lock, runnableSupplier, false, onFinallyActions);
     }
     
     /**
@@ -172,10 +172,10 @@ public class TaskTools {
      */
     @SafeVarargs
     public static <R> R sync(Lock lock, Supplier<R> runnableSupplier, boolean allowNull, Consumer<Throwable>... onFinallyActions) {
-        ExceptionTools.nullCheck(runnableSupplier, "Runnable Supplier");
-        ExceptionTools.nullCheck(onFinallyActions, "On-Finally Actions", "leave empty for no actions");
+        SLExceptions.nullCheck(runnableSupplier, "Runnable Supplier");
+        SLExceptions.nullCheck(onFinallyActions, "On-Finally Actions", "leave empty for no actions");
         
-        return TaskTools.sync(lock, ignored -> runnableSupplier.get(), () -> null, allowNull, onFinallyActions);
+        return SLTasks.sync(lock, ignored -> runnableSupplier.get(), () -> null, allowNull, onFinallyActions);
     }
     
     /**
@@ -192,7 +192,7 @@ public class TaskTools {
      * <b>Example Usage</b>
      * <blockquote><pre>
      * <code>public static double distanceToCursor(Point2D point) {
-     *      {@link ExceptionTools#nullCheck(Object, String) ExceptionTools.check}(point, "Point cannot be null.");
+     *      {@link SLExceptions#nullCheck(Object, String) ExceptionTools.check}(point, "Point cannot be null.");
      *      return ThreadTools.run(new ReentrantLock(), paramPoint{@code ->} point.distanceTo(paramPoint), (){@code ->} Mouse.getLocation(), true);
      * }</code></pre></blockquote>
      *
@@ -229,12 +229,12 @@ public class TaskTools {
      */
     @SafeVarargs
     public static <T, R> R sync(Lock lock, Function<T, R> runnableFunction, Supplier<T> functionInputSupplier, boolean allowNullLock, Consumer<Throwable>... onFinally) {
-        ExceptionTools.nullCheck(runnableFunction, "Runnable Function");
-        ExceptionTools.nullCheck(functionInputSupplier, "Return Value Supplier");
-        ExceptionTools.nullCheck(onFinally, "On-Finally Actions", "leave empty for no actions, not null");
+        SLExceptions.nullCheck(runnableFunction, "Runnable Function");
+        SLExceptions.nullCheck(functionInputSupplier, "Return Value Supplier");
+        SLExceptions.nullCheck(onFinally, "On-Finally Actions", "leave empty for no actions, not null");
         
-        if (ArrayTools.containsNull(onFinally))
-            throw ExceptionTools.ex(new NullPointerException("On-Finally Actions array cannot contain null elements."));
+        if (SLArrays.containsNull(onFinally))
+            throw SLExceptions.ex(new NullPointerException("On-Finally Actions array cannot contain null elements."));
         
         final boolean locked = lock(lock, allowNullLock);
         Throwable thrown = null;
@@ -243,12 +243,12 @@ public class TaskTools {
             return runnableFunction.apply(functionInputSupplier.get());
         } catch (Throwable t) {
             thrown = t;
-            if (ArrayTools.isEmpty(onFinally))
-                throw ExceptionTools.ex(t, "");
+            if (SLArrays.isEmpty(onFinally))
+                throw SLExceptions.ex(t, "");
         } finally {
             try {
                 for (Consumer<Throwable> onFinallyAction: onFinally)
-                    ExceptionTools.nullCheck(onFinallyAction, "On-Finally Action").accept(thrown);
+                    SLExceptions.nullCheck(onFinallyAction, "On-Finally Action").accept(thrown);
             } finally {
                 if (locked)
                     lock.unlock();
@@ -310,7 +310,7 @@ public class TaskTools {
      */
     public static boolean lock(Lock lock, boolean allowNull) {
         if (!allowNull)
-            ExceptionTools.nullCheckMessage(lock, "Lock cannot be null if allowNull is false");
+            SLExceptions.nullCheckMessage(lock, "Lock cannot be null if allowNull is false");
         if (lock != null) {
             lock.lock();
             return true;

@@ -1,6 +1,6 @@
 package com.taco.suit_lady.ui;
 
-import com.taco.suit_lady.util.tools.BindingTools;
+import com.taco.suit_lady.util.tools.SLBindings;
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
@@ -37,7 +37,7 @@ public abstract class UIBookshelf
         
         //
         
-        final Binding<Boolean> innerBinding = BindingTools.createRecursiveBinding((UIBook uiBook) -> {
+        final Binding<Boolean> innerBinding = SLBindings.createRecursiveBinding((UIBook uiBook) -> {
             if (uiBook != null) {
                 final UIPageHandler pageHandler = uiBook.getPageHandler();
                 if (pageHandler != null)

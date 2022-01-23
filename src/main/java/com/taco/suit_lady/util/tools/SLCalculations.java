@@ -11,9 +11,9 @@ import java.util.function.Consumer;
 /**
  * Contains methods related to doing various calculations.
  */
-public class CalculationTools
+public class SLCalculations
 {
-	private CalculationTools() {
+	private SLCalculations() {
 	} // No instance
 
 	/**
@@ -28,8 +28,8 @@ public class CalculationTools
 	 * @return The absolute value.
 	 */
 	public static int getAbsoluteDifferent(Number number1, Number number2) {
-		ExceptionTools.nullCheck(number1);
-		ExceptionTools.nullCheck(number2);
+		SLExceptions.nullCheck(number1);
+		SLExceptions.nullCheck(number2);
 		return (Math.abs(number1.intValue() - number2.intValue()));
 	}
 
@@ -45,8 +45,8 @@ public class CalculationTools
 	 * @return The absolute value.
 	 */
 	public static double getAbsoluteDoubleDifferent(Number number1, Number number2) {
-		ExceptionTools.nullCheck(number1);
-		ExceptionTools.nullCheck(number2);
+		SLExceptions.nullCheck(number1);
+		SLExceptions.nullCheck(number2);
 		return (Math.abs(number1.doubleValue() - number2.doubleValue()));
 	}
 
@@ -168,7 +168,7 @@ public class CalculationTools
 	 *         Point(x2, y2).
 	 */
 	public static double distanceTo(int x1, int y1, int x2, int y2) {
-		throw ExceptionTools.nyi();
+		throw SLExceptions.nyi();
 	} // TODO - TRiLeZ - Have I already created a method for this yet?
 
 	/**
@@ -299,8 +299,8 @@ public class CalculationTools
 	 * @return A value that is greater than or equal to the specified min value.
 	 */
 	public static <T extends Number> T clampMin(T value, T min) {
-		ExceptionTools.nullCheck(value);
-		ExceptionTools.nullCheck(min);
+		SLExceptions.nullCheck(value);
+		SLExceptions.nullCheck(min);
 
 		if (value.doubleValue() < min.doubleValue())
 			return min;
@@ -323,8 +323,8 @@ public class CalculationTools
 	 * @return A value that is less than or equal to the specified max value.
 	 */
 	public static <T extends Number> T clampMax(T value, T max) {
-		ExceptionTools.nullCheck(value);
-		ExceptionTools.nullCheck(max);
+		SLExceptions.nullCheck(value);
+		SLExceptions.nullCheck(max);
 
 		if (value.doubleValue() > max.doubleValue())
 			return max;
@@ -351,9 +351,9 @@ public class CalculationTools
 	 * @return A value that is between the specified min and max values.
 	 */
 	public static <T extends Number> T clamp(T value, T min, T max) {
-		ExceptionTools.nullCheck(value);
-		ExceptionTools.nullCheck(min);
-		ExceptionTools.nullCheck(max);
+		SLExceptions.nullCheck(value);
+		SLExceptions.nullCheck(min);
+		SLExceptions.nullCheck(max);
 
 		if (value.doubleValue() < min.doubleValue())
 			value = min;
@@ -365,7 +365,7 @@ public class CalculationTools
 	// </editor-fold>
 
 	public static void generateStraightPath(final Point start, final Point end, final Consumer<Point> point_consumer) {
-		CalculationTools.generateStraightPath(start, end, point_consumer, true);
+		SLCalculations.generateStraightPath(start, end, point_consumer, true);
 	}
 
 	public static void generateStraightPath(final Point start, final Point end, final Consumer<Point> point_consumer,
@@ -412,7 +412,7 @@ public class CalculationTools
 	}
 
 	public static List<Point> generateStraightPath(final Point start, final Point end) {
-		return CalculationTools.generateStraightPath(start, end, true);
+		return SLCalculations.generateStraightPath(start, end, true);
 	}
 
 	public static List<Point> generateStraightPath(final Point start, final Point end,
@@ -433,7 +433,7 @@ public class CalculationTools
 
 		final List<Point> arr = new ArrayList<>((int) points + 2);
 
-		CalculationTools.generateStraightPath(start, end, p -> arr.add(p), add_start);
+		SLCalculations.generateStraightPath(start, end, p -> arr.add(p), add_start);
 
 		return arr;
 	}
@@ -512,7 +512,7 @@ public class CalculationTools
 		double sum = 0;
 
 		for (int i = 0; i < steps; i++)
-			sum -= (table[i] = -CalculationTools.gaussian(i * step));
+			sum -= (table[i] = -SLCalculations.gaussian(i * step));
 
 		for (int i = 0; i < steps; i++)
 			table[i] /= sum;
@@ -587,12 +587,12 @@ public class CalculationTools
 		final double end_y = end.getY();
 
 		line.stream().limit(line.size() - 1).skip(1).forEach(p -> {
-			final double angle = CalculationTools.getAngle(start_x, start_y, p.getX(), p.getY(), end_x, end_y)
-					* CalculationTools.RAD_TO_DEG_NEG;
+			final double angle = SLCalculations.getAngle(start_x, start_y, p.getX(), p.getY(), end_x, end_y)
+                                 * SLCalculations.RAD_TO_DEG_NEG;
 			if (angle == 0)
 				return;
 
-			final double[] rt = CalculationTools.getRotatedPoint(start_x, start_y, p.getX(), p.getY(), angle * 2.0);
+			final double[] rt = SLCalculations.getRotatedPoint(start_x, start_y, p.getX(), p.getY(), angle * 2.0);
 
 			p.setLocation(rt[0], rt[1]);
 		});
@@ -604,19 +604,19 @@ public class CalculationTools
 		if (line.size() < 2)
 			return p;
 
-		return CalculationTools.flipLinePoint(line.get(0), line.get(line.size() - 1), p);
+		return SLCalculations.flipLinePoint(line.get(0), line.get(line.size() - 1), p);
 	}
 
 	public static Point flipLinePoint(final Point start, final Point end, final Point p) {
 		final double start_x = start.getX();
 		final double start_y = start.getY();
 
-		final double angle = CalculationTools.getAngle(start_x, start_y, p.getX(), p.getY(), end.getX(), end.getY())
-				* CalculationTools.RAD_TO_DEG_NEG;
+		final double angle = SLCalculations.getAngle(start_x, start_y, p.getX(), p.getY(), end.getX(), end.getY())
+                             * SLCalculations.RAD_TO_DEG_NEG;
 		if (angle == 0)
 			return p;
 
-		final double[] rt = CalculationTools.getRotatedPoint(start_x, start_y, p.x, p.y, angle * 2.0);
+		final double[] rt = SLCalculations.getRotatedPoint(start_x, start_y, p.x, p.y, angle * 2.0);
 
 		p.setLocation(rt[0], rt[1]);
 

@@ -15,7 +15,7 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 // TODO - Convert to non-static
-public class ArrayTools {
+public class SLArrays {
     /**
      * <p>Sorts the specified {@link List} using the {@link Comparator#naturalOrder() Natural Order} as the {@link Comparator}.</p>
      * <hr>
@@ -45,7 +45,7 @@ public class ArrayTools {
      * <p>Returns the {@link T element} at the specified {@code movedToIndex} using <i>{@code () -> null}</i> as the {@link Supplier Fallback Supplier}.</p>
      * <p><b>Passthrough Definition</b></p>
      * <blockquote><i><code>
-     * {@link ArrayTools}<b>.</b>{@link ArrayTools#getAt(int, List, Supplier, Supplier) getAt}<b>(</b>{@code movedToIndex}<b>,</b> {@code list}<b>,</b> <u>{@code () -> null)}</u><b>,</b> <u>{@code () -> null)}</u><b>)</b>
+     * {@link SLArrays}<b>.</b>{@link SLArrays#getAt(int, List, Supplier, Supplier) getAt}<b>(</b>{@code movedToIndex}<b>,</b> {@code list}<b>,</b> <u>{@code () -> null)}</u><b>,</b> <u>{@code () -> null)}</u><b>)</b>
      * </code></i></blockquote>
      *
      * @param index The {@code movedToIndex} to {@link List#get(int) retrieve} the desired {@link T element} from.
@@ -63,7 +63,7 @@ public class ArrayTools {
      * <p>Returns the {@link T element} at the specified {@code movedToIndex} using optional {@link Supplier Fallback Supplier} to handle all types of invalid queries.</p>
      * <p><b>Passthrough Definition</b></p>
      * <blockquote><i><code>
-     * {@link ArrayTools}<b>.</b>{@link ArrayTools#getAt(int, List, Supplier, Supplier) getAt}<b>(</b>{@code movedToIndex}<b>,</b> {@code list}<b>,</b> {@code fallbackSupplier}<b>,</b> {@code fallbackSupplier}<b>)</b>
+     * {@link SLArrays}<b>.</b>{@link SLArrays#getAt(int, List, Supplier, Supplier) getAt}<b>(</b>{@code movedToIndex}<b>,</b> {@code list}<b>,</b> {@code fallbackSupplier}<b>,</b> {@code fallbackSupplier}<b>)</b>
      * </code></i></blockquote>
      *
      * @param index            The {@code movedToIndex} to {@link List#get(int) retrieve} the desired {@link T element} from.
@@ -138,7 +138,7 @@ public class ArrayTools {
      * @throws NullPointerException      If the {@link T element} at the specified {@code movedToIndex} is {@code null} and the {@link Supplier ifNullFallbackSupplier} was not specified.
      */
     public static <T> T getAt(@NonNegative int index, @NotNull List<T> list, @Nullable Supplier<T> ifInvalidIndexFallbackSupplier, @Nullable Supplier<T> ifNullFallbackSupplier) {
-        ExceptionTools.nullCheck(list, "List cannot be null.");
+        SLExceptions.nullCheck(list, "List cannot be null.");
         
         T value;
         
@@ -148,11 +148,11 @@ public class ArrayTools {
                 if (ifNullFallbackSupplier != null)
                     value = ifNullFallbackSupplier.get();
                 else
-                    throw ExceptionTools.ex(new NullPointerException(), "Value at movedToIndex [" + index + "] is null, but ifNull fallback Supplier was not provided.");
+                    throw SLExceptions.ex(new NullPointerException(), "Value at movedToIndex [" + index + "] is null, but ifNull fallback Supplier was not provided.");
         } else if (ifInvalidIndexFallbackSupplier != null)
             value = ifInvalidIndexFallbackSupplier.get();
         else
-            throw ExceptionTools.ex(new IndexOutOfBoundsException(), "Index value [" + index + "] is not valid for List:  " + list);
+            throw SLExceptions.ex(new IndexOutOfBoundsException(), "Index value [" + index + "] is not valid for List:  " + list);
         
         return value;
     }
@@ -179,7 +179,7 @@ public class ArrayTools {
     public static <T> T[] filterDuplicatesArray(T[] arr) {
         if (arr.length < 1)
             return arr;
-        HashSet<T> set = new LinkedHashSet<>(Arrays.asList(arr));
+        HashSet<T> set = new LinkedHashSet<>(java.util.Arrays.asList(arr));
         return set.toArray((T[]) Array.newInstance(arr.getClass(), set.size()));
     }
     
@@ -196,7 +196,7 @@ public class ArrayTools {
      * @return An ArrayList with the duplicates filtered out.
      */
     public static <T> ArrayList<T> filterDuplicatesList(T[] arr) {
-        return new ArrayList<>(Arrays.asList(filterDuplicatesArray(arr)));
+        return new ArrayList<>(java.util.Arrays.asList(filterDuplicatesArray(arr)));
     }
     
     /**
@@ -242,7 +242,7 @@ public class ArrayTools {
      * @return The element at the specified movedToIndex of the specified array.
      */
     public static <T> T getElementAt(int index, T[] arr) {
-        return getElementAt(index, Arrays.asList(arr));
+        return getElementAt(index, java.util.Arrays.asList(arr));
     }
     
     /**
@@ -284,7 +284,7 @@ public class ArrayTools {
     @SafeVarargs
     @SuppressWarnings("varargs")
     public static <T> T getElement(T element, T... arr) {
-        return getElement(element, new ArrayList<>(Arrays.asList(arr)));
+        return getElement(element, new ArrayList<>(java.util.Arrays.asList(arr)));
     }
     
     /**
@@ -429,7 +429,7 @@ public class ArrayTools {
         else if (offset <= 0 || offset > 1)
             return -1;
         final int[] sortedArr = arr.clone();
-        Arrays.sort(sortedArr);
+        java.util.Arrays.sort(sortedArr);
         if (sortedArr.length == 0)
             return -1;
         else if ((int) (sortedArr.length * offset) <= 0)
@@ -530,7 +530,7 @@ public class ArrayTools {
     }
     
     public static <T> T[] createAndFillArray(List<T> list, Class<T> clazz) {
-        T[] arr = createArray((Class<T[]>) GeneralTools.get().getArrayClass(clazz), list.size());
+        T[] arr = createArray((Class<T[]>) SLTools.get().getArrayClass(clazz), list.size());
         if (arr != null)
             for (int i = 0; i < list.size(); i++) {
                 T element = list.get(i);
@@ -558,7 +558,7 @@ public class ArrayTools {
      * @see #getMapValues(Map, List)
      */
     public static <V> ArrayList<V> getMapValues(Map<?, V> map) {
-        return (ArrayList<V>) getMapValues(ExceptionTools.nullCheck(map, "Map"), null);
+        return (ArrayList<V>) getMapValues(SLExceptions.nullCheck(map, "Map"), null);
     }
     
     /**
@@ -577,13 +577,13 @@ public class ArrayTools {
      * @see #getMapValues(Map)
      */
     public static <V> List<V> getMapValues(Map<?, V> map, List<V> targetList) {
-        Collection<V> _mapContents = ExceptionTools.nullCheck(map, "Map").values();
+        Collection<V> _mapContents = SLExceptions.nullCheck(map, "Map").values();
         
         if (targetList == null)
             return new ArrayList<>(_mapContents);
         
         if (!targetList.addAll(_mapContents))
-            throw ExceptionTools.ex("Failed to add contents of map (" + map + ")" + " to target list (" + targetList + ")");
+            throw SLExceptions.ex("Failed to add contents of map (" + map + ")" + " to target list (" + targetList + ")");
         
         return targetList;
     }
@@ -664,7 +664,7 @@ public class ArrayTools {
      * @param <T>  The type of {@link T element} being added.
      */
     public static <T> void addToFront(List<T> list, T obj) {
-        ExceptionTools.nullCheck(list, "List").add(0, ExceptionTools.nullCheck(obj, "Object Param"));
+        SLExceptions.nullCheck(list, "List").add(0, SLExceptions.nullCheck(obj, "Object Param"));
     }
     
     // </editor-fold>
@@ -694,7 +694,7 @@ public class ArrayTools {
      * @throws NullPointerException If the specified {@code List} is {@code null}.
      */
     public static <T> boolean insertAfter(List<T> list, T searchElement, T objToInsert) {
-        throw ExceptionTools.nyi();
+        throw SLExceptions.nyi();
     } // TODO
     
     /**
@@ -720,7 +720,7 @@ public class ArrayTools {
      * @throws NullPointerException If the specified {@code List} is {@code null}.
      */
     public static <T> boolean insertBefore(List<T> list, T searchElement, T objToInsert) {
-        throw ExceptionTools.nyi();
+        throw SLExceptions.nyi();
     } // TODO
     
     //
@@ -775,8 +775,8 @@ public class ArrayTools {
     //
     
     public static <V> boolean remove(Map<?, V> map, V obj) {
-        ExceptionTools.nullCheck(map, "Map");
-        ExceptionTools.nullCheck(obj, "Object to Remove");
+        SLExceptions.nullCheck(map, "Map");
+        SLExceptions.nullCheck(obj, "Object to Remove");
         //        ConsoleBB.CONSOLE.dev("Removing \"" + obj + "\" from \"" + map + "\"");
         
         // DO NOT SIMPLIFY: removeAll(obj) would only remove the first instance.
@@ -784,8 +784,8 @@ public class ArrayTools {
     }
     
     public static <V> boolean removeFirst(Map<?, V> map, V obj) {
-        ExceptionTools.nullCheck(map, "Map");
-        ExceptionTools.nullCheck(obj, "Object to Remove");
+        SLExceptions.nullCheck(map, "Map");
+        SLExceptions.nullCheck(obj, "Object to Remove");
         
         return map.values().remove(obj);
     }
@@ -938,7 +938,7 @@ public class ArrayTools {
      */
     @SafeVarargs
     public static <T> boolean containsAny(T[] array, T... elements) {
-        return array != null && containsAny(Arrays.asList(array), elements);
+        return array != null && containsAny(java.util.Arrays.asList(array), elements);
     }
     
     /**
@@ -973,7 +973,7 @@ public class ArrayTools {
      * specified {@link Predicate}, false otherwise.
      */
     public static <T> boolean containsAnyMatching(T[] array, Predicate<T> filter) {
-        return array != null && Arrays.stream(array).anyMatch(filter);
+        return array != null && java.util.Arrays.stream(array).anyMatch(filter);
     }
     
     /**
@@ -1006,7 +1006,7 @@ public class ArrayTools {
      */
     @SafeVarargs
     public static <T> boolean containsAll(T[] array, T... elements) {
-        return array != null && elements != null && Arrays.asList(array).containsAll(Arrays.asList(elements));
+        return array != null && elements != null && java.util.Arrays.asList(array).containsAll(java.util.Arrays.asList(elements));
     }
     
     /**
@@ -1025,7 +1025,7 @@ public class ArrayTools {
      */
     @SafeVarargs
     public static <T> boolean containsAll(Collection<T> collection, T... elements) {
-        return collection != null && elements != null && collection.containsAll(Arrays.asList(elements));
+        return collection != null && elements != null && collection.containsAll(java.util.Arrays.asList(elements));
     }
     
     /**
@@ -1127,12 +1127,12 @@ public class ArrayTools {
      */
     // TO-DOC
     public static <T> List<Object> purge(@NotNull Collection<Object> collection, @NotNull Class<T> clazz) {
-        throw ExceptionTools.nyi();
+        throw SLExceptions.nyi();
     }
     
     /**
      * <p><b>Passthrough Definition</b></p>
-     * <blockquote><i><code>{@link ArrayTools}<b>.</b>{@link #containsType(Collection, Class, boolean, boolean, boolean) containsType}<b>(</b>collection<b>,</b> clazz<b>,</b> <u>false</u><b>,</b> <u>false</u><b>,</b> <u>true</u><b>)</b></code></i></blockquote>
+     * <blockquote><i><code>{@link SLArrays}<b>.</b>{@link #containsType(Collection, Class, boolean, boolean, boolean) containsType}<b>(</b>collection<b>,</b> clazz<b>,</b> <u>false</u><b>,</b> <u>false</u><b>,</b> <u>true</u><b>)</b></code></i></blockquote>
      *
      * @param collection The {@link Collection} being iterated.
      * @param clazz      The {@link Class type} of {@link Object} to scan for when iterating the specified {@link Collection}.
@@ -1146,7 +1146,7 @@ public class ArrayTools {
     
     /**
      * <p><b>Passthrough Definition</b></p>
-     * <blockquote><i><code>{@link ArrayTools}<b>.</b>{@link #containsType(Collection, Class, boolean, boolean, boolean) containsType}<b>(</b>collection<b>,</b> clazz<b>,</b> <u>false</u><b>,</b> <u>false</u><b>,</b> <u>false</u><b>)</b></code></i></blockquote>
+     * <blockquote><i><code>{@link SLArrays}<b>.</b>{@link #containsType(Collection, Class, boolean, boolean, boolean) containsType}<b>(</b>collection<b>,</b> clazz<b>,</b> <u>false</u><b>,</b> <u>false</u><b>,</b> <u>false</u><b>)</b></code></i></blockquote>
      *
      * @param collection The {@link Collection} being iterated.
      * @param clazz      The {@link Class type} of {@link Object} to scan for when iterating the specified {@link Collection}.
@@ -1173,7 +1173,7 @@ public class ArrayTools {
     public static boolean containsType(@NotNull Collection<?> collection, @NotNull Class<?> clazz, boolean allowNullElements, boolean allowEmpty, boolean requireAll) {
         // If the collection instance is null, throw a NPE.
         // If the collection is empty, return the value of the specified allowEmpty boolean.
-        if (ExceptionTools.nullCheck(collection, "Collection Parameter").isEmpty())
+        if (SLExceptions.nullCheck(collection, "Collection Parameter").isEmpty())
             return allowEmpty;
         
         // Keeps track of whether a valid element has been found or not.
@@ -1219,7 +1219,7 @@ public class ArrayTools {
      * @throws NullPointerException If the specified {@code Collection} is null.
      */
     public static <V> ArrayList<V> copy(Collection<V> collection) {
-        return new ArrayList<>(ExceptionTools.nullCheck(collection, "Collection"));
+        return new ArrayList<>(SLExceptions.nullCheck(collection, "Collection"));
     }
     
     /**
@@ -1235,7 +1235,7 @@ public class ArrayTools {
      * @throws NullPointerException If the specified {@code Map} is null.
      */
     public static <K, V> Map<K, V> copy(Map<K, V> map) {
-        HashMap<K, V> _map = new HashMap<>(ExceptionTools.nullCheck(map, "Map").size());
+        HashMap<K, V> _map = new HashMap<>(SLExceptions.nullCheck(map, "Map").size());
         _map.putAll(map);
         return _map;
     }
@@ -1532,7 +1532,7 @@ public class ArrayTools {
      * default toString method of {@link List}.
      */
     public static String toString(Object... arr) {
-        return toString(Arrays.asList(arr));
+        return toString(java.util.Arrays.asList(arr));
     }
     
     /**
@@ -1575,7 +1575,7 @@ public class ArrayTools {
      * default toString method of {@link List}.
      */
     public static String toClassString(Object... arr) {
-        return toClassString(Arrays.asList(arr));
+        return toClassString(java.util.Arrays.asList(arr));
     }
     
     /**
@@ -1593,7 +1593,7 @@ public class ArrayTools {
         if (list != null) {
             ArrayList<String> stringArr = new ArrayList<>(list.size());
             for (Object obj: list)
-                stringArr.add(obj == null ? "null" : GeneralTools.get().getSimpleName(obj.getClass()));
+                stringArr.add(obj == null ? "null" : SLTools.get().getSimpleName(obj.getClass()));
             return stringArr.toString();
         }
         return null;
@@ -1657,7 +1657,7 @@ public class ArrayTools {
          */
         public static <T> void shift(T[] arr, int... stopPoints) {
             if (arr != null && stopPoints != null && stopPoints.length > 0) {
-                Arrays.sort(stopPoints);
+                java.util.Arrays.sort(stopPoints);
                 stopPoints = concat(concat(new int[]{0}, stopPoints), new int[]{arr.length});
                 for (int i = stopPoints.length - 1; i > 0; i--) {
                     int currentStopPoint = stopPoints[i];
@@ -1894,13 +1894,13 @@ public class ArrayTools {
                 T[] sourceArr, Z[] targetArr, ElementCopier<T, Z> copier,
                 Supplier<Z> onNull) {
             if (sourceArr == null)
-                throw ExceptionTools.ex(new NullPointerException("Source array cannot be null"));
+                throw SLExceptions.ex(new NullPointerException("Source array cannot be null"));
             else if (targetArr == null)
-                throw ExceptionTools.ex(new NullPointerException("Target array cannot be null"));
+                throw SLExceptions.ex(new NullPointerException("Target array cannot be null"));
             else if (copier == null)
-                throw ExceptionTools.ex(new NullPointerException("ElementCopier cannot be null"));
+                throw SLExceptions.ex(new NullPointerException("ElementCopier cannot be null"));
             else if (sourceArr.length != targetArr.length)
-                throw ExceptionTools
+                throw SLExceptions
                         .ex(new IndexOutOfBoundsException("Source array length must equal target array length"));
             for (int i = 0; i < sourceArr.length; i++) {
                 if (sourceArr[i] != null)

@@ -1,7 +1,7 @@
 package com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas;
 
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.PropertyTools;
+import com.taco.suit_lady.util.tools.SLProperties;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import org.jetbrains.annotations.NotNull;
@@ -15,6 +15,7 @@ public abstract class ShapePainter extends CanvasPainter {
     
     public ShapePainter(@NotNull Springable springable, @Nullable ReentrantLock lock) {
         super(springable, lock);
+        
         this.isFillProperty = new SimpleBooleanProperty(false);
     }
     
@@ -22,7 +23,7 @@ public abstract class ShapePainter extends CanvasPainter {
     
     public final BooleanProperty isFillProperty() { return isFillProperty; }
     public final boolean isFill() { return isFillProperty.get(); }
-    public final boolean setIsFill(boolean newValue) { return PropertyTools.setProperty(isFillProperty, newValue); }
+    public final boolean setIsFill(boolean newValue) { return SLProperties.setProperty(isFillProperty, newValue); }
     
     //</editor-fold>
 }

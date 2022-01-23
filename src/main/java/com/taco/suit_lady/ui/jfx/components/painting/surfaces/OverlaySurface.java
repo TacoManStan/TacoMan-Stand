@@ -9,7 +9,7 @@ import com.taco.suit_lady.ui.jfx.components.painting.paintables.overlay.OverlayP
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
-import com.taco.suit_lady.util.tools.ExceptionTools;
+import com.taco.suit_lady.util.tools.SLExceptions;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import com.taco.suit_lady.util.tools.list_tools.ListTools;
 import javafx.beans.property.ReadOnlyIntegerProperty;
@@ -82,7 +82,7 @@ public class OverlaySurface
      * @param paintPriority The priority of this {@link OverlaySurface}.
      */
     public OverlaySurface(@NotNull Springable springable, @Nullable ReentrantLock lock, @Nullable String name, int paintPriority) {
-        this.springable = ExceptionTools.nullCheck(springable, "Springable Input").asStrict();
+        this.springable = SLExceptions.nullCheck(springable, "Springable Input").asStrict();
         this.lock = lock; // Null-checking is done in get method via lazy instantiation
         
         this.nameProperty = new ReadOnlyStringWrapper(name);
@@ -150,7 +150,7 @@ public class OverlaySurface
     public final int getPaintPriority() { return paintPriorityProperty.get(); }
     public final void setPaintPriority(int paintPriority) {
         if (paintPriority <= 0)
-            throw ExceptionTools.ex(new IndexOutOfBoundsException("Paint Priority Must Be Greater Than Zero! [" + paintPriority + "]"));
+            throw SLExceptions.ex(new IndexOutOfBoundsException("Paint Priority Must Be Greater Than Zero! [" + paintPriority + "]"));
         paintPriorityProperty.set(paintPriority);
     }
     
@@ -198,7 +198,7 @@ public class OverlaySurface
             return addPaintable(paintNode);
         else if (paintable instanceof CanvasPainter canvasPainter)
             return foregroundCanvasPane.canvas().addPaintable(canvasPainter);
-        throw ExceptionTools.unsupported("Unknown Paintable Type: " + paintable.getClass().getSimpleName());
+        throw SLExceptions.unsupported("Unknown Paintable Type: " + paintable.getClass().getSimpleName());
     }
     
     /**
@@ -220,6 +220,6 @@ public class OverlaySurface
             return removePaintableV2(paintNode);
         else if (paintable instanceof CanvasPainter canvasPainter)
             return foregroundCanvasPane.canvas().removePaintableV2(canvasPainter);
-        throw ExceptionTools.unsupported("Unknown Paintable Type: " + paintable.getClass().getSimpleName());
+        throw SLExceptions.unsupported("Unknown Paintable Type: " + paintable.getClass().getSimpleName());
     }
 }

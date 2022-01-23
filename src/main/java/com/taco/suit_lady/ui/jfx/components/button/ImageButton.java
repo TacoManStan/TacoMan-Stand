@@ -4,9 +4,9 @@ import com.taco.suit_lady.logic.LogiCore;
 import com.taco.suit_lady.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
-import com.taco.suit_lady.util.tools.BindingTools;
-import com.taco.suit_lady.util.tools.ExceptionTools;
-import com.taco.suit_lady.util.tools.ResourceTools;
+import com.taco.suit_lady.util.tools.SLBindings;
+import com.taco.suit_lady.util.tools.SLExceptions;
+import com.taco.suit_lady.util.tools.SLResources;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import com.taco.tacository.obj_traits.common.Nameable;
 import javafx.beans.InvalidationListener;
@@ -96,7 +96,7 @@ public class ImageButton
             @Nullable Point2D size) {
         this(springable,
              name,
-             BindingTools.createStringBinding(imageId),
+             SLBindings.createStringBinding(imageId),
              imagePane,
              actionResponder,
              actionResponderFX,
@@ -222,8 +222,8 @@ public class ImageButton
         });
         
         
-        this.hoveredBinding = BindingTools.createBooleanBinding(this.imagePane.hoverProperty());
-        this.pressedBinding = BindingTools.createBooleanBinding(this.imagePane.pressedProperty());
+        this.hoveredBinding = SLBindings.createBooleanBinding(this.imagePane.hoverProperty());
+        this.pressedBinding = SLBindings.createBooleanBinding(this.imagePane.pressedProperty());
         
         
         this.paintData = new PaintData("");
@@ -303,7 +303,7 @@ public class ImageButton
     private void initPropertyListeners() {
         selectedProperty.addListener((observable, oldValue, newValue) -> {
             if (newValue && !isToggleable())
-                throw ExceptionTools.unsupported("Image Button \"" + getName() + "\" is not toggleable and can therefore not be selected.");
+                throw SLExceptions.unsupported("Image Button \"" + getName() + "\" is not toggleable and can therefore not be selected.");
         });
         
         showTooltipProperty.addListener((observable, oldValue, newValue) -> updateTooltip());
@@ -427,7 +427,7 @@ public class ImageButton
             case SUFFIX_SELECTED_HOVERED -> selectedHoveredPaintData;
             case SUFFIX_SELECTED_PRESSED -> selectedPressedPaintData;
             
-            default -> throw ExceptionTools.unsupported("Suffix \"" + suffix + "\" is not supported.");
+            default -> throw SLExceptions.unsupported("Suffix \"" + suffix + "\" is not supported.");
         };
     }
     
@@ -601,7 +601,7 @@ public class ImageButton
      * <p>Returns the {@link StringBinding} bound to the {@link #getName() name} of this {@link ImageButton}.</p>
      * <p><b>Details</b></p>
      * <ol>
-     *     <li>The {@link #getImageId() Image ID} is used to load references to the {@link ResourceTools#getImage(String, String, String) Cached} {@link Image Images}.</li>
+     *     <li>The {@link #getImageId() Image ID} is used to load references to the {@link SLResources#getImage(String, String, String) Cached} {@link Image Images}.</li>
      *     <li>Each {@link ButtonState state} results in a different variation of the same {@link Image} referenced by the {@link ImageButton} {@link #imageIdBinding() Image ID}.</li>
      *     <li>The <code><i>{@link #getImage()}</i></code> method returns the current {@link Image} variation displayed by this {@link ImageButton} based on its current {@link #getState() state}.</li>
      *     <li>
@@ -657,7 +657,7 @@ public class ImageButton
      *
      * @see #imageIdBinding()
      * @see #getPathIdOLD()
-     * @see ResourceTools#getImage(String, String, String)
+     * @see SLResources#getImage(String, String, String)
      */
     private @NotNull String getFormattedImageId() {
         return getImageId().replace(" ", "_").toLowerCase();
@@ -673,7 +673,7 @@ public class ImageButton
      *
      * @see #imageIdBinding()
      * @see #getFormattedImageId()
-     * @see ResourceTools#getImage(String, String, String)
+     * @see SLResources#getImage(String, String, String)
      */
     // TO-REMOVE
     private @NotNull String getPathIdOLD() {
@@ -997,7 +997,7 @@ public class ImageButton
      * @see #getSize()
      */
     public String getSizeID() {
-        throw ExceptionTools.nyi();
+        throw SLExceptions.nyi();
         //        // TODO - Eventually, different size parameters of the same image will be created, and this will allow access to the correct image.
         //        // The purpose of multiple identical image files of different sizes will provide additional size options that are guaranteed to provide a non-warped image.
         //        // This is because images can (and usually do) become warped/fuzzy when they are automatically resized.
@@ -1224,7 +1224,7 @@ public class ImageButton
         
         private @NotNull ObjectBinding<Image> generateImageBinding() {
             return Bindings.createObjectBinding(() -> {
-                Image image = ResourceTools.get().getImage(ImageButton.this.getPathId(), ImageButton.this.getFormattedImageId(), "png");
+                Image image = SLResources.get().getImage(ImageButton.this.getPathId(), ImageButton.this.getFormattedImageId(), "png");
                 if (image != null) {
                     WritableImage writableImage = new WritableImage((int) image.getWidth(), (int) image.getHeight());
                     PixelReader reader = image.getPixelReader();
@@ -1240,7 +1240,7 @@ public class ImageButton
                     return writableImage != null ? writableImage : missingno();
                 } else {
                     ImageButton.this.debugger().print("Image is null  [" + ImageButton.this.getName() + "_" + suffix + "]");
-                    image = ResourceTools.get().getImage(ImageButton.this.getPathIdOLD(), ImageButton.this.getFormattedImageId() + suffix, "png");
+                    image = SLResources.get().getImage(ImageButton.this.getPathIdOLD(), ImageButton.this.getFormattedImageId() + suffix, "png");
                     return image != null ? image : missingno();
                 }
             }, ImageButton.this.imageIdBinding(), foregroundColorProperty, backgroundColorProperty);
@@ -1323,7 +1323,7 @@ public class ImageButton
          * @see #generateImageBinding()
          */
         private Image missingno() {
-            return ResourceTools.get().getImage("buttons/missingno/", "missingno" + suffix, "png");
+            return SLResources.get().getImage("buttons/missingno/", "missingno" + suffix, "png");
         }
         
         public final Color FOREGROUND = Color.BLACK;
