@@ -8,9 +8,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-public class BoxPainter extends ShapePainter {
+public class BoxPaintCommand extends ShapePaintCommand {
     
-    public BoxPainter(@NotNull Springable springable, @Nullable ReentrantLock lock) {
+    public BoxPaintCommand(@NotNull Springable springable, @Nullable ReentrantLock lock) {
         super(springable, lock);
     }
     
@@ -20,7 +20,7 @@ public class BoxPainter extends ShapePainter {
             FX.drawRectangle(getSurface(), bounds, false, isFill());
     }
     
-    @Override public @NotNull BoxPainter init() {
-        return (BoxPainter) super.init();
+    @Override public @NotNull BoxPaintCommand init() {
+        return (BoxPaintCommand) super.init();
     }
 }

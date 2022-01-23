@@ -13,12 +13,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-public abstract class ShapeOverlayPaintNode extends OverlayPaintNode {
+public abstract class ShapePaintNode extends PaintNode {
     
     private final ObjectProperty<Paint> fillProperty;
     private final ObjectProperty<Paint> strokeProperty;
     
-    public ShapeOverlayPaintNode(@NotNull Springable springable, @Nullable ReentrantLock lock) {
+    public ShapePaintNode(@NotNull Springable springable, @Nullable ReentrantLock lock) {
         super(springable, lock);
         
         this.fillProperty = new SimpleObjectProperty<>(Color.TRANSPARENT);

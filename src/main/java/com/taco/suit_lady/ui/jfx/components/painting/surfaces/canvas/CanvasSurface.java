@@ -1,6 +1,6 @@
 package com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas;
 
-import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.CanvasPainter;
+import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.PaintCommand;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.Surface;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.SurfaceData;
 import com.taco.suit_lady.util.springable.Springable;
@@ -18,12 +18,12 @@ import java.util.concurrent.locks.ReentrantLock;
  * <p>A {@link #isResizable() resizable} implementation of {@link Canvas}.</p>
  */
 public class CanvasSurface extends Canvas
-        implements Surface<CanvasPainter, CanvasSurface> {
+        implements Surface<PaintCommand, CanvasSurface> {
     
     private final ReadOnlyObjectWrapper<CanvasListener> canvasListenerProperty;
     private final ReadOnlyObjectWrapper<Image> imageProperty;
     
-    private final SurfaceData<CanvasPainter, CanvasSurface> data;
+    private final SurfaceData<PaintCommand, CanvasSurface> data;
     
     //<editor-fold desc="--- CONSTRUCTORS ---">
     
@@ -103,7 +103,7 @@ public class CanvasSurface extends Canvas
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull SurfaceData<CanvasPainter, CanvasSurface> data() { return data; }
+    @Override public @NotNull SurfaceData<PaintCommand, CanvasSurface> data() { return data; }
     
     @Override public @NotNull CanvasSurface repaint() {
         return sync(() -> FX.runFX(() -> {

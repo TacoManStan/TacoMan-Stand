@@ -5,7 +5,6 @@ import com.taco.suit_lady.ui.jfx.components.painting.paintables.PaintableData;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.OverlaySurface;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.Node;
@@ -14,14 +13,14 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-public abstract class OverlayPaintNode
-        implements SpringableWrapper, Paintable<OverlayPaintNode, OverlaySurface> {
+public abstract class PaintNode
+        implements SpringableWrapper, Paintable<PaintNode, OverlaySurface> {
     
-    private final PaintableData<OverlayPaintNode, OverlaySurface> data;
+    private final PaintableData<PaintNode, OverlaySurface> data;
     
     private final ReadOnlyObjectWrapper<Node> nodeProperty;
     
-    public OverlayPaintNode(@NotNull Springable springable, @Nullable ReentrantLock lock) {
+    public PaintNode(@NotNull Springable springable, @Nullable ReentrantLock lock) {
         this.data = new PaintableData<>(springable, lock, this);
         
         this.nodeProperty = new ReadOnlyObjectWrapper<>();
@@ -51,13 +50,13 @@ public abstract class OverlayPaintNode
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull PaintableData<OverlayPaintNode, OverlaySurface> data() { return data; }
+    @Override public @NotNull PaintableData<PaintNode, OverlaySurface> data() { return data; }
     
     @Override public void onAdd(OverlaySurface surface) { }
     @Override public void onRemove(OverlaySurface surface) { }
     
     
-    @Override public @NotNull OverlayPaintNode paint() {
+    @Override public @NotNull PaintNode paint() {
         refreshNodeImpl();
         return this;
     }

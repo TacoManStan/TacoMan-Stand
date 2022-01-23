@@ -12,12 +12,12 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 
-public abstract class CanvasPainter
-        implements SpringableWrapper, Paintable<CanvasPainter, CanvasSurface> {
+public abstract class PaintCommand
+        implements SpringableWrapper, Paintable<PaintCommand, CanvasSurface> {
     
-    private final PaintableData<CanvasPainter, CanvasSurface> data;
+    private final PaintableData<PaintCommand, CanvasSurface> data;
     
-    public CanvasPainter(@NotNull Springable springable, @Nullable ReentrantLock lock) {
+    public PaintCommand(@NotNull Springable springable, @Nullable ReentrantLock lock) {
         this.data = new PaintableData<>(springable, lock, this);
     }
     
@@ -30,13 +30,13 @@ public abstract class CanvasPainter
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull PaintableData<CanvasPainter, CanvasSurface> data() { return data; }
+    @Override public @NotNull PaintableData<PaintCommand, CanvasSurface> data() { return data; }
     
     @Override public void onAdd(CanvasSurface surface) { }
     @Override public void onRemove(CanvasSurface surface) { }
     
     
-    @Override public @NotNull CanvasPainter paint() {
+    @Override public @NotNull PaintCommand paint() {
         if (isActive())
             FX.runFX(() -> sync(() -> {
                 Predicate<CanvasSurface> autoRemoveCondition = getAutoRemoveCondition();

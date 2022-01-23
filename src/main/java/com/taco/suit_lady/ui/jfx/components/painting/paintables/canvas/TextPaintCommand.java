@@ -13,27 +13,27 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-public class TextPainter extends ShapePainter {
+public class TextPaintCommand extends ShapePaintCommand {
     
     private final StringProperty textProperty;
     private final IntegerProperty maxWidthProperty;
     
     //<editor-fold desc="--- CONSTRUCTORS ---">
     
-    public TextPainter(@NotNull Springable springable, @Nullable ReentrantLock lock) {
+    public TextPaintCommand(@NotNull Springable springable, @Nullable ReentrantLock lock) {
         this(springable, lock, null, 0);
     }
     
-    public TextPainter(@NotNull Springable springable, @Nullable ReentrantLock lock, int maxWidth) {
+    public TextPaintCommand(@NotNull Springable springable, @Nullable ReentrantLock lock, int maxWidth) {
         this(springable, lock, null, maxWidth);
     }
     
-    public TextPainter(@NotNull Springable springable, @Nullable ReentrantLock lock, @Nullable String text) {
+    public TextPaintCommand(@NotNull Springable springable, @Nullable ReentrantLock lock, @Nullable String text) {
         this(springable, lock, text, 0);
     }
     
     
-    public TextPainter(@NotNull Springable springable, @Nullable ReentrantLock lock, @Nullable String text, int maxWidth) {
+    public TextPaintCommand(@NotNull Springable springable, @Nullable ReentrantLock lock, @Nullable String text, int maxWidth) {
         super(springable, lock);
         
         this.textProperty = new SimpleStringProperty(text);
@@ -56,13 +56,13 @@ public class TextPainter extends ShapePainter {
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull TextPainter init() {
+    @Override public @NotNull TextPaintCommand init() {
         maxWidthProperty.addListener((observable, oldValue, newValue) -> {
             if (newValue.intValue() < 0)
                 throw SLExceptions.unsupported("Max Width must be non-negative (" + newValue.intValue() + ")");
         });
         
-        return (TextPainter) super.init();
+        return (TextPaintCommand) super.init();
     }
     
     @Override protected void onPaint() {

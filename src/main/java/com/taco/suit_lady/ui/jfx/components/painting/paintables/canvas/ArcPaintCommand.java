@@ -14,14 +14,14 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-public class ArcPainter extends ShapePainter {
+public class ArcPaintCommand extends ShapePaintCommand {
     
     private final DoubleProperty startAngleProperty;
     private final DoubleProperty arcExtentProperty;
     private final ObjectProperty<ArcType> closureProperty;
     
-    public ArcPainter(@NotNull Springable springable, @Nullable ReentrantLock lock,
-                      double startAngle, double arcExtent, @Nullable ArcType closure) {
+    public ArcPaintCommand(@NotNull Springable springable, @Nullable ReentrantLock lock,
+                           double startAngle, double arcExtent, @Nullable ArcType closure) {
         super(springable, lock);
         
         this.startAngleProperty = new SimpleDoubleProperty(startAngle);

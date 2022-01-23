@@ -2,10 +2,10 @@ package com.taco.suit_lady.ui.jfx.components.painting.surfaces;
 
 import com.taco.suit_lady._to_sort._new.interfaces.ReadOnlyNameableProperty;
 import com.taco.suit_lady.ui.jfx.components.painting.paintables.Paintable;
-import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.CanvasPainter;
+import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.PaintCommand;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasPane;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasSurface;
-import com.taco.suit_lady.ui.jfx.components.painting.paintables.overlay.OverlayPaintNode;
+import com.taco.suit_lady.ui.jfx.components.painting.paintables.overlay.PaintNode;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
@@ -25,7 +25,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 // TO-DOC
 public class OverlaySurface
-        implements SpringableWrapper, Lockable, ReadOnlyNameableProperty, Comparable<OverlaySurface>, Surface<OverlayPaintNode, OverlaySurface> {
+        implements SpringableWrapper, Lockable, ReadOnlyNameableProperty, Comparable<OverlaySurface>, Surface<PaintNode, OverlaySurface> {
     
     private final Springable springable;
     private final ReentrantLock lock;
@@ -39,7 +39,7 @@ public class OverlaySurface
     
     private final ReadOnlyIntegerWrapper paintPriorityProperty;
     
-    private final SurfaceData<OverlayPaintNode, OverlaySurface> data;
+    private final SurfaceData<PaintNode, OverlaySurface> data;
     
     //<editor-fold desc="--- CONSTRUCTORS ---">
     
@@ -66,7 +66,7 @@ public class OverlaySurface
     
     /**
      * <p><b>Fully-Parameterized Constructor</b></p>
-     * <p>Constructs a new {@link OverlaySurface} instance used to display a set of {@link OverlayPaintNode Paint Commands}.</p>
+     * <p>Constructs a new {@link OverlaySurface} instance used to display a set of {@link PaintNode Paint Commands}.</p>
      * <p><hr>
      * <p><b>Parameter Details</b></p>
      * <ol>
@@ -158,7 +158,7 @@ public class OverlaySurface
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">3.
     
-    @Override public @NotNull SurfaceData<OverlayPaintNode, OverlaySurface> data() { return data; }
+    @Override public @NotNull SurfaceData<PaintNode, OverlaySurface> data() { return data; }
     @Override public @NotNull OverlaySurface repaint() {
         sync(() -> paintables().forEach(paintable -> paintable.paint()));
         return this;
@@ -183,8 +183,8 @@ public class OverlaySurface
      * <p>Adds the specified {@link Paintable} instance to this {@link OverlaySurface}.</p>
      * <p><b>Details</b></p>
      * <ol>
-     *     <li>If the specified {@link Paintable} is an instance of {@link OverlayPaintNode}, the {@link Paintable} is {@link #addPaintable(Paintable) added} directly to this {@link OverlaySurface}.</li>
-     *     <li>If the specified {@link Paintable} is an instance of {@link CanvasPainter}, the {@link Paintable} is {@link CanvasSurface#addPaintable(Paintable) added} to the {@link #getForegroundCanvas() foreground canvas} of this {@link OverlaySurface}.</li>
+     *     <li>If the specified {@link Paintable} is an instance of {@link PaintNode}, the {@link Paintable} is {@link #addPaintable(Paintable) added} directly to this {@link OverlaySurface}.</li>
+     *     <li>If the specified {@link Paintable} is an instance of {@link PaintCommand}, the {@link Paintable} is {@link CanvasSurface#addPaintable(Paintable) added} to the {@link #getForegroundCanvas() foreground canvas} of this {@link OverlaySurface}.</li>
      *     <li>If the specified {@link Paintable} is of an unknown type, an {@link UnsupportedOperationException} is thrown.</li>
      *     <li>If the specified {@link Paintable} is {@code null}, a {@link NullPointerException} is thrown.</li>
      * </ol>
@@ -194,10 +194,10 @@ public class OverlaySurface
      * @return True if the specified {@link Paintable} was added successfully, false if it was not.
      */
     public boolean add(@NotNull Paintable<?, ?> paintable) {
-        if (paintable instanceof OverlayPaintNode paintNode)
+        if (paintable instanceof PaintNode paintNode)
             return addPaintable(paintNode);
-        else if (paintable instanceof CanvasPainter canvasPainter)
-            return foregroundCanvasPane.canvas().addPaintable(canvasPainter);
+        else if (paintable instanceof PaintCommand paintCommand)
+            return foregroundCanvasPane.canvas().addPaintable(paintCommand);
         throw SLExceptions.unsupported("Unknown Paintable Type: " + paintable.getClass().getSimpleName());
     }
     
@@ -205,8 +205,8 @@ public class OverlaySurface
      * <p>Removes the specified {@link Paintable} instance from this {@link OverlaySurface}.</p>
      * <p><b>Details</b></p>
      * <ol>
-     *     <li>If the specified {@link Paintable} is an instance of {@link OverlayPaintNode}, the {@link Paintable} is {@link #addPaintable(Paintable) removed} directly from this {@link OverlaySurface}.</li>
-     *     <li>If the specified {@link Paintable} is an instance of {@link CanvasPainter}, the {@link Paintable} is {@link CanvasSurface#addPaintable(Paintable) removed} from the {@link #getForegroundCanvas() foreground canvas} of this {@link OverlaySurface}.</li>
+     *     <li>If the specified {@link Paintable} is an instance of {@link PaintNode}, the {@link Paintable} is {@link #addPaintable(Paintable) removed} directly from this {@link OverlaySurface}.</li>
+     *     <li>If the specified {@link Paintable} is an instance of {@link PaintCommand}, the {@link Paintable} is {@link CanvasSurface#addPaintable(Paintable) removed} from the {@link #getForegroundCanvas() foreground canvas} of this {@link OverlaySurface}.</li>
      *     <li>If the specified {@link Paintable} is of an unknown type, an {@link UnsupportedOperationException} is thrown.</li>
      *     <li>If the specified {@link Paintable} is {@code null}, a {@link NullPointerException} is thrown.</li>
      * </ol>
@@ -216,10 +216,10 @@ public class OverlaySurface
      * @return True if the specified {@link Paintable} was removed successfully, false if it was not.
      */
     public boolean remove(@NotNull Paintable<?, ?> paintable) {
-        if (paintable instanceof OverlayPaintNode paintNode)
+        if (paintable instanceof PaintNode paintNode)
             return removePaintableV2(paintNode);
-        else if (paintable instanceof CanvasPainter canvasPainter)
-            return foregroundCanvasPane.canvas().removePaintableV2(canvasPainter);
+        else if (paintable instanceof PaintCommand paintCommand)
+            return foregroundCanvasPane.canvas().removePaintableV2(paintCommand);
         throw SLExceptions.unsupported("Unknown Paintable Type: " + paintable.getClass().getSimpleName());
     }
 }

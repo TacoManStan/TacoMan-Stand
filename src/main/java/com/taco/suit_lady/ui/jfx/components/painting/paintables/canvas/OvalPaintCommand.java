@@ -8,9 +8,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-public class OvalPainter extends ShapePainter {
+public class OvalPaintCommand extends ShapePaintCommand {
     
-    public OvalPainter(@NotNull Springable springable, @Nullable ReentrantLock lock) {
+    public OvalPaintCommand(@NotNull Springable springable, @Nullable ReentrantLock lock) {
         super(springable, lock);
     }
     
@@ -20,7 +20,7 @@ public class OvalPainter extends ShapePainter {
             FX.drawOval(getSurface(), bounds, false, isFill());
     }
     
-    @Override public @NotNull OvalPainter init() {
-        return (OvalPainter) super.init();
+    @Override public @NotNull OvalPaintCommand init() {
+        return (OvalPaintCommand) super.init();
     }
 }

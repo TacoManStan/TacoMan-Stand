@@ -6,8 +6,8 @@ import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotContentController.Mou
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotIterator.MandelbrotColor;
 import com.taco.suit_lady.ui.jfx.components.painting.paintables.Paintable;
 import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.*;
-import com.taco.suit_lady.ui.jfx.components.painting.paintables.overlay.BoxOverlayPaintNode;
-import com.taco.suit_lady.ui.jfx.components.painting.paintables.overlay.ImageOverlayPaintNode;
+import com.taco.suit_lady.ui.jfx.components.painting.paintables.overlay.BoxPaintNode;
+import com.taco.suit_lady.ui.jfx.components.painting.paintables.overlay.ImagePaintNode;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasSurface;
 import com.taco.suit_lady.ui.pages.impl.content_selector.ListableContent;
 import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotContentHandler;
@@ -43,14 +43,14 @@ public class MandelbrotContent extends ListableContent<
     
     private final MandelbrotIterator iterator;
     
-    private final BoxPainter boxPainter;
-    private final OvalPainter ovalPainter;
-    private final ArcPainter arcPainter;
-    private final ImagePainter imagePainter;
-    private final TextPainter textPainter;
+    private final BoxPaintCommand boxPainter;
+    private final OvalPaintCommand ovalPainter;
+    private final ArcPaintCommand arcPainter;
+    private final ImagePaintCommand imagePainter;
+    private final TextPaintCommand textPainter;
     
-    private final BoxOverlayPaintNode boxOverlayPainter;
-    private final ImageOverlayPaintNode imageOverlayPainter;
+    private final BoxPaintNode boxOverlayPainter;
+    private final ImagePaintNode imageOverlayPainter;
     
     private final Paintable<?, ?>[] paintables;
     
@@ -76,14 +76,14 @@ public class MandelbrotContent extends ListableContent<
         
         //
         
-        this.boxPainter = new BoxPainter(this, lock);
-        this.ovalPainter = new OvalPainter(this, lock);
-        this.arcPainter = new ArcPainter(this, lock, 30, 30, ArcType.ROUND);
-        this.imagePainter = new ImagePainter(this, lock);
-        this.textPainter = new TextPainter(this, lock, "Test Text");
+        this.boxPainter = new BoxPaintCommand(this, lock);
+        this.ovalPainter = new OvalPaintCommand(this, lock);
+        this.arcPainter = new ArcPaintCommand(this, lock, 30, 30, ArcType.ROUND);
+        this.imagePainter = new ImagePaintCommand(this, lock);
+        this.textPainter = new TextPaintCommand(this, lock, "Test Text");
         
-        this.boxOverlayPainter = new BoxOverlayPaintNode(this, lock);
-        this.imageOverlayPainter = new ImageOverlayPaintNode(this, lock);
+        this.boxOverlayPainter = new BoxPaintNode(this, lock);
+        this.imageOverlayPainter = new ImagePaintNode(this, lock);
         
         Arrays.stream(paintables = new Paintable[]{ovalPainter, imagePainter, boxOverlayPainter})
               .forEach(paintable -> getOverlayHandler().getDefaultOverlay().add(paintable.init()));

@@ -13,11 +13,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-public class ImagePainter extends CanvasPainter {
+public class ImagePaintCommand extends PaintCommand {
     
     private final ObjectProperty<Image> imageProperty;
     
-    public ImagePainter(@NotNull Springable springable, @Nullable ReentrantLock lock) {
+    public ImagePaintCommand(@NotNull Springable springable, @Nullable ReentrantLock lock) {
         super(springable, lock);
         this.imageProperty = new SimpleObjectProperty<>();
     }
@@ -32,11 +32,11 @@ public class ImagePainter extends CanvasPainter {
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull ImagePainter init() {
+    @Override public @NotNull ImagePaintCommand init() {
         imageProperty.addListener((observable, oldValue, newValue) -> repaintSurface());
         imageProperty.set(SLResources.getDummyImage(SLResources.MAP));
         
-        return (ImagePainter) super.init();
+        return (ImagePaintCommand) super.init();
     }
     
     @Override protected void onPaint() {

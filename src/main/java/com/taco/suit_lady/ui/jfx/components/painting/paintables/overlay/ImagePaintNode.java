@@ -9,11 +9,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-public class ImageOverlayPaintNode extends OverlayPaintNode {
+public class ImagePaintNode extends PaintNode {
     
     private final ImageView imageView;
     
-    public ImageOverlayPaintNode(@NotNull Springable springable, @Nullable ReentrantLock lock) {
+    public ImagePaintNode(@NotNull Springable springable, @Nullable ReentrantLock lock) {
         super(springable, lock);
         this.imageView = new ImageView(SLResources.getDummyImage(SLResources.AVATAR));
     }

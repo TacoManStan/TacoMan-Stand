@@ -8,24 +8,22 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-public class BoxOverlayPaintNode extends ShapeOverlayPaintNode {
+public class BoxPaintNode extends ShapePaintNode {
     
     private final Rectangle shape;
     
-    public BoxOverlayPaintNode(@NotNull Springable springable, @Nullable ReentrantLock lock) {
+    public BoxPaintNode(@NotNull Springable springable, @Nullable ReentrantLock lock) {
         super(springable, lock);
         this.shape = new Rectangle();
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull OverlayPaintNode init() {
-        super.init();
-        
+    @Override public @NotNull BoxPaintNode init() {
         this.shape.fillProperty().bind(fillProperty());
         this.shape.strokeProperty().bind(strokeProperty());
         
-        return this;
+        return (BoxPaintNode) super.init();
     }
     
     @Override protected Rectangle refreshNode() { return shape; }
