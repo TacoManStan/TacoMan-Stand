@@ -7,7 +7,7 @@ import com.taco.suit_lady.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.ui.jfx.lists.CellControlManager;
 import com.taco.suit_lady.ui.jfx.lists.ListCellFX;
 import com.taco.suit_lady.util.tools.TB;
-import com.taco.suit_lady.util.tools.TaskTools;
+import com.taco.suit_lady.util.tools.SLTasks;
 import com.taco.suit_lady.util.tools.fx_tools.FXTools;
 import com.taco.suit_lady.util.tools.list_tools.ListTools;
 import com.taco.suit_lady.util.tools.list_tools.Operation;
@@ -89,11 +89,11 @@ public abstract class ContentSelectorPageController<
         });
     
         selectedContentMMProperty.addListener(
-                (observable, oldValue, newValue) -> TaskTools.sync(
+                (observable, oldValue, newValue) -> SLTasks.sync(
                         lock, () -> contentList.getSelectionModel().select(newValue)));
     
         contentList.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> TaskTools.sync(
+                (observable, oldValue, newValue) -> SLTasks.sync(
                         lock, () -> selectedContentMMProperty.set(newValue)));
     
         getPage().getContentHandler().selectedContentProperty().bindBidirectional(selectedContentMMProperty);
