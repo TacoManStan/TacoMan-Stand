@@ -9,7 +9,7 @@ import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.SLProperties;
-import com.taco.suit_lady.util.tools.fx_tools.FXTools;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -55,7 +55,7 @@ public interface Paintable<P extends Paintable<P, S>, S extends Surface<P, S>>
         //        System.out.println("Repainting Surface w/ Bounds : " + getBounds() + " for Paintable: " + this);
         S surface = getSurface();
         if (surface != null)
-            sync(() -> FXTools.runFX(() -> surface.repaint(), true));
+            sync(() -> FX.runFX(() -> surface.repaint(), true));
         return self();
     }
     

@@ -5,7 +5,7 @@ import com.taco.suit_lady.ui.jfx.components.painting.paintables.Paintable;
 import com.taco.suit_lady.ui.jfx.components.painting.paintables.PaintableData;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
-import com.taco.suit_lady.util.tools.fx_tools.FXTools;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,7 +38,7 @@ public abstract class CanvasPainter
     
     @Override public @NotNull CanvasPainter paint() {
         if (isActive())
-            FXTools.runFX(() -> sync(() -> {
+            FX.runFX(() -> sync(() -> {
                 Predicate<CanvasSurface> autoRemoveCondition = getAutoRemoveCondition();
                 if (autoRemoveCondition != null && autoRemoveCondition.test(getSurface()))
                     getSurface().removePaintableV2(this);

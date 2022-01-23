@@ -6,7 +6,7 @@ import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasPane;
 import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.tools.SLExceptions;
-import com.taco.suit_lady.util.tools.fx_tools.FXTools;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Label;
@@ -80,7 +80,7 @@ public class MandelbrotContentController extends ContentController
     @Override
     public void initialize() {
         canvasAnchorPane.getChildren().add(canvasPane);
-        FXTools.setAnchors(canvasPane);
+        FX.setAnchors(canvasPane);
         
         canvas().setOnMousePressed(event -> onMousePressed(event));
         canvas().setOnMouseReleased(event -> onMouseReleased(event));
@@ -104,14 +104,14 @@ public class MandelbrotContentController extends ContentController
     
     private void onMouseReleased(MouseEvent e) {
         sync(() -> {
-            if (FXTools.isMouseOnNode(canvas(), e))
+            if (FX.isMouseOnNode(canvas(), e))
                 getDragConsumer().accept(generateDragData(e));
         });
     }
     
     private void onMouseDragged(MouseEvent e) {
         sync(() -> {
-            if (FXTools.isMouseOnNode(canvas(), e))
+            if (FX.isMouseOnNode(canvas(), e))
                 getMoveConsumer().accept(generateDragData(e));
         });
     }

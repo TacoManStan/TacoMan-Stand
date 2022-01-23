@@ -10,7 +10,7 @@ import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.SLExceptions;
-import com.taco.suit_lady.util.tools.fx_tools.FXTools;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import com.taco.suit_lady.util.tools.list_tools.ListTools;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
@@ -112,11 +112,11 @@ public class OverlaySurface
     }
     
     private void initPainting() {
-        FXTools.bindToParent(backgroundCanvasPane, root, true);
-        FXTools.bindToParent(overlayPane, root, true);
-        FXTools.bindToParent(foregroundCanvasPane, root, true);
+        FX.bindToParent(backgroundCanvasPane, root, true);
+        FX.bindToParent(overlayPane, root, true);
+        FX.bindToParent(foregroundCanvasPane, root, true);
         
-        FXTools.togglePickOnBounds(root, false);
+        FX.togglePickOnBounds(root, false);
     }
     
     //</editor-fold>

@@ -7,7 +7,7 @@ import com.taco.suit_lady.util.tools.SLBindings;
 import com.taco.suit_lady.util.tools.SLExceptions;
 import com.taco.suit_lady.util.tools.SLObjects;
 import com.taco.suit_lady.ui.jfx.components.button.ImageButton;
-import com.taco.suit_lady.util.tools.fx_tools.FXTools;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -166,7 +166,7 @@ public class Sidebar
             }
         });
         
-        this.bookshelvesProperty.addListener((ListChangeListener<SidebarBookshelf>) c -> FXTools.runFX(() -> {
+        this.bookshelvesProperty.addListener((ListChangeListener<SidebarBookshelf>) c -> FX.runFX(() -> {
             while (c.next()) {
                 c.getAddedSubList().forEach(sidebarBookshelf -> {
                     toolBar.getItems().add(sidebarBookshelf.getButton());
@@ -183,7 +183,7 @@ public class Sidebar
      * <p>Initializes this {@link Sidebar} and associated components and functionality..</p>
      * <p><b>Details</b></p>
      * <ol>
-     *     <li>Executed on the {@link FXTools#runFX(Runnable, boolean) JavaFX Thread}.</li>
+     *     <li>Executed on the {@link FX#runFX(Runnable, boolean) JavaFX Thread}.</li>
      *     <li>The calling {@link Thread} blocks until initialization process is complete.</li>
      *     <li><code><i>{@link #initialize()}</i></code> can <u>only</u> be called <u>once</u>.</li>
      *     <li>Calling <code><i>{@link #initialize()}</i></code> more than once on a single {@link Sidebar} instance can (and likely will) result in unexpected and/or unpredictable runtime functionality.</li>
@@ -197,7 +197,7 @@ public class Sidebar
      */
     public void initialize()
     {
-        FXTools.runFX(() -> {
+        FX.runFX(() -> {
             backImageButton.init();
             childButtonPane.setAlignment(Pos.TOP_LEFT);
             

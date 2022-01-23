@@ -1,9 +1,7 @@
 package com.taco.suit_lady.util.tools.fx_tools;
 
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.SnapshotParameters;
-import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
@@ -14,8 +12,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 
-public class FXGraphicTools {
-	private FXGraphicTools() {} //No instance
+public class FXGraphics {
+	private FXGraphics() {} //No instance
 
 	/**
 	 * Returns the {@link Point} relative to the {@link MouseEvent#getSource() source} in which the mouse is at for the specified {@link MouseEvent}.

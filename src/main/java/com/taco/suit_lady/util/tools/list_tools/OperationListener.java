@@ -1,7 +1,7 @@
 package com.taco.suit_lady.util.tools.list_tools;
 
 import com.taco.suit_lady.util.timing.Timer;
-import com.taco.suit_lady.util.tools.fx_tools.FXTools;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import com.taco.suit_lady.util.tools.list_tools.ListTools.SimpleOperationListener;
 import com.taco.suit_lady.util.tools.list_tools.Operation.OperationType;
 import javafx.collections.ListChangeListener;
@@ -38,7 +38,7 @@ import java.util.concurrent.locks.ReentrantLock;
  *                 The two solutions to the aforementioned concurrency problem are as follows:
  *                 <ol>
  *                     <li>
- *                         Perform all {@link OperationListener} event handling on the {@link FXTools#runFX(Runnable, boolean) JavaFX Thread}.
+ *                         Perform all {@link OperationListener} event handling on the {@link FX#runFX(Runnable, boolean) JavaFX Thread}.
  *                         <ul>
  *                             <li>This is a viable solution <i>only</i> if <i>all</i> event handling operations are bound by {@link Contract contract} to complete execution instantaneously.</li>
  *                             <li>

@@ -1,6 +1,6 @@
 package com.taco.suit_lady.ui.content;
 
-import com.taco.suit_lady.util.tools.fx_tools.FXTools;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -145,7 +145,7 @@ public class TransitionContentView<P extends Pane> extends ContentView<P>
                     onShownHandler.handle(event);
             });
             
-            FXTools.runFX(() -> {
+            FX.runFX(() -> {
                 if (newContent != null) {
                     newContent.maxWidthProperty().bind(rootPane.widthProperty());
                     newContent.maxHeightProperty().bind(rootPane.heightProperty());

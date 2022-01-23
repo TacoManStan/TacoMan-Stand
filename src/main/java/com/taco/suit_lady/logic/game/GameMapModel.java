@@ -41,7 +41,7 @@ public class GameMapModel
         this.lock = SLExceptions.nullCheck(lock, "Lock");
         this.owner = SLExceptions.nullCheck(owner, "GameMap Owner");
         
-        this.mapImageBinding = SLBindings.createObjectBinding(SLResources.get().getDummyImage(SLResources.MAP));
+        this.mapImageBinding = SLBindings.createObjectBinding(SLResources.getDummyImage(SLResources.MAP));
         
         this.parentPaneProperty = new SimpleObjectProperty<>();
         

@@ -4,14 +4,14 @@ import com.taco.suit_lady.ui.AppUI;
 import com.taco.suit_lady.ui.jfx.lists.treehandler.TreeCellData;
 import com.taco.suit_lady.ui.jfx.lists.treehandler.TreeLoader;
 import com.taco.suit_lady.ui.jfx.lists.treehandler.WrappingTreeLoader;
+import com.taco.suit_lady.ui.ui_internal.console.ConsolePage;
+import com.taco.suit_lady.ui.ui_internal.console.ConsoleUIDataContainer;
 import com.taco.suit_lady.ui.ui_internal.controllers.ConsoleElementController;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.SLBindings;
 import com.taco.suit_lady.util.tools.SLExceptions;
-import com.taco.suit_lady.util.tools.TB;
-import com.taco.suit_lady.util.tools.fx_tools.FXTools;
-import com.taco.suit_lady.ui.ui_internal.console.ConsolePage;
-import com.taco.suit_lady.ui.ui_internal.console.ConsoleUIDataContainer;
+import com.taco.suit_lady.util.tools.SLResources;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
@@ -112,7 +112,7 @@ public class Console
                 final List<WrappingTreeLoader<ConsoleMessageable<?>, ConsoleElementController>> activeConsoleHandlers = getActiveConsoles();
                 while (change.next())
                     if (change.wasAdded())
-                        activeConsoleHandlers.forEach(treeHandler -> FXTools.runFX(
+                        activeConsoleHandlers.forEach(treeHandler -> FX.runFX(
                                 () -> change.getAddedSubList().forEach(
                                         message -> treeHandler.generateCellData(
                                                 CONSOLE_ROOT_NAME,
@@ -171,7 +171,7 @@ public class Console
     public final ConsolePage getPage()
     {
         if (consolePage == null) // Lazy initialization
-            consolePage = TB.resources().get("pages", "console");
+            consolePage = SLResources.get("pages", "console");
         return consolePage;
     }
     
@@ -194,7 +194,7 @@ public class Console
     private void append(String str)
     {
         // CHANGE-HERE
-        FXTools.runFX(() -> messages.add(new SimpleConsoleMessage(str)), false);
+        FX.runFX(() -> messages.add(new SimpleConsoleMessage(str)), false);
     }
     
     //</editor-fold>
@@ -205,7 +205,7 @@ public class Console
     {
         SLExceptions.nullCheck(consoleContainer, "Console UI Data Container");
     
-        FXTools.runFX(() -> {
+        FX.runFX(() -> {
             // treeView.setShowRoot(false); // Disabled temporarily because for some reason hiding the root causes messages to be truncated.
         
             // The below binding is used to trigger a refresh whenever a console display checkbox is toggled.

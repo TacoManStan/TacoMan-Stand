@@ -24,7 +24,7 @@ public class UIDProcessor
 	 */
 	public UIDProcessor(String groupID) {
 		this.globalUID = SLExceptions.nullCheck(groupID, "Global UID");
-		this.hashID = "" + SLTools.get().generateHashID();
+		this.hashID = "" + SLTools.generateHashID();
 	}
 
 	/**

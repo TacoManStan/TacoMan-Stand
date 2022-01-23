@@ -1,7 +1,10 @@
 package com.taco.suit_lady.util.tools;
 
+import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.stereotype.Component;
 
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -9,12 +12,7 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * A utility for generating pseudo-random numbers.
  */
-public class SLRandom
-{
-    public static SLRandom get()
-    {
-        return TB.random();
-    }
+public final class SLRandom {
     
     /**
      * {@link Random} instance unique to the current {@link Thread} as defined by {@link ThreadLocalRandom#current()}.
@@ -29,25 +27,24 @@ public class SLRandom
      */
     public static final String METHOD_SOURCE = "method";
     
-    private final Random random;
-    private String source;
+    private static final Random random;
+    private static String source;
     
-    SLRandom()
-    {
-        this.random = new Random();
-        this.source = GLOBAL_SOURCE;
+    static {
+        random = new Random();
+        source = GLOBAL_SOURCE;
     }
     
-    public Random getRandom()
-    {
-        return this.random;
+    private SLRandom() { } //No Instance
+    
+    public static Random getRandom() {
+        return random;
     }
     
-    public Random getRandomBySource(String source)
-    {
+    public static Random getRandomBySource(String source) {
         switch (source) {
             case SLRandom.GLOBAL_SOURCE -> {
-                return this.random;
+                return random;
             }
             case SLRandom.THREAD_SOURCE -> {
                 return ThreadLocalRandom.current();
@@ -59,14 +56,12 @@ public class SLRandom
         return null;
     }
     
-    public String getSource()
-    {
-        return this.source;
+    public static String getSource() {
+        return source;
     }
     
-    public void setSource(String source)
-    {
-        this.source = source;
+    public static void setSource(String source) {
+        SLRandom.source = source;
     }
     
     //
@@ -80,8 +75,7 @@ public class SLRandom
      *
      * @see Random#nextBoolean()
      */
-    public boolean nextBoolean()
-    {
+    public static boolean nextBoolean() {
         return getRandom().nextBoolean();
     }
     
@@ -97,8 +91,7 @@ public class SLRandom
      *
      * @see Random#nextInt()
      */
-    public int nextInt()
-    {
+    public static int nextInt() {
         return getRandom().nextInt();
     }
     
@@ -113,8 +106,7 @@ public class SLRandom
      *
      * @see Random#nextInt()
      */
-    public int nextInt(final int bound)
-    {
+    public static int nextInt(final int bound) {
         return getRandom().nextInt(bound >= 0 ? bound : -bound);
     }
     
@@ -130,8 +122,7 @@ public class SLRandom
      * @throws IllegalArgumentException When {@code min} > {@code max}.
      * @see Random#nextInt(int)
      */
-    public int nextInt(final int min, final int max)
-    {
+    public static int nextInt(final int min, final int max) {
         final int n = max - min;
         if (n < 0)
             throw new IllegalArgumentException(
@@ -152,8 +143,7 @@ public class SLRandom
      *
      * @see Random#nextDouble()
      */
-    public double nextDouble()
-    {
+    public static double nextDouble() {
         return getRandom().nextDouble();
     }
     
@@ -168,8 +158,7 @@ public class SLRandom
      *
      * @see Random#nextDouble()
      */
-    public double nextDouble(final double bound)
-    {
+    public static double nextDouble(final double bound) {
         return getRandom().nextDouble() * bound;
     }
     
@@ -185,8 +174,7 @@ public class SLRandom
      * @throws IllegalArgumentException When {@code min} > {@code max}.
      * @see Random#nextDouble()
      */
-    public double nextDouble(final double min, final double max)
-    {
+    public static double nextDouble(final double min, final double max) {
         final double n = max - min;
         if (n < 0)
             throw new IllegalArgumentException(
@@ -211,8 +199,7 @@ public class SLRandom
      *
      * @return The random integer ({@code >=} min and {@code <=} max).
      */
-    public double nextGaussian(final double min, final double max, final double mean, final double sd)
-    {
+    public static double nextGaussian(final double min, final double max, final double mean, final double sd) {
         if (!(mean >= min && mean <= max))
             throw new IllegalArgumentException(
                     "Invalid range (Min: " + min + ", Mean: " + mean + ", Max: " + max + ").");
@@ -240,8 +227,7 @@ public class SLRandom
      *
      * @return The random integer ({@code >=} min and {@code <=} max).
      */
-    public double nextGaussian(final double min, final double max, final double sd)
-    {
+    public static double nextGaussian(final double min, final double max, final double sd) {
         final double mean = min + (max - min) / 2;
         
         return nextGaussian(min, max, mean, sd);
@@ -256,8 +242,7 @@ public class SLRandom
      *
      * @return The random integer ({@code >=} min and {@code <=} max).
      */
-    public double nextGaussian(final double mean, final double sd)
-    {
+    public static double nextGaussian(final double mean, final double sd) {
         return getRandom().nextGaussian() * sd + mean;
     }
     
@@ -274,10 +259,9 @@ public class SLRandom
      *
      * @return {@code double}
      */
-    public double nextSkewedBoundedDouble(
+    public static double nextSkewedBoundedDouble(
             final double min, final double max, final double skew,
-            final double bias)
-    {
+            final double bias) {
         final double range = max - min;
         final double mid = min + range / 2.0;
         final double bias_factor = Math.exp(bias);
@@ -289,8 +273,7 @@ public class SLRandom
     
     // <editor-fold desc="Any Number">
     
-    public double next(final Number bound)
-    {
+    public static double next(final Number bound) {
         if (bound.longValue() <= Integer.MAX_VALUE) { // Ensure bound is not a
             // long
             double decimal = bound.doubleValue() - bound.intValue();
@@ -300,8 +283,7 @@ public class SLRandom
         return nextDouble(bound.doubleValue(), bound.doubleValue());
     }
     
-    public double next(final Number min, final Number max)
-    {
+    public static double next(final Number min, final Number max) {
         if (min.longValue() <= Integer.MAX_VALUE && max.longValue() <= Integer.MAX_VALUE) {
             double min_decimal = min.doubleValue() - min.intValue();
             double max_decimal = max.doubleValue() - max.intValue();
@@ -323,8 +305,7 @@ public class SLRandom
      *
      * @throws NullPointerException If the specified array is {@code null}.
      */
-    public <T> @Nullable T getRandomElement(@NotNull T[] arr)
-    {
+    public static <T> @Nullable T getRandomElement(@NotNull T[] arr) {
         if (SLExceptions.nullCheck(arr, "Input Array").length == 0)
             return null;
         return arr[nextInt(arr.length - 1)];

@@ -3,7 +3,7 @@ package com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas;
 import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.SLProperties;
-import com.taco.suit_lady.util.tools.fx_tools.FXTools;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -50,7 +50,7 @@ public class ArcPainter extends ShapePainter {
     @Override protected void onPaint() {
         Bounds bounds = getBounds();
         if (isValidDimensions())
-            FXTools.drawArc(getSurface(), bounds, getStartAngle(), getArcExtent(), getClosure(), false, isFill());
+            FX.drawArc(getSurface(), bounds, getStartAngle(), getArcExtent(), getClosure(), false, isFill());
     }
     
     //</editor-fold>

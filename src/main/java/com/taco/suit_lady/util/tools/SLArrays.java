@@ -530,7 +530,7 @@ public class SLArrays {
     }
     
     public static <T> T[] createAndFillArray(List<T> list, Class<T> clazz) {
-        T[] arr = createArray((Class<T[]>) SLTools.get().getArrayClass(clazz), list.size());
+        T[] arr = createArray((Class<T[]>) SLTools.getArrayClass(clazz), list.size());
         if (arr != null)
             for (int i = 0; i < list.size(); i++) {
                 T element = list.get(i);
@@ -1593,7 +1593,7 @@ public class SLArrays {
         if (list != null) {
             ArrayList<String> stringArr = new ArrayList<>(list.size());
             for (Object obj: list)
-                stringArr.add(obj == null ? "null" : SLTools.get().getSimpleName(obj.getClass()));
+                stringArr.add(obj == null ? "null" : SLTools.getSimpleName(obj.getClass()));
             return stringArr.toString();
         }
         return null;

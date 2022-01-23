@@ -6,9 +6,9 @@ import javafx.scene.control.TextField;
 import org.springframework.stereotype.Component;
 
 @Component
-public class FXBindingTools {
+public class FXBindings {
     
-    protected FXBindingTools() { }
+    protected FXBindings() { }
     
     public void createIntegerBinding(ObservableIntegerValue observable, TextField textField) {
     

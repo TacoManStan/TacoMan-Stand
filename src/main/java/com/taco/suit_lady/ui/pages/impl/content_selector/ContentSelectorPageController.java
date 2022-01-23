@@ -2,13 +2,13 @@ package com.taco.suit_lady.ui.pages.impl.content_selector;
 
 import com.taco.suit_lady.ui.ContentData;
 import com.taco.suit_lady.ui.UIPageController;
-import com.taco.suit_lady.ui.jfx.components.button.ImageButton;
 import com.taco.suit_lady.ui.jfx.components.ImagePane;
+import com.taco.suit_lady.ui.jfx.components.button.ImageButton;
 import com.taco.suit_lady.ui.jfx.lists.CellControlManager;
 import com.taco.suit_lady.ui.jfx.lists.ListCellFX;
-import com.taco.suit_lady.util.tools.TB;
+import com.taco.suit_lady.util.tools.SLResources;
 import com.taco.suit_lady.util.tools.SLTasks;
-import com.taco.suit_lady.util.tools.fx_tools.FXTools;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import com.taco.suit_lady.util.tools.list_tools.ListTools;
 import com.taco.suit_lady.util.tools.list_tools.Operation;
 import javafx.beans.property.BooleanProperty;
@@ -75,7 +75,7 @@ public abstract class ContentSelectorPageController<
         contentList.setCellFactory(listView -> new ListCellFX<>(
                 listCellFX -> new CellControlManager<>(
                         listCellFX,
-                        cellData -> TB.resources().get(
+                        cellData -> SLResources.get(
                                 cellData,
                                 () -> weaver().loadController(getPage().elementControllerDefinition()),
                                 listView.hashCode()))));
@@ -116,11 +116,11 @@ public abstract class ContentSelectorPageController<
     //<editor-fold desc="--- INTERNAL ---">
     
     private void onAdded(T content) {
-        FXTools.runFX(() -> FXTools.addElement(content, contentList, true), true);
+        FX.runFX(() -> FX.addElement(content, contentList, true), true);
     }
     
     private void onRemoved(T content) {
-        FXTools.runFX(() -> contentList.getItems().remove(content), true);
+        FX.runFX(() -> contentList.getItems().remove(content), true);
     }
     
     private void addInstance() {

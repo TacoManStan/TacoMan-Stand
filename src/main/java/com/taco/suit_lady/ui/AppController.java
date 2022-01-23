@@ -12,9 +12,10 @@ import com.taco.suit_lady.ui.pages.tester_page.TesterPage;
 import com.taco.suit_lady.ui.ui_internal.console.ConsoleUIDataContainer;
 import com.taco.suit_lady.ui.ui_internal.controllers.SettingsController;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.TB;
-import com.taco.suit_lady.util.tools.fx_tools.FXDialogTools;
-import com.taco.suit_lady.util.tools.fx_tools.FXTools;
+import com.taco.suit_lady.util.tools.SLResources;
+import com.taco.suit_lady.util.tools.SLWeb;
+import com.taco.suit_lady.util.tools.fx_tools.FXDialogs;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -205,7 +206,7 @@ public class AppController
         // TODO: Synchronize with the actual title of the application.
         this.stage.titleProperty().set("Suit Lady");
         
-        this.stage.getIcons().add(TB.resources().getImage("buttons/logo/", "logo", "png"));
+        this.stage.getIcons().add(SLResources.getImage("buttons/logo/", "logo", "png"));
         
         sidebarImagePane.setRotationAxis(Rotate.Y_AXIS);
         sidebarPaneAnchor.managedProperty().bind(sidebarPaneAnchor.visibleProperty());
@@ -213,7 +214,7 @@ public class AppController
         getAppUI().init();
         
         contentAnchorPane.getChildren().add(getAppUI().getContentManager().getContentBasePane());
-        FXTools.setAnchors(getAppUI().getContentManager().getContentBasePane(), 0.0);
+        FX.setAnchors(getAppUI().getContentManager().getContentBasePane(), 0.0);
         
         initImageButtons();
         initSidebar();
@@ -227,9 +228,9 @@ public class AppController
                         consoleSelectedInstanceOnlyCheckBox.selectedProperty()
                 ));
         
-        FXTools.constructDraggableNode(dragBar);
-        FXTools.constructResizableNode(getStage(), cornerResizePane, topResizePane, bottomResizePane, leftResizePane, rightResizePane,
-                                       minimizeImagePane, maximizeImagePane, closeImagePane, settingsImagePane, sidebarImagePane);
+        FX.constructDraggableNode(dragBar);
+        FX.constructResizableNode(getStage(), cornerResizePane, topResizePane, bottomResizePane, leftResizePane, rightResizePane,
+                                  minimizeImagePane, maximizeImagePane, closeImagePane, settingsImagePane, sidebarImagePane);
         
         bookshelfTitleLabel.textProperty().bind(
                 Bindings.createStringBinding(() -> {
@@ -259,7 +260,7 @@ public class AppController
                 this,
                 "Mandelbrot Content Selector Demo",
                 "mandelbrot2",
-                uiBook -> TB.resources().get(
+                uiBook -> SLResources.get(
                         "pages",
                         uiBook.getUID(uiBook.getButtonID()),
                         () -> new MandelbrotContentSelectorPage(uiBook)),
@@ -268,7 +269,7 @@ public class AppController
                 this,
                 "Development",
                 "social",
-                uiBook -> TB.resources().get(
+                uiBook -> SLResources.get(
                         "pages",
                         uiBook.getButtonID(),
                         () -> new ExamplePage(uiBook, "green")),
@@ -280,7 +281,7 @@ public class AppController
                 this,
                 "Entity Debug",
                 "entity-debug",
-                uiBook -> TB.resources().get(
+                uiBook -> SLResources.get(
                         "pages",
                         uiBook.getButtonID(),
                         () -> new EntityDebugPage(uiBook)),
@@ -295,7 +296,7 @@ public class AppController
                 this,
                 "Social",
                 "play",
-                uiBook -> TB.resources().get(
+                uiBook -> SLResources.get(
                         "pages",
                         uiBook.getButtonID(),
                         () -> new ExamplePage(uiBook, "blue")),
@@ -310,7 +311,7 @@ public class AppController
                 this,
                 "Demo 1",
                 "calendar",
-                uiBook -> TB.resources().get(
+                uiBook -> SLResources.get(
                         "pages",
                         uiBook.getButtonID(),
                         () -> new ExamplePage(uiBook, "gray")),
@@ -319,7 +320,7 @@ public class AppController
                 this,
                 "Demo 2",
                 "social",
-                uiBook -> TB.resources().get(
+                uiBook -> SLResources.get(
                         "pages",
                         uiBook.getButtonID(),
                         () -> new ExamplePage(uiBook, "gray")),
@@ -328,7 +329,7 @@ public class AppController
                 this,
                 "Demo 3",
                 "popout_var2",
-                uiBook -> TB.resources().get(
+                uiBook -> SLResources.get(
                         "pages",
                         uiBook.getButtonID(),
                         () -> new ExamplePage(uiBook, "gray")),
@@ -337,7 +338,7 @@ public class AppController
                 this,
                 "Demo 4",
                 "account_manager",
-                uiBook -> TB.resources().get(
+                uiBook -> SLResources.get(
                         "pages",
                         uiBook.getButtonID(),
                         () -> new ExamplePage(uiBook, "gray")),
@@ -346,7 +347,7 @@ public class AppController
                 this,
                 "Demo 5",
                 "entity_debug",
-                uiBook -> TB.resources().get(
+                uiBook -> SLResources.get(
                         "pages",
                         uiBook.getButtonID(),
                         () -> new ExamplePage(uiBook, "gray")),
@@ -355,7 +356,7 @@ public class AppController
                 this,
                 "Demo 6",
                 "graph",
-                uiBook -> TB.resources().get(
+                uiBook -> SLResources.get(
                         "pages",
                         uiBook.getButtonID(),
                         () -> new ExamplePage(uiBook, "gray")),
@@ -364,7 +365,7 @@ public class AppController
                 this,
                 "Tester",
                 "demo",
-                uiBook -> TB.resources().get(
+                uiBook -> SLResources.get(
                         "pages",
                         uiBook.getButtonID(),
                         () -> new TesterPage(uiBook)),
@@ -536,7 +537,7 @@ public class AppController
                 "Logo",
                 "logo",
                 logoImagePane,
-                () -> TB.web().browse("google", true),
+                () -> SLWeb.browse("google", true),
                 null,
                 false,
                 new Point2D(20.0, 20.0)
@@ -560,7 +561,7 @@ public class AppController
         sidebarPane.setPrefWidth(PUI_WIDTH);
         STAGE_MIN_WIDTH = stage.getWidth() - PUI_WIDTH;
         STAGE_MIN_HEIGHT = stage.getHeight();
-        FXTools.lockSize(stage, STAGE_MIN_WIDTH + PUI_WIDTH, STAGE_MIN_HEIGHT);
+        FX.lockSize(stage, STAGE_MIN_WIDTH + PUI_WIDTH, STAGE_MIN_HEIGHT);
     }
     
     // </editor-fold>
@@ -636,7 +637,7 @@ public class AppController
             
             stageWidthProperty.removeListener(stageWidthChangeListener);
             stage.setWidth(end_stage_width);
-            FXTools.lockSize(stage, end_stage_pref_width, FXTools.NO_CHANGE_SIZE_LOCK);
+            FX.lockSize(stage, end_stage_pref_width, FX.NO_CHANGE_SIZE_LOCK);
             
             sidebarPaneAnchor.setVisible(!hiding);
             sidebarPaneAnchor.setPrefWidth(PUI_WIDTH);
@@ -647,14 +648,14 @@ public class AppController
     }
     
     private void openSettings() {
-        FXDialogTools.showControllableDialog(
+        FXDialogs.showControllableDialog(
                 "Settings",
                 null,
                 0.0,
-                FXDialogTools.OK,
+                FXDialogs.OK,
                 true,
                 weaver.loadController(SettingsController.class)
-                                            );
+                                        );
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">

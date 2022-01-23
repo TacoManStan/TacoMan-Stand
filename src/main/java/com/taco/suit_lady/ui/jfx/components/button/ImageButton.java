@@ -7,7 +7,7 @@ import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.SLBindings;
 import com.taco.suit_lady.util.tools.SLExceptions;
 import com.taco.suit_lady.util.tools.SLResources;
-import com.taco.suit_lady.util.tools.fx_tools.FXTools;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import com.taco.tacository.obj_traits.common.Nameable;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -156,7 +156,7 @@ public class ImageButton
      * @param imagePane         The {@link ImagePane} this {@link ImageButton} will be displayed on.
      * @param imageIdBinding    The {@link ObservableStringValue} containing the {@link String name} of this {@link ImageButton}.
      * @param actionResponder   The {@link Runnable} that is executed in a {@link Task Background Task} when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.
-     * @param actionResponderFX The {@link Runnable} that is executed on the {@link FXTools#isFXThread() JavaFX Thread} when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.
+     * @param actionResponderFX The {@link Runnable} that is executed on the {@link FX#isFXThread() JavaFX Thread} when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.
      * @param toggleable        True if this {@link ImageButton} is {@link #isToggleable() toggleable}, false if it is not.
      * @param size              A {@link Point2D} representing the {@link ImagePane#widthProperty() width} and {@link ImagePane#heightProperty() height} of this {@link ImageButton}.
      */
@@ -324,7 +324,7 @@ public class ImageButton
      * <ol>
      *     <li>The {@link Runnable} is executed in a {@link Task Background Task} by the core {@link ThreadPoolExecutor Executor} for the entire application instance.</li>
      *     <li>The {@link Task} {@link ThreadPoolExecutor#execute(Runnable) execution} is non-blocking.</li>
-     *     <li>To execute a {@link Runnable} on the {@link FXTools#isFXThread() JavaFX Thread}, refer to <code><i>{@link #actionResponderFXProperty()}</i></code>.</li>
+     *     <li>To execute a {@link Runnable} on the {@link FX#isFXThread() JavaFX Thread}, refer to <code><i>{@link #actionResponderFXProperty()}</i></code>.</li>
      *     <li>If the {@link Runnable value} contained by the {@link ObjectProperty} is {@code null}, no action response will be executed.</li>
      * </ol>
      *
@@ -359,16 +359,16 @@ public class ImageButton
     }
     
     /**
-     * <p>Returns the {@link ObjectProperty} containing the {@link Runnable} that is executed on the {@link FXTools#isFXThread() JavaFX Thread} when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.</p>
+     * <p>Returns the {@link ObjectProperty} containing the {@link Runnable} that is executed on the {@link FX#isFXThread() JavaFX Thread} when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.</p>
      * <p><b>Execution Details</b></p>
      * <ol>
-     *     <li>The {@link Runnable} is executed on the {@link FXTools#isFXThread() JavaFX Thread}.</li>
-     *     <li>The {@link Task} {@link FXTools#runFX(Runnable, boolean) execution} is blocking.</li>
+     *     <li>The {@link Runnable} is executed on the {@link FX#isFXThread() JavaFX Thread}.</li>
+     *     <li>The {@link Task} {@link FX#runFX(Runnable, boolean) execution} is blocking.</li>
      *     <li>To execute a {@link Runnable} in a {@link Task Background Task}, refer to <code><i>{@link #actionResponderProperty()}</i></code>.</li>
      *     <li>If the {@link Runnable value} contained by the {@link ObjectProperty} is {@code null}, no action response will be executed.</li>
      * </ol>
      *
-     * @return The {@link ObjectProperty} containing the {@link Runnable} that is executed on the {@link FXTools#isFXThread() JavaFX Thread} when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.
+     * @return The {@link ObjectProperty} containing the {@link Runnable} that is executed on the {@link FX#isFXThread() JavaFX Thread} when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.
      *
      * @see #actionResponderProperty()
      */
@@ -377,9 +377,9 @@ public class ImageButton
     }
     
     /**
-     * <p>Returns the {@link Runnable} that is executed on the {@link FXTools#isFXThread() JavaFX Thread} when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.</p>
+     * <p>Returns the {@link Runnable} that is executed on the {@link FX#isFXThread() JavaFX Thread} when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.</p>
      *
-     * @return The {@link Runnable} that is executed on the {@link FXTools#isFXThread() JavaFX Thread} when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.
+     * @return The {@link Runnable} that is executed on the {@link FX#isFXThread() JavaFX Thread} when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.
      *
      * @see #actionResponderFXProperty()
      */
@@ -388,9 +388,9 @@ public class ImageButton
     }
     
     /**
-     * <p>Sets the {@link Runnable} to be executed on the {@link FXTools#isFXThread() JavaFX Thread} when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.</p>
+     * <p>Sets the {@link Runnable} to be executed on the {@link FX#isFXThread() JavaFX Thread} when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.</p>
      *
-     * @param actionResponder The {@link Runnable} to be executed on the {@link FXTools#isFXThread() JavaFX Thread} when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.
+     * @param actionResponder The {@link Runnable} to be executed on the {@link FX#isFXThread() JavaFX Thread} when this {@link ImageButton} is {@link Button#onActionProperty() pressed}.
      *
      * @see #actionResponderFXProperty()
      */
@@ -1042,7 +1042,7 @@ public class ImageButton
      *     <li>
      *         <b>FX Execution</b>
      *         <ol>
-     *             <li>If the {@link #actionResponderFXProperty() FX Responder} for this {@link ImageButton} is {@code non-null}, it is {@link FXTools#runFX(Runnable, boolean) executed} on the {@link FXTools#isFXThread() JavaFX Thread}.</li>
+     *             <li>If the {@link #actionResponderFXProperty() FX Responder} for this {@link ImageButton} is {@code non-null}, it is {@link FX#runFX(Runnable, boolean) executed} on the {@link FX#isFXThread() JavaFX Thread}.</li>
      *             <li>The {@link #actionResponderFXProperty() FX Responder} execution is <u>blocking</u>.</li>
      *             <li>Refer to <code><i>{@link #actionResponderFXProperty()}</i></code> for additional information.</li>
      *         </ol>
@@ -1059,7 +1059,7 @@ public class ImageButton
         
         final Runnable actionResponderFX = getActionResponderFX();
         if (actionResponderFX != null)
-            FXTools.runFX(actionResponderFX, false);
+            FX.runFX(actionResponderFX, false);
     }
     
     /**
@@ -1070,7 +1070,7 @@ public class ImageButton
      *         If <i>any</i> of the following conditions are {@code true}, the {@link MouseEvent} is {@link MouseEvent#consume() consumed}, no other actions are taken, and {@link #onMouseReleased(MouseEvent) this method} returns silently.
      *         <ol>
      *             <li>The {@link Event#getSource() Event Source} is not this {@link ImageButton ImageButton's} {@link #getImagePane() ImagePane}.</li>
-     *             <li>The {@link MouseEvent} was not triggered while {@link FXTools#isMouseOnEventSource(MouseEvent) on the} {@link Event#getSource() Event Source}.</li>
+     *             <li>The {@link MouseEvent} was not triggered while {@link FX#isMouseOnEventSource(MouseEvent) on the} {@link Event#getSource() Event Source}.</li>
      *             <li>This {@link ImageButton} is currently {@link #disabledProperty() disabled}.</li>
      *         </ol>
      *     </li>
@@ -1082,7 +1082,7 @@ public class ImageButton
      * @param event The triggering {@link MouseEvent} object.
      */
     private void onMouseReleased(@NotNull MouseEvent event) {
-        if (Objects.equals(event.getSource(), imagePane) && FXTools.isMouseOnEventSource(event) && !isDisabled()) {
+        if (Objects.equals(event.getSource(), imagePane) && FX.isMouseOnEventSource(event) && !isDisabled()) {
             toggle();
             onAction();
         }
@@ -1224,7 +1224,7 @@ public class ImageButton
         
         private @NotNull ObjectBinding<Image> generateImageBinding() {
             return Bindings.createObjectBinding(() -> {
-                Image image = SLResources.get().getImage(ImageButton.this.getPathId(), ImageButton.this.getFormattedImageId(), "png");
+                Image image = SLResources.getImage(ImageButton.this.getPathId(), ImageButton.this.getFormattedImageId(), "png");
                 if (image != null) {
                     WritableImage writableImage = new WritableImage((int) image.getWidth(), (int) image.getHeight());
                     PixelReader reader = image.getPixelReader();
@@ -1240,7 +1240,7 @@ public class ImageButton
                     return writableImage != null ? writableImage : missingno();
                 } else {
                     ImageButton.this.debugger().print("Image is null  [" + ImageButton.this.getName() + "_" + suffix + "]");
-                    image = SLResources.get().getImage(ImageButton.this.getPathIdOLD(), ImageButton.this.getFormattedImageId() + suffix, "png");
+                    image = SLResources.getImage(ImageButton.this.getPathIdOLD(), ImageButton.this.getFormattedImageId() + suffix, "png");
                     return image != null ? image : missingno();
                 }
             }, ImageButton.this.imageIdBinding(), foregroundColorProperty, backgroundColorProperty);
@@ -1249,62 +1249,62 @@ public class ImageButton
         private Color defaultColor(Color baseColor) {
             if (baseColor.equals(FOREGROUND)) {
                 return switch (suffix) {
-                    case SUFFIX_STANDARD -> FXTools.Colors.from255(95, 95, 95);
-                    case SUFFIX_PRESSED, SUFFIX_HOVERED -> FXTools.Colors.from255(153, 153, 153);
-                    case SUFFIX_DISABLED -> FXTools.Colors.from255(50, 50, 50);
+                    case SUFFIX_STANDARD -> FX.Colors.from255(95, 95, 95);
+                    case SUFFIX_PRESSED, SUFFIX_HOVERED -> FX.Colors.from255(153, 153, 153);
+                    case SUFFIX_DISABLED -> FX.Colors.from255(50, 50, 50);
                     //                case SUFFIX_SELECTED_HOVERED, SUFFIX_SELECTED_PRESSED -> FXTools.Colors.from255(23, 77, 154);
-                    case SUFFIX_SELECTED_HOVERED, SUFFIX_SELECTED_PRESSED -> FXTools.Colors.from255(40, 83, 156);
-                    case SUFFIX_SELECTED -> FXTools.Colors.from255(30, 62, 117);
+                    case SUFFIX_SELECTED_HOVERED, SUFFIX_SELECTED_PRESSED -> FX.Colors.from255(40, 83, 156);
+                    case SUFFIX_SELECTED -> FX.Colors.from255(30, 62, 117);
                     default -> Color.BLACK;
                 };
             } else if (baseColor.equals(BACKGROUND)) {
                 return switch (suffix) {
                     case SUFFIX_STANDARD, SUFFIX_DISABLED -> Color.TRANSPARENT;
-                    case SUFFIX_PRESSED -> FXTools.Colors.from255(64, 64, 64, 70);
-                    case SUFFIX_HOVERED -> FXTools.Colors.from255(64, 64, 64, 35);
-                    case SUFFIX_SELECTED -> FXTools.Colors.from255(35, 35, 35);
-                    case SUFFIX_SELECTED_PRESSED -> FXTools.Colors.from255(45, 45, 45);
-                    case SUFFIX_SELECTED_HOVERED -> FXTools.Colors.from255(40, 40, 40);
+                    case SUFFIX_PRESSED -> FX.Colors.from255(64, 64, 64, 70);
+                    case SUFFIX_HOVERED -> FX.Colors.from255(64, 64, 64, 35);
+                    case SUFFIX_SELECTED -> FX.Colors.from255(35, 35, 35);
+                    case SUFFIX_SELECTED_PRESSED -> FX.Colors.from255(45, 45, 45);
+                    case SUFFIX_SELECTED_HOVERED -> FX.Colors.from255(40, 40, 40);
                     default -> Color.WHITE;
                 };
             } else if (baseColor.equals(COLOR1)) {
                 return switch (suffix) {
-                    case SUFFIX_STANDARD, SUFFIX_DISABLED -> FXTools.Colors.from255(95, 95, 95, 150);
-                    case SUFFIX_PRESSED, SUFFIX_HOVERED -> FXTools.Colors.from255(153, 153, 153, 150);
-                    case SUFFIX_SELECTED -> FXTools.Colors.from255(30, 62, 117, 150);
-                    case SUFFIX_SELECTED_HOVERED, SUFFIX_SELECTED_PRESSED -> FXTools.Colors.from255(40, 83, 156, 150);
+                    case SUFFIX_STANDARD, SUFFIX_DISABLED -> FX.Colors.from255(95, 95, 95, 150);
+                    case SUFFIX_PRESSED, SUFFIX_HOVERED -> FX.Colors.from255(153, 153, 153, 150);
+                    case SUFFIX_SELECTED -> FX.Colors.from255(30, 62, 117, 150);
+                    case SUFFIX_SELECTED_HOVERED, SUFFIX_SELECTED_PRESSED -> FX.Colors.from255(40, 83, 156, 150);
                     default -> Color.WHITE;
                 };
             } else if (baseColor.equals(COLOR2)) {
                 return switch (suffix) {
-                    case SUFFIX_STANDARD, SUFFIX_DISABLED -> FXTools.Colors.from255(95, 95, 95, 210);
-                    case SUFFIX_PRESSED, SUFFIX_HOVERED -> FXTools.Colors.from255(153, 153, 153, 210);
-                    case SUFFIX_SELECTED -> FXTools.Colors.from255(30, 62, 117, 210);
-                    case SUFFIX_SELECTED_HOVERED, SUFFIX_SELECTED_PRESSED -> FXTools.Colors.from255(40, 83, 156, 210);
+                    case SUFFIX_STANDARD, SUFFIX_DISABLED -> FX.Colors.from255(95, 95, 95, 210);
+                    case SUFFIX_PRESSED, SUFFIX_HOVERED -> FX.Colors.from255(153, 153, 153, 210);
+                    case SUFFIX_SELECTED -> FX.Colors.from255(30, 62, 117, 210);
+                    case SUFFIX_SELECTED_HOVERED, SUFFIX_SELECTED_PRESSED -> FX.Colors.from255(40, 83, 156, 210);
                     default -> Color.WHITE;
                 };
             } else if (baseColor.equals(COLOR3)) {
                 return switch (suffix) {
-                    case SUFFIX_STANDARD, SUFFIX_DISABLED -> FXTools.Colors.from255(95, 95, 95, 100);
-                    case SUFFIX_PRESSED, SUFFIX_HOVERED -> FXTools.Colors.from255(153, 153, 153, 100);
-                    case SUFFIX_SELECTED -> FXTools.Colors.from255(30, 62, 117, 100);
-                    case SUFFIX_SELECTED_HOVERED, SUFFIX_SELECTED_PRESSED -> FXTools.Colors.from255(40, 83, 156, 100);
+                    case SUFFIX_STANDARD, SUFFIX_DISABLED -> FX.Colors.from255(95, 95, 95, 100);
+                    case SUFFIX_PRESSED, SUFFIX_HOVERED -> FX.Colors.from255(153, 153, 153, 100);
+                    case SUFFIX_SELECTED -> FX.Colors.from255(30, 62, 117, 100);
+                    case SUFFIX_SELECTED_HOVERED, SUFFIX_SELECTED_PRESSED -> FX.Colors.from255(40, 83, 156, 100);
                     default -> Color.WHITE;
                 };
             } else if (baseColor.equals(COLOR4)) {
                 return switch (suffix) {
-                    case SUFFIX_STANDARD, SUFFIX_DISABLED -> FXTools.Colors.from255(95, 95, 95, 65);
-                    case SUFFIX_PRESSED, SUFFIX_HOVERED -> FXTools.Colors.from255(153, 153, 153, 65);
-                    case SUFFIX_SELECTED -> FXTools.Colors.from255(30, 62, 117, 65);
-                    case SUFFIX_SELECTED_HOVERED, SUFFIX_SELECTED_PRESSED -> FXTools.Colors.from255(40, 83, 156, 65);
+                    case SUFFIX_STANDARD, SUFFIX_DISABLED -> FX.Colors.from255(95, 95, 95, 65);
+                    case SUFFIX_PRESSED, SUFFIX_HOVERED -> FX.Colors.from255(153, 153, 153, 65);
+                    case SUFFIX_SELECTED -> FX.Colors.from255(30, 62, 117, 65);
+                    case SUFFIX_SELECTED_HOVERED, SUFFIX_SELECTED_PRESSED -> FX.Colors.from255(40, 83, 156, 65);
                     default -> Color.WHITE;
                 };
             } else if (baseColor.equals(COLOR5)) {
                 return switch (suffix) {
-                    case SUFFIX_STANDARD, SUFFIX_DISABLED -> FXTools.Colors.from255(95, 95, 95, 30);
-                    case SUFFIX_PRESSED, SUFFIX_HOVERED -> FXTools.Colors.from255(153, 153, 153, 30);
-                    case SUFFIX_SELECTED -> FXTools.Colors.from255(30, 62, 117, 30);
-                    case SUFFIX_SELECTED_HOVERED, SUFFIX_SELECTED_PRESSED -> FXTools.Colors.from255(40, 83, 156, 30);
+                    case SUFFIX_STANDARD, SUFFIX_DISABLED -> FX.Colors.from255(95, 95, 95, 30);
+                    case SUFFIX_PRESSED, SUFFIX_HOVERED -> FX.Colors.from255(153, 153, 153, 30);
+                    case SUFFIX_SELECTED -> FX.Colors.from255(30, 62, 117, 30);
+                    case SUFFIX_SELECTED_HOVERED, SUFFIX_SELECTED_PRESSED -> FX.Colors.from255(40, 83, 156, 30);
                     default -> Color.WHITE;
                 };
             }
@@ -1323,7 +1323,7 @@ public class ImageButton
          * @see #generateImageBinding()
          */
         private Image missingno() {
-            return SLResources.get().getImage("buttons/missingno/", "missingno" + suffix, "png");
+            return SLResources.getImage("buttons/missingno/", "missingno" + suffix, "png");
         }
         
         public final Color FOREGROUND = Color.BLACK;

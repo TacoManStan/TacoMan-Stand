@@ -17,9 +17,9 @@ import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_pag
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.tools.SLExceptions;
-import com.taco.suit_lady.util.tools.TB;
+import com.taco.suit_lady.util.tools.SLResources;
 import com.taco.suit_lady.util.tools.SLTasks;
-import com.taco.suit_lady.util.tools.fx_tools.FXTools;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import com.taco.tacository.json.JFiles;
 import javafx.beans.binding.Bindings;
 import javafx.scene.paint.Color;
@@ -65,7 +65,7 @@ public class MandelbrotContent extends ListableContent<
                 this,
                 "Mandelbrot Demo",
                 "mandelbrot2",
-                uiBook -> TB.resources().get(
+                uiBook -> SLResources.get(
                         "pages",
                         uiBook.getUID(uiBook.getButtonID()),
                         () -> coverPage = new MandelbrotPage(uiBook, this)),
@@ -220,12 +220,12 @@ public class MandelbrotContent extends ListableContent<
     }
     
     private void refreshCanvas() {
-        sync(() -> FXTools.runFX(() -> {
+        sync(() -> FX.runFX(() -> {
             final CanvasSurface canvas = getController().canvas();
             final double newWidth = getController().canvas().getWidth();
             final double newHeight = getController().canvas().getHeight();
             
-            FXTools.clearCanvasUnsafe(ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas());
+            FX.clearCanvasUnsafe(ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas());
             
             getData().resizeTo(newWidth, newHeight);
             
@@ -234,7 +234,7 @@ public class MandelbrotContent extends ListableContent<
     }
     
     private void redraw(MandelbrotColor[][] colors) {
-        FXTools.runFX(() -> SLTasks.sync(lock, () -> {
+        FX.runFX(() -> SLTasks.sync(lock, () -> {
             getCoverPage().getController().getProgressBar().setVisible(false);
             for (int i = 0; i < colors.length; i++)
                 for (int j = 0; j < colors[i].length; j++) {

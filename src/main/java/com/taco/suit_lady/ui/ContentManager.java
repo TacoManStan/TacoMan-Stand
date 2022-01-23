@@ -6,7 +6,7 @@ import com.taco.suit_lady.util.tools.SLExceptions;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasSurface;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasContentPane;
 import com.taco.suit_lady.ui.jfx.components.ContentPane;
-import com.taco.suit_lady.util.tools.fx_tools.FXTools;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.layout.StackPane;
@@ -135,7 +135,7 @@ public class ContentManager
     private void onChange(@Nullable Content<?, ?> oldContent, @Nullable Content<?, ?> newContent) {
         // TODO - Execute onRemoved() and onSet via a JavaFX Task implementation. For now, though, this will work.
         // When the above is completed, don't forget to update the onRemoved() and onSet() Javadocs as well.
-        FXTools.runFX(() -> {
+        FX.runFX(() -> {
             if (oldContent != null) {
                 getContentPrimaryPane().getChildren().remove(oldContent.getController().root());
                 oldContent.getController().root().prefWidthProperty().unbind();
@@ -152,8 +152,8 @@ public class ContentManager
                 ctx().getBean(LogiCore.class).executor().execute(() -> oldContent.onRemovedInternal());
             }
             if (newContent != null) {
-                FXTools.bindToParent(newContent.getController().root(), getContentPrimaryPane(), true);
-                FXTools.bindToParent(newContent.getOverlayHandler().root(), getContentPrimaryPane(), true);
+                FX.bindToParent(newContent.getController().root(), getContentPrimaryPane(), true);
+                FX.bindToParent(newContent.getOverlayHandler().root(), getContentPrimaryPane(), true);
                 
                 //                final List<Overlay> contentOverlays = newContent.getOverlayHandler().overlays().getCopy();
                 //                for (Overlay overlay: contentOverlays) {

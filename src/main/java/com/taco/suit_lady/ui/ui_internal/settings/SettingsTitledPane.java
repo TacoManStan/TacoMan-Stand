@@ -1,6 +1,6 @@
 package com.taco.suit_lady.ui.ui_internal.settings;
 
-import com.taco.suit_lady.util.tools.fx_tools.FXTools;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import com.taco.suit_lady.ui.ui_internal.controllers.SettingGroupController;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.collections.ListChangeListener;
@@ -23,7 +23,7 @@ public class SettingsTitledPane extends TitledPane
         {
             @Override public void onChanged(Change<? extends SettingGroup<? extends SettingGroupController>> change)
             {
-                FXTools.runFX(() -> {
+                FX.runFX(() -> {
                     while (change.next())
                     {
                         if (change.wasAdded())
@@ -46,7 +46,7 @@ public class SettingsTitledPane extends TitledPane
         
         //
         
-        FXTools.applyCellFactory(settingGroupListView);
+        FX.applyCellFactory(settingGroupListView);
         
         textProperty().bind(settingContainer.nameProperty());
         setContent(settingGroupListView);

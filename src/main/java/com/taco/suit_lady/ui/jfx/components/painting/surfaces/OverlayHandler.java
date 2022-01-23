@@ -5,7 +5,7 @@ import com.taco.suit_lady._to_sort._new.ReadOnlyObservableListWrapper;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.SLExceptions;
-import com.taco.suit_lady.util.tools.fx_tools.FXTools;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -47,7 +47,7 @@ public class OverlayHandler
         
         this.overlays = new ReadOnlyObservableListWrapper<>(initInitialOverlayList(initialOverlays));
         
-        this.root = FXTools.togglePickOnBounds(new StackPane(), false);
+        this.root = FX.togglePickOnBounds(new StackPane(), false);
         
         //
         
@@ -310,16 +310,16 @@ public class OverlayHandler
      * <ol>
      *     <li>{@link FXCollections#sort(ObservableList) Sorts} the {@link OverlaySurface Overlays} contained within this {@link OverlayHandler}.</li>
      *     <li>
-     *         <b>Executed via the {@link FXTools#runFX(Runnable, boolean) JavaFX Thread}</b>
+     *         <b>Executed via the {@link FX#runFX(Runnable, boolean) JavaFX Thread}</b>
      *         <ol>
      *             <li>Clears the {@link StackPane#getChildren() contents} of the {@link #root() Root Pane} for this {@link OverlayHandler}.</li>
      *             <li>
      *                 <b>For each {@link OverlaySurface} contained within this {@link OverlayHandler}</b>
      *                 <ol>
-     *                     <li>{@link FXTools#bindToParent(Region, Region, boolean) Binds} the {@link OverlaySurface} to the {@link #root() Root Pane} for this {@link OverlayHandler}.</li>
+     *                     <li>{@link FX#bindToParent(Region, Region, boolean) Binds} the {@link OverlaySurface} to the {@link #root() Root Pane} for this {@link OverlayHandler}.</li>
      *                 </ol>
      *             </li>
-     *             <li>{@link FXTools#togglePickOnBounds(Node, boolean) Toggles} {@link Pane#pickOnBoundsProperty() Pick on Bounds} for the {@link #root() Root Pane} to {@code false}.</li>
+     *             <li>{@link FX#togglePickOnBounds(Node, boolean) Toggles} {@link Pane#pickOnBoundsProperty() Pick on Bounds} for the {@link #root() Root Pane} to {@code false}.</li>
      *         </ol>
      *     </li>
      *     <li>Waits for completion.</li>
@@ -332,11 +332,11 @@ public class OverlayHandler
     private void refreshOverlays() {
         sync(() -> {
             FXCollections.sort(overlays);
-            FXTools.runFX(() -> {
+            FX.runFX(() -> {
                 root().getChildren().retainAll();
                 for (OverlaySurface overlay: overlays) {
-                    FXTools.bindToParent(overlay.getRoot(), root(), true);
-                    FXTools.togglePickOnBounds(overlay.getRoot(), false);
+                    FX.bindToParent(overlay.getRoot(), root(), true);
+                    FX.togglePickOnBounds(overlay.getRoot(), false);
                 }
             }, true);
         });

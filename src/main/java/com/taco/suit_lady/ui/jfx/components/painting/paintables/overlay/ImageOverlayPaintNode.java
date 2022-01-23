@@ -15,7 +15,7 @@ public class ImageOverlayPaintNode extends OverlayPaintNode {
     
     public ImageOverlayPaintNode(@NotNull Springable springable, @Nullable ReentrantLock lock) {
         super(springable, lock);
-        this.imageView = new ImageView(SLResources.get().getDummyImage(SLResources.AVATAR));
+        this.imageView = new ImageView(SLResources.getDummyImage(SLResources.AVATAR));
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">

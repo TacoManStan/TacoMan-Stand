@@ -1,17 +1,15 @@
 package com.taco.suit_lady.util.timing;
 
-import com.taco.suit_lady.util.tools.SLExceptions;
 import com.taco.suit_lady.util.SimplePredicate;
-import com.taco.suit_lady.util.tools.TB;
+import com.taco.suit_lady.util.tools.SLExceptions;
+import com.taco.suit_lady.util.tools.SLTools;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
 
-public final class Timing
-{
-    
-    private Timing() { } // No instance
+public final class Timing {
+    private Timing() { } //No instance
     
     private static final long START_TIME = System.currentTimeMillis();
     private static final long NANO_TIME = System.nanoTime();
@@ -21,11 +19,11 @@ public final class Timing
      * to avoid problems with changing clock times.
      *
      * @return The current time in milliseconds.
+     *
      * @see System#currentTimeMillis()
      * @see System#nanoTime()
      */
-    public static long currentTimeMillis()
-    {
+    public static long currentTimeMillis() {
         return Timing.START_TIME + ((System.nanoTime() - Timing.NANO_TIME) / 1000000);
     }
     
@@ -33,12 +31,13 @@ public final class Timing
      * Returns the current time represented by the specified {@link TimeUnit}.
      *
      * @param timeUnit The {@code TimeUnit} of the returned value.
+     *
      * @return The current time represented by the specified {@link TimeUnit}.
+     *
      * @see #currentTimeMillis()
      * @see System#currentTimeMillis()
      */
-    public static long currentTime(TimeUnit timeUnit)
-    {
+    public static long currentTime(TimeUnit timeUnit) {
         return SLExceptions.nullCheck(timeUnit, "Time Unit").convert(currentTimeMillis(), TimeUnit.MILLISECONDS);
     }
     
@@ -56,11 +55,11 @@ public final class Timing
      * {@link #wait_time} as the timeout.
      *
      * @param condition The {@link SimplePredicate}.
+     *
      * @return True if the {@link SimplePredicate} was met before the timeout, false
      * otherwise.
      */
-    public static boolean wait(SimplePredicate condition)
-    {
+    public static boolean wait(SimplePredicate condition) {
         return wait(condition, wait_time);
     }
     
@@ -69,39 +68,35 @@ public final class Timing
      *
      * @param condition The {@link SimplePredicate}.
      * @param timeout   The timeout. In milliseconds. -1 for no timeout.
+     *
      * @return True if the {@link SimplePredicate} was met before the timeout, false
      * otherwise.
      */
-    public static boolean wait(SimplePredicate condition, long timeout)
-    {
+    public static boolean wait(SimplePredicate condition, long timeout) {
         Timer timer = Timers.newCountdown(timeout).start();
-        while (timeout == -1 || !timer.isTimedOut())
-        {
+        while (timeout == -1 || !timer.isTimedOut()) {
             if (condition.test())
                 return true;
-            TB.general().sleepLoop();
+            SLTools.sleepLoop();
         }
         return false;
     }
     
     //
     
-    public static Duration createDurationMillis(Number duration)
-    {
+    public static Duration createDurationMillis(Number duration) {
         SLExceptions.nullCheck(duration, "Duration");
         return new Duration();
     }
     
-    public static String timestamp(LocalDateTime ldt)
-    {
+    public static String timestamp(LocalDateTime ldt) {
         if (ldt == null)
             return "[LDT is NULL]";
-    
+        
         return "[" + ldt.format(DateTimeFormatter.ISO_LOCAL_TIME) + "]";
     }
     
-    public static String now()
-    {
+    public static String now() {
         return timestamp(LocalDateTime.now());
     }
 }

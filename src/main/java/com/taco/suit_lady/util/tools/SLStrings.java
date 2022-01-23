@@ -1,6 +1,7 @@
 package com.taco.suit_lady.util.tools;
 
 import com.taco.tacository.obj_traits.common.Nameable;
+import org.springframework.stereotype.Component;
 
 import java.awt.*;
 import java.lang.reflect.Array;
@@ -14,27 +15,21 @@ import java.util.Locale;
 /**
  * Contains methods related to manipulating strings.
  */
-public class SLStrings
-{
-    public static SLStrings get()
-    {
-        return TB.strings();
-    }
-    
-    SLStrings() { }
+public class SLStrings {
+    private SLStrings() { } //No Instance
     
     /**
      * A constant representing one thousand (1,000).
      */
-    private final int K = 1000;
+    private static final int K = 1000;
     /**
      * A constant representing one million (1,000,000).
      */
-    private final int M = 1000000;
+    private static final int M = 1000000;
     /**
      * A constant representing one billion (1,000,000,000).
      */
-    private final int B = 1000000000;
+    private static final int B = 1000000000;
     
     //
     
@@ -44,12 +39,11 @@ public class SLStrings
      * @param string              The string.
      * @param strings             The array of second strings.
      * @param stringContainsArray True if the specified string must contain an element in the specified array, false if an element in the specified array must contain the specified string.
+     *
      * @return True if the any of the strings in the specified array of strings are contained within the specified string, false otherwise.
      */
-    public boolean containsIgnoreCase(String string, boolean stringContainsArray, String... strings)
-    {
-        if (string != null && strings != null)
-        {
+    public static boolean containsIgnoreCase(String string, boolean stringContainsArray, String... strings) {
+        if (string != null && strings != null) {
             for (String s: strings)
                 if (s != null && !s.isEmpty())
                     if (stringContainsArray ? string.toLowerCase().contains(s.toLowerCase()) : s.toLowerCase().contains(string.toLowerCase()))
@@ -63,10 +57,10 @@ public class SLStrings
      *
      * @param string1 The first string.
      * @param string2 The second string.
+     *
      * @return True if the first specified string is equal to the second specified string. This method is not case-sensitive, false otherwise.
      */
-    public boolean equalsIgnoreCase(String string1, String string2)
-    {
+    public static boolean equalsIgnoreCase(String string1, String string2) {
         return string1 != null && string2 != null && string1.equalsIgnoreCase(string2);
     }
     
@@ -74,10 +68,10 @@ public class SLStrings
      * Capitalizes the first letter of the specified string.
      *
      * @param string The string.
+     *
      * @return The string with the capital first letter. Returns the original string if it has a length of 0.
      */
-    public String capitalizeFirst(String string)
-    {
+    public static String capitalizeFirst(String string) {
         if (string.length() < 1)
             return string;
         return string.replaceFirst(string.substring(0, 1), string.substring(0, 1).toUpperCase());
@@ -87,10 +81,10 @@ public class SLStrings
      * Capitalizes the first letter of each word in the specified string.
      *
      * @param string The string.
+     *
      * @return The string with the first letter of each word being capitalized. Returns the original string if it has a length of 0.
      */
-    public String capitalizeAllFirst(String string)
-    {
+    public static String capitalizeAllFirst(String string) {
         if (string.length() < 1)
             return string;
         String[] words = string.split(" ");
@@ -104,22 +98,18 @@ public class SLStrings
      * Capitalizes the first letter of the first word of each sentence in the specified string.
      *
      * @param string The string (containing sentences).
+     *
      * @return The modified string with the first letter of the first word of each sentence in the specified string being capitalized.
      */
-    public String capitalizeSentence(String string)
-    {
-        if (string != null)
-        {
+    public static String capitalizeSentence(String string) {
+        if (string != null) {
             final char[] chars = string.toCharArray();
             boolean found = false;
-            for (int i = 0; i < chars.length; i++)
-            {
-                if (!found && Character.isLetter(chars[i]))
-                {
+            for (int i = 0; i < chars.length; i++) {
+                if (!found && Character.isLetter(chars[i])) {
                     chars[i] = Character.toUpperCase(chars[i]);
                     found = true;
-                }
-                else if (chars[i] == '.' || chars[i] == '?' || chars[i] == '!' || matches(i, chars, "</li>".toCharArray()))
+                } else if (chars[i] == '.' || chars[i] == '?' || chars[i] == '!' || matches(i, chars, "</li>".toCharArray()))
                     found = false;
             }
             return String.valueOf(chars);
@@ -127,8 +117,7 @@ public class SLStrings
         return null;
     }
     
-    private boolean matches(int index, char[] chars1, char... chars2)
-    {
+    private static boolean matches(int index, char[] chars1, char... chars2) {
         final Character[] reverse = SLArrays.getReverse(SLArrays.toArray(chars2));
         for (int i = 0; i < reverse.length; i++)
             if (chars1[index - i] != reverse[i])
@@ -140,10 +129,10 @@ public class SLStrings
      * Replaces any underscores in the specified string with spaces.
      *
      * @param string The string.
+     *
      * @return A string that has its underscores replaced with spaces.
      */
-    public String replaceUnderscores(String string)
-    {
+    public static String replaceUnderscores(String string) {
         return string.replaceAll("_", " ");
     }
     
@@ -151,10 +140,10 @@ public class SLStrings
      * Replaces any spaces in the specified string with underscores.
      *
      * @param string The string.
+     *
      * @return A string that has its spaces replaced with underscores.
      */
-    public String makeUnderscores(String string)
-    {
+    public static String makeUnderscores(String string) {
         return string.replaceAll(" ", "_");
     }
     
@@ -162,10 +151,10 @@ public class SLStrings
      * Formats the specified enum into a readable form.
      *
      * @param e The enum.
+     *
      * @return The formatted string.
      */
-    public String enumToString(Enum e)
-    {
+    public static String enumToString(Enum e) {
         return capitalizeAllFirst(replaceUnderscores(e.name().toLowerCase()));
     }
     
@@ -173,25 +162,20 @@ public class SLStrings
      * Returns the name of the specified {@link Class} with spaces in between the camel-case words that the class name forms.
      *
      * @param aClass The {@link Class}.
+     *
      * @return The name of the specified {@link Class} with spaces in between the camel-case words that the class name forms.
      */
-    public String classToString(Class aClass)
-    {
-        if (aClass != null)
-        {
-            String simpleName = SLTools.get().getSimpleName(aClass);
+    public static String classToString(Class aClass) {
+        if (aClass != null) {
+            String simpleName = SLTools.getSimpleName(aClass);
             ArrayList<Integer> indexes = new ArrayList<>();
             ArrayList<Character> characters = new ArrayList<>(java.util.Arrays.asList(SLArrays.toArray(simpleName.toCharArray())));
-            if (characters.size() > 1)
-            {
+            if (characters.size() > 1) {
                 boolean succeeded = false;
-                while (!succeeded)
-                {
+                while (!succeeded) {
                     succeeded = true;
-                    for (int i = 1; i < characters.size() && succeeded; i++)
-                    {
-                        if (Character.isUpperCase(characters.get(i)) && characters.get(i - 1) != ' ')
-                        {
+                    for (int i = 1; i < characters.size() && succeeded; i++) {
+                        if (Character.isUpperCase(characters.get(i)) && characters.get(i - 1) != ' ') {
                             characters.add(i, ' ');
                             succeeded = false;
                         }
@@ -208,10 +192,10 @@ public class SLStrings
      *
      * @param g The graphics used to draw the string.
      * @param s The string.
+     *
      * @return The length.
      */
-    public int getStringPixelLength(Graphics g, String s)
-    {
+    public static int getStringPixelLength(Graphics g, String s) {
         return g.getFontMetrics().stringWidth(s);
     }
     
@@ -219,26 +203,28 @@ public class SLStrings
      * Inserts commas (US LOCALE) into the specified integer.
      *
      * @param number The integer to insert commas into.
+     *
      * @return A string representing the specified integer with commas inserted.
      */
-    public String commas(int number) { return commas((long) number); }
+    public static String commas(int number) { return commas((long) number); }
     
     /**
      * Inserts commas (US LOCALE) into the specified double.
      *
      * @param number The double to insert commas into.
+     *
      * @return A string representing the specified double with commas inserted.
      */
-    public String commas(double number) { return commas((long) number); }
+    public static String commas(double number) { return commas((long) number); }
     
     /**
      * Inserts commas (US LOCALE) into the specified long.
      *
      * @param number The long to insert commas into.
+     *
      * @return A string representing the specified long with commas inserted.
      */
-    public String commas(long number)
-    {
+    public static String commas(long number) {
         return NumberFormat.getNumberInstance(Locale.US).format(number);
     }
     
@@ -247,20 +233,24 @@ public class SLStrings
      *
      * @param number    The number.
      * @param upperCase True to display the string in upper case, false for lower case.
+     *
      * @return A KMB formatted string representing the number.
+     *
      * @see #kmb(long, boolean)
      */
-    public String kmb(int number, boolean upperCase) { return kmb((long) number, upperCase); }
+    public static String kmb(int number, boolean upperCase) { return kmb((long) number, upperCase); }
     
     /**
      * Formats a number to be in KMB format.
      *
      * @param number    The number.
      * @param upperCase True to display the string in upper case, false for lower case.
+     *
      * @return A KMB formatted string representing the number.
+     *
      * @see #kmb(long, boolean)
      */
-    public String kmb(double number, boolean upperCase) { return kmb((long) number, upperCase); }
+    public static String kmb(double number, boolean upperCase) { return kmb((long) number, upperCase); }
     
     /**
      * Formats a number to be in KMB format.
@@ -276,22 +266,19 @@ public class SLStrings
      *
      * @param number    The number.
      * @param upperCase True to display the string in upper case, false for lower case.
+     *
      * @return A KMB formatted string representing the number.
      */
-    public String kmb(long number, boolean upperCase)
-    {
+    public static String kmb(long number, boolean upperCase) {
         DecimalFormat df = new DecimalFormat("#.##");
         df.setRoundingMode(RoundingMode.DOWN);
         df.setMinimumFractionDigits(2);
         if (Math.abs(number) < K)
             return "" + number;
-        else if (Math.abs(number) < M)
-        {
+        else if (Math.abs(number) < M) {
             double num = (double) number / (double) K;
             return "" + df.format(num) + (upperCase ? "K" : "k");
-        }
-        else if (Math.abs(number) < B)
-        {
+        } else if (Math.abs(number) < B) {
             double num = (double) number / (double) M;
             return "" + df.format(num) + (upperCase ? "M" : "m");
         }
@@ -307,10 +294,10 @@ public class SLStrings
      * All negative numbers are treated the same as positive numbers.
      *
      * @param milliseconds The time being formatted, in milliseconds.
+     *
      * @return A KMB formatted string representing the number.
      */
-    public String timeFormat(long milliseconds)
-    {
+    public static String timeFormat(long milliseconds) {
         long seconds = milliseconds / 1000;
         long minutes = seconds / 60;
         seconds %= 60;
@@ -338,19 +325,20 @@ public class SLStrings
      * Formats the specified amount of time in milliseconds to a readable format.
      *
      * @param ms The amount of time in milliseconds.
+     *
      * @return A formatted, readable copy of the time specified.
      */
-    public String msToString(long ms) { return msToString(ms, false); }
+    public static String msToString(long ms) { return msToString(ms, false); }
     
     /**
      * Formats the specified amount of time in milliseconds to a readable format.
      *
      * @param ms   The amount of time in milliseconds.
      * @param caps True if the returned String should be printed in uppercase, false if it should be printed in lowercase.
+     *
      * @return A formatted, readable copy of the time specified.
      */
-    public String msToString(long ms, boolean caps)
-    {
+    public static String msToString(long ms, boolean caps) {
         String msString = "";
         long seconds = ms / 1000;
         long minutes = seconds / 60;
@@ -373,10 +361,10 @@ public class SLStrings
      * Inserts non-breaking spaces in place of breaking spaces in the specified RSN.
      *
      * @param rsn The RSN to fix.
+     *
      * @return The fixed RSN.
      */
-    public String fix(String rsn)
-    {
+    public static String fix(String rsn) {
         return rsn != null ? rsn.replaceAll("" + (char) 160, "" + (char) 32) : null;
     }
     
@@ -388,10 +376,10 @@ public class SLStrings
      * @param replaceWith     The value that is to be the replacing value.
      * @param useRegex        True if the replacement search should be done using regular expressions, false otherwise.
      * @param toReplaceValues The array of Strings representing the values that are to be replaced with the specified {code replaceWith String}.
+     *
      * @return The specified {@code host String} with the specified values replaced.
      */
-    public String replace(String host, String replaceWith, boolean useRegex, String... toReplaceValues)
-    {
+    public static String replace(String host, String replaceWith, boolean useRegex, String... toReplaceValues) {
         SLExceptions.nullCheck(host, "Host string cannot be null.");
         SLExceptions.nullCheck(replaceWith, "To-Replace string cannot be null.");
         SLExceptions.nullCheck(toReplaceValues, "Replace with array cannot be null.");
@@ -411,17 +399,16 @@ public class SLStrings
      *
      * @param host The host String.
      * @param str  The String being counted.
+     *
      * @return How many times the specified String is contained within the host String.
      */
-    public int getCount(String host, String str)
-    {
+    public static int getCount(String host, String str) {
         if (host == null)
             throw new NullPointerException("Host String cannot be null.");
         if (str == null)
             throw new NullPointerException("Searching String cannot be null.");
         int count = 0;
-        while (!str.isEmpty() && host.contains(str))
-        {
+        while (!str.isEmpty() && host.contains(str)) {
             host = host.replaceFirst(str, "");
             count++;
         }
@@ -433,10 +420,10 @@ public class SLStrings
      *
      * @param host      The host String.
      * @param toRemoves The Strings being removed.
+     *
      * @return The host String with all instances of all of the specified Strings removed.
      */
-    public String remove(String host, String... toRemoves)
-    {
+    public static String remove(String host, String... toRemoves) {
         if (host == null)
             throw new NullPointerException("Host String cannot be null.");
         String newHost = host;
@@ -450,10 +437,10 @@ public class SLStrings
      *
      * @param host    The host String.
      * @param toKeeps The chars being kept.
+     *
      * @return The host String with anything that does not equal one of the specified chars removed.
      */
-    public String removeOther(String host, char... toKeeps)
-    {
+    public static String removeOther(String host, char... toKeeps) {
         if (host == null)
             throw new NullPointerException("Host String cannot be null.");
         ArrayList<Character> chars = new ArrayList<>();
@@ -472,10 +459,10 @@ public class SLStrings
      * @param host The host String.
      * @param pre  The pre String.
      * @param post The post String.
+     *
      * @return The value that lies between the specified pre and post strings contained within the host string.
      */
-    public String getIntermediate(String host, String pre, String post)
-    {
+    public static String getIntermediate(String host, String pre, String post) {
         host = host.substring(host.indexOf(pre) + pre.length());
         return host.substring(0, host.indexOf(post));
     }
@@ -484,17 +471,15 @@ public class SLStrings
      * Checks to see if the specified string is a number or not.
      *
      * @param val The string.
+     *
      * @return True if the specified string is a number, false otherwise.
      */
-    public boolean isNumber(String val)
-    {
-        try
-        {
+    public static boolean isNumber(String val) {
+        try {
             //noinspection ResultOfMethodCallIgnored
             Integer.parseInt(val);
             return true;
-        }
-        catch (NumberFormatException ignored) { }
+        } catch (NumberFormatException ignored) { }
         return false;
     }
     
@@ -507,10 +492,10 @@ public class SLStrings
      *
      * @param string1 The first string being compared.
      * @param string2 The second string being compared.
+     *
      * @return True if the first string matchesEither the second string, false otherwise. If either string is null, this method returns false.
      */
-    public boolean matches(String string1, String string2)
-    {
+    public static boolean matches(String string1, String string2) {
         return string1 != null && string2 != null && string1.toLowerCase().contains(string2.toLowerCase());
     }
     
@@ -523,10 +508,10 @@ public class SLStrings
      *
      * @param string1 The first string being compared.
      * @param string2 The second string being compared.
+     *
      * @return True if the first string matchesEither the second string, false otherwise. If either string is null, this method returns false.
      */
-    public boolean matchesEither(String string1, String string2)
-    {
+    public static boolean matchesEither(String string1, String string2) {
         return string1 != null && string2 != null && (string1.toLowerCase().contains(string2.toLowerCase()) || string2.toLowerCase().contains(string1.toLowerCase()));
     }
     
@@ -535,12 +520,11 @@ public class SLStrings
      *
      * @param string        The string.
      * @param stripEditable True if the specified string should be made to be not editable, false if it should be left as-is.
+     *
      * @return The specified string converted into the default HTML format.
      */
-    public String html(String string, boolean stripEditable)
-    {
-        if (string != null)
-        {
+    public static String html(String string, boolean stripEditable) {
+        if (string != null) {
             if (stripEditable)
                 string = htmlStripEditable(string);
             return "<body><font face=\"Segoe UI\" size=\"2\">" + string + "</font></body>";
@@ -557,23 +541,20 @@ public class SLStrings
      *                   <br>
      *                   If this value is set to false and there is only one element in the specified array, the returned text will be surrounded in break statements ({@code <br>})
      * @param components The text being converted into an html list.
+     *
      * @return The specified array of text as an html list.
      */
-    public String htmlList(boolean alwaysList, String... components)
-    {
+    public static String htmlList(boolean alwaysList, String... components) {
         String text = "";
-        if (components != null)
-        {
+        if (components != null) {
             ArrayList<String> componentsList = new ArrayList<>(SLArrays.removeNull(components));
-            if (componentsList.size() > 1 || alwaysList)
-            {
+            if (componentsList.size() > 1 || alwaysList) {
                 text += "<ol>";
                 for (String component: componentsList)
                     if (component != null)
                         text += "<li>" + capitalizeSentence(component) + "</li>";
                 text += "</ol>";
-            }
-            else
+            } else
                 text += "<br>" + componentsList.get(0) + "<br>";
         }
         return text;
@@ -583,10 +564,10 @@ public class SLStrings
      * Strips all HTML from the specified string that makes the string editable.
      *
      * @param string The string.
+     *
      * @return The specified string with all HTML that makes the string editable stripped from it.
      */
-    public String htmlStripEditable(String string)
-    {
+    public static String htmlStripEditable(String string) {
         return string.replace(" contenteditable=\"true\"", "").replace("contenteditable=\"true\"", "");
     }
     
@@ -594,20 +575,23 @@ public class SLStrings
      * Returns the average length of the words in the specified sentence.
      *
      * @param sentence The sentence.
+     *
      * @return The average length of the words in the specified sentence.
+     *
      * @see #getAverageWordLength(String[])
      */
-    public double getAverageWordLength(String sentence) { return getAverageWordLength(getWords(sentence)); }
+    public static double getAverageWordLength(String sentence) { return getAverageWordLength(getWords(sentence)); }
     
     /**
      * Returns the average length of the words in the specified array of words.
      *
      * @param words The words.
+     *
      * @return The average length of the words in the specified array of words.
+     *
      * @see #getAverageWordLength(String)
      */
-    public double getAverageWordLength(String[] words)
-    {
+    public static double getAverageWordLength(String[] words) {
         int totalCharacters = 0;
         for (String word: words)
             totalCharacters += word.length();
@@ -618,10 +602,10 @@ public class SLStrings
      * Returns the specified sentence as an array of words.
      *
      * @param sentence The sentence.
+     *
      * @return The specified sentence as an array of words.
      */
-    public String[] getWords(String sentence)
-    {
+    public static String[] getWords(String sentence) {
         return sentence.split(" ");
     }
     
@@ -629,10 +613,10 @@ public class SLStrings
      * Makes a sentence out of the specified array of words, and then returns the result.
      *
      * @param words The words.
+     *
      * @return A sentence formed by the specified array of words.
      */
-    public String sentence(String[] words)
-    {
+    public static String sentence(String[] words) {
         String sentence = "";
         for (int i = 0; i < words.length; i++)
             sentence += words[i] + (i != words.length - 1 ? " " : "");
@@ -643,10 +627,10 @@ public class SLStrings
      * Returns the total character count of the strings in the specified array of words.
      *
      * @param words The words.
+     *
      * @return The total character count of the strings in the specified array of words.
      */
-    public int getCharacterCount(String[] words)
-    {
+    public static int getCharacterCount(String[] words) {
         int count = 0;
         for (String word: words)
             count += word.length();
@@ -659,10 +643,10 @@ public class SLStrings
      * @param text          The getText.
      * @param subText       The subtext.
      * @param substringType The type in which the method gets the substring.
+     *
      * @return The substring of the specified getText based on the location of the specified subtext.
      */
-    public String substring(String text, String subText, SubstringType substringType)
-    {
+    public static String substring(String text, String subText, SubstringType substringType) {
         if (text != null && subText != null && text.contains(subText))
             if (substringType == SubstringType.AFTER)
                 return text.substring(text.indexOf(subText) + subText.length());
@@ -680,19 +664,19 @@ public class SLStrings
      * <code>stringBuilder.{@link StringBuilder#delete(int, int) delete}(0, stringBuilder.{@link StringBuilder#capacity() capacity}().</code>
      *
      * @param stringBuilder The {@code StringBuilder} that is being cleared.
+     *
      * @return The recently cleared {@code StringBuilder}.
+     *
      * @see StringBuilder#delete(int, int)
      */
-    public StringBuilder clearSB(StringBuilder stringBuilder)
-    {
+    public static StringBuilder clearSB(StringBuilder stringBuilder) {
         stringBuilder.delete(0, stringBuilder.capacity());
         return stringBuilder;
     }
     
-    public String replaceSeparator(String filePath)
-    {
+    public static String replaceSeparator(String filePath) {
         String separator = "/";
-        return SLStrings.get().replace(filePath, separator, false, "/", "\\");
+        return SLStrings.replace(filePath, separator, false, "/", "\\");
     }
     
     //
@@ -710,10 +694,10 @@ public class SLStrings
      * </ul>
      *
      * @param obj The {@link Object} being toString'd.
+     *
      * @return An appropriate toString for the specified {@link Object}.
      */
-    public String toString(Object obj)
-    {
+    public static String toString(Object obj) {
         if (obj == null)
             return null;
         else if (obj instanceof Array)
@@ -730,8 +714,7 @@ public class SLStrings
     /**
      * The format in which the substring method returns.
      */
-    public enum SubstringType
-    {
+    public enum SubstringType {
         /**
          * All of the characters <i>before</i> the specified substring are returned.
          */

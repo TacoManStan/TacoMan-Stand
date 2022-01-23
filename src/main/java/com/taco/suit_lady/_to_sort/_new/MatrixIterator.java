@@ -4,7 +4,7 @@ import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.SLArrays;
-import com.taco.suit_lady.util.tools.fx_tools.FXTools;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -180,7 +180,7 @@ public abstract class MatrixIterator<T>
     }
     
     private void updateProgressOverlays(@NotNull Consumer<ProgressIndicator> action) {
-        FXTools.runFX(() -> java.util.Arrays.stream(progressIndicators).forEach(action), true);
+        FX.runFX(() -> java.util.Arrays.stream(progressIndicators).forEach(action), true);
     }
     
     //</editor-fold>
@@ -251,7 +251,7 @@ public abstract class MatrixIterator<T>
                     return null;
             }
             
-            FXTools.runFX(() -> sync(() -> {
+            FX.runFX(() -> sync(() -> {
                 updateProgressOverlays(progressIndicator -> progressIndicator.setVisible(false));
                 onTaskEnd(getMatrix());
             }), true);

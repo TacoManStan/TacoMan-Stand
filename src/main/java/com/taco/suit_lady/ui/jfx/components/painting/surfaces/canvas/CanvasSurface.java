@@ -4,7 +4,7 @@ import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.CanvasPai
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.Surface;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.SurfaceData;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.fx_tools.FXTools;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import javafx.beans.property.*;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
@@ -106,8 +106,8 @@ public class CanvasSurface extends Canvas
     @Override public @NotNull SurfaceData<CanvasPainter, CanvasSurface> data() { return data; }
     
     @Override public @NotNull CanvasSurface repaint() {
-        return sync(() -> FXTools.runFX(() -> {
-            FXTools.clearCanvasUnsafe(this);
+        return sync(() -> FX.runFX(() -> {
+            FX.clearCanvasUnsafe(this);
             
             paintables().forEach(uiCommand -> uiCommand.paint());
             

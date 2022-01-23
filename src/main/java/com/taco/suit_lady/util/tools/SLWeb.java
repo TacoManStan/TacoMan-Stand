@@ -4,17 +4,10 @@ import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 
-public class SLWeb
-{
-    public static SLWeb get()
-    {
-        return TB.web();
-    }
+public final class SLWeb {
+    private SLWeb() { } //No Instance
     
-    SLWeb() { }
-    
-    public void browse(String rawUrl)
-    {
+    public static void browse(String rawUrl) {
         try {
             Desktop.getDesktop().browse(URI.create(rawUrl));
         } catch (IOException e) {
@@ -22,13 +15,11 @@ public class SLWeb
         }
     }
     
-    public void browse(String page, boolean secure)
-    {
+    public static void browse(String page, boolean secure) {
         browse(page, "com", secure);
     }
     
-    public void browse(String page, String suffix, boolean secure)
-    {
+    public static void browse(String page, String suffix, boolean secure) {
         String prefix = "http" + (secure ? "s" : "") + "://www.";
         suffix = "." + suffix;
         String rawURL = prefix + page + suffix;

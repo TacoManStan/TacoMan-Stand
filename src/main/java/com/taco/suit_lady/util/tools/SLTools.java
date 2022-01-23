@@ -1,5 +1,11 @@
 package com.taco.suit_lady.util.tools;
 
+import com.taco.suit_lady.util.springable.Springable;
+import net.rgielen.fxweaver.core.FxWeaver;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -7,14 +13,8 @@ import java.util.function.Predicate;
 /**
  * Contains a variety of classes that provide utility features.
  */
-public class SLTools
-{
-    public static SLTools get()
-    {
-        return TB.general();
-    }
-    
-    SLTools() { }
+public final class SLTools {
+    private SLTools() { } //No Instance
     
     /**
      * Checks if the specified {@link Predicate} is valid for the specified {@code Object},
@@ -23,12 +23,13 @@ public class SLTools
      * @param obj       The {@code Object} being tested by the specified {@code Predicate}.
      * @param predicate The {@code Predicate} testing the specified {@code Object}.
      * @param <T>       The type of {@code Object} being tested.
+     *
      * @return True if the specified {@link Predicate} is valid for the specified {@code Object}
      * and if the specified {@code Object} is not null, false otherwise.
+     *
      * @throws NullPointerException if the specified {@code Object} is null.
      */
-    public <T> boolean test(T obj, Predicate<T> predicate)
-    {
+    public static <T> boolean test(T obj, Predicate<T> predicate) {
         SLExceptions.nullCheck(predicate, "Predicate");
         return obj != null && predicate.test(obj);
     }
@@ -39,16 +40,13 @@ public class SLTools
      * Sleeps for the specified amount of time. In milliseconds.
      *
      * @param millis The amount of time to sleep in milliseconds.
+     *
      * @return True if an InterruptedException was thrown while sleeping; false otherwise.
      */
-    public boolean sleep(double millis)
-    {
-        try
-        {
+    public static boolean sleep(double millis) {
+        try {
             Thread.sleep((long) millis);
-        }
-        catch (final InterruptedException ignored)
-        {
+        } catch (final InterruptedException ignored) {
             return true;
         }
         return false;
@@ -59,8 +57,7 @@ public class SLTools
      *
      * @return True if an InterruptedException was thrown while sleeping; false otherwise.
      */
-    public boolean sleepLoop()
-    {
+    public static boolean sleepLoop() {
         return sleep(15);
     } // TODO
     
@@ -88,10 +85,10 @@ public class SLTools
      *
      * @param param The value. Does not have to be an array.
      * @param <T>   The value type of the {@link Class} being returned.
+     *
      * @return The component type {@link Class} for the specified value.
      */
-    public <T> Class<? extends T> getClass(T[] param)
-    {
+    public static <T> Class<? extends T> getClass(T[] param) {
         SLExceptions.nullCheck(param, "Param Array");
         return (Class<T>) param.getClass().getComponentType();
     }
@@ -105,25 +102,20 @@ public class SLTools
      *
      * @param param The value.
      * @param <T>   The type of value being returned.
+     *
      * @return The array {@link Class} for the specified value.
      */
     @SafeVarargs
-    public final <T> Class getArrayClass(T... param)
-    {
-        if (param != null)
-        {
-            if (param.length > 0 && param[0] != null && param[0] instanceof Class)
-            {
+    public static final <T> Class getArrayClass(T... param) {
+        if (param != null) {
+            if (param.length > 0 && param[0] != null && param[0] instanceof Class) {
                 Class c = (Class) param[0];
                 if (c.isArray())
                     return c;
                 else
-                    try
-                    {
+                    try {
                         return Class.forName("[L" + c.getName() + ";");
-                    }
-                    catch (ClassNotFoundException e)
-                    {
+                    } catch (ClassNotFoundException e) {
                         throw SLExceptions.ex(e);
                     }
             }
@@ -139,10 +131,10 @@ public class SLTools
      * <br>The returned String will <i>never</i> itself be null.
      *
      * @param obj The {@link Object}.
+     *
      * @return The simple name of the specified {@link Object}.
      */
-    public String getSimpleName(Object obj)
-    {
+    public static String getSimpleName(Object obj) {
         if (obj != null)
             return obj.getClass().getSimpleName();
         return null;
@@ -158,20 +150,20 @@ public class SLTools
      * <br> Should no longer be necessary in TRiBot FX, but is being kept just in case.
      *
      * @param obj The {@link Object}.
+     *
      * @return The simple name of the specified {@link Object}.
+     *
      * @see #getSimpleName(Object)
      */
     @Deprecated
-    public String getWOSimpleName(Object obj)
-    {
-        if (obj != null)
-        {
+    public static String getWOSimpleName(Object obj) {
+        if (obj != null) {
             Class c = obj instanceof Class ? (Class) obj : obj.getClass();
             int indexOf = c.getName().lastIndexOf(c.getName().contains("$") ? "$" : ".");
             if (indexOf < c.getName().length() - 1)
                 indexOf++;
             String name = c.getName().substring(indexOf);
-            if (SLStrings.get().isNumber(name))
+            if (SLStrings.isNumber(name))
                 name = c.getName().substring(c.getName().lastIndexOf(".") + 1, c.getName().lastIndexOf("$"));
             return name;
         }
@@ -189,25 +181,21 @@ public class SLTools
      *
      * @param t  The {@link Object} being compared.
      * @param cs The {@link Class Classes} being compared.
+     *
      * @return if the specified {@link Object} is an instance of any of the
      * specified {@link Class Classes}, false otherwise.
      */
-    public boolean instanceOf(Object t, Class... cs)
-    {
+    public static boolean instanceOf(Object t, Class... cs) {
         if (t != null && cs != null)
             for (Class c: cs)
                 if (c != null)
-                    if (t instanceof Enum)
-                    {
+                    if (t instanceof Enum) {
                         if (c.equals(t.getClass()) || ((Enum) t).getDeclaringClass().isAssignableFrom(c))
                             return true;
-                    }
-                    else if (t instanceof Class)
-                    {
+                    } else if (t instanceof Class) {
                         if (c.equals(t) || c.isAssignableFrom((Class) t))
                             return true;
-                    }
-                    else if (c.equals(t.getClass()) || c.isAssignableFrom(t.getClass()))
+                    } else if (c.equals(t.getClass()) || c.isAssignableFrom(t.getClass()))
                         return true;
         return false;
     }
@@ -225,11 +213,12 @@ public class SLTools
      *
      * @param obj1 The first object being compared. Can be null.
      * @param obj2 The second object being compared. Can be null.
+     *
      * @return True if the specified objects are equal, false otherwise.
+     *
      * @see #equalsUnsafe(Object, Object)
      */
-    public boolean equals(Object obj1, Object obj2)
-    {
+    public static boolean equals(Object obj1, Object obj2) {
         return Objects.equals(obj1, obj2);
     }
     
@@ -238,11 +227,12 @@ public class SLTools
      *
      * @param obj1 The first object. <i>Cannot</i> be null.
      * @param obj2 The second object. <i>Cannot</i> be null.
+     *
      * @return True if the specified objects are equal <i>and</i> non-null, false otherwise.
+     *
      * @see #equals(Object, Object)
      */
-    public boolean equalsUnsafe(Object obj1, Object obj2)
-    {
+    public static boolean equalsUnsafe(Object obj1, Object obj2) {
         return obj1 != null && obj2 != null && Objects.equals(obj1, obj2);
     }
     
@@ -254,11 +244,11 @@ public class SLTools
      *
      * @param obj  The object being compared. Can be null.
      * @param objs The array of objects being compared to the first object. Elements can be null, but the array cannot.
+     *
      * @return If the specified object is equal to <u>any</u> of the elements contained within the specified array.
      * Returns false if the array is null or empty.
      */
-    public boolean equalsAny(Object obj, Object... objs)
-    {
+    public static boolean equalsAny(Object obj, Object... objs) {
         return equals(obj, false, true, false, objs);
     }
     
@@ -268,11 +258,11 @@ public class SLTools
      *
      * @param obj  The object being compared. Can be null.
      * @param objs The array of objects being compared to the first object. Elements can be null, but the array cannot.
+     *
      * @return If the specified object is equal to <u>any</u> of the elements contained within the specified array.
      * Returns false if the array is null, true if it is empty.
      */
-    public boolean equalsAll(Object obj, Object... objs)
-    {
+    public static boolean equalsAll(Object obj, Object... objs) {
         return equals(obj, true, true, false, objs);
     }
     
@@ -284,24 +274,20 @@ public class SLTools
      * @param allowNull  ...
      * @param deep       ...
      * @param objs       ...
+     *
      * @return ...
      */
-    public boolean equals(Object obj, boolean requireAll, boolean allowNull, boolean deep, Object... objs)
-    {
+    public static boolean equals(Object obj, boolean requireAll, boolean allowNull, boolean deep, Object... objs) {
         if (objs == null || (!allowNull && obj == null))
             return false;
         else if (objs.length == 1)
             return equalsImpl(obj, objs[0], allowNull, deep);
-        else
-        {
+        else {
             for (Object arrObj: objs)
-                if (equalsImpl(obj, arrObj, allowNull, deep))
-                {
+                if (equalsImpl(obj, arrObj, allowNull, deep)) {
                     if (requireAll)
                         return false;
-                }
-                else
-                {
+                } else {
                     if (!requireAll)
                         return true;
                 }
@@ -309,27 +295,25 @@ public class SLTools
         }
     }
     
-    private boolean equalsImpl(Object obj1, Object obj2, boolean allowNull, boolean deep)
-    {
+    private static boolean equalsImpl(Object obj1, Object obj2, boolean allowNull, boolean deep) {
         if (allowNull && obj1 == null && obj2 == null)
             return true;
         else
             return deep ? Objects.deepEquals(obj1, obj2) : Objects.equals(obj1, obj2);
     }
     
-    public long generateHashID()
-    {
-        return (long) TB.random().nextDouble(0, Long.MAX_VALUE);
+    public static long generateHashID() {
+        return (long) SLRandom.nextDouble(0, Long.MAX_VALUE);
     }
     
     /**
      * Generates a hash id that is useful for saving/loading unique objects.
      *
      * @return A hash id.
+     *
      * @see #generateHashID()
      */
-    public String generateHashString()
-    {
+    public static String generateHashString() {
         return "" + generateHashID();
     }
 }

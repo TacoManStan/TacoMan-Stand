@@ -64,8 +64,8 @@ import java.util.function.Consumer;
 /**
  * Contains a variety of classes that provide JavaFX utility features.
  */
-public class FXTools {
-    private FXTools() { } //No Instance    
+public class FX {
+    private FX() { } //No Instance
     
     //<editor-fold desc="EDT/FX Thread">
     
@@ -372,7 +372,7 @@ public class FXTools {
                 for (Object obj2: parents)
                     addFlowObj(obj2, children);
             } else
-                ConsoleBB.CONSOLE.print("ERROR: " + TB.general().getSimpleName(obj.getClass()) + " is an invalid type.");
+                ConsoleBB.CONSOLE.print("ERROR: " + SLTools.getSimpleName(obj.getClass()) + " is an invalid type.");
     }
     
     /**
@@ -525,7 +525,7 @@ public class FXTools {
             if (observableString != null) {
                 String string = observableString.get();
                 if (string != null) {
-                    webView.getEngine().loadContent(SLStrings.get().html(string, true));
+                    webView.getEngine().loadContent(SLStrings.html(string, true));
                     return;
                 }
             }
@@ -865,7 +865,7 @@ public class FXTools {
     
     
     public static void drawRectangle(Canvas canvas, Bounds bounds, boolean wipeCanvas, boolean fill) {
-        FXTools.runFX(() -> {
+        FX.runFX(() -> {
             if (wipeCanvas)
                 clearCanvasUnsafe(canvas);
             
@@ -881,7 +881,7 @@ public class FXTools {
     }
     
     public static void drawOval(Canvas canvas, Bounds bounds, boolean wipeCanvas, boolean fill) {
-        FXTools.runFX(() -> {
+        FX.runFX(() -> {
             if (wipeCanvas)
                 clearCanvasUnsafe(canvas);
             
@@ -897,7 +897,7 @@ public class FXTools {
     }
     
     public static void drawArc(Canvas canvas, Bounds bounds, double startAngle, double arcExtent, ArcType closure, boolean wipeCanvas, boolean fill) {
-        FXTools.runFX(() -> {
+        FX.runFX(() -> {
             if (wipeCanvas)
                 clearCanvasUnsafe(canvas);
             
@@ -913,7 +913,7 @@ public class FXTools {
     }
     
     public static void drawImage(@NotNull Canvas canvas, int x, int y, @NotNull Image image, boolean safe, boolean wipeCanvas) {
-        FXTools.runFX(() -> {
+        FX.runFX(() -> {
             if (wipeCanvas)
                 clearCanvasUnsafe(canvas);
             canvas.getGraphicsContext2D().drawImage(image, x, y);
@@ -921,7 +921,7 @@ public class FXTools {
     }
     
     public static void drawImage(@NotNull Canvas canvas, @NotNull Bounds bounds, @NotNull Image image, boolean safe, boolean wipeCanvas) {
-        FXTools.runFX(() -> {
+        FX.runFX(() -> {
             if (wipeCanvas)
                 clearCanvasUnsafe(canvas);
             canvas.getGraphicsContext2D().drawImage(image, bounds.getX(safe), bounds.getY(safe), bounds.getWidth(safe), bounds.getHeight(safe));
@@ -929,7 +929,7 @@ public class FXTools {
     }
     
     public static void drawImage(@NotNull Canvas canvas, @NotNull Bounds source, @NotNull Bounds destination, Image image, boolean safe, boolean wipeCanvas) {
-        FXTools.runFX(() -> {
+        FX.runFX(() -> {
             if (wipeCanvas)
                 clearCanvasUnsafe(canvas);
             canvas.getGraphicsContext2D().drawImage(
@@ -1072,7 +1072,7 @@ public class FXTools {
                         else
                             throw new RuntimeException("If root is a BorderPane, then root center must be a Stack Pane (center=" + center + ")");
                     } else
-                        throw new ClassCastException("Root must be instance of Stack Pane or BorderPane (root=" + SLTools.get().getSimpleName(root) + ")");
+                        throw new ClassCastException("Root must be instance of Stack Pane or BorderPane (root=" + SLTools.getSimpleName(root) + ")");
                 } else
                     throw new NullPointerException("Root cannot be null");
             } else
@@ -1715,7 +1715,7 @@ public class FXTools {
         if (comboBox != null) {
             applyCellFactory(comboBox);
             if (t != null) {
-                final Enum[] e_list = SLEnums.get().list(t);
+                final Enum[] e_list = SLEnums.list(t);
                 for (Enum e: e_list)
                     if (!SLArrays.contains(e, excludeValues))
                         comboBox.getItems().add((T) e);
@@ -1745,7 +1745,7 @@ public class FXTools {
             if (obj instanceof Listable)
                 str = ((Listable) obj).getShortText();
             else if (obj instanceof Enum)
-                str = SLStrings.get().enumToString((Enum) obj);
+                str = SLStrings.enumToString((Enum) obj);
             else
                 str = obj.toString();
             return str;
@@ -1775,21 +1775,21 @@ public class FXTools {
     public static final int NO_CHANGE_SIZE_LOCK = Integer.MIN_VALUE;
     
     /**
-     * Locks the size of the specified {@link Stage} based on the specified {@link FXDialogTools.SizeType}.
+     * Locks the size of the specified {@link Stage} based on the specified {@link FXDialogs.SizeType}.
      *
      * @param stage    The {@link Stage} being locked.
-     * @param sizeType The {@link FXDialogTools.SizeType} that controls how the {@link Stage} can be resized.
+     * @param sizeType The {@link FXDialogs.SizeType} that controls how the {@link Stage} can be resized.
      *
      * @return True if the {@link Stage Stage's} size was locked successfully, false otherwise.
      */
-    public static boolean lockSize(Stage stage, FXDialogTools.SizeType sizeType) {
+    public static boolean lockSize(Stage stage, FXDialogs.SizeType sizeType) {
         if (stage != null && sizeType != null) {
-            if (sizeType == FXDialogTools.SizeType.MINIMUM_SIZE) {
+            if (sizeType == FXDialogs.SizeType.MINIMUM_SIZE) {
                 stage.setMinWidth(stage.getWidth());
                 stage.setMinHeight(stage.getHeight());
-            } else if (sizeType == FXDialogTools.SizeType.NON_RESIZEABLE)
+            } else if (sizeType == FXDialogs.SizeType.NON_RESIZEABLE)
                 stage.setResizable(false);
-            else if (sizeType == FXDialogTools.SizeType.RESIZEABLE)
+            else if (sizeType == FXDialogs.SizeType.RESIZEABLE)
                 stage.setResizable(true);
             return true;
         }
@@ -1842,30 +1842,30 @@ public class FXTools {
     }
     
     /**
-     * Locks the size of the specified {@link Region} based on the specified {@link FXDialogTools.SizeType}.
+     * Locks the size of the specified {@link Region} based on the specified {@link FXDialogs.SizeType}.
      * <p>
      * Note that {@link Region regions} do not have a {@code setResizable()} method. This methods:
      * <ul>
-     * <li>{@link FXDialogTools.SizeType#NON_RESIZEABLE} sets the {@link Region#setMinSize(double, double) minimum size} and {@link Region#setMaxSize(double, double) maximum size} to the current size of the {@link
+     * <li>{@link FXDialogs.SizeType#NON_RESIZEABLE} sets the {@link Region#setMinSize(double, double) minimum size} and {@link Region#setMaxSize(double, double) maximum size} to the current size of the {@link
      * Region}.</li>
-     * <li>{@link FXDialogTools.SizeType#RESIZEABLE} sets the {@link Region#setMaxSize(double, double) maximum size} to {@link Integer#MAX_VALUE}.</li>
+     * <li>{@link FXDialogs.SizeType#RESIZEABLE} sets the {@link Region#setMaxSize(double, double) maximum size} to {@link Integer#MAX_VALUE}.</li>
      * </ul>
      *
      * @param region   The {@link Region} being locked.
-     * @param sizeType The {@link FXDialogTools.SizeType} that controls how the {@link Region} can be resized.
+     * @param sizeType The {@link FXDialogs.SizeType} that controls how the {@link Region} can be resized.
      *
      * @return True if the {@link Region Region's} size was locked successfully, false otherwise.
      */
-    public static boolean lockSize(Region region, FXDialogTools.SizeType sizeType) {
+    public static boolean lockSize(Region region, FXDialogs.SizeType sizeType) {
         if (region != null && sizeType != null) {
             double width = region.getWidth();
             double height = region.getHeight();
-            if (sizeType == FXDialogTools.SizeType.MINIMUM_SIZE)
+            if (sizeType == FXDialogs.SizeType.MINIMUM_SIZE)
                 region.setMinSize(width, height);
-            else if (sizeType == FXDialogTools.SizeType.NON_RESIZEABLE) {
+            else if (sizeType == FXDialogs.SizeType.NON_RESIZEABLE) {
                 region.setMaxSize(width, height);
                 region.setMinSize(width, height);
-            } else if (sizeType == FXDialogTools.SizeType.RESIZEABLE)
+            } else if (sizeType == FXDialogs.SizeType.RESIZEABLE)
                 region.setMaxSize(Integer.MAX_VALUE, Integer.MAX_VALUE);
             return true;
         }
@@ -1894,7 +1894,7 @@ public class FXTools {
             //				System.err.println("Initializing FXML Loader for resource: " + resource);
             if (controller != null)
                 loader.setController(controller);
-            loader.load(TB.resources().getResourceStream(resource));
+            loader.load(SLResources.getResourceStream(resource));
             return loader;
         } catch (Exception e) {
             throw new UndefinedRuntimeException("Error loading resource: " + resource);
@@ -1908,14 +1908,14 @@ public class FXTools {
     
     private static boolean isValidSuffix(String str, String @NotNull ... suffixes) {
         for (final String suffix: suffixes)
-            if (str.contains(suffix) && (!str.endsWith(suffix) || SLStrings.get().getCount(str, suffix) != 1 || str.length() == suffix.length()))
+            if (str.contains(suffix) && (!str.endsWith(suffix) || SLStrings.getCount(str, suffix) != 1 || str.length() == suffix.length()))
                 return false;
         return true;
     }
     
     private static boolean isValidPrefix(String str, String @NotNull ... prefixes) {
         for (String prefix: prefixes)
-            if (str.contains(prefix) && (!str.startsWith(prefix) || SLStrings.get().getCount(str, prefix) != 1))
+            if (str.contains(prefix) && (!str.startsWith(prefix) || SLStrings.getCount(str, prefix) != 1))
                 return false;
         return true;
     }

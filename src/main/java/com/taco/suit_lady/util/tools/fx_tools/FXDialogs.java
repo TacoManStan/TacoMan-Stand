@@ -1,8 +1,9 @@
 package com.taco.suit_lady.util.tools.fx_tools;
 
 import com.taco.suit_lady.util.tools.SLEnums;
+import com.taco.suit_lady.util.tools.SLResources;
 import com.taco.suit_lady.util.tools.SLStrings;
-import com.taco.suit_lady.util.tools.TB;
+import com.taco.suit_lady.util.tools.SLTools;
 import com.taco.suit_lady.ui.jfx.dialog.DialogCallback;
 import com.taco.suit_lady.ui.jfx.dialog.DialogController;
 import javafx.scene.Node;
@@ -21,8 +22,8 @@ import java.util.Optional;
 /**
  * //TODO
  */
-public class FXDialogTools {
-    private FXDialogTools() { } //No instance
+public class FXDialogs {
+    private FXDialogs() { } //No instance
     
     //<editor-fold desc="Button Types">
     
@@ -96,7 +97,7 @@ public class FXDialogTools {
      * @param text    The text to be displayed.
      */
     public static void showInfoDialog(String title, String message, String text) {
-        FXTools.runFX(() -> {
+        FX.runFX(() -> {
             WebView webView = new WebView(); webView.setPrefSize(DEFAULT_WIDTH, DEFAULT_HEIGHT); webView.setMinSize(DEFAULT_WIDTH, DEFAULT_HEIGHT); webView.getEngine().loadContent(text);
             showDialog(title, message, webView, null, DEFAULT_SPACING, OK, SizeType.RESIZEABLE, null);
         }, true);
@@ -113,7 +114,7 @@ public class FXDialogTools {
      * @param message The message to display for the user. Null to use the title as the message.
      */
     public static void showMessageDialog(String title, String message) {
-        FXTools.runFX(() -> showDialog(title, message, null, null, DEFAULT_SPACING, OK, SizeType.RESIZEABLE, null), true);
+        FX.runFX(() -> showDialog(title, message, null, null, DEFAULT_SPACING, OK, SizeType.RESIZEABLE, null), true);
     }
     
     /**
@@ -149,8 +150,8 @@ public class FXDialogTools {
      * @return The integer that the user entered, or 0 if the {@link Dialog} was cancelled or closed.
      */
     public static int showIntDialog(String title, String message, int... initialValue) {
-        int initialVal = initialValue != null && initialValue.length != 0 ? initialValue[0] : 0; TextField textField = new TextField(); FXTools.numberTextField(textField, false); textField.setText("" + initialVal);
-        Integer value = showDialog(title, message, textField, textField, DEFAULT_SPACING, DONE_CANCEL, SizeType.RESIZEABLE, new DialogCallback<>(NULL_NUMBER, param -> FXTools.getIntValue(textField))); return value != null ? value : NULL_NUMBER;
+        int initialVal = initialValue != null && initialValue.length != 0 ? initialValue[0] : 0; TextField textField = new TextField(); FX.numberTextField(textField, false); textField.setText("" + initialVal);
+        Integer value = showDialog(title, message, textField, textField, DEFAULT_SPACING, DONE_CANCEL, SizeType.RESIZEABLE, new DialogCallback<>(NULL_NUMBER, param -> FX.getIntValue(textField))); return value != null ? value : NULL_NUMBER;
     }
     
     /**
@@ -163,8 +164,8 @@ public class FXDialogTools {
      * @return The long that the user entered, or 0 if the {@link Dialog} was cancelled or closed.
      */
     public static long showLongDialog(String title, String message, long... initialValue) {
-        long initialVal = initialValue != null && initialValue.length != 0 ? initialValue[0] : 0; TextField textField = new TextField(); FXTools.numberTextField(textField, false); textField.setText("" + initialVal);
-        Long value = showDialog(title, message, textField, textField, DEFAULT_SPACING, DONE_CANCEL, SizeType.RESIZEABLE, new DialogCallback<>((long) NULL_NUMBER, param -> FXTools.getLongValue(textField))); return value != null ? value : NULL_NUMBER;
+        long initialVal = initialValue != null && initialValue.length != 0 ? initialValue[0] : 0; TextField textField = new TextField(); FX.numberTextField(textField, false); textField.setText("" + initialVal);
+        Long value = showDialog(title, message, textField, textField, DEFAULT_SPACING, DONE_CANCEL, SizeType.RESIZEABLE, new DialogCallback<>((long) NULL_NUMBER, param -> FX.getLongValue(textField))); return value != null ? value : NULL_NUMBER;
     }
     
     /**
@@ -176,8 +177,8 @@ public class FXDialogTools {
      * @return The number(double) that the user entered, or 0.0 if the {@link Dialog} was cancelled or closed.
      */
     public static double showDoubleDialog(String title, String message, double... initialValue) {
-        double initialVal = initialValue != null && initialValue.length != 0 ? initialValue[0] : 0.0; TextField textField = new TextField(); FXTools.numberTextField(textField, true); textField.setText("" + initialVal);
-        Double value = showDialog(title, message, textField, textField, DEFAULT_SPACING, DONE_CANCEL, SizeType.RESIZEABLE, new DialogCallback<>((double) NULL_NUMBER, param -> FXTools.getValue(textField))); return value != null ? value : NULL_NUMBER;
+        double initialVal = initialValue != null && initialValue.length != 0 ? initialValue[0] : 0.0; TextField textField = new TextField(); FX.numberTextField(textField, true); textField.setText("" + initialVal);
+        Double value = showDialog(title, message, textField, textField, DEFAULT_SPACING, DONE_CANCEL, SizeType.RESIZEABLE, new DialogCallback<>((double) NULL_NUMBER, param -> FX.getValue(textField))); return value != null ? value : NULL_NUMBER;
     }
     
     /**
@@ -215,17 +216,17 @@ public class FXDialogTools {
      *
      * @param title            The title of the {@link Dialog}.
      * @param message          The message to display for the user. Null to use the title as the message.
-     * @param autoCompleteMode The {@link FXTools.AutoCompleteMode}, or null if the {@link ComboBox} is not an auto-complete box.
+     * @param autoCompleteMode The {@link FX.AutoCompleteMode}, or null if the {@link ComboBox} is not an auto-complete box.
      * @param defaultOption    The default option that the {@link ComboBox} returns if the user does not select a value.
      * @param options          The array of potential options that the user can choose.
      * @param <T>              The type of element in the {@link ComboBox}.
      *
      * @return The value that the user chose from the {@link ComboBox}, or the default value if the {@link Dialog} was cancelled or closed.
      */
-    @SafeVarargs public static <T> T showChooseOptionDialog(String title, String message, FXTools.AutoCompleteMode autoCompleteMode, T defaultOption, boolean selectFirst, String promptText, T... options) {
-        ComboBox<T> comboBox = new ComboBox<>(); FXTools.autoCompleteComboBox(comboBox, autoCompleteMode, promptText); comboBox.getItems().addAll(options); if (autoCompleteMode == null) if (selectFirst) comboBox.getSelectionModel().selectFirst();
+    @SafeVarargs public static <T> T showChooseOptionDialog(String title, String message, FX.AutoCompleteMode autoCompleteMode, T defaultOption, boolean selectFirst, String promptText, T... options) {
+        ComboBox<T> comboBox = new ComboBox<>(); FX.autoCompleteComboBox(comboBox, autoCompleteMode, promptText); comboBox.getItems().addAll(options); if (autoCompleteMode == null) if (selectFirst) comboBox.getSelectionModel().selectFirst();
         else comboBox.getSelectionModel().select(defaultOption);
-        return showDialog(title, message, comboBox, autoCompleteMode != null ? comboBox : null, DEFAULT_SPACING, DONE_CANCEL, SizeType.RESIZEABLE, new DialogCallback<>(defaultOption, param -> FXTools.getSelectedValue(comboBox)));
+        return showDialog(title, message, comboBox, autoCompleteMode != null ? comboBox : null, DEFAULT_SPACING, DONE_CANCEL, SizeType.RESIZEABLE, new DialogCallback<>(defaultOption, param -> FX.getSelectedValue(comboBox)));
     }
     
     /**
@@ -233,17 +234,17 @@ public class FXDialogTools {
      *
      * @param title            The title of the {@link Dialog}.
      * @param message          The message to display for the user. Null to use the title as the message.
-     * @param autoCompleteMode The {@link FXTools.AutoCompleteMode}, or null if the {@link ComboBox} is not an auto-complete box.
+     * @param autoCompleteMode The {@link FX.AutoCompleteMode}, or null if the {@link ComboBox} is not an auto-complete box.
      * @param defaultOption    The default option that the {@link ComboBox} returns if the user does not select a value.
      * @param <T>              The type of element in the {@link ComboBox}.
      *
      * @return The value that the user chose from the {@link ComboBox}, or the default value if the {@link Dialog} was cancelled or closed.
      *
-     * @see #showChooseOptionDialog(String, String, FXTools.AutoCompleteMode, Object, boolean, String, Object[])
+     * @see #showChooseOptionDialog(String, String, FX.AutoCompleteMode, Object, boolean, String, Object[])
      */
-    public static <T extends Enum> T showChooseEnumDialog(String title, String message, FXTools.AutoCompleteMode autoCompleteMode, T defaultOption, String promptText, boolean selectFirst) {
-        if (promptText != null && promptText.isEmpty()) promptText = "Start typing " + SLStrings.get().classToString(defaultOption.getClass());
-        return showChooseOptionDialog(title, message, autoCompleteMode, defaultOption, selectFirst, promptText, (T[]) SLEnums.get().list(defaultOption));
+    public static <T extends Enum> T showChooseEnumDialog(String title, String message, FX.AutoCompleteMode autoCompleteMode, T defaultOption, String promptText, boolean selectFirst) {
+        if (promptText != null && promptText.isEmpty()) promptText = "Start typing " + SLStrings.classToString(defaultOption.getClass());
+        return showChooseOptionDialog(title, message, autoCompleteMode, defaultOption, selectFirst, promptText, (T[]) SLEnums.list(defaultOption));
     }
     
     /**
@@ -258,7 +259,7 @@ public class FXDialogTools {
      * @return The values that the user has selected from the {@link ListView}, or the default value if the {@link Dialog} was cancelled or closed.
      */
     @SafeVarargs public static <T> T[] showChooseOptionsDialog(String title, String message, T[] empty, T... options) {
-        ListView<T> listView = new ListView<>(); FXTools.applyCellFactory(listView); listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); listView.setMinSize(0, 0); listView.setPrefSize(200, 250); listView.getItems().addAll(options);
+        ListView<T> listView = new ListView<>(); FX.applyCellFactory(listView); listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); listView.setMinSize(0, 0); listView.setPrefSize(200, 250); listView.getItems().addAll(options);
         return showDialog(title, message, listView, listView, DEFAULT_SPACING, DONE_CANCEL, SizeType.RESIZEABLE, new DialogCallback<>(empty, param -> listView.getSelectionModel().getSelectedItems().toArray(empty)));
     }
     
@@ -339,7 +340,7 @@ public class FXDialogTools {
      * @return The value returned by the {@link DialogCallback}.
      */
     public static <T> T showDialog(String title, String message, Node content, Node contentToFocus, double spacing, ButtonType[] buttonTypes, SizeType sizeType, DialogCallback<T> callback) {
-        return FXTools.runFX(() -> {
+        return FX.runFX(() -> {
             final Dialog<T> dialog; final DialogPane dialog_pane;
             
             final BorderPane parent_container = new BorderPane(); final Node container; final Node final_content_to_focus = contentToFocus != null ? contentToFocus : content;
@@ -352,7 +353,7 @@ public class FXDialogTools {
             dialog_pane = dialog.getDialogPane();
             
             // Apply css to dialog
-            dialog_pane.getStylesheets().add(TB.resources().getResourceURL("css/main.css").toExternalForm()); dialog_pane.getStyleClass().add("dialogFX");
+            dialog_pane.getStylesheets().add(SLResources.getResourceURL("css/main.css").toExternalForm()); dialog_pane.getStyleClass().add("dialogFX");
             
             // Set the spacing around the dialog's content
             final double final_spacing = spacing == -1 ? DEFAULT_SPACING : spacing; if (final_spacing > 0 && content != null) {
@@ -392,10 +393,10 @@ public class FXDialogTools {
             new Thread(() -> {
                 // TODO [S]: Make this more efficient
                 // Wait for dialog to appear
-                while (!dialog.isShowing()) TB.general().sleep(5);
+                while (!dialog.isShowing()) SLTools.sleep(5);
                 // Focus content if not a ComboBox, ChoiceBox, or ListView
-                FXTools.runFX(() -> {
-                    if (final_content_to_focus != null && !(TB.general().instanceOf(final_content_to_focus, ComboBox.class, ChoiceBox.class, ListView.class))) final_content_to_focus.requestFocus();
+                FX.runFX(() -> {
+                    if (final_content_to_focus != null && !(SLTools.instanceOf(final_content_to_focus, ComboBox.class, ChoiceBox.class, ListView.class))) final_content_to_focus.requestFocus();
                 }, false);
             }).start();
             

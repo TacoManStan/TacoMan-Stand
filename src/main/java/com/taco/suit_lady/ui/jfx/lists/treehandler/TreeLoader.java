@@ -2,12 +2,13 @@ package com.taco.suit_lady.ui.jfx.lists.treehandler;
 
 import com.taco.suit_lady.ui.jfx.lists.CellControlManager;
 import com.taco.suit_lady.ui.jfx.lists.TreeCellFX;
+import com.taco.suit_lady.ui.ui_internal.controllers.CellController;
 import com.taco.suit_lady.util.Validatable;
 import com.taco.suit_lady.util.tools.SLArrays;
 import com.taco.suit_lady.util.tools.SLExceptions;
-import com.taco.suit_lady.util.tools.TB;
-import com.taco.suit_lady.util.tools.fx_tools.FXTools;
-import com.taco.suit_lady.ui.ui_internal.controllers.CellController;
+import com.taco.suit_lady.util.tools.SLResources;
+import com.taco.suit_lady.util.tools.SLTools;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.scene.control.TreeCell;
@@ -195,7 +196,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
         treeView.setRoot(rootItem);
         
         while (clearEmptyFolders(rootItem) > 0)
-            TB.general().sleepLoop();
+           SLTools.sleepLoop();
         
         applyCellFactory();
     }
@@ -241,7 +242,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
         treeView.setCellFactory(treeView -> new TreeCellFX<>(
                 treeCellFX -> new CellControlManager<>(
                         treeCellFX,
-                        cellData -> TB.resources().get(
+                        cellData -> SLResources.get(
                                 cellData,
                                 () -> controllerSupplier.apply(cellData), // CHANGE-HERE
                                 treeView.hashCode()))));
@@ -561,7 +562,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
     
     //TO-DOC
     public void revalidate() {
-        FXTools.runFX(() -> items.forEach(this::revalidate), true);
+        FX.runFX(() -> items.forEach(this::revalidate), true);
     }
     
     //TO-DOC

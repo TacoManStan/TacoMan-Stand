@@ -8,8 +8,8 @@ import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.TB;
-import com.taco.suit_lady.util.tools.fx_tools.FXTools;
+import com.taco.suit_lady.util.tools.SLResources;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import com.taco.tacository.json.JFiles;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
@@ -42,7 +42,7 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
                 this,
                 "Game View",
                 "mandelbrot2",
-                uiBook -> TB.resources().get(
+                uiBook -> SLResources.get(
                         "pages",
                         uiBook.getUID(uiBook.getButtonID()),
                         () -> coverPage = new GameViewPage(uiBook, this)),
@@ -197,8 +197,8 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
     }
     
     private void refreshCanvas() {
-        sync(() -> FXTools.runFX(() -> {
-            FXTools.clearCanvasUnsafe(ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas());
+        sync(() -> FX.runFX(() -> {
+            FX.clearCanvasUnsafe(ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas());
         }, true));
     }
     

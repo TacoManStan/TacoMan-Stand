@@ -2,7 +2,7 @@ package com.taco.suit_lady.ui.jfx.setting;
 
 import com.taco.suit_lady.util.tools.SLExceptions;
 import com.taco.suit_lady.util.settings.SavableSetting;
-import com.taco.suit_lady.util.tools.fx_tools.FXTools;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import com.taco.tacository.obj_traits.common.Nameable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -40,7 +40,7 @@ public abstract class SettingNode<V, T extends Region, U extends SavableSetting>
 	private void initialize() {
 		getSetting().createBinding(getInputNode());
 
-		FXTools.runFX(() -> {
+		FX.runFX(() -> {
 			setFillHeight(true);
 			setSpacing(5);
 

@@ -4,7 +4,7 @@ import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.SLProperties;
 import com.taco.suit_lady.util.tools.SLResources;
-import com.taco.suit_lady.util.tools.fx_tools.FXTools;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.image.Image;
@@ -34,7 +34,7 @@ public class ImagePainter extends CanvasPainter {
     
     @Override public @NotNull ImagePainter init() {
         imageProperty.addListener((observable, oldValue, newValue) -> repaintSurface());
-        imageProperty.set(SLResources.get().getDummyImage(SLResources.MAP));
+        imageProperty.set(SLResources.getDummyImage(SLResources.MAP));
         
         return (ImagePainter) super.init();
     }
@@ -43,7 +43,7 @@ public class ImagePainter extends CanvasPainter {
         Image image = getImage();
         Bounds bounds = getBounds();
         if (image != null && isValidDimensions())
-            FXTools.drawImage(getSurface(), bounds, image, true, false);
+            FX.drawImage(getSurface(), bounds, image, true, false);
         
         // Below is example use case for both source & target Bounds.
         // The example clips the image to show only the top left quadrant of the image

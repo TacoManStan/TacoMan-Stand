@@ -3,7 +3,6 @@ package com.taco.suit_lady.ui;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.SLArrays;
 import com.taco.suit_lady.util.tools.SLExceptions;
-import com.taco.suit_lady.util.tools.TB;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.OverlaySurface;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.OverlayHandler;
 import javafx.beans.property.ReadOnlyListProperty;
