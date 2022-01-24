@@ -96,7 +96,7 @@ public class ImageButton
             @Nullable Point2D size) {
         this(springable,
              name,
-             SLBindings.bindString(imageId),
+             SLBindings.bindStringStatic(imageId),
              imagePane,
              actionResponder,
              actionResponderFX,
@@ -222,8 +222,8 @@ public class ImageButton
         });
         
         
-        this.hoveredBinding = SLBindings.bindBoolean(this.imagePane.hoverProperty());
-        this.pressedBinding = SLBindings.bindBoolean(this.imagePane.pressedProperty());
+        this.hoveredBinding = SLBindings.bindBooleanDirect(this.imagePane.hoverProperty());
+        this.pressedBinding = SLBindings.bindBooleanDirect(this.imagePane.pressedProperty());
         
         
         this.paintData = new PaintData("");

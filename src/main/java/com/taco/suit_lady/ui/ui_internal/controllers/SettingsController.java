@@ -70,7 +70,7 @@ public class SettingsController extends DialogController<Void>
         this.selectedGroupBinding = SLBindings.bindRecursive(
                 (TitledPane pane) -> pane != null
                         ? ((SettingsTitledPane) pane).selectedGroupProperty()
-                        : SLBindings.bindObject(null),
+                        : SLBindings.bindObjectStatic(null),
                 expandedPaneProperty()
                                                             );
         
