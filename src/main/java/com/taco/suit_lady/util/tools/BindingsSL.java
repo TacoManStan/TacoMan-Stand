@@ -239,7 +239,7 @@ public class BindingsSL {
      *
      * @return The newly created {@code BooleanBinding} bound to the null status of the specified {@code Binding}.
      */
-    public static BooleanBinding createNullCheckBinding(Binding<?> binding) {
+    public static @NotNull BooleanBinding createNullCheckBinding(Binding<?> binding) {
         ExceptionsSL.nullCheck(binding, "Binding");
         return Bindings.createBooleanBinding(() -> binding.getValue() != null, binding);
     }
@@ -251,7 +251,7 @@ public class BindingsSL {
      *
      * @return An {@link IntegerBinding} that increments by 1 every time any of the specified {@link Observable Observables} is updated.
      */
-    public static IntegerBinding incrementingBinding(Observable... obs) {
+    public static @NotNull IntegerBinding incrementingBinding(Observable... obs) {
         AtomicInteger _int = new AtomicInteger(0);
         return Bindings.createIntegerBinding(_int::incrementAndGet, obs);
     }
@@ -324,34 +324,33 @@ public class BindingsSL {
     }
     
     /**
-     * Allows you to bind an {@link ObservableValue} to a dynamic {@link Binding}.
-     * <p>
-     * <b>Example Class 1:</b>
+     * <p>Allows you to bind an {@link ObservableValue} to a dynamic {@link Binding}.</p>
+     * <br><hr><br>
+     * <p><b>Example Class 1:</b></p>
      * <pre><code>
-     * public static class ExampleClass1
-     * {
+     * public static class ExampleClass1 {
      *      private final {@link ObjectProperty}{@literal ExampleClass2} selectedExampleProperty;
      *
      *      public ExampleClass1(ExampleClass2 selectedExampleClass2) {
-     *          this.selectedExampleProperty = new {@link SimpleObjectProperty}{@literal <>}selectedExampleClass2);}
+     *          this.selectedExampleProperty = new {@link SimpleObjectProperty}{@literal <>}selectedExampleClass2);
      *      }
      *
      *      ... Assumed to have standard Property methods ...
      * }</code></pre>
-     * <b>Example Class 2:</b>
+     * <br>
+     * <p><b>Example Class 2:</b></p>
      * <pre><code>
-     * public static class ExampleClass2
-     * {
+     * public static class ExampleClass2 {
      *      private final {@link StringProperty} nameProperty;
      *
      *      public ExampleClass2(String name) {
-     *          this.nameProperty = new {@link SimpleStringProperty} (name);
+     *          this.nameProperty = new {@link SimpleStringProperty}(name);
      *      }
      *
      *      ... Assumed to have standard Property methods ...
      * }</code></pre>
-     * <p>
-     * <b>Example Usage:</b>
+     * <br>
+     * <p><b>Example Usage:</b></p>
      * <pre><code>
      * ExampleClass2 example1 = new ExampleClass2("Example 1");
      * ExampleClass2 example2 = new ExampleClass2("Example 2");
@@ -380,7 +379,7 @@ public class BindingsSL {
         private Binding<V> binding;
         
         /**
-         * Constructs a new {@code RecursiveBinding} object.
+         * <p>Constructs a new {@code RecursiveBinding} object.</p>
          *
          * @param lock             The {@code ReentrantLock} used for this {@code RecursiveBinding}.
          *                         Specify {@code null} to not use a {@code ReentrantLock}.
@@ -406,140 +405,46 @@ public class BindingsSL {
         
         //<editor-fold desc="--- PROPERTIES ---">
         
-        //
-        
         /**
-         * Returns the {@link ObjectProperty} for this {@code RecursiveBinding}.
+         * <p>Returns the {@link ObjectProperty} containing the {@link Function} used to calculate the {@link ObservableValue#getValue() value} of this {@link RecursiveBinding} instance upon its {@link #invalidate() invalidation}.</p>
          *
-         * @return The {@code ObjectProperty} for this {@code RecursiveBinding}.
-         *
-         * @see #getFunction()
-         * @see #setFunction(Function)
+         * @return The {@link ObjectProperty} containing the {@link Function} used to calculate the {@link ObservableValue#getValue() value} of this {@link RecursiveBinding} instance upon its {@link #invalidate() invalidation}.
          */
-        public ObjectProperty<Function<U, ObservableValue<V>>> functionProperty() {
-            return functionProperty;
-        }
+        public ObjectProperty<Function<U, ObservableValue<V>>> functionProperty() { return functionProperty; }
+        public Function<U, ObservableValue<V>> getFunction() { return functionProperty.get(); }
+        public Function<U, ObservableValue<V>> setFunction(Function<U, ObservableValue<V>> newValue) { return PropertiesSL.setProperty(functionProperty, newValue); }
         
         /**
-         * Returns the {@link Function} for this {@code RecursiveBinding}.
-         *
-         * @return The {@code Function} for this {@code RecursiveBinding}.
-         *
-         * @see #functionProperty()
-         */
-        public Function<U, ObservableValue<V>> getFunction() {
-            return functionProperty.get();
-        }
-        
-        /**
-         * Sets the {@link Function} for this {@code RecursiveBinding}.
-         * <p>
-         * Calling this method causes this {@code RecursiveBinding} to update.
-         *
-         * @param function The new {@code Function}.
-         *
-         * @see #functionProperty()
-         */
-        public void setFunction(Function<U, ObservableValue<V>> function) {
-            functionProperty.set(function);
-        }
-        
-        //
-        
-        /**
-         * Returns the backing {@link Binding} attached to this {@code RecursiveBinding}.
-         * <p>
-         * All implemented {@code Binding} methods are passed through to the backing {@code Binding}.
+         * <p>Returns the backing {@link Binding} attached to this {@code RecursiveBinding}.</p>
+         * <p>All implemented {@code Binding} methods are passed through to the backing {@code Binding}.</p>
          *
          * @return The backing {@code Binding} attached to this {@code RecursiveBinding}.
          */
-        private Binding<V> getBackingBinding() {
-            return binding;
-        }
+        private Binding<V> getBackingBinding() { return binding; }
         
         //</editor-fold>
         
-        //<editor-fold desc="--- BINDINGS ---">
+        //<editor-fold desc="--- BINDING ---">
+    
+        @Override public ObservableList<?> getDependencies() { return getBackingBinding().getDependencies(); }
+        @Override public V getValue() { return getBackingBinding().getValue(); }
         
-        /**
-         * Calls the {@link Binding#isValid() isValid()} method of the {@code backing Binding}.
-         * {@inheritDoc}
-         *
-         * @return {@inheritDoc}
-         */
-        @Override public boolean isValid() {
-            return getBackingBinding().isValid();
-        }
+        @Override public void dispose() { getBackingBinding().dispose(); }
         
-        /**
-         * Calls the {@link Binding#invalidate() invalidate()} method of the {@code backing Binding}.
-         * {@inheritDoc}
-         */
-        @Override public void invalidate() {
-            getBackingBinding().invalidate();
-        }
         
-        /**
-         * Calls the {@link Binding#getDependencies() getDependencies()} method of the {@code backing Binding}.
-         * {@inheritDoc}
-         *
-         * @return {@inheritDoc}
-         */
-        @Override public ObservableList<?> getDependencies() {
-            return getBackingBinding().getDependencies();
-        }
+        @Override public boolean isValid() { return getBackingBinding().isValid(); }
+        @Override public void invalidate() { getBackingBinding().invalidate(); }
         
-        /**
-         * Calls the {@link Binding#dispose() dispose()} method of the {@code backing Binding}.
-         * {@inheritDoc}
-         */
-        @Override public void dispose() {
-            getBackingBinding().dispose();
-        } //TODO - Might need to actually dispose of this instance rather than just the Binding instance.
         
-        /**
-         * Calls the {@link Binding#addListener(ChangeListener) addListener(ChangeListener)} method of the {@code backing Binding}.
-         * {@inheritDoc}
-         */
-        @Override public void addListener(ChangeListener<? super V> listener) {
-            getBackingBinding().addListener(listener);
-        }
+        @Override public void addListener(ChangeListener<? super V> listener) { getBackingBinding().addListener(listener); }
+        @Override public void removeListener(ChangeListener<? super V> listener) { getBackingBinding().removeListener(listener); }
         
-        /**
-         * Calls the {@link Binding#removeListener(ChangeListener) removeListener(ChangeListener)} method of the {@code backing Binding}.
-         * {@inheritDoc}
-         */
-        @Override public void removeListener(ChangeListener<? super V> listener) {
-            getBackingBinding().removeListener(listener);
-        }
-        
-        /**
-         * Calls the {@link Binding#getValue() getValue()} method of the {@code backing Binding}.
-         * {@inheritDoc}
-         *
-         * @return {@inheritDoc}
-         */
-        @Override public V getValue() {
-            return getBackingBinding().getValue();
-        }
-        
-        /**
-         * Calls the {@link Binding#addListener(InvalidationListener) addListener(InvalidationListener)} method of the {@code backing Binding}.
-         * {@inheritDoc}
-         */
-        @Override public void addListener(InvalidationListener listener) {
-            getBackingBinding().addListener(listener);
-        }
-        
-        /**
-         * Calls the {@link Binding#removeListener(InvalidationListener) removeListener(InvalidationListener)} method of the {@code backing Binding}.
-         * {@inheritDoc}
-         */
-        @Override public void removeListener(InvalidationListener listener) {
-            getBackingBinding().removeListener(listener);
-        }
+        @Override public void addListener(InvalidationListener listener) { getBackingBinding().addListener(listener); }
+        @Override public void removeListener(InvalidationListener listener) { getBackingBinding().removeListener(listener); }
         
         //</editor-fold>
+        
+        //<editor-fold desc="--- INTERNAL ---">
         
         /**
          * Initializes this {@code RecursiveBinding}.
@@ -572,6 +477,8 @@ public class BindingsSL {
                 backingBindingProperty.unbind();
             invalidate();
         }
+        
+        //</editor-fold>
     }
     
     //</editor-fold>
