@@ -59,19 +59,13 @@ public abstract class ContentSelectorPageController<
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override
-    public Pane root() {
-        return root;
-    }
+    @Override public Pane root() { return root; }
     
-    @Override
-    public void initialize() {
-    
-    }
+    @Override public void initialize() { }
     
     public void doInit() {
         initButtonViews();
-    
+        
         contentList.setCellFactory(listView -> new ListCellFX<>(
                 listCellFX -> new CellControlManager<>(
                         listCellFX,
@@ -79,7 +73,7 @@ public abstract class ContentSelectorPageController<
                                 cellData,
                                 () -> weaver().loadController(getPage().elementControllerDefinition()),
                                 listView.hashCode()))));
-    
+        
         ListsSL.applyListener(getPage().getContentHandler().contentList(), (op, opType, triggerType) -> {
             if (triggerType == Operation.TriggerType.CHANGE)
                 switch (opType) {
@@ -87,7 +81,7 @@ public abstract class ContentSelectorPageController<
                     case REMOVAL -> onRemoved(op.contents());
                 }
         });
-    
+        
         selectedContentMMProperty.addListener(
                 (observable, oldValue, newValue) -> TasksSL.sync(
                         lock, () -> contentList.getSelectionModel().select(newValue)));
@@ -115,17 +109,10 @@ public abstract class ContentSelectorPageController<
     
     //<editor-fold desc="--- INTERNAL ---">
     
-    private void onAdded(T content) {
-        ToolsFX.runFX(() -> ToolsFX.addElement(content, contentList, true), true);
-    }
+    private void onAdded(T content) { ToolsFX.runFX(() -> ToolsFX.addElement(content, contentList, true), true); }
+    private void onRemoved(T content) { ToolsFX.runFX(() -> contentList.getItems().remove(content), true); }
     
-    private void onRemoved(T content) {
-        ToolsFX.runFX(() -> contentList.getItems().remove(content), true);
-    }
-    
-    private void addInstance() {
-        logiCore().executor().execute(() -> getPage().getContentHandler().addInstance());
-    }
+    private void addInstance() { logiCore().executor().execute(() -> getPage().getContentHandler().addInstance()); }
     
     //</editor-fold>
 }
