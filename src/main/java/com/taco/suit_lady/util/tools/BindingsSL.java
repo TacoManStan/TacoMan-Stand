@@ -1,6 +1,6 @@
 package com.taco.suit_lady.util.tools;
 
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
+import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.tools.list_tools.ListsSL;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -10,11 +10,11 @@ import javafx.beans.value.*;
 import javafx.collections.ObservableList;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
 
@@ -262,28 +262,29 @@ public class BindingsSL {
     
     //<editor-fold desc="> Default Type Wrapper Factories">
     
-    public static <U> @NotNull BooleanBinding bindBooleanRecursive(Function<U, ObservableValue<Boolean>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
-        return boolBinding(bindRecursive(function, updateObservable), dependencies);
+    
+    public static <U> @NotNull BooleanBinding boolBindingRecursive(@Nullable ReentrantLock lock, Function<U, ObservableValue<Boolean>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
+        return boolBinding(recursiveBinding(lock, function, updateObservable), dependencies);
     }
     
-    public static <U> @NotNull IntegerBinding bindIntegerRecursive(Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
-        return intBinding(bindRecursive(function, updateObservable), dependencies);
+    public static <U> @NotNull IntegerBinding intBindingRecursive(@Nullable ReentrantLock lock, Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
+        return intBinding(recursiveBinding(lock, function, updateObservable), dependencies);
     }
     
-    public static <U> @NotNull LongBinding bindLongRecursive(Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
-        return longBinding(bindRecursive(function, updateObservable), dependencies);
+    public static <U> @NotNull LongBinding longBindingRecursive(@Nullable ReentrantLock lock, Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
+        return longBinding(recursiveBinding(lock, function, updateObservable), dependencies);
     }
     
-    public static <U> @NotNull FloatBinding bindFloatRecursive(Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
-        return floatBinding(bindRecursive(function, updateObservable), dependencies);
+    public static <U> @NotNull FloatBinding floatBindingRecursive(@Nullable ReentrantLock lock, Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
+        return floatBinding(recursiveBinding(lock, function, updateObservable), dependencies);
     }
     
-    public static <U> @NotNull DoubleBinding bindDoubleRecursive(Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
-        return doubleBinding(bindRecursive(function, updateObservable), dependencies);
+    public static <U> @NotNull DoubleBinding doubleBindingRecursive(@Nullable ReentrantLock lock, Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
+        return doubleBinding(recursiveBinding(lock, function, updateObservable), dependencies);
     }
     
-    public static <U, V> @NotNull ObjectBinding<V> bindObjectRecursive(Function<U, ObservableValue<V>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
-        return objBinding(bindRecursive(function, updateObservable), dependencies);
+    public static <U, V> @NotNull ObjectBinding<V> objBindingRecursive(@Nullable ReentrantLock lock, Function<U, ObservableValue<V>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
+        return objBinding(recursiveBinding(lock, function, updateObservable), dependencies);
     }
     
     //</editor-fold>
@@ -301,8 +302,8 @@ public class BindingsSL {
      * @see RecursiveBinding
      */
     @Contract("_, _, _ -> new")
-    public static <U, V> @NotNull RecursiveBinding<U, V> bindRecursive(Function<U, ObservableValue<V>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
-        return bindRecursive(new ReentrantLock(), function, updateObservable, dependencies);
+    public static <U, V> @NotNull RecursiveBinding<U, V> recursiveBinding(Function<U, ObservableValue<V>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
+        return recursiveBinding(new ReentrantLock(), function, updateObservable, dependencies);
     }
     
     /**
@@ -319,7 +320,7 @@ public class BindingsSL {
      * @see RecursiveBinding
      */
     @Contract("_, _, _, _ -> new")
-    public static <U, V> @NotNull RecursiveBinding<U, V> bindRecursive(Lock lock, Function<U, ObservableValue<V>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
+    public static <U, V> @NotNull RecursiveBinding<U, V> recursiveBinding(ReentrantLock lock, Function<U, ObservableValue<V>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
         return new RecursiveBinding<>(lock, function, updateObservable, dependencies);
     }
     
@@ -366,9 +367,9 @@ public class BindingsSL {
      * exampleClass1.setSelectedExample(example1);</code></pre>
      */
     public static class RecursiveBinding<U, V>
-            implements Binding<V> {
+            implements Lockable, Binding<V> {
         
-        private final Lock lock;
+        private final ReentrantLock lock;
         
         private final ObjectProperty<Function<U, ObservableValue<V>>> functionProperty;
         
@@ -388,10 +389,10 @@ public class BindingsSL {
          * @param dependencies     Any additional {@code Observables} that should trigger an update (call to the {@code Function}) upon changing.
          *                         <i>Optional</i>.
          *
-         * @see BindingsSL#bindRecursive(Function, ObservableValue, Observable...)}
-         * @see BindingsSL#bindRecursive(Lock, Function, ObservableValue, Observable...)}
+         * @see BindingsSL#recursiveBinding(Function, ObservableValue, Observable...)
+         * @see BindingsSL#recursiveBinding(ReentrantLock, Function, ObservableValue, Observable...)
          */
-        protected RecursiveBinding(Lock lock, Function<U, ObservableValue<V>> function, ObservableValue<U> updateObservable, Observable[] dependencies) {
+        protected RecursiveBinding(ReentrantLock lock, Function<U, ObservableValue<V>> function, ObservableValue<U> updateObservable, Observable[] dependencies) {
             this.lock = lock;
             
             this.functionProperty = new SimpleObjectProperty<>(function);
@@ -424,8 +425,10 @@ public class BindingsSL {
         
         //</editor-fold>
         
-        //<editor-fold desc="--- BINDING ---">
-    
+        //<editor-fold desc="--- IMPLEMENTATIONS ---">
+        
+        //<editor-fold desc="> Binding">
+        
         @Override public ObservableList<?> getDependencies() { return getBackingBinding().getDependencies(); }
         @Override public V getValue() { return getBackingBinding().getValue(); }
         
@@ -441,6 +444,10 @@ public class BindingsSL {
         
         @Override public void addListener(InvalidationListener listener) { getBackingBinding().addListener(listener); }
         @Override public void removeListener(InvalidationListener listener) { getBackingBinding().removeListener(listener); }
+        
+        //</editor-fold>
+        
+        @Override public @NotNull ReentrantLock getLock() { return lock; }
         
         //</editor-fold>
         

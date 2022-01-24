@@ -89,8 +89,8 @@ public class Camera
         
         this.mapImageBinding = BindingsSL.objBinding(() -> gameMap.getModel().getMapImage(), gameMap.getModel().mapImageBinding());
         
-        this.mapImageWidthBinding = BindingsSL.bindIntegerRecursive(image -> image.widthProperty(), mapImageBinding);
-        this.mapImageHeightBinding = BindingsSL.bindIntegerRecursive(image -> image.heightProperty(), mapImageBinding);
+        this.mapImageWidthBinding = BindingsSL.intBindingRecursive(lock, image -> image.widthProperty(), mapImageBinding);
+        this.mapImageHeightBinding = BindingsSL.intBindingRecursive(lock, image -> image.heightProperty(), mapImageBinding);
         
         
         this.xMultiplierBinding = BindingsSL.doubleBinding(() -> ((double) getMapImageWidth() / (double) getGameMap().getFullWidth()), mapImageWidthBinding);
