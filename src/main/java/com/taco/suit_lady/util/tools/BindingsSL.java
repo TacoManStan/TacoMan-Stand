@@ -162,7 +162,7 @@ public class BindingsSL {
     
     //</editor-fold>
     
-    //<editor-fold desc="--- DEFAULT BINDING PASSTHROUGHS">
+    //<editor-fold desc="--- DEFAULT PASSTHROUGH BINDINGS">
     
     public static @NotNull BooleanBinding bindBoolean(@NotNull Callable<Boolean> function, Observable... dependencies) {
         return Bindings.createBooleanBinding(function, dependencies);
