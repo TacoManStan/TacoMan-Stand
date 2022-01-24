@@ -15,7 +15,7 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 // TODO - Convert to non-static
-public class SLArrays {
+public class ArraysSL {
     /**
      * <p>Sorts the specified {@link List} using the {@link Comparator#naturalOrder() Natural Order} as the {@link Comparator}.</p>
      * <hr>
@@ -45,7 +45,7 @@ public class SLArrays {
      * <p>Returns the {@link T element} at the specified {@code movedToIndex} using <i>{@code () -> null}</i> as the {@link Supplier Fallback Supplier}.</p>
      * <p><b>Passthrough Definition</b></p>
      * <blockquote><i><code>
-     * {@link SLArrays}<b>.</b>{@link SLArrays#getAt(int, List, Supplier, Supplier) getAt}<b>(</b>{@code movedToIndex}<b>,</b> {@code list}<b>,</b> <u>{@code () -> null)}</u><b>,</b> <u>{@code () -> null)}</u><b>)</b>
+     * {@link ArraysSL}<b>.</b>{@link ArraysSL#getAt(int, List, Supplier, Supplier) getAt}<b>(</b>{@code movedToIndex}<b>,</b> {@code list}<b>,</b> <u>{@code () -> null)}</u><b>,</b> <u>{@code () -> null)}</u><b>)</b>
      * </code></i></blockquote>
      *
      * @param index The {@code movedToIndex} to {@link List#get(int) retrieve} the desired {@link T element} from.
@@ -63,7 +63,7 @@ public class SLArrays {
      * <p>Returns the {@link T element} at the specified {@code movedToIndex} using optional {@link Supplier Fallback Supplier} to handle all types of invalid queries.</p>
      * <p><b>Passthrough Definition</b></p>
      * <blockquote><i><code>
-     * {@link SLArrays}<b>.</b>{@link SLArrays#getAt(int, List, Supplier, Supplier) getAt}<b>(</b>{@code movedToIndex}<b>,</b> {@code list}<b>,</b> {@code fallbackSupplier}<b>,</b> {@code fallbackSupplier}<b>)</b>
+     * {@link ArraysSL}<b>.</b>{@link ArraysSL#getAt(int, List, Supplier, Supplier) getAt}<b>(</b>{@code movedToIndex}<b>,</b> {@code list}<b>,</b> {@code fallbackSupplier}<b>,</b> {@code fallbackSupplier}<b>)</b>
      * </code></i></blockquote>
      *
      * @param index            The {@code movedToIndex} to {@link List#get(int) retrieve} the desired {@link T element} from.
@@ -138,7 +138,7 @@ public class SLArrays {
      * @throws NullPointerException      If the {@link T element} at the specified {@code movedToIndex} is {@code null} and the {@link Supplier ifNullFallbackSupplier} was not specified.
      */
     public static <T> T getAt(@NonNegative int index, @NotNull List<T> list, @Nullable Supplier<T> ifInvalidIndexFallbackSupplier, @Nullable Supplier<T> ifNullFallbackSupplier) {
-        SLExceptions.nullCheck(list, "List cannot be null.");
+        ExceptionsSL.nullCheck(list, "List cannot be null.");
         
         T value;
         
@@ -148,11 +148,11 @@ public class SLArrays {
                 if (ifNullFallbackSupplier != null)
                     value = ifNullFallbackSupplier.get();
                 else
-                    throw SLExceptions.ex(new NullPointerException(), "Value at movedToIndex [" + index + "] is null, but ifNull fallback Supplier was not provided.");
+                    throw ExceptionsSL.ex(new NullPointerException(), "Value at movedToIndex [" + index + "] is null, but ifNull fallback Supplier was not provided.");
         } else if (ifInvalidIndexFallbackSupplier != null)
             value = ifInvalidIndexFallbackSupplier.get();
         else
-            throw SLExceptions.ex(new IndexOutOfBoundsException(), "Index value [" + index + "] is not valid for List:  " + list);
+            throw ExceptionsSL.ex(new IndexOutOfBoundsException(), "Index value [" + index + "] is not valid for List:  " + list);
         
         return value;
     }
@@ -530,7 +530,7 @@ public class SLArrays {
     }
     
     public static <T> T[] createAndFillArray(List<T> list, Class<T> clazz) {
-        T[] arr = createArray((Class<T[]>) SLTools.getArrayClass(clazz), list.size());
+        T[] arr = createArray((Class<T[]>) ToolsSL.getArrayClass(clazz), list.size());
         if (arr != null)
             for (int i = 0; i < list.size(); i++) {
                 T element = list.get(i);
@@ -558,7 +558,7 @@ public class SLArrays {
      * @see #getMapValues(Map, List)
      */
     public static <V> ArrayList<V> getMapValues(Map<?, V> map) {
-        return (ArrayList<V>) getMapValues(SLExceptions.nullCheck(map, "Map"), null);
+        return (ArrayList<V>) getMapValues(ExceptionsSL.nullCheck(map, "Map"), null);
     }
     
     /**
@@ -577,13 +577,13 @@ public class SLArrays {
      * @see #getMapValues(Map)
      */
     public static <V> List<V> getMapValues(Map<?, V> map, List<V> targetList) {
-        Collection<V> _mapContents = SLExceptions.nullCheck(map, "Map").values();
+        Collection<V> _mapContents = ExceptionsSL.nullCheck(map, "Map").values();
         
         if (targetList == null)
             return new ArrayList<>(_mapContents);
         
         if (!targetList.addAll(_mapContents))
-            throw SLExceptions.ex("Failed to add contents of map (" + map + ")" + " to target list (" + targetList + ")");
+            throw ExceptionsSL.ex("Failed to add contents of map (" + map + ")" + " to target list (" + targetList + ")");
         
         return targetList;
     }
@@ -664,7 +664,7 @@ public class SLArrays {
      * @param <T>  The type of {@link T element} being added.
      */
     public static <T> void addToFront(List<T> list, T obj) {
-        SLExceptions.nullCheck(list, "List").add(0, SLExceptions.nullCheck(obj, "Object Param"));
+        ExceptionsSL.nullCheck(list, "List").add(0, ExceptionsSL.nullCheck(obj, "Object Param"));
     }
     
     // </editor-fold>
@@ -694,7 +694,7 @@ public class SLArrays {
      * @throws NullPointerException If the specified {@code List} is {@code null}.
      */
     public static <T> boolean insertAfter(List<T> list, T searchElement, T objToInsert) {
-        throw SLExceptions.nyi();
+        throw ExceptionsSL.nyi();
     } // TODO
     
     /**
@@ -720,7 +720,7 @@ public class SLArrays {
      * @throws NullPointerException If the specified {@code List} is {@code null}.
      */
     public static <T> boolean insertBefore(List<T> list, T searchElement, T objToInsert) {
-        throw SLExceptions.nyi();
+        throw ExceptionsSL.nyi();
     } // TODO
     
     //
@@ -775,8 +775,8 @@ public class SLArrays {
     //
     
     public static <V> boolean remove(Map<?, V> map, V obj) {
-        SLExceptions.nullCheck(map, "Map");
-        SLExceptions.nullCheck(obj, "Object to Remove");
+        ExceptionsSL.nullCheck(map, "Map");
+        ExceptionsSL.nullCheck(obj, "Object to Remove");
         //        ConsoleBB.CONSOLE.dev("Removing \"" + obj + "\" from \"" + map + "\"");
         
         // DO NOT SIMPLIFY: removeAll(obj) would only remove the first instance.
@@ -784,8 +784,8 @@ public class SLArrays {
     }
     
     public static <V> boolean removeFirst(Map<?, V> map, V obj) {
-        SLExceptions.nullCheck(map, "Map");
-        SLExceptions.nullCheck(obj, "Object to Remove");
+        ExceptionsSL.nullCheck(map, "Map");
+        ExceptionsSL.nullCheck(obj, "Object to Remove");
         
         return map.values().remove(obj);
     }
@@ -1127,12 +1127,12 @@ public class SLArrays {
      */
     // TO-DOC
     public static <T> List<Object> purge(@NotNull Collection<Object> collection, @NotNull Class<T> clazz) {
-        throw SLExceptions.nyi();
+        throw ExceptionsSL.nyi();
     }
     
     /**
      * <p><b>Passthrough Definition</b></p>
-     * <blockquote><i><code>{@link SLArrays}<b>.</b>{@link #containsType(Collection, Class, boolean, boolean, boolean) containsType}<b>(</b>collection<b>,</b> clazz<b>,</b> <u>false</u><b>,</b> <u>false</u><b>,</b> <u>true</u><b>)</b></code></i></blockquote>
+     * <blockquote><i><code>{@link ArraysSL}<b>.</b>{@link #containsType(Collection, Class, boolean, boolean, boolean) containsType}<b>(</b>collection<b>,</b> clazz<b>,</b> <u>false</u><b>,</b> <u>false</u><b>,</b> <u>true</u><b>)</b></code></i></blockquote>
      *
      * @param collection The {@link Collection} being iterated.
      * @param clazz      The {@link Class type} of {@link Object} to scan for when iterating the specified {@link Collection}.
@@ -1146,7 +1146,7 @@ public class SLArrays {
     
     /**
      * <p><b>Passthrough Definition</b></p>
-     * <blockquote><i><code>{@link SLArrays}<b>.</b>{@link #containsType(Collection, Class, boolean, boolean, boolean) containsType}<b>(</b>collection<b>,</b> clazz<b>,</b> <u>false</u><b>,</b> <u>false</u><b>,</b> <u>false</u><b>)</b></code></i></blockquote>
+     * <blockquote><i><code>{@link ArraysSL}<b>.</b>{@link #containsType(Collection, Class, boolean, boolean, boolean) containsType}<b>(</b>collection<b>,</b> clazz<b>,</b> <u>false</u><b>,</b> <u>false</u><b>,</b> <u>false</u><b>)</b></code></i></blockquote>
      *
      * @param collection The {@link Collection} being iterated.
      * @param clazz      The {@link Class type} of {@link Object} to scan for when iterating the specified {@link Collection}.
@@ -1173,7 +1173,7 @@ public class SLArrays {
     public static boolean containsType(@NotNull Collection<?> collection, @NotNull Class<?> clazz, boolean allowNullElements, boolean allowEmpty, boolean requireAll) {
         // If the collection instance is null, throw a NPE.
         // If the collection is empty, return the value of the specified allowEmpty boolean.
-        if (SLExceptions.nullCheck(collection, "Collection Parameter").isEmpty())
+        if (ExceptionsSL.nullCheck(collection, "Collection Parameter").isEmpty())
             return allowEmpty;
         
         // Keeps track of whether a valid element has been found or not.
@@ -1219,7 +1219,7 @@ public class SLArrays {
      * @throws NullPointerException If the specified {@code Collection} is null.
      */
     public static <V> ArrayList<V> copy(Collection<V> collection) {
-        return new ArrayList<>(SLExceptions.nullCheck(collection, "Collection"));
+        return new ArrayList<>(ExceptionsSL.nullCheck(collection, "Collection"));
     }
     
     /**
@@ -1235,7 +1235,7 @@ public class SLArrays {
      * @throws NullPointerException If the specified {@code Map} is null.
      */
     public static <K, V> Map<K, V> copy(Map<K, V> map) {
-        HashMap<K, V> _map = new HashMap<>(SLExceptions.nullCheck(map, "Map").size());
+        HashMap<K, V> _map = new HashMap<>(ExceptionsSL.nullCheck(map, "Map").size());
         _map.putAll(map);
         return _map;
     }
@@ -1593,7 +1593,7 @@ public class SLArrays {
         if (list != null) {
             ArrayList<String> stringArr = new ArrayList<>(list.size());
             for (Object obj: list)
-                stringArr.add(obj == null ? "null" : SLTools.getSimpleName(obj.getClass()));
+                stringArr.add(obj == null ? "null" : ToolsSL.getSimpleName(obj.getClass()));
             return stringArr.toString();
         }
         return null;
@@ -1894,13 +1894,13 @@ public class SLArrays {
                 T[] sourceArr, Z[] targetArr, ElementCopier<T, Z> copier,
                 Supplier<Z> onNull) {
             if (sourceArr == null)
-                throw SLExceptions.ex(new NullPointerException("Source array cannot be null"));
+                throw ExceptionsSL.ex(new NullPointerException("Source array cannot be null"));
             else if (targetArr == null)
-                throw SLExceptions.ex(new NullPointerException("Target array cannot be null"));
+                throw ExceptionsSL.ex(new NullPointerException("Target array cannot be null"));
             else if (copier == null)
-                throw SLExceptions.ex(new NullPointerException("ElementCopier cannot be null"));
+                throw ExceptionsSL.ex(new NullPointerException("ElementCopier cannot be null"));
             else if (sourceArr.length != targetArr.length)
-                throw SLExceptions
+                throw ExceptionsSL
                         .ex(new IndexOutOfBoundsException("Source array length must equal target array length"));
             for (int i = 0; i < sourceArr.length; i++) {
                 if (sourceArr[i] != null)

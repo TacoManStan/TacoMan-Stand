@@ -1,7 +1,7 @@
 package com.taco.suit_lady.ui;
 
 import com.taco.tacository.collections.ObservableLinkedList;
-import com.taco.suit_lady.util.tools.SLExceptions;
+import com.taco.suit_lady.util.tools.ExceptionsSL;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.ObjectBinding;
@@ -249,7 +249,7 @@ public class UIPageHandler
                     if (getVisiblePage().equals(page))
                         return true;
                     else
-                        throw SLExceptions.ex("Visible page should equal the specified page given prior loop, but it does not. This should not be possible; extensive debugging is necessary.");
+                        throw ExceptionsSL.ex("Visible page should equal the specified page given prior loop, but it does not. This should not be possible; extensive debugging is necessary.");
                 }
             }
         } finally {
@@ -275,11 +275,11 @@ public class UIPageHandler
     {
         lock.lock();
         try {
-            SLExceptions.nullCheck(page, "Page cannot be null");
+            ExceptionsSL.nullCheck(page, "Page cannot be null");
             if (Objects.equals(page, getCoverPage()))
-                throw SLExceptions.unsupported("Cannot add the cover page to the page list.");
+                throw ExceptionsSL.unsupported("Cannot add the cover page to the page list.");
             else if (pages.contains(page))
-                throw SLExceptions.unsupported("Page has already been added to this PageHandler.");
+                throw ExceptionsSL.unsupported("Page has already been added to this PageHandler.");
             pages.addLast(page);
         } finally {
             lock.unlock();

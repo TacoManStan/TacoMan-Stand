@@ -1,6 +1,6 @@
 package com.taco.tacository.collections;
 
-import com.taco.suit_lady.util.tools.SLExceptions;
+import com.taco.suit_lady.util.tools.ExceptionsSL;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableListBase;
 
@@ -30,7 +30,7 @@ public class ObservableLinkedList<E> extends ObservableListBase<E>
 	}
 
 	public ObservableLinkedList(LinkedList<E> backingList) {
-		SLExceptions.nullCheck(backingList, "Backing list cannot be null.");
+		ExceptionsSL.nullCheck(backingList, "Backing list cannot be null.");
 
 		this.lock = new ReentrantLock();
 		this.backingList = backingList;

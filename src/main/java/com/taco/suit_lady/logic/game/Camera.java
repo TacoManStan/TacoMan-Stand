@@ -3,8 +3,8 @@ package com.taco.suit_lady.logic.game;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.springable.StrictSpringable;
-import com.taco.suit_lady.util.tools.SLBindings;
-import com.taco.suit_lady.util.tools.SLProperties;
+import com.taco.suit_lady.util.tools.BindingsSL;
+import com.taco.suit_lady.util.tools.PropertiesSL;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.IntegerBinding;
@@ -83,8 +83,8 @@ public class Camera
         
         this.mapImageBinding = Bindings.createObjectBinding(() -> gameMap.getModel().getMapImage(), gameMap.getModel().mapImageBinding());
         
-        this.mapImageWidthBinding = SLBindings.bindIntegerRecursive(image -> image.widthProperty(), mapImageBinding);
-        this.mapImageHeightBinding = SLBindings.bindIntegerRecursive(image -> image.heightProperty(), mapImageBinding);
+        this.mapImageWidthBinding = BindingsSL.bindIntegerRecursive(image -> image.widthProperty(), mapImageBinding);
+        this.mapImageHeightBinding = BindingsSL.bindIntegerRecursive(image -> image.heightProperty(), mapImageBinding);
         
         
 //        this.xMultiplierBinding = SLBindings.bindInteger(() -> );
@@ -144,7 +144,7 @@ public class Camera
      */
     public final IntegerProperty xLocationProperty() { return xLocationProperty; }
     public final int getXLocation() { return xLocationProperty.get(); }
-    public final int setXLocation(int newValue) { return SLProperties.setProperty(xLocationProperty, newValue); }
+    public final int setXLocation(int newValue) { return PropertiesSL.setProperty(xLocationProperty, newValue); }
     
     /**
      * <p>Defines the {@code y} coordinate at which this camera is assigned.</p>
@@ -156,7 +156,7 @@ public class Camera
      */
     public final IntegerProperty yLocationProperty() { return yLocationProperty; }
     public final int getYLocation() { return yLocationProperty.get(); }
-    public final int setYLocation(int newValue) { return SLProperties.setProperty(yLocationProperty, newValue); }
+    public final int setYLocation(int newValue) { return PropertiesSL.setProperty(yLocationProperty, newValue); }
     
     
     /**
@@ -169,7 +169,7 @@ public class Camera
      */
     public final IntegerProperty xOffsetProperty() { return xOffsetProperty; }
     public final int getXOffset() { return xOffsetProperty.get(); }
-    protected final int setXOffset(int newValue) { return SLProperties.setProperty(xOffsetProperty, newValue); }
+    protected final int setXOffset(int newValue) { return PropertiesSL.setProperty(xOffsetProperty, newValue); }
     
     /**
      * <p>Represents the number of units (pixels, not tiles) this camera's view is shifted on the {@code x} plane.</p>
@@ -181,7 +181,7 @@ public class Camera
      */
     public final IntegerProperty yOffsetProperty() { return yOffsetProperty; }
     public final int getYOffset() { return yOffsetProperty.get(); }
-    public final int setYOffset(int newValue) { return SLProperties.setProperty(yOffsetProperty, newValue); }
+    public final int setYOffset(int newValue) { return PropertiesSL.setProperty(yOffsetProperty, newValue); }
     
     //</editor-fold>
     

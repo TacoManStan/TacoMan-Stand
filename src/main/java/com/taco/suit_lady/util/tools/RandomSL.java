@@ -1,10 +1,7 @@
 package com.taco.suit_lady.util.tools;
 
-import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.stereotype.Component;
 
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -12,7 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * A utility for generating pseudo-random numbers.
  */
-public final class SLRandom {
+public final class RandomSL {
     
     /**
      * {@link Random} instance unique to the current {@link Thread} as defined by {@link ThreadLocalRandom#current()}.
@@ -35,7 +32,7 @@ public final class SLRandom {
         source = GLOBAL_SOURCE;
     }
     
-    private SLRandom() { } //No Instance
+    private RandomSL() { } //No Instance
     
     public static Random getRandom() {
         return random;
@@ -43,13 +40,13 @@ public final class SLRandom {
     
     public static Random getRandomBySource(String source) {
         switch (source) {
-            case SLRandom.GLOBAL_SOURCE -> {
+            case RandomSL.GLOBAL_SOURCE -> {
                 return random;
             }
-            case SLRandom.THREAD_SOURCE -> {
+            case RandomSL.THREAD_SOURCE -> {
                 return ThreadLocalRandom.current();
             }
-            case SLRandom.METHOD_SOURCE -> {
+            case RandomSL.METHOD_SOURCE -> {
                 return new Random();
             }
         }
@@ -61,7 +58,7 @@ public final class SLRandom {
     }
     
     public static void setSource(String source) {
-        SLRandom.source = source;
+        RandomSL.source = source;
     }
     
     //
@@ -306,7 +303,7 @@ public final class SLRandom {
      * @throws NullPointerException If the specified array is {@code null}.
      */
     public static <T> @Nullable T getRandomElement(@NotNull T[] arr) {
-        if (SLExceptions.nullCheck(arr, "Input Array").length == 0)
+        if (ExceptionsSL.nullCheck(arr, "Input Array").length == 0)
             return null;
         return arr[nextInt(arr.length - 1)];
     }

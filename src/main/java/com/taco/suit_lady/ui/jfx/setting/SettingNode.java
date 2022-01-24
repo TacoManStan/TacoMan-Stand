@@ -1,8 +1,8 @@
 package com.taco.suit_lady.ui.jfx.setting;
 
-import com.taco.suit_lady.util.tools.SLExceptions;
+import com.taco.suit_lady.util.tools.ExceptionsSL;
 import com.taco.suit_lady.util.settings.SavableSetting;
-import com.taco.suit_lady.util.tools.fx_tools.FX;
+import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import com.taco.tacository.obj_traits.common.Nameable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -22,13 +22,13 @@ public abstract class SettingNode<V, T extends Region, U extends SavableSetting>
 	private final NodeOrder nodeOrder;
 
 	public SettingNode(String name, NodeOrder nodeOrder) {
-		this.name = SLExceptions.nullCheck(name, "SettingNode Name");
+		this.name = ExceptionsSL.nullCheck(name, "SettingNode Name");
 		this.setting = createSetting();
 
 		this.nameLabel = new Label(getName());
-		this.inputNode = SLExceptions.nullCheck(createInputNode(), "Input Node");
+		this.inputNode = ExceptionsSL.nullCheck(createInputNode(), "Input Node");
 
-		this.nodeOrder = SLExceptions.nullCheck(nodeOrder, "Node Order");
+		this.nodeOrder = ExceptionsSL.nullCheck(nodeOrder, "Node Order");
 
 		//
 
@@ -40,7 +40,7 @@ public abstract class SettingNode<V, T extends Region, U extends SavableSetting>
 	private void initialize() {
 		getSetting().createBinding(getInputNode());
 
-		FX.runFX(() -> {
+		ToolsFX.runFX(() -> {
 			setFillHeight(true);
 			setSpacing(5);
 
@@ -69,7 +69,7 @@ public abstract class SettingNode<V, T extends Region, U extends SavableSetting>
 				HBox.setHgrow(nameLabel, Priority.ALWAYS);
 				HBox.setHgrow(inputNode, Priority.NEVER);
 			} else
-				throw SLExceptions.unsupported("Unknown NodeOrder: " + nodeOrder);
+				throw ExceptionsSL.unsupported("Unknown NodeOrder: " + nodeOrder);
 		}, true);
 	}
 

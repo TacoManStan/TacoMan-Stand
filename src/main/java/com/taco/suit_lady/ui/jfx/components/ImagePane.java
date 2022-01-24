@@ -1,6 +1,6 @@
 package com.taco.suit_lady.ui.jfx.components;
 
-import com.taco.suit_lady.util.tools.SLExceptions;
+import com.taco.suit_lady.util.tools.ExceptionsSL;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.ObjectBinding;
@@ -121,7 +121,7 @@ public class ImagePane extends AnchorPane
         else if (input instanceof Image)
             this.imageView = new WrappedImageView((Image) input);
         else
-            throw SLExceptions.ex("Input Must be an Image, a String, or null [" + input.getClass() + "]");
+            throw ExceptionsSL.ex("Input Must be an Image, a String, or null [" + input.getClass() + "]");
         
         this.imageView.setFocusTraversable(false);
         

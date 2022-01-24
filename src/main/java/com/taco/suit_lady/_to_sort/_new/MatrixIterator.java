@@ -3,8 +3,8 @@ package com.taco.suit_lady._to_sort._new;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
-import com.taco.suit_lady.util.tools.SLArrays;
-import com.taco.suit_lady.util.tools.fx_tools.FX;
+import com.taco.suit_lady.util.tools.ArraysSL;
+import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -44,7 +44,7 @@ public abstract class MatrixIterator<T>
         this.springable = springable.asStrict();
         this.lock = lock != null ? lock : new ReentrantLock();
         
-        java.util.Arrays.stream(params).map(o -> "Param " + SLArrays.indexOf(o, params) + ": " + o).forEach(msg -> debugger().print(msg));
+        java.util.Arrays.stream(params).map(o -> "Param " + ArraysSL.indexOf(o, params) + ": " + o).forEach(msg -> debugger().print(msg));
         
         this.progressIndicators = java.util.Arrays.stream(params)
                                                   .filter(param -> param instanceof ProgressIndicator)
@@ -180,7 +180,7 @@ public abstract class MatrixIterator<T>
     }
     
     private void updateProgressOverlays(@NotNull Consumer<ProgressIndicator> action) {
-        FX.runFX(() -> java.util.Arrays.stream(progressIndicators).forEach(action), true);
+        ToolsFX.runFX(() -> java.util.Arrays.stream(progressIndicators).forEach(action), true);
     }
     
     //</editor-fold>
@@ -251,7 +251,7 @@ public abstract class MatrixIterator<T>
                     return null;
             }
             
-            FX.runFX(() -> sync(() -> {
+            ToolsFX.runFX(() -> sync(() -> {
                 updateProgressOverlays(progressIndicator -> progressIndicator.setVisible(false));
                 onTaskEnd(getMatrix());
             }), true);

@@ -1,8 +1,8 @@
 package com.taco.suit_lady.util.tools.list_tools;
 
 import com.taco.suit_lady.util.timing.Timer;
-import com.taco.suit_lady.util.tools.fx_tools.FX;
-import com.taco.suit_lady.util.tools.list_tools.ListTools.SimpleOperationListener;
+import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
+import com.taco.suit_lady.util.tools.list_tools.ListsSL.SimpleOperationListener;
 import com.taco.suit_lady.util.tools.list_tools.Operation.OperationType;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ListChangeListener.Change;
@@ -19,9 +19,9 @@ import java.util.concurrent.locks.ReentrantLock;
  * <ol>
  *     <li>The primary implementation of {@link OperationListener} is the {@link OperationHandler} class.</li>
  *     <li>
- *         {@link OperationListener OperationListeners} are used as the input to {@link OperationHandler} static factory methods located in {@link ListTools}
+ *         {@link OperationListener OperationListeners} are used as the input to {@link OperationHandler} static factory methods located in {@link ListsSL}
  *         <ul>
- *             <li>Root Factory Method: <i>{@link ListTools#applyListener(ReentrantLock, ObservableList, OperationListener) ListTools.applyListener(... OperationListener)}</i></li>
+ *             <li>Root Factory Method: <i>{@link ListsSL#applyListener(ReentrantLock, ObservableList, OperationListener) ListTools.applyListener(... OperationListener)}</i></li>
  *         </ul>
  *     </li>
  *     <li>Various interface extensions of {@link OperationListener} exist to allow varying amounts and types of lambda factory input parameters.</li>
@@ -38,7 +38,7 @@ import java.util.concurrent.locks.ReentrantLock;
  *                 The two solutions to the aforementioned concurrency problem are as follows:
  *                 <ol>
  *                     <li>
- *                         Perform all {@link OperationListener} event handling on the {@link FX#runFX(Runnable, boolean) JavaFX Thread}.
+ *                         Perform all {@link OperationListener} event handling on the {@link ToolsFX#runFX(Runnable, boolean) JavaFX Thread}.
  *                         <ul>
  *                             <li>This is a viable solution <i>only</i> if <i>all</i> event handling operations are bound by {@link Contract contract} to complete execution instantaneously.</li>
  *                             <li>
@@ -79,15 +79,15 @@ import java.util.concurrent.locks.ReentrantLock;
  * <ol>
  *     <li>The most concrete implementation of {@link OperationListener} is the {@link OperationHandler} class.</li>
  *     <li>
- *         However, the main purpose of the {@link OperationListener} interface is to allow for anonymous implementations to be passed to the static {@link ListTools#wrap(ReentrantLock, String, ObservableList, OperationListener) wrap} factory method for use with a wrapping {@link OperationHandler} instance.
+ *         However, the main purpose of the {@link OperationListener} interface is to allow for anonymous implementations to be passed to the static {@link ListsSL#wrap(ReentrantLock, String, ObservableList, OperationListener) wrap} factory method for use with a wrapping {@link OperationHandler} instance.
  *         <ul>
- *             <li>The {@link ListTools#wrap(ReentrantLock, String, ObservableList, OperationListener) wrap} method is used by most other factory methods located in the {@link ListTools} utility class.</li>
+ *             <li>The {@link ListsSL#wrap(ReentrantLock, String, ObservableList, OperationListener) wrap} method is used by most other factory methods located in the {@link ListsSL} utility class.</li>
  *         </ul>
  *     </li>
  *     <li>
- *         Sub-implementations exist in {@link ListTools} — e.g., {@link SimpleOperationListener} — that provide more streamlined implementations of the event response methods present in {@link OperationListener this interface}.
+ *         Sub-implementations exist in {@link ListsSL} — e.g., {@link SimpleOperationListener} — that provide more streamlined implementations of the event response methods present in {@link OperationListener this interface}.
  *         <ul>
- *             <li>Multiple static factory methods corresponding to each sub-implementation are available for use in the {@link ListTools} utility class as well.</li>
+ *             <li>Multiple static factory methods corresponding to each sub-implementation are available for use in the {@link ListsSL} utility class as well.</li>
  *         </ul>
  *     </li>
  * </ol>

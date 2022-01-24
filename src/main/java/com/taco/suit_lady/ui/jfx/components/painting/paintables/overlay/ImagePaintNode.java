@@ -1,7 +1,7 @@
 package com.taco.suit_lady.ui.jfx.components.painting.paintables.overlay;
 
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.SLResources;
+import com.taco.suit_lady.util.tools.ResourcesSL;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +15,7 @@ public class ImagePaintNode extends PaintNode {
     
     public ImagePaintNode(@NotNull Springable springable, @Nullable ReentrantLock lock) {
         super(springable, lock);
-        this.imageView = new ImageView(SLResources.getDummyImage(SLResources.AVATAR));
+        this.imageView = new ImageView(ResourcesSL.getDummyImage(ResourcesSL.AVATAR));
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">

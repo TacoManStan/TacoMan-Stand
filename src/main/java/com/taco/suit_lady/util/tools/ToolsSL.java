@@ -1,11 +1,5 @@
 package com.taco.suit_lady.util.tools;
 
-import com.taco.suit_lady.util.springable.Springable;
-import net.rgielen.fxweaver.core.FxWeaver;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -13,8 +7,8 @@ import java.util.function.Predicate;
 /**
  * Contains a variety of classes that provide utility features.
  */
-public final class SLTools {
-    private SLTools() { } //No Instance
+public final class ToolsSL {
+    private ToolsSL() { } //No Instance
     
     /**
      * Checks if the specified {@link Predicate} is valid for the specified {@code Object},
@@ -30,7 +24,7 @@ public final class SLTools {
      * @throws NullPointerException if the specified {@code Object} is null.
      */
     public static <T> boolean test(T obj, Predicate<T> predicate) {
-        SLExceptions.nullCheck(predicate, "Predicate");
+        ExceptionsSL.nullCheck(predicate, "Predicate");
         return obj != null && predicate.test(obj);
     }
     
@@ -89,7 +83,7 @@ public final class SLTools {
      * @return The component type {@link Class} for the specified value.
      */
     public static <T> Class<? extends T> getClass(T[] param) {
-        SLExceptions.nullCheck(param, "Param Array");
+        ExceptionsSL.nullCheck(param, "Param Array");
         return (Class<T>) param.getClass().getComponentType();
     }
     
@@ -116,7 +110,7 @@ public final class SLTools {
                     try {
                         return Class.forName("[L" + c.getName() + ";");
                     } catch (ClassNotFoundException e) {
-                        throw SLExceptions.ex(e);
+                        throw ExceptionsSL.ex(e);
                     }
             }
             return param.getClass();
@@ -163,7 +157,7 @@ public final class SLTools {
             if (indexOf < c.getName().length() - 1)
                 indexOf++;
             String name = c.getName().substring(indexOf);
-            if (SLStrings.isNumber(name))
+            if (StringsSL.isNumber(name))
                 name = c.getName().substring(c.getName().lastIndexOf(".") + 1, c.getName().lastIndexOf("$"));
             return name;
         }
@@ -303,7 +297,7 @@ public final class SLTools {
     }
     
     public static long generateHashID() {
-        return (long) SLRandom.nextDouble(0, Long.MAX_VALUE);
+        return (long) RandomSL.nextDouble(0, Long.MAX_VALUE);
     }
     
     /**

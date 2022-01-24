@@ -1,6 +1,6 @@
 package com.taco.suit_lady.ui.jfx.lists;
 
-import com.taco.suit_lady.util.tools.fx_tools.FX;
+import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import com.taco.suit_lady.ui.ui_internal.controllers.CellController;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -140,7 +140,7 @@ public class CellControlManager<T, C extends CellController<T>> {
      * @param empty Whether this {@link IndexedCell} represents data from the list. If it is empty, then it does not represent any domain data, but is a cell being used to render an "empty" row. *Copied from IndexedCell*
      */
     protected void doUpdateItem(T item, boolean empty) {
-        FX.runFX(() -> {
+        ToolsFX.runFX(() -> {
             if (!empty) {
                 if (item != null) {
                     final C controller = updateController(item);

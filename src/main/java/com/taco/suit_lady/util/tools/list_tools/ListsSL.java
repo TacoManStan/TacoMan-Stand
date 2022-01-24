@@ -2,7 +2,6 @@ package com.taco.suit_lady.util.tools.list_tools;
 
 import com.taco.suit_lady.util.tools.list_tools.Operation.OperationType;
 import com.taco.suit_lady.util.tools.list_tools.Operation.TriggerType;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import org.jetbrains.annotations.Contract;
@@ -12,13 +11,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * <p>The {@link ListTools} utility class provides a wide variety of static factory methods for applying an {@link OperationListener} implementation to an {@link ObservableList}.</p>
+ * <p>The {@link ListsSL} utility class provides a wide variety of static factory methods for applying an {@link OperationListener} implementation to an {@link ObservableList}.</p>
  * <h2>Details</h2>
  * <p><i>TO-EXPAND</i></p>
  * <br><hr>
  * <h2>Example Usages</h2>
  * <p>
- * There are numerous default implementations of {@link OperationListener} that {@link ListTools} provides.
+ * There are numerous default implementations of {@link OperationListener} that {@link ListsSL} provides.
  * Example usage of such implementations are shown below.
  * </p>
  * <br>
@@ -137,9 +136,9 @@ import java.util.concurrent.locks.ReentrantLock;
  * }</pre>
  */
 // TO-EXPAND
-public final class ListTools {
+public final class ListsSL {
     
-    private ListTools() { } // No Instance
+    private ListsSL() { } // No Instance
     
     //<editor-fold desc="--- LIST LISTENING ---">
     
@@ -150,7 +149,7 @@ public final class ListTools {
     }
     
     public static <E> OperationHandler<E> applyListener(@Nullable ReentrantLock lock, @NotNull ObservableList<E> list, @NotNull OperationListener<E> listener) {
-        return ListTools.wrap(lock, null, list, listener).apply();
+        return ListsSL.wrap(lock, null, list, listener).apply();
     }
     
     //

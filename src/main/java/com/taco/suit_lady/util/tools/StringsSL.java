@@ -1,7 +1,6 @@
 package com.taco.suit_lady.util.tools;
 
 import com.taco.tacository.obj_traits.common.Nameable;
-import org.springframework.stereotype.Component;
 
 import java.awt.*;
 import java.lang.reflect.Array;
@@ -15,8 +14,8 @@ import java.util.Locale;
 /**
  * Contains methods related to manipulating strings.
  */
-public class SLStrings {
-    private SLStrings() { } //No Instance
+public class StringsSL {
+    private StringsSL() { } //No Instance
     
     /**
      * A constant representing one thousand (1,000).
@@ -118,7 +117,7 @@ public class SLStrings {
     }
     
     private static boolean matches(int index, char[] chars1, char... chars2) {
-        final Character[] reverse = SLArrays.getReverse(SLArrays.toArray(chars2));
+        final Character[] reverse = ArraysSL.getReverse(ArraysSL.toArray(chars2));
         for (int i = 0; i < reverse.length; i++)
             if (chars1[index - i] != reverse[i])
                 return false;
@@ -167,9 +166,9 @@ public class SLStrings {
      */
     public static String classToString(Class aClass) {
         if (aClass != null) {
-            String simpleName = SLTools.getSimpleName(aClass);
+            String simpleName = ToolsSL.getSimpleName(aClass);
             ArrayList<Integer> indexes = new ArrayList<>();
-            ArrayList<Character> characters = new ArrayList<>(java.util.Arrays.asList(SLArrays.toArray(simpleName.toCharArray())));
+            ArrayList<Character> characters = new ArrayList<>(java.util.Arrays.asList(ArraysSL.toArray(simpleName.toCharArray())));
             if (characters.size() > 1) {
                 boolean succeeded = false;
                 while (!succeeded) {
@@ -181,7 +180,7 @@ public class SLStrings {
                         }
                     }
                 }
-                return String.valueOf(SLArrays.toArray(characters.toArray(new Character[characters.size()])));
+                return String.valueOf(ArraysSL.toArray(characters.toArray(new Character[characters.size()])));
             }
         }
         return null;
@@ -380,9 +379,9 @@ public class SLStrings {
      * @return The specified {@code host String} with the specified values replaced.
      */
     public static String replace(String host, String replaceWith, boolean useRegex, String... toReplaceValues) {
-        SLExceptions.nullCheck(host, "Host string cannot be null.");
-        SLExceptions.nullCheck(replaceWith, "To-Replace string cannot be null.");
-        SLExceptions.nullCheck(toReplaceValues, "Replace with array cannot be null.");
+        ExceptionsSL.nullCheck(host, "Host string cannot be null.");
+        ExceptionsSL.nullCheck(replaceWith, "To-Replace string cannot be null.");
+        ExceptionsSL.nullCheck(toReplaceValues, "Replace with array cannot be null.");
         for (String toReplace: toReplaceValues)
             if (toReplace != null)
                 if (useRegex)
@@ -445,7 +444,7 @@ public class SLStrings {
             throw new NullPointerException("Host String cannot be null.");
         ArrayList<Character> chars = new ArrayList<>();
         for (char c: host.toCharArray())
-            if (SLArrays.contains(c, toKeeps))
+            if (ArraysSL.contains(c, toKeeps))
                 chars.add(0, c);
         char[] charsArr = new char[chars.size()];
         for (int i = 0; i < chars.size(); i++)
@@ -547,7 +546,7 @@ public class SLStrings {
     public static String htmlList(boolean alwaysList, String... components) {
         String text = "";
         if (components != null) {
-            ArrayList<String> componentsList = new ArrayList<>(SLArrays.removeNull(components));
+            ArrayList<String> componentsList = new ArrayList<>(ArraysSL.removeNull(components));
             if (componentsList.size() > 1 || alwaysList) {
                 text += "<ol>";
                 for (String component: componentsList)
@@ -676,7 +675,7 @@ public class SLStrings {
     
     public static String replaceSeparator(String filePath) {
         String separator = "/";
-        return SLStrings.replace(filePath, separator, false, "/", "\\");
+        return StringsSL.replace(filePath, separator, false, "/", "\\");
     }
     
     //

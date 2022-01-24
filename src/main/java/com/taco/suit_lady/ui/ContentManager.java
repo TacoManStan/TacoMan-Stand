@@ -2,11 +2,11 @@ package com.taco.suit_lady.ui;
 
 import com.taco.suit_lady.logic.LogiCore;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.SLExceptions;
+import com.taco.suit_lady.util.tools.ExceptionsSL;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasSurface;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasContentPane;
 import com.taco.suit_lady.ui.jfx.components.ContentPane;
-import com.taco.suit_lady.util.tools.fx_tools.FX;
+import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.layout.StackPane;
@@ -25,8 +25,8 @@ public class ContentManager
     private final ReadOnlyObjectWrapper<Content<?, ?>> contentProperty; // Add support for a list of overlapping Content, each overlapping on the Content Base StackPane?
     
     public ContentManager(@NotNull FxWeaver weaver, @NotNull ConfigurableApplicationContext ctx) {
-        this.weaver = SLExceptions.nullCheck(weaver, "FxWeaver");
-        this.ctx = SLExceptions.nullCheck(ctx, "Application Context");
+        this.weaver = ExceptionsSL.nullCheck(weaver, "FxWeaver");
+        this.ctx = ExceptionsSL.nullCheck(ctx, "Application Context");
         
         this.contentBase = new ContentPane(this) {
             @Override
@@ -135,7 +135,7 @@ public class ContentManager
     private void onChange(@Nullable Content<?, ?> oldContent, @Nullable Content<?, ?> newContent) {
         // TODO - Execute onRemoved() and onSet via a JavaFX Task implementation. For now, though, this will work.
         // When the above is completed, don't forget to update the onRemoved() and onSet() Javadocs as well.
-        FX.runFX(() -> {
+        ToolsFX.runFX(() -> {
             if (oldContent != null) {
                 getContentPrimaryPane().getChildren().remove(oldContent.getController().root());
                 oldContent.getController().root().prefWidthProperty().unbind();
@@ -152,8 +152,8 @@ public class ContentManager
                 ctx().getBean(LogiCore.class).executor().execute(() -> oldContent.onRemovedInternal());
             }
             if (newContent != null) {
-                FX.bindToParent(newContent.getController().root(), getContentPrimaryPane(), true);
-                FX.bindToParent(newContent.getOverlayHandler().root(), getContentPrimaryPane(), true);
+                ToolsFX.bindToParent(newContent.getController().root(), getContentPrimaryPane(), true);
+                ToolsFX.bindToParent(newContent.getOverlayHandler().root(), getContentPrimaryPane(), true);
                 
                 //                final List<Overlay> contentOverlays = newContent.getOverlayHandler().overlays().getCopy();
                 //                for (Overlay overlay: contentOverlays) {

@@ -1,8 +1,8 @@
 package com.taco.suit_lady.ui;
 
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.SLArrays;
-import com.taco.suit_lady.util.tools.SLExceptions;
+import com.taco.suit_lady.util.tools.ArraysSL;
+import com.taco.suit_lady.util.tools.ExceptionsSL;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.OverlaySurface;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.OverlayHandler;
 import javafx.beans.property.ReadOnlyListProperty;
@@ -27,11 +27,11 @@ public abstract class Content<D extends ContentData, C extends ContentController
     private final ReadOnlyListWrapper<SidebarBookshelf> bookshelves;
     
     public Content(@NotNull Springable springable) {
-        this.strictSpringable = SLExceptions.nullCheck(springable, "Springable Parent").asStrict();
+        this.strictSpringable = ExceptionsSL.nullCheck(springable, "Springable Parent").asStrict();
         
-        this.data = SLExceptions.nullCheck(loadData(), "SLContentData");
-        this.controller = SLExceptions.nullCheckMessage(
-                weaver().loadController(SLExceptions.nullCheck(controllerDefinition(), "Controller Definition Class")),
+        this.data = ExceptionsSL.nullCheck(loadData(), "SLContentData");
+        this.controller = ExceptionsSL.nullCheckMessage(
+                weaver().loadController(ExceptionsSL.nullCheck(controllerDefinition(), "Controller Definition Class")),
                 "Error Loading Controller of Type [" + controllerDefinition() + "] — Ensure controller class is defined in FXML file.");
         
         this.overlayHandler = new OverlayHandler(this, null);
@@ -63,10 +63,10 @@ public abstract class Content<D extends ContentData, C extends ContentController
     //<editor-fold desc="--- CLASS BODY ---">
     
     protected SidebarBookshelf injectBookshelf(String name, UIBook... books) {
-        if (SLArrays.isEmpty(SLExceptions.nullCheck(books, "Book Array")))
-            throw SLExceptions.ex("Bookshelf Contents Cannot Be Empty");
-        if (SLArrays.containsNull(books))
-            throw SLExceptions.ex("Bookshelf Contents Cannot Contain Null Elements: [" + java.util.Arrays.asList(books) + "]");
+        if (ArraysSL.isEmpty(ExceptionsSL.nullCheck(books, "Book Array")))
+            throw ExceptionsSL.ex("Bookshelf Contents Cannot Be Empty");
+        if (ArraysSL.containsNull(books))
+            throw ExceptionsSL.ex("Bookshelf Contents Cannot Contain Null Elements: [" + java.util.Arrays.asList(books) + "]");
         
         final SidebarBookshelf bookshelf = new SidebarBookshelf(getSidebar(), name, true);
         

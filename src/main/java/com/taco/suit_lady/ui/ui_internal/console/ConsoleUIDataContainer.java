@@ -2,7 +2,7 @@ package com.taco.suit_lady.ui.ui_internal.console;
 
 import com.taco.suit_lady.ui.console.ConsoleMessageable;
 import com.taco.suit_lady.ui.jfx.lists.treehandler.WrappingTreeCellData;
-import com.taco.suit_lady.util.tools.SLBindings;
+import com.taco.suit_lady.util.tools.BindingsSL;
 import com.taco.suit_lady.util.Validatable;
 import javafx.beans.value.ObservableBooleanValue;
 import javafx.scene.control.TreeView;
@@ -106,7 +106,7 @@ public class ConsoleUIDataContainer
     
     private ObservableBooleanValue hlpr_getObservable(ObservableBooleanValue observable)
     {
-        return observable != null ? observable : SLBindings.bindBooleanStatic(true);
+        return observable != null ? observable : BindingsSL.bindBooleanStatic(true);
     }
 }
 

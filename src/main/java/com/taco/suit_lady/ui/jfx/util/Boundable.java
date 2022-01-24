@@ -1,6 +1,6 @@
 package com.taco.suit_lady.ui.jfx.util;
 
-import com.taco.suit_lady.util.tools.SLArrays;
+import com.taco.suit_lady.util.tools.ArraysSL;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
@@ -130,6 +130,6 @@ public interface Boundable {
      * @return A single {@code boolean} primitive based on the specified {@code varargs array} and the rules listed above.
      */
     private boolean vargs(boolean... varArgs) {
-        return varArgs != null && !SLArrays.isEmpty(varArgs) && varArgs[0];
+        return varArgs != null && !ArraysSL.isEmpty(varArgs) && varArgs[0];
     }
 }

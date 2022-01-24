@@ -3,10 +3,10 @@ package com.taco.suit_lady.logic.game;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
-import com.taco.suit_lady.util.tools.SLBindings;
-import com.taco.suit_lady.util.tools.SLExceptions;
-import com.taco.suit_lady.util.tools.SLProperties;
-import com.taco.suit_lady.util.tools.SLResources;
+import com.taco.suit_lady.util.tools.BindingsSL;
+import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.PropertiesSL;
+import com.taco.suit_lady.util.tools.ResourcesSL;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -40,12 +40,12 @@ public class GameMapModel
     //    private final ImageOverlayCommand paintCommand;
     
     public GameMapModel(@NotNull GameMap owner, @NotNull ReentrantLock lock) {
-        this.lock = SLExceptions.nullCheck(lock, "Lock");
-        this.owner = SLExceptions.nullCheck(owner, "GameMap Owner");
+        this.lock = ExceptionsSL.nullCheck(lock, "Lock");
+        this.owner = ExceptionsSL.nullCheck(owner, "GameMap Owner");
         
         this.parentPaneProperty = new SimpleObjectProperty<>();
         
-        this.mapImageBinding = SLBindings.bindObjectStatic(SLResources.getDummyImage(SLResources.MAP));
+        this.mapImageBinding = BindingsSL.bindObjectStatic(ResourcesSL.getDummyImage(ResourcesSL.MAP));
         
         //        this.paintCommand = new ImageOverlayCommand(lock, this, "map", null, 1);
     }
@@ -68,7 +68,7 @@ public class GameMapModel
     
     public final ObjectProperty<StackPane> parentPaneProperty() { return parentPaneProperty; }
     public final StackPane getParentPane() { return parentPaneProperty.get(); }
-    public final StackPane setParentPane(StackPane newValue) { return SLProperties.setProperty(parentPaneProperty, newValue); }
+    public final StackPane setParentPane(StackPane newValue) { return PropertiesSL.setProperty(parentPaneProperty, newValue); }
     
     
     public final ObjectBinding<Image> mapImageBinding() { return mapImageBinding; }

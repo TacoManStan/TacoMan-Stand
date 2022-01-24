@@ -4,7 +4,7 @@ import com.taco.suit_lady.ui.Content;
 import com.taco.suit_lady.ui.UIBook;
 import com.taco.suit_lady.ui.pages.example_page.ExamplePage;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.SLResources;
+import com.taco.suit_lady.util.tools.ResourcesSL;
 import org.jetbrains.annotations.NotNull;
 
 public class TestContent extends Content<TestContentData, TestContentController>
@@ -18,7 +18,7 @@ public class TestContent extends Content<TestContentData, TestContentController>
                 new UIBook(this,
                            "Repository Red",
                            "invalid_button_id",
-                           uiBook -> SLResources.get(
+                           uiBook -> ResourcesSL.get(
                                    "pages",
                                    uiBook.getUID(uiBook.getButtonID()),
                                    () -> new ExamplePage(uiBook, "red")),
@@ -26,7 +26,7 @@ public class TestContent extends Content<TestContentData, TestContentController>
                 new UIBook(this,
                            "Repository Blue",
                            "invalid_button_id",
-                           uiBook -> SLResources.get(
+                           uiBook -> ResourcesSL.get(
                                    "pages",
                                    uiBook.getUID(uiBook.getButtonID()),
                                    () -> new ExamplePage(uiBook, "blue")),
@@ -34,7 +34,7 @@ public class TestContent extends Content<TestContentData, TestContentController>
                 new UIBook(this,
                            "Repository Green",
                            "invalid_button_id",
-                           uiBook -> SLResources.get(
+                           uiBook -> ResourcesSL.get(
                                    "pages",
                                    uiBook.getUID(uiBook.getButtonID()),
                                    () -> new ExamplePage(uiBook, "green")),

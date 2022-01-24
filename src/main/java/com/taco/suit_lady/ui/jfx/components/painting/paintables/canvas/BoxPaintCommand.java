@@ -2,7 +2,7 @@ package com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas;
 
 import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.fx_tools.FX;
+import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,7 +17,7 @@ public class BoxPaintCommand extends ShapePaintCommand {
     @Override protected void onPaint() {
         Bounds bounds = getBounds();
         if (isValidDimensions())
-            FX.drawRectangle(getSurface(), bounds, false, isFill());
+            ToolsFX.drawRectangle(getSurface(), bounds, false, isFill());
     }
     
     @Override public @NotNull BoxPaintCommand init() {

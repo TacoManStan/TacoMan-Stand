@@ -8,10 +8,10 @@ import com.taco.suit_lady.ui.ui_internal.console.ConsolePage;
 import com.taco.suit_lady.ui.ui_internal.console.ConsoleUIDataContainer;
 import com.taco.suit_lady.ui.ui_internal.controllers.ConsoleElementController;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.SLBindings;
-import com.taco.suit_lady.util.tools.SLExceptions;
-import com.taco.suit_lady.util.tools.SLResources;
-import com.taco.suit_lady.util.tools.fx_tools.FX;
+import com.taco.suit_lady.util.tools.BindingsSL;
+import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.ResourcesSL;
+import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
@@ -85,7 +85,7 @@ public class Console
      * <p><b>Initialization Process</b></p>
      * <ol>
      *     <li>Locks the synchronization {@link ReentrantLock lock}.</li>
-     *     <li>Throws an {@link SLExceptions#ex(String) exception} if this {@link Console} has already been {@link #isInitialized() initialized}.</li>
+     *     <li>Throws an {@link ExceptionsSL#ex(String) exception} if this {@link Console} has already been {@link #isInitialized() initialized}.</li>
      *     <li>Calls the <code><i>{@link #initStreams()}</i></code> method.</li>
      *     <li>
      *         Adds a {@link ListChangeListener} to the {@link #getMessages() Message List}:
@@ -102,7 +102,7 @@ public class Console
         lock.lock();
         try {
             if (initialized)
-                throw SLExceptions.ex("Console has already been created.");
+                throw ExceptionsSL.ex("Console has already been created.");
             initialized = true;
             
             initStreams();
@@ -112,7 +112,7 @@ public class Console
                 final List<WrappingTreeLoader<ConsoleMessageable<?>, ConsoleElementController>> activeConsoleHandlers = getActiveConsoles();
                 while (change.next())
                     if (change.wasAdded())
-                        activeConsoleHandlers.forEach(treeHandler -> FX.runFX(
+                        activeConsoleHandlers.forEach(treeHandler -> ToolsFX.runFX(
                                 () -> change.getAddedSubList().forEach(
                                         message -> treeHandler.generateCellData(
                                                 CONSOLE_ROOT_NAME,
@@ -171,7 +171,7 @@ public class Console
     public final ConsolePage getPage()
     {
         if (consolePage == null) // Lazy initialization
-            consolePage = SLResources.get("pages", "console");
+            consolePage = ResourcesSL.get("pages", "console");
         return consolePage;
     }
     
@@ -194,7 +194,7 @@ public class Console
     private void append(String str)
     {
         // CHANGE-HERE
-        FX.runFX(() -> messages.add(new SimpleConsoleMessage(str)), false);
+        ToolsFX.runFX(() -> messages.add(new SimpleConsoleMessage(str)), false);
     }
     
     //</editor-fold>
@@ -203,13 +203,13 @@ public class Console
     
     public void consolify(ConsoleUIDataContainer consoleContainer)
     {
-        SLExceptions.nullCheck(consoleContainer, "Console UI Data Container");
+        ExceptionsSL.nullCheck(consoleContainer, "Console UI Data Container");
     
-        FX.runFX(() -> {
+        ToolsFX.runFX(() -> {
             // treeView.setShowRoot(false); // Disabled temporarily because for some reason hiding the root causes messages to be truncated.
         
             // The below binding is used to trigger a refresh whenever a console display checkbox is toggled.
-            final IntegerBinding incrementingBinding = SLBindings.incrementingBinding(
+            final IntegerBinding incrementingBinding = BindingsSL.incrementingBinding(
                     consoleContainer.showTRiBotProperty(),
                     consoleContainer.showClientProperty(),
                     consoleContainer.showScriptProperty(),

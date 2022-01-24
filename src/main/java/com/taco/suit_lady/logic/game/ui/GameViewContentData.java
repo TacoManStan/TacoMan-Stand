@@ -8,7 +8,7 @@ import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
-import com.taco.suit_lady.util.tools.SLExceptions;
+import com.taco.suit_lady.util.tools.ExceptionsSL;
 import com.taco.tacository.json.JElement;
 import com.taco.tacository.json.JLoadable;
 import com.taco.tacository.json.JObject;
@@ -355,7 +355,7 @@ public class GameViewContentData extends ContentData
     //</editor-fold>
     
     public final @NotNull Point2D convertFromCanvas(Point2D point) {
-        SLExceptions.nullCheck(point, "Conversion Point");
+        ExceptionsSL.nullCheck(point, "Conversion Point");
         return convertFromCanvas(point.getX(), point.getY());
     }
     

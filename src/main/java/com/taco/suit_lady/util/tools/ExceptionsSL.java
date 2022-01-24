@@ -8,7 +8,7 @@ import com.taco.tacository.quick.ConsoleBB;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public class SLExceptions
+public class ExceptionsSL
 {
     
     /* *************************************************************************** *
@@ -33,23 +33,23 @@ public class SLExceptions
     
     public static <T> T check(T obj, Predicate<T> condition)
     {
-        SLExceptions.nullCheck(condition, "Condition");
+        ExceptionsSL.nullCheck(condition, "Condition");
         return check(obj, condition, RuntimeException::new);
     }
     
     public static <T> T check(T obj, Predicate<T> condition, String message)
     {
-        SLExceptions.nullCheck(condition, "Condition");
-        SLExceptions.nullCheck(message, "Message");
+        ExceptionsSL.nullCheck(condition, "Condition");
+        ExceptionsSL.nullCheck(message, "Message");
         return check(obj, condition, () -> new RuntimeException(message));
     }
     
     public static <T> T check(T obj, Predicate<T> condition, Supplier<RuntimeException> exceptionSupplier)
     {
-        SLExceptions.nullCheck(condition, "Condition");
-        SLExceptions.nullCheck(exceptionSupplier, "Exception Supplier");
+        ExceptionsSL.nullCheck(condition, "Condition");
+        ExceptionsSL.nullCheck(exceptionSupplier, "Exception Supplier");
         if (condition.test(obj))
-            throw SLExceptions.ex(exceptionSupplier.get());
+            throw ExceptionsSL.ex(exceptionSupplier.get());
         return obj;
     }
     
@@ -282,7 +282,7 @@ public class SLExceptions
      * The example above does the following:
      * <ol>
      * <li>Creates a variable of type {@code long} equal to {@code 1000} called {@code myVariable}.</li>
-     * <li>Uses the {@link SLExceptions#boundsCheck(Number, double, double, String) check} method to check if the bounds of {@code myVariable} are between -50 and 750.</li>
+     * <li>Uses the {@link ExceptionsSL#boundsCheck(Number, double, double, String) check} method to check if the bounds of {@code myVariable} are between -50 and 750.</li>
      * <li>Determines that {@code myVariable} is not within the specified bounds ({@code 750 is less than 1000}</li>
      * <li>Throws a {@code IndexOutOfBoundsException}</li>
      * </ol>
@@ -296,7 +296,7 @@ public class SLExceptions
      */
     public static <T extends Number> T boundsCheck(T value, double floor, double ceiling, boolean isFloorInclusive, boolean isCeilingInclusive, String valueName)
     {
-        SLExceptions.nullCheck(value, "Value");
+        ExceptionsSL.nullCheck(value, "Value");
         final String _valueString = valueName != null ? valueName + " (" + value + ")" : "" + value;
         if (isFloorInclusive && value.doubleValue() < floor)
             throw ex(new IndexOutOfBoundsException(_valueString + " must be greater than or equal to " + floor + "."));

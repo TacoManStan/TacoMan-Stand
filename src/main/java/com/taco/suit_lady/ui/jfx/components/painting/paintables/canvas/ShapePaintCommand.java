@@ -1,7 +1,7 @@
 package com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas;
 
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.SLProperties;
+import com.taco.suit_lady.util.tools.PropertiesSL;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +23,7 @@ public abstract class ShapePaintCommand extends PaintCommand {
     
     public final BooleanProperty isFillProperty() { return isFillProperty; }
     public final boolean isFill() { return isFillProperty.get(); }
-    public final boolean setIsFill(boolean newValue) { return SLProperties.setProperty(isFillProperty, newValue); }
+    public final boolean setIsFill(boolean newValue) { return PropertiesSL.setProperty(isFillProperty, newValue); }
     
     //</editor-fold>
 }

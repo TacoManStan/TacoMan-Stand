@@ -1,6 +1,6 @@
 package com.taco.suit_lady.ui.jfx.hyperlink;
 
-import com.taco.suit_lady.util.tools.fx_tools.FX;
+import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
@@ -135,8 +135,8 @@ public class HyperlinkFX
             final Hyperlink hyperlinkCopy = hyperlinkProperty.get();
             if (hyperlinkCopy != null)
             {
-                hyperlinkCopy.pseudoClassStateChanged(FX.INVALID, invalidProperty().get());
-                hyperlinkCopy.pseudoClassStateChanged(FX.DISABLED, disabledProperty().get());
+                hyperlinkCopy.pseudoClassStateChanged(ToolsFX.INVALID, invalidProperty().get());
+                hyperlinkCopy.pseudoClassStateChanged(ToolsFX.DISABLED, disabledProperty().get());
             }
         };
         hyperlinkProperty.addListener(listener);
@@ -272,7 +272,7 @@ public class HyperlinkFX
                                                         @Override public void run()
                                                         {
                                                             if (!doubleClick)
-                                                                FX.runFX(() -> leftClickHandler.handle(new ActionEvent()), false);
+                                                                ToolsFX.runFX(() -> leftClickHandler.handle(new ActionEvent()), false);
                                                         }
                                                     }, 250);
                                                 }

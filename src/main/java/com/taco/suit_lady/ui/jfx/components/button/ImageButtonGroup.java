@@ -1,6 +1,6 @@
 package com.taco.suit_lady.ui.jfx.components.button;
 
-import com.taco.suit_lady.util.tools.SLTools;
+import com.taco.suit_lady.util.tools.ToolsSL;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -166,7 +166,7 @@ public class ImageButtonGroup
         if (buttons.length == 0)
             setSelectedButton(null);
         
-        if (SLTools.equalsAny(getSelectedButton(), (Object[]) buttons)) {
+        if (ToolsSL.equalsAny(getSelectedButton(), (Object[]) buttons)) {
             setSelectedButton(null);
             return true;
         } else

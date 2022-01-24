@@ -1,6 +1,6 @@
 package com.taco.suit_lady.util;
 
-import com.taco.suit_lady.util.tools.SLTasks;
+import com.taco.suit_lady.util.tools.TasksSL;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,37 +35,37 @@ import java.util.function.Supplier;
     // Sync
     
     /**
-     * See {@link SLTasks#sync(Lock, Runnable, Consumer[])}.
+     * See {@link TasksSL#sync(Lock, Runnable, Consumer[])}.
      *
-     * @param action           See {@link SLTasks#sync(Lock, Runnable, boolean, Consumer[])}.
-     * @param onFinallyActions See {@link SLTasks#sync(Lock, Runnable, boolean, Consumer[])}.
+     * @param action           See {@link TasksSL#sync(Lock, Runnable, boolean, Consumer[])}.
+     * @param onFinallyActions See {@link TasksSL#sync(Lock, Runnable, boolean, Consumer[])}.
      */
     default void sync(Runnable action, Consumer<Throwable>... onFinallyActions)
     {
-        SLTasks.sync(getLock(), action, isNullableLock(), onFinallyActions);
+        TasksSL.sync(getLock(), action, isNullableLock(), onFinallyActions);
     }
     
     /**
-     * See {@link SLTasks#sync(Lock, Supplier, Consumer[])}.
+     * See {@link TasksSL#sync(Lock, Supplier, Consumer[])}.
      *
-     * @param action           See {@link SLTasks#sync(Lock, Supplier, boolean, Consumer[])}.
-     * @param onFinallyActions See {@link SLTasks#sync(Lock, Supplier, boolean, Consumer[])}.
+     * @param action           See {@link TasksSL#sync(Lock, Supplier, boolean, Consumer[])}.
+     * @param onFinallyActions See {@link TasksSL#sync(Lock, Supplier, boolean, Consumer[])}.
      */
     default <R> R sync(Supplier<R> action, Consumer<Throwable>... onFinallyActions)
     {
-        return SLTasks.sync(getLock(), action, isNullableLock(), onFinallyActions);
+        return TasksSL.sync(getLock(), action, isNullableLock(), onFinallyActions);
     }
     
     /**
-     * See {@link SLTasks#sync(Lock, Function, Supplier, boolean, Consumer[])}.
+     * See {@link TasksSL#sync(Lock, Function, Supplier, boolean, Consumer[])}.
      *
-     * @param action           See {@link SLTasks#sync(Lock, Function, Supplier, boolean, Consumer[])}.
-     * @param actionSupplier   See {@link SLTasks#sync(Lock, Function, Supplier, boolean, Consumer[])}.
-     * @param onFinallyActions See {@link SLTasks#sync(Lock, Function, Supplier, boolean, Consumer[])}.
+     * @param action           See {@link TasksSL#sync(Lock, Function, Supplier, boolean, Consumer[])}.
+     * @param actionSupplier   See {@link TasksSL#sync(Lock, Function, Supplier, boolean, Consumer[])}.
+     * @param onFinallyActions See {@link TasksSL#sync(Lock, Function, Supplier, boolean, Consumer[])}.
      */
     default <T, R> R sync(Function<T, R> action, Supplier<T> actionSupplier, Consumer<Throwable>... onFinallyActions)
     {
-        return SLTasks.sync(getLock(), action, actionSupplier, isNullableLock(), onFinallyActions);
+        return TasksSL.sync(getLock(), action, actionSupplier, isNullableLock(), onFinallyActions);
     }
     
     // Lock Methods

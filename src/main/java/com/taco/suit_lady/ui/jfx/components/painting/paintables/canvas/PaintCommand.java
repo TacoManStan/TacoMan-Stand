@@ -5,7 +5,7 @@ import com.taco.suit_lady.ui.jfx.components.painting.paintables.Paintable;
 import com.taco.suit_lady.ui.jfx.components.painting.paintables.PaintableData;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
-import com.taco.suit_lady.util.tools.fx_tools.FX;
+import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,7 +37,7 @@ public abstract class PaintCommand
     
     @Override public @NotNull PaintCommand paint() {
         if (isActive())
-            FX.runFX(() -> sync(() -> {
+            ToolsFX.runFX(() -> sync(() -> {
                 Predicate<CanvasSurface> autoRemoveCondition = getAutoRemoveCondition();
                 if (autoRemoveCondition != null && autoRemoveCondition.test(getSurface()))
                     getSurface().removePaintableV2(this);

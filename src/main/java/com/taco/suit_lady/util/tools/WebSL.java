@@ -4,14 +4,14 @@ import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 
-public final class SLWeb {
-    private SLWeb() { } //No Instance
+public final class WebSL {
+    private WebSL() { } //No Instance
     
     public static void browse(String rawUrl) {
         try {
             Desktop.getDesktop().browse(URI.create(rawUrl));
         } catch (IOException e) {
-            throw SLExceptions.ex(e);
+            throw ExceptionsSL.ex(e);
         }
     }
     

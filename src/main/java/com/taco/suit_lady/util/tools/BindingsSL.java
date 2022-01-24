@@ -1,13 +1,12 @@
 package com.taco.suit_lady.util.tools;
 
-import com.taco.suit_lady.util.tools.fx_tools.FX;
+import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.binding.*;
 import javafx.beans.property.*;
 import javafx.beans.value.*;
 import javafx.collections.ObservableList;
-import org.aspectj.weaver.ast.Call;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,7 +19,7 @@ import java.util.function.Function;
 /**
  * Utility methods related to {@link Property Properties} and {@link Bindings}.
  */
-public class SLBindings {
+public class BindingsSL {
     
     //<editor-fold desc="--- STATIC BINDINGS ---">
     
@@ -95,42 +94,42 @@ public class SLBindings {
      * <p><i>See {@link #bindObject(Callable, Observable...)}</i></p>
      */
     public static @NotNull BooleanBinding bindBooleanDirect(@NotNull ObservableValue<Boolean> observableValue, Observable... dependencies) {
-        return Bindings.createBooleanBinding(() -> observableValue.getValue(), SLArrays.concat(new Observable[]{observableValue}, dependencies));
+        return Bindings.createBooleanBinding(() -> observableValue.getValue(), ArraysSL.concat(new Observable[]{observableValue}, dependencies));
     }
     
     /**
      * <p><i>See {@link #bindObject(Callable, Observable...)}</i></p>
      */
     public static @NotNull IntegerBinding bindIntegerDirect(@NotNull ObservableValue<? extends Number> observableValue, Observable... dependencies) {
-        return Bindings.createIntegerBinding(() -> observableValue.getValue().intValue(), SLArrays.concat(new Observable[]{observableValue}, dependencies));
+        return Bindings.createIntegerBinding(() -> observableValue.getValue().intValue(), ArraysSL.concat(new Observable[]{observableValue}, dependencies));
     }
     
     /**
      * <p><i>See {@link #bindObject(Callable, Observable...)}</i></p>
      */
     public static @NotNull LongBinding bindLongDirect(@NotNull ObservableValue<? extends Number> observableValue, Observable... dependencies) {
-        return Bindings.createLongBinding(() -> observableValue.getValue().longValue(), SLArrays.concat(new Observable[]{observableValue}, dependencies));
+        return Bindings.createLongBinding(() -> observableValue.getValue().longValue(), ArraysSL.concat(new Observable[]{observableValue}, dependencies));
     }
     
     /**
      * <p><i>See {@link #bindObject(Callable, Observable...)}</i></p>
      */
     public static @NotNull FloatBinding bindFloatDirect(@NotNull ObservableValue<? extends Number> observableValue, Observable... dependencies) {
-        return Bindings.createFloatBinding(() -> observableValue.getValue().floatValue(), SLArrays.concat(new Observable[]{observableValue}, dependencies));
+        return Bindings.createFloatBinding(() -> observableValue.getValue().floatValue(), ArraysSL.concat(new Observable[]{observableValue}, dependencies));
     }
     
     /**
      * <p><i>See {@link #bindObject(Callable, Observable...)}</i></p>
      */
     public static @NotNull DoubleBinding bindDoubleDirect(@NotNull ObservableValue<? extends Number> observableValue, Observable... dependencies) {
-        return Bindings.createDoubleBinding(() -> observableValue.getValue().doubleValue(), SLArrays.concat(new Observable[]{observableValue}, dependencies));
+        return Bindings.createDoubleBinding(() -> observableValue.getValue().doubleValue(), ArraysSL.concat(new Observable[]{observableValue}, dependencies));
     }
     
     /**
      * <p><i>See {@link #bindObject(Callable, Observable...)}</i></p>
      */
     public static @NotNull StringBinding bindStringDirect(@NotNull ObservableValue<String> observableValue, Observable... dependencies) {
-        return Bindings.createStringBinding(() -> observableValue.getValue(), SLArrays.concat(new Observable[]{observableValue}, dependencies));
+        return Bindings.createStringBinding(() -> observableValue.getValue(), ArraysSL.concat(new Observable[]{observableValue}, dependencies));
     }
     
     /**
@@ -158,7 +157,7 @@ public class SLBindings {
      * @return A new {@link Binding} object bound to always reflect the {@link ObservableValue#getValue() value} of the specified {@link ObservableValue} object.
      */
     public static <T> @NotNull ObjectBinding<T> bindObjectDirect(@NotNull ObservableValue<T> observableValue, Observable... dependencies) {
-        return Bindings.createObjectBinding(() -> observableValue.getValue(), SLArrays.concat(new Observable[]{observableValue}, dependencies));
+        return Bindings.createObjectBinding(() -> observableValue.getValue(), ArraysSL.concat(new Observable[]{observableValue}, dependencies));
     }
     
     //</editor-fold>
@@ -205,7 +204,7 @@ public class SLBindings {
      * @return The newly created {@code BooleanBinding} bound to the null status of the specified {@code Binding}.
      */
     public static BooleanBinding createNullCheckBinding(Binding<?> binding) {
-        SLExceptions.nullCheck(binding, "Binding");
+        ExceptionsSL.nullCheck(binding, "Binding");
         return Bindings.createBooleanBinding(() -> binding.getValue() != null, binding);
     }
     
@@ -233,8 +232,8 @@ public class SLBindings {
                 (observable, oldValue, newValue) ->
                 {
                     if (property.isBound())
-                        throw SLExceptions.ex("Property is already bound (" + property + ")");
-                    FX.runFX(() -> property.setValue(newValue), true);
+                        throw ExceptionsSL.ex("Property is already bound (" + property + ")");
+                    ToolsFX.runFX(() -> property.setValue(newValue), true);
                 });
     }
     
@@ -369,8 +368,8 @@ public class SLBindings {
          * @param dependencies     Any additional {@code Observables} that should trigger an update (call to the {@code Function}) upon changing.
          *                         <i>Optional</i>.
          *
-         * @see SLBindings#bindRecursive(Function, ObservableValue, Observable...)}
-         * @see SLBindings#bindRecursive(Lock, Function, ObservableValue, Observable...)}
+         * @see BindingsSL#bindRecursive(Function, ObservableValue, Observable...)}
+         * @see BindingsSL#bindRecursive(Lock, Function, ObservableValue, Observable...)}
          */
         protected RecursiveBinding(Lock lock, Function<U, ObservableValue<V>> function, ObservableValue<U> updateObservable, Observable[] dependencies) {
             this.lock = lock;
@@ -530,7 +529,7 @@ public class SLBindings {
             updateObservable.addListener((observable, oldValue, newValue) -> update(oldValue, newValue));
             binding = Bindings.createObjectBinding(
                     backingBindingProperty::get,
-                    SLArrays.concat(new Observable[]{backingBindingProperty}, updateBindings)
+                    ArraysSL.concat(new Observable[]{backingBindingProperty}, updateBindings)
                                                   );
             binding.invalidate();
             update(updateObservable.getValue(), updateObservable.getValue());
@@ -544,7 +543,7 @@ public class SLBindings {
          */
         private void update(U oldValue, U newValue) {
             Function<U, ObservableValue<V>> function = getFunction();
-            SLExceptions.nullCheck(function, "Function");
+            ExceptionsSL.nullCheck(function, "Function");
             ObservableValue<V> observableValue = function.apply(newValue);
             if (observableValue != null)
                 backingBindingProperty.bind(observableValue);

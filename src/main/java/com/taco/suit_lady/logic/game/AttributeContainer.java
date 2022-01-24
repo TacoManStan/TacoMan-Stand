@@ -4,7 +4,7 @@ import com.taco.suit_lady.logic.game.interfaces.Attributable;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
-import com.taco.suit_lady.util.tools.SLExceptions;
+import com.taco.suit_lady.util.tools.ExceptionsSL;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.collections.FXCollections;
@@ -60,10 +60,10 @@ public class AttributeContainer
     @Override
     public final <V> V add(String key, V attribute, boolean replaceIfPresent) {
         return sync(() -> {
-            if (attributes.containsKey(SLExceptions.nullCheck(key, "Property Key")))
-                throw SLExceptions.ex("Property with name \"" + key + "\" already exists in this map (" + attribute + ")");
-            if (attributes.containsValue(SLExceptions.nullCheck(attribute, "Property Value")))
-                throw SLExceptions.ex("Property \"" + attribute + "\" already exists in this map.");
+            if (attributes.containsKey(ExceptionsSL.nullCheck(key, "Property Key")))
+                throw ExceptionsSL.ex("Property with name \"" + key + "\" already exists in this map (" + attribute + ")");
+            if (attributes.containsValue(ExceptionsSL.nullCheck(attribute, "Property Value")))
+                throw ExceptionsSL.ex("Property \"" + attribute + "\" already exists in this map.");
             
             return (V) attributes.put(key, attribute);
         });

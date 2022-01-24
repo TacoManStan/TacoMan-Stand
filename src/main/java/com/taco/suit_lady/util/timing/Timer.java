@@ -1,7 +1,7 @@
 package com.taco.suit_lady.util.timing;
 
-import com.taco.suit_lady.util.tools.SLCalculations;
-import com.taco.suit_lady.util.tools.SLExceptions;
+import com.taco.suit_lady.util.tools.CalculationsSL;
+import com.taco.suit_lady.util.tools.ExceptionsSL;
 import javafx.beans.property.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -95,7 +95,7 @@ public class Timer
     @Override
     public final void setTimeout(@NotNull Number timeout)
     {
-        timeoutProperty.set(SLCalculations.clampMin(timeout.longValue(), -1L));
+        timeoutProperty.set(CalculationsSL.clampMin(timeout.longValue(), -1L));
     }
     
     //
@@ -223,7 +223,7 @@ public class Timer
     @Override
     public final @NotNull Timer start(@NotNull Number newTimeout)
     {
-        long long_new_timeout = SLExceptions.nullCheck(newTimeout, "New Timeout").longValue();
+        long long_new_timeout = ExceptionsSL.nullCheck(newTimeout, "New Timeout").longValue();
         setTimeout(long_new_timeout);
         return start();
     }
@@ -245,7 +245,7 @@ public class Timer
     @Override
     public final @NotNull Timer reset(@NotNull Number newTimeout)
     {
-        long long_new_timeout = SLExceptions.nullCheck(newTimeout, "New Timeout").longValue();
+        long long_new_timeout = ExceptionsSL.nullCheck(newTimeout, "New Timeout").longValue();
         if (getStartTime() == 0)
             return this;
         return start(long_new_timeout);

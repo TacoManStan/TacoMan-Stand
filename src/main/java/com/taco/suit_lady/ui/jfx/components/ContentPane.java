@@ -1,8 +1,8 @@
 package com.taco.suit_lady.ui.jfx.components;
 
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.SLExceptions;
-import com.taco.suit_lady.util.tools.fx_tools.FX;
+import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import javafx.scene.layout.StackPane;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
@@ -18,17 +18,17 @@ public class ContentPane extends StackPane
     private final StackPane backgroundPane;
     
     public ContentPane(@NotNull Springable springable) {
-        this.springable = SLExceptions.nullCheck(springable, "Springable Input").asStrict();
+        this.springable = ExceptionsSL.nullCheck(springable, "Springable Input").asStrict();
         
         this.foregroundPane = loadForegroundPane();
         this.contentPane = loadContentPane();
         this.backgroundPane = loadBackgroundPane();
         
-        FX.bindToParent(foregroundPane, this, true);
-        FX.bindToParent(contentPane, this, true);
-        FX.bindToParent(backgroundPane, this, true);
+        ToolsFX.bindToParent(foregroundPane, this, true);
+        ToolsFX.bindToParent(contentPane, this, true);
+        ToolsFX.bindToParent(backgroundPane, this, true);
         
-        FX.togglePickOnBounds(this, false);
+        ToolsFX.togglePickOnBounds(this, false);
     }
     
     //<editor-fold desc="--- PROPERTIES ---">

@@ -1,8 +1,8 @@
 package com.taco.suit_lady.util.tools.list_tools;
 
 import com.taco.suit_lady._to_sort._new.Debugger;
-import com.taco.suit_lady.util.tools.SLArrays;
-import com.taco.suit_lady.util.tools.SLExceptions;
+import com.taco.suit_lady.util.tools.ArraysSL;
+import com.taco.suit_lady.util.tools.ExceptionsSL;
 import com.taco.suit_lady.util.tools.list_tools.Operation.OperationType;
 import com.taco.suit_lady.util.tools.list_tools.Operation.TriggerType;
 import javafx.collections.FXCollections;
@@ -23,7 +23,7 @@ public class ListToolsDemo {
         
         //        ListTools.applyListener(lock, list, op -> Demo.doPrint(() -> System.out.println("GENERIC OPERATION:  " + op), "Listener 1", null, false));
         //        ListTools.applyListener(lock, list, (op, opType, triggerType) -> Demo.printListEvent(op, null, opType, triggerType, "Listener 2", false));
-        ListTools.applyListener(lock, list, (op1, op2, opType, triggerType)
+        ListsSL.applyListener(lock, list, (op1, op2, opType, triggerType)
                 -> ListToolsDemo.printListEvent(debugger, op1, op2, opType, triggerType, null, false));
         ListToolsDemo.testPrints(debugger, list, null);
     }
@@ -36,7 +36,7 @@ public class ListToolsDemo {
         
         System.out.println("Sorting...");
         
-        SLArrays.sort(list);
+        ArraysSL.sort(list);
         
         debugger.printList(list, footer);
         
@@ -64,7 +64,7 @@ public class ListToolsDemo {
         
         System.out.println("Resorting...");
         
-        SLArrays.sort(list);
+        ArraysSL.sort(list);
         
         debugger.printList(list, footer);
         
@@ -163,7 +163,7 @@ public class ListToolsDemo {
             footerI = null;
             boxI = false;
         } else
-            throw SLExceptions.ex("BLAH BLAH BLAH");
+            throw ExceptionsSL.ex("BLAH BLAH BLAH");
         
         debugger.printBlock(printsI, titleI, footerI, boxI);
     }

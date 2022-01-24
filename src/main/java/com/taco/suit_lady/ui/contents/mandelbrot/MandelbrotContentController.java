@@ -5,8 +5,8 @@ import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasSurfa
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasPane;
 import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.util.Lockable;
-import com.taco.suit_lady.util.tools.SLExceptions;
-import com.taco.suit_lady.util.tools.fx_tools.FX;
+import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Label;
@@ -80,7 +80,7 @@ public class MandelbrotContentController extends ContentController
     @Override
     public void initialize() {
         canvasAnchorPane.getChildren().add(canvasPane);
-        FX.setAnchors(canvasPane);
+        ToolsFX.setAnchors(canvasPane);
         
         canvas().setOnMousePressed(event -> onMousePressed(event));
         canvas().setOnMouseReleased(event -> onMouseReleased(event));
@@ -104,14 +104,14 @@ public class MandelbrotContentController extends ContentController
     
     private void onMouseReleased(MouseEvent e) {
         sync(() -> {
-            if (FX.isMouseOnNode(canvas(), e))
+            if (ToolsFX.isMouseOnNode(canvas(), e))
                 getDragConsumer().accept(generateDragData(e));
         });
     }
     
     private void onMouseDragged(MouseEvent e) {
         sync(() -> {
-            if (FX.isMouseOnNode(canvas(), e))
+            if (ToolsFX.isMouseOnNode(canvas(), e))
                 getMoveConsumer().accept(generateDragData(e));
         });
     }
@@ -122,7 +122,7 @@ public class MandelbrotContentController extends ContentController
     }
     
     public final void setDragConsumer(Consumer<MouseDragData> dragConsumer) {
-        this.dragConsumer = SLExceptions.nullCheck(dragConsumer, "Mouse DRAG Consumer");
+        this.dragConsumer = ExceptionsSL.nullCheck(dragConsumer, "Mouse DRAG Consumer");
     }
     
     public final void resetDragConsumer() {
@@ -134,7 +134,7 @@ public class MandelbrotContentController extends ContentController
     }
     
     public final void setMoveConsumer(Consumer<MouseDragData> moveConsumer) {
-        this.moveConsumer = SLExceptions.nullCheck(moveConsumer, "Mouse MOVE Consumer");
+        this.moveConsumer = ExceptionsSL.nullCheck(moveConsumer, "Mouse MOVE Consumer");
     }
     
     public final void resetMoveConsumer() {

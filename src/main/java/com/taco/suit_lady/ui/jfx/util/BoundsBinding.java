@@ -1,6 +1,6 @@
 package com.taco.suit_lady.ui.jfx.util;
 
-import com.taco.suit_lady.util.tools.SLProperties;
+import com.taco.suit_lady.util.tools.PropertiesSL;
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
@@ -49,19 +49,19 @@ public class BoundsBinding
     
     public final IntegerProperty xProperty() { return xProperty; }
     @Override public final int x() { return xProperty.get(); }
-    public final int setX(int newValue) { return SLProperties.setProperty(xProperty, newValue); }
+    public final int setX(int newValue) { return PropertiesSL.setProperty(xProperty, newValue); }
     
     public final IntegerProperty yProperty() { return yProperty; }
     @Override public final int y() { return yProperty.get(); }
-    public final int setY(int newValue) { return SLProperties.setProperty(yProperty, newValue); }
+    public final int setY(int newValue) { return PropertiesSL.setProperty(yProperty, newValue); }
     
     public final IntegerProperty widthProperty() { return widthProperty; }
     @Override public final int width() { return widthProperty.get(); }
-    public final int setWidth(int newValue) { return SLProperties.setProperty(widthProperty, newValue); }
+    public final int setWidth(int newValue) { return PropertiesSL.setProperty(widthProperty, newValue); }
     
     public final IntegerProperty heightProperty() { return heightProperty; }
     @Override public final int height() { return heightProperty.get(); }
-    public final int setHeight(int newValue) { return SLProperties.setProperty(heightProperty, newValue); }
+    public final int setHeight(int newValue) { return PropertiesSL.setProperty(heightProperty, newValue); }
     
     //<editor-fold desc="> Bindings">
     

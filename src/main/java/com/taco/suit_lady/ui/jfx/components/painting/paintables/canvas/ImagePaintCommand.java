@@ -2,9 +2,9 @@ package com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas;
 
 import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.SLProperties;
-import com.taco.suit_lady.util.tools.SLResources;
-import com.taco.suit_lady.util.tools.fx_tools.FX;
+import com.taco.suit_lady.util.tools.PropertiesSL;
+import com.taco.suit_lady.util.tools.ResourcesSL;
+import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.image.Image;
@@ -26,7 +26,7 @@ public class ImagePaintCommand extends PaintCommand {
     
     public final ObjectProperty<Image> imageProperty() { return imageProperty; }
     public final Image getImage() { return imageProperty.get(); }
-    public final Image setImage(Image newValue) { return SLProperties.setProperty(imageProperty, newValue); }
+    public final Image setImage(Image newValue) { return PropertiesSL.setProperty(imageProperty, newValue); }
     
     //</editor-fold>
     
@@ -34,7 +34,7 @@ public class ImagePaintCommand extends PaintCommand {
     
     @Override public @NotNull ImagePaintCommand init() {
         imageProperty.addListener((observable, oldValue, newValue) -> repaintSurface());
-        imageProperty.set(SLResources.getDummyImage(SLResources.MAP));
+        imageProperty.set(ResourcesSL.getDummyImage(ResourcesSL.MAP));
         
         return (ImagePaintCommand) super.init();
     }
@@ -43,7 +43,7 @@ public class ImagePaintCommand extends PaintCommand {
         Image image = getImage();
         Bounds bounds = getBounds();
         if (image != null && isValidDimensions())
-            FX.drawImage(getSurface(), bounds, image, true, false);
+            ToolsFX.drawImage(getSurface(), bounds, image, true, false);
         
         // Below is example use case for both source & target Bounds.
         // The example clips the image to show only the top left quadrant of the image

@@ -8,7 +8,7 @@ import com.taco.suit_lady.util.tools.*;
 import com.taco.suit_lady.ui.jfx.Colorable;
 import com.taco.suit_lady.ui.jfx.hyperlink.HyperlinkNodeFX;
 import com.taco.suit_lady.ui.jfx.lists.Listable;
-import com.taco.suit_lady.util.tools.SLArrays;
+import com.taco.suit_lady.util.tools.ArraysSL;
 import com.taco.tacository.quick.ConsoleBB;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -64,8 +64,8 @@ import java.util.function.Consumer;
 /**
  * Contains a variety of classes that provide JavaFX utility features.
  */
-public class FX {
-    private FX() { } //No Instance
+public class ToolsFX {
+    private ToolsFX() { } //No Instance
     
     //<editor-fold desc="EDT/FX Thread">
     
@@ -101,7 +101,7 @@ public class FX {
      *                 //
      */
     public static void runFX(Runnable runnable, boolean wait) {
-        SLExceptions.nullCheck(runnable, "Runnable cannot be null");
+        ExceptionsSL.nullCheck(runnable, "Runnable cannot be null");
         try {
             if (isFXThread())
                 runnable.run();
@@ -111,7 +111,7 @@ public class FX {
                 Platform.runLater(runnable);
         } catch (Exception e) {
             if (!e.getMessage().equalsIgnoreCase("toolkit has exited"))
-                throw SLExceptions.ex(e);
+                throw ExceptionsSL.ex(e);
         }
     }
     
@@ -121,7 +121,7 @@ public class FX {
      * @param callable The Callable to be executed.
      */
     public static <V> V runFX(Callable<V> callable) {
-        SLExceptions.nullCheck(callable, "Callable cannot be null");
+        ExceptionsSL.nullCheck(callable, "Callable cannot be null");
         try {
             if (isFXThread())
                 return callable.call();
@@ -132,13 +132,13 @@ public class FX {
                         _objProperty.set(callable.call());
                     } catch (Exception e) {
                         if (!e.getMessage().equalsIgnoreCase("toolkit has exited"))
-                            throw SLExceptions.ex(e);
+                            throw ExceptionsSL.ex(e);
                     }
                 });
                 return _objProperty.get();
             }
         } catch (Exception e) {
-            throw SLExceptions.ex(e);
+            throw ExceptionsSL.ex(e);
         }
     }
     
@@ -153,7 +153,7 @@ public class FX {
      * @param wait     True if this method should block until the Runnable is finished execution, false if this method should return as soon as the Runnable has been published.
      */
     public static void runEDT(Runnable runnable, boolean wait) {
-        SLExceptions.nullCheck(runnable, "Runnable cannot be null");
+        ExceptionsSL.nullCheck(runnable, "Runnable cannot be null");
         try {
             if (EventQueue.isDispatchThread())
                 runnable.run();
@@ -162,7 +162,7 @@ public class FX {
             else
                 EventQueue.invokeLater(runnable);
         } catch (Exception e) {
-            throw SLExceptions.ex(e);
+            throw ExceptionsSL.ex(e);
         }
     }
     
@@ -172,7 +172,7 @@ public class FX {
      * @param callable The Callable to be executed.
      */
     public static <V> V runEDT(Callable<V> callable) {
-        SLExceptions.nullCheck(callable, "Callable cannot be null");
+        ExceptionsSL.nullCheck(callable, "Callable cannot be null");
         try {
             if (isFXThread())
                 return callable.call();
@@ -182,13 +182,13 @@ public class FX {
                     try {
                         _objProperty.set(callable.call());
                     } catch (Exception e) {
-                        throw SLExceptions.ex(e);
+                        throw ExceptionsSL.ex(e);
                     }
                 });
                 return _objProperty.get();
             }
         } catch (Exception e) {
-            throw SLExceptions.ex(e);
+            throw ExceptionsSL.ex(e);
         }
     }
     
@@ -199,7 +199,7 @@ public class FX {
      */
     public static void requireFX() {
         if (!isFXThread())
-            throw SLExceptions.ex(new IllegalStateException("Operation must be executed on the FX Thread."));
+            throw ExceptionsSL.ex(new IllegalStateException("Operation must be executed on the FX Thread."));
     }
     
     /**
@@ -207,7 +207,7 @@ public class FX {
      */
     public static void requireEDT() {
         if (!isEDT())
-            throw SLExceptions.ex(new IllegalStateException("Operation must be executed on the EDT."));
+            throw ExceptionsSL.ex(new IllegalStateException("Operation must be executed on the EDT."));
     }
     
     //</editor-fold>
@@ -220,7 +220,7 @@ public class FX {
      * @return The {@code key code} for the specified {@link KeyCode}.
      */
     public static int getKeyCode(KeyCode keyCode) {
-        return SLExceptions.nullCheck(keyCode, "JFX KeyCode").getCode();
+        return ExceptionsSL.nullCheck(keyCode, "JFX KeyCode").getCode();
     }
     
     /**
@@ -231,7 +231,7 @@ public class FX {
      * @return The {@code key char} for the specified {@link KeyCode}.
      */
     public static String getKeyChar(KeyCode keyCode) {
-        return SLExceptions.nullCheck(keyCode, "JFX KeyCode").getChar();
+        return ExceptionsSL.nullCheck(keyCode, "JFX KeyCode").getChar();
     }
     
     
@@ -372,7 +372,7 @@ public class FX {
                 for (Object obj2: parents)
                     addFlowObj(obj2, children);
             } else
-                ConsoleBB.CONSOLE.print("ERROR: " + SLTools.getSimpleName(obj.getClass()) + " is an invalid type.");
+                ConsoleBB.CONSOLE.print("ERROR: " + ToolsSL.getSimpleName(obj.getClass()) + " is an invalid type.");
     }
     
     /**
@@ -409,7 +409,7 @@ public class FX {
      */
     @Contract("_, _, _ -> param1")
     public static @NotNull TextField numberTextField(TextField textField, boolean allowDecimals, double initialValue) {
-        SLExceptions.nullCheck(textField, "TextField cannot be null.");
+        ExceptionsSL.nullCheck(textField, "TextField cannot be null.");
         
         textField.addEventFilter(KeyEvent.KEY_TYPED, _keyEvent -> {
             String _str = _keyEvent.getCharacter().toLowerCase();
@@ -421,7 +421,7 @@ public class FX {
                 return;
             }
             
-            Character[] _numbers = SLArrays.concat(
+            Character[] _numbers = ArraysSL.concat(
                     new Character[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', 'k', 'm', 'b'},
                     (allowDecimals ? new Character[]{'.'} : new Character[]{})
                                                   );
@@ -525,7 +525,7 @@ public class FX {
             if (observableString != null) {
                 String string = observableString.get();
                 if (string != null) {
-                    webView.getEngine().loadContent(SLStrings.html(string, true));
+                    webView.getEngine().loadContent(StringsSL.html(string, true));
                     return;
                 }
             }
@@ -555,7 +555,7 @@ public class FX {
      * @return The integer value from the specified {@link TextField}.
      */
     public static int getIntValue(@NotNull TextField textField) {
-        return (int) SLCalculations.getLongkmb(textField.getText(), false);
+        return (int) CalculationsSL.getLongkmb(textField.getText(), false);
     }
     
     /**
@@ -568,7 +568,7 @@ public class FX {
      * @return The integer value from the specified {@link TextField}.
      */
     public static long getLongValue(@NotNull TextField textField) {
-        return SLCalculations.getLongkmb(textField.getText(), false);
+        return CalculationsSL.getLongkmb(textField.getText(), false);
     }
     
     /**
@@ -581,7 +581,7 @@ public class FX {
      * @return The double value from the specified {@link TextField}.
      */
     public static double getValue(@NotNull TextField textField) {
-        return SLCalculations.getkmb(textField.getText(), false);
+        return CalculationsSL.getkmb(textField.getText(), false);
     }
     
     /**
@@ -644,7 +644,7 @@ public class FX {
         for (Node c: excludes)
             if (c instanceof Parent)
                 excludes_list.addAll(getChildren((Parent) c, true));
-        getChildren(parent, true).stream().filter(c -> !SLArrays.contains(c, excludes_list.toArray())).forEach(c -> c.setDisable(!enabled));
+        getChildren(parent, true).stream().filter(c -> !ArraysSL.contains(c, excludes_list.toArray())).forEach(c -> c.setDisable(!enabled));
     }
     
     /**
@@ -784,8 +784,8 @@ public class FX {
                     } else
                         node.getStyleClass().remove(styleClass);
             if (active)
-                SLArrays.containsAll(node.getStyleClass(), styleClasses);
-            return !SLArrays.containsAny(node.getStyleClass(), styleClasses);
+                ArraysSL.containsAll(node.getStyleClass(), styleClasses);
+            return !ArraysSL.containsAny(node.getStyleClass(), styleClasses);
         }
         return false;
     }
@@ -841,7 +841,7 @@ public class FX {
     
     
     public static <T extends Node> T setAnchors(T node, double left, double right, double top, double bottom) {
-        SLExceptions.nullCheck(node, "Input Node");
+        ExceptionsSL.nullCheck(node, "Input Node");
         
         AnchorPane.setLeftAnchor(node, left);
         AnchorPane.setRightAnchor(node, right);
@@ -865,7 +865,7 @@ public class FX {
     
     
     public static void drawRectangle(Canvas canvas, Bounds bounds, boolean wipeCanvas, boolean fill) {
-        FX.runFX(() -> {
+        ToolsFX.runFX(() -> {
             if (wipeCanvas)
                 clearCanvasUnsafe(canvas);
             
@@ -881,7 +881,7 @@ public class FX {
     }
     
     public static void drawOval(Canvas canvas, Bounds bounds, boolean wipeCanvas, boolean fill) {
-        FX.runFX(() -> {
+        ToolsFX.runFX(() -> {
             if (wipeCanvas)
                 clearCanvasUnsafe(canvas);
             
@@ -897,7 +897,7 @@ public class FX {
     }
     
     public static void drawArc(Canvas canvas, Bounds bounds, double startAngle, double arcExtent, ArcType closure, boolean wipeCanvas, boolean fill) {
-        FX.runFX(() -> {
+        ToolsFX.runFX(() -> {
             if (wipeCanvas)
                 clearCanvasUnsafe(canvas);
             
@@ -913,7 +913,7 @@ public class FX {
     }
     
     public static void drawImage(@NotNull Canvas canvas, int x, int y, @NotNull Image image, boolean safe, boolean wipeCanvas) {
-        FX.runFX(() -> {
+        ToolsFX.runFX(() -> {
             if (wipeCanvas)
                 clearCanvasUnsafe(canvas);
             canvas.getGraphicsContext2D().drawImage(image, x, y);
@@ -921,7 +921,7 @@ public class FX {
     }
     
     public static void drawImage(@NotNull Canvas canvas, @NotNull Bounds bounds, @NotNull Image image, boolean safe, boolean wipeCanvas) {
-        FX.runFX(() -> {
+        ToolsFX.runFX(() -> {
             if (wipeCanvas)
                 clearCanvasUnsafe(canvas);
             canvas.getGraphicsContext2D().drawImage(image, bounds.getX(safe), bounds.getY(safe), bounds.getWidth(safe), bounds.getHeight(safe));
@@ -929,7 +929,7 @@ public class FX {
     }
     
     public static void drawImage(@NotNull Canvas canvas, @NotNull Bounds source, @NotNull Bounds destination, Image image, boolean safe, boolean wipeCanvas) {
-        FX.runFX(() -> {
+        ToolsFX.runFX(() -> {
             if (wipeCanvas)
                 clearCanvasUnsafe(canvas);
             canvas.getGraphicsContext2D().drawImage(
@@ -949,7 +949,7 @@ public class FX {
     }
     
     public static Canvas clearCanvas(Canvas canvas, ReentrantLock lock) {
-        SLExceptions.nullCheck(canvas, "Canvas Input");
+        ExceptionsSL.nullCheck(canvas, "Canvas Input");
         
         if (lock != null)
             try {
@@ -969,7 +969,7 @@ public class FX {
     
     
     public static <T extends Node> T togglePickOnBounds(T node, boolean pickOnBounds) {
-        SLExceptions.nullCheck(node, "Input Node").setPickOnBounds(pickOnBounds);
+        ExceptionsSL.nullCheck(node, "Input Node").setPickOnBounds(pickOnBounds);
         if (node instanceof Canvas)
             node.setMouseTransparent(!pickOnBounds);
         if (node instanceof Region)
@@ -1072,7 +1072,7 @@ public class FX {
                         else
                             throw new RuntimeException("If root is a BorderPane, then root center must be a Stack Pane (center=" + center + ")");
                     } else
-                        throw new ClassCastException("Root must be instance of Stack Pane or BorderPane (root=" + SLTools.getSimpleName(root) + ")");
+                        throw new ClassCastException("Root must be instance of Stack Pane or BorderPane (root=" + ToolsSL.getSimpleName(root) + ")");
                 } else
                     throw new NullPointerException("Root cannot be null");
             } else
@@ -1193,8 +1193,8 @@ public class FX {
     
     
     public static void passdownOrder(Node root, Consumer<Node> action) {
-        SLExceptions.nullCheck(root, "Root node cannot be null");
-        SLExceptions.nullCheck(action, "Task cannot be null");
+        ExceptionsSL.nullCheck(root, "Root node cannot be null");
+        ExceptionsSL.nullCheck(action, "Task cannot be null");
         if (root instanceof Parent)
             ((Parent) root).getChildrenUnmodifiable().forEach(child -> passdownOrder(child, action));
     }
@@ -1275,10 +1275,10 @@ public class FX {
             @NotNull BindOrientation bindOrientation,
             @NotNull BindType bindType,
             boolean addTo) {
-        SLExceptions.nullCheck(child, "Region");
-        SLExceptions.nullCheck(parent, "Parent Region");
-        SLExceptions.nullCheck(bindOrientation, "Bind Orientation");
-        SLExceptions.nullCheck(bindType, "Bind Type");
+        ExceptionsSL.nullCheck(child, "Region");
+        ExceptionsSL.nullCheck(parent, "Parent Region");
+        ExceptionsSL.nullCheck(bindOrientation, "Bind Orientation");
+        ExceptionsSL.nullCheck(bindType, "Bind Type");
         
         final ObservableDoubleValue observableOffsetImpl = observableOffset == null ? new SimpleDoubleProperty(0.0) : observableOffset;
         final DoubleProperty widthProperty;
@@ -1286,7 +1286,7 @@ public class FX {
         
         if (addTo)
             if (parent instanceof Pane) ((Pane) parent).getChildren().add(child);
-            else throw SLExceptions.ex("Parent must be an implementation of Pane!  (" + parent.getClass() + ")");
+            else throw ExceptionsSL.ex("Parent must be an implementation of Pane!  (" + parent.getClass() + ")");
         
         if (bindType == BindType.PREF || bindType == BindType.BOTH) {
             widthProperty = child.prefWidthProperty();
@@ -1295,7 +1295,7 @@ public class FX {
             widthProperty = child.maxWidthProperty();
             heightProperty = child.maxHeightProperty();
         } else
-            throw SLExceptions.unsupported("Unknown BindType: " + bindType);
+            throw ExceptionsSL.unsupported("Unknown BindType: " + bindType);
         
         if (bindOrientation == BindOrientation.WIDTH || bindOrientation == BindOrientation.BOTH) {
             widthProperty.bind(Bindings.createDoubleBinding(
@@ -1329,8 +1329,8 @@ public class FX {
     }
     
     public static double getNodeSize(Region region, boolean includePadding, boolean includeInsets, double offset, BindOrientation bindOrientation) {
-        SLExceptions.nullCheck(region, "Region");
-        SLExceptions.nullCheck(bindOrientation, "BindOrientation");
+        ExceptionsSL.nullCheck(region, "Region");
+        ExceptionsSL.nullCheck(bindOrientation, "BindOrientation");
         
         Insets _insets = region.getInsets();
         Insets _padding = region.getPadding();
@@ -1339,7 +1339,7 @@ public class FX {
         else if (bindOrientation == BindOrientation.HEIGHT)
             return region.getHeight() + offset - (includePadding ? _padding.getTop() + _padding.getBottom() : 0) + (includeInsets ? _insets.getTop() + _insets.getBottom() : 0);
         else
-            throw SLExceptions.unsupported("BindOrientation \"" + bindOrientation + "\" is not supported.");
+            throw ExceptionsSL.unsupported("BindOrientation \"" + bindOrientation + "\" is not supported.");
     }
     
     public enum BindOrientation {
@@ -1715,9 +1715,9 @@ public class FX {
         if (comboBox != null) {
             applyCellFactory(comboBox);
             if (t != null) {
-                final Enum[] e_list = SLEnums.list(t);
+                final Enum[] e_list = EnumsSL.list(t);
                 for (Enum e: e_list)
-                    if (!SLArrays.contains(e, excludeValues))
+                    if (!ArraysSL.contains(e, excludeValues))
                         comboBox.getItems().add((T) e);
                 
                 comboBox.setValue(selectFirst ? (T) e_list[0] : t);
@@ -1731,7 +1731,7 @@ public class FX {
      * This method supports the following:
      * <ol>
      * <li>The {@link Listable} interface (uses the {@link Listable#getShortText()} method</li>
-     * <li>Enums (uses the {@link SLStrings#enumToString(Enum)} method)</li>
+     * <li>Enums (uses the {@link StringsSL#enumToString(Enum)} method)</li>
      * <li>Non-null Objects (uses the {@link Object#toString()} method)</li>
      * </ol>
      *
@@ -1745,7 +1745,7 @@ public class FX {
             if (obj instanceof Listable)
                 str = ((Listable) obj).getShortText();
             else if (obj instanceof Enum)
-                str = SLStrings.enumToString((Enum) obj);
+                str = StringsSL.enumToString((Enum) obj);
             else
                 str = obj.toString();
             return str;
@@ -1775,21 +1775,21 @@ public class FX {
     public static final int NO_CHANGE_SIZE_LOCK = Integer.MIN_VALUE;
     
     /**
-     * Locks the size of the specified {@link Stage} based on the specified {@link FXDialogs.SizeType}.
+     * Locks the size of the specified {@link Stage} based on the specified {@link DialogsFX.SizeType}.
      *
      * @param stage    The {@link Stage} being locked.
-     * @param sizeType The {@link FXDialogs.SizeType} that controls how the {@link Stage} can be resized.
+     * @param sizeType The {@link DialogsFX.SizeType} that controls how the {@link Stage} can be resized.
      *
      * @return True if the {@link Stage Stage's} size was locked successfully, false otherwise.
      */
-    public static boolean lockSize(Stage stage, FXDialogs.SizeType sizeType) {
+    public static boolean lockSize(Stage stage, DialogsFX.SizeType sizeType) {
         if (stage != null && sizeType != null) {
-            if (sizeType == FXDialogs.SizeType.MINIMUM_SIZE) {
+            if (sizeType == DialogsFX.SizeType.MINIMUM_SIZE) {
                 stage.setMinWidth(stage.getWidth());
                 stage.setMinHeight(stage.getHeight());
-            } else if (sizeType == FXDialogs.SizeType.NON_RESIZEABLE)
+            } else if (sizeType == DialogsFX.SizeType.NON_RESIZEABLE)
                 stage.setResizable(false);
-            else if (sizeType == FXDialogs.SizeType.RESIZEABLE)
+            else if (sizeType == DialogsFX.SizeType.RESIZEABLE)
                 stage.setResizable(true);
             return true;
         }
@@ -1842,30 +1842,30 @@ public class FX {
     }
     
     /**
-     * Locks the size of the specified {@link Region} based on the specified {@link FXDialogs.SizeType}.
+     * Locks the size of the specified {@link Region} based on the specified {@link DialogsFX.SizeType}.
      * <p>
      * Note that {@link Region regions} do not have a {@code setResizable()} method. This methods:
      * <ul>
-     * <li>{@link FXDialogs.SizeType#NON_RESIZEABLE} sets the {@link Region#setMinSize(double, double) minimum size} and {@link Region#setMaxSize(double, double) maximum size} to the current size of the {@link
+     * <li>{@link DialogsFX.SizeType#NON_RESIZEABLE} sets the {@link Region#setMinSize(double, double) minimum size} and {@link Region#setMaxSize(double, double) maximum size} to the current size of the {@link
      * Region}.</li>
-     * <li>{@link FXDialogs.SizeType#RESIZEABLE} sets the {@link Region#setMaxSize(double, double) maximum size} to {@link Integer#MAX_VALUE}.</li>
+     * <li>{@link DialogsFX.SizeType#RESIZEABLE} sets the {@link Region#setMaxSize(double, double) maximum size} to {@link Integer#MAX_VALUE}.</li>
      * </ul>
      *
      * @param region   The {@link Region} being locked.
-     * @param sizeType The {@link FXDialogs.SizeType} that controls how the {@link Region} can be resized.
+     * @param sizeType The {@link DialogsFX.SizeType} that controls how the {@link Region} can be resized.
      *
      * @return True if the {@link Region Region's} size was locked successfully, false otherwise.
      */
-    public static boolean lockSize(Region region, FXDialogs.SizeType sizeType) {
+    public static boolean lockSize(Region region, DialogsFX.SizeType sizeType) {
         if (region != null && sizeType != null) {
             double width = region.getWidth();
             double height = region.getHeight();
-            if (sizeType == FXDialogs.SizeType.MINIMUM_SIZE)
+            if (sizeType == DialogsFX.SizeType.MINIMUM_SIZE)
                 region.setMinSize(width, height);
-            else if (sizeType == FXDialogs.SizeType.NON_RESIZEABLE) {
+            else if (sizeType == DialogsFX.SizeType.NON_RESIZEABLE) {
                 region.setMaxSize(width, height);
                 region.setMinSize(width, height);
-            } else if (sizeType == FXDialogs.SizeType.RESIZEABLE)
+            } else if (sizeType == DialogsFX.SizeType.RESIZEABLE)
                 region.setMaxSize(Integer.MAX_VALUE, Integer.MAX_VALUE);
             return true;
         }
@@ -1894,7 +1894,7 @@ public class FX {
             //				System.err.println("Initializing FXML Loader for resource: " + resource);
             if (controller != null)
                 loader.setController(controller);
-            loader.load(SLResources.getResourceStream(resource));
+            loader.load(ResourcesSL.getResourceStream(resource));
             return loader;
         } catch (Exception e) {
             throw new UndefinedRuntimeException("Error loading resource: " + resource);
@@ -1908,14 +1908,14 @@ public class FX {
     
     private static boolean isValidSuffix(String str, String @NotNull ... suffixes) {
         for (final String suffix: suffixes)
-            if (str.contains(suffix) && (!str.endsWith(suffix) || SLStrings.getCount(str, suffix) != 1 || str.length() == suffix.length()))
+            if (str.contains(suffix) && (!str.endsWith(suffix) || StringsSL.getCount(str, suffix) != 1 || str.length() == suffix.length()))
                 return false;
         return true;
     }
     
     private static boolean isValidPrefix(String str, String @NotNull ... prefixes) {
         for (String prefix: prefixes)
-            if (str.contains(prefix) && (!str.startsWith(prefix) || SLStrings.getCount(str, prefix) != 1))
+            if (str.contains(prefix) && (!str.startsWith(prefix) || StringsSL.getCount(str, prefix) != 1))
                 return false;
         return true;
     }

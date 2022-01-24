@@ -2,7 +2,7 @@ package com.taco.suit_lady.util.tools;
 
 import java.util.Objects;
 
-public class SLObjects
+public class ObjectsSL
 {
     public static boolean equals(Object obj1, Object obj2)
     {

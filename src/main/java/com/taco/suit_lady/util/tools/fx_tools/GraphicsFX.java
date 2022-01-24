@@ -12,8 +12,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 
-public class FXGraphics {
-	private FXGraphics() {} //No instance
+public class GraphicsFX {
+	private GraphicsFX() {} //No instance
 
 	/**
 	 * Returns the {@link Point} relative to the {@link MouseEvent#getSource() source} in which the mouse is at for the specified {@link MouseEvent}.

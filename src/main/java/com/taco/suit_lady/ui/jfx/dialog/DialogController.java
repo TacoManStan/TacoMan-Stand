@@ -1,7 +1,7 @@
 package com.taco.suit_lady.ui.jfx.dialog;
 
-import com.taco.suit_lady.util.tools.SLArrays;
-import com.taco.suit_lady.util.tools.fx_tools.FXDialogs;
+import com.taco.suit_lady.util.tools.ArraysSL;
+import com.taco.suit_lady.util.tools.fx_tools.DialogsFX;
 import com.taco.suit_lady.ui.ui_internal.controllers.Controller;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -104,7 +104,7 @@ public abstract class DialogController<R>
 	/**
 	 * Sets the {@link ButtonType Button Types}.
 	 * <p>
-	 * Returns {@link FXDialogs#DONE} if the specified array is null or empty.
+	 * Returns {@link DialogsFX#DONE} if the specified array is null or empty.
 	 *
 	 * @param buttonTypes The array of accepted {@link ButtonType ButtonTypes}.
 	 * @return The {@link ButtonType ButtonTypes}.I
@@ -113,11 +113,11 @@ public abstract class DialogController<R>
 	 */
 	private ButtonType[] setButtonTypes(ButtonType... buttonTypes) {
 		if (buttonTypes != null && buttonTypes.length > 0)
-			if (!SLArrays.containsNull(buttonTypes))
+			if (!ArraysSL.containsNull(buttonTypes))
 				return buttonTypes;
 			else
 				throw new NullPointerException("No ButtonType can be null.");
-		return FXDialogs.DONE_CANCEL;
+		return DialogsFX.DONE_CANCEL;
 	}
 
 	//</editor-fold>
@@ -151,7 +151,7 @@ public abstract class DialogController<R>
 	 * @return The value returned by the {@link #getCallback() callback result} created when the {@link Dialog} is closed.
 	 */
 	protected R show(boolean launch) {
-		value = FXDialogs.showControllableDialog(title, message, spacing, buttonTypes, launch, this);
+		value = DialogsFX.showControllableDialog(title, message, spacing, buttonTypes, launch, this);
 		onClose();
 		return value;
 	}
@@ -202,7 +202,7 @@ public abstract class DialogController<R>
 	 * Generates and then returns the {@link DialogCallback} for this {@link DialogController}.
 	 * <p>
 	 * The {@link DialogCallback} is used to display this {@link DialogController} in a
-	 * {@link FXDialogs#showControllableDialog(String, String, double, ButtonType[], boolean, DialogController) dialog}.
+	 * {@link DialogsFX#showControllableDialog(String, String, double, ButtonType[], boolean, DialogController) dialog}.
 	 *
 	 * @return The created {@link DialogCallback}.
 	 */

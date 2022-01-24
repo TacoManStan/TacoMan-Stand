@@ -1,6 +1,6 @@
 package com.taco.suit_lady.util.springable;
 
-import com.taco.suit_lady.util.tools.SLExceptions;
+import com.taco.suit_lady.util.tools.ExceptionsSL;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -28,8 +28,8 @@ public record StrictSpringable(@NotNull FxWeaver weaver, @NotNull ConfigurableAp
      * @throws NullPointerException If the specified {@link ConfigurableApplicationContext} is {@code null}.
      */
     public StrictSpringable(@NotNull FxWeaver weaver, @NotNull ConfigurableApplicationContext ctx) {
-        this.weaver = SLExceptions.nullCheck(weaver, "FxWeaver");
-        this.ctx = SLExceptions.nullCheck(ctx, "Application Context");
+        this.weaver = ExceptionsSL.nullCheck(weaver, "FxWeaver");
+        this.ctx = ExceptionsSL.nullCheck(ctx, "Application Context");
     }
     
     /**

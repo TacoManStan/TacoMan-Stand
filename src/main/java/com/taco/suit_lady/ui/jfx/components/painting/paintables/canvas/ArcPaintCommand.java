@@ -2,8 +2,8 @@ package com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas;
 
 import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.SLProperties;
-import com.taco.suit_lady.util.tools.fx_tools.FX;
+import com.taco.suit_lady.util.tools.PropertiesSL;
+import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -33,15 +33,15 @@ public class ArcPaintCommand extends ShapePaintCommand {
     
     public final DoubleProperty startAngleProperty() { return startAngleProperty; }
     public final double getStartAngle() { return startAngleProperty.get(); }
-    public final double setStartAngle(double newValue) { return SLProperties.setProperty(startAngleProperty, newValue); }
+    public final double setStartAngle(double newValue) { return PropertiesSL.setProperty(startAngleProperty, newValue); }
     
     public final DoubleProperty arcExtentProperty() { return arcExtentProperty; }
     public final double getArcExtent() { return arcExtentProperty.get(); }
-    public final double setArcExtent(double newValue) { return SLProperties.setProperty(arcExtentProperty, newValue); }
+    public final double setArcExtent(double newValue) { return PropertiesSL.setProperty(arcExtentProperty, newValue); }
     
     public final ObjectProperty<ArcType> closureProperty() { return closureProperty; }
     public final ArcType getClosure() { return closureProperty.get(); }
-    public final ArcType setClosure(ArcType newValue) { return SLProperties.setProperty(closureProperty, newValue); }
+    public final ArcType setClosure(ArcType newValue) { return PropertiesSL.setProperty(closureProperty, newValue); }
     
     //</editor-fold>
     
@@ -50,7 +50,7 @@ public class ArcPaintCommand extends ShapePaintCommand {
     @Override protected void onPaint() {
         Bounds bounds = getBounds();
         if (isValidDimensions())
-            FX.drawArc(getSurface(), bounds, getStartAngle(), getArcExtent(), getClosure(), false, isFill());
+            ToolsFX.drawArc(getSurface(), bounds, getStartAngle(), getArcExtent(), getClosure(), false, isFill());
     }
     
     //</editor-fold>

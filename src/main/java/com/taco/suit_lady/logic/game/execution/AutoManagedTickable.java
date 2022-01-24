@@ -1,6 +1,6 @@
 package com.taco.suit_lady.logic.game.execution;
 
-import com.taco.suit_lady.util.tools.SLExceptions;
+import com.taco.suit_lady.util.tools.ExceptionsSL;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.ReadOnlyBooleanProperty;
@@ -117,7 +117,7 @@ public abstract class AutoManagedTickable<T>
     @Override
     public void tick() {
         if (isCancelled())
-            throw SLExceptions.ex("Tickable has already been cancelled!");
+            throw ExceptionsSL.ex("Tickable has already been cancelled!");
         
         if (autoCancelCondition.test(owner))
             cancel();

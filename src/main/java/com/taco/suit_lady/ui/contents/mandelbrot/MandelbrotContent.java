@@ -16,10 +16,10 @@ import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_pag
 import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotElementController;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
-import com.taco.suit_lady.util.tools.SLExceptions;
-import com.taco.suit_lady.util.tools.SLResources;
-import com.taco.suit_lady.util.tools.SLTasks;
-import com.taco.suit_lady.util.tools.fx_tools.FX;
+import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.ResourcesSL;
+import com.taco.suit_lady.util.tools.TasksSL;
+import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import com.taco.tacository.json.JFiles;
 import javafx.beans.binding.Bindings;
 import javafx.scene.paint.Color;
@@ -65,7 +65,7 @@ public class MandelbrotContent extends ListableContent<
                 this,
                 "Mandelbrot Demo",
                 "mandelbrot2",
-                uiBook -> SLResources.get(
+                uiBook -> ResourcesSL.get(
                         "pages",
                         uiBook.getUID(uiBook.getButtonID()),
                         () -> coverPage = new MandelbrotPage(uiBook, this)),
@@ -220,12 +220,12 @@ public class MandelbrotContent extends ListableContent<
     }
     
     private void refreshCanvas() {
-        sync(() -> FX.runFX(() -> {
+        sync(() -> ToolsFX.runFX(() -> {
             final CanvasSurface canvas = getController().canvas();
             final double newWidth = getController().canvas().getWidth();
             final double newHeight = getController().canvas().getHeight();
             
-            FX.clearCanvasUnsafe(ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas());
+            ToolsFX.clearCanvasUnsafe(ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas());
             
             getData().resizeTo(newWidth, newHeight);
             
@@ -234,7 +234,7 @@ public class MandelbrotContent extends ListableContent<
     }
     
     private void redraw(MandelbrotColor[][] colors) {
-        FX.runFX(() -> SLTasks.sync(lock, () -> {
+        ToolsFX.runFX(() -> TasksSL.sync(lock, () -> {
             getCoverPage().getController().getProgressBar().setVisible(false);
             for (int i = 0; i < colors.length; i++)
                 for (int j = 0; j < colors[i].length; j++) {
@@ -247,14 +247,14 @@ public class MandelbrotContent extends ListableContent<
     
     private void zoom(@NotNull MouseDragData dragData) {
         if (!dragData.isValid())
-            throw SLExceptions.ex("Drag Data is Invalid!");
+            throw ExceptionsSL.ex("Drag Data is Invalid!");
         
         Arrays.stream(paintables).forEach(paintable -> paintable.setPaused(true));
         getData().zoomTo(dragData.getStartX(), dragData.getStartY(), dragData.getEndX(), dragData.getEndY());
     }
     
     private void updateZoomBox(MouseDragData moveData) {
-        SLTasks.sync(lock, () -> {
+        TasksSL.sync(lock, () -> {
             Arrays.stream(paintables).forEach(paintable -> paintable.setPaused(false));
             Arrays.stream(paintables).forEach(paintable -> paintable.boundsBinding().setBounds(moveData.getBounds()));
         });

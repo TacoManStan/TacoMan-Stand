@@ -3,9 +3,9 @@ package com.taco.suit_lady.util.tools.list_tools;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
-import com.taco.suit_lady.util.tools.SLArrays;
-import com.taco.suit_lady.util.tools.SLExceptions;
-import com.taco.suit_lady.util.tools.SLTasks;
+import com.taco.suit_lady.util.tools.ArraysSL;
+import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.TasksSL;
 import com.taco.suit_lady.util.tools.list_tools.Operation.OperationType;
 import com.taco.tacository.obj_traits.common.Nameable;
 import javafx.beans.property.BooleanProperty;
@@ -30,9 +30,9 @@ import java.util.stream.IntStream;
  * <h2>Details</h2>
  * <ol>
  *     <li>
- *         {@link OperationHandler} objects are constructed by <i>{@link ListTools}<b>.</b>{@link ListTools#wrap(ReentrantLock, String, ObservableList, OperationListener) wrap(...)}</i> and other factory methods in the {@link ListTools} utility class.
+ *         {@link OperationHandler} objects are constructed by <i>{@link ListsSL}<b>.</b>{@link ListsSL#wrap(ReentrantLock, String, ObservableList, OperationListener) wrap(...)}</i> and other factory methods in the {@link ListsSL} utility class.
  *         <ul>
- *             <li>Most factory methods return a {@link OperationHandler} that was constructed using <i>{@link ListTools}<b>.</b>{@link ListTools#wrap(ReentrantLock, String, ObservableList, OperationListener) wrap(...)}</i>.</li>
+ *             <li>Most factory methods return a {@link OperationHandler} that was constructed using <i>{@link ListsSL}<b>.</b>{@link ListsSL#wrap(ReentrantLock, String, ObservableList, OperationListener) wrap(...)}</i>.</li>
  *         </ul>
  *     </li>
  *     <li>The primary function of {@link OperationHandler} is to streamline the event data provided by <i>{@link ListChangeListener#onChanged(Change) ListChangeListener#onChanged(Change)}</i>.</li>
@@ -60,7 +60,7 @@ import java.util.stream.IntStream;
  * </ol>
  * <h4>With <u>Native</u> Permutation Event Support</h4>
  * <ol>
- *     <li>{@link SLArrays#sort(List)}</li>
+ *     <li>{@link ArraysSL#sort(List)}</li>
  * </ol>
  * <h3>Example Output</h3>
  * <p>Refer to {@link ListToolsDemo}.</p>
@@ -119,7 +119,7 @@ public abstract class OperationHandler<E>
     
     @Override
     public final void onChanged(Change<? extends E> change) {
-        SLTasks.sync(lock, () -> {
+        TasksSL.sync(lock, () -> {
             while (change.next())
                 if (change.wasPermutated()) {
                     onPermutateOperationInternal(true);
@@ -242,32 +242,32 @@ public abstract class OperationHandler<E>
     //<editor-fold desc="--- INTERNAL ---">
     
     private void onPermutateInternal(Operation<E> op1, Operation<E> op2) {
-        SLTasks.sync(lock, () -> onPermutate(op1, op2), true);
+        TasksSL.sync(lock, () -> onPermutate(op1, op2), true);
     }
     
     private void onUpdateInternal(int from, int to) {
-        SLTasks.sync(lock, () -> onUpdate(from, to), true);
+        TasksSL.sync(lock, () -> onUpdate(from, to), true);
     }
     
     private void onAddInternal(Operation<E> op) {
-        SLTasks.sync(lock, () -> onAdd(op), true);
+        TasksSL.sync(lock, () -> onAdd(op), true);
     }
     
     private void onRemoveInternal(Operation<E> op) {
-        SLTasks.sync(lock, () -> onRemove(op), true);
+        TasksSL.sync(lock, () -> onRemove(op), true);
     }
     
     //
     
     private void onPermutateOperationInternal(boolean before) {
-        SLTasks.sync(lock, () -> {
+        TasksSL.sync(lock, () -> {
             if (before) onPrePermutate();
             else onPostPermutate();
         }, true);
     }
     
     private void onAddOrRemoveOperationInternal(boolean before, boolean add) {
-        SLTasks.sync(lock, () -> {
+        TasksSL.sync(lock, () -> {
             if (add)
                 if (before)
                     onPreAdd();
@@ -284,7 +284,7 @@ public abstract class OperationHandler<E>
     //
     
     private void refresh() {
-        SLTasks.sync(lock, () -> backingListProperty.set(SLArrays.copy(list)), true);
+        TasksSL.sync(lock, () -> backingListProperty.set(ArraysSL.copy(list)), true);
     }
     
     //</editor-fold>
@@ -316,7 +316,7 @@ public abstract class OperationHandler<E>
      */
     public final OperationHandler<E> apply() {
         refresh();
-        SLExceptions.nullCheck(list, "Observable List").addListener(SLExceptions.nullCheck(this, "List Listener"));
+        ExceptionsSL.nullCheck(list, "Observable List").addListener(ExceptionsSL.nullCheck(this, "List Listener"));
         return this;
     }
 }
