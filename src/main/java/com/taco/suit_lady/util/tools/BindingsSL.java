@@ -156,7 +156,7 @@ public class BindingsSL {
     
     //</editor-fold>
     
-    //<editor-fold desc="--- DEFAULT PASSTHROUGH BINDINGS">
+    //<editor-fold desc="--- PASSTHROUGH BINDINGS ---">
     
     /**
      * <p><i>See {@link #objBinding(Callable, Observable...)}</i></p>
@@ -220,27 +220,44 @@ public class BindingsSL {
     
     //<editor-fold desc="> Default Type Wrapper Factories">
     
-    
+    public static <U> @NotNull BooleanBinding recursiveBoolBinding(Function<U, ObservableValue<Boolean>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
+        return recursiveBoolBinding(null, function, updateObservable, dependencies);
+    }
     public static <U> @NotNull BooleanBinding recursiveBoolBinding(@Nullable ReentrantLock lock, Function<U, ObservableValue<Boolean>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
         return directBoolBinding(recursiveBinding(lock, function, updateObservable), dependencies);
     }
     
+    public static <U> @NotNull IntegerBinding recursiveIntBinding(Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
+        return recursiveIntBinding(null, function, updateObservable, dependencies);
+    }
     public static <U> @NotNull IntegerBinding recursiveIntBinding(@Nullable ReentrantLock lock, Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
         return directIntBinding(recursiveBinding(lock, function, updateObservable), dependencies);
     }
     
+    public static <U> @NotNull LongBinding recursiveLongBinding(Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
+        return recursiveLongBinding(null, function, updateObservable, dependencies);
+    }
     public static <U> @NotNull LongBinding recursiveLongBinding(@Nullable ReentrantLock lock, Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
         return directLongBinding(recursiveBinding(lock, function, updateObservable), dependencies);
     }
     
+    public static <U> @NotNull FloatBinding recursiveFloatBinding(Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
+        return recursiveFloatBinding(null, function, updateObservable, dependencies);
+    }
     public static <U> @NotNull FloatBinding recursiveFloatBinding(@Nullable ReentrantLock lock, Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
         return directFloatBinding(recursiveBinding(lock, function, updateObservable), dependencies);
     }
     
+    public static <U> @NotNull DoubleBinding recursiveDoubleBinding(Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
+        return recursiveDoubleBinding(null, function, updateObservable, dependencies);
+    }
     public static <U> @NotNull DoubleBinding recursiveDoubleBinding(@Nullable ReentrantLock lock, Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
         return directDoubleBinding(recursiveBinding(lock, function, updateObservable), dependencies);
     }
     
+    public static <U, V> @NotNull ObjectBinding<V> recursiveObjBinding(Function<U, ObservableValue<V>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
+        return recursiveObjBinding(null, function, updateObservable, dependencies);
+    }
     public static <U, V> @NotNull ObjectBinding<V> recursiveObjBinding(@Nullable ReentrantLock lock, Function<U, ObservableValue<V>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
         return directObjBinding(recursiveBinding(lock, function, updateObservable), dependencies);
     }
