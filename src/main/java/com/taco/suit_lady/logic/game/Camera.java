@@ -1,11 +1,11 @@
 package com.taco.suit_lady.logic.game;
 
+import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.BindingsSL;
 import com.taco.suit_lady.util.tools.PropertiesSL;
-import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.ObjectBinding;
@@ -14,6 +14,8 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ObservableNumberValue;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * <p>An object that does not implement/extend any abstract game concept, but is rather a unique object that is assigned to a game window to define how the game is viewed.</p>
@@ -31,9 +33,10 @@ import org.jetbrains.annotations.NotNull;
  * </ol>
  */
 public class Camera
-        implements SpringableWrapper {
+        implements SpringableWrapper, Lockable {
     
     private final StrictSpringable springable;
+    private final ReentrantLock lock;
     
     //
     
@@ -70,6 +73,7 @@ public class Camera
     
     public Camera(@NotNull GameMap gameMap, @NotNull ObservableNumberValue observableViewportWidth, @NotNull ObservableNumberValue observableViewportHeight) {
         this.springable = gameMap.asStrict();
+        this.lock = gameMap.getLock();
         
         this.viewportWidthBinding = BindingsSL.bindInteger(() -> observableViewportWidth.intValue(), observableViewportWidth);
         this.viewportHeightBinding = BindingsSL.bindInteger(() -> observableViewportHeight.intValue(), observableViewportHeight);
@@ -212,6 +216,7 @@ public class Camera
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override public @NotNull Springable springable() { return springable; }
+    @Override public @NotNull ReentrantLock getLock() { return lock; }
     
     //</editor-fold>
 }
