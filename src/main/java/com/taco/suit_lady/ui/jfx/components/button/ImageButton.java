@@ -1135,8 +1135,8 @@ public class ImageButton
             this.foregroundColorProperty = new SimpleObjectProperty<>(defaultColor(FOREGROUND));
             this.backgroundColorProperty = new SimpleObjectProperty<>(defaultColor(BACKGROUND));
             
-            this.color1Property = new SimpleObjectProperty<>(defaultColor(COLOR1));
-            this.color2Property = new SimpleObjectProperty<>(defaultColor(COLOR2));
+            this.color1Property = new SimpleObjectProperty<>(defaultColor(COLOR2));
+            this.color2Property = new SimpleObjectProperty<>(defaultColor(COLOR1));
             this.color3Property = new SimpleObjectProperty<>(defaultColor(COLOR3));
             this.color4Property = new SimpleObjectProperty<>(defaultColor(COLOR4));
             this.color5Property = new SimpleObjectProperty<>(defaultColor(COLOR5));
@@ -1183,9 +1183,9 @@ public class ImageButton
                 return foregroundColorProperty;
             else if (baseColor.equals(BACKGROUND))
                 return backgroundColorProperty;
-            else if (baseColor.equals(COLOR1))
-                return color1Property;
             else if (baseColor.equals(COLOR2))
+                return color1Property;
+            else if (baseColor.equals(COLOR1))
                 return color2Property;
             else if (baseColor.equals(COLOR3))
                 return color3Property;
@@ -1267,7 +1267,7 @@ public class ImageButton
                     case SUFFIX_SELECTED_HOVERED -> FX.Colors.from255(40, 40, 40);
                     default -> Color.WHITE;
                 };
-            } else if (baseColor.equals(COLOR1)) {
+            } else if (baseColor.equals(COLOR2)) {
                 return switch (suffix) {
                     case SUFFIX_STANDARD, SUFFIX_DISABLED -> FX.Colors.from255(95, 95, 95, 150);
                     case SUFFIX_PRESSED, SUFFIX_HOVERED -> FX.Colors.from255(153, 153, 153, 150);
@@ -1275,7 +1275,7 @@ public class ImageButton
                     case SUFFIX_SELECTED_HOVERED, SUFFIX_SELECTED_PRESSED -> FX.Colors.from255(40, 83, 156, 150);
                     default -> Color.WHITE;
                 };
-            } else if (baseColor.equals(COLOR2)) {
+            } else if (baseColor.equals(COLOR1)) {
                 return switch (suffix) {
                     case SUFFIX_STANDARD, SUFFIX_DISABLED -> FX.Colors.from255(95, 95, 95, 210);
                     case SUFFIX_PRESSED, SUFFIX_HOVERED -> FX.Colors.from255(153, 153, 153, 210);
@@ -1328,8 +1328,8 @@ public class ImageButton
         
         public final Color FOREGROUND = Color.BLACK;
         public final Color BACKGROUND = Color.WHITE;
-        public final Color COLOR1 = Color.RED; //150
-        public final Color COLOR2 = Color.GREEN; //210
+        public final Color COLOR1 = Color.GREEN; //210
+        public final Color COLOR2 = Color.RED; //150
         public final Color COLOR3 = Color.BLUE; //100
         public final Color COLOR4 = Color.CYAN; //65
         public final Color COLOR5 = Color.MAGENTA; //30

@@ -268,11 +268,20 @@ public class AppController
         generalSidebarBookshelf.getBooks().add(new UIBook(
                 this,
                 "Development",
-                "social",
+                "game_engine",
                 uiBook -> SLResources.get(
                         "pages",
                         uiBook.getButtonID(),
                         () -> new ExamplePage(uiBook, "green")),
+                null));
+        generalSidebarBookshelf.getBooks().add(new UIBook(
+                this,
+                "Avatar ImageButton Demo",
+                "avatar",
+                uiBook -> SLResources.get(
+                        "pages",
+                        uiBook.getButtonID(),
+                        () -> new ExamplePage(uiBook, "red")),
                 null));
         generalSidebarBookshelf.getButtonGroup().selectFirst();
         
