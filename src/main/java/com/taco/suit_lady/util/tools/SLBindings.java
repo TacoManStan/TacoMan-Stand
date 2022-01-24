@@ -169,19 +169,19 @@ public class SLBindings {
         return Bindings.createBooleanBinding(function, dependencies);
     }
     
-    public static @NotNull IntegerBinding bindInteger(@NotNull Callable<Number> function, Observable... dependencies) {
+    public static @NotNull IntegerBinding bindInteger(@NotNull Callable<? extends Number> function, Observable... dependencies) {
         return Bindings.createIntegerBinding(() -> function.call().intValue(), dependencies);
     }
     
-    public static @NotNull LongBinding bindLong(@NotNull Callable<Number> function, Observable... dependencies) {
+    public static @NotNull LongBinding bindLong(@NotNull Callable<? extends Number> function, Observable... dependencies) {
         return Bindings.createLongBinding(() -> function.call().longValue(), dependencies);
     }
     
-    public static @NotNull FloatBinding bindFloat(@NotNull Callable<Number> function, Observable... dependencies) {
+    public static @NotNull FloatBinding bindFloat(@NotNull Callable<? extends Number> function, Observable... dependencies) {
         return Bindings.createFloatBinding(() -> function.call().floatValue(), dependencies);
     }
     
-    public static @NotNull DoubleBinding bindDouble(@NotNull Callable<Number> function, Observable... dependencies) {
+    public static @NotNull DoubleBinding bindDouble(@NotNull Callable<? extends Number> function, Observable... dependencies) {
         return Bindings.createDoubleBinding(() -> function.call().doubleValue(), dependencies);
     }
     
