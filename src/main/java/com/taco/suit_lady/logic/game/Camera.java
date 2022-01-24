@@ -6,6 +6,7 @@ import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.SLBindings;
 import com.taco.suit_lady.util.tools.SLProperties;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.IntegerProperty;
@@ -48,14 +49,21 @@ public class Camera
     
     //
     
-    private final ObjectBinding<Image> mapImagePassthroughBinding; //Bound to the actual raw game map image loaded by the MapModel object assigned to the GameMap object assigned to this Camera object.
-    private final IntegerBinding mapImagePassthroughWidthBinding; //Bound via recursive binding to the width of the actual game map image loaded by the MapModel object assigned to the GameMap object assigned to this Camera object.
-    private final IntegerBinding mapImagePassthroughHeightBinding; //Ditto
+    private final ObjectBinding<Image> mapImageBinding; //Bound to the actual raw game map image loaded by the MapModel object assigned to the GameMap object assigned to this Camera object.
     
-    private final IntegerBinding scaledWidthBinding; //The viewport width scaled to match the dimensions of the map image object
-    private final IntegerBinding scaledHeightBinding; //The viewport height scaled to match the dimensions of the map image object
-    private final IntegerBinding scaledXLocationBinding; //The viewport x location scaled to match the dimensions of the map image object
-    private final IntegerBinding scaledYLocationBinding; //The viewport y location scaled to match the dimensions of the map image object
+    private final IntegerBinding mapImageWidthBinding; //Bound via recursive binding to the width of the actual game map image loaded by the MapModel object assigned to the GameMap object assigned to this Camera object.
+    private final IntegerBinding mapImageHeightBinding; //Ditto
+    
+    
+    private final DoubleBinding xScalerBinding; //Multiplier representing the scaling ratio between the map image width and the map data object width
+    private final DoubleBinding yScalerBinding; //Multiplier representing the scaling ratio between the map image height and the map data object height
+    
+    
+    private final IntegerBinding scaledViewportWidthBinding; //The viewport width scaled to match the dimensions of the map image object
+    private final IntegerBinding scaledViewportHeightBinding; //The viewport height scaled to match the dimensions of the map image object
+    
+    private final IntegerBinding scaledViewportXLocationBinding; //The viewport x location scaled to match the dimensions of the map image object
+    private final IntegerBinding scaledViewportYLocationBinding; //The viewport y location scaled to match the dimensions of the map image object
     
     
     public Camera(@NotNull GameMap gameMap, @NotNull ObservableNumberValue observableViewportWidth, @NotNull ObservableNumberValue observableViewportHeight) {
@@ -73,8 +81,16 @@ public class Camera
         
         //
         
-        this.mapImagePassthroughBinding = Bindings.createObjectBinding(() -> gameMap.getModel().getMapImage(), gameMap.getModel().mapImageBinding());
-        SLBindings.bindRecursive(image -> image.widthProperty(), mapImagePassthroughBinding);
+        this.mapImageBinding = Bindings.createObjectBinding(() -> gameMap.getModel().getMapImage(), gameMap.getModel().mapImageBinding());
+        
+        this.mapImageWidthBinding = SLBindings.bindIntegerRecursive(image -> image.widthProperty(), mapImageBinding);
+        this.mapImageHeightBinding = SLBindings.bindIntegerRecursive(image -> image.heightProperty(), mapImageBinding);
+        
+        
+        this.xScalerBinding = Bindings.create
+        
+        
+        this.scaledViewportWidthBinding =
     }
     
     //<editor-fold desc="--- PROPERTIES ---">

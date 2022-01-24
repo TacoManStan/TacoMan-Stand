@@ -20,32 +20,15 @@ import java.util.function.Function;
  */
 public class SLBindings {
     
-    //<editor-fold desc="--- BASIC BINDINGS ---">
+    //<editor-fold desc="--- STATIC BINDINGS ---">
     
     /**
      * <p>Constructs and then returns a {@link BooleanBinding} that always returns the value of {@code value}.</p>
      *
      * @return A newly constructed {@link BooleanBinding} that always returns the value of {@code value}.
      */
-    public static @NotNull BooleanBinding bindBoolean(boolean value) {
+    public static @NotNull BooleanBinding bindBooleanStatic(boolean value) {
         return Bindings.createBooleanBinding(() -> value);
-    }
-    
-    /**
-     * <p>Constructs a new {@link BooleanBinding} that always reflects the {@link ObservableBooleanValue#get() value} of the specified {@link ObservableBooleanValue}.</p>
-     * <p><b>Details</b></p>
-     * <ol>
-     *     <li>If the specified {@code value} is {@code null}, the {@link BooleanBinding returned binding} always {@link BooleanBinding#get() returns} {@code false}.</li>
-     * </ol>
-     *
-     * @param observable The {@link ObservableBooleanValue} to be reflected by the returned {@link BooleanBinding}.
-     *
-     * @return A new {@link BooleanBinding} that always reflects the {@link ObservableBooleanValue#get() value} of the specified {@code value}.
-     */
-    public static @NotNull BooleanBinding bindBoolean(ObservableBooleanValue observable) {
-        if (observable == null)
-            return bindBoolean(false);
-        return Bindings.createBooleanBinding(() -> observable.get(), observable);
     }
     
     /**
@@ -53,25 +36,8 @@ public class SLBindings {
      *
      * @return A newly constructed {@link IntegerBinding} that always returns the value of {@code value}.
      */
-    public static @NotNull IntegerBinding bindInteger(int value) {
+    public static @NotNull IntegerBinding bindIntegerStatic(int value) {
         return Bindings.createIntegerBinding(() -> value);
-    }
-    
-    /**
-     * <p>Constructs a new {@link IntegerBinding} that always reflects the {@link ObservableIntegerValue#get() value} of the specified {@link ObservableIntegerValue}.</p>
-     * <p><b>Details</b></p>
-     * <ol>
-     *     <li>If the specified {@code value} is {@code null}, the {@link IntegerBinding returned binding} always {@link IntegerBinding#get() returns} {@code 0}.</li>
-     * </ol>
-     *
-     * @param observable The {@link ObservableIntegerValue} to be reflected by the returned {@link IntegerBinding}.
-     *
-     * @return A new {@link IntegerBinding} that always reflects the {@link ObservableIntegerValue#get() value} of the specified {@code value}.
-     */
-    public static @NotNull IntegerBinding bindInteger(ObservableIntegerValue observable) {
-        if (observable == null)
-            return bindInteger(0);
-        return Bindings.createIntegerBinding(() -> observable.get(), observable);
     }
     
     /**
@@ -79,25 +45,8 @@ public class SLBindings {
      *
      * @return A newly constructed {@link LongBinding} that always returns the value of {@code value}.
      */
-    public static @NotNull LongBinding bindLong(long value) {
+    public static @NotNull LongBinding bindLongStatic(long value) {
         return Bindings.createLongBinding(() -> value);
-    }
-    
-    /**
-     * <p>Constructs a new {@link LongBinding} that always reflects the {@link ObservableLongValue#get() value} of the specified {@link ObservableLongValue}.</p>
-     * <p><b>Details</b></p>
-     * <ol>
-     *     <li>If the specified {@code value} is {@code null}, the {@link LongBinding returned binding} always {@link LongBinding#get() returns} {@code 0}.</li>
-     * </ol>
-     *
-     * @param observable The {@link ObservableLongValue} to be reflected by the returned {@link LongBinding}.
-     *
-     * @return A new {@link LongBinding} that always reflects the {@link ObservableLongValue#get() value} of the specified {@code value}.
-     */
-    public static @NotNull LongBinding bindLong(ObservableLongValue observable) {
-        if (observable == null)
-            return bindLong(0);
-        return Bindings.createLongBinding(() -> observable.get(), observable);
     }
     
     /**
@@ -105,25 +54,8 @@ public class SLBindings {
      *
      * @return A newly constructed {@link FloatBinding} that always returns the value of {@code value}.
      */
-    public static @NotNull FloatBinding bindFloat(float value) {
+    public static @NotNull FloatBinding bindFloatStatic(float value) {
         return Bindings.createFloatBinding(() -> value);
-    }
-    
-    /**
-     * <p>Constructs a new {@link FloatBinding} that always reflects the {@link ObservableFloatValue#get() value} of the specified {@link ObservableFloatValue}.</p>
-     * <p><b>Details</b></p>
-     * <ol>
-     *     <li>If the specified {@code value} is {@code null}, the {@link FloatBinding returned binding} always {@link FloatBinding#get() returns} {@code 0}.</li>
-     * </ol>
-     *
-     * @param observable The {@link ObservableFloatValue} to be reflected by the returned {@link FloatBinding}.
-     *
-     * @return A new {@link FloatBinding} that always reflects the {@link ObservableFloatValue#get() value} of the specified {@code value}.
-     */
-    public static @NotNull FloatBinding bindFloat(ObservableFloatValue observable) {
-        if (observable == null)
-            return bindFloat(0);
-        return Bindings.createFloatBinding(() -> observable.get(), observable);
     }
     
     /**
@@ -131,25 +63,8 @@ public class SLBindings {
      *
      * @return A newly constructed {@link DoubleBinding} that always returns the value of {@code value}.
      */
-    public static @NotNull DoubleBinding bindDouble(double value) {
+    public static @NotNull DoubleBinding bindDoubleStatic(double value) {
         return Bindings.createDoubleBinding(() -> value);
-    }
-    
-    /**
-     * <p>Constructs a new {@link DoubleBinding} that always reflects the {@link ObservableDoubleValue#get() value} of the specified {@link ObservableDoubleValue}.</p>
-     * <p><b>Details</b></p>
-     * <ol>
-     *     <li>If the specified {@code value} is {@code null}, the {@link DoubleBinding returned binding} always {@link DoubleBinding#get() returns} {@code 0}.</li>
-     * </ol>
-     *
-     * @param observable The {@link ObservableDoubleValue} to be reflected by the returned {@link DoubleBinding}.
-     *
-     * @return A new {@link DoubleBinding} that always reflects the {@link ObservableDoubleValue#get() value} of the specified {@code value}.
-     */
-    public static @NotNull DoubleBinding bindDouble(ObservableDoubleValue observable) {
-        if (observable == null)
-            return bindDouble(0);
-        return Bindings.createDoubleBinding(() -> observable.get(), observable);
     }
     
     /**
@@ -157,25 +72,8 @@ public class SLBindings {
      *
      * @return A newly constructed {@link StringBinding} that always returns the value of {@code value}.
      */
-    public static @NotNull StringBinding bindString(String value) {
+    public static @NotNull StringBinding bindStringStatic(String value) {
         return Bindings.createStringBinding(() -> value);
-    }
-    
-    /**
-     * <p>Constructs a new {@link StringBinding} that always reflects the {@link ObservableStringValue#get() value} of the specified {@link ObservableStringValue}.</p>
-     * <p><b>Details</b></p>
-     * <ol>
-     *     <li>If the specified {@code value} is {@code null}, the {@link StringBinding returned binding} always {@link StringBinding#get() returns} an empty {@link String}.</li>
-     * </ol>
-     *
-     * @param observable The {@link ObservableStringValue} to be reflected by the returned {@link StringBinding}.
-     *
-     * @return A new {@link StringBinding} that always reflects the {@link ObservableStringValue#get() value} of the specified {@code value}.
-     */
-    public static @NotNull StringBinding bindString(ObservableStringValue observable) {
-        if (observable == null)
-            return bindString("");
-        return Bindings.createStringBinding(() -> observable.get(), observable);
     }
     
     /**
@@ -183,25 +81,8 @@ public class SLBindings {
      *
      * @return A newly constructed {@link ObjectBinding} that always returns the value of {@code value}.
      */
-    public static <T> @NotNull ObjectBinding<T> bindObject(T value) {
+    public static <T> @NotNull ObjectBinding<T> bindObjectStatic(T value) {
         return Bindings.createObjectBinding(() -> value);
-    }
-    
-    /**
-     * <p>Constructs a new {@link ObjectBinding} that always reflects the {@link ObservableObjectValue#get() value} of the specified {@link ObservableObjectValue}.</p>
-     * <p><b>Details</b></p>
-     * <ol>
-     *     <li>If the specified {@code value} is {@code null}, the {@link ObjectBinding returned binding} always {@link ObjectBinding#get() returns} {@code null}.</li>
-     * </ol>
-     *
-     * @param observable The {@link ObservableObjectValue} to be reflected by the returned {@link ObjectBinding}.
-     *
-     * @return A new {@link ObjectBinding} that always reflects the {@link ObservableObjectValue#get() value} of the specified {@code value}.
-     */
-    public static <T> @NotNull ObjectBinding<T> bindObject(ObservableObjectValue<T> observable) {
-        if (observable == null)
-            return bindObject((T) null);
-        return Bindings.createObjectBinding(() -> observable.get(), observable);
     }
     
     //</editor-fold>

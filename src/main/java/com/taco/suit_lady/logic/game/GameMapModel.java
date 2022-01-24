@@ -45,7 +45,7 @@ public class GameMapModel
         
         this.parentPaneProperty = new SimpleObjectProperty<>();
         
-        this.mapImageBinding = SLBindings.bindObject(SLResources.getDummyImage(SLResources.MAP));
+        this.mapImageBinding = SLBindings.bindObjectStatic(SLResources.getDummyImage(SLResources.MAP));
         
         //        this.paintCommand = new ImageOverlayCommand(lock, this, "map", null, 1);
     }

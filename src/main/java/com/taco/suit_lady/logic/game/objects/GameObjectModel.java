@@ -26,7 +26,7 @@ public class GameObjectModel
         //
         
         this.imageIdProperty = new SimpleObjectProperty<>();
-        this.imageBinding = SLBindings.bindObject(SLResources.getDummyImage(SLResources.AVATAR));
+        this.imageBinding = SLBindings.bindObjectStatic(SLResources.getDummyImage(SLResources.AVATAR));
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
