@@ -230,34 +230,6 @@ public class BindingsSL {
     
     //</editor-fold>
     
-    //<editor-fold desc="--- MISC. BINDINGS ---">
-    
-    /**
-     * Creates a {@link BooleanBinding} that is bound to the null status of the specified {@code Binding}.
-     *
-     * @param binding The {@code Binding} who's value is to be null-checked.
-     *
-     * @return The newly created {@code BooleanBinding} bound to the null status of the specified {@code Binding}.
-     */
-    public static @NotNull BooleanBinding createNullCheckBinding(Binding<?> binding) {
-        ExceptionsSL.nullCheck(binding, "Binding");
-        return Bindings.createBooleanBinding(() -> binding.getValue() != null, binding);
-    }
-    
-    /**
-     * Creates and then returns an {@link IntegerBinding} that increments by 1 every time any of the specified {@link Observable Observables} is updated.
-     *
-     * @param obs The {@code Observables}.
-     *
-     * @return An {@link IntegerBinding} that increments by 1 every time any of the specified {@link Observable Observables} is updated.
-     */
-    public static @NotNull IntegerBinding incrementingBinding(Observable... obs) {
-        AtomicInteger _int = new AtomicInteger(0);
-        return Bindings.createIntegerBinding(_int::incrementAndGet, obs);
-    }
-    
-    //</editor-fold>
-    
     //<editor-fold desc="--- RECURSIVE BINDINGS ---">
     
     //<editor-fold desc="> Default Type Wrapper Factories">
@@ -486,6 +458,34 @@ public class BindingsSL {
         }
         
         //</editor-fold>
+    }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- MISC. BINDINGS ---">
+    
+    /**
+     * Creates a {@link BooleanBinding} that is bound to the null status of the specified {@code Binding}.
+     *
+     * @param binding The {@code Binding} who's value is to be null-checked.
+     *
+     * @return The newly created {@code BooleanBinding} bound to the null status of the specified {@code Binding}.
+     */
+    public static @NotNull BooleanBinding createNullCheckBinding(Binding<?> binding) {
+        ExceptionsSL.nullCheck(binding, "Binding");
+        return Bindings.createBooleanBinding(() -> binding.getValue() != null, binding);
+    }
+    
+    /**
+     * Creates and then returns an {@link IntegerBinding} that increments by 1 every time any of the specified {@link Observable Observables} is updated.
+     *
+     * @param obs The {@code Observables}.
+     *
+     * @return An {@link IntegerBinding} that increments by 1 every time any of the specified {@link Observable Observables} is updated.
+     */
+    public static @NotNull IntegerBinding incrementingBinding(Observable... obs) {
+        AtomicInteger _int = new AtomicInteger(0);
+        return Bindings.createIntegerBinding(_int::incrementAndGet, obs);
     }
     
     //</editor-fold>
