@@ -36,63 +36,49 @@ public class BindingsSL {
      *
      * @return A newly constructed {@link BooleanBinding} that is bound to the specified constant {@code value}.
      */
-    public static @NotNull BooleanBinding boolBinding(boolean value) {
-        return Bindings.createBooleanBinding(() -> value);
-    }
+    public static @NotNull BooleanBinding constBoolBinding(boolean value) { return Bindings.createBooleanBinding(() -> value); }
     
     /**
      * <p>Constructs and then returns an {@link IntegerBinding} that is bound to the specified constant {@code value}.</p>
      *
      * @return A newly constructed {@link IntegerBinding} that is bound to the specified constant {@code value}.
      */
-    public static @NotNull IntegerBinding intBinding(@NotNull Number value) {
-        return Bindings.createIntegerBinding(() -> value.intValue());
-    }
+    public static @NotNull IntegerBinding constIntBinding(@NotNull Number value) { return Bindings.createIntegerBinding(() -> value.intValue()); }
     
     /**
      * <p>Constructs and then returns a {@link LongBinding} that is bound to the specified constant {@code value}.</p>
      *
      * @return A newly constructed {@link LongBinding} that is bound to the specified constant {@code value}.
      */
-    public static @NotNull LongBinding longBinding(@NotNull Number value) {
-        return Bindings.createLongBinding(() -> value.longValue());
-    }
+    public static @NotNull LongBinding constLongBinding(@NotNull Number value) { return Bindings.createLongBinding(() -> value.longValue()); }
     
     /**
      * <p>Constructs and then returns a {@link FloatBinding} that is bound to the specified constant {@code value}.</p>
      *
      * @return A newly constructed {@link FloatBinding} that is bound to the specified constant {@code value}.
      */
-    public static @NotNull FloatBinding floatBinding(@NotNull Number value) {
-        return Bindings.createFloatBinding(() -> value.floatValue());
-    }
+    public static @NotNull FloatBinding constFloatBinding(@NotNull Number value) { return Bindings.createFloatBinding(() -> value.floatValue()); }
     
     /**
      * <p>Constructs and then returns a {@link DoubleBinding} that is bound to the specified constant {@code value}.</p>
      *
      * @return A newly constructed {@link DoubleBinding} that is bound to the specified constant {@code value}.
      */
-    public static @NotNull DoubleBinding doubleBinding(@NotNull Number value) {
-        return Bindings.createDoubleBinding(() -> value.doubleValue());
-    }
+    public static @NotNull DoubleBinding constDoubleBinding(@NotNull Number value) { return Bindings.createDoubleBinding(() -> value.doubleValue()); }
     
     /**
      * <p>Constructs and then returns a {@link StringBinding} that is bound to the specified constant {@code value}.</p>
      *
      * @return A newly constructed {@link StringBinding} that is bound to the specified constant {@code value}.
      */
-    public static @NotNull StringBinding stringBinding(String value) {
-        return Bindings.createStringBinding(() -> value);
-    }
+    public static @NotNull StringBinding constStringBinding(String value) { return Bindings.createStringBinding(() -> value); }
     
     /**
      * <p>Constructs and then returns a {@link ObjectBinding} that is bound to the specified constant {@code value}.</p>
      *
      * @return A newly constructed {@link ObjectBinding} that is bound to the specified constant {@code value}.
      */
-    public static <T> @NotNull ObjectBinding<T> objBinding(T value) {
-        return Bindings.createObjectBinding(() -> value);
-    }
+    public static <T> @NotNull ObjectBinding<T> constObjBinding(T value) { return Bindings.createObjectBinding(() -> value); }
     
     //</editor-fold>
     
@@ -101,42 +87,42 @@ public class BindingsSL {
     /**
      * <p><i>See {@link #objBinding(Callable, Observable...)}</i></p>
      */
-    public static @NotNull BooleanBinding boolBinding(@NotNull ObservableValue<Boolean> observableValue, Observable... dependencies) {
+    public static @NotNull BooleanBinding directBoolBinding(@NotNull ObservableValue<Boolean> observableValue, Observable... dependencies) {
         return Bindings.createBooleanBinding(() -> observableValue.getValue(), ArraysSL.concat(new Observable[]{observableValue}, dependencies));
     }
     
     /**
      * <p><i>See {@link #objBinding(Callable, Observable...)}</i></p>
      */
-    public static @NotNull IntegerBinding intBinding(@NotNull ObservableValue<? extends Number> observableValue, Observable... dependencies) {
+    public static @NotNull IntegerBinding directIntBinding(@NotNull ObservableValue<? extends Number> observableValue, Observable... dependencies) {
         return Bindings.createIntegerBinding(() -> observableValue.getValue().intValue(), ArraysSL.concat(new Observable[]{observableValue}, dependencies));
     }
     
     /**
      * <p><i>See {@link #objBinding(Callable, Observable...)}</i></p>
      */
-    public static @NotNull LongBinding longBinding(@NotNull ObservableValue<? extends Number> observableValue, Observable... dependencies) {
+    public static @NotNull LongBinding directLongBinding(@NotNull ObservableValue<? extends Number> observableValue, Observable... dependencies) {
         return Bindings.createLongBinding(() -> observableValue.getValue().longValue(), ArraysSL.concat(new Observable[]{observableValue}, dependencies));
     }
     
     /**
      * <p><i>See {@link #objBinding(Callable, Observable...)}</i></p>
      */
-    public static @NotNull FloatBinding floatBinding(@NotNull ObservableValue<? extends Number> observableValue, Observable... dependencies) {
+    public static @NotNull FloatBinding directFloatBinding(@NotNull ObservableValue<? extends Number> observableValue, Observable... dependencies) {
         return Bindings.createFloatBinding(() -> observableValue.getValue().floatValue(), ArraysSL.concat(new Observable[]{observableValue}, dependencies));
     }
     
     /**
      * <p><i>See {@link #objBinding(Callable, Observable...)}</i></p>
      */
-    public static @NotNull DoubleBinding doubleBinding(@NotNull ObservableValue<? extends Number> observableValue, Observable... dependencies) {
+    public static @NotNull DoubleBinding directDoubleBinding(@NotNull ObservableValue<? extends Number> observableValue, Observable... dependencies) {
         return Bindings.createDoubleBinding(() -> observableValue.getValue().doubleValue(), ArraysSL.concat(new Observable[]{observableValue}, dependencies));
     }
     
     /**
      * <p><i>See {@link #objBinding(Callable, Observable...)}</i></p>
      */
-    public static @NotNull StringBinding stringBinding(@NotNull ObservableValue<String> observableValue, Observable... dependencies) {
+    public static @NotNull StringBinding directStringBinding(@NotNull ObservableValue<String> observableValue, Observable... dependencies) {
         return Bindings.createStringBinding(() -> observableValue.getValue(), ArraysSL.concat(new Observable[]{observableValue}, dependencies));
     }
     
@@ -164,7 +150,7 @@ public class BindingsSL {
      *
      * @return A new {@link Binding} object bound to reflect the {@link ObservableValue#getValue() value} of the specified {@link ObservableValue} object.
      */
-    public static <T> @NotNull ObjectBinding<T> objBinding(@NotNull ObservableValue<T> observableValue, Observable... dependencies) {
+    public static <T> @NotNull ObjectBinding<T> directObjBinding(@NotNull ObservableValue<T> observableValue, Observable... dependencies) {
         return Bindings.createObjectBinding(() -> observableValue.getValue(), ArraysSL.concat(new Observable[]{observableValue}, dependencies));
     }
     
@@ -235,28 +221,28 @@ public class BindingsSL {
     //<editor-fold desc="> Default Type Wrapper Factories">
     
     
-    public static <U> @NotNull BooleanBinding boolBindingRecursive(@Nullable ReentrantLock lock, Function<U, ObservableValue<Boolean>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
-        return boolBinding(recursiveBinding(lock, function, updateObservable), dependencies);
+    public static <U> @NotNull BooleanBinding recursiveBoolBinding(@Nullable ReentrantLock lock, Function<U, ObservableValue<Boolean>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
+        return directBoolBinding(recursiveBinding(lock, function, updateObservable), dependencies);
     }
     
-    public static <U> @NotNull IntegerBinding intBindingRecursive(@Nullable ReentrantLock lock, Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
-        return intBinding(recursiveBinding(lock, function, updateObservable), dependencies);
+    public static <U> @NotNull IntegerBinding recursiveIntBinding(@Nullable ReentrantLock lock, Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
+        return directIntBinding(recursiveBinding(lock, function, updateObservable), dependencies);
     }
     
-    public static <U> @NotNull LongBinding longBindingRecursive(@Nullable ReentrantLock lock, Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
-        return longBinding(recursiveBinding(lock, function, updateObservable), dependencies);
+    public static <U> @NotNull LongBinding recursiveLongBinding(@Nullable ReentrantLock lock, Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
+        return directLongBinding(recursiveBinding(lock, function, updateObservable), dependencies);
     }
     
-    public static <U> @NotNull FloatBinding floatBindingRecursive(@Nullable ReentrantLock lock, Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
-        return floatBinding(recursiveBinding(lock, function, updateObservable), dependencies);
+    public static <U> @NotNull FloatBinding recursiveFloatBinding(@Nullable ReentrantLock lock, Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
+        return directFloatBinding(recursiveBinding(lock, function, updateObservable), dependencies);
     }
     
-    public static <U> @NotNull DoubleBinding doubleBindingRecursive(@Nullable ReentrantLock lock, Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
-        return doubleBinding(recursiveBinding(lock, function, updateObservable), dependencies);
+    public static <U> @NotNull DoubleBinding recursiveDoubleBinding(@Nullable ReentrantLock lock, Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
+        return directDoubleBinding(recursiveBinding(lock, function, updateObservable), dependencies);
     }
     
-    public static <U, V> @NotNull ObjectBinding<V> objBindingRecursive(@Nullable ReentrantLock lock, Function<U, ObservableValue<V>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
-        return objBinding(recursiveBinding(lock, function, updateObservable), dependencies);
+    public static <U, V> @NotNull ObjectBinding<V> recursiveObjBinding(@Nullable ReentrantLock lock, Function<U, ObservableValue<V>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
+        return directObjBinding(recursiveBinding(lock, function, updateObservable), dependencies);
     }
     
     //</editor-fold>
@@ -471,7 +457,7 @@ public class BindingsSL {
      *
      * @return The newly created {@code BooleanBinding} bound to the null status of the specified {@code Binding}.
      */
-    public static @NotNull BooleanBinding createNullCheckBinding(Binding<?> binding) {
+    public static @NotNull BooleanBinding nullCheckBinding(Binding<?> binding) {
         ExceptionsSL.nullCheck(binding, "Binding");
         return Bindings.createBooleanBinding(() -> binding.getValue() != null, binding);
     }
