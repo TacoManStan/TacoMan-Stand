@@ -7,6 +7,7 @@ import javafx.beans.binding.*;
 import javafx.beans.property.*;
 import javafx.beans.value.*;
 import javafx.collections.ObservableList;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -17,8 +18,8 @@ import java.util.function.Function;
 /**
  * Utility methods related to {@link Property Properties} and {@link Bindings}.
  */
-public class SLBindings
-{
+public class SLBindings {
+    
     //<editor-fold desc="--- BASIC BINDINGS ---">
     
     /**
@@ -26,8 +27,7 @@ public class SLBindings
      *
      * @return A newly constructed {@link BooleanBinding} that always returns the value of {@code value}.
      */
-    public static @NotNull BooleanBinding createBooleanBinding(boolean value)
-    {
+    public static @NotNull BooleanBinding bindBoolean(boolean value) {
         return Bindings.createBooleanBinding(() -> value);
     }
     
@@ -42,10 +42,9 @@ public class SLBindings
      *
      * @return A new {@link BooleanBinding} that always reflects the {@link ObservableBooleanValue#get() value} of the specified {@code value}.
      */
-    public static @NotNull BooleanBinding createBooleanBinding(ObservableBooleanValue observable)
-    {
+    public static @NotNull BooleanBinding bindBoolean(ObservableBooleanValue observable) {
         if (observable == null)
-            return createBooleanBinding(false);
+            return bindBoolean(false);
         return Bindings.createBooleanBinding(() -> observable.get(), observable);
     }
     
@@ -54,8 +53,7 @@ public class SLBindings
      *
      * @return A newly constructed {@link IntegerBinding} that always returns the value of {@code value}.
      */
-    public static @NotNull IntegerBinding createIntegerBinding(int value)
-    {
+    public static @NotNull IntegerBinding bindInteger(int value) {
         return Bindings.createIntegerBinding(() -> value);
     }
     
@@ -70,10 +68,9 @@ public class SLBindings
      *
      * @return A new {@link IntegerBinding} that always reflects the {@link ObservableIntegerValue#get() value} of the specified {@code value}.
      */
-    public static @NotNull IntegerBinding createIntegerBinding(ObservableIntegerValue observable)
-    {
+    public static @NotNull IntegerBinding bindInteger(ObservableIntegerValue observable) {
         if (observable == null)
-            return createIntegerBinding(0);
+            return bindInteger(0);
         return Bindings.createIntegerBinding(() -> observable.get(), observable);
     }
     
@@ -82,8 +79,7 @@ public class SLBindings
      *
      * @return A newly constructed {@link LongBinding} that always returns the value of {@code value}.
      */
-    public static @NotNull LongBinding createLongBinding(long value)
-    {
+    public static @NotNull LongBinding bindLong(long value) {
         return Bindings.createLongBinding(() -> value);
     }
     
@@ -98,10 +94,9 @@ public class SLBindings
      *
      * @return A new {@link LongBinding} that always reflects the {@link ObservableLongValue#get() value} of the specified {@code value}.
      */
-    public static @NotNull LongBinding createLongBinding(ObservableLongValue observable)
-    {
+    public static @NotNull LongBinding bindLong(ObservableLongValue observable) {
         if (observable == null)
-            return createLongBinding(0);
+            return bindLong(0);
         return Bindings.createLongBinding(() -> observable.get(), observable);
     }
     
@@ -110,8 +105,7 @@ public class SLBindings
      *
      * @return A newly constructed {@link FloatBinding} that always returns the value of {@code value}.
      */
-    public static @NotNull FloatBinding createFloatBinding(float value)
-    {
+    public static @NotNull FloatBinding bindFloat(float value) {
         return Bindings.createFloatBinding(() -> value);
     }
     
@@ -126,10 +120,9 @@ public class SLBindings
      *
      * @return A new {@link FloatBinding} that always reflects the {@link ObservableFloatValue#get() value} of the specified {@code value}.
      */
-    public static @NotNull FloatBinding createFloatBinding(ObservableFloatValue observable)
-    {
+    public static @NotNull FloatBinding bindFloat(ObservableFloatValue observable) {
         if (observable == null)
-            return createFloatBinding(0);
+            return bindFloat(0);
         return Bindings.createFloatBinding(() -> observable.get(), observable);
     }
     
@@ -138,8 +131,7 @@ public class SLBindings
      *
      * @return A newly constructed {@link DoubleBinding} that always returns the value of {@code value}.
      */
-    public static @NotNull DoubleBinding createDoubleBinding(double value)
-    {
+    public static @NotNull DoubleBinding bindDouble(double value) {
         return Bindings.createDoubleBinding(() -> value);
     }
     
@@ -154,10 +146,9 @@ public class SLBindings
      *
      * @return A new {@link DoubleBinding} that always reflects the {@link ObservableDoubleValue#get() value} of the specified {@code value}.
      */
-    public static @NotNull DoubleBinding createDoubleBinding(ObservableDoubleValue observable)
-    {
+    public static @NotNull DoubleBinding bindDouble(ObservableDoubleValue observable) {
         if (observable == null)
-            return createDoubleBinding(0);
+            return bindDouble(0);
         return Bindings.createDoubleBinding(() -> observable.get(), observable);
     }
     
@@ -166,8 +157,7 @@ public class SLBindings
      *
      * @return A newly constructed {@link StringBinding} that always returns the value of {@code value}.
      */
-    public static @NotNull StringBinding createStringBinding(String value)
-    {
+    public static @NotNull StringBinding bindString(String value) {
         return Bindings.createStringBinding(() -> value);
     }
     
@@ -182,10 +172,9 @@ public class SLBindings
      *
      * @return A new {@link StringBinding} that always reflects the {@link ObservableStringValue#get() value} of the specified {@code value}.
      */
-    public static @NotNull StringBinding createStringBinding(ObservableStringValue observable)
-    {
+    public static @NotNull StringBinding bindString(ObservableStringValue observable) {
         if (observable == null)
-            return createStringBinding("");
+            return bindString("");
         return Bindings.createStringBinding(() -> observable.get(), observable);
     }
     
@@ -194,8 +183,7 @@ public class SLBindings
      *
      * @return A newly constructed {@link ObjectBinding} that always returns the value of {@code value}.
      */
-    public static <T> @NotNull ObjectBinding<T> createObjectBinding(T value)
-    {
+    public static <T> @NotNull ObjectBinding<T> bindObject(T value) {
         return Bindings.createObjectBinding(() -> value);
     }
     
@@ -210,11 +198,42 @@ public class SLBindings
      *
      * @return A new {@link ObjectBinding} that always reflects the {@link ObservableObjectValue#get() value} of the specified {@code value}.
      */
-    public static <T> @NotNull ObjectBinding<T> createObjectBinding(ObservableObjectValue<T> observable)
-    {
+    public static <T> @NotNull ObjectBinding<T> bindObject(ObservableObjectValue<T> observable) {
         if (observable == null)
-            return createObjectBinding((T) null);
+            return bindObject((T) null);
         return Bindings.createObjectBinding(() -> observable.get(), observable);
+    }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- DIRECT BINDINGS ---">
+    
+    public static @NotNull BooleanBinding bindBooleanDirect(@NotNull ObservableValue<Boolean> observableValue, Observable... updateObservables) {
+        return Bindings.createBooleanBinding(() -> observableValue.getValue(), SLArrays.concat(new Observable[]{observableValue}, updateObservables));
+    }
+    
+    public static @NotNull IntegerBinding bindIntegerDirect(@NotNull ObservableValue<? extends Number> observableValue, Observable... updateObservables) {
+        return Bindings.createIntegerBinding(() -> observableValue.getValue().intValue(), SLArrays.concat(new Observable[]{observableValue}, updateObservables));
+    }
+    
+    public static @NotNull LongBinding bindLongDirect(@NotNull ObservableValue<? extends Number> observableValue, Observable... updateObservables) {
+        return Bindings.createLongBinding(() -> observableValue.getValue().longValue(), SLArrays.concat(new Observable[]{observableValue}, updateObservables));
+    }
+    
+    public static @NotNull FloatBinding bindFloatDirect(@NotNull ObservableValue<? extends Number> observableValue, Observable... updateObservables) {
+        return Bindings.createFloatBinding(() -> observableValue.getValue().floatValue(), SLArrays.concat(new Observable[]{observableValue}, updateObservables));
+    }
+    
+    public static @NotNull DoubleBinding bindDoubleDirect(@NotNull ObservableValue<? extends Number> observableValue, Observable... updateObservables) {
+        return Bindings.createDoubleBinding(() -> observableValue.getValue().doubleValue(), SLArrays.concat(new Observable[]{observableValue}, updateObservables));
+    }
+    
+    public static @NotNull StringBinding bindStringDirect(@NotNull ObservableValue<String> observableValue, Observable... updateObservables) {
+        return Bindings.createStringBinding(() -> observableValue.getValue(), SLArrays.concat(new Observable[]{observableValue}, updateObservables));
+    }
+    
+    public static <T> @NotNull ObjectBinding<T> bindObjectDirect(@NotNull ObservableValue<T> observableValue, Observable... updateObservables) {
+        return Bindings.createObjectBinding(() -> observableValue.getValue(), SLArrays.concat(new Observable[]{observableValue}, updateObservables));
     }
     
     //</editor-fold>
@@ -228,8 +247,7 @@ public class SLBindings
      *
      * @return The newly created {@code BooleanBinding} bound to the null status of the specified {@code Binding}.
      */
-    public static BooleanBinding createNullCheckBinding(Binding<?> binding)
-    {
+    public static BooleanBinding createNullCheckBinding(Binding<?> binding) {
         SLExceptions.nullCheck(binding, "Binding");
         return Bindings.createBooleanBinding(() -> binding.getValue() != null, binding);
     }
@@ -241,8 +259,7 @@ public class SLBindings
      *
      * @return An {@link IntegerBinding} that increments by 1 every time any of the specified {@link Observable Observables} is updated.
      */
-    public static IntegerBinding incrementingBinding(Observable... obs)
-    {
+    public static IntegerBinding incrementingBinding(Observable... obs) {
         AtomicInteger _int = new AtomicInteger(0);
         return Bindings.createIntegerBinding(_int::incrementAndGet, obs);
     }
@@ -254,8 +271,7 @@ public class SLBindings
      * @param observableValue The {@code ObservableValue} the specified {@code Property} is being bound to.
      * @param <T>             The type of {@code Object} wrapped by the specified values.
      */
-    public static <T> void bindFX(Property<T> property, ObservableValue<T> observableValue, Lock lock)
-    {
+    public static <T> void bindFX(Property<T> property, ObservableValue<T> observableValue, Lock lock) {
         observableValue.addListener(
                 (observable, oldValue, newValue) ->
                 {
@@ -269,37 +285,61 @@ public class SLBindings
     
     //<editor-fold desc="--- RECURSIVE BINDINGS ---">
     
+    //<editor-fold desc="> Recursive Primitive Wrappers">
+    
+    public static <U> @NotNull BooleanBinding bindBooleanRecursive(Function<U, ObservableValue<Boolean>> function, ObservableValue<U> updateObservable, Observable... updateObservables) {
+        return bindBooleanDirect(bindRecursive(function, updateObservable, updateObservables));
+    }
+    
+    public static <U> @NotNull IntegerBinding bindIntegerRecursive(Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... updateObservables) {
+        return bindIntegerDirect(bindRecursive(function, updateObservable, updateObservables));
+    }
+    
+    public static <U> @NotNull LongBinding bindLongDirect(Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... updateObservables) {
+        return bindLongDirect(bindRecursive(function, updateObservable, updateObservables));
+    }
+    
+    public static <U> @NotNull FloatBinding bindFloatDirect(Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... updateObservables) {
+        return bindFloatDirect(bindRecursive(function, updateObservable, updateObservables));
+    }
+    
+    public static <U> @NotNull DoubleBinding bindDoubleDirect(Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... updateObservables) {
+        return bindDoubleDirect(bindRecursive(function, updateObservable, updateObservables));
+    }
+    
+    //</editor-fold>
+    
     /**
      * Constructs a new {@link RecursiveBinding} with a new {@link ReentrantLock}.
      *
-     * @param function         The {@code Function}. //TODO - Expand
-     * @param updateObservable The {@code ObservableValue}. //TODO - Expand
-     * @param updateBindings   The array of {@code Observables}. //TODO - Expand
+     * @param function          The {@code Function}. //TODO - Expand
+     * @param updateObservable  The {@code ObservableValue}. //TODO - Expand
+     * @param updateObservables The array of {@code Observables}. //TODO - Expand
      *
      * @return A new {@link RecursiveBinding}.
      *
      * @see RecursiveBinding
      */
-    public static <U, V> RecursiveBinding<U, V> createRecursiveBinding(Function<U, ObservableValue<V>> function, ObservableValue<U> updateObservable, Observable... updateBindings)
-    {
-        return createRecursiveBinding(new ReentrantLock(), function, updateObservable, updateBindings);
+    @Contract("_, _, _ -> new")
+    public static <U, V> @NotNull RecursiveBinding<U, V> bindRecursive(Function<U, ObservableValue<V>> function, ObservableValue<U> updateObservable, Observable... updateObservables) {
+        return bindRecursive(new ReentrantLock(), function, updateObservable, updateObservables);
     }
     
     /**
      * Constructs a new {@link RecursiveBinding} with the specified {@link ReentrantLock}.
      *
-     * @param lock             The {@code ReentrantLock} to be used to synchronize calls to the returned {@code RecursiveBinding}.
-     * @param function         The {@code Function}. //TODO - Expand
-     * @param updateObservable The {@code ObservableValue}. //TODO - Expand
-     * @param updateBindings   The array of {@code Observables}. //TODO - Expand
+     * @param lock              The {@code ReentrantLock} to be used to synchronize calls to the returned {@code RecursiveBinding}.
+     * @param function          The {@code Function}. //TODO - Expand
+     * @param updateObservable  The {@code ObservableValue}. //TODO - Expand
+     * @param updateObservables The array of {@code Observables}. //TODO - Expand
      *
      * @return A new {@code RecursiveBinding}.
      *
      * @see RecursiveBinding
      */
-    public static <U, V> RecursiveBinding<U, V> createRecursiveBinding(Lock lock, Function<U, ObservableValue<V>> function, ObservableValue<U> updateObservable, Observable... updateBindings)
-    {
-        return new RecursiveBinding<>(lock, function, updateObservable, updateBindings);
+    @Contract("_, _, _, _ -> new")
+    public static <U, V> @NotNull RecursiveBinding<U, V> bindRecursive(Lock lock, Function<U, ObservableValue<V>> function, ObservableValue<U> updateObservable, Observable... updateObservables) {
+        return new RecursiveBinding<>(lock, function, updateObservable, updateObservables);
     }
     
     /**
@@ -346,8 +386,7 @@ public class SLBindings
      * exampleClass1.setSelectedExample(example1);</code></pre>
      */
     public static class RecursiveBinding<U, V>
-            implements Binding<V>
-    {
+            implements Binding<V> {
         
         private final Lock lock;
         
@@ -362,25 +401,24 @@ public class SLBindings
         /**
          * Constructs a new {@code RecursiveBinding} object.
          *
-         * @param lock             The {@code ReentrantLock} used for this {@code RecursiveBinding}.
-         *                         Specify {@code null} to not use a {@code ReentrantLock}.
-         * @param function         The {@code Function} used to retrieve a new {@code ObservableValue} when the {@code updateObservable} changes.
-         * @param updateObservable The {@code ObservableValue} that calls the {@code Function} upon changing.
-         * @param updateBindings   Any additional {@code Observables} that should trigger an update (call to the {@code Function}) upon changing.
-         *                         <i>Optional</i>.
+         * @param lock              The {@code ReentrantLock} used for this {@code RecursiveBinding}.
+         *                          Specify {@code null} to not use a {@code ReentrantLock}.
+         * @param function          The {@code Function} used to retrieve a new {@code ObservableValue} when the {@code updateObservable} changes.
+         * @param updateObservable  The {@code ObservableValue} that calls the {@code Function} upon changing.
+         * @param updateObservables Any additional {@code Observables} that should trigger an update (call to the {@code Function}) upon changing.
+         *                          <i>Optional</i>.
          *
-         * @see SLBindings#createRecursiveBinding(Function, ObservableValue, Observable...)}
-         * @see SLBindings#createRecursiveBinding(Lock, Function, ObservableValue, Observable...)}
+         * @see SLBindings#bindRecursive(Function, ObservableValue, Observable...)}
+         * @see SLBindings#bindRecursive(Lock, Function, ObservableValue, Observable...)}
          */
-        protected RecursiveBinding(Lock lock, Function<U, ObservableValue<V>> function, ObservableValue<U> updateObservable, Observable[] updateBindings)
-        {
+        protected RecursiveBinding(Lock lock, Function<U, ObservableValue<V>> function, ObservableValue<U> updateObservable, Observable[] updateObservables) {
             this.lock = lock;
             
             this.functionProperty = new SimpleObjectProperty<>(function);
             
             this.backingBindingProperty = new SimpleObjectProperty<>();
             this.updateObservable = updateObservable;
-            this.updateBindings = updateBindings;
+            this.updateBindings = updateObservables;
             
             this.initialize();
         }
@@ -397,8 +435,7 @@ public class SLBindings
          * @see #getFunction()
          * @see #setFunction(Function)
          */
-        public ObjectProperty<Function<U, ObservableValue<V>>> functionProperty()
-        {
+        public ObjectProperty<Function<U, ObservableValue<V>>> functionProperty() {
             return functionProperty;
         }
         
@@ -409,8 +446,7 @@ public class SLBindings
          *
          * @see #functionProperty()
          */
-        public Function<U, ObservableValue<V>> getFunction()
-        {
+        public Function<U, ObservableValue<V>> getFunction() {
             return functionProperty.get();
         }
         
@@ -423,8 +459,7 @@ public class SLBindings
          *
          * @see #functionProperty()
          */
-        public void setFunction(Function<U, ObservableValue<V>> function)
-        {
+        public void setFunction(Function<U, ObservableValue<V>> function) {
             functionProperty.set(function);
         }
         
@@ -437,8 +472,7 @@ public class SLBindings
          *
          * @return The backing {@code Binding} attached to this {@code RecursiveBinding}.
          */
-        private Binding<V> getBackingBinding()
-        {
+        private Binding<V> getBackingBinding() {
             return binding;
         }
         
@@ -452,8 +486,7 @@ public class SLBindings
          *
          * @return {@inheritDoc}
          */
-        @Override public boolean isValid()
-        {
+        @Override public boolean isValid() {
             return getBackingBinding().isValid();
         }
         
@@ -461,8 +494,7 @@ public class SLBindings
          * Calls the {@link Binding#invalidate() invalidate()} method of the {@code backing Binding}.
          * {@inheritDoc}
          */
-        @Override public void invalidate()
-        {
+        @Override public void invalidate() {
             getBackingBinding().invalidate();
         }
         
@@ -472,8 +504,7 @@ public class SLBindings
          *
          * @return {@inheritDoc}
          */
-        @Override public ObservableList<?> getDependencies()
-        {
+        @Override public ObservableList<?> getDependencies() {
             return getBackingBinding().getDependencies();
         }
         
@@ -481,8 +512,7 @@ public class SLBindings
          * Calls the {@link Binding#dispose() dispose()} method of the {@code backing Binding}.
          * {@inheritDoc}
          */
-        @Override public void dispose()
-        {
+        @Override public void dispose() {
             getBackingBinding().dispose();
         } //TODO - Might need to actually dispose of this instance rather than just the Binding instance.
         
@@ -490,8 +520,7 @@ public class SLBindings
          * Calls the {@link Binding#addListener(ChangeListener) addListener(ChangeListener)} method of the {@code backing Binding}.
          * {@inheritDoc}
          */
-        @Override public void addListener(ChangeListener<? super V> listener)
-        {
+        @Override public void addListener(ChangeListener<? super V> listener) {
             getBackingBinding().addListener(listener);
         }
         
@@ -499,8 +528,7 @@ public class SLBindings
          * Calls the {@link Binding#removeListener(ChangeListener) removeListener(ChangeListener)} method of the {@code backing Binding}.
          * {@inheritDoc}
          */
-        @Override public void removeListener(ChangeListener<? super V> listener)
-        {
+        @Override public void removeListener(ChangeListener<? super V> listener) {
             getBackingBinding().removeListener(listener);
         }
         
@@ -510,8 +538,7 @@ public class SLBindings
          *
          * @return {@inheritDoc}
          */
-        @Override public V getValue()
-        {
+        @Override public V getValue() {
             return getBackingBinding().getValue();
         }
         
@@ -519,8 +546,7 @@ public class SLBindings
          * Calls the {@link Binding#addListener(InvalidationListener) addListener(InvalidationListener)} method of the {@code backing Binding}.
          * {@inheritDoc}
          */
-        @Override public void addListener(InvalidationListener listener)
-        {
+        @Override public void addListener(InvalidationListener listener) {
             getBackingBinding().addListener(listener);
         }
         
@@ -528,8 +554,7 @@ public class SLBindings
          * Calls the {@link Binding#removeListener(InvalidationListener) removeListener(InvalidationListener)} method of the {@code backing Binding}.
          * {@inheritDoc}
          */
-        @Override public void removeListener(InvalidationListener listener)
-        {
+        @Override public void removeListener(InvalidationListener listener) {
             getBackingBinding().removeListener(listener);
         }
         
@@ -540,13 +565,12 @@ public class SLBindings
          * <p>
          * Calling this method more than once will result in an {@code RuntimeException} being thrown.
          */
-        private void initialize()
-        {
+        private void initialize() {
             updateObservable.addListener((observable, oldValue, newValue) -> update(oldValue, newValue));
             binding = Bindings.createObjectBinding(
                     backingBindingProperty::get,
                     SLArrays.concat(new Observable[]{backingBindingProperty}, updateBindings)
-            );
+                                                  );
             binding.invalidate();
             update(updateObservable.getValue(), updateObservable.getValue());
         }
@@ -557,8 +581,7 @@ public class SLBindings
          * @param oldValue The old value. <i>Currently unused.</i>
          * @param newValue The new value.
          */
-        private void update(U oldValue, U newValue)
-        {
+        private void update(U oldValue, U newValue) {
             Function<U, ObservableValue<V>> function = getFunction();
             SLExceptions.nullCheck(function, "Function");
             ObservableValue<V> observableValue = function.apply(newValue);

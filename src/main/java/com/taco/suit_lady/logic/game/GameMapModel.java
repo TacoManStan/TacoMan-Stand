@@ -5,6 +5,7 @@ import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.SLBindings;
 import com.taco.suit_lady.util.tools.SLExceptions;
+import com.taco.suit_lady.util.tools.SLProperties;
 import com.taco.suit_lady.util.tools.SLResources;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ObjectProperty;
@@ -31,27 +32,29 @@ public class GameMapModel
     
     //
     
-    private final ObjectBinding<Image> mapImageBinding;
-    private ObjectBinding<Image> visibleMapImageBinding;
     private final ObjectProperty<StackPane> parentPaneProperty;
     
-//    private final ImageOverlayCommand paintCommand;
+    private final ObjectBinding<Image> mapImageBinding;
+    
+    
+    //    private final ImageOverlayCommand paintCommand;
     
     public GameMapModel(@NotNull GameMap owner, @NotNull ReentrantLock lock) {
         this.lock = SLExceptions.nullCheck(lock, "Lock");
         this.owner = SLExceptions.nullCheck(owner, "GameMap Owner");
         
-        this.mapImageBinding = SLBindings.createObjectBinding(SLResources.getDummyImage(SLResources.MAP));
-        
         this.parentPaneProperty = new SimpleObjectProperty<>();
         
-//        this.paintCommand = new ImageOverlayCommand(lock, this, "map", null, 1);
+        this.mapImageBinding = SLBindings.bindObject(SLResources.getDummyImage(SLResources.MAP));
+        
+        //        this.paintCommand = new ImageOverlayCommand(lock, this, "map", null, 1);
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">
     
     public final GameMapModel init() {
-//        FXTools.bindToParent();
+        
+        
         return this;
     }
     
@@ -63,48 +66,20 @@ public class GameMapModel
         return owner;
     }
     
-    
-    public final ObjectBinding<Image> mapImageBinding() {
-        return mapImageBinding;
-    }
-    
-    public final Image getMapImage() {
-        return mapImageBinding.get();
-    }
+    public final ObjectProperty<StackPane> parentPaneProperty() { return parentPaneProperty; }
+    public final StackPane getParentPane() { return parentPaneProperty.get(); }
+    public final StackPane setParentPane(StackPane newValue) { return SLProperties.setProperty(parentPaneProperty, newValue); }
     
     
-    public final ObjectProperty<StackPane> parentPaneProperty() {
-        return parentPaneProperty;
-    }
-    
-    public final StackPane getParentPane() {
-        return parentPaneProperty.get();
-    }
-    
-    public final StackPane setParentPane(StackPane newValue) {
-        StackPane oldValue = getParentPane();
-        parentPaneProperty.set(newValue);
-        return oldValue;
-    }
-    
-    
-//    public final ImageOverlayCommand getPaintCommand() {
-//        return paintCommand;
-//    }
+    public final ObjectBinding<Image> mapImageBinding() { return mapImageBinding; }
+    public final Image getMapImage() { return mapImageBinding.get(); }
     
     //</editor-fold>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override
-    public @NotNull Springable springable() {
-        return owner;
-    }
-    
-    @Override
-    public @NotNull ReentrantLock getLock() {
-        return lock;
-    }
+    @Override public @NotNull Springable springable() { return owner; }
+    @Override public @NotNull ReentrantLock getLock() { return lock; }
     
     //</editor-fold>
 }

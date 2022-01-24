@@ -18,7 +18,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class GameMap
         implements SpringableWrapper, Lockable {
     
-    private final int tileSize = 25; // The number of "pixels" comprising each tile.
+    private final int tileSize = 20; // The number of "pixels" comprising each tile.
     
     //
     
@@ -73,40 +73,46 @@ public class GameMap
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final int getTileSize() {
-        return tileSize;
-    }
+    public final int getTileSize() { return tileSize; }
     
     
-    public final int getWidth() {
-        return width;
-    }
+    /**
+     * <p>Returns the {@code width} of this {@link GameMap} in {@link GameTile tiles}.</p>
+     *
+     * @return The {@code width} of this {@link GameMap} in {@link GameTile tiles}.
+     */
+    public final int getWidth() { return width; }
     
-    public final int getHeight() {
-        return height;
-    }
+    /**
+     * <p>Returns the {@code height} of this {@link GameMap} in {@link GameTile tiles}.</p>
+     *
+     * @return The {@code height} of this {@link GameMap} in {@link GameTile tiles}.
+     */
+    public final int getHeight() { return height; }
     
-    public final int getFullWidth() {
-        return width * tileSize;
-    }
+    /**
+     * <p>Returns the {@code width} of this {@link GameMap} in {@code virtual pixels}.</p>
+     * <p><b>Passthrough Definition:</b></p>
+     * <blockquote><i>{@link #getWidth()} <b>*</b> {@link #getTileSize()}</i></blockquote>
+     *
+     * @return The {@code width} of this {@link GameMap} in {@code virtual pixels}.
+     */
+    public final int getFullWidth() { return width * tileSize; }
     
-    public final int getFullHeight() {
-        return height * tileSize;
-    }
+    /**
+     * <p>Returns the {@code height} of this {@link GameMap} in {@code virtual pixels}.</p>
+     * <p><b>Passthrough Definition:</b></p>
+     * <blockquote><i>{@link #getHeight()} <b>*</b> {@link #getTileSize()}</i></blockquote>
+     *
+     * @return The {@code height} of this {@link GameMap} in {@code virtual pixels}.
+     */
+    public final int getFullHeight() { return height * tileSize; }
     
     
-    public final GameTile[][] getTileMap() {
-        return tileMap;
-    }
+    public final GameTile[][] getTileMap() { return tileMap; }
+    public final ArrayList<GameObject> mapObjects() { return mapObjects; }
     
-    public final ArrayList<GameObject> mapObjects() {
-        return mapObjects;
-    }
-    
-    
-    public final GameMapModel getModel() {
-        return model;
-    }
+    public final GameMapModel getModel() { return model; }
     
     //</editor-fold>
     

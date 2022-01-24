@@ -3,7 +3,15 @@ package com.taco.suit_lady.logic.game;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.springable.StrictSpringable;
-import javafx.beans.property.*;
+import com.taco.suit_lady.util.tools.SLBindings;
+import com.taco.suit_lady.util.tools.SLProperties;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.IntegerBinding;
+import javafx.beans.binding.ObjectBinding;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ObservableNumberValue;
+import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -28,121 +36,101 @@ public class Camera
     
     //
     
-    private final ReadOnlyObjectWrapper<GameMap> gameMapProperty;
+    private final IntegerBinding viewportWidthBinding; //Bound to the specified observable value representing the width in pixels of the UI viewport object (e.g., CanvasSurface).
+    private final IntegerBinding viewportHeightBinding; //Bound to the specified observable value representing the height in pixels of the UI viewport object (e.g., CanvasSurface).
     
     private final IntegerProperty xLocationProperty;
     private final IntegerProperty yLocationProperty;
     private final IntegerProperty xOffsetProperty;
     private final IntegerProperty yOffsetProperty;
     
-    public Camera(@NotNull Springable springable) {
-        this.springable = springable.asStrict();
+    private final GameMap gameMap;
+    
+    //
+    
+    private final ObjectBinding<Image> mapImagePassthroughBinding; //Bound to the actual raw game map image loaded by the MapModel object assigned to the GameMap object assigned to this Camera object.
+    private final IntegerBinding mapImagePassthroughWidthBinding; //Bound via recursive binding to the width of the actual game map image loaded by the MapModel object assigned to the GameMap object assigned to this Camera object.
+    private final IntegerBinding mapImagePassthroughHeightBinding; //Ditto
+    
+    private final IntegerBinding scaledWidthBinding; //The viewport width scaled to match the dimensions of the map image object
+    private final IntegerBinding scaledHeightBinding; //The viewport height scaled to match the dimensions of the map image object
+    private final IntegerBinding scaledXLocationBinding; //The viewport x location scaled to match the dimensions of the map image object
+    private final IntegerBinding scaledYLocationBinding; //The viewport y location scaled to match the dimensions of the map image object
+    
+    
+    public Camera(@NotNull GameMap gameMap, @NotNull ObservableNumberValue observableViewportWidth, @NotNull ObservableNumberValue observableViewportHeight) {
+        this.springable = gameMap.asStrict();
         
-        
-        this.gameMapProperty = new ReadOnlyObjectWrapper<>();
+        this.viewportWidthBinding = Bindings.createIntegerBinding(() -> observableViewportWidth.intValue(), observableViewportWidth);
+        this.viewportHeightBinding = Bindings.createIntegerBinding(() -> observableViewportHeight.intValue(), observableViewportHeight);
         
         this.xLocationProperty = new SimpleIntegerProperty(0);
         this.yLocationProperty = new SimpleIntegerProperty(0);
         this.xOffsetProperty = new SimpleIntegerProperty(0);
         this.yOffsetProperty = new SimpleIntegerProperty(0);
+        
+        this.gameMap = gameMap;
+        
+        //
+        
+        this.mapImagePassthroughBinding = Bindings.createObjectBinding(() -> gameMap.getModel().getMapImage(), gameMap.getModel().mapImageBinding());
+        SLBindings.bindRecursive(image -> image.widthProperty(), mapImagePassthroughBinding);
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    protected final ReadOnlyObjectWrapper<GameMap> gameMapModifiableProperty() {
-        return gameMapProperty;
-    }
-    
-    public final ReadOnlyObjectProperty<GameMap> gameMapProperty() {
-        return gameMapProperty.getReadOnlyProperty();
-    }
-    
-    public final GameMap getGameMap() {
-        return gameMapProperty.get();
-    }
-    
-    protected final GameMap setGameMap(GameMap newValue) {
-        GameMap oldValue = getGameMap();
-        gameMapProperty.set(newValue);
-        return oldValue;
-    }
+    public final GameMap getGameMap() { return gameMap; }
     
     //<editor-fold desc="--- COORDINATES ---">
     
     /**
-     * <p>Defines the x coordinate at which this camera is assigned.</p>
+     * <p>Defines the {@code x} coordinate at which this camera is assigned.</p>
      * <p><b>Details</b></p>
      * <ol>
      *     <li>Location values represent the coordinates at the top left (0, 0) point of the viewport (e.g., Canvas).</li>
      *     <li>Location values are represented in pixels, not tiles.</li>
      * </ol>
      */
-    public final IntegerProperty xLocationProperty() {
-        return xLocationProperty;
-    }
+    public final IntegerProperty xLocationProperty() { return xLocationProperty; }
+    public final int getXLocation() { return xLocationProperty.get(); }
+    public final int setXLocation(int newValue) { return SLProperties.setProperty(xLocationProperty, newValue); }
     
-    public final int getXLocation() {
-        return xLocationProperty.get();
-    }
-    
-    public final int setXLocation(int newValue) {
-        int oldValue = getXLocation();
-        xLocationProperty.set(newValue);
-        return oldValue;
-    }
-    
-    
-    public final IntegerProperty yLocationProperty() {
-        return yLocationProperty;
-    }
-    
-    public final int getYLocation() {
-        return yLocationProperty.get();
-    }
-    
-    public final int setYLocation(int newValue) {
-        int oldValue = getYLocation();
-        yLocationProperty.set(newValue);
-        return oldValue;
-    }
+    /**
+     * <p>Defines the {@code y} coordinate at which this camera is assigned.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>Location values represent the coordinates at the top left (0, 0) point of the viewport (e.g., Canvas).</li>
+     *     <li>Location values are represented in pixels, not tiles.</li>
+     * </ol>
+     */
+    public final IntegerProperty yLocationProperty() { return yLocationProperty; }
+    public final int getYLocation() { return yLocationProperty.get(); }
+    public final int setYLocation(int newValue) { return SLProperties.setProperty(yLocationProperty, newValue); }
     
     
     /**
-     * <p>Represents the number of units (pixels, not tiles) this camera's view is shifted.</p>
+     * <p>Represents the number of units (pixels, not tiles) this camera's view is shifted on the {@code x} plane.</p>
      * <p><b>Details</b></p>
      * <ol>
-     *     <li>For example, to center the camera around its target point, you would bind the x offset value to half of the viewport width.</li>
+     *     <li>For example, to center the camera around its target point, you would bind the {@link #getXOffset() X Offset} value to half of the viewport width.</li>
      *     <li>Negative values will result in the target point of the camera being off-screen (which is entirely legal and could potentially be useful in the future).</li>
      * </ol>
      */
-    public final IntegerProperty xOffsetProperty() {
-        return xOffsetProperty;
-    }
+    public final IntegerProperty xOffsetProperty() { return xOffsetProperty; }
+    public final int getXOffset() { return xOffsetProperty.get(); }
+    protected final int setXOffset(int newValue) { return SLProperties.setProperty(xOffsetProperty, newValue); }
     
-    public final int getXOffset() {
-        return xOffsetProperty.get();
-    }
-    
-    protected final int setXOffset(int newValue) {
-        int oldValue = getXOffset();
-        xOffsetProperty.set(newValue);
-        return oldValue;
-    }
-    
-    
-    public final IntegerProperty yOffsetProperty() {
-        return yOffsetProperty;
-    }
-    
-    public final int getYOffset() {
-        return yOffsetProperty.get();
-    }
-    
-    public final int setYOffset(int newValue) {
-        int oldValue = getYOffset();
-        yOffsetProperty.set(newValue);
-        return oldValue;
-    }
+    /**
+     * <p>Represents the number of units (pixels, not tiles) this camera's view is shifted on the {@code x} plane.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>For example, to center the camera around its target point, you would bind the {@link #getYOffset() Y Offset} value to half of the viewport width.</li>
+     *     <li>Negative values will result in the target point of the camera being off-screen (which is entirely legal and could potentially be useful in the future).</li>
+     * </ol>
+     */
+    public final IntegerProperty yOffsetProperty() { return yOffsetProperty; }
+    public final int getYOffset() { return yOffsetProperty.get(); }
+    public final int setYOffset(int newValue) { return SLProperties.setProperty(yOffsetProperty, newValue); }
     
     //</editor-fold>
     
@@ -150,10 +138,7 @@ public class Camera
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override
-    public @NotNull Springable springable() {
-        return springable;
-    }
+    @Override public @NotNull Springable springable() { return springable; }
     
     //</editor-fold>
 }

@@ -663,8 +663,7 @@ public class AppController
                 0.0,
                 FXDialogs.OK,
                 true,
-                weaver.loadController(SettingsController.class)
-                                        );
+                weaver.loadController(SettingsController.class));
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">

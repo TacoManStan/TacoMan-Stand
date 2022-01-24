@@ -133,7 +133,7 @@ public class Sidebar
         //
         
         this.backImageButton.getImagePane().visibleProperty().bind(
-                SLBindings.createRecursiveBinding(selectedBookshelf -> {
+                SLBindings.bindRecursive(selectedBookshelf -> {
                     if (selectedBookshelf != null)
                         return Bindings.and(Bindings.not(selectedBookshelf.isEmptyBinding()), selectedBookshelf.getBookDisplayer().visibleBinding());
                     return null;

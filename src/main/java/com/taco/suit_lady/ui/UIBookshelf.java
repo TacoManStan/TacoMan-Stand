@@ -37,7 +37,7 @@ public abstract class UIBookshelf
         
         //
         
-        final Binding<Boolean> innerBinding = SLBindings.createRecursiveBinding((UIBook uiBook) -> {
+        final Binding<Boolean> innerBinding = SLBindings.bindRecursive((UIBook uiBook) -> {
             if (uiBook != null) {
                 final UIPageHandler pageHandler = uiBook.getPageHandler();
                 if (pageHandler != null)
