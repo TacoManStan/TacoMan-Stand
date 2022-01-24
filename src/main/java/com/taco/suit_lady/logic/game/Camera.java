@@ -55,8 +55,8 @@ public class Camera
     private final IntegerBinding mapImageHeightBinding; //Ditto
     
     
-    private final DoubleBinding xScalerBinding; //Multiplier representing the scaling ratio between the map image width and the map data object width
-    private final DoubleBinding yScalerBinding; //Multiplier representing the scaling ratio between the map image height and the map data object height
+    private final DoubleBinding xMultiplierBinding; //Multiplier representing the scaling ratio between the map image width and the map data object width
+    private final DoubleBinding yMultiplierBinding; //Multiplier representing the scaling ratio between the map image height and the map data object height
     
     
     private final IntegerBinding scaledViewportWidthBinding; //The viewport width scaled to match the dimensions of the map image object
@@ -87,15 +87,50 @@ public class Camera
         this.mapImageHeightBinding = SLBindings.bindIntegerRecursive(image -> image.heightProperty(), mapImageBinding);
         
         
-        this.xScalerBinding = Bindings.create
-        
-        
-        this.scaledViewportWidthBinding =
+//        this.xMultiplierBinding = SLBindings.bindInteger(() -> );
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
     
     public final GameMap getGameMap() { return gameMap; }
+    
+    //<editor-fold desc="> Bindings">
+    
+    public final ObjectBinding<Image> mapImageBinding() { return mapImageBinding; }
+    public final Image getMapImage() { return mapImageBinding.get(); }
+    
+    
+    public final IntegerBinding mapImageWidthBinding() { return mapImageWidthBinding; }
+    public final int getMapImageWidth() { return mapImageWidthBinding.get(); }
+    
+    public final IntegerBinding mapImageHeightBinding() { return mapImageHeightBinding; }
+    public final int getMapImageHeight() { return mapImageHeightBinding.get(); }
+    
+    //
+    
+    public final DoubleBinding xMultiplierBinding() { return xMultiplierBinding; }
+    public final double getXMultiplier() { return xMultiplierBinding.get(); }
+    
+    public final DoubleBinding yMultiplierBinding() { return yMultiplierBinding; }
+    public final double getYMultiplier() { return yMultiplierBinding.get(); }
+    
+    //
+    
+    public final IntegerBinding scaledViewportWidthBinding() { return scaledViewportWidthBinding; }
+    public final int getScaledViewportWidth() { return scaledViewportWidthBinding.get(); }
+    
+    public final IntegerBinding getScaledViewportHeightBinding() { return scaledViewportHeightBinding; }
+    public final int getScaledViewportHeight() { return scaledViewportHeightBinding.get(); }
+    
+    
+    public final IntegerBinding scaledViewportXLocationBinding() { return scaledViewportXLocationBinding; }
+    public final int getScaledViewportXLocation() { return scaledViewportXLocationBinding.get(); }
+    
+    public final IntegerBinding scaledViewportYLocationBinding() { return scaledViewportYLocationBinding; }
+    public final int getScaledViewportYLocation() { return scaledViewportYLocationBinding.get(); }
+    
+    //</editor-fold>
+    
     
     //<editor-fold desc="--- COORDINATES ---">
     
