@@ -1,6 +1,7 @@
 package com.taco.suit_lady.util.tools;
 
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
+import com.taco.suit_lady.util.tools.list_tools.ListsSL;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.binding.*;
@@ -10,6 +11,7 @@ import javafx.collections.ObservableList;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
@@ -17,8 +19,14 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
 
 /**
- * Utility methods related to {@link Property Properties} and {@link Bindings}.
+ * Utility methods providing various {@link Binding} manipulations & operations, some of which are {@code passthrough methods} to functions located in the default JavaFX API {@link Bindings} class.
+ * <p><b>Details</b></p>
+ * <ol>
+ *     <li>For functions pertaining to {@link Property Properties} and other {@link Observable Observables}, refer to {@link PropertiesSL}.</li>
+ *     <li>For functions pertaining to {@link ObservableList Observable Lists} as well as {@link Collection Standard Collections}, refer to {@link ListsSL}.</li>
+ * </ol>
  */
+//TO-EXPAND
 public class BindingsSL {
     
     //<editor-fold desc="--- STATIC BINDINGS ---">
