@@ -1,6 +1,6 @@
 package com.taco.suit_lady.util.settings;
 
-import com.taco.suit_lady.util.tools.fx_tools.FXGraphics;
+import com.taco.suit_lady.util.tools.fx_tools.GraphicsFX;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -48,7 +48,7 @@ public class ColorWrapper
 			if (newValue == null)
 				setColor(DEFAULT);
 		});
-		this.awtColorProperty.bind(Bindings.createObjectBinding(() -> FXGraphics.toAWTColor(getColor()), colorProperty));
+		this.awtColorProperty.bind(Bindings.createObjectBinding(() -> GraphicsFX.toAWTColor(getColor()), colorProperty));
 		this.setColor(color);
 	}
 
