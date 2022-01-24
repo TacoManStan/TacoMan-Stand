@@ -40,6 +40,8 @@ public class Camera
     private final IntegerBinding viewportWidthBinding; //Bound to the specified observable value representing the width in pixels of the UI viewport object (e.g., CanvasSurface).
     private final IntegerBinding viewportHeightBinding; //Bound to the specified observable value representing the height in pixels of the UI viewport object (e.g., CanvasSurface).
     
+    //
+    
     private final IntegerProperty xLocationProperty;
     private final IntegerProperty yLocationProperty;
     private final IntegerProperty xOffsetProperty;
@@ -69,8 +71,8 @@ public class Camera
     public Camera(@NotNull GameMap gameMap, @NotNull ObservableNumberValue observableViewportWidth, @NotNull ObservableNumberValue observableViewportHeight) {
         this.springable = gameMap.asStrict();
         
-        this.viewportWidthBinding = Bindings.createIntegerBinding(() -> observableViewportWidth.intValue(), observableViewportWidth);
-        this.viewportHeightBinding = Bindings.createIntegerBinding(() -> observableViewportHeight.intValue(), observableViewportHeight);
+        this.viewportWidthBinding = BindingsSL.bindInteger(() -> observableViewportWidth.intValue(), observableViewportWidth);
+        this.viewportHeightBinding = BindingsSL.bindInteger(() -> observableViewportHeight.intValue(), observableViewportHeight);
         
         this.xLocationProperty = new SimpleIntegerProperty(0);
         this.yLocationProperty = new SimpleIntegerProperty(0);
@@ -81,58 +83,33 @@ public class Camera
         
         //
         
-        this.mapImageBinding = Bindings.createObjectBinding(() -> gameMap.getModel().getMapImage(), gameMap.getModel().mapImageBinding());
+        this.mapImageBinding = BindingsSL.bindObject(() -> gameMap.getModel().getMapImage(), gameMap.getModel().mapImageBinding());
         
         this.mapImageWidthBinding = BindingsSL.bindIntegerRecursive(image -> image.widthProperty(), mapImageBinding);
         this.mapImageHeightBinding = BindingsSL.bindIntegerRecursive(image -> image.heightProperty(), mapImageBinding);
         
         
-//        this.xMultiplierBinding = SLBindings.bindInteger(() -> );
+        this.xMultiplierBinding = BindingsSL.bindDouble(() -> ((double) getMapImageWidth() / (double) getGameMap().getFullWidth()), mapImageWidthBinding);
+        this.yMultiplierBinding = BindingsSL.bindDouble(() -> ((double) getMapImageHeight() / (double) getGameMap().getFullHeight()), mapImageHeightBinding);
+        
+        
+        this.scaledViewportWidthBinding = BindingsSL.bindInteger(() -> (int) (getViewportWidth() * getXMultiplier()), viewportWidthBinding, xMultiplierBinding);
+        this.scaledViewportHeightBinding = BindingsSL.bindInteger(() -> (int) (getViewportHeight() * getYMultiplier()), viewportHeightBinding, yMultiplierBinding);
+        
+        this.scaledViewportXLocationBinding = BindingsSL.bindInteger(() -> (int) (getXLocation() * getXMultiplier()), xLocationProperty, xMultiplierBinding);
+        this.scaledViewportYLocationBinding = BindingsSL.bindInteger(() -> (int) (getYLocation() * getYMultiplier()), yLocationProperty, yMultiplierBinding);
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
     
+    /**
+     * <p>Returns the {@link GameMap} object that this {@link Camera} instance is assigned to.</p>
+     *
+     * @return The {@link GameMap} object that this {@link Camera} instance is assigned to.
+     */
     public final GameMap getGameMap() { return gameMap; }
     
-    //<editor-fold desc="> Bindings">
-    
-    public final ObjectBinding<Image> mapImageBinding() { return mapImageBinding; }
-    public final Image getMapImage() { return mapImageBinding.get(); }
-    
-    
-    public final IntegerBinding mapImageWidthBinding() { return mapImageWidthBinding; }
-    public final int getMapImageWidth() { return mapImageWidthBinding.get(); }
-    
-    public final IntegerBinding mapImageHeightBinding() { return mapImageHeightBinding; }
-    public final int getMapImageHeight() { return mapImageHeightBinding.get(); }
-    
-    //
-    
-    public final DoubleBinding xMultiplierBinding() { return xMultiplierBinding; }
-    public final double getXMultiplier() { return xMultiplierBinding.get(); }
-    
-    public final DoubleBinding yMultiplierBinding() { return yMultiplierBinding; }
-    public final double getYMultiplier() { return yMultiplierBinding.get(); }
-    
-    //
-    
-    public final IntegerBinding scaledViewportWidthBinding() { return scaledViewportWidthBinding; }
-    public final int getScaledViewportWidth() { return scaledViewportWidthBinding.get(); }
-    
-    public final IntegerBinding getScaledViewportHeightBinding() { return scaledViewportHeightBinding; }
-    public final int getScaledViewportHeight() { return scaledViewportHeightBinding.get(); }
-    
-    
-    public final IntegerBinding scaledViewportXLocationBinding() { return scaledViewportXLocationBinding; }
-    public final int getScaledViewportXLocation() { return scaledViewportXLocationBinding.get(); }
-    
-    public final IntegerBinding scaledViewportYLocationBinding() { return scaledViewportYLocationBinding; }
-    public final int getScaledViewportYLocation() { return scaledViewportYLocationBinding.get(); }
-    
-    //</editor-fold>
-    
-    
-    //<editor-fold desc="--- COORDINATES ---">
+    //<editor-fold desc="> Coordinates">
     
     /**
      * <p>Defines the {@code x} coordinate at which this camera is assigned.</p>
@@ -182,6 +159,51 @@ public class Camera
     public final IntegerProperty yOffsetProperty() { return yOffsetProperty; }
     public final int getYOffset() { return yOffsetProperty.get(); }
     public final int setYOffset(int newValue) { return PropertiesSL.setProperty(yOffsetProperty, newValue); }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="> Bindings">
+    
+    public final IntegerBinding viewportWidthBinding() { return viewportWidthBinding; }
+    public final int getViewportWidth() { return viewportWidthBinding.get(); }
+    
+    public final IntegerBinding viewportHeightBinding() { return viewportHeightBinding; }
+    public final int getViewportHeight() { return viewportHeightBinding.get(); }
+    
+    //
+    
+    public final ObjectBinding<Image> mapImageBinding() { return mapImageBinding; }
+    public final Image getMapImage() { return mapImageBinding.get(); }
+    
+    
+    public final IntegerBinding mapImageWidthBinding() { return mapImageWidthBinding; }
+    public final int getMapImageWidth() { return mapImageWidthBinding.get(); }
+    
+    public final IntegerBinding mapImageHeightBinding() { return mapImageHeightBinding; }
+    public final int getMapImageHeight() { return mapImageHeightBinding.get(); }
+    
+    //
+    
+    public final DoubleBinding xMultiplierBinding() { return xMultiplierBinding; }
+    public final double getXMultiplier() { return xMultiplierBinding.get(); }
+    
+    public final DoubleBinding yMultiplierBinding() { return yMultiplierBinding; }
+    public final double getYMultiplier() { return yMultiplierBinding.get(); }
+    
+    //
+    
+    public final IntegerBinding scaledViewportWidthBinding() { return scaledViewportWidthBinding; }
+    public final int getScaledViewportWidth() { return scaledViewportWidthBinding.get(); }
+    
+    public final IntegerBinding getScaledViewportHeightBinding() { return scaledViewportHeightBinding; }
+    public final int getScaledViewportHeight() { return scaledViewportHeightBinding.get(); }
+    
+    
+    public final IntegerBinding scaledViewportXLocationBinding() { return scaledViewportXLocationBinding; }
+    public final int getScaledViewportXLocation() { return scaledViewportXLocationBinding.get(); }
+    
+    public final IntegerBinding scaledViewportYLocationBinding() { return scaledViewportYLocationBinding; }
+    public final int getScaledViewportYLocation() { return scaledViewportYLocationBinding.get(); }
     
     //</editor-fold>
     
