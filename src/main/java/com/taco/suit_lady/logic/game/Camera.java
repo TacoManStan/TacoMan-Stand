@@ -75,8 +75,8 @@ public class Camera
         this.springable = gameMap.asStrict();
         this.lock = gameMap.getLock();
         
-        this.viewportWidthBinding = BindingsSL.bindInteger(() -> observableViewportWidth.intValue(), observableViewportWidth);
-        this.viewportHeightBinding = BindingsSL.bindInteger(() -> observableViewportHeight.intValue(), observableViewportHeight);
+        this.viewportWidthBinding = BindingsSL.intBinding(() -> observableViewportWidth.intValue(), observableViewportWidth);
+        this.viewportHeightBinding = BindingsSL.intBinding(() -> observableViewportHeight.intValue(), observableViewportHeight);
         
         this.xLocationProperty = new SimpleIntegerProperty(0);
         this.yLocationProperty = new SimpleIntegerProperty(0);
@@ -87,21 +87,21 @@ public class Camera
         
         //
         
-        this.mapImageBinding = BindingsSL.bindObject(() -> gameMap.getModel().getMapImage(), gameMap.getModel().mapImageBinding());
+        this.mapImageBinding = BindingsSL.objBinding(() -> gameMap.getModel().getMapImage(), gameMap.getModel().mapImageBinding());
         
         this.mapImageWidthBinding = BindingsSL.bindIntegerRecursive(image -> image.widthProperty(), mapImageBinding);
         this.mapImageHeightBinding = BindingsSL.bindIntegerRecursive(image -> image.heightProperty(), mapImageBinding);
         
         
-        this.xMultiplierBinding = BindingsSL.bindDouble(() -> ((double) getMapImageWidth() / (double) getGameMap().getFullWidth()), mapImageWidthBinding);
-        this.yMultiplierBinding = BindingsSL.bindDouble(() -> ((double) getMapImageHeight() / (double) getGameMap().getFullHeight()), mapImageHeightBinding);
+        this.xMultiplierBinding = BindingsSL.doubleBinding(() -> ((double) getMapImageWidth() / (double) getGameMap().getFullWidth()), mapImageWidthBinding);
+        this.yMultiplierBinding = BindingsSL.doubleBinding(() -> ((double) getMapImageHeight() / (double) getGameMap().getFullHeight()), mapImageHeightBinding);
         
         
-        this.scaledViewportWidthBinding = BindingsSL.bindInteger(() -> (int) (getViewportWidth() * getXMultiplier()), viewportWidthBinding, xMultiplierBinding);
-        this.scaledViewportHeightBinding = BindingsSL.bindInteger(() -> (int) (getViewportHeight() * getYMultiplier()), viewportHeightBinding, yMultiplierBinding);
+        this.scaledViewportWidthBinding = BindingsSL.intBinding(() -> (int) (getViewportWidth() * getXMultiplier()), viewportWidthBinding, xMultiplierBinding);
+        this.scaledViewportHeightBinding = BindingsSL.intBinding(() -> (int) (getViewportHeight() * getYMultiplier()), viewportHeightBinding, yMultiplierBinding);
         
-        this.scaledViewportXLocationBinding = BindingsSL.bindInteger(() -> (int) (getXLocation() * getXMultiplier()), xLocationProperty, xMultiplierBinding);
-        this.scaledViewportYLocationBinding = BindingsSL.bindInteger(() -> (int) (getYLocation() * getYMultiplier()), yLocationProperty, yMultiplierBinding);
+        this.scaledViewportXLocationBinding = BindingsSL.intBinding(() -> (int) (getXLocation() * getXMultiplier()), xLocationProperty, xMultiplierBinding);
+        this.scaledViewportYLocationBinding = BindingsSL.intBinding(() -> (int) (getYLocation() * getYMultiplier()), yLocationProperty, yMultiplierBinding);
     }
     
     //<editor-fold desc="--- PROPERTIES ---">

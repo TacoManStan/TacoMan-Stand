@@ -57,7 +57,7 @@ public class TreeCellFX<T, C extends CellController<T>> extends TreeCell<T>
         }, treeItemProperty());
         
         final BindingsSL.RecursiveBinding<TreeItemFX<T>, Boolean> recursiveVisibleBinding = BindingsSL.bindRecursive(
-                treeItemFX -> treeItemFX != null ? treeItemFX.visibleProperty() : BindingsSL.bindBooleanStatic(false), treeItemFXBinding());
+                treeItemFX -> treeItemFX != null ? treeItemFX.visibleProperty() : BindingsSL.boolBinding(false), treeItemFXBinding());
         this.contentVisibleBinding = Bindings.createBooleanBinding(() -> recursiveVisibleBinding.getValue(), recursiveVisibleBinding);
         this.contentVisibleBinding.addListener(observable -> setDisable(!recursiveVisibleBinding.getValue()));
     }

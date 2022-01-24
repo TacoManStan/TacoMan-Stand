@@ -106,7 +106,7 @@ public class ConsoleUIDataContainer
     
     private ObservableBooleanValue hlpr_getObservable(ObservableBooleanValue observable)
     {
-        return observable != null ? observable : BindingsSL.bindBooleanStatic(true);
+        return observable != null ? observable : BindingsSL.boolBinding(true);
     }
 }
 
