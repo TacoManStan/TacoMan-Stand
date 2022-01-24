@@ -29,7 +29,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * <p>{@link Camera} objects should be able to have tints, zoom values, vision radius, etc.</p>
  * <p><b>Details</b></p>
  * <ol>
- *     <li>The location of the {@link Camera} represents the <i>center</i> of the {@link Camera camera's} view region, <i>not</i> the top-left corner as is the case with most {@code rectangle-based} implementations.</li>
+ *     <li>The location of the {@link Camera} represents the <i>top left</i> of the {@link Camera camera's} view region, <i>not</i> the center.</li>
  * </ol>
  */
 public class Camera
@@ -40,11 +40,6 @@ public class Camera
     
     //
     
-    private final IntegerBinding viewportWidthBinding; //Bound to the specified observable value representing the width in pixels of the UI viewport object (e.g., CanvasSurface).
-    private final IntegerBinding viewportHeightBinding; //Bound to the specified observable value representing the height in pixels of the UI viewport object (e.g., CanvasSurface).
-    
-    //
-    
     private final IntegerProperty xLocationProperty;
     private final IntegerProperty yLocationProperty;
     private final IntegerProperty xOffsetProperty;
@@ -52,7 +47,12 @@ public class Camera
     
     private final GameMap gameMap;
     
-    //
+    
+    //<editor-fold desc="--- BINDING FIELDS ---">
+    
+    private final IntegerBinding viewportWidthBinding; //Bound to the specified observable value representing the width in pixels of the UI viewport object (e.g., CanvasSurface).
+    private final IntegerBinding viewportHeightBinding; //Bound to the specified observable value representing the height in pixels of the UI viewport object (e.g., CanvasSurface).
+    
     
     private final ObjectBinding<Image> mapImageBinding; //Bound to the actual raw game map image loaded by the MapModel object assigned to the GameMap object assigned to this Camera object.
     
@@ -70,6 +70,7 @@ public class Camera
     private final IntegerBinding scaledViewportXLocationBinding; //The viewport x location scaled to match the dimensions of the map image object
     private final IntegerBinding scaledViewportYLocationBinding; //The viewport y location scaled to match the dimensions of the map image object
     
+    //</editor-fold>
     
     public Camera(@NotNull GameMap gameMap, @NotNull ObservableNumberValue observableViewportWidth, @NotNull ObservableNumberValue observableViewportHeight) {
         this.springable = gameMap.asStrict();
