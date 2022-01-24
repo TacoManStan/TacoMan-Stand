@@ -238,7 +238,7 @@ public class SLBindings {
     
     //</editor-fold>
     
-    //<editor-fold desc="--- CONVENIENCE BINDINGS ---">
+    //<editor-fold desc="--- MISC. BINDINGS ---">
     
     /**
      * Creates a {@link BooleanBinding} that is bound to the null status of the specified {@code Binding}.
@@ -285,26 +285,30 @@ public class SLBindings {
     
     //<editor-fold desc="--- RECURSIVE BINDINGS ---">
     
-    //<editor-fold desc="> Recursive Primitive Wrappers">
+    //<editor-fold desc="> Default Type Wrapper Factories">
     
     public static <U> @NotNull BooleanBinding bindBooleanRecursive(Function<U, ObservableValue<Boolean>> function, ObservableValue<U> updateObservable, Observable... updateObservables) {
-        return bindBooleanDirect(bindRecursive(function, updateObservable, updateObservables));
+        return bindBooleanDirect(bindRecursive(function, updateObservable), updateObservables);
     }
     
     public static <U> @NotNull IntegerBinding bindIntegerRecursive(Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... updateObservables) {
-        return bindIntegerDirect(bindRecursive(function, updateObservable, updateObservables));
+        return bindIntegerDirect(bindRecursive(function, updateObservable), updateObservables);
     }
     
-    public static <U> @NotNull LongBinding bindLongDirect(Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... updateObservables) {
-        return bindLongDirect(bindRecursive(function, updateObservable, updateObservables));
+    public static <U> @NotNull LongBinding bindLongRecursive(Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... updateObservables) {
+        return bindLongDirect(bindRecursive(function, updateObservable), updateObservables);
     }
     
-    public static <U> @NotNull FloatBinding bindFloatDirect(Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... updateObservables) {
-        return bindFloatDirect(bindRecursive(function, updateObservable, updateObservables));
+    public static <U> @NotNull FloatBinding bindFloatRecursive(Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... updateObservables) {
+        return bindFloatDirect(bindRecursive(function, updateObservable), updateObservables);
     }
     
-    public static <U> @NotNull DoubleBinding bindDoubleDirect(Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... updateObservables) {
-        return bindDoubleDirect(bindRecursive(function, updateObservable, updateObservables));
+    public static <U> @NotNull DoubleBinding bindDoubleRecursive(Function<U, ObservableValue<Number>> function, ObservableValue<U> updateObservable, Observable... updateObservables) {
+        return bindDoubleDirect(bindRecursive(function, updateObservable), updateObservables);
+    }
+    
+    public static <U, V> @NotNull ObjectBinding<V> bindObjectRecursive(Function<U, ObservableValue<V>> function, ObservableValue<U> updateObservable, Observable... updateObservables) {
+        return bindObjectDirect(bindRecursive(function, updateObservable), updateObservables);
     }
     
     //</editor-fold>
