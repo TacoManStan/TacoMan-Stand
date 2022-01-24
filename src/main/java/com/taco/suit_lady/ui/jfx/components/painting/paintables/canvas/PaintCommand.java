@@ -35,7 +35,6 @@ public abstract class PaintCommand
     @Override public void onAdd(CanvasSurface surface) { }
     @Override public void onRemove(CanvasSurface surface) { }
     
-    
     @Override public @NotNull PaintCommand paint() {
         if (isActive())
             FX.runFX(() -> sync(() -> {
