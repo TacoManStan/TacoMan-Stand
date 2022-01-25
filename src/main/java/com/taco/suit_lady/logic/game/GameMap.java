@@ -56,6 +56,8 @@ public class GameMap
     
     public final GameMap init() {
         initTiles();
+        getModel().init();
+        
         return this;
     }
     
@@ -167,17 +169,14 @@ public class GameMap
         return returnTiles;
     }
     
+    public boolean shutdown() {
+        return true;
+    }
+    
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override
-    public @NotNull Springable springable() {
-        return springable;
-    }
-    
-    @Override
-    public @NotNull ReentrantLock getLock() {
-        return lock;
-    }
+    @Override public @NotNull Springable springable() { return springable; }
+    @Override public @NotNull ReentrantLock getLock() { return lock; }
     
     //</editor-fold>
 }

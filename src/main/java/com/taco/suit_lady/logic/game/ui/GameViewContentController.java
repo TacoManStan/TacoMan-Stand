@@ -27,8 +27,7 @@ public class GameViewContentController extends ContentController
     
     @FXML private AnchorPane root;
     @FXML private BorderPane borderPaneRoot;
-    @FXML private AnchorPane contentAnchorPane;
-    @FXML private StackPane contentStackPane;
+    @FXML private AnchorPane mapPane;
     
     //</editor-fold>
     
@@ -36,28 +35,22 @@ public class GameViewContentController extends ContentController
     
     public GameViewContentController(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         super(weaver, ctx);
-        
         this.lock = new ReentrantLock();
     }
     
-    public final StackPane getContentPane() {
-        return contentStackPane;
-    }
+    //<editor-fold desc="--- PROPERTIES ---">
+    
+    public final AnchorPane getMapPane() { return mapPane; }
+    
+    //</editor-fold>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override
-    public @NotNull Lock getLock() {
-        return lock;
-    }
+    @Override public @NotNull Lock getLock() { return lock; }
     
-    @Override
-    public Pane root() {
-        return root;
-    }
+    @Override public Pane root() { return root; }
     
-    @Override
-    public void initialize() {
+    @Override public void initialize() {
     
     }
     

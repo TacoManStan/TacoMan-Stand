@@ -3,10 +3,8 @@ package com.taco.suit_lady.logic.game;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
-import com.taco.suit_lady.util.tools.BindingsSL;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
-import com.taco.suit_lady.util.tools.PropertiesSL;
-import com.taco.suit_lady.util.tools.ResourcesSL;
+import com.taco.suit_lady.util.tools.*;
+import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -53,7 +51,8 @@ public class GameMapModel
     //<editor-fold desc="--- INITIALIZATION ---">
     
     public final GameMapModel init() {
-        
+        parentPaneProperty.addListener((observable, oldValue, newValue) -> ObjectsSL.doIfNonNull(() -> newValue, value -> ToolsFX.setAnchors(value)));
+        setParentPane(new StackPane());
         
         return this;
     }

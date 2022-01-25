@@ -220,4 +220,6 @@ public class Camera
     @Override public @NotNull ReentrantLock getLock() { return lock; }
     
     //</editor-fold>
+    
+    
 }
