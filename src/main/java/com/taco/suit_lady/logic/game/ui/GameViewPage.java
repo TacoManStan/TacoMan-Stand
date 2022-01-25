@@ -6,22 +6,23 @@ import org.jetbrains.annotations.NotNull;
 
 public class GameViewPage extends UIPage<GameViewPageController> {
     
-    private final GameViewContent slContent;
+    private final GameViewContent content;
     
-    public GameViewPage(@NotNull UIBook owner, @NotNull GameViewContent slContent, Object... constructorParams) {
+    public GameViewPage(@NotNull UIBook owner, @NotNull GameViewContent content, Object... constructorParams) {
         super(owner, constructorParams);
-        this.slContent = slContent;
+        this.content = content;
     }
     
-    public GameViewContent getSLContent() { return slContent; }
+    //<editor-fold desc="--- PROPERTIES ---">
     
-    @Override
-    protected void initializePage(@NotNull Object[] constructorParams) {
+    public GameViewContent getSLContent() { return content; }
     
-    }
+    //</editor-fold>
     
-    @Override
-    protected @NotNull Class<GameViewPageController> controllerDefinition() {
-        return GameViewPageController.class;
-    }
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+    @Override protected void initializePage(@NotNull Object[] constructorParams) { }
+    @Override protected @NotNull Class<GameViewPageController> controllerDefinition() { return GameViewPageController.class; }
+    
+    //</editor-fold>
 }

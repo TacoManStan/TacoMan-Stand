@@ -1,5 +1,6 @@
 package com.taco.suit_lady.ui;
 
+import com.taco.suit_lady.logic.game.ui.GameViewContent;
 import com.taco.suit_lady.ui.console.Console;
 import com.taco.suit_lady.ui.console.ConsoleMessageable;
 import com.taco.suit_lady.ui.jfx.components.button.ImageButton;
@@ -218,6 +219,7 @@ public class AppController
         
         initImageButtons();
         initSidebar();
+        getAppUI().getContentManager().init();
         
         ctx().getBean(Console.class).consolify(
                 new ConsoleUIDataContainer(
@@ -592,7 +594,7 @@ public class AppController
      *
      * @return The singleton {@link AppUI} instance for this application runtime instance.
      */
-    public final AppUI getAppUI() {
+    public final @NotNull AppUI getAppUI() {
         return ctx().getBean(AppUI.class);
     }
     

@@ -67,7 +67,7 @@ public class AppUI
      * </ol>
      */
     protected void init() {
-        ctx().getBean(Console.class).initialize();
+        console().initialize();
         this.contentManager = new ContentManager(weaver(), ctx());
     }
     

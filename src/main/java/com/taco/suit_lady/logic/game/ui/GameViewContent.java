@@ -41,7 +41,7 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
         injectBookshelf("Game View", new UIBook(
                 this,
                 "Game View",
-                "mandelbrot2",
+                "game_engine",
                 uiBook -> ResourcesSL.get(
                         "pages",
                         uiBook.getUID(uiBook.getButtonID()),

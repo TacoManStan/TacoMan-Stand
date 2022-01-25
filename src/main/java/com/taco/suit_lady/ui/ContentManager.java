@@ -1,6 +1,7 @@
 package com.taco.suit_lady.ui;
 
 import com.taco.suit_lady.logic.LogiCore;
+import com.taco.suit_lady.logic.game.ui.GameViewContent;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ExceptionsSL;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasSurface;
@@ -49,6 +50,12 @@ public class ContentManager
         //
         
         this.contentProperty.addListener((observable, oldValue, newValue) -> onChange(oldValue, newValue));
+    }
+    
+    protected @NotNull ContentManager init() {
+        final GameViewContent game = new GameViewContent(this);
+        setContent(game);
+        return this;
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
