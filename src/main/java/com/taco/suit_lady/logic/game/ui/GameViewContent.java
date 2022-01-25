@@ -58,61 +58,7 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
     
     //<editor-fold desc="--- INITIALIZATION ---">
     
-    private void initUIPage() {
-        //Bind the value properties of relevant JFX components to the matching MandelbrotData property bidirectionally
-        getCoverPage().getController().getPrecisionTextField().getFormatter().valueProperty().bindBidirectional(getData().precisionProperty());
-        
-        getCoverPage().getController().getXMaxTextField().getFormatter().valueProperty().bindBidirectional(getData().xMaxProperty());
-        getCoverPage().getController().getYMaxTextField().getFormatter().valueProperty().bindBidirectional(getData().yMaxProperty());
-        getCoverPage().getController().getXMinTextField().getFormatter().valueProperty().bindBidirectional(getData().xMinProperty());
-        getCoverPage().getController().getYMinTextField().getFormatter().valueProperty().bindBidirectional(getData().yMinProperty());
-        
-        getCoverPage().getController().getColorSchemeChoiceBox().valueProperty().bindBidirectional(getData().colorSchemeProperty());
-        getCoverPage().getController().getInvertColorSchemeImageButton().selectedProperty().bindBidirectional(getData().invertColorSchemeProperty());
-        
-        getCoverPage().getController().getPauseAutoRegenerationImageButton().selectedProperty().bindBidirectional(getData().pauseAutoRegenerationProperty());
-        
-        
-        // Refresh the generated image when an applicable MandelbrotData property changes
-        getData().precisionProperty().addListener((observable, oldValue, newValue) -> refreshCanvasChecked());
-        
-        getData().xMinProperty().addListener((observable, oldValue, newValue) -> refreshCanvasChecked());
-        getData().xMaxProperty().addListener((observable, oldValue, newValue) -> refreshCanvasChecked());
-        getData().yMinProperty().addListener((observable, oldValue, newValue) -> refreshCanvasChecked());
-        getData().yMaxProperty().addListener((observable, oldValue, newValue) -> refreshCanvasChecked());
-        
-        getData().colorSchemeProperty().addListener((observable, oldValue, newValue) -> refreshCanvasChecked());
-        getData().invertColorSchemeProperty().addListener((observable, oldValue, newValue) -> refreshCanvasChecked());
-        
-        
-        // Bind the text properties of applicable labels to reflect relevant MandelbrotData calculated values (bindings)
-        getCoverPage().getController().getWidthLabel().textProperty().bind(
-                Bindings.createStringBinding(() -> "" + getData().getWidth(), getData().widthBinding()));
-        getCoverPage().getController().getHeightLabel().textProperty().bind(
-                Bindings.createStringBinding(() -> "" + getData().getHeight(), getData().heightBinding()));
-        getCoverPage().getController().getWidthScaledLabel().textProperty().bind(
-                Bindings.createStringBinding(() -> "" + getData().getScaledWidth(), getData().scaledWidthBinding()));
-        getCoverPage().getController().getHeightScaledLabel().textProperty().bind(
-                Bindings.createStringBinding(() -> "" + getData().getScaledHeight(), getData().scaledHeightBinding()));
-        
-        getCoverPage().getController().getXMinScaledLabel().textProperty().bind(
-                Bindings.createStringBinding(() -> "" + getData().getScaledMinX(), getData().scaledXMinBinding()));
-        getCoverPage().getController().getYMinScaledLabel().textProperty().bind(
-                Bindings.createStringBinding(() -> "" + getData().getScaledMinY(), getData().scaledYMinBinding()));
-        getCoverPage().getController().getXMaxScaledLabel().textProperty().bind(
-                Bindings.createStringBinding(() -> "" + getData().getScaledMaxX(), getData().scaledXMaxBinding()));
-        getCoverPage().getController().getYMaxScaledLabel().textProperty().bind(
-                Bindings.createStringBinding(() -> "" + getData().getScaledMaxY(), getData().scaledYMaxBinding()));
-        
-        getCoverPage().getController().getCanvasWidthLabel().textProperty().bind(
-                Bindings.createStringBinding(() -> "" + getData().getCanvasWidth(), getData().canvasWidthProperty()));
-        getCoverPage().getController().getCanvasHeightLabel().textProperty().bind(
-                Bindings.createStringBinding(() -> "" + getData().getCanvasHeight(), getData().canvasHeightProperty()));
-        
-        
-        getCoverPage().getController().getSaveConfigButton().setOnAction(event -> JFiles.save(getData()));
-        getCoverPage().getController().getLoadConfigButton().setOnAction(event -> JFiles.load(getData()));
-    }
+    private void initUIPage() { }
     
     private void initGame() {
         setGameMap(new GameMap(this, lock, 40, 20));
