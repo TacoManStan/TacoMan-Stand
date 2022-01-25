@@ -15,7 +15,9 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -93,7 +95,7 @@ public class GameMapModel
     public final StackPane setParentPane(StackPane newValue) { return PropertiesSL.setProperty(parentPaneProperty, newValue); }
     
     protected final CanvasPane getCanvasPane() { return canvasPane; }
-    public final CanvasSurface getCanvas() { return canvasPane != null ? canvasPane.canvas() : null; }
+    @Contract(pure = true) public final @Nullable CanvasSurface getCanvas() { return canvasPane != null ? canvasPane.canvas() : null; }
     
     
     public final ObjectBinding<Image> mapImageBinding() { return mapImageBinding; }

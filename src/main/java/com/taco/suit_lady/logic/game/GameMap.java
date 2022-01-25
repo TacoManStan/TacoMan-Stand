@@ -171,6 +171,7 @@ public class GameMap
     }
     
     public boolean shutdown() {
+        //TODO
         return true;
     }
     
@@ -180,6 +181,8 @@ public class GameMap
     @Override public @NotNull ReentrantLock getLock() { return lock; }
     
     //</editor-fold>
+    
+    //<editor-fold desc="--- STATIC FACTORY METHODS ---">
     
     /**
      * <p>Identical to <i>{@link #newTestInstance(Springable, ReentrantLock)}</i> except the {@link ReentrantLock} passed to the {@link GameMap Game Map's} {@link GameMap#GameMap(Springable, ReentrantLock, int, int) constructor} is always {@code null}.</p>
@@ -208,4 +211,6 @@ public class GameMap
     public static @NotNull GameMap newTestInstance(@NotNull Springable springable, @Nullable ReentrantLock lock) {
         return new GameMap(springable, lock, 40, 20);
     }
+    
+    //</editor-fold>
 }
