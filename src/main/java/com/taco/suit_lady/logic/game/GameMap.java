@@ -10,6 +10,7 @@ import com.taco.suit_lady.util.tools.ArraysSL;
 import com.taco.suit_lady.util.tools.MathSL;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.plutext.jaxb.svg11.G;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -179,4 +180,32 @@ public class GameMap
     @Override public @NotNull ReentrantLock getLock() { return lock; }
     
     //</editor-fold>
+    
+    /**
+     * <p>Identical to <i>{@link #newTestInstance(Springable, ReentrantLock)}</i> except the {@link ReentrantLock} passed to the {@link GameMap Game Map's} {@link GameMap#GameMap(Springable, ReentrantLock, int, int) constructor} is always {@code null}.</p>
+     * <p>Note that a new {@link ReentrantLock} is automatically created by the {@link GameMap} constructor if the specified value is {@code null}, so the returned {@link GameMap} object will still be {@code synchronized}, just only with itself.</p>
+     *
+     * @param springable Any non-null {@link Springable} object used to enable {@link Springable} features in the returned {@link GameMap} object.
+     *
+     * @return The newly constructed {@link GameMap} instance.
+     *
+     * @see #newTestInstance(Springable, ReentrantLock)
+     * @see GameMap
+     * @see GameMap#GameMap(Springable, ReentrantLock, int, int)
+     */
+    public static @NotNull GameMap newTestInstance(@NotNull Springable springable) {
+        return newTestInstance(springable, null);
+    }
+    
+    /**
+     * <p>Constructs a new {@link GameMap} instance with construction parameters set to ideal values for testing purposes.</p>
+     *
+     * @param springable Any non-null {@link Springable} object used to enable {@link Springable} features in the returned {@link GameMap} object.
+     * @param lock       The {@link ReentrantLock} to be used for synchronizing asynchronous operations on the returned {@link GameMap}. If {@code null}, the {@link GameMap} will automatically create a new {@link ReentrantLock} object upon the {@link GameMap Game Map's} {@link GameMap#GameMap(Springable, ReentrantLock, int, int) construction}./
+     *
+     * @return The newly-constructed {@link GameMap} instance.
+     */
+    public static @NotNull GameMap newTestInstance(@NotNull Springable springable, @Nullable ReentrantLock lock) {
+        return new GameMap(springable, lock, 40, 20);
+    }
 }
