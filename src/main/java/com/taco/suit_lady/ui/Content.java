@@ -1,5 +1,6 @@
 package com.taco.suit_lady.ui;
 
+import com.taco.suit_lady.logic.LogiCore;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ArraysSL;
 import com.taco.suit_lady.util.tools.ExceptionsSL;
@@ -93,7 +94,7 @@ public abstract class Content<D extends ContentData, C extends ContentController
      * <p>Abstract method that is executed <i>after</i> this {@link Content} is {@link ContentManager#setContent(Content) set} as the active {@link Content contnet}.</p>
      * <p><b>Details</b></p>
      * <ol>
-     *     <li>{@link #onActivate() This method} is {@link ThreadPoolExecutor#execute(Runnable) executed} by the {@link TB Toolbox} {@link ThreadPoolExecutor Executor}.</li>
+     *     <li>{@link #onActivate() This method} is {@link ThreadPoolExecutor#execute(Runnable) executed} by the {@link LogiCore} {@link ThreadPoolExecutor Executor}.</li>
      *     <li>
      *         The <code><i>{@link #onDeactivate()}</i></code> implementation of the <i>{@link ContentManager#getContent() previous content}</i> is executed <i>prior to</i> {@link #onActivate() this method}.
      *         <ul>

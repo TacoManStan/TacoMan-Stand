@@ -5,6 +5,7 @@ import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.PropertiesSL;
 import com.taco.suit_lady.util.tools.TasksSL;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyListProperty;
@@ -47,26 +48,14 @@ public abstract class ContentHandler<
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final P getContentSelectorPage() {
-        return contentSelectorPage;
-    }
+    public final P getContentSelectorPage() { return contentSelectorPage; }
+    public final void setContentSelectorPage(P contentSelectorPage) { this.contentSelectorPage = contentSelectorPage; }
     
-    public final void setContentSelectorPage(P contentSelectorPage) {
-        this.contentSelectorPage = contentSelectorPage;
-    }
+    public final ReadOnlyListProperty<T> contentList() { return contentList.getReadOnlyProperty(); }
     
-    
-    public final ReadOnlyListProperty<T> contentList() {
-        return contentList.getReadOnlyProperty();
-    }
-    
-    public final ObjectProperty<T> selectedContentProperty() {
-        return selectedContentProperty;
-    }
-    
-    public final T getSelectedContent() {
-        return selectedContentProperty.get();
-    }
+    public final ObjectProperty<T> selectedContentProperty() { return selectedContentProperty; }
+    public final T getSelectedContent() { return selectedContentProperty.get(); }
+    public final T setSelectedContent(T newValue) { return PropertiesSL.setProperty(selectedContentProperty, newValue); }
     
     //</editor-fold>
     

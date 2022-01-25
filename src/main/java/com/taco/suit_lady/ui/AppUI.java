@@ -4,6 +4,7 @@ import com.taco.suit_lady.ui.jfx.components.ContentPane;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.ui.console.Console;
 import com.taco.suit_lady.ui.contents.test.TestContent;
+import com.taco.suit_lady.util.tools.PropertiesSL;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import net.rgielen.fxweaver.core.FxWeaver;
@@ -54,7 +55,7 @@ public class AppUI
      *     <li>
      *         Sets the {@link #contentManager} of this {@link AppUI} to a new {@link ContentManager}.
      *         <ul>
-     *             <li>The {@link ContentPane Content Stack Pane} of this {@link AppUI} is used as the {@link ContentManager#getRootPane() Content Base} for the constructed {@link ContentManager} object.</li>
+     *             <li>The {@link ContentPane Content Stack Pane} of this {@link AppUI} is used as the {@link ContentManager#getContentBasePane()  Content Base} for the constructed {@link ContentManager} object.</li>
      *         </ul>
      *     </li>
      *     <li>
@@ -79,56 +80,19 @@ public class AppUI
      *
      * @return The {@link ReadOnlyObjectProperty} containing the {@link AppController} in charge of the {@code FXML UI} of this {@link AppUI}.
      */
-    public final ReadOnlyObjectProperty<AppController> controllerProperty() {
-        return controllerProperty.getReadOnlyProperty();
-    }
-    
-    /**
-     * <p>Returns the {@link AppController} in charge of the {@code FXML UI} of this {@link AppUI}.</p>
-     *
-     * @return The {@link AppController} in charge of the {@code FXML UI} of this {@link AppUI}.
-     */
-    public final AppController getController() {
-        return controllerProperty.get();
-    }
-    
-    /**
-     * <p>Sets the {@link AppController} in charge of the {@code FXML UI} of this {@link AppUI} to the specified value.</p>
-     *
-     * @param controller The {@link AppController} to be set as the {@link AppController} in charge of the {@code FXML UI} of this {@link AppUI}.
-     */
-    protected final void setController(AppController controller) {
-        controllerProperty.set(controller);
-    }
-    
+    public final ReadOnlyObjectProperty<AppController> controllerProperty() { return controllerProperty.getReadOnlyProperty(); }
+    public final AppController getController() { return controllerProperty.get(); }
+    protected final AppController setController(AppController newValue) { return PropertiesSL.setProperty(controllerProperty, newValue); }
     
     /**
      * <p>Returns the {@link ReadOnlyObjectProperty} containing the {@link Sidebar} of this {@link AppUI}.</p>
      *
      * @return The {@link ReadOnlyObjectProperty} containing the {@link Sidebar} of this {@link AppUI}.
      */
-    // TO-EXPAND (same with corresponding getter and setter)
-    public final ReadOnlyObjectProperty<Sidebar> sidebarProperty() {
-        return sidebarProperty.getReadOnlyProperty();
-    }
-    
-    /**
-     * <p>Returns the {@link Sidebar} of this {@link AppUI}.</p>
-     *
-     * @return The {@link Sidebar} of this {@link AppUI}.
-     */
-    public final @NotNull Sidebar getSidebar() {
-        return sidebarProperty.get();
-    }
-    
-    /**
-     * <p>Sets the {@link Sidebar} of this {@link AppUI} to the specified value.</p>
-     *
-     * @param sidebar The {@link Sidebar} to be set as the {@link Sidebar} of this {@link AppUI}.
-     */
-    protected final void setSidebar(Sidebar sidebar) {
-        sidebarProperty.set(sidebar);
-    }
+    // TO-EXPAND
+    public final ReadOnlyObjectProperty<Sidebar> sidebarProperty() { return sidebarProperty.getReadOnlyProperty(); }
+    public final @NotNull Sidebar getSidebar() { return sidebarProperty.get(); }
+    protected final Sidebar setSidebar(Sidebar newValue) { return PropertiesSL.setProperty(sidebarProperty, newValue); }
     
     /**
      * <p>Returns the {@link ContentManager Content Manager} in charge of managing the {@link Content} of this {@link AppUI} instance.</p>
@@ -136,9 +100,7 @@ public class AppUI
      * @return The {@link ContentManager Content Manager} in charge of managing the {@link Content} of this {@link AppUI} instance.
      */
     // TO-EXPAND
-    public final ContentManager getContentManager() {
-        return contentManager;
-    }
+    public final ContentManager getContentManager() { return contentManager; }
     
     // </editor-fold>
     

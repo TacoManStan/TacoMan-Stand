@@ -6,6 +6,7 @@ import com.taco.suit_lady.ui.ContentData;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
+import com.taco.suit_lady.util.tools.PropertiesSL;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.image.Image;
@@ -39,39 +40,15 @@ public abstract class ListableContent<
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final H getContentHandler() {
-        return contentHandler;
-    }
+    public final H getContentHandler() { return contentHandler; }
     
+    public final ObjectProperty<EC> elementControllerProperty() { return elementControllerProperty; }
+    public final EC getElementController() { return elementControllerProperty.get(); }
+    public final EC setElementController(EC newValue) { return PropertiesSL.setProperty(elementControllerProperty, newValue); }
     
-    public final ObjectProperty<EC> elementControllerProperty() {
-        return elementControllerProperty;
-    }
-    
-    public final EC getElementController() {
-        return elementControllerProperty.get();
-    }
-    
-    public final EC setElementController(EC newValue) {
-        EC oldValue = getElementController();
-        elementControllerProperty.set(newValue);
-        return oldValue;
-    }
-    
-    
-    public final ObjectProperty<Image> iconImageProperty() {
-        return iconImageProperty;
-    }
-    
-    public final Image getIconImage() {
-        return iconImageProperty.get();
-    }
-    
-    public final Image setIconImage(Image newValue) {
-        Image oldValue = getIconImage();
-        iconImageProperty.set(newValue);
-        return oldValue;
-    }
+    public final ObjectProperty<Image> iconImageProperty() { return iconImageProperty; }
+    public final Image getIconImage() { return iconImageProperty.get(); }
+    public final Image setIconImage(Image newValue) { return PropertiesSL.setProperty(iconImageProperty, newValue); }
     
     //</editor-fold>
     
@@ -83,16 +60,10 @@ public abstract class ListableContent<
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override
-    public final @NotNull Lock getLock() {
-        return getContentHandler().getLock();
-    }
-    
+    @Override public final @NotNull Lock getLock() { return getContentHandler().getLock(); }
     
     private UIDProcessor uidProcessor;
-    
-    @Override
-    public UIDProcessor getUIDProcessor() {
+    @Override public UIDProcessor getUIDProcessor() {
         if (uidProcessor == null)
             uidProcessor = new UIDProcessor("selectable-content");
         return uidProcessor;

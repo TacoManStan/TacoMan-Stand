@@ -1,6 +1,8 @@
 package com.taco.suit_lady.ui.pages.impl.content_selector;
 
+import com.taco.suit_lady.ui.Content;
 import com.taco.suit_lady.ui.ContentData;
+import com.taco.suit_lady.ui.UIPage;
 import com.taco.suit_lady.ui.UIPageController;
 import com.taco.suit_lady.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.ui.jfx.components.button.ImageButton;
@@ -24,6 +26,16 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * <p>Abstract parent "middle man" implementation of {@link UIPageController} used for {@link UIPage} objects designed for constructing, deconstructing, listing, and selecting multiple instances of a specific implementation of {@link Content}.</p>
+ *
+ * @param <D>  The {@link ContentData} implementation type matching the {@link Content} implementation type.
+ * @param <P>  The {@link ContentSelectorPage} implementation type that is controlled by this {@link ContentSelectorPageController} implementation.
+ * @param <SC> The {@link ContentSelectorPageController} type of this object.
+ * @param <EC> The {@link ContentElementController} implementation type defining how the {@link Content} implementation is displayed in the {@link ListView} contained within the {@link ContentSelectorPageController}.
+ * @param <H>  The {@link ContentHandler} implementation type used to store and manage the data aspects of the {@link Content}.
+ * @param <T>  The {@link ListableContent} implementation type used as the {@link Content} objects managed by the {@link ContentHandler}.
+ */
 public abstract class ContentSelectorPageController<
         D extends ContentData,
         P extends ContentSelectorPage<D, P, SC, EC, H, T>,
@@ -85,11 +97,11 @@ public abstract class ContentSelectorPageController<
         selectedContentMMProperty.addListener(
                 (observable, oldValue, newValue) -> TasksSL.sync(
                         lock, () -> contentList.getSelectionModel().select(newValue)));
-    
+        
         contentList.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> TasksSL.sync(
                         lock, () -> selectedContentMMProperty.set(newValue)));
-    
+        
         getPage().getContentHandler().selectedContentProperty().bindBidirectional(selectedContentMMProperty);
     }
     
