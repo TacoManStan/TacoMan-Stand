@@ -28,7 +28,7 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
     private GameViewPage coverPage;
     
     private final ObjectProperty<GameMap> gameMapProperty;
-    private ObjectProperty<Camera> cameraProperty;
+    private final ObjectProperty<Camera> cameraProperty;
     
     public GameViewContent(@NotNull Springable springable) {
         super(springable);
@@ -68,7 +68,8 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
             
             ObjectsSL.getIfNonNull(() -> newValue, value -> sync(() -> ToolsFX.runFX(() -> {
                 value.init();
-                
+    
+                getController().getMapPane().getChildren().retainAll();
                 getController().getMapPane().getChildren().add(value.getModel().getParentPane());
                 
                 return value;

@@ -85,7 +85,7 @@ public abstract class PaintNode
         return sync(() -> {
             OverlaySurface surface = getSurface();
             if (surface != null && getAutoRemoveCondition().test(surface))
-                return surface.removePaintableV2(this);
+                return surface.removePaintable(this);
             return false;
         });
     }

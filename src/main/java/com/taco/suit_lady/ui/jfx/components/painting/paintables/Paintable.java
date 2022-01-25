@@ -42,6 +42,7 @@ public interface Paintable<P extends Paintable<P, S>, S extends Surface<P, S>>
         
         setDisabled(false);
         
+        
         return self();
     }
     

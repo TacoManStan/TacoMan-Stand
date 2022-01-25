@@ -1,5 +1,8 @@
 package com.taco.suit_lady.logic.game;
 
+import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.ImagePaintCommand;
+import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasPane;
+import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasSurface;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
@@ -7,6 +10,8 @@ import com.taco.suit_lady.util.tools.*;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
@@ -31,6 +36,7 @@ public class GameMapModel
     //
     
     private final ObjectProperty<StackPane> parentPaneProperty;
+    private final CanvasPane canvasPane;
     
     private final ObjectBinding<Image> mapImageBinding;
     
@@ -42,6 +48,7 @@ public class GameMapModel
         this.owner = ExceptionsSL.nullCheck(owner, "GameMap Owner");
         
         this.parentPaneProperty = new SimpleObjectProperty<>();
+        this.canvasPane = new CanvasPane(this);
         
         this.mapImageBinding = BindingsSL.constObjBinding(ResourcesSL.getDummyImage(ResourcesSL.MAP));
         
@@ -51,8 +58,24 @@ public class GameMapModel
     //<editor-fold desc="--- INITIALIZATION ---">
     
     public final GameMapModel init() {
-        parentPaneProperty.addListener((observable, oldValue, newValue) -> ObjectsSL.doIfNonNull(() -> newValue, value -> ToolsFX.setAnchors(value)));
+        parentPaneProperty.addListener((observable, oldValue, newValue) -> ObjectsSL.doIfNonNull(
+                () -> newValue, value -> {
+                    ToolsFX.setAnchors(value);
+                    refreshCanvas();
+                }));
+        
         setParentPane(new StackPane());
+        
+        //        getParentPane().setStyle("-fx-border-color: red");
+        //        getCanvasPane().setStyle("-fx-border-color: blue");
+        
+        ImagePaintCommand paintCommand = new ImagePaintCommand(this, lock).init();
+        //TODO: Configure the paint command initialization properly & bind w & h to correct values (in Camera)
+        paintCommand.boundsBinding().setWidth(getOwner().getFullWidth());
+        paintCommand.boundsBinding().setHeight(getOwner().getFullHeight());
+        
+        getCanvas().addPaintable(paintCommand);
+        getCanvas().repaint();
         
         return this;
     }
@@ -69,6 +92,9 @@ public class GameMapModel
     public final StackPane getParentPane() { return parentPaneProperty.get(); }
     public final StackPane setParentPane(StackPane newValue) { return PropertiesSL.setProperty(parentPaneProperty, newValue); }
     
+    protected final CanvasPane getCanvasPane() { return canvasPane; }
+    public final CanvasSurface getCanvas() { return canvasPane != null ? canvasPane.canvas() : null; }
+    
     
     public final ObjectBinding<Image> mapImageBinding() { return mapImageBinding; }
     public final Image getMapImage() { return mapImageBinding.get(); }
@@ -81,4 +107,17 @@ public class GameMapModel
     @Override public @NotNull ReentrantLock getLock() { return lock; }
     
     //</editor-fold>
+    
+    /**
+     * <p>A helper method that fully resets the JFX UI elements comprising the map image and parent pane.</p>
+     */
+    private void refreshCanvas() {
+        syncFX(() -> {
+            StackPane parent = getParentPane();
+            if (parent != null) {
+                parent.getChildren().retainAll();
+                parent.getChildren().add(canvasPane);
+            }
+        });
+    }
 }

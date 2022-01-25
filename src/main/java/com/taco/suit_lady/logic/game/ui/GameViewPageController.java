@@ -27,6 +27,7 @@ import java.util.Arrays;
 public class GameViewPageController extends UIPageController<GameViewPage> {
     
     @FXML private AnchorPane root;
+    @FXML private Button testButton;
     
     protected GameViewPageController(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         super(weaver, ctx);
@@ -46,7 +47,12 @@ public class GameViewPageController extends UIPageController<GameViewPage> {
     }
     
     @Override
-    public void initialize() { }
+    public void initialize() {
+        testButton.setOnAction(event -> {
+            System.out.println("Canvas Width: " + getPage().getSLContent().getGameMap().getModel().getCanvas().getWidth());
+            System.out.println("Canvas Height: " + getPage().getSLContent().getGameMap().getModel().getCanvas().getHeight());
+        });
+    }
     
     //</editor-fold>
 }

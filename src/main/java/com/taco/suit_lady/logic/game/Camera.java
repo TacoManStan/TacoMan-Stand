@@ -47,7 +47,6 @@ public class Camera
     
     private final GameMap gameMap;
     
-    
     //<editor-fold desc="--- BINDING FIELDS ---">
     
     private final IntegerBinding viewportWidthBinding; //Bound to the specified observable value representing the width in pixels of the UI viewport object (e.g., CanvasSurface).
@@ -220,6 +219,4 @@ public class Camera
     @Override public @NotNull ReentrantLock getLock() { return lock; }
     
     //</editor-fold>
-    
-    
 }

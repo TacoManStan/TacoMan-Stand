@@ -217,9 +217,9 @@ public class OverlaySurface
      */
     public boolean remove(@NotNull Paintable<?, ?> paintable) {
         if (paintable instanceof PaintNode paintNode)
-            return removePaintableV2(paintNode);
+            return removePaintable(paintNode);
         else if (paintable instanceof PaintCommand paintCommand)
-            return foregroundCanvasPane.canvas().removePaintableV2(paintCommand);
+            return foregroundCanvasPane.canvas().removePaintable(paintCommand);
         throw ExceptionsSL.unsupported("Unknown Paintable Type: " + paintable.getClass().getSimpleName());
     }
 }

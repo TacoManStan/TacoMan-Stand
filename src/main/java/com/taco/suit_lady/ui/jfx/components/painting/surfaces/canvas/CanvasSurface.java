@@ -106,7 +106,7 @@ public class CanvasSurface extends Canvas
     @Override public @NotNull SurfaceData<PaintCommand, CanvasSurface> data() { return data; }
     
     @Override public @NotNull CanvasSurface repaint() {
-        return sync(() -> ToolsFX.runFX(() -> {
+        return syncFX(() -> {
             ToolsFX.clearCanvasUnsafe(this);
             
             paintables().forEach(uiCommand -> uiCommand.paint());
@@ -118,7 +118,7 @@ public class CanvasSurface extends Canvas
             refreshImage();
             
             return this;
-        }));
+        });
     }
     
     //<editor-fold desc="--- CANVAS ---">

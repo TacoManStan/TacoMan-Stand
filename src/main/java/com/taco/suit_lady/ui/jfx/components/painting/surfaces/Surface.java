@@ -59,7 +59,7 @@ public interface Surface<P extends Paintable<P, S>, S extends Surface<P, S>>
             }
         });
     }
-    default boolean removePaintableV2(@NotNull P paintable) {
+    default boolean removePaintable(@NotNull P paintable) {
         return paintable != null && sync(() -> {
             final ListProperty<P> paintables = paintables();
             if (paintables.contains(paintable)) {

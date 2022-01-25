@@ -40,7 +40,7 @@ public abstract class PaintCommand
             ToolsFX.runFX(() -> sync(() -> {
                 Predicate<CanvasSurface> autoRemoveCondition = getAutoRemoveCondition();
                 if (autoRemoveCondition != null && autoRemoveCondition.test(getSurface()))
-                    getSurface().removePaintableV2(this);
+                    getSurface().removePaintable(this);
                 else
                     onPaint();
             }), true);

@@ -32,6 +32,7 @@ public class GameViewContentData extends ContentData
     public GameViewContentData(@NotNull Springable springable) {
         this.springable = springable.asStrict();
     }
+    
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override public @NotNull Springable springable() { return springable; }
