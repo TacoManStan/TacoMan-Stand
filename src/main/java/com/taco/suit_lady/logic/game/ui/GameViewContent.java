@@ -1,17 +1,14 @@
 package com.taco.suit_lady.logic.game.ui;
 
 import com.taco.suit_lady.logic.game.GameMap;
-import com.taco.suit_lady.ui.AppUI;
 import com.taco.suit_lady.ui.Content;
 import com.taco.suit_lady.ui.UIBook;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.springable.Springable;
+import com.taco.suit_lady.util.tools.PropertiesSL;
 import com.taco.suit_lady.util.tools.ResourcesSL;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
-import com.taco.tacository.json.JFiles;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import org.jetbrains.annotations.NotNull;
@@ -26,8 +23,6 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
     //
     
     private GameViewPage coverPage;
-    
-    //
     
     private final ObjectProperty<GameMap> gameMapProperty;
     
@@ -68,84 +63,34 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    protected GameViewPage getCoverPage() {
-        return coverPage;
-    }
+    protected GameViewPage getCoverPage() { return coverPage; }
     
-    //
-    
-    public final ObjectProperty<GameMap> gameMapProperty() {
-        return gameMapProperty;
-    }
-    
-    public final GameMap getGameMap() {
-        return gameMapProperty.get();
-    }
-    
-    public final GameMap setGameMap(GameMap newValue) {
-        GameMap oldValue = getGameMap();
-        gameMapProperty.set(newValue);
-        return oldValue;
-    }
+    public final ObjectProperty<GameMap> gameMapProperty() { return gameMapProperty; }
+    public final GameMap getGameMap() { return gameMapProperty.get(); }
+    public final GameMap setGameMap(GameMap newValue) { return PropertiesSL.setProperty(gameMapProperty, newValue); }
     
     //</editor-fold>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override
-    public @NotNull ReentrantLock getLock() {
-        return lock;
-    }
-    
-    @Override
-    public boolean isNullableLock() {
-        return true;
-    }
+    @Override public @NotNull ReentrantLock getLock() { return lock; }
+    @Override public boolean isNullableLock() { return true; }
     
     //
     
-    @Override
-    protected @NotNull GameViewContentData loadData() {
-        return GameViewContentData.newDefaultInstance(this);
-    }
+    @Override protected @NotNull GameViewContentData loadData() { return new GameViewContentData(this); }
+    @Override protected @NotNull Class<GameViewContentController> controllerDefinition() { return GameViewContentController.class; }
     
-    @Override
-    protected @NotNull Class<GameViewContentController> controllerDefinition() {
-        return GameViewContentController.class;
-    }
-    
-    
-    @Override
-    protected void onActivate() { }
-    
-    @Override
-    protected void onDeactivate() { }
+    @Override protected void onActivate() { }
+    @Override protected void onDeactivate() { }
     
     //
     
     private UIDProcessor uidProcessor;
-    
-    @Override
-    public UIDProcessor getUIDProcessor() {
+    @Override public UIDProcessor getUIDProcessor() {
         if (uidProcessor == null)
             uidProcessor = new UIDProcessor("mandelbrot_content");
         return uidProcessor;
-    }
-    
-    //</editor-fold>
-    
-    //<editor-fold desc="--- INTERNAL ---">
-    
-    private void refreshCanvasChecked() {
-        boolean autoRegenerationPaused = getData().isAutoRegenerationPaused();
-        if (!autoRegenerationPaused)
-            refreshCanvas();
-    }
-    
-    private void refreshCanvas() {
-        sync(() -> ToolsFX.runFX(() -> {
-            ToolsFX.clearCanvasUnsafe(ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas());
-        }, true));
     }
     
     //</editor-fold>
