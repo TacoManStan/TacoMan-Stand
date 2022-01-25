@@ -15,6 +15,7 @@ public class CroppedImagePaintCommand extends ImagePaintCommandBase {
     
     private final BoundsBinding croppingBoundsBinding;
     
+    
     public CroppedImagePaintCommand(@NotNull Springable springable, @Nullable ReentrantLock lock) {
         super(springable, lock);
         

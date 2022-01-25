@@ -75,22 +75,7 @@ public class CanvasSurface extends Canvas
      */
     public final @NotNull ReadOnlyObjectProperty<CanvasListener> canvasListenerProperty() { return canvasListenerProperty.getReadOnlyProperty(); }
     public final @Nullable CanvasListener getCanvasListener() { return canvasListenerProperty.get(); }
-    /**
-     * <b>Passthrough Definition:</b> <i><code>{@code canvasListenerProperty}<b>.</b>{@link ReadOnlyObjectWrapper#set(Object) set}<b>(</b>{@link CanvasListener}</code><b>)</b></i>
-     * <p><b>Note That...</b></p>
-     * <ol>
-     *     <li>
-     *         <i>{@link #canvasListenerProperty()}</i> returns a {@link ReadOnlyObjectProperty}, not a {@link ReadOnlyObjectWrapper}.
-     *         <ul>
-     *             <li>As such, {@link #setCanvasListener(CanvasListener) this method} is the only way to {@link ReadOnlyObjectWrapper#set(Object) change} the {@link CanvasListener} for this {@link CanvasSurface}.</li>
-     *         </ul>
-     *     </li>
-     * </ol>
-     *
-     * @param canvasListener See {@link #canvasListenerProperty()}}.
-     */
     public final void setCanvasListener(@Nullable CanvasListener canvasListener) { canvasListenerProperty.set(canvasListener); }
-    
     
     public final ReadOnlyObjectProperty<Image> imageProperty() { return imageProperty.getReadOnlyProperty(); }
     public final Image getImage() { return imageProperty.get(); }
@@ -123,35 +108,14 @@ public class CanvasSurface extends Canvas
     
     //<editor-fold desc="--- CANVAS ---">
     
-    @Override
-    public double minHeight(double width) {
-        return 64;
-    }
+    @Override public double minHeight(double width) { return 64; }
+    @Override public double maxHeight(double width) { return 1000; }
+    @Override public double prefHeight(double width) { return minHeight(width); }
     
-    @Override
-    public double maxHeight(double width) {
-        return 1000;
-    }
+    @Override public double minWidth(double height) { return 0; }
+    @Override public double maxWidth(double height) { return 10000; }
     
-    @Override
-    public double prefHeight(double width) {
-        return minHeight(width);
-    }
-    
-    @Override
-    public double minWidth(double height) {
-        return 0;
-    }
-    
-    @Override
-    public double maxWidth(double height) {
-        return 10000;
-    }
-    
-    @Override
-    public boolean isResizable() {
-        return true;
-    }
+    @Override public boolean isResizable() { return true; }
     
     private double width;
     private double height;
