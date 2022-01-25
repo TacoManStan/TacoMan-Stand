@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -60,20 +61,42 @@ public class ObjectsSL {
     
     //<editor-fold desc="--- CONDITIONAL OPERATIONS ---">
     
-    public static <T, R> @Nullable R doIfNonNull(@NotNull Supplier<T> valueFactory, @NotNull Function<T, R> filterPassedOperation) {
-        return doIfNonNull(valueFactory, filterPassedOperation, null);
+    public static <T> void doIfNonNull(@NotNull Supplier<T> valueFactory, @NotNull Consumer<T> filterPassedOperation) {
+        doIfNonNull(valueFactory, filterPassedOperation, null);
     }
     
-    public static <T, R> @Nullable R doIfNonNull(@NotNull Supplier<T> valueFactory, @NotNull Function<T, R> filterPassedOperation, @Nullable Function<T, R> filterFailedOperation) {
-        return doIf(valueFactory, value -> value != null, filterPassedOperation, filterFailedOperation);
+    public static <T> void doIfNonNull(@NotNull Supplier<T> valueFactory, @NotNull Consumer<T> filterPassedOperation, @Nullable Consumer<T> filterFailedOperation) {
+        doIf(valueFactory, value -> value != null, filterPassedOperation, filterFailedOperation);
     }
     
     
-    public static <T, R> @Nullable R doIf(@NotNull Supplier<T> valueFactory, @NotNull Predicate<T> filter, @NotNull Function<T, R> filterPassedOperation) {
-        return doIf(valueFactory, filter, filterPassedOperation, null);
+    public static <T> void doIf(@NotNull Supplier<T> valueFactory, @NotNull Predicate<T> filter, @NotNull Consumer<T> filterPassedOperation) {
+        doIf(valueFactory, filter, filterPassedOperation, null);
     }
     
-    public static <T, R> @Nullable R doIf(@NotNull Supplier<T> valueFactory, @NotNull Predicate<T> filter, @NotNull Function<T, R> filterPassedOperation, @Nullable Function<T, R> filterFailedOperation) {
+    public static <T> void doIf(@NotNull Supplier<T> valueFactory, @NotNull Predicate<T> filter, @NotNull Consumer<T> filterPassedOperation, @Nullable Consumer<T> filterFailedOperation) {
+        T input = valueFactory.get();
+        if (filter.test(input))
+            filterPassedOperation.accept(input);
+        else if (filterFailedOperation != null)
+            filterFailedOperation.accept(input);
+    }
+    
+    
+    public static <T, R> @Nullable R getIfNonNull(@NotNull Supplier<T> valueFactory, @NotNull Function<T, R> filterPassedOperation) {
+        return getIfNonNull(valueFactory, filterPassedOperation, null);
+    }
+    
+    public static <T, R> @Nullable R getIfNonNull(@NotNull Supplier<T> valueFactory, @NotNull Function<T, R> filterPassedOperation, @Nullable Function<T, R> filterFailedOperation) {
+        return getIf(valueFactory, value -> value != null, filterPassedOperation, filterFailedOperation);
+    }
+    
+    
+    public static <T, R> @Nullable R getIf(@NotNull Supplier<T> valueFactory, @NotNull Predicate<T> filter, @NotNull Function<T, R> filterPassedOperation) {
+        return getIf(valueFactory, filter, filterPassedOperation, null);
+    }
+    
+    public static <T, R> @Nullable R getIf(@NotNull Supplier<T> valueFactory, @NotNull Predicate<T> filter, @NotNull Function<T, R> filterPassedOperation, @Nullable Function<T, R> filterFailedOperation) {
         T input = valueFactory.get();
         if (filter.test(input))
             return filterPassedOperation.apply(input);

@@ -61,12 +61,12 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
     
     private void initGame() {
         gameMapProperty.addListener((observable, oldValue, newValue) -> {
-            ObjectsSL.doIfNonNull(() -> oldValue, value -> sync(() -> ToolsFX.runFX(() -> {
+            ObjectsSL.getIfNonNull(() -> oldValue, value -> sync(() -> ToolsFX.runFX(() -> {
                 getController().getMapPane().getChildren().remove(value.getModel().getParentPane());
                 return value.shutdown();
             })));
             
-            ObjectsSL.doIfNonNull(() -> newValue, value -> sync(() -> ToolsFX.runFX(() -> {
+            ObjectsSL.getIfNonNull(() -> newValue, value -> sync(() -> ToolsFX.runFX(() -> {
                 value.init();
                 
                 getController().getMapPane().getChildren().add(value.getModel().getParentPane());
