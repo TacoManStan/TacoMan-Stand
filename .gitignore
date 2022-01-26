@@ -42,3 +42,4 @@ out/artifacts/gg/gg.jar
 *.hdr
 *.ini
 out/artifacts/gg/gg.jar
+*.png

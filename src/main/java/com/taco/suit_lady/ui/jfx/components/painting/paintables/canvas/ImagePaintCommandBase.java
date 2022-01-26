@@ -8,6 +8,7 @@ import com.taco.suit_lady.util.tools.ResourcesSL;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableObjectValue;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

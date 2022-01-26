@@ -19,7 +19,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class GameMap
         implements SpringableWrapper, Lockable {
     
-    private final int tileSize = 20; // The number of "pixels" comprising each tile.
+    private final int tileSize; // The number of "pixels" comprising each tile.
     
     //
     
@@ -37,7 +37,7 @@ public class GameMap
     
     private final GameMapModel model;
     
-    public GameMap(@NotNull Springable springable, @Nullable ReentrantLock lock, int width, int height) {
+    public GameMap(@NotNull Springable springable, @Nullable ReentrantLock lock, int width, int height, int tileSize) {
         this.springable = springable.asStrict();
         this.lock = lock != null ? lock : new ReentrantLock();
         
@@ -45,6 +45,9 @@ public class GameMap
         
         this.width = width;
         this.height = height;
+        
+        this.tileSize = tileSize;
+        
         
         this.tileMap = new GameTile[width][height];
         this.mapObjects = new ArrayList<>();
@@ -185,7 +188,7 @@ public class GameMap
     //<editor-fold desc="--- STATIC FACTORY METHODS ---">
     
     /**
-     * <p>Identical to <i>{@link #newTestInstance(Springable, ReentrantLock)}</i> except the {@link ReentrantLock} passed to the {@link GameMap Game Map's} {@link GameMap#GameMap(Springable, ReentrantLock, int, int) constructor} is always {@code null}.</p>
+     * <p>Identical to <i>{@link #newTestInstance(Springable, ReentrantLock)}</i> except the {@link ReentrantLock} passed to the {@link GameMap Game Map's} {@link GameMap#GameMap(Springable, ReentrantLock, int, int, int) constructor} is always {@code null}.</p>
      * <p>Note that a new {@link ReentrantLock} is automatically created by the {@link GameMap} constructor if the specified value is {@code null}, so the returned {@link GameMap} object will still be {@code synchronized}, just only with itself.</p>
      *
      * @param springable Any non-null {@link Springable} object used to enable {@link Springable} features in the returned {@link GameMap} object.
@@ -194,22 +197,15 @@ public class GameMap
      *
      * @see #newTestInstance(Springable, ReentrantLock)
      * @see GameMap
-     * @see GameMap#GameMap(Springable, ReentrantLock, int, int)
+     * @see GameMap#GameMap(Springable, ReentrantLock, int, int, int)
      */
     public static @NotNull GameMap newTestInstance(@NotNull Springable springable) {
         return newTestInstance(springable, null);
     }
     
-    /**
-     * <p>Constructs a new {@link GameMap} instance with construction parameters set to ideal values for testing purposes.</p>
-     *
-     * @param springable Any non-null {@link Springable} object used to enable {@link Springable} features in the returned {@link GameMap} object.
-     * @param lock       The {@link ReentrantLock} to be used for synchronizing asynchronous operations on the returned {@link GameMap}. If {@code null}, the {@link GameMap} will automatically create a new {@link ReentrantLock} object upon the {@link GameMap Game Map's} {@link GameMap#GameMap(Springable, ReentrantLock, int, int) construction}./
-     *
-     * @return The newly-constructed {@link GameMap} instance.
-     */
+
     public static @NotNull GameMap newTestInstance(@NotNull Springable springable, @Nullable ReentrantLock lock) {
-        return new GameMap(springable, lock, 40, 20);
+        return new GameMap(springable, lock, 96, 64, 16);
     }
     
     //</editor-fold>

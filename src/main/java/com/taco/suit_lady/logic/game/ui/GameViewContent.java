@@ -11,7 +11,6 @@ import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ObjectsSL;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import com.taco.suit_lady.util.tools.ResourcesSL;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import org.jetbrains.annotations.NotNull;
@@ -76,8 +75,8 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
             }));
         });
         
-        setGameMap(new GameMap(this, lock, 40, 20));
-        setCamera(new Camera(getGameMap(), getController().getMapPane().widthProperty(), getController().getMapPane().heightProperty()));
+        setGameMap(GameMap.newTestInstance(this, lock));
+        setCamera(new Camera(this, getGameMap(), getController().getMapPane().widthProperty(), getController().getMapPane().heightProperty()));
     }
     
     //</editor-fold>

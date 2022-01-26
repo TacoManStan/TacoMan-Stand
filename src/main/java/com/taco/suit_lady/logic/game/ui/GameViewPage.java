@@ -15,7 +15,7 @@ public class GameViewPage extends UIPage<GameViewPageController> {
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public GameViewContent getSLContent() { return content; }
+    public GameViewContent getContentView() { return content; }
     
     //</editor-fold>
     

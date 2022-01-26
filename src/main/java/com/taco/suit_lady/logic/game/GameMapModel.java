@@ -1,6 +1,6 @@
 package com.taco.suit_lady.logic.game;
 
-import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.ImagePaintCommand;
+import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.CroppedImagePaintCommand;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasPane;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasSurface;
 import com.taco.suit_lady.util.Lockable;
@@ -10,8 +10,6 @@ import com.taco.suit_lady.util.tools.*;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
@@ -71,13 +69,13 @@ public class GameMapModel
         //        getParentPane().setStyle("-fx-border-color: red");
         //        getCanvasPane().setStyle("-fx-border-color: blue");
         
-        ImagePaintCommand paintCommand = new ImagePaintCommand(this, lock).init();
-        //TODO: Configure the paint command initialization properly & bind w & h to correct values (in Camera)
-        paintCommand.boundsBinding().setWidth(getOwner().getFullWidth());
-        paintCommand.boundsBinding().setHeight(getOwner().getFullHeight());
-        
-        getCanvas().addPaintable(paintCommand);
-        getCanvas().repaint();
+//        CroppedImagePaintCommand paintCommand = new CroppedImagePaintCommand(this, lock).init();
+//        //TODO: Configure the paint command initialization properly & bind w & h to correct values (in Camera)
+//        paintCommand.croppingBoundsBinding().setWidth(getOwner().get)
+//        paintCommand.croppingBoundsBinding().setHeight(getOwner().getFullHeight());
+//
+//        getCanvas().addPaintable(paintCommand);
+//        getCanvas().repaint();
         
         return this;
     }
