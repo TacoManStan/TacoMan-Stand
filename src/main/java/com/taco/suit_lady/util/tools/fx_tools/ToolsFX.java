@@ -928,14 +928,64 @@ public class ToolsFX {
         }, true);
     }
     
-    public static void drawImage(@NotNull Canvas canvas, @NotNull Bounds source, @NotNull Bounds destination, Image image, boolean safe, boolean wipeCanvas) {
+    public static void drawImageScaled(@NotNull Canvas canvas, @NotNull Image image, @NotNull Bounds source, boolean wipeCanvas) {
+        drawImageScaled(canvas, image, source, 1d, 1d, wipeCanvas);
+    }
+    
+    public static void drawImageScaled(@NotNull Canvas canvas, @NotNull Image image, @NotNull Bounds source, double xScale, double yScale, boolean wipeCanvas) {
         ToolsFX.runFX(() -> {
             if (wipeCanvas)
                 clearCanvasUnsafe(canvas);
+            
+            final int imageWidth = (int) image.getWidth();
+            final int imageHeight = (int) image.getHeight();
+            final int canvasWidth = (int) canvas.getWidth();
+            final int canvasHeight = (int) canvas.getHeight();
+            
+            final int xMinO = source.getMinX();
+            final int yMinO = source.getMinY();
+            final int xMaxO = xMinO + source.getWidth();
+            final int yMaxO = yMinO + source.getHeight();
+            
+            final int xMinF = Math.max(xMinO, 0);
+            final int yMinF = Math.max(yMinO, 0);
+            final int xMaxF = Math.min(xMaxO, imageWidth);
+            final int yMaxF = Math.min(yMaxO, imageHeight);
+            
+            final int widthF = Math.min(imageWidth, xMaxF - xMinF);
+            final int heightF = Math.min(imageHeight, yMaxF - yMinF);
+            
+            final int xDestF = Math.max(-xMinO, 0);
+            final int yDestF = Math.max(-yMinO, 0);
+            
+            
+            System.out.println("xMinO: " + xMinO);
+            System.out.println("yMinO: " + yMinO);
+            System.out.println("xMaxO: " + xMaxO);
+            System.out.println("yMaxO: " + yMaxO);
+            
+            System.out.println("xMinF: " + xMinF);
+            System.out.println("yMinF: " + yMinF);
+            System.out.println("xMaxF: " + xMaxF);
+            System.out.println("yMaxF: " + yMaxF);
+            
+            System.out.println("widthF: " + widthF);
+            System.out.println("heightF: " + heightF);
+            
+            System.out.println("xDestF: " + xDestF);
+            System.out.println("yDestF: " + yDestF);
+            
+            
             canvas.getGraphicsContext2D().drawImage(
                     image,
-                    source.getX(safe), source.getY(safe), source.getWidth(safe), source.getHeight(safe),
-                    destination.getX(safe), destination.getY(safe), destination.getWidth(safe), destination.getHeight(safe));
+                    xMinF, yMinF, widthF, heightF,
+                    xDestF, yDestF, widthF, heightF);
+            
+            
+            //            canvas.getGraphicsContext2D().drawImage(
+            //                    image,
+            //                    source.getX(safe), source.getY(safe), source.getWidth(safe), source.getHeight(safe),
+            //                    destination.getX(safe), destination.getY(safe), destination.getWidth(safe), destination.getHeight(safe));
         }, true);
     }
     

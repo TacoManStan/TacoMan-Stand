@@ -176,18 +176,24 @@ public class Camera
         mapImagePaintCommand.imageProperty().bind(getMap().getModel().mapImageBinding());
         
         
-        mapImagePaintCommand.croppingBoundsBinding().widthProperty().bind(sourceWidthBinding);
-        mapImagePaintCommand.croppingBoundsBinding().heightProperty().bind(sourceHeightBinding);
+        mapImagePaintCommand.boundsBinding().widthProperty().bind(viewportWidthBinding);
+        mapImagePaintCommand.boundsBinding().heightProperty().bind(viewportHeightBinding);
         
-        mapImagePaintCommand.boundsBinding().widthProperty().bind(targetWidthBinding);
-        mapImagePaintCommand.boundsBinding().heightProperty().bind(targetHeightBinding);
+        mapImagePaintCommand.boundsBinding().xProperty().bind(xLocationProperty);
+        mapImagePaintCommand.boundsBinding().yProperty().bind(yLocationProperty);
         
-        
-        mapImagePaintCommand.croppingBoundsBinding().xProperty().bind(sourceXBinding);
-        mapImagePaintCommand.croppingBoundsBinding().yProperty().bind(sourceYBinding);
-        
-        mapImagePaintCommand.boundsBinding().xProperty().bind(targetXBinding);
-        mapImagePaintCommand.boundsBinding().yProperty().bind(targetYBinding);
+//        mapImagePaintCommand.croppingBoundsBinding().widthProperty().bind(sourceWidthBinding);
+//        mapImagePaintCommand.croppingBoundsBinding().heightProperty().bind(sourceHeightBinding);
+//
+//        mapImagePaintCommand.boundsBinding().widthProperty().bind(targetWidthBinding);
+//        mapImagePaintCommand.boundsBinding().heightProperty().bind(targetHeightBinding);
+//
+//
+//        mapImagePaintCommand.croppingBoundsBinding().xProperty().bind(sourceXBinding);
+//        mapImagePaintCommand.croppingBoundsBinding().yProperty().bind(sourceYBinding);
+//
+//        mapImagePaintCommand.boundsBinding().xProperty().bind(targetXBinding);
+//        mapImagePaintCommand.boundsBinding().yProperty().bind(targetYBinding);
         
         
         getMap().getModel().getCanvas().addPaintable(mapImagePaintCommand);

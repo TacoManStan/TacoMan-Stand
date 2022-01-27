@@ -35,7 +35,7 @@ public class CroppedImagePaintCommand extends ImagePaintCommandBase {
     }
     
     @Override protected void drawImage(@NotNull Image image, @NotNull CanvasSurface surface, @NotNull Bounds bounds) {
-        ToolsFX.drawImage(surface, getCroppingBounds(), bounds, image, false, false);
+        ToolsFX.drawImageScaled(surface, image, bounds, false);
     }
     
     //</editor-fold>
