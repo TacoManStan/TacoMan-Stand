@@ -55,10 +55,27 @@ public class GameViewPageController extends UIPageController<GameViewPage> {
             getPage().getContentView().getCamera().print();
         });
         
-        testButton3.setOnAction(event -> { });
-        testButton4.setOnAction(event -> { });
-        testButton5.setOnAction(event -> { });
-        testButton6.setOnAction(event -> { });
+        testButton3.setOnAction(event -> {
+            getPage().getContentView().getCamera().decrementX();
+        });
+        testButton3.setText("Decrement X");
+        
+        testButton4.setOnAction(event -> {
+            getPage().getContentView().getCamera().incrementX();
+        });
+        testButton4.setText("Increment X");
+        
+        
+        testButton5.setOnAction(event -> {
+            getPage().getContentView().getCamera().decrementY();
+        });
+        testButton5.setText("Decrement Y");
+        
+        testButton6.setOnAction(event -> {
+            getPage().getContentView().getCamera().incrementY();
+        });
+        testButton6.setText("Increment Y");
+        
         testButton7.setOnAction(event -> { });
         testButton8.setOnAction(event -> { });
     }
