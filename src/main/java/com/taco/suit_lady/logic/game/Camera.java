@@ -158,11 +158,11 @@ public class Camera
         
         
         this.targetXBinding = BindingsSL.intBinding(() -> {
-            return ((double) getXLocation() * getXMultiplier());
+            return -((double) getXLocation() * getXMultiplier());
         }, xLocationProperty, xOffsetProperty, viewportWidthMultiplierBinding, xMultiplierBinding);
         this.targetYBinding = BindingsSL.intBinding(() -> {
             //            return Math.max(((double) getYLocation() * getYMultiplier()), 0);
-            return ((double) getYLocation() * getYMultiplier());
+            return -((double) getYLocation() * getYMultiplier());
         }, yLocationProperty, yOffsetProperty, viewportHeightMultiplierBinding, yMultiplierBinding);
         
         //
