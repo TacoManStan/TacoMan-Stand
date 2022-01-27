@@ -50,7 +50,7 @@ public class GameMapModel
         this.parentPaneProperty = new SimpleObjectProperty<>();
         this.canvasPane = new CanvasPane(this);
         
-        this.mapImageBinding = BindingsSL.constObjBinding(ResourcesSL.getDummyImage(ResourcesSL.MAP));
+        this.mapImageBinding = BindingsSL.constObjBinding(ResourcesSL.getDummyImage(ResourcesSL.MAP_XL));
         
         //        this.paintCommand = new ImageOverlayCommand(lock, this, "map", null, 1);
     }

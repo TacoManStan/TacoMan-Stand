@@ -182,6 +182,11 @@ public class Camera
         mapImagePaintCommand.boundsBinding().xProperty().bind(xLocationProperty);
         mapImagePaintCommand.boundsBinding().yProperty().bind(yLocationProperty);
         
+        
+        mapImagePaintCommand.xScaleProperty().bind(xMultiplierBinding);
+        mapImagePaintCommand.yScaleProperty().bind(yMultiplierBinding);
+        
+        
 //        mapImagePaintCommand.croppingBoundsBinding().widthProperty().bind(sourceWidthBinding);
 //        mapImagePaintCommand.croppingBoundsBinding().heightProperty().bind(sourceHeightBinding);
 //

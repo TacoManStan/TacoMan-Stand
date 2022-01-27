@@ -174,6 +174,7 @@ public class ResourcesSL {
     
     public static final String AVATAR = "Avatar";
     public static final String MAP = "Map";
+    public static final String MAP_XL = "Map XL";
     
     public static Image getDummyImage(String name) {
         return getImage("/", name, "png");

@@ -942,10 +942,10 @@ public class ToolsFX {
             final int canvasWidth = (int) canvas.getWidth();
             final int canvasHeight = (int) canvas.getHeight();
             
-            final int xMinO = source.getMinX();
-            final int yMinO = source.getMinY();
-            final int xMaxO = xMinO + source.getWidth();
-            final int yMaxO = yMinO + source.getHeight();
+            final int xMinO = (int) (source.getMinX() * xScale);
+            final int yMinO = (int) (source.getMinY() * yScale);
+            final int xMaxO = xMinO + (int) (source.getWidth() * xScale);
+            final int yMaxO = yMinO + (int) (source.getHeight() * yScale);
             
             final int xMinF = Math.max(xMinO, 0);
             final int yMinF = Math.max(yMinO, 0);
