@@ -69,13 +69,13 @@ public abstract class UIPage<C extends UIPageController<?>>
     }
     
     /**
-     * <p>Returns the {@link UIPageController} that defines and manages the {@link #getContent() content} displayed by this {@link UIPage}.</p>
+     * <p>Returns the {@link UIPageController} that defines and manages the {@link #getContentPane() content} displayed by this {@link UIPage}.</p>
      * <p><b>Details</b></p>
      * <ol>
      *     <li>The {@link UIPageController} returned by {@link #getController() this method} is automatically loaded in the {@link UIPage} {@link UIPage#UIPage(UIBook, Object...) constructor}.</li>
      * </ol>
      *
-     * @return The {@link Controller} that defines and manages the {@link #getContent() content} displayed by this {@link UIPage}.
+     * @return The {@link Controller} that defines and manages the {@link #getContentPane() content} displayed by this {@link UIPage}.
      */
     public @NotNull C getController() {
         return controller;
@@ -107,12 +107,12 @@ public abstract class UIPage<C extends UIPageController<?>>
      *
      * @return The {@link Pane content} displayed by this {@link UIPage}.
      *
-     * @see Displayable#getContent()
+     * @see Displayable#getContentPane()
      * @see #getController()
      * @see Controller#root()
      */
     @Override
-    public @Nullable Pane getContent() {
+    public @Nullable Pane getContentPane() {
         return getController().root();
     }
     

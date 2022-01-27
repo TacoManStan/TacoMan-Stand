@@ -1,7 +1,8 @@
 package com.taco.suit_lady.logic.game.ui;
 
-import com.taco.suit_lady.logic.game.Camera;
+import com.taco.suit_lady.logic.game.CameraBase;
 import com.taco.suit_lady.logic.game.GameMap;
+import com.taco.suit_lady.logic.game.interfaces.Camera;
 import com.taco.suit_lady.ui.Content;
 import com.taco.suit_lady.ui.UIBook;
 import com.taco.suit_lady.util.Lockable;
@@ -76,7 +77,7 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
         });
         
         setGameMap(GameMap.newTestInstance(this, lock));
-        setCamera(new Camera(this, getGameMap(), getController().getMapPane().widthProperty(), getController().getMapPane().heightProperty()));
+        setCamera(new CameraBase(this, getGameMap(), getController().getMapPane().widthProperty(), getController().getMapPane().heightProperty()));
     }
     
     //</editor-fold>

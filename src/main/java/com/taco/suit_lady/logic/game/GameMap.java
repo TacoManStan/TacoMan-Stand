@@ -10,7 +10,6 @@ import com.taco.suit_lady.util.tools.ArraysSL;
 import com.taco.suit_lady.util.tools.MathSL;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.plutext.jaxb.svg11.G;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -149,12 +148,13 @@ public class GameMap
     
     
     /**
-     * <p>Returns a {@link List} of {@link GameTile tiles} partially or entirely visible in the specified {@link Camera Camera's} bounds.</p>
+     * <p>Returns a {@link List} of {@link GameTile tiles} partially or entirely visible in the specified {@link CameraBase Camera's} bounds.</p>
      */
     // TO-EXPAND
-    public final @NotNull List<GameTile> getTilesInView(@NotNull Camera camera) {
-        int xLoc = camera.getXLocation();
-        int yLoc = camera.getYLocation();
+    public final @NotNull List<GameTile> getTilesInView(@NotNull CameraBase camera) {
+        int xLoc = camera.getLocationX();
+        int yLoc = camera.getLocationY();
+        
         //TODO: Include Offsets
         
         int pxMapWidth = getFullWidth();

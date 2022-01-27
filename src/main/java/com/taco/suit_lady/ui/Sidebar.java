@@ -87,11 +87,11 @@ public class Sidebar
      * <ol>
      *     <li><b>{@link Sidebar}: </b>Contains and manages a group of {@link UIBookshelf UIBookshelfs} in the form of {@link SidebarBookshelf SidebarBookshelfs}.</li>
      *     <li><b>{@link SidebarBookshelf}: </b>Contains and manages a group of {@link UIBook UIBooks}.</li>
-     *     <li><b>{@link UIBook}: </b>{@link Displayable} implementations that contain, manage, and display the {@link UIPage#getContent() contents} of {@link UIPage UIPages}.</li>
+     *     <li><b>{@link UIBook}: </b>{@link Displayable} implementations that contain, manage, and display the {@link UIPage#getContentPane() contents} of {@link UIPage UIPages}.</li>
      * </ol>
      *
      * @param childButtonPane The {@link StackPane} that the {@link ImageButton ImageButtons} linked to each {@link UIBook} in the currently selected {@link SidebarBookshelf} are displayed on.
-     * @param contentPane     The {@link StackPane} that the {@link UIBook#getContent() contents} of the currently displayed {@link UIBook} based on the currently selected {@link SidebarBookshelf} are displayed on.
+     * @param contentPane     The {@link StackPane} that the {@link UIBook#getContentPane() contents} of the currently displayed {@link UIBook} based on the currently selected {@link SidebarBookshelf} are displayed on.
      * @param backImagePane   The {@link ImagePane} on which the {@link #back() Back} {@link #getBackButton() Button} is displayed on.
      *
      * @throws NullPointerException If the {@code childButtonPane} parameter is {@code null}.
@@ -157,7 +157,7 @@ public class Sidebar
                     
                     this.childButtonPane.getChildren().add(buttonBox);
                     this.contentPane.getChildren().clear();
-                    this.contentPane.getChildren().add(newBookshelf.getContent());
+                    this.contentPane.getChildren().add(newBookshelf.getContentPane());
     
                     final Button newButton = newBookshelf.getButton();
                     if (newButton != null)
@@ -236,9 +236,9 @@ public class Sidebar
     }
     
     /**
-     * <p>Returns the {@link StackPane} on which the {@link #getSelectedBookshelf() Selected} {@link SidebarBookshelf Bookshelf's} {@link SidebarBookshelf#getContent() content} is displayed.</p>
+     * <p>Returns the {@link StackPane} on which the {@link #getSelectedBookshelf() Selected} {@link SidebarBookshelf Bookshelf's} {@link SidebarBookshelf#getContentPane() content} is displayed.</p>
      *
-     * @return The {@link StackPane} on which the {@link #getSelectedBookshelf() Selected} {@link SidebarBookshelf Bookshelf's} {@link SidebarBookshelf#getContent() content} is displayed.
+     * @return The {@link StackPane} on which the {@link #getSelectedBookshelf() Selected} {@link SidebarBookshelf Bookshelf's} {@link SidebarBookshelf#getContentPane() content} is displayed.
      */
     public StackPane getContentPane()
     {

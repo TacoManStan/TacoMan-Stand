@@ -55,7 +55,7 @@ public class Displayer<T extends Displayable>
      * </ol>
      * <p>Refer to the {@link #Displayer(ReentrantLock, StackPane) fully parameterized constructor} for details.</p>
      *
-     * @param displayContainer A {@link StackPane} that the {@link Displayable#getContent() displayable content} will be displayed on.
+     * @param displayContainer A {@link StackPane} that the {@link Displayable#getContentPane() displayable content} will be displayed on.
      * @see #Displayer(ReentrantLock, StackPane)
      * @see #Displayer()
      */
@@ -74,7 +74,7 @@ public class Displayer<T extends Displayable>
      * </ol>
      *
      * @param lock             The {@link ReentrantLock} object that will be used to {@link Lock#lock() synchronize} this {@link Displayer} instance. Can be {@code null}.
-     * @param displayContainer A {@link StackPane} that the {@link Displayable#getContent() displayable content} will be displayed on. Can be {@code null}.
+     * @param displayContainer A {@link StackPane} that the {@link Displayable#getContentPane() displayable content} will be displayed on. Can be {@code null}.
      * @see #Displayer(StackPane)
      * @see #Displayer()
      */
@@ -299,8 +299,8 @@ public class Displayer<T extends Displayable>
      *             <li>The binding {@link ToolsFX.BindType type} is set to {@link ToolsFX.BindType#BOTH BOTH}.</li>
      *         </ol>
      *     </li>
-     *     <li>If the {@link Displayable oldDisplayable} parameter is non-null but contains null {@link Displayable#getContent() contents}, a {@link NullPointerException} is thrown.</li>
-     *     <li>If the {@link Displayable newDisplayable} parameter is non-null but contains null {@link Displayable#getContent() contents}, no special actions are taken and this method returns silently.</li>
+     *     <li>If the {@link Displayable oldDisplayable} parameter is non-null but contains null {@link Displayable#getContentPane() contents}, a {@link NullPointerException} is thrown.</li>
+     *     <li>If the {@link Displayable newDisplayable} parameter is non-null but contains null {@link Displayable#getContentPane() contents}, no special actions are taken and this method returns silently.</li>
      * </ol>
      * <p><b>Implementation and Usage Details</b></p>
      * <ol>
@@ -321,7 +321,7 @@ public class Displayer<T extends Displayable>
         try {
             //Remove old content
             if (oldDisplayable != null) {
-                final Node oldContent = oldDisplayable.getContent();
+                final Node oldContent = oldDisplayable.getContentPane();
                 if (oldContent != null)
                     displayContainer.getChildren().remove(oldContent);
                 else
@@ -330,7 +330,7 @@ public class Displayer<T extends Displayable>
             
             //Add new content
             if (newDisplayable != null) {
-                final Pane newContent = newDisplayable.getContent();
+                final Pane newContent = newDisplayable.getContentPane();
                 if (newContent != null) {
                     ToolsFX.bindToParent(newContent, displayContainer, ToolsFX.BindOrientation.BOTH, ToolsFX.BindType.BOTH, true);
                 }

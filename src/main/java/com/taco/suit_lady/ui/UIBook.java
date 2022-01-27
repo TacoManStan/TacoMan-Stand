@@ -74,7 +74,7 @@ public class UIBook
      *                          </ul>
      * @param contentPane       The {@link StackPane} in which the contents ({@link UIPage pages}) of this {@link UIBook} are displayed.
      *                          <ul>
-     *                              <li>Accessed via <i>{@link #getContent() getContent()}<b>.</b>{@link Displayer#getDisplayContainer() getDisplayContainer()}</i></li>
+     *                              <li>Accessed via <i>{@link #getContentPane() getContent()}<b>.</b>{@link Displayer#getDisplayContainer() getDisplayContainer()}</i></li>
      *                          </ul>
      */
     public UIBook(Springable springable, String name, String buttonID, Function<UIBook, UIPage<?>> coverPageFunction, Runnable onAction, StackPane contentPane)
@@ -218,7 +218,7 @@ public class UIBook
      * @return The {@link Pane content} of this {@link UIBook}.
      */
     @Override
-    public Pane getContent()
+    public Pane getContentPane()
     {
         return getDisplayer().getDisplayContainer();
     }

@@ -50,7 +50,7 @@ public class SidebarBookshelf extends UIBookshelf {
      *                    <ul>
      *                          <li>Cannot be {@code null}.</li>
      *                    </ul>
-     * @param contentPane The {@link StackPane} on which the {@link #getContent() contents} of this {@link SidebarBookshelf} are displayed.
+     * @param contentPane The {@link StackPane} on which the {@link #getContentPane() contents} of this {@link SidebarBookshelf} are displayed.
      *                    <ul>
      *                          <li>Cannot be {@code null}.</li>
      *                    </ul>

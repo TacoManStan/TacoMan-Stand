@@ -112,10 +112,10 @@ public abstract class UIBookshelf
     }
     
     /**
-     * <p>Checks if the {@link #getContent() content} of this {@link UIBookshelf} is {@link UIPageHandler#isEmptyBinding() empty}.</p>
+     * <p>Checks if the {@link #getContentPane() content} of this {@link UIBookshelf} is {@link UIPageHandler#isEmptyBinding() empty}.</p>
      * <blockquote><b>Passthrough Definition:</b> <i><code>{@link #isEmptyBinding()}<b>.</b>{@link BooleanBinding#get() get()}</code></i></blockquote>
      *
-     * @return True if the {@link #getContent() content} of this {@link UIBookshelf} is {@link UIPageHandler#isEmpty() empty}, false if it is not.
+     * @return True if the {@link #getContentPane() content} of this {@link UIBookshelf} is {@link UIPageHandler#isEmpty() empty}, false if it is not.
      *
      * @see #isEmptyBinding()
      * @see UIPageHandler#isEmpty()
@@ -136,7 +136,7 @@ public abstract class UIBookshelf
      * @return The {@link Pane} that contains the {@link #getSelection() content} of this {@link UIBookshelf}.
      */
     @Override
-    public Pane getContent()
+    public Pane getContentPane()
     {
         return bookDisplayer.getDisplayContainer();
     }
