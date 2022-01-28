@@ -173,6 +173,7 @@ public class ResourcesSL {
     }
     
     public static final String AVATAR = "Avatar";
+    public static final String AVATAR_16 = "Avatar 16";
     public static final String MAP = "Map";
     public static final String MAP_XL = "Map XL";
     

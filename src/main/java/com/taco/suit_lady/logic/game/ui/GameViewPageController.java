@@ -47,35 +47,15 @@ public class GameViewPageController extends UIPageController<GameViewPage> {
     @Override
     public void initialize() {
         testButton1.setOnAction(event -> {
-            System.out.println("Canvas Width: " + getPage().getContent().getMap().getModel().getCanvas().getWidth());
-            System.out.println("Canvas Height: " + getPage().getContent().getMap().getModel().getCanvas().getHeight());
+            System.out.println("Canvas Width: " + getPage().getContent().getGameMap().getModel().getCanvas().getWidth());
+            System.out.println("Canvas Height: " + getPage().getContent().getGameMap().getModel().getCanvas().getHeight());
         });
         
-        testButton2.setOnAction(event -> {
-            getPage().getContent().getCamera().print();
-        });
-        
-        testButton3.setOnAction(event -> {
-            getPage().getContent().getCamera().moveX(-getPage().getContent().getCamera().getMap().getTileSize());
-        });
-        testButton3.setText("Decrement X");
-        
-        testButton4.setOnAction(event -> {
-            getPage().getContent().getCamera().moveX(getPage().getContent().getCamera().getMap().getTileSize());
-        });
-        testButton4.setText("Increment X");
-        
-        
-        testButton5.setOnAction(event -> {
-            getPage().getContent().getCamera().moveY(-getPage().getContent().getCamera().getMap().getTileSize());
-        });
-        testButton5.setText("Decrement Y");
-        
-        testButton6.setOnAction(event -> {
-            getPage().getContent().getCamera().moveY(getPage().getContent().getCamera().getMap().getTileSize());
-        });
-        testButton6.setText("Increment Y");
-        
+        testButton2.setOnAction(event -> { });
+        testButton3.setOnAction(event -> { });
+        testButton4.setOnAction(event -> { });
+        testButton5.setOnAction(event -> { });
+        testButton6.setOnAction(event -> { });
         testButton7.setOnAction(event -> { });
         testButton8.setOnAction(event -> { });
     }

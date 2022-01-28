@@ -2,12 +2,10 @@ package com.taco.suit_lady.logic.game.objects;
 
 import com.taco.suit_lady.logic.game.AttributeContainer;
 import com.taco.suit_lady.logic.game.Entity;
-import com.taco.suit_lady.logic.game.GameMap;
 import com.taco.suit_lady.logic.game.interfaces.AttributeContainable;
+import com.taco.suit_lady.logic.game.ui.GameViewContent;
 import com.taco.suit_lady.util.Lockable;
-import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
-import com.taco.suit_lady.util.tools.PropertiesSL;
 import javafx.beans.property.*;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +23,8 @@ public class GameObject
     
     //
     
-    private final ObjectProperty<GameMap> gameMapProperty;
+    private final GameViewContent content;
+    
     private final AttributeContainer attributes;
     
     
@@ -61,13 +60,13 @@ public class GameObject
     // TO-EXPAND
     private final ReadOnlyDoubleWrapper moveSpeedProperty;
     
-    public GameObject(@NotNull Springable springable, @Nullable ReentrantLock lock, @NotNull GameMap gameMap) {
-        this.springable = springable.asStrict();
+    public GameObject(@NotNull GameViewContent content, @Nullable ReentrantLock lock) {
+        this.springable = content.asStrict();
         this.lock = lock != null ? lock : new ReentrantLock();
         
         //
         
-        this.gameMapProperty = new SimpleObjectProperty<>(gameMap);
+        this.content = content;
         this.attributes = new AttributeContainer(this, lock, this);
         
         
@@ -85,12 +84,6 @@ public class GameObject
     //<editor-fold desc="--- PROPERTIES ---">
     
     //<editor-fold desc="--- MAP PROPERTIES ---">
-    
-    public final ObjectProperty<GameMap> mapProperty() { return gameMapProperty; }
-    public final GameMap getMap() { return gameMapProperty.get(); }
-    public final GameMap setMap(@NotNull GameMap newValue) { return PropertiesSL.setProperty(gameMapProperty, newValue); }
-    
-    //
     
     public final IntegerProperty xLocProperty() {
         return xLocProperty;
@@ -194,20 +187,22 @@ public class GameObject
     //</editor-fold>
     
     public final @NotNull GameTile[][] getOccupyingTiles() {
-        final int adjustedMinX = getXLocation() / getMap().getTileSize();
-        final int adjustedMinY = getYLocation() / getMap().getTileSize();
-        final int adjustedMaxX = (getWidth() + getXLocation()) / getMap().getTileSize();
-        final int adjustedMaxY = (getHeight() + getYLocation()) / getMap().getTileSize();
+        final int adjustedMinX = getXLocation() / getGameMap().getTileSize();
+        final int adjustedMinY = getYLocation() / getGameMap().getTileSize();
+        final int adjustedMaxX = (getWidth() + getXLocation()) / getGameMap().getTileSize();
+        final int adjustedMaxY = (getHeight() + getYLocation()) / getGameMap().getTileSize();
         
         final GameTile[][] occupyingGameTiles = new GameTile[(adjustedMaxX - adjustedMinX) + 1][(adjustedMaxY - adjustedMinY) + 1];
         for (int i = 0; i < occupyingGameTiles.length; i++)
             for (int j = 0; j < occupyingGameTiles[i].length; j++)
-                occupyingGameTiles[i][j] = getMap().getTileMap()[i + adjustedMinX][j + adjustedMinY];
+                occupyingGameTiles[i][j] = getGameMap().getTileMap()[i + adjustedMinX][j + adjustedMinY];
         
         return occupyingGameTiles;
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+    @Override public @NotNull GameViewContent game() { return content; }
     
     @Override public void tick() {
         //TODO

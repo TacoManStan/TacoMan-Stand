@@ -1,8 +1,8 @@
 package com.taco.suit_lady.logic.game.ui;
 
-import com.taco.suit_lady.logic.game.CameraBase;
+import com.taco.suit_lady.logic.game.Camera;
 import com.taco.suit_lady.logic.game.GameMap;
-import com.taco.suit_lady.logic.game.interfaces.Camera;
+import com.taco.suit_lady.logic.game.interfaces.GameComponent;
 import com.taco.suit_lady.ui.Content;
 import com.taco.suit_lady.ui.UIBook;
 import com.taco.suit_lady.util.Lockable;
@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class GameViewContent extends Content<GameViewContentData, GameViewContentController>
-        implements UIDProcessable, Lockable {
+        implements UIDProcessable, Lockable, GameComponent {
     
     private final ReentrantLock lock;
     
@@ -29,7 +29,6 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
     private GameViewPage coverPage;
     
     private final ObjectProperty<GameMap> gameMapProperty;
-    private final ObjectProperty<Camera> cameraProperty;
     
     public GameViewContent(@NotNull Springable springable) {
         super(springable);
@@ -48,7 +47,6 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
                 null));
         
         this.gameMapProperty = new SimpleObjectProperty<>();
-        this.cameraProperty = new SimpleObjectProperty<>();
         
         //
         
@@ -77,8 +75,7 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
             }));
         });
         
-        setMap(GameMap.newTestInstance(this, lock));
-        setCamera(new CameraBase(this));
+        setGameMap(GameMap.newTestInstance(this, lock));
     }
     
     //</editor-fold>
@@ -87,39 +84,35 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
     
     protected GameViewPage getCoverPage() { return coverPage; }
     
-    public final ObjectProperty<GameMap> mapProperty() { return gameMapProperty; }
-    public final GameMap getMap() { return gameMapProperty.get(); }
-    public final GameMap setMap(GameMap newValue) { return PropertiesSL.setProperty(gameMapProperty, newValue); }
+    @Override public final @NotNull ObjectProperty<GameMap> gameMapProperty() { return gameMapProperty; }
+    @Override public final GameMap getGameMap() { return gameMapProperty.get(); }
+    @Override public final GameMap setGameMap(@NotNull GameMap newValue) { return PropertiesSL.setProperty(gameMapProperty, newValue); }
     
-    public final ObjectProperty<Camera> cameraProperty() { return cameraProperty; }
-    public final Camera getCamera() { return cameraProperty.get(); }
-    public final Camera setCamera(Camera newValue) { return PropertiesSL.setProperty(cameraProperty, newValue); }
+    public final @NotNull Camera getCamera() { return getGameMap().getModel().getCamera(); }
     
     //</editor-fold>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull ReentrantLock getLock() { return lock; }
-    @Override public boolean isNullableLock() { return true; }
+    @Override protected void handleKeyEvent(@NotNull KeyCode keyCode) {
+        switch (keyCode) {
+            case W -> getCamera().moveY(-getCamera().getGameMap().getTileSize());
+            case A -> getCamera().moveX(-getCamera().getGameMap().getTileSize());
+            case S -> getCamera().moveY(getCamera().getGameMap().getTileSize());
+            case D -> getCamera().moveX(getCamera().getGameMap().getTileSize());
+        }
+    }
     
     //
+    
+    @Override public @NotNull GameViewContent game() { return this; }
+    
     
     @Override protected @NotNull GameViewContentData loadData() { return new GameViewContentData(this); }
     @Override protected @NotNull Class<GameViewContentController> controllerDefinition() { return GameViewContentController.class; }
     
-    
     @Override protected void onActivate() { }
     @Override protected void onDeactivate() { }
-    
-    
-    @Override protected void handleKeyEvent(@NotNull KeyCode keyCode) {
-        switch (keyCode) {
-            case W -> getCamera().moveY(-getCamera().getMap().getTileSize());
-            case A -> getCamera().moveX(-getCamera().getMap().getTileSize());
-            case S -> getCamera().moveY(getCamera().getMap().getTileSize());
-            case D -> getCamera().moveX(getCamera().getMap().getTileSize());
-        }
-    }
     
     //
     
@@ -129,6 +122,11 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
             uidProcessor = new UIDProcessor("mandelbrot_content");
         return uidProcessor;
     }
+    
+    //
+    
+    @Override public @NotNull ReentrantLock getLock() { return lock; }
+    @Override public boolean isNullableLock() { return true; }
     
     //</editor-fold>
 }

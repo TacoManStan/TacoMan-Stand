@@ -1,7 +1,9 @@
 package com.taco.suit_lady.logic.game;
 
+import com.taco.suit_lady.logic.game.interfaces.GameComponent;
 import com.taco.suit_lady.logic.game.objects.GameObject;
 import com.taco.suit_lady.logic.game.objects.GameTile;
+import com.taco.suit_lady.logic.game.ui.GameViewContent;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
@@ -16,13 +18,13 @@ import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class GameMap
-        implements SpringableWrapper, Lockable {
+        implements SpringableWrapper, Lockable, GameComponent {
     
     private final int tileSize; // The number of "pixels" comprising each tile.
     
     //
     
-    private final StrictSpringable springable;
+    private final GameViewContent content;
     private final ReentrantLock lock;
     
     //
@@ -36,8 +38,8 @@ public class GameMap
     
     private final GameMapModel model;
     
-    public GameMap(@NotNull Springable springable, @Nullable ReentrantLock lock, int width, int height, int tileSize) {
-        this.springable = springable.asStrict();
+    public GameMap(@NotNull GameViewContent content, @Nullable ReentrantLock lock, int width, int height, int tileSize) {
+        this.content = content;
         this.lock = lock != null ? lock : new ReentrantLock();
         
         //
@@ -148,10 +150,10 @@ public class GameMap
     
     
     /**
-     * <p>Returns a {@link List} of {@link GameTile tiles} partially or entirely visible in the specified {@link CameraBase Camera's} bounds.</p>
+     * <p>Returns a {@link List} of {@link GameTile tiles} partially or entirely visible in the specified {@link Camera Camera's} bounds.</p>
      */
     // TO-EXPAND
-    public final @NotNull List<GameTile> getTilesInView(@NotNull CameraBase camera) {
+    public final @NotNull List<GameTile> getTilesInView(@NotNull Camera camera) {
         int xLoc = camera.getLocationX();
         int yLoc = camera.getLocationY();
         
@@ -180,7 +182,11 @@ public class GameMap
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull Springable springable() { return springable; }
+    @Override public @NotNull GameViewContent game() { return content; }
+    
+    //
+    
+    @Override public @NotNull Springable springable() { return content; }
     @Override public @NotNull ReentrantLock getLock() { return lock; }
     
     //</editor-fold>
@@ -188,24 +194,24 @@ public class GameMap
     //<editor-fold desc="--- STATIC FACTORY METHODS ---">
     
     /**
-     * <p>Identical to <i>{@link #newTestInstance(Springable, ReentrantLock)}</i> except the {@link ReentrantLock} passed to the {@link GameMap Game Map's} {@link GameMap#GameMap(Springable, ReentrantLock, int, int, int) constructor} is always {@code null}.</p>
+     * <p>Identical to <i>{@link #newTestInstance(GameViewContent, ReentrantLock)}</i> except the {@link ReentrantLock} passed to the {@link GameMap Game Map's} {@link GameMap#GameMap(GameViewContent, ReentrantLock, int, int, int) constructor} is always {@code null}.</p>
      * <p>Note that a new {@link ReentrantLock} is automatically created by the {@link GameMap} constructor if the specified value is {@code null}, so the returned {@link GameMap} object will still be {@code synchronized}, just only with itself.</p>
      *
-     * @param springable Any non-null {@link Springable} object used to enable {@link Springable} features in the returned {@link GameMap} object.
+     * @param content Any non-null {@link Springable} object used to enable {@link Springable} features in the returned {@link GameMap} object.
      *
      * @return The newly constructed {@link GameMap} instance.
      *
-     * @see #newTestInstance(Springable, ReentrantLock)
+     * @see #newTestInstance(GameViewContent, ReentrantLock)
      * @see GameMap
-     * @see GameMap#GameMap(Springable, ReentrantLock, int, int, int)
+     * @see GameMap#GameMap(GameViewContent, ReentrantLock, int, int, int)
      */
-    public static @NotNull GameMap newTestInstance(@NotNull Springable springable) {
-        return newTestInstance(springable, null);
+    public static @NotNull GameMap newTestInstance(@NotNull GameViewContent content) {
+        return newTestInstance(content, null);
     }
     
 
-    public static @NotNull GameMap newTestInstance(@NotNull Springable springable, @Nullable ReentrantLock lock) {
-        return new GameMap(springable, lock, 96, 64, 16);
+    public static @NotNull GameMap newTestInstance(@NotNull GameViewContent content, @Nullable ReentrantLock lock) {
+        return new GameMap(content, lock, 96, 64, 16);
     }
     
     //</editor-fold>

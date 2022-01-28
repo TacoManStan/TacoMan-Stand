@@ -157,24 +157,16 @@ public class ContentManager
                 oldContent.getOverlayHandler().root().maxWidthProperty().unbind();
                 oldContent.getOverlayHandler().root().maxHeightProperty().unbind();
                 
-                ctx().getBean(LogiCore.class).executor().execute(() -> oldContent.onRemovedInternal());
+                logiCore().executor().execute(() -> oldContent.onRemovedInternal());
             }
             if (newContent != null) {
                 ToolsFX.bindToParent(newContent.getController().root(), getContentPrimaryPane(), true);
                 ToolsFX.bindToParent(newContent.getOverlayHandler().root(), getContentPrimaryPane(), true);
                 
-                //                final List<Overlay> contentOverlays = newContent.getOverlayHandler().overlays().getCopy();
-                //                for (Overlay overlay: contentOverlays) {
-                //                    System.out.println("Binding overlay... " + overlay.getName());
-                //                    FXTools.bindToParent(overlay.root(), getContentForegroundPane(), true);
-                //                }
-                
-                ctx().getBean(LogiCore.class).executor().execute(() -> newContent.onSetInternal());
+                logiCore().executor().execute(() -> newContent.onSetInternal());
             }
         }, true);
     }
-    
-    //
     
     protected void submitKeyEvent(@NotNull KeyCode keyCode) {
         Content<?, ?> content = getContent();

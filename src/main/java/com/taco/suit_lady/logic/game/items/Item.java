@@ -3,6 +3,7 @@ package com.taco.suit_lady.logic.game.items;
 import com.taco.suit_lady.logic.game.AttributeContainer;
 import com.taco.suit_lady.logic.game.Entity;
 import com.taco.suit_lady.logic.game.interfaces.AttributeContainable;
+import com.taco.suit_lady.logic.game.ui.GameViewContent;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
@@ -26,13 +27,13 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Item
         implements Lockable, AttributeContainable, Entity {
     
-    private final StrictSpringable springable;
+    private final GameViewContent content;
     private final ReentrantLock lock;
     
     private final AttributeContainer attributes;
     
-    public Item(@NotNull Springable springable, @Nullable ReentrantLock lock) {
-        this.springable = springable.asStrict();
+    public Item(@NotNull GameViewContent content, @Nullable ReentrantLock lock) {
+        this.content = content;
         this.lock = lock != null ? lock : new ReentrantLock();
         
         this.attributes = new AttributeContainer(this, lock, this);
@@ -40,32 +41,21 @@ public class Item
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override
-    public @NotNull AttributeContainer attributes() {
-        return attributes;
-    }
-    
-    //<editor-fold desc="--- GENERIC ---">
-    
-    @Override
-    public @NotNull FxWeaver weaver() {
-        return springable.weaver();
-    }
-    
-    @Override
-    public @NotNull ConfigurableApplicationContext ctx() {
-        return springable.ctx();
-    }
-    
-    
-    @Override
-    public @NotNull ReentrantLock getLock() {
-        return lock;
-    }
-    
     @Override public void tick() {
         //TODO
     }
+    
+    //
+    
+    @Override public @NotNull GameViewContent game() { return content; }
+    @Override public @NotNull AttributeContainer attributes() { return attributes; }
+    
+    //<editor-fold desc="--- GENERIC ---">
+    
+    @Override public @NotNull FxWeaver weaver() { return content.weaver(); }
+    @Override public @NotNull ConfigurableApplicationContext ctx() { return content.ctx(); }
+    
+    @Override public @NotNull ReentrantLock getLock() { return lock; }
     
     //</editor-fold>
     
