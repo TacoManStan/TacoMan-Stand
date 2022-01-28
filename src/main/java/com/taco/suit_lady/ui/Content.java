@@ -9,6 +9,7 @@ import com.taco.suit_lady.ui.jfx.components.painting.surfaces.OverlayHandler;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.collections.FXCollections;
+import javafx.scene.input.KeyCode;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -85,8 +86,9 @@ public abstract class Content<D extends ContentData, C extends ContentController
     //<editor-fold desc="--- ABSTRACT ---">
     
     protected abstract @NotNull D loadData();
-    
     protected abstract @NotNull Class<C> controllerDefinition();
+    
+    protected abstract void handleKeyEvent(@NotNull KeyCode keyCode);
     
     //<editor-fold desc="--- EVENTS ---">
     

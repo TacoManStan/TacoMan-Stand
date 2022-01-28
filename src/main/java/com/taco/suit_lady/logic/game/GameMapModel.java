@@ -12,6 +12,7 @@ import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -50,7 +51,7 @@ public class GameMapModel
         this.parentPaneProperty = new SimpleObjectProperty<>();
         this.canvasPane = new CanvasPane(this);
         
-        this.mapImageBinding = BindingsSL.constObjBinding(ResourcesSL.getDummyImage(ResourcesSL.MAP_XL));
+        this.mapImageBinding = BindingsSL.constObjBinding(ResourcesSL.getDummyImage(ResourcesSL.MAP));
         
         //        this.paintCommand = new ImageOverlayCommand(lock, this, "map", null, 1);
     }

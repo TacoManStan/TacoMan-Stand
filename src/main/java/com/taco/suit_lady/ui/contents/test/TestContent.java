@@ -5,6 +5,7 @@ import com.taco.suit_lady.ui.UIBook;
 import com.taco.suit_lady.ui.pages.example_page.ExamplePage;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ResourcesSL;
+import javafx.scene.input.KeyCode;
 import org.jetbrains.annotations.NotNull;
 
 public class TestContent extends Content<TestContentData, TestContentController>
@@ -56,6 +57,8 @@ public class TestContent extends Content<TestContentData, TestContentController>
     {
         return TestContentController.class;
     }
+    
+    @Override protected void handleKeyEvent(@NotNull KeyCode keyCode) { }
     
     @Override
     protected void onActivate() { }

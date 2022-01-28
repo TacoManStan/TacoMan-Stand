@@ -22,6 +22,7 @@ import com.taco.suit_lady.util.tools.TasksSL;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import com.taco.tacository.json.JFiles;
 import javafx.beans.binding.Bindings;
+import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcType;
 import org.jetbrains.annotations.NotNull;
@@ -184,6 +185,10 @@ public class MandelbrotContent extends ListableContent<
     @Override
     protected @NotNull Class<MandelbrotContentController> controllerDefinition() {
         return MandelbrotContentController.class;
+    }
+    
+    @Override protected void handleKeyEvent(@NotNull KeyCode keyCode) {
+        //TODO
     }
     
     

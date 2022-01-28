@@ -10,6 +10,7 @@ import com.taco.suit_lady.ui.jfx.components.ContentPane;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
@@ -171,5 +172,13 @@ public class ContentManager
                 ctx().getBean(LogiCore.class).executor().execute(() -> newContent.onSetInternal());
             }
         }, true);
+    }
+    
+    //
+    
+    protected void submitKeyEvent(@NotNull KeyCode keyCode) {
+        Content<?, ?> content = getContent();
+        if (content != null)
+            content.handleKeyEvent(keyCode);
     }
 }

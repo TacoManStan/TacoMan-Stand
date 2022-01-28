@@ -14,6 +14,7 @@ import com.taco.suit_lady.util.tools.PropertiesSL;
 import com.taco.suit_lady.util.tools.ResourcesSL;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.input.KeyCode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.locks.ReentrantLock;
@@ -106,8 +107,19 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
     @Override protected @NotNull GameViewContentData loadData() { return new GameViewContentData(this); }
     @Override protected @NotNull Class<GameViewContentController> controllerDefinition() { return GameViewContentController.class; }
     
+    
     @Override protected void onActivate() { }
     @Override protected void onDeactivate() { }
+    
+    
+    @Override protected void handleKeyEvent(@NotNull KeyCode keyCode) {
+        switch (keyCode) {
+            case W -> getCamera().moveY(-getCamera().getMap().getTileSize());
+            case A -> getCamera().moveX(-getCamera().getMap().getTileSize());
+            case S -> getCamera().moveY(getCamera().getMap().getTileSize());
+            case D -> getCamera().moveX(getCamera().getMap().getTileSize());
+        }
+    }
     
     //
     

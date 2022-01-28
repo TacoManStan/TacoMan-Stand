@@ -30,6 +30,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
@@ -187,8 +188,6 @@ public class AppController
         this.ctx = ctx;
     }
     
-    private ContentManager contentManager;
-    
     // <editor-fold desc="--- INITIALIZATION ---">
     
     // Called automatically by FXML loader.
@@ -244,6 +243,12 @@ public class AppController
         
         stage.show();
         onShownInit();
+        
+        //
+        
+        root.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            this.getAppUI().getContentManager().submitKeyEvent(event.getCode());
+        });
     }
     
     private void initSidebar() {
