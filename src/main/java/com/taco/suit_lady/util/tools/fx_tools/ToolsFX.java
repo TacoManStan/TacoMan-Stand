@@ -959,33 +959,10 @@ public class ToolsFX {
             final int yDestF = Math.max(-yMinO, 0);
             
             
-            System.out.println("xMinO: " + xMinO);
-            System.out.println("yMinO: " + yMinO);
-            System.out.println("xMaxO: " + xMaxO);
-            System.out.println("yMaxO: " + yMaxO);
-            
-            System.out.println("xMinF: " + xMinF);
-            System.out.println("yMinF: " + yMinF);
-            System.out.println("xMaxF: " + xMaxF);
-            System.out.println("yMaxF: " + yMaxF);
-            
-            System.out.println("widthF: " + widthF);
-            System.out.println("heightF: " + heightF);
-            
-            System.out.println("xDestF: " + xDestF);
-            System.out.println("yDestF: " + yDestF);
-            
-            
             canvas.getGraphicsContext2D().drawImage(
                     image,
                     xMinF, yMinF, widthF, heightF,
                     xDestF, yDestF, widthF, heightF);
-            
-            
-            //            canvas.getGraphicsContext2D().drawImage(
-            //                    image,
-            //                    source.getX(safe), source.getY(safe), source.getWidth(safe), source.getHeight(safe),
-            //                    destination.getX(safe), destination.getY(safe), destination.getWidth(safe), destination.getHeight(safe));
         }, true);
     }
     

@@ -249,6 +249,8 @@ public class AppController
         root.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             this.getAppUI().getContentManager().submitKeyEvent(event.getCode());
         });
+        
+        logiCore().init();
     }
     
     private void initSidebar() {
