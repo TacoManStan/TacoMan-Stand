@@ -40,7 +40,6 @@ public class LogiCore
     
     public final void init() {
         gameLoopExecutor.scheduleAtFixedRate(() -> {
-            System.out.println("Tick");
         }, 0, (long) 1000 / 60, TimeUnit.MILLISECONDS);
     }
     

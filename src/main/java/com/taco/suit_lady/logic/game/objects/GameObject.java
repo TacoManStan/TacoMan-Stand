@@ -3,10 +3,7 @@ package com.taco.suit_lady.logic.game.objects;
 import com.taco.suit_lady.logic.game.AttributeContainer;
 import com.taco.suit_lady.logic.game.Entity;
 import com.taco.suit_lady.logic.game.GameMap;
-import com.taco.suit_lady.logic.game.execution.AutoManagedTickable;
-import com.taco.suit_lady.logic.game.execution.WrappedTickable;
 import com.taco.suit_lady.logic.game.interfaces.AttributeContainable;
-import com.taco.suit_lady.logic.game.objects.commands.Commander;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
@@ -20,14 +17,12 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class GameObject
-        implements Lockable, AttributeContainable, Entity, WrappedTickable<GameObject> {
+        implements Lockable, AttributeContainable, Entity {
     
     private final StrictSpringable springable;
     private final ReentrantLock lock;
     
     //
-    
-    private final AutoManagedTickable<GameObject> tickable;
     
     private final ObjectProperty<GameMap> gameMapProperty;
     private final AttributeContainer attributes;
@@ -65,21 +60,11 @@ public class GameObject
     // TO-EXPAND
     private final ReadOnlyDoubleWrapper moveSpeedProperty;
     
-    private final Commander commander;
-    
     public GameObject(@NotNull Springable springable, @Nullable ReentrantLock lock, @NotNull GameMap gameMap) {
         this.springable = springable.asStrict();
         this.lock = lock != null ? lock : new ReentrantLock();
         
         //
-        
-        this.tickable = new AutoManagedTickable<>(this) {
-            @Override
-            protected void step() {
-                commander.tick();
-                //TODO: Update Graphics Loop?
-            }
-        };
         
         this.gameMapProperty = new SimpleObjectProperty<>(gameMap);
         this.attributes = new AttributeContainer(this, lock, this);
@@ -94,8 +79,6 @@ public class GameObject
         //
         
         this.moveSpeedProperty = new ReadOnlyDoubleWrapper();
-    
-        this.commander = new Commander(this);
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
@@ -200,11 +183,6 @@ public class GameObject
         return attributes;
     }
     
-    @Override
-    public @NotNull AutoManagedTickable<GameObject> tickable() {
-        return tickable;
-    }
-    
     //<editor-fold desc="--- GENERIC ---">
     
     @Override
@@ -239,5 +217,8 @@ public class GameObject
                 occupyingGameTiles[i][j] = getGameMap().getTileMap()[i + adjustedMinX][j + adjustedMinY];
         
         return occupyingGameTiles;
+    }
+    @Override public void tick() {
+        //TODO
     }
 }

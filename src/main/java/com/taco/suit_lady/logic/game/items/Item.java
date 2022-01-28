@@ -67,10 +67,6 @@ public class Item
         //TODO
     }
     
-    @Override public long getTickCount() {
-        return 0; //TODO
-    }
-    
     //</editor-fold>
     
     //</editor-fold>
