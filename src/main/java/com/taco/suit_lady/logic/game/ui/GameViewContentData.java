@@ -1,42 +1,31 @@
 package com.taco.suit_lady.logic.game.ui;
 
-import com.github.cliftonlabs.json_simple.JsonObject;
 import com.taco.suit_lady._to_sort._new.interfaces.ObservablePropertyContainable;
+import com.taco.suit_lady.logic.game.interfaces.GameComponent;
 import com.taco.suit_lady.ui.ContentData;
-import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotColorScheme;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
-import com.taco.suit_lady.util.springable.StrictSpringable;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
-import com.taco.tacository.json.JElement;
-import com.taco.tacository.json.JLoadable;
-import com.taco.tacository.json.JObject;
-import com.taco.tacository.json.JUtil;
 import javafx.beans.Observable;
-import javafx.beans.binding.DoubleBinding;
-import javafx.beans.binding.IntegerBinding;
-import javafx.beans.property.*;
-import javafx.geometry.Point2D;
-import javafx.scene.paint.Color;
-import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.context.ConfigurableApplicationContext;
 
 public class GameViewContentData extends ContentData
-        implements ObservablePropertyContainable, SpringableWrapper, UIDProcessable {
+        implements ObservablePropertyContainable, SpringableWrapper, UIDProcessable, GameComponent {
     
-    private final StrictSpringable springable;
+    private final GameViewContent content;
     
-    public GameViewContentData(@NotNull Springable springable) {
-        this.springable = springable.asStrict();
+    public GameViewContentData(@NotNull GameViewContent content) {
+        this.content = content;
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull Springable springable() { return springable; }
+    @Override public @NotNull GameViewContent getGame() { return content; }
     
+    //
+    
+    @Override public @NotNull Springable springable() { return content; }
     @Override public @NotNull Observable[] properties() { return new Observable[]{}; }
     
     private UIDProcessor uidProcessor;
