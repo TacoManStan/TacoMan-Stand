@@ -47,8 +47,8 @@ public class GameViewPageController extends UIPageController<GameViewPage> {
     @Override
     public void initialize() {
         testButton1.setOnAction(event -> {
-            System.out.println("Canvas Width: " + getPage().getContent().getGameMap().getModel().getCanvas().getWidth());
-            System.out.println("Canvas Height: " + getPage().getContent().getGameMap().getModel().getCanvas().getHeight());
+            System.out.println("Canvas Width: " + getPage().getContent().getMap().getModel().getCanvas().getWidth());
+            System.out.println("Canvas Height: " + getPage().getContent().getMap().getModel().getCanvas().getHeight());
         });
         
         testButton2.setOnAction(event -> {

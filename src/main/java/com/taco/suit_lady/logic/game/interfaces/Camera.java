@@ -13,9 +13,10 @@ import javafx.scene.image.Image;
 public interface Camera {
     
     GameViewContent getContent();
+    CroppedImagePaintCommand getPaintCommand();
+    
     GameMap getMap();
     
-    CroppedImagePaintCommand getPaintCommand();
     
     //
     

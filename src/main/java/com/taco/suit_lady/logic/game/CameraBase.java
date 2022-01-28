@@ -9,12 +9,13 @@ import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.BindingsSL;
+import com.taco.suit_lady.util.tools.PropertiesSL;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ObservableNumberValue;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 
@@ -50,7 +51,7 @@ public class CameraBase
     
     
     private final GameViewContent content;
-    private final GameMap gameMap;
+    private final ObjectBinding<GameMap> mapBinding;
     
     private final ImagePaintCommand mapImagePaintCommandTest;
     private final CroppedImagePaintCommand mapImagePaintCommand;
@@ -72,29 +73,33 @@ public class CameraBase
     
     //</editor-fold>
     
-    public CameraBase(@NotNull GameViewContent content, @NotNull GameMap gameMap, @NotNull ObservableNumberValue observableViewportWidth, @NotNull ObservableNumberValue observableViewportHeight) {
-        this.springable = gameMap.asStrict();
-        this.lock = gameMap.getLock();
+    public CameraBase(@NotNull GameViewContent content) {
+        this.springable = content.asStrict();
+        this.lock = content.getLock();
         
-        this.viewportWidthBinding = BindingsSL.directIntBinding(observableViewportWidth);
-        this.viewportHeightBinding = BindingsSL.directIntBinding(observableViewportHeight);
-        
-        
-        this.xLocationProperty = new SimpleIntegerProperty(0);
-        this.yLocationProperty = new SimpleIntegerProperty(0);
-        this.xOffsetProperty = new SimpleIntegerProperty(0);
-        this.yOffsetProperty = new SimpleIntegerProperty(0);
-        
+        //
         
         this.content = content;
-        this.gameMap = gameMap;
+        this.mapBinding = BindingsSL.directObjBinding(content.mapProperty());
         
         this.mapImagePaintCommandTest = new ImagePaintCommand(this, lock).init();
         this.mapImagePaintCommand = new CroppedImagePaintCommand(this, lock).init();
         
         //
+    
+        this.viewportWidthBinding = BindingsSL.directIntBinding(getContent().getController().getMapPane().widthProperty());
+        this.viewportHeightBinding = BindingsSL.directIntBinding(getContent().getController().getMapPane().heightProperty());
+    
+    
+        this.xLocationProperty = new SimpleIntegerProperty(0);
+        this.yLocationProperty = new SimpleIntegerProperty(0);
         
-        this.mapImageBinding = BindingsSL.directObjBinding(gameMap.getModel().mapImageBinding());
+        this.xOffsetProperty = new SimpleIntegerProperty(0);
+        this.yOffsetProperty = new SimpleIntegerProperty(0);
+        
+        //
+        
+        this.mapImageBinding = BindingsSL.directObjBinding(getMap().getModel().mapImageBinding());
         
         this.mapImageWidthBinding = BindingsSL.recursiveIntBinding(lock, image -> image.widthProperty(), mapImageBinding);
         this.mapImageHeightBinding = BindingsSL.recursiveIntBinding(lock, image -> image.heightProperty(), mapImageBinding);
@@ -134,13 +139,8 @@ public class CameraBase
     
     public final GameViewContent getContent() { return content; }
     
-    /**
-     * <p>Returns the {@link GameMap} object that this {@link CameraBase} instance is assigned to.</p>
-     *
-     * @return The {@link GameMap} object that this {@link CameraBase} instance is assigned to.
-     */
-    public final GameMap getMap() { return gameMap; }
-    
+    public final ObjectBinding<GameMap> mapBinding() { return mapBinding; }
+    public final GameMap getMap() { return mapBinding.get(); }
     
     public final CroppedImagePaintCommand getPaintCommand() { return mapImagePaintCommand; }
     

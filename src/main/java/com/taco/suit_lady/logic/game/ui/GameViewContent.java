@@ -77,8 +77,8 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
             }));
         });
         
-        setGameMap(GameMap.newTestInstance(this, lock));
-        setCamera(new CameraBase(this, getGameMap(), getController().getMapPane().widthProperty(), getController().getMapPane().heightProperty()));
+        setMap(GameMap.newTestInstance(this, lock));
+        setCamera(new CameraBase(this));
     }
     
     //</editor-fold>
@@ -87,9 +87,9 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
     
     protected GameViewPage getCoverPage() { return coverPage; }
     
-    public final ObjectProperty<GameMap> gameMapProperty() { return gameMapProperty; }
-    public final GameMap getGameMap() { return gameMapProperty.get(); }
-    public final GameMap setGameMap(GameMap newValue) { return PropertiesSL.setProperty(gameMapProperty, newValue); }
+    public final ObjectProperty<GameMap> mapProperty() { return gameMapProperty; }
+    public final GameMap getMap() { return gameMapProperty.get(); }
+    public final GameMap setMap(GameMap newValue) { return PropertiesSL.setProperty(gameMapProperty, newValue); }
     
     public final ObjectProperty<Camera> cameraProperty() { return cameraProperty; }
     public final Camera getCamera() { return cameraProperty.get(); }

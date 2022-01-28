@@ -7,6 +7,7 @@ import com.taco.suit_lady.logic.game.interfaces.AttributeContainable;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
+import com.taco.suit_lady.util.tools.PropertiesSL;
 import javafx.beans.property.*;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
@@ -85,19 +86,9 @@ public class GameObject
     
     //<editor-fold desc="--- MAP PROPERTIES ---">
     
-    public final ObjectProperty<GameMap> gameMapProperty() {
-        return gameMapProperty;
-    }
-    
-    public final GameMap getGameMap() {
-        return gameMapProperty.get();
-    }
-    
-    public final GameMap setGameMap(GameMap newValue) {
-        GameMap oldValue = getGameMap();
-        gameMapProperty.set(newValue);
-        return oldValue;
-    }
+    public final ObjectProperty<GameMap> mapProperty() { return gameMapProperty; }
+    public final GameMap getMap() { return gameMapProperty.get(); }
+    public final GameMap setMap(@NotNull GameMap newValue) { return PropertiesSL.setProperty(gameMapProperty, newValue); }
     
     //
     
@@ -178,10 +169,7 @@ public class GameObject
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override
-    public final @NotNull AttributeContainer attributes() {
-        return attributes;
-    }
+    @Override public final @NotNull AttributeContainer attributes() { return attributes; }
     
     //<editor-fold desc="--- GENERIC ---">
     
@@ -206,19 +194,24 @@ public class GameObject
     //</editor-fold>
     
     public final @NotNull GameTile[][] getOccupyingTiles() {
-        final int adjustedMinX = getXLocation() / getGameMap().getTileSize();
-        final int adjustedMinY = getYLocation() / getGameMap().getTileSize();
-        final int adjustedMaxX = (getWidth() + getXLocation()) / getGameMap().getTileSize();
-        final int adjustedMaxY = (getHeight() + getYLocation()) / getGameMap().getTileSize();
+        final int adjustedMinX = getXLocation() / getMap().getTileSize();
+        final int adjustedMinY = getYLocation() / getMap().getTileSize();
+        final int adjustedMaxX = (getWidth() + getXLocation()) / getMap().getTileSize();
+        final int adjustedMaxY = (getHeight() + getYLocation()) / getMap().getTileSize();
         
         final GameTile[][] occupyingGameTiles = new GameTile[(adjustedMaxX - adjustedMinX) + 1][(adjustedMaxY - adjustedMinY) + 1];
         for (int i = 0; i < occupyingGameTiles.length; i++)
             for (int j = 0; j < occupyingGameTiles[i].length; j++)
-                occupyingGameTiles[i][j] = getGameMap().getTileMap()[i + adjustedMinX][j + adjustedMinY];
+                occupyingGameTiles[i][j] = getMap().getTileMap()[i + adjustedMinX][j + adjustedMinY];
         
         return occupyingGameTiles;
     }
+    
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
     @Override public void tick() {
         //TODO
     }
+    
+    //</editor-fold>
 }
