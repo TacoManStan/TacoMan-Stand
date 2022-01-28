@@ -57,9 +57,7 @@ public class GameViewContentController extends ContentController
     
     @Override public Pane root() { return root; }
     
-    @Override public void initialize() {
-    
-    }
+    @Override public void initialize() { }
     
     //</editor-fold>
 }
