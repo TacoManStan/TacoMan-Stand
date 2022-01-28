@@ -54,7 +54,7 @@ public class GameMap
         this.mapObjects = new ArrayList<>();
         
         
-        this.model = new GameMapModel(this, getLock());
+        this.model = new GameMapModel(game(), getLock());
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">

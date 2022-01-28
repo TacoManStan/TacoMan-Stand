@@ -32,7 +32,7 @@ public class GameMapModel
         implements SpringableWrapper, Lockable, GameComponent {
     
     private final ReentrantLock lock;
-    private final GameMap owner;
+    private final GameViewContent content;
     
     //
     
@@ -47,9 +47,9 @@ public class GameMapModel
     
     //    private final ImageOverlayCommand paintCommand;
     
-    public GameMapModel(@NotNull GameMap owner, @NotNull ReentrantLock lock) {
+    public GameMapModel(@NotNull GameViewContent content, @NotNull ReentrantLock lock) {
         this.lock = ExceptionsSL.nullCheck(lock, "Lock");
-        this.owner = ExceptionsSL.nullCheck(owner, "GameMap Owner");
+        this.content = content;
         
         
         this.cameraProperty = new SimpleObjectProperty<>();
@@ -71,7 +71,7 @@ public class GameMapModel
                 }));
         
         setParentPane(new StackPane());
-        setCamera(new Camera(owner.game()));
+        setCamera(new Camera(game()));
         
         //        getParentPane().setStyle("-fx-border-color: red");
         //        getCanvasPane().setStyle("-fx-border-color: blue");
@@ -90,12 +90,6 @@ public class GameMapModel
     //</editor-fold>
     
     //<editor-fold desc="--- PROPERTIES ---">
-    
-    public final GameMap getOwner() {
-        return owner;
-    }
-    
-    //
     
     public final ObjectProperty<Camera> cameraProperty() { return cameraProperty; }
     public final Camera getCamera() { return cameraProperty.get(); }
@@ -116,11 +110,11 @@ public class GameMapModel
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull GameViewContent game() { return getGameMap().game(); }
+    @Override public @NotNull GameViewContent game() { return content; }
     
     //
     
-    @Override public @NotNull Springable springable() { return owner; }
+    @Override public @NotNull Springable springable() { return content; }
     @Override public @NotNull ReentrantLock getLock() { return lock; }
     
     //</editor-fold>
