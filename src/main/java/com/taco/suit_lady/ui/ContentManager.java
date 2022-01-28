@@ -3,6 +3,8 @@ package com.taco.suit_lady.ui;
 import com.taco.suit_lady.logic.LogiCore;
 import com.taco.suit_lady.logic.game.ui.GameViewContent;
 import com.taco.suit_lady.util.springable.Springable;
+import com.taco.suit_lady.util.springable.SpringableWrapper;
+import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.ExceptionsSL;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasSurface;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasContentPane;
@@ -18,17 +20,17 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.context.ConfigurableApplicationContext;
 
 public class ContentManager
-        implements Springable {
+        implements SpringableWrapper {
     
-    private final FxWeaver weaver;
-    private final ConfigurableApplicationContext ctx;
+    private final StrictSpringable springable;
+    
+    //
     
     private final ContentPane contentBase;
     private final ReadOnlyObjectWrapper<Content<?, ?>> contentProperty; // Add support for a list of overlapping Content, each overlapping on the Content Base StackPane?
     
-    public ContentManager(@NotNull FxWeaver weaver, @NotNull ConfigurableApplicationContext ctx) {
-        this.weaver = ExceptionsSL.nullCheck(weaver, "FxWeaver");
-        this.ctx = ExceptionsSL.nullCheck(ctx, "Application Context");
+    public ContentManager(@NotNull Springable springable) {
+        this.springable = springable.asStrict();
         
         this.contentBase = new ContentPane(this) {
             @Override
@@ -128,15 +130,7 @@ public class ContentManager
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override
-    public @NotNull FxWeaver weaver() {
-        return weaver;
-    }
-    
-    @Override
-    public @NotNull ConfigurableApplicationContext ctx() {
-        return ctx;
-    }
+    @Override public @NotNull Springable springable() { return springable; }
     
     //</editor-fold>
     

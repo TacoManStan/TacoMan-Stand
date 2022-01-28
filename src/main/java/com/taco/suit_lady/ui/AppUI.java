@@ -68,7 +68,7 @@ public class AppUI
      */
     protected void init() {
         console().initialize();
-        this.contentManager = new ContentManager(weaver(), ctx());
+        this.contentManager = new ContentManager(this);
     }
     
     //</editor-fold>
