@@ -47,7 +47,7 @@ public class Item
     
     //
     
-    @Override public @NotNull GameViewContent game() { return content; }
+    @Override public @NotNull GameViewContent getGame() { return content; }
     @Override public @NotNull AttributeContainer attributes() { return attributes; }
     
     //<editor-fold desc="--- GENERIC ---">

@@ -38,7 +38,6 @@ public class GameMapModel
     
     private final ObjectProperty<Camera> cameraProperty;
     
-    
     private final ObjectProperty<StackPane> parentPaneProperty;
     private final CanvasPane canvasPane;
     
@@ -71,7 +70,7 @@ public class GameMapModel
                 }));
         
         setParentPane(new StackPane());
-        setCamera(new Camera(game()));
+        setCamera(new Camera(getGame()));
         
         //        getParentPane().setStyle("-fx-border-color: red");
         //        getCanvasPane().setStyle("-fx-border-color: blue");
@@ -110,7 +109,7 @@ public class GameMapModel
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull GameViewContent game() { return content; }
+    @Override public @NotNull GameViewContent getGame() { return content; }
     
     //
     

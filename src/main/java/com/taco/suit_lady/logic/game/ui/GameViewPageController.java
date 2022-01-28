@@ -1,5 +1,6 @@
 package com.taco.suit_lady.logic.game.ui;
 
+import com.taco.suit_lady.logic.game.interfaces.GameComponent;
 import com.taco.suit_lady.ui.UIPageController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -7,6 +8,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -14,7 +16,8 @@ import org.springframework.stereotype.Component;
 @Component
 @FxmlView("/fxml/game_view/pages/game_view_page.fxml")
 @Scope("prototype")
-public class GameViewPageController extends UIPageController<GameViewPage> {
+public class GameViewPageController extends UIPageController<GameViewPage>
+        implements GameComponent {
     
     @FXML private AnchorPane root;
     
@@ -39,16 +42,15 @@ public class GameViewPageController extends UIPageController<GameViewPage> {
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override
-    public Pane root() {
-        return root;
-    }
+    @Override public @NotNull GameViewContent getGame() { return getPage().getGame(); }
     
-    @Override
-    public void initialize() {
+    //
+    
+    @Override public Pane root() { return root; }
+    @Override public void initialize() {
         testButton1.setOnAction(event -> {
-            System.out.println("Canvas Width: " + getPage().getContent().getGameMap().getModel().getCanvas().getWidth());
-            System.out.println("Canvas Height: " + getPage().getContent().getGameMap().getModel().getCanvas().getHeight());
+            System.out.println("Canvas Width: " + getGameMap().getModel().getCanvas().getWidth());
+            System.out.println("Canvas Height: " + getGameMap().getModel().getCanvas().getHeight());
         });
         
         testButton2.setOnAction(event -> { });

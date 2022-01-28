@@ -1,5 +1,6 @@
 package com.taco.suit_lady.logic.game.ui;
 
+import com.taco.suit_lady.logic.game.interfaces.GameComponent;
 import com.taco.suit_lady.ui.ContentController;
 import com.taco.suit_lady.util.Lockable;
 import javafx.fxml.FXML;
@@ -20,7 +21,7 @@ import java.util.concurrent.locks.ReentrantLock;
 @FxmlView("/fxml/game_view/content/game_view_content.fxml")
 @Scope("prototype")
 public class GameViewContentController extends ContentController
-        implements Lockable {
+        implements Lockable, GameComponent {
     
     //<editor-fold desc="--- FXML FIELDS ---">
     
@@ -30,6 +31,7 @@ public class GameViewContentController extends ContentController
     
     //</editor-fold>
     
+    private GameViewContent content;
     private final ReentrantLock lock;
     
     public GameViewContentController(FxWeaver weaver, ConfigurableApplicationContext ctx) {
@@ -39,11 +41,17 @@ public class GameViewContentController extends ContentController
     
     //<editor-fold desc="--- PROPERTIES ---">
     
+    protected final void setGame(@NotNull GameViewContent content) { this.content = content; }
+    
     public final AnchorPane getMapPane() { return mapPane; }
     
     //</editor-fold>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+    @Override public @NotNull GameViewContent getGame() { return content; }
+    
+    //
     
     @Override public @NotNull Lock getLock() { return lock; }
     

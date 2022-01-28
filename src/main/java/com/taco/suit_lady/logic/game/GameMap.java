@@ -7,7 +7,6 @@ import com.taco.suit_lady.logic.game.ui.GameViewContent;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
-import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.ArraysSL;
 import com.taco.suit_lady.util.tools.MathSL;
 import org.jetbrains.annotations.NotNull;
@@ -54,7 +53,7 @@ public class GameMap
         this.mapObjects = new ArrayList<>();
         
         
-        this.model = new GameMapModel(game(), getLock());
+        this.model = new GameMapModel(getGame(), getLock());
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">
@@ -182,7 +181,7 @@ public class GameMap
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull GameViewContent game() { return content; }
+    @Override public @NotNull GameViewContent getGame() { return content; }
     
     //
     

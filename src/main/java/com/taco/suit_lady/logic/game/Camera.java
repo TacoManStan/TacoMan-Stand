@@ -87,8 +87,8 @@ public class Camera
         
         //
     
-        this.viewportWidthBinding = BindingsSL.directIntBinding(game().getController().getMapPane().widthProperty());
-        this.viewportHeightBinding = BindingsSL.directIntBinding(game().getController().getMapPane().heightProperty());
+        this.viewportWidthBinding = BindingsSL.directIntBinding(getGame().getController().getMapPane().widthProperty());
+        this.viewportHeightBinding = BindingsSL.directIntBinding(getGame().getController().getMapPane().heightProperty());
     
     
         this.xLocationProperty = new SimpleIntegerProperty(0);
@@ -235,7 +235,7 @@ public class Camera
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull GameViewContent game() { return content; }
+    @Override public @NotNull GameViewContent getGame() { return content; }
     
     //
     

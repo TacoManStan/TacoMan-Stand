@@ -202,7 +202,7 @@ public class GameObject
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull GameViewContent game() { return content; }
+    @Override public @NotNull GameViewContent getGame() { return content; }
     
     @Override public void tick() {
         //TODO

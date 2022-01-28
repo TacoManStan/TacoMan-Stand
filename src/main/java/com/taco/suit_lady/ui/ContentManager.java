@@ -55,7 +55,7 @@ public class ContentManager
     
     protected @NotNull ContentManager init() {
         final GameViewContent game = new GameViewContent(this);
-        setContent(game);
+        setContent(game.init());
         return this;
     }
     

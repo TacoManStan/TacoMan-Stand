@@ -36,6 +36,12 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
         
         //
         
+        this.gameMapProperty = new SimpleObjectProperty<>();
+    }
+    
+    //<editor-fold desc="--- INITIALIZATION ---">
+    
+    public GameViewContent init() {
         injectBookshelf("Game View", new UIBook(
                 this,
                 "Game View",
@@ -46,15 +52,11 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
                         () -> coverPage = new GameViewPage(uiBook, this)),
                 null));
         
-        this.gameMapProperty = new SimpleObjectProperty<>();
-        
-        //
-        
         initUIPage();
         initGame();
+        
+        return this;
     }
-    
-    //<editor-fold desc="--- INITIALIZATION ---">
     
     private void initUIPage() { }
     
@@ -105,7 +107,7 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
     
     //
     
-    @Override public @NotNull GameViewContent game() { return this; }
+    @Override public @NotNull GameViewContent getGame() { return this; }
     
     
     @Override protected @NotNull GameViewContentData loadData() { return new GameViewContentData(this); }
