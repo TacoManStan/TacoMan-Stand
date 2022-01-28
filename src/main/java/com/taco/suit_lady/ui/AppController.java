@@ -211,16 +211,16 @@ public class AppController
         sidebarImagePane.setRotationAxis(Rotate.Y_AXIS);
         sidebarPaneAnchor.managedProperty().bind(sidebarPaneAnchor.visibleProperty());
         
-        getAppUI().init();
+        ui().init();
         
-        contentAnchorPane.getChildren().add(getAppUI().getContentManager().getContentBasePane());
-        ToolsFX.setAnchors(getAppUI().getContentManager().getContentBasePane(), 0.0);
+        contentAnchorPane.getChildren().add(ui().getContentManager().getContentBasePane());
+        ToolsFX.setAnchors(ui().getContentManager().getContentBasePane(), 0.0);
         
         initImageButtons();
         initSidebar();
-        getAppUI().getContentManager().init();
+        initContent();
         
-        ctx().getBean(Console.class).consolify(
+        console().consolify(
                 new ConsoleUIDataContainer(
                         consoleTree,
                         consoleTRiBotCheckBox.selectedProperty(),
@@ -235,9 +235,9 @@ public class AppController
         
         bookshelfTitleLabel.textProperty().bind(
                 Bindings.createStringBinding(() -> {
-                    final SidebarBookshelf bookshelf = getAppUI().getSidebar().getSelectedBookshelf();
+                    final SidebarBookshelf bookshelf = ui().getSidebar().getSelectedBookshelf();
                     return bookshelf != null ? bookshelf.getName() : "No Bookshelf Selected";
-                }, getAppUI().getSidebar().selectedBookshelfProperty()));
+                }, ui().getSidebar().selectedBookshelfProperty()));
         
         //        initOverlays();
         
@@ -247,14 +247,14 @@ public class AppController
         //
         
         root.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            this.getAppUI().getContentManager().submitKeyEvent(event.getCode());
+            ui().getContentManager().submitKeyEvent(event.getCode());
         });
         
         logiCore().init();
     }
     
     private void initSidebar() {
-        final Sidebar sidebar = ctx().getBean(AppUI.class).getSidebar();
+        final Sidebar sidebar = ui().getSidebar();
         
         final SidebarBookshelf generalSidebarBookshelf = new SidebarBookshelf(sidebar, "General", true);
         final SidebarBookshelf nyiSidebarBookshelf = new SidebarBookshelf(sidebar, "Not Yet Implemented", true);
@@ -572,6 +572,10 @@ public class AppController
         sidebarImagePane.visibleProperty().bind(Bindings.not(stage.maximizedProperty()));
     }
     
+    private void initContent() {
+        new GameViewContent(this).init();
+    }
+    
     //
     
     private void onShownInit() {
@@ -595,15 +599,6 @@ public class AppController
     }
     
     //</editor-fold>
-    
-    /**
-     * <p>Convenience method for retrieving the singleton {@link AppUI} instance for this application runtime instance.
-     *
-     * @return The singleton {@link AppUI} instance for this application runtime instance.
-     */
-    public final @NotNull AppUI getAppUI() {
-        return ctx().getBean(AppUI.class);
-    }
     
     private void toggleSidebar() {
         Stage stage = getStage();

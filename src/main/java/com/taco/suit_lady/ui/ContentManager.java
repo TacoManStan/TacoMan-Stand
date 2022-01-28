@@ -55,12 +55,6 @@ public class ContentManager
         this.contentProperty.addListener((observable, oldValue, newValue) -> onChange(oldValue, newValue));
     }
     
-    protected @NotNull ContentManager init() {
-        final GameViewContent game = new GameViewContent(this);
-        setContent(game.init());
-        return this;
-    }
-    
     //<editor-fold desc="--- PROPERTIES ---">
     
     //<editor-fold desc="--- INTERNAL UI PROPERTIES ---">

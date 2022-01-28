@@ -55,6 +55,8 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
         initUIPage();
         initGame();
         
+        ui().getContentManager().setContent(this);
+        
         return this;
     }
     
