@@ -85,6 +85,8 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
         });
         
         setGameMap(GameMap.newTestInstance(this, lock));
+        testObject.setXLocation(16 * 20);
+        testObject.setYLocation(16 * 20); 
         getGameMap().mapObjects().add(testObject.init());
         
         getCamera().xLocationProperty().bind(testObject.xLocProperty());
