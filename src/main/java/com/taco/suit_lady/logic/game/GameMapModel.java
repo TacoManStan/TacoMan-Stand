@@ -2,6 +2,7 @@ package com.taco.suit_lady.logic.game;
 
 import com.taco.suit_lady.logic.game.interfaces.GameComponent;
 import com.taco.suit_lady.logic.game.ui.GameViewContent;
+import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.CroppedImagePaintCommand;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasPane;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasSurface;
 import com.taco.suit_lady.util.Lockable;
@@ -9,6 +10,8 @@ import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.*;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
+import javafx.beans.binding.DoubleBinding;
+import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -36,28 +39,32 @@ public class GameMapModel
     
     //
     
-    private final ObjectProperty<Camera> cameraProperty;
+    private final Camera camera;
+    
+    private final ObjectProperty<Image> mapImageProperty;
+    
+    //
     
     private final ObjectProperty<StackPane> parentPaneProperty;
     private final CanvasPane canvasPane;
     
-    private final ObjectBinding<Image> mapImageBinding;
-    
-    
-    //    private final ImageOverlayCommand paintCommand;
+    private final CroppedImagePaintCommand mapImagePaintCommand;
     
     public GameMapModel(@NotNull GameViewContent content, @NotNull ReentrantLock lock) {
         this.lock = ExceptionsSL.nullCheck(lock, "Lock");
         this.content = content;
         
+        //
         
-        this.cameraProperty = new SimpleObjectProperty<>();
+        this.camera = new Camera(getGame());
         
+        //
         
         this.parentPaneProperty = new SimpleObjectProperty<>();
         this.canvasPane = new CanvasPane(this);
         
-        this.mapImageBinding = BindingsSL.constObjBinding(ResourcesSL.getDummyImage(ResourcesSL.MAP));
+        this.mapImageProperty = new SimpleObjectProperty<>(ResourcesSL.getDummyImage(ResourcesSL.MAP));
+        this.mapImagePaintCommand = new CroppedImagePaintCommand(this, lock);
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">
@@ -70,29 +77,49 @@ public class GameMapModel
                 }));
         
         setParentPane(new StackPane());
-        setCamera(new Camera(getGame()));
         
         //        getParentPane().setStyle("-fx-border-color: red");
         //        getCanvasPane().setStyle("-fx-border-color: blue");
         
-//        CroppedImagePaintCommand paintCommand = new CroppedImagePaintCommand(this, lock).init();
-//        //TODO: Configure the paint command initialization properly & bind w & h to correct values (in Camera)
-//        paintCommand.croppingBoundsBinding().setWidth(getOwner().get)
-//        paintCommand.croppingBoundsBinding().setHeight(getOwner().getFullHeight());
-//
-//        getCanvas().addPaintable(paintCommand);
-//        getCanvas().repaint();
+        //        CroppedImagePaintCommand paintCommand = new CroppedImagePaintCommand(this, lock).init();
+        //        //TODO: Configure the paint command initialization properly & bind w & h to correct values (in Camera)
+        //        paintCommand.croppingBoundsBinding().setWidth(getOwner().get)
+        //        paintCommand.croppingBoundsBinding().setHeight(getOwner().getFullHeight());
+        //
+        //        getCanvas().addPaintable(paintCommand);
+        //        getCanvas().repaint();
+        
+        getCamera().init();
+        
+        mapImagePaintCommand.init();
+        initMapImagePainting();
         
         return this;
+    }
+    
+    private void initMapImagePainting() {
+        mapImagePaintCommand.imageProperty().bind(getGameMap().getModel().mapImageProperty());
+        
+        
+        mapImagePaintCommand.boundsBinding().widthProperty().bind(camera.viewportWidthBinding());
+        mapImagePaintCommand.boundsBinding().heightProperty().bind(camera.viewportHeightBinding());
+        
+        mapImagePaintCommand.boundsBinding().xProperty().bind(camera.xAggregateBinding());
+        mapImagePaintCommand.boundsBinding().yProperty().bind(camera.yAggregateBinding());
+        
+        
+        mapImagePaintCommand.xScaleProperty().bind(camera.xMultiplierBinding());
+        mapImagePaintCommand.yScaleProperty().bind(camera.yMultiplierBinding());
+        
+        
+        getGameMap().getModel().getCanvas().addPaintable(mapImagePaintCommand);
     }
     
     //</editor-fold>
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final ObjectProperty<Camera> cameraProperty() { return cameraProperty; }
-    public final Camera getCamera() { return cameraProperty.get(); }
-    public final Camera setCamera(@NotNull Camera newValue) { return PropertiesSL.setProperty(cameraProperty, newValue); }
+    public final Camera getCamera() { return camera; }
     
     
     public final ObjectProperty<StackPane> parentPaneProperty() { return parentPaneProperty; }
@@ -102,8 +129,8 @@ public class GameMapModel
     protected final CanvasPane getCanvasPane() { return canvasPane; }
     @Contract(pure = true) public final @Nullable CanvasSurface getCanvas() { return canvasPane != null ? canvasPane.canvas() : null; }
     
-    public final ObjectBinding<Image> mapImageBinding() { return mapImageBinding; }
-    public final Image getMapImage() { return mapImageBinding.get(); }
+    public final ObjectProperty<Image> mapImageProperty() { return mapImageProperty; }
+    public final Image getMapImage() { return mapImageProperty.get(); }
     
     //</editor-fold>
     

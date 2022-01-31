@@ -25,6 +25,7 @@ public class GameObject
     
     private final GameViewContent content;
     
+    private final GameObjectModel model;
     private final AttributeContainer attributes;
     
     
@@ -67,6 +68,8 @@ public class GameObject
         //
         
         this.content = content;
+        
+        this.model = new GameObjectModel(this);
         this.attributes = new AttributeContainer(this, lock, this);
         
         
@@ -82,6 +85,8 @@ public class GameObject
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
+    
+    public final GameObjectModel getModel() { return model; }
     
     //<editor-fold desc="--- MAP PROPERTIES ---">
     

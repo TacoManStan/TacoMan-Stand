@@ -55,22 +55,22 @@ public class Camera
     
     //<editor-fold desc="--- BINDING FIELDS ---">
     
-    private final IntegerBinding xAggregateBinding;
-    private final IntegerBinding yAggregateBinding;
+    private IntegerBinding xAggregateBinding;
+    private IntegerBinding yAggregateBinding;
     
     
-    private final IntegerBinding viewportWidthBinding; //Bound to the specified observable value representing the width in pixels of the UI viewport object (e.g., CanvasSurface).
-    private final IntegerBinding viewportHeightBinding; //Bound to the specified observable value representing the height in pixels of the UI viewport object (e.g., CanvasSurface).
+    private IntegerBinding viewportWidthBinding; //Bound to the specified observable value representing the width in pixels of the UI viewport object (e.g., CanvasSurface).
+    private IntegerBinding viewportHeightBinding; //Bound to the specified observable value representing the height in pixels of the UI viewport object (e.g., CanvasSurface).
     
     
-    private final ObjectBinding<Image> mapImageBinding; //Bound to the actual raw game map image loaded by the MapModel object assigned to the GameMap object assigned to this Camera object.
+    private ObjectBinding<Image> mapImageBinding; //Bound to the actual raw game map image loaded by the MapModel object assigned to the GameMap object assigned to this Camera object.
     
-    private final IntegerBinding mapImageWidthBinding; //Bound via recursive binding to the width of the actual game map image loaded by the MapModel object assigned to the GameMap object assigned to this Camera object.
-    private final IntegerBinding mapImageHeightBinding; //Ditto
+    private IntegerBinding mapImageWidthBinding; //Bound via recursive binding to the width of the actual game map image loaded by the MapModel object assigned to the GameMap object assigned to this Camera object.
+    private IntegerBinding mapImageHeightBinding; //Ditto
     
     
-    private final DoubleBinding xMultiplierBinding; //Multiplier representing the scaling ratio between the map image width and the map data object width
-    private final DoubleBinding yMultiplierBinding; //Multiplier representing the scaling ratio between the map image height and the map data object height
+    private DoubleBinding xMultiplierBinding; //Multiplier representing the scaling ratio between the map image width and the map data object width
+    private DoubleBinding yMultiplierBinding; //Multiplier representing the scaling ratio between the map image height and the map data object height
     
     //</editor-fold>
     
@@ -86,55 +86,38 @@ public class Camera
         this.mapImagePaintCommand = new CroppedImagePaintCommand(this, lock).init();
         
         //
-    
-        this.viewportWidthBinding = BindingsSL.directIntBinding(getGame().getController().getMapPane().widthProperty());
-        this.viewportHeightBinding = BindingsSL.directIntBinding(getGame().getController().getMapPane().heightProperty());
-    
-    
+        
         this.xLocationProperty = new SimpleIntegerProperty(0);
         this.yLocationProperty = new SimpleIntegerProperty(0);
         
         this.xOffsetProperty = new SimpleIntegerProperty(0);
         this.yOffsetProperty = new SimpleIntegerProperty(0);
-    
-    
-        this.xAggregateBinding = BindingsSL.intBinding(() -> getLocationX() + getOffsetX(), xLocationProperty(), xOffsetProperty());
-        this.yAggregateBinding = BindingsSL.intBinding(() -> getLocationY() + getOffsetY(), yLocationProperty(), yOffsetProperty());
-        
-        //
-        
-        this.mapImageBinding = BindingsSL.directObjBinding(getGameMap().getModel().mapImageBinding());
-        
-        this.mapImageWidthBinding = BindingsSL.recursiveIntBinding(lock, image -> image.widthProperty(), mapImageBinding);
-        this.mapImageHeightBinding = BindingsSL.recursiveIntBinding(lock, image -> image.heightProperty(), mapImageBinding);
-        
-        
-        this.xMultiplierBinding = BindingsSL.doubleBinding(() -> ((double) getMapImageWidth() / (double) getMapWidth()), mapImageWidthBinding);
-        this.yMultiplierBinding = BindingsSL.doubleBinding(() -> ((double) getMapImageHeight() / (double) getMapHeight()), mapImageHeightBinding);
-        
-        //
-        
-        initPainting();
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">
     
-    private void initPainting() {
-        mapImagePaintCommand.imageProperty().bind(getGameMap().getModel().mapImageBinding());
+    public Camera init() {
+        initBindings();
+        return this;
+    }
+    
+    private void initBindings() {
+        this.viewportWidthBinding = BindingsSL.directIntBinding(getGame().getController().getMapPane().widthProperty());
+        this.viewportHeightBinding = BindingsSL.directIntBinding(getGame().getController().getMapPane().heightProperty());
         
-        
-        mapImagePaintCommand.boundsBinding().widthProperty().bind(viewportWidthBinding);
-        mapImagePaintCommand.boundsBinding().heightProperty().bind(viewportHeightBinding);
-        
-        mapImagePaintCommand.boundsBinding().xProperty().bind(xAggregateBinding);
-        mapImagePaintCommand.boundsBinding().yProperty().bind(yAggregateBinding);
-        
-        
-        mapImagePaintCommand.xScaleProperty().bind(xMultiplierBinding);
-        mapImagePaintCommand.yScaleProperty().bind(yMultiplierBinding);
-        
-        
-        getGameMap().getModel().getCanvas().addPaintable(mapImagePaintCommand);
+        this.xAggregateBinding = BindingsSL.intBinding(() -> getLocationX() + getOffsetX(), xLocationProperty(), xOffsetProperty());
+        this.yAggregateBinding = BindingsSL.intBinding(() -> getLocationY() + getOffsetY(), yLocationProperty(), yOffsetProperty());
+    
+        //
+    
+        this.mapImageBinding = BindingsSL.directObjBinding(getGameMap().getModel().mapImageProperty());
+    
+        this.mapImageWidthBinding = BindingsSL.recursiveIntBinding(lock, image -> image.widthProperty(), mapImageBinding);
+        this.mapImageHeightBinding = BindingsSL.recursiveIntBinding(lock, image -> image.heightProperty(), mapImageBinding);
+    
+    
+        this.xMultiplierBinding = BindingsSL.doubleBinding(() -> ((double) getMapImageWidth() / (double) getMapWidth()), mapImageWidthBinding);
+        this.yMultiplierBinding = BindingsSL.doubleBinding(() -> ((double) getMapImageHeight() / (double) getMapHeight()), mapImageHeightBinding);
     }
     
     //</editor-fold>
@@ -219,6 +202,13 @@ public class Camera
     public final int getMapImageHeight() { return mapImageHeightBinding.get(); }
     
     //
+    
+    public final IntegerBinding xAggregateBinding() { return xAggregateBinding; }
+    public final int getAggregateX() { return xAggregateBinding.get(); }
+    
+    public final IntegerBinding yAggregateBinding() { return yAggregateBinding; }
+    public final int getAggregateY() { return yAggregateBinding.get(); }
+    
     
     public final DoubleBinding xMultiplierBinding() { return xMultiplierBinding; }
     public final double getMultiplierX() { return xMultiplierBinding.get(); }

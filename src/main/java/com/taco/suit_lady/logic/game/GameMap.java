@@ -35,7 +35,7 @@ public class GameMap
     private final ArrayList<GameObject> mapObjects;
     
     
-    private final GameMapModel model;
+    private GameMapModel model;
     
     public GameMap(@NotNull GameViewContent content, @Nullable ReentrantLock lock, int width, int height, int tileSize) {
         this.content = content;
@@ -51,17 +51,19 @@ public class GameMap
         
         this.tileMap = new GameTile[width][height];
         this.mapObjects = new ArrayList<>();
-        
-        
-        this.model = new GameMapModel(getGame(), getLock());
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">
     
     public final GameMap init() {
         initTiles();
-        getModel().init();
-        
+        initModel();
+        return this;
+    }
+    
+    public final GameMap initModel() {
+        this.model = new GameMapModel(getGame(), lock);
+        this.model.init();
         return this;
     }
     
