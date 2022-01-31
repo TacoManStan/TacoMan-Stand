@@ -109,6 +109,8 @@ public class GameObject
         return oldValue;
     }
     
+    public final int moveX(int amount) { return setXLocation(getXLocation() + amount); }
+    
     
     public final IntegerProperty yLocProperty() {
         return yLocProperty;
@@ -123,6 +125,8 @@ public class GameObject
         yLocProperty.set(newValue);
         return oldValue;
     }
+    
+    public final int moveY(int amount) { return setYLocation(getYLocation() + amount); }
     
     
     public final IntegerProperty widthProperty() {

@@ -31,6 +31,8 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
     
     private final ObjectProperty<GameMap> gameMapProperty;
     
+    private final GameObject testObject;
+    
     public GameViewContent(@NotNull Springable springable) {
         super(springable);
         this.lock = new ReentrantLock();
@@ -38,6 +40,8 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
         //
         
         this.gameMapProperty = new SimpleObjectProperty<>();
+        
+        this.testObject = new GameObject(this, lock);
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">
@@ -81,8 +85,10 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
         });
         
         setGameMap(GameMap.newTestInstance(this, lock));
+        getGameMap().mapObjects().add(testObject.init());
         
-        getGameMap().mapObjects().add(new GameObject(this, lock).init());
+        getCamera().xLocationProperty().bind(testObject.xLocProperty());
+        getCamera().yLocationProperty().bind(testObject.yLocProperty());
     }
     
     //</editor-fold>
@@ -103,10 +109,14 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
     
     @Override protected void handleKeyEvent(@NotNull KeyCode keyCode) {
         switch (keyCode) {
-            case W -> getCamera().moveY(-getCamera().getGameMap().getTileSize());
-            case A -> getCamera().moveX(-getCamera().getGameMap().getTileSize());
-            case S -> getCamera().moveY(getCamera().getGameMap().getTileSize());
-            case D -> getCamera().moveX(getCamera().getGameMap().getTileSize());
+//            case W -> getCamera().moveY(-getCamera().getGameMap().getTileSize());
+//            case A -> getCamera().moveX(-getCamera().getGameMap().getTileSize());
+//            case S -> getCamera().moveY(getCamera().getGameMap().getTileSize());
+//            case D -> getCamera().moveX(getCamera().getGameMap().getTileSize());
+            case W -> testObject.moveY(-getCamera().getGameMap().getTileSize());
+            case A -> testObject.moveX(-getCamera().getGameMap().getTileSize());
+            case S -> testObject.moveY(getCamera().getGameMap().getTileSize());
+            case D -> testObject.moveX(getCamera().getGameMap().getTileSize());
         }
     }
     
