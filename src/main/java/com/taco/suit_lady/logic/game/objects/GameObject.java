@@ -84,6 +84,11 @@ public class GameObject
         this.moveSpeedProperty = new ReadOnlyDoubleWrapper();
     }
     
+    public final GameObject init() {
+        getModel().init();
+        return this;
+    }
+    
     //<editor-fold desc="--- PROPERTIES ---">
     
     public final GameObjectModel getModel() { return model; }

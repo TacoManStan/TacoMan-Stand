@@ -10,9 +10,6 @@ import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.*;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
-import javafx.beans.binding.DoubleBinding;
-import javafx.beans.binding.IntegerBinding;
-import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.image.Image;
@@ -65,6 +62,7 @@ public class GameMapModel
         
         this.mapImageProperty = new SimpleObjectProperty<>(ResourcesSL.getDummyImage(ResourcesSL.MAP));
         this.mapImagePaintCommand = new CroppedImagePaintCommand(this, lock);
+        this.mapImagePaintCommand.setPaintPriority(5);
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">
@@ -92,12 +90,12 @@ public class GameMapModel
         getCamera().init();
         
         mapImagePaintCommand.init();
-        initMapImagePainting();
+        initPaintCommand();
         
         return this;
     }
     
-    private void initMapImagePainting() {
+    private void initPaintCommand() {
         mapImagePaintCommand.imageProperty().bind(getGameMap().getModel().mapImageProperty());
         
         
@@ -112,7 +110,7 @@ public class GameMapModel
         mapImagePaintCommand.yScaleProperty().bind(camera.yMultiplierBinding());
         
         
-        getGameMap().getModel().getCanvas().addPaintable(mapImagePaintCommand);
+        getCanvas().addPaintable(mapImagePaintCommand);
     }
     
     //</editor-fold>

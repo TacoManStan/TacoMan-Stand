@@ -3,6 +3,7 @@ package com.taco.suit_lady.logic.game.ui;
 import com.taco.suit_lady.logic.game.Camera;
 import com.taco.suit_lady.logic.game.GameMap;
 import com.taco.suit_lady.logic.game.interfaces.GameComponent;
+import com.taco.suit_lady.logic.game.objects.GameObject;
 import com.taco.suit_lady.ui.Content;
 import com.taco.suit_lady.ui.UIBook;
 import com.taco.suit_lady.util.Lockable;
@@ -80,6 +81,8 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
         });
         
         setGameMap(GameMap.newTestInstance(this, lock));
+        
+        getGameMap().mapObjects().add(new GameObject(this, lock).init());
     }
     
     //</editor-fold>
