@@ -1,6 +1,8 @@
 package com.taco.suit_lady.logic;
 
 import com.taco.suit_lady.util.springable.Springable;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -23,6 +25,7 @@ public class LogiCore
     //
     
     private final ScheduledThreadPoolExecutor gameLoopExecutor;
+    private final ListProperty<Tickable> tickables;
     
     public LogiCore(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         this.weaver = weaver;
@@ -34,16 +37,23 @@ public class LogiCore
         //
         
         this.gameLoopExecutor = new ScheduledThreadPoolExecutor(1);
+        this.tickables = new SimpleListProperty<>();
     }
+    
+    public final ListProperty<Tickable> getTickables() { return tickables; }
+    
+    public final boolean submit(@NotNull Tickable tickable) { return tickables.add(tickable); }
+    public final boolean remove(@NotNull Tickable tickable) { return tickables.remove(tickable); }
     
     //<editor-fold desc="--- GAME LOOP ---">
     
     public final void init() {
-        gameLoopExecutor.scheduleAtFixedRate(() -> {
-        }, 0, (long) 1000 / 60, TimeUnit.MILLISECONDS);
+        gameLoopExecutor.scheduleAtFixedRate(this::tick, 0, (long) 1000 / 60, TimeUnit.MILLISECONDS);
     }
     
-    private void tick() { }
+    private void tick() {
+        tickables.forEach(Tickable::tick);
+    }
     
     //</editor-fold>
     
