@@ -188,8 +188,8 @@ public class GameObject
     public final @NotNull GameTile[][] getOccupyingTiles() {
         final int adjustedMinX = getXLocation() / getGameMap().getTileSize();
         final int adjustedMinY = getYLocation() / getGameMap().getTileSize();
-        final int adjustedMaxX = (getWidth() + getXLocation()) / getGameMap().getTileSize();
-        final int adjustedMaxY = (getHeight() + getYLocation()) / getGameMap().getTileSize();
+        final int adjustedMaxX = (int) Math.ceil((getWidth() + getXLocation()) / (double) getGameMap().getTileSize());
+        final int adjustedMaxY = (int) Math.ceil((getHeight() + getYLocation()) / (double) getGameMap().getTileSize());
         
         final GameTile[][] occupyingGameTiles = new GameTile[(adjustedMaxX - adjustedMinX) + 1][(adjustedMaxY - adjustedMinY) + 1];
         for (int i = 0; i < occupyingGameTiles.length; i++)

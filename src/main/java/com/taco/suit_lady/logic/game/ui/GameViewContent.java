@@ -44,6 +44,8 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
         this.testObject = new GameObject(this, lock);
     }
     
+    public final GameObject getTestObject() { return testObject; }
+    
     //<editor-fold desc="--- INITIALIZATION ---">
     
     public GameViewContent init() {
@@ -109,13 +111,25 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override protected void handleKeyEvent(@NotNull KeyCode keyCode) {
-        switch (keyCode) {
-            case W -> testObject.moveTileY(-1);
-            case A -> testObject.moveTileX(-1);
-            case S -> testObject.moveTileY(1);
-            case D -> testObject.moveTileX(1);
-        }
+    @Override protected boolean handleKeyEvent(@NotNull KeyCode keyCode) {
+        return switch (keyCode) {
+            case W -> keyInputAction(() -> testObject.moveTileY(-1));
+            case A -> keyInputAction(() ->  testObject.moveTileX(-1));
+            case S -> keyInputAction(() -> testObject.moveTileY(1));
+            case D -> keyInputAction(() -> testObject.moveTileX(1));
+            
+            case UP -> keyInputAction(() -> testObject.moveY(-1));
+            case LEFT -> keyInputAction(() -> testObject.moveX(-1));
+            case DOWN -> keyInputAction(() -> testObject.moveY(1));
+            case RIGHT -> keyInputAction(() -> testObject.moveX(1));
+            
+            default -> false;
+        };
+    }
+    
+    private boolean keyInputAction(@NotNull Runnable action) {
+        action.run();
+        return true;
     }
     
     //

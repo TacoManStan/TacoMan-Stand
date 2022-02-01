@@ -27,4 +27,12 @@ public class GameTile {
     public final int getYLoc() {
         return yLoc;
     }
+    
+    @Override public String toString() {
+        return "GameTile{" +
+               "owner=" + owner +
+               ", xLoc=" + xLoc +
+               ", yLoc=" + yLoc +
+               '}';
+    }
 }

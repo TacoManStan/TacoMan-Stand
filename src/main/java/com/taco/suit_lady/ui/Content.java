@@ -88,7 +88,7 @@ public abstract class Content<D extends ContentData, C extends ContentController
     protected abstract @NotNull D loadData();
     protected abstract @NotNull Class<C> controllerDefinition();
     
-    protected abstract void handleKeyEvent(@NotNull KeyCode keyCode);
+    protected abstract boolean handleKeyEvent(@NotNull KeyCode keyCode);
     
     //<editor-fold desc="--- EVENTS ---">
     

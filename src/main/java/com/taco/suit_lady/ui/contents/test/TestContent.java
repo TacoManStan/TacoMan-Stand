@@ -58,7 +58,7 @@ public class TestContent extends Content<TestContentData, TestContentController>
         return TestContentController.class;
     }
     
-    @Override protected void handleKeyEvent(@NotNull KeyCode keyCode) { }
+    @Override protected boolean handleKeyEvent(@NotNull KeyCode keyCode) { return false; }
     
     @Override
     protected void onActivate() { }

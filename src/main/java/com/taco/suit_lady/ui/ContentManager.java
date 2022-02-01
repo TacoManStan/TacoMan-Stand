@@ -156,9 +156,10 @@ public class ContentManager
         }, true);
     }
     
-    protected void submitKeyEvent(@NotNull KeyCode keyCode) {
+    protected boolean submitKeyEvent(@NotNull KeyCode keyCode) {
         Content<?, ?> content = getContent();
         if (content != null)
-            content.handleKeyEvent(keyCode);
+            return content.handleKeyEvent(keyCode);
+        return false;
     }
 }

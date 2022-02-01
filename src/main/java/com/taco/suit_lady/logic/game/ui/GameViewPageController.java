@@ -1,6 +1,8 @@
 package com.taco.suit_lady.logic.game.ui;
 
 import com.taco.suit_lady.logic.game.interfaces.GameComponent;
+import com.taco.suit_lady.logic.game.objects.GameObject;
+import com.taco.suit_lady.logic.game.objects.GameTile;
 import com.taco.suit_lady.ui.UIPageController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -12,6 +14,8 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
 
 @Component
 @FxmlView("/fxml/game_view/pages/game_view_page.fxml")
@@ -53,8 +57,24 @@ public class GameViewPageController extends UIPageController<GameViewPage>
             System.out.println("Canvas Height: " + getGameMap().getModel().getCanvas().getHeight());
         });
         
-        testButton2.setOnAction(event -> { });
-        testButton3.setOnAction(event -> { });
+        testButton2.setOnAction(event -> {
+            debugger().setDebugEnabled(true);
+            debugger().setStatusEnabled(true);
+            debugger().setErrorEnabled(true);
+            debugger().setWarnEnabled(true);
+            
+            debugger().printList(getGameMap().mapObjects(), "Map Objects");
+        });
+        testButton2.setText("Print Game Objects");
+        
+        testButton3.setOnAction(event -> {
+            ArrayList<GameTile> tiles = new ArrayList<>();
+            GameTile[][] tileMatrix = getGame().getTestObject().getOccupyingTiles();
+            for (int i = 0; i < tileMatrix.length; i++)
+                for (int j = 0; j < tileMatrix[i].length; j++)
+                    System.out.println("Tile [" + i + ", " + j + "]: " + tileMatrix[i][j]);
+        });
+        
         testButton4.setOnAction(event -> { });
         testButton5.setOnAction(event -> { });
         testButton6.setOnAction(event -> { });

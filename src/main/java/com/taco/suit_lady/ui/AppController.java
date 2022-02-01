@@ -247,7 +247,8 @@ public class AppController
         //
         
         root.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            ui().getContentManager().submitKeyEvent(event.getCode());
+            if (ui().getContentManager().submitKeyEvent(event.getCode()))
+                event.consume();
         });
         
         logiCore().init();
