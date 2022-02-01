@@ -32,6 +32,7 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
     private final ObjectProperty<GameMap> gameMapProperty;
     
     private final GameObject testObject;
+    private final GameObject testObject2;
     
     public GameViewContent(@NotNull Springable springable) {
         super(springable);
@@ -42,6 +43,7 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
         this.gameMapProperty = new SimpleObjectProperty<>();
         
         this.testObject = new GameObject(this, lock);
+        this.testObject2 = new GameObject(this, lock);
     }
     
     public final GameObject getTestObject() { return testObject; }
@@ -91,8 +93,12 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
         testObject.setTileLocationY(20);
         getGameMap().mapObjects().add(testObject.init());
         
+        testObject2.setTileLocationX(30);
+        testObject2.setTileLocationY(20);
+        getGameMap().mapObjects().add(testObject2.init());
+        
         getCamera().xLocationProperty().bind(testObject.xLocProperty());
-        getCamera().yLocationProperty().bind(testObject.yLocProperty());
+        getCamera().yLocationProperty().bind(testObject.yLocationProperty());
     }
     
     //</editor-fold>

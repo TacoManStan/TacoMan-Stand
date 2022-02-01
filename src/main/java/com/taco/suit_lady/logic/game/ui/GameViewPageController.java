@@ -1,5 +1,6 @@
 package com.taco.suit_lady.logic.game.ui;
 
+import com.taco.suit_lady.logic.game.commands.MoveBehavior;
 import com.taco.suit_lady.logic.game.interfaces.GameComponent;
 import com.taco.suit_lady.logic.game.objects.GameObject;
 import com.taco.suit_lady.logic.game.objects.GameTile;
@@ -74,6 +75,7 @@ public class GameViewPageController extends UIPageController<GameViewPage>
                 for (int j = 0; j < tileMatrix[i].length; j++)
                     System.out.println("Tile [" + i + ", " + j + "]: " + tileMatrix[i][j]);
         });
+        testButton3.setText("Print Occupying Tiles");
         
         testButton4.setOnAction(event -> { });
         testButton5.setOnAction(event -> { });

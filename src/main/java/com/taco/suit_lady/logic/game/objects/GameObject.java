@@ -30,8 +30,8 @@ public class GameObject
     private final AttributeContainer attributes;
     
     
-    private final IntegerProperty xLocProperty;
-    private final IntegerProperty yLocProperty;
+    private final DoubleProperty xLocationProperty;
+    private final DoubleProperty yLocationProperty;
     
     private final IntegerProperty widthProperty;
     private final IntegerProperty heightProperty;
@@ -63,6 +63,10 @@ public class GameObject
     private final ReadOnlyDoubleWrapper moveSpeedProperty;
     
     public GameObject(@NotNull GameViewContent content, @Nullable ReentrantLock lock) {
+        this(content, lock, 0, 0);
+    }
+    
+    public GameObject(@NotNull GameViewContent content, @Nullable ReentrantLock lock, int locationX, int locationY) {
         this.springable = content.asStrict();
         this.lock = lock != null ? lock : new ReentrantLock();
         
@@ -74,8 +78,8 @@ public class GameObject
         this.attributes = new AttributeContainer(this, lock, this);
         
         
-        this.xLocProperty = new SimpleIntegerProperty();
-        this.yLocProperty = new SimpleIntegerProperty();
+        this.xLocationProperty = new SimpleDoubleProperty(locationX);
+        this.yLocationProperty = new SimpleDoubleProperty(locationY);
         
         this.widthProperty = new SimpleIntegerProperty();
         this.heightProperty = new SimpleIntegerProperty();
@@ -96,22 +100,22 @@ public class GameObject
     
     //<editor-fold desc="--- MAP PROPERTIES ---">
     
-    public final IntegerProperty xLocProperty() { return xLocProperty; }
-    public final int getXLocation() { return xLocProperty.get(); }
-    public final int setXLocation(int newValue) { return PropertiesSL.setProperty(xLocProperty, newValue); }
+    public final DoubleProperty xLocProperty() { return xLocationProperty; }
+    public final double getLocationX() { return xLocationProperty.get(); }
+    public final double setLocationX(@NotNull Number newValue) { return PropertiesSL.setProperty(xLocationProperty, newValue.doubleValue()); }
     
-    public final int setTileLocationX(int newValue) { return PropertiesSL.setProperty(xLocProperty, newValue * getGameMap().getTileSize()); }
-    public final int moveX(int amount) { return setXLocation(getXLocation() + amount); }
-    public final int moveTileX(int amount) { return setXLocation(getXLocation() + (amount * getGameMap().getTileSize())); }
+    public final double setTileLocationX(@NotNull Number newValue) { return PropertiesSL.setProperty(xLocationProperty, newValue.doubleValue() * getGameMap().getTileSize()); }
+    public final double moveX(@NotNull Number amount) { return setLocationX(getLocationX() + amount.doubleValue()); }
+    public final double moveTileX(@NotNull Number amount) { return setLocationX(getLocationX() + (amount.doubleValue() * getGameMap().getTileSize())); }
     
     
-    public final IntegerProperty yLocProperty() { return yLocProperty; }
-    public final int getYLocation() { return yLocProperty.get(); }
-    public final int setYLocation(int newValue) { return PropertiesSL.setProperty(yLocProperty, newValue); }
+    public final DoubleProperty yLocationProperty() { return yLocationProperty; }
+    public final double getLocationY() { return yLocationProperty.get(); }
+    public final double setLocationY(@NotNull Number newValue) { return PropertiesSL.setProperty(yLocationProperty, newValue.doubleValue()); }
     
-    public final int setTileLocationY(int newValue) { return PropertiesSL.setProperty(yLocProperty, newValue * getGameMap().getTileSize()); }
-    public final int moveY(int amount) { return setYLocation(getYLocation() + amount); }
-    public final int moveTileY(int amount) { return setYLocation(getYLocation() + (amount * getGameMap().getTileSize())); }
+    public final double setTileLocationY(@NotNull Number newValue) { return PropertiesSL.setProperty(yLocationProperty, newValue.doubleValue() * getGameMap().getTileSize()); }
+    public final double moveY(@NotNull Number amount) { return setLocationY(getLocationY() + amount.doubleValue()); }
+    public final double moveTileY(@NotNull Number amount) { return setLocationY(getLocationY() + (amount.doubleValue() * getGameMap().getTileSize())); }
     
     
     public final IntegerProperty widthProperty() {
@@ -186,10 +190,10 @@ public class GameObject
     //</editor-fold>
     
     public final @NotNull GameTile[][] getOccupyingTiles() {
-        final int adjustedMinX = getXLocation() / getGameMap().getTileSize();
-        final int adjustedMinY = getYLocation() / getGameMap().getTileSize();
-        final int adjustedMaxX = (int) Math.ceil((getWidth() + getXLocation()) / (double) getGameMap().getTileSize());
-        final int adjustedMaxY = (int) Math.ceil((getHeight() + getYLocation()) / (double) getGameMap().getTileSize());
+        final int adjustedMinX = (int) getLocationX() / getGameMap().getTileSize();
+        final int adjustedMinY = (int) getLocationY() / getGameMap().getTileSize();
+        final int adjustedMaxX = (int) Math.ceil((getWidth() + getLocationX()) / (double) getGameMap().getTileSize());
+        final int adjustedMaxY = (int) Math.ceil((getHeight() + getLocationY()) / (double) getGameMap().getTileSize());
         
         final GameTile[][] occupyingGameTiles = new GameTile[(adjustedMaxX - adjustedMinX) + 1][(adjustedMaxY - adjustedMinY) + 1];
         for (int i = 0; i < occupyingGameTiles.length; i++)

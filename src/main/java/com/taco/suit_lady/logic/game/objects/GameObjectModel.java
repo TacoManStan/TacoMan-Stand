@@ -2,7 +2,6 @@ package com.taco.suit_lady.logic.game.objects;
 
 import com.taco.suit_lady.logic.game.interfaces.GameComponent;
 import com.taco.suit_lady.logic.game.ui.GameViewContent;
-import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.CroppedImagePaintCommand;
 import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.ImagePaintCommand;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
@@ -42,8 +41,8 @@ public class GameObjectModel
     }
     
     public GameObjectModel init() {
-        this.xPaintPositionBinding = BindingsSL.intBinding(() -> -getOwner().getGameMap().getModel().getCamera().getAggregateX() + getOwner().getXLocation(), getOwner().getGameMap().getModel().getCamera().xAggregateBinding(), getOwner().xLocProperty());
-        this.yPaintPositionBinding = BindingsSL.intBinding(() -> -getOwner().getGameMap().getModel().getCamera().getAggregateY() + getOwner().getYLocation(), getOwner().getGameMap().getModel().getCamera().yAggregateBinding(), getOwner().yLocProperty());
+        this.xPaintPositionBinding = BindingsSL.intBinding(() -> -getOwner().getGameMap().getModel().getCamera().getAggregateX() + getOwner().getLocationX(), getOwner().getGameMap().getModel().getCamera().xAggregateBinding(), getOwner().xLocProperty());
+        this.yPaintPositionBinding = BindingsSL.intBinding(() -> -getOwner().getGameMap().getModel().getCamera().getAggregateY() + getOwner().getLocationY(), getOwner().getGameMap().getModel().getCamera().yAggregateBinding(), getOwner().yLocationProperty());
         
         this.modelPaintCommand.init();
         
