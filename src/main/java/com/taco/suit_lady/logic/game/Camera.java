@@ -140,6 +140,7 @@ public class Camera
     public final int getLocationX() { return xLocationProperty.get(); }
     public final int setLocationX(int newValue) { return PropertiesSL.setProperty(xLocationProperty, newValue); }
     public final int moveX(int amount) { return setLocationX(getLocationX() + amount); }
+    public final int moveTileX(int amount) { return setLocationX(getLocationX() + (amount * getGameMap().getTileSize())); }
     
     /**
      * <p>Defines the {@code y} coordinate at which this camera is assigned.</p>
@@ -153,6 +154,7 @@ public class Camera
     public final int getLocationY() { return yLocationProperty.get(); }
     public final int setLocationY(int newValue) { return PropertiesSL.setProperty(yLocationProperty, newValue); }
     public final int moveY(int amount) { return setLocationY(getLocationY() + amount); }
+    public final int moveTileY(int amount) { return setLocationY(getLocationY() + (amount * getGameMap().getTileSize())); }
     
     
     /**

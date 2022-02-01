@@ -212,7 +212,7 @@ public class GameMap
     
 
     public static @NotNull GameMap newTestInstance(@NotNull GameViewContent content, @Nullable ReentrantLock lock) {
-        return new GameMap(content, lock, 96, 64, 16);
+        return new GameMap(content, lock, 96, 64, 32);
     }
     
     //</editor-fold>

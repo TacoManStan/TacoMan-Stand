@@ -6,6 +6,7 @@ import com.taco.suit_lady.logic.game.interfaces.AttributeContainable;
 import com.taco.suit_lady.logic.game.ui.GameViewContent;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
+import com.taco.suit_lady.util.tools.PropertiesSL;
 import javafx.beans.property.*;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
@@ -95,38 +96,22 @@ public class GameObject
     
     //<editor-fold desc="--- MAP PROPERTIES ---">
     
-    public final IntegerProperty xLocProperty() {
-        return xLocProperty;
-    }
+    public final IntegerProperty xLocProperty() { return xLocProperty; }
+    public final int getXLocation() { return xLocProperty.get(); }
+    public final int setXLocation(int newValue) { return PropertiesSL.setProperty(xLocProperty, newValue); }
     
-    public final int getXLocation() {
-        return xLocProperty.get();
-    }
-    
-    public final int setXLocation(int newValue) {
-        int oldValue = getXLocation();
-        xLocProperty.set(newValue);
-        return oldValue;
-    }
-    
+    public final int setTileLocationX(int newValue) { return PropertiesSL.setProperty(xLocProperty, newValue * getGameMap().getTileSize()); }
     public final int moveX(int amount) { return setXLocation(getXLocation() + amount); }
+    public final int moveTileX(int amount) { return setXLocation(getXLocation() + (amount * getGameMap().getTileSize())); }
     
     
-    public final IntegerProperty yLocProperty() {
-        return yLocProperty;
-    }
+    public final IntegerProperty yLocProperty() { return yLocProperty; }
+    public final int getYLocation() { return yLocProperty.get(); }
+    public final int setYLocation(int newValue) { return PropertiesSL.setProperty(yLocProperty, newValue); }
     
-    public final int getYLocation() {
-        return yLocProperty.get();
-    }
-    
-    public final int setYLocation(int newValue) {
-        int oldValue = getYLocation();
-        yLocProperty.set(newValue);
-        return oldValue;
-    }
-    
+    public final int setTileLocationY(int newValue) { return PropertiesSL.setProperty(yLocProperty, newValue * getGameMap().getTileSize()); }
     public final int moveY(int amount) { return setYLocation(getYLocation() + amount); }
+    public final int moveTileY(int amount) { return setYLocation(getYLocation() + (amount * getGameMap().getTileSize())); }
     
     
     public final IntegerProperty widthProperty() {

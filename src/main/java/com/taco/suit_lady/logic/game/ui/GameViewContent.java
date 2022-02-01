@@ -85,8 +85,8 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
         });
         
         setGameMap(GameMap.newTestInstance(this, lock));
-        testObject.setXLocation(16 * 20);
-        testObject.setYLocation(16 * 20); 
+        testObject.setTileLocationX(20);
+        testObject.setTileLocationY(20);
         getGameMap().mapObjects().add(testObject.init());
         
         getCamera().xLocationProperty().bind(testObject.xLocProperty());
@@ -111,14 +111,10 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
     
     @Override protected void handleKeyEvent(@NotNull KeyCode keyCode) {
         switch (keyCode) {
-//            case W -> getCamera().moveY(-getCamera().getGameMap().getTileSize());
-//            case A -> getCamera().moveX(-getCamera().getGameMap().getTileSize());
-//            case S -> getCamera().moveY(getCamera().getGameMap().getTileSize());
-//            case D -> getCamera().moveX(getCamera().getGameMap().getTileSize());
-            case W -> testObject.moveY(-getCamera().getGameMap().getTileSize());
-            case A -> testObject.moveX(-getCamera().getGameMap().getTileSize());
-            case S -> testObject.moveY(getCamera().getGameMap().getTileSize());
-            case D -> testObject.moveX(getCamera().getGameMap().getTileSize());
+            case W -> testObject.moveTileY(-1);
+            case A -> testObject.moveTileX(-1);
+            case S -> testObject.moveTileY(1);
+            case D -> testObject.moveTileX(1);
         }
     }
     
