@@ -44,6 +44,11 @@ public abstract class Content<T extends Content<T, D, C>, D extends ContentData<
         this.bookshelves = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
     }
     
+    protected T init() {
+        getController().init((T) this);
+        return (T) this;
+    }
+    
     //<editor-fold desc="--- PROPERTIES ---">
     
     public final @NotNull D getData() {

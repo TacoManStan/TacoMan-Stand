@@ -52,7 +52,7 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
     
     //<editor-fold desc="--- INITIALIZATION ---">
     
-    public GameViewContent init() {
+    @Override public GameViewContent init() {
         injectBookshelf("Game View", new UIBook(
                 this,
                 "Game View",
@@ -70,7 +70,7 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         
         getController().getContentPane().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {});
         
-        return this;
+        return super.init();
     }
     
     private void initUIPage() { }
