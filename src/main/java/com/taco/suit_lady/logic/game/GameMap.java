@@ -10,6 +10,7 @@ import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.ArraysSL;
 import com.taco.suit_lady.util.tools.MathSL;
+import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -175,6 +176,18 @@ public class GameMap
                 if (ArraysSL.isInMatrixBounds(getTileMap(), i, j))
                     returnTiles.add(getTileMap()[i][j]);
         return returnTiles;
+    }
+    
+    public final @NotNull GameTile getTileAtPoint(@NotNull Number x, @NotNull Number y) {
+        return getTileAtPoint(new Point2D(x.doubleValue(), y.doubleValue()));
+    }
+    
+    public final @NotNull GameTile getTileAtPoint(@NotNull Point2D point) {
+        return tileMap[(int) Math.ceil(point.getX() / getTileSize())][(int) Math.ceil(point.getY() / getTileSize())];
+    }
+    
+    public final ArrayList<GameObject> getObjectsAtPoint(@NotNull Point2D point) {
+        return new ArrayList<>(getTileAtPoint(point).getOccupyingObjects());
     }
     
     public boolean shutdown() {

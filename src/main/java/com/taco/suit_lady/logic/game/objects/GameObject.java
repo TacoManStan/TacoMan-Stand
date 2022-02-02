@@ -10,6 +10,7 @@ import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.BindingsSL;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import javafx.beans.binding.DoubleBinding;
+import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;
 import javafx.geometry.Point2D;
 import net.rgielen.fxweaver.core.FxWeaver;
@@ -44,6 +45,8 @@ public class GameObject
     
     private final DoubleBinding xLocationCenteredBinding;
     private final DoubleBinding yLocationCenteredBinding;
+    
+    private ObjectBinding<GameTile[][]> occupiedTilesBinding = null;
     
     //
     
@@ -111,6 +114,21 @@ public class GameObject
     
     public final GameObject init() {
         getModel().init();
+        this.occupiedTilesBinding = BindingsSL.objBinding(() -> {
+            return calculateOccupiedTiles();
+        }, xLocationProperty, yLocationProperty, widthProperty, heightProperty, gameMapProperty());
+    
+        this.occupiedTilesBinding.addListener((observable, oldValue, newValue) -> {
+            if (oldValue != null) {
+                for (int i = 0; i < oldValue.length; i++)
+                    for (int j = 0; j < oldValue[i].length; j++)
+                        oldValue[i][j].getOccupyingObjects().remove(this);
+            }
+            if (newValue != null)
+                for (int i = 0; i < newValue.length; i++)
+                    for (int j = 0; j < newValue[i].length; j++)
+                        newValue[i][j].getOccupyingObjects().add(this);
+        });
         return this;
     }
     
@@ -144,6 +162,10 @@ public class GameObject
     public final double setTileLocationY(@NotNull Number newValue) { return PropertiesSL.setProperty(yLocationProperty, newValue.doubleValue() * getGameMap().getTileSize()); }
     public final double moveY(@NotNull Number amount) { return setLocationY(getLocationY(false) + amount.doubleValue()); }
     public final double moveTileY(@NotNull Number amount) { return setLocationY(getLocationY(false) + (amount.doubleValue() * getGameMap().getTileSize())); }
+    
+    
+    public final ObjectBinding<GameTile[][]> occupiedTilesBinding() { return occupiedTilesBinding; }
+    public final GameTile[][] getOccupiedTiles() { return occupiedTilesBinding.get(); }
     
     
     //</editor-fold>
@@ -223,18 +245,18 @@ public class GameObject
     
     //</editor-fold>
     
-    public final @NotNull GameTile[][] getOccupyingTiles() {
-        final int adjustedMinX = (int) getLocationX(false) / getGameMap().getTileSize();
-        final int adjustedMinY = (int) getLocationY(false) / getGameMap().getTileSize();
-        final int adjustedMaxX = (int) Math.ceil((getWidth() + getLocationX(false)) / (double) getGameMap().getTileSize());
-        final int adjustedMaxY = (int) Math.ceil((getHeight() + getLocationY(false)) / (double) getGameMap().getTileSize());
-        
-        final GameTile[][] occupyingGameTiles = new GameTile[(adjustedMaxX - adjustedMinX) + 1][(adjustedMaxY - adjustedMinY) + 1];
-        for (int i = 0; i < occupyingGameTiles.length; i++)
-            for (int j = 0; j < occupyingGameTiles[i].length; j++)
-                occupyingGameTiles[i][j] = getGameMap().getTileMap()[i + adjustedMinX][j + adjustedMinY];
-        
-        return occupyingGameTiles;
+    private @NotNull GameTile[][] calculateOccupiedTiles() {
+            final int adjustedMinX = (int) Math.ceil(getLocationX(false) / getGameMap().getTileSize());
+            final int adjustedMinY = (int) Math.ceil(getLocationY(false) / getGameMap().getTileSize());
+            final int adjustedMaxX = (int) Math.ceil((getWidth() + getLocationX(false)) / (double) getGameMap().getTileSize());
+            final int adjustedMaxY = (int) Math.ceil((getHeight() + getLocationY(false)) / (double) getGameMap().getTileSize());
+            
+            final GameTile[][] occupyingGameTiles = new GameTile[(adjustedMaxX - adjustedMinX) + 1][(adjustedMaxY - adjustedMinY) + 1];
+            for (int i = 0; i < occupyingGameTiles.length; i++)
+                for (int j = 0; j < occupyingGameTiles[i].length; j++)
+                    occupyingGameTiles[i][j] = getGameMap().getTileMap()[i + adjustedMinX][j + adjustedMinY];
+            
+            return occupyingGameTiles;
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">

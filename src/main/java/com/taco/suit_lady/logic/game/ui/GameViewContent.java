@@ -4,6 +4,7 @@ import com.taco.suit_lady.logic.game.Camera;
 import com.taco.suit_lady.logic.game.GameMap;
 import com.taco.suit_lady.logic.game.interfaces.GameComponent;
 import com.taco.suit_lady.logic.game.objects.GameObject;
+import com.taco.suit_lady.logic.game.objects.GameTile;
 import com.taco.suit_lady.ui.Content;
 import com.taco.suit_lady.ui.UIBook;
 import com.taco.suit_lady.util.Lockable;
@@ -17,6 +18,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -49,6 +51,7 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
     }
     
     public final GameObject getTestObject() { return testObject; }
+    public final GameObject getTestObject2() { return testObject2; }
     
     //<editor-fold desc="--- INITIALIZATION ---">
     
@@ -105,6 +108,7 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         getCamera().yLocationProperty().bind(testObject.yLocationProperty());
         
         logiCore().submit(getTestObject().getCommand());
+        logiCore().submit(getTestObject2().getCommand());
     }
     
     //</editor-fold>
@@ -147,12 +151,25 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
     @Override protected boolean handleMousePressEvent(@NotNull MouseEvent event) {
         final Point2D viewToMap = getCamera().viewToMap(event.getX(), event.getY());
         
-        System.out.println("Moving To: [" + viewToMap.getX() + ", " + viewToMap.getY() + "]");
-        
-        getTestObject().getCommand().setTargetX((int) viewToMap.getX());
-        getTestObject().getCommand().setTargetY((int) viewToMap.getY());
-        
-        getTestObject().getCommand().setPaused(false);
+        if (event.getButton().equals(MouseButton.SECONDARY)) {
+            System.out.println("Moving Test Object To: [" + viewToMap.getX() + ", " + viewToMap.getY() + "]");
+    
+            getTestObject().getCommand().setTargetX((int) viewToMap.getX());
+            getTestObject().getCommand().setTargetY((int) viewToMap.getY());
+    
+            getTestObject().getCommand().setPaused(false);
+        } else if (event.getButton().equals(MouseButton.PRIMARY)) {
+            GameTile tile = getGameMap().getTileAtPoint(viewToMap);
+            System.out.println("Tile At Point [" + viewToMap.getX() + ", " + viewToMap.getY() + "]: " + tile);
+            debugger().printList(tile.getOccupyingObjects(), "Occupying Objects for Tile [" + tile.getXLoc() + ", " + tile.getYLoc() + "]");
+        } else if (event.getButton().equals(MouseButton.MIDDLE)) {
+            System.out.println("Moving Test Object 2 To: [" + viewToMap.getX() + ", " + viewToMap.getY() + "]");
+    
+            getTestObject2().getCommand().setTargetX((int) viewToMap.getX());
+            getTestObject2().getCommand().setTargetY((int) viewToMap.getY());
+    
+            getTestObject2().getCommand().setPaused(false);
+        }
         
         return true;
     }

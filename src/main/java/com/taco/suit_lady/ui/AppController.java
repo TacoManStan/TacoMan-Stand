@@ -199,7 +199,9 @@ public class AppController
         ui.setSidebar(new Sidebar(weaver(), ctx(), sidebarChildButtonsPane, sidebarContentPane, backImagePane, sidebarButtonBar));
     }
     
-    public final void initialize(Stage stage) {
+    public final void initialize(@NotNull Stage stage) {
+        debugger().enableAll();
+        
         this.stage = stage;
         //        this.contentPane = new DummyContentsInstancePane();
         

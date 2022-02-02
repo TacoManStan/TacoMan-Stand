@@ -240,5 +240,13 @@ public final class Debugger {
         throw ExceptionsSL.unsupported("Unrecognized Print Type: " + printType);
     }
     
+    
+    public void enableAll() {
+        setWarnEnabled(true);
+        setErrorEnabled(true);
+        setDebugEnabled(true);
+        setStatusEnabled(true);
+    }
+    
     //</editor-fold>
 }
