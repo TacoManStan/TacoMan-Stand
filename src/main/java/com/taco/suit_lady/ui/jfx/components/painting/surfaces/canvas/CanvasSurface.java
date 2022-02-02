@@ -4,6 +4,10 @@ import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.PaintComm
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.Surface;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.SurfaceData;
 import com.taco.suit_lady.util.springable.Springable;
+import com.taco.suit_lady.util.timing.Timer;
+import com.taco.suit_lady.util.timing.Timers;
+import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.PropertiesSL;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import javafx.beans.property.*;
 import javafx.scene.SnapshotParameters;
@@ -21,9 +25,11 @@ public class CanvasSurface extends Canvas
         implements Surface<PaintCommand, CanvasSurface> {
     
     private final ReadOnlyObjectWrapper<CanvasListener> canvasListenerProperty;
-    private final ReadOnlyObjectWrapper<Image> imageProperty;
-    
     private final SurfaceData<PaintCommand, CanvasSurface> data;
+    
+    private final ReadOnlyObjectWrapper<Image> snapshotProperty;
+    private final LongProperty snapshotFrequencyProperty;
+    private final Timer snapshotTimer;
     
     //<editor-fold desc="--- CONSTRUCTORS ---">
     
@@ -52,11 +58,29 @@ public class CanvasSurface extends Canvas
         super(width, height);
         
         this.canvasListenerProperty = new ReadOnlyObjectWrapper<>();
-        this.imageProperty = new ReadOnlyObjectWrapper<>();
-        
         this.data = new SurfaceData<>(
                 springable, lock, this,
                 widthProperty(), heightProperty());
+        
+        
+        this.snapshotProperty = new ReadOnlyObjectWrapper<>();
+        this.snapshotFrequencyProperty = new SimpleLongProperty();
+        this.snapshotTimer = Timers.newStopwatch();
+        
+        this.snapshotFrequencyProperty.addListener((observable, oldValue, newValue) -> {
+            if (newValue.longValue() == -1)
+                snapshotTimer.stop();
+            else if (newValue.longValue() <= 0)
+                throw ExceptionsSL.unsupported("Snapshot Frequency must be either -1 (disabled) or greater than 0 [" + getSnapshotFrequency() + "]");
+            else
+                snapshotTimer.reset(newValue);
+        });
+        setSnapshotFrequency(5000L);
+        
+        this.snapshotTimer.setOnTimeout(() -> sync(() -> {
+            updateSnapshot();
+            snapshotTimer.reset(getSnapshotFrequency());
+        }));
     }
     
     //</editor-fold>
@@ -77,11 +101,17 @@ public class CanvasSurface extends Canvas
     public final @Nullable CanvasListener getCanvasListener() { return canvasListenerProperty.get(); }
     public final void setCanvasListener(@Nullable CanvasListener canvasListener) { canvasListenerProperty.set(canvasListener); }
     
-    public final ReadOnlyObjectProperty<Image> imageProperty() { return imageProperty.getReadOnlyProperty(); }
-    public final Image getImage() { return imageProperty.get(); }
+    //
     
-    public void refreshImage() {
-        imageProperty.set(snapshot(new SnapshotParameters(), null));
+    public final ReadOnlyObjectProperty<Image> snapshotProperty() { return snapshotProperty.getReadOnlyProperty(); }
+    public final Image getSnapshot() { return snapshotProperty.get(); }
+    
+    public final LongProperty snapshotFrequencyProperty() { return snapshotFrequencyProperty; }
+    public final long getSnapshotFrequency() { return snapshotFrequencyProperty.get(); }
+    public final long setSnapshotFrequency(@NotNull Number newValue) { return PropertiesSL.setProperty(snapshotFrequencyProperty, newValue.longValue()); }
+    
+    public void updateSnapshot() {
+        ToolsFX.runFX(() -> snapshotProperty.set(snapshot(new SnapshotParameters(), null)), true);
     }
     
     //</editor-fold>
@@ -100,7 +130,8 @@ public class CanvasSurface extends Canvas
             if (listener != null)
                 listener.redraw(this, width, height);
             
-//            refreshImage();
+            if (snapshotTimer.isTimedOut())
+                snapshotTimer.getOnTimeout().run();
             
             return this;
         });

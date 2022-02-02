@@ -75,6 +75,7 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor> {
             
             @Override
             protected void onTaskEnd(MandelbrotColor[][] result) {
+                //TODO: Convert to Paintable (PixelMatrixPaintable?)
                 for (int i = 0; i < result.length; i++)
                     for (int j = 0; j < result[i].length; j++) {
                         final MandelbrotColor mandelbrotColor = result[i][j];
@@ -85,7 +86,7 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor> {
             
             @Override
             protected void onSucceeded() {
-                canvas.refreshImage();
+                canvas.updateSnapshot();
             }
             
             @Override

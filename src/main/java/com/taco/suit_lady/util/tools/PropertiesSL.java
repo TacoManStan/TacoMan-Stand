@@ -18,6 +18,12 @@ public class PropertiesSL {
         return oldValue;
     }
     
+    public static long setProperty(@NotNull LongProperty property, long newValue) {
+        long oldValue = property.get();
+        property.set(newValue);
+        return oldValue;
+    }
+    
     public static double setProperty(@NotNull DoubleProperty property, double newValue) {
         double oldValue = property.get();
         property.set(newValue);

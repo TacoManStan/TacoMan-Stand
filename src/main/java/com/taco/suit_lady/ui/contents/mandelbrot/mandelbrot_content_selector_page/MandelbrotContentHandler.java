@@ -20,7 +20,7 @@ public class MandelbrotContentHandler extends ContentHandler<
     
     @Override
     protected @NotNull MandelbrotContent newInstance() {
-        return new MandelbrotContent(this);
+        return new MandelbrotContent(this).init();
     }
     
     @Override

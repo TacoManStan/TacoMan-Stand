@@ -22,7 +22,6 @@ import com.taco.suit_lady.util.tools.TasksSL;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import com.taco.tacository.json.JFiles;
 import javafx.beans.binding.Bindings;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcType;
@@ -95,7 +94,7 @@ public class MandelbrotContent extends ListableContent<
         getController().setDragConsumer(dragData -> zoom(dragData));
         getController().setMoveConsumer(dragData -> updateZoomBox(dragData));
         
-        iconImageProperty().bind(getController().canvas().imageProperty());
+        iconImageProperty().bind(getController().canvas().snapshotProperty());
         initUIPage();
         
         this.iterator = new MandelbrotIterator(this, lock, getData(), getController().canvas(), getCoverPage().getController().getProgressBar());
