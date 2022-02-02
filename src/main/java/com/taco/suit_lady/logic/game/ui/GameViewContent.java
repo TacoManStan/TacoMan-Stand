@@ -16,11 +16,13 @@ import com.taco.suit_lady.util.tools.ResourcesSL;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-public class GameViewContent extends Content<GameViewContentData, GameViewContentController>
+public class GameViewContent extends Content<GameViewContent, GameViewContentData, GameViewContentController>
         implements UIDProcessable, Lockable, GameComponent {
     
     private final ReentrantLock lock;
@@ -65,6 +67,8 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
         initGame();
         
         ui().getContentManager().setContent(this);
+        
+        getController().getContentPane().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {});
         
         return this;
     }
@@ -117,8 +121,8 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override protected boolean handleKeyEvent(@NotNull KeyCode keyCode) {
-        return switch (keyCode) {
+    @Override protected boolean handleKeyEvent(@NotNull KeyEvent keyEvent) {
+        return switch (keyEvent.getCode()) {
             case W -> keyInputAction(() -> testObject.moveTileY(-1));
             case A -> keyInputAction(() ->  testObject.moveTileX(-1));
             case S -> keyInputAction(() -> testObject.moveTileY(1));
@@ -135,6 +139,15 @@ public class GameViewContent extends Content<GameViewContentData, GameViewConten
     
     private boolean keyInputAction(@NotNull Runnable action) {
         action.run();
+        return true;
+    }
+    
+    @Override protected boolean handleMousePressEvent(@NotNull MouseEvent event) {
+        System.out.println("Mouse Pressed: [" + event.getX() + ", " + event.getY() + "]");
+        return true;
+    }
+    @Override protected boolean handleMouseReleaseEvent(@NotNull MouseEvent event) {
+        System.out.println("Mouse Released: [" + event.getX() + ", " + event.getY() + "]");
         return true;
     }
     

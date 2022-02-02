@@ -23,6 +23,7 @@ import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import com.taco.tacository.json.JFiles;
 import javafx.beans.binding.Bindings;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcType;
 import org.jetbrains.annotations.NotNull;
@@ -187,7 +188,7 @@ public class MandelbrotContent extends ListableContent<
         return MandelbrotContentController.class;
     }
     
-    @Override protected boolean handleKeyEvent(@NotNull KeyCode keyCode) {
+    @Override protected boolean handleKeyEvent(@NotNull KeyEvent keyEvent) {
         return false;
     }
     

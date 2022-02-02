@@ -15,14 +15,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.locks.Lock;
 
 public abstract class ListableContent<
-        D extends ContentData,
-        C extends ContentController,
+        D extends ContentData<T, D, C>,
+        C extends ContentController<T, D, C>,
         P extends ContentSelectorPage<D, P, SC, EC, H, T>,
         SC extends ContentSelectorPageController<D, P, SC, EC, H, T>,
         EC extends ContentElementController<D, P, SC, EC, H, T>,
         H extends ContentHandler<D, P, SC, EC, H, T>,
         T extends ListableContent<D, C, P, SC, EC, H, T>>
-        extends Content<D, C> implements UIDProcessable, Lockable {
+        extends Content<T, D, C> implements UIDProcessable, Lockable {
     
     private final H contentHandler;
     

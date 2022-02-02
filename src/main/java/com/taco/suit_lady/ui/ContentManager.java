@@ -1,23 +1,18 @@
 package com.taco.suit_lady.ui;
 
-import com.taco.suit_lady.logic.LogiCore;
-import com.taco.suit_lady.logic.game.ui.GameViewContent;
+import com.taco.suit_lady.ui.jfx.components.ContentPane;
+import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasContentPane;
+import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasSurface;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.springable.StrictSpringable;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
-import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasSurface;
-import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasContentPane;
-import com.taco.suit_lady.ui.jfx.components.ContentPane;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
-import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.springframework.context.ConfigurableApplicationContext;
 
 public class ContentManager
         implements SpringableWrapper {
@@ -27,7 +22,7 @@ public class ContentManager
     //
     
     private final ContentPane contentBase;
-    private final ReadOnlyObjectWrapper<Content<?, ?>> contentProperty; // Add support for a list of overlapping Content, each overlapping on the Content Base StackPane?
+    private final ReadOnlyObjectWrapper<Content<?, ?, ?>> contentProperty; // Add support for a list of overlapping Content, each overlapping on the Content Base StackPane?
     
     public ContentManager(@NotNull Springable springable) {
         this.springable = springable.asStrict();
@@ -107,15 +102,15 @@ public class ContentManager
     
     //</editor-fold>
     
-    public @NotNull ReadOnlyObjectProperty<Content<?, ?>> contentProperty() {
+    public @NotNull ReadOnlyObjectProperty<Content<?, ?, ?>> contentProperty() {
         return contentProperty.getReadOnlyProperty();
     }
     
-    public @Nullable Content<?, ?> getContent() {
+    public @Nullable Content<?, ?, ?> getContent() {
         return contentProperty.get();
     }
     
-    public boolean setContent(@Nullable Content<?, ?> newContent) {
+    public boolean setContent(@Nullable Content<?, ?, ?> newContent) {
         contentProperty.set(newContent);
         return true; // TODO - Add actual validity checks here
     }
@@ -128,7 +123,7 @@ public class ContentManager
     
     //</editor-fold>
     
-    private void onChange(@Nullable Content<?, ?> oldContent, @Nullable Content<?, ?> newContent) {
+    private void onChange(@Nullable Content<?, ?, ?> oldContent, @Nullable Content<?, ?, ?> newContent) {
         // TODO - Execute onRemoved() and onSet via a JavaFX Task implementation. For now, though, this will work.
         // When the above is completed, don't forget to update the onRemoved() and onSet() Javadocs as well.
         ToolsFX.runFX(() -> {
@@ -156,10 +151,10 @@ public class ContentManager
         }, true);
     }
     
-    protected boolean submitKeyEvent(@NotNull KeyCode keyCode) {
-        Content<?, ?> content = getContent();
+    protected boolean submitKeyEvent(@NotNull KeyEvent keyEvent) {
+        Content<?, ?, ?> content = getContent();
         if (content != null)
-            return content.handleKeyEvent(keyCode);
+            return content.handleKeyEvent(keyEvent);
         return false;
     }
 }

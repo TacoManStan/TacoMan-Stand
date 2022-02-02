@@ -247,7 +247,7 @@ public class AppController
         //
         
         root.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            if (ui().getContentManager().submitKeyEvent(event.getCode()))
+            if (ui().getContentManager().submitKeyEvent(event))
                 event.consume();
         });
         

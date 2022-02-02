@@ -20,7 +20,7 @@ import java.util.concurrent.locks.ReentrantLock;
 @Component
 @FxmlView("/fxml/game_view/content/game_view_content.fxml")
 @Scope("prototype")
-public class GameViewContentController extends ContentController
+public class GameViewContentController extends ContentController<GameViewContent, GameViewContentData, GameViewContentController>
         implements Lockable, GameComponent {
     
     //<editor-fold desc="--- FXML FIELDS ---">
@@ -56,8 +56,9 @@ public class GameViewContentController extends ContentController
     @Override public @NotNull Lock getLock() { return lock; }
     
     @Override public Pane root() { return root; }
+    @Override public AnchorPane getContentPane() { return mapPane; }
     
-    @Override public void initialize() { }
+    @Override public void initialize() { super.initialize(); }
     
     //</editor-fold>
 }

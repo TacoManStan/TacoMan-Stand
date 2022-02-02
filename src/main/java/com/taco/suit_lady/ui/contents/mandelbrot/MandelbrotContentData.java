@@ -22,7 +22,7 @@ import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ConfigurableApplicationContext;
 
-public class MandelbrotContentData extends ContentData
+public class MandelbrotContentData extends ContentData<MandelbrotContent, MandelbrotContentData, MandelbrotContentController>
         implements ObservablePropertyContainable, Springable, JObject, JLoadable, UIDProcessable {
     
     private final StrictSpringable springable;

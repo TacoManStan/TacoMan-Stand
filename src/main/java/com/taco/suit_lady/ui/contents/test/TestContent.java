@@ -6,9 +6,10 @@ import com.taco.suit_lady.ui.pages.example_page.ExamplePage;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ResourcesSL;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import org.jetbrains.annotations.NotNull;
 
-public class TestContent extends Content<TestContentData, TestContentController>
+public class TestContent extends Content<TestContent, TestContentData, TestContentController>
 {
     public TestContent(@NotNull Springable springable)
     {
@@ -58,7 +59,7 @@ public class TestContent extends Content<TestContentData, TestContentController>
         return TestContentController.class;
     }
     
-    @Override protected boolean handleKeyEvent(@NotNull KeyCode keyCode) { return false; }
+    @Override protected boolean handleKeyEvent(@NotNull KeyEvent keyEvent) { return false; }
     
     @Override
     protected void onActivate() { }

@@ -30,7 +30,7 @@ import java.util.function.Consumer;
 @Component
 @FxmlView("/fxml/content/mandelbrot/mandelbrot_content.fxml")
 @Scope("prototype")
-public class MandelbrotContentController extends ContentController
+public class MandelbrotContentController extends ContentController<MandelbrotContent, MandelbrotContentData, MandelbrotContentController>
         implements Lockable {
     
     //<editor-fold desc="--- FXML FIELDS ---">
@@ -77,6 +77,10 @@ public class MandelbrotContentController extends ContentController
         return root;
     }
     
+    @Override public AnchorPane getContentPane() {
+        return canvasPane;
+    }
+    
     @Override
     public void initialize() {
         canvasAnchorPane.getChildren().add(canvasPane);
@@ -86,6 +90,8 @@ public class MandelbrotContentController extends ContentController
         canvas().setOnMouseReleased(event -> onMouseReleased(event));
         //        canvas().setOnMouseMoved(event -> onMouseMoved(event));
         canvas().setOnMouseDragged(event -> onMouseDragged(event));
+        
+        super.initialize();
     }
     
     //</editor-fold>

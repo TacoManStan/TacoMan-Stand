@@ -10,7 +10,7 @@ import com.taco.suit_lady.util.springable.SpringableWrapper;
 import javafx.beans.Observable;
 import org.jetbrains.annotations.NotNull;
 
-public class GameViewContentData extends ContentData
+public class GameViewContentData extends ContentData<GameViewContent, GameViewContentData, GameViewContentController>
         implements ObservablePropertyContainable, SpringableWrapper, UIDProcessable, GameComponent {
     
     private final GameViewContent content;

@@ -6,7 +6,7 @@ import com.taco.suit_lady.ui.UIPage;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class ContentSelectorPage<
-        D extends ContentData,
+        D extends ContentData<T, D, ?>,
         P extends ContentSelectorPage<D, P, SC, EC, H, T>,
         SC extends ContentSelectorPageController<D, P, SC, EC, H, T>,
         EC extends ContentElementController<D, P, SC, EC, H, T>,

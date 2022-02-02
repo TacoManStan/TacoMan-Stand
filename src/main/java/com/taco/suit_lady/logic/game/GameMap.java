@@ -4,6 +4,7 @@ import com.taco.suit_lady.logic.game.interfaces.GameComponent;
 import com.taco.suit_lady.logic.game.objects.GameObject;
 import com.taco.suit_lady.logic.game.objects.GameTile;
 import com.taco.suit_lady.logic.game.ui.GameViewContent;
+import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;

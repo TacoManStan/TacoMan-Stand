@@ -10,13 +10,15 @@ import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.collections.FXCollections;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.concurrent.ThreadPoolExecutor;
 
-public abstract class Content<D extends ContentData, C extends ContentController>
+public abstract class Content<T extends Content<T, D, C>, D extends ContentData<T, D, C>, C extends ContentController<T, D, C>>
         implements Springable {
     
     private final Springable strictSpringable;
@@ -88,7 +90,10 @@ public abstract class Content<D extends ContentData, C extends ContentController
     protected abstract @NotNull D loadData();
     protected abstract @NotNull Class<C> controllerDefinition();
     
-    protected abstract boolean handleKeyEvent(@NotNull KeyCode keyCode);
+    protected boolean handleKeyEvent(@NotNull KeyEvent keyEvent) { return false; }
+    
+    protected boolean handleMousePressEvent(@NotNull MouseEvent event) { return false; }
+    protected boolean handleMouseReleaseEvent(@NotNull MouseEvent event) { return false; }
     
     //<editor-fold desc="--- EVENTS ---">
     
