@@ -183,7 +183,7 @@ public class GameMap
     }
     
     public final @NotNull GameTile getTileAtPoint(@NotNull Point2D point) {
-        return tileMap[(int) Math.ceil(point.getX() / getTileSize())][(int) Math.ceil(point.getY() / getTileSize())];
+        return tileMap[(int) Math.floor(point.getX() / getTileSize())][(int) Math.floor(point.getY() / getTileSize())];
     }
     
     public final ArrayList<GameObject> getObjectsAtPoint(@NotNull Point2D point) {

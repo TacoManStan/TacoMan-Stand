@@ -96,17 +96,24 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         });
         
         setGameMap(GameMap.newTestInstance(this, lock));
+        
+        initTestObjects();
+    }
+    
+    private void initTestObjects() {
+        testObject.init();
         testObject.setTileLocationX(20);
         testObject.setTileLocationY(20);
-        getGameMap().mapObjects().add(testObject.init());
-        
+        getGameMap().mapObjects().add(testObject);
+    
+        testObject2.init();
         testObject2.setTileLocationX(30);
         testObject2.setTileLocationY(20);
-        getGameMap().mapObjects().add(testObject2.init());
-        
+        getGameMap().mapObjects().add(testObject2);
+    
         getCamera().xLocationProperty().bind(testObject.xLocationProperty());
         getCamera().yLocationProperty().bind(testObject.yLocationProperty());
-        
+    
         logiCore().submit(getTestObject().getCommand());
         logiCore().submit(getTestObject2().getCommand());
     }

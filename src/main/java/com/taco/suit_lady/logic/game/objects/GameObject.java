@@ -77,10 +77,6 @@ public class GameObject
     private final MoveCommand command;
     
     public GameObject(@NotNull GameViewContent content, @Nullable ReentrantLock lock) {
-        this(content, lock, 0, 0);
-    }
-    
-    public GameObject(@NotNull GameViewContent content, @Nullable ReentrantLock lock, int locationX, int locationY) {
         this.springable = content.asStrict();
         this.lock = lock != null ? lock : new ReentrantLock();
         
@@ -92,8 +88,8 @@ public class GameObject
         this.attributes = new AttributeContainer(this, lock, this);
         
         
-        this.xLocationProperty = new SimpleDoubleProperty(locationX);
-        this.yLocationProperty = new SimpleDoubleProperty(locationY);
+        this.xLocationProperty = new SimpleDoubleProperty();
+        this.yLocationProperty = new SimpleDoubleProperty();
         
         this.widthProperty = new SimpleIntegerProperty(32);
         this.heightProperty = new SimpleIntegerProperty(32);
@@ -246,10 +242,10 @@ public class GameObject
     //</editor-fold>
     
     private @NotNull GameTile[][] calculateOccupiedTiles() {
-            final int adjustedMinX = (int) Math.ceil(getLocationX(false) / getGameMap().getTileSize());
-            final int adjustedMinY = (int) Math.ceil(getLocationY(false) / getGameMap().getTileSize());
-            final int adjustedMaxX = (int) Math.ceil((getWidth() + getLocationX(false)) / (double) getGameMap().getTileSize());
-            final int adjustedMaxY = (int) Math.ceil((getHeight() + getLocationY(false)) / (double) getGameMap().getTileSize());
+            final int adjustedMinX = (int) Math.floor(getLocationX(false) / getGameMap().getTileSize());
+            final int adjustedMinY = (int) Math.floor(getLocationY(false) / getGameMap().getTileSize());
+            final int adjustedMaxX = (int) Math.floor((getWidth() - 1 + getLocationX(false)) / getGameMap().getTileSize());
+            final int adjustedMaxY = (int) Math.floor((getHeight() - 1 + getLocationY(false)) / getGameMap().getTileSize());
             
             final GameTile[][] occupyingGameTiles = new GameTile[(adjustedMaxX - adjustedMinX) + 1][(adjustedMaxY - adjustedMinY) + 1];
             for (int i = 0; i < occupyingGameTiles.length; i++)
