@@ -170,46 +170,20 @@ public class GameObject
         return Math.abs(Math.round((getLocationX(center))) - Math.round(point.getX())) <= 1 && Math.abs(Math.round(getLocationY(center)) - Math.round(point.getY())) <= 1;
     }
     
-    public final IntegerProperty widthProperty() {
-        return widthProperty;
-    }
+    public final IntegerProperty widthProperty() { return widthProperty; }
+    public final int getWidth() { return widthProperty.get(); }
+    public final int setWidth(int newValue) { return PropertiesSL.setProperty(widthProperty, newValue); }
     
-    public final int getWidth() {
-        return widthProperty.get();
-    }
-    
-    public final int setWidth(int newValue) {
-        int oldValue = getWidth();
-        widthProperty.set(newValue);
-        return oldValue;
-    }
-    
-    
-    public final IntegerProperty heightProperty() {
-        return heightProperty;
-    }
-    
-    public final int getHeight() {
-        return heightProperty.get();
-    }
-    
-    public final int setHeight(int newValue) {
-        int oldValue = getHeight();
-        heightProperty.set(newValue);
-        return oldValue;
-    }
+    public final IntegerProperty heightProperty() { return heightProperty; }
+    public final int getHeight() { return heightProperty.get(); }
+    public final int setHeight(int newValue) { return PropertiesSL.setProperty(heightProperty, newValue); }
     
     //</editor-fold>
     
     //<editor-fold desc="--- GAME STAT PROPERTIES ---">
     
-    public final ReadOnlyDoubleProperty readOnlyMoveSpeedProperty() {
-        return moveSpeedProperty.getReadOnlyProperty();
-    }
-    
-    public final double getMoveSpeed() {
-        return moveSpeedProperty.get();
-    }
+    public final ReadOnlyDoubleProperty readOnlyMoveSpeedProperty() { return moveSpeedProperty.getReadOnlyProperty(); }
+    public final double getMoveSpeed() { return moveSpeedProperty.get(); }
     
     //</editor-fold>
     
@@ -221,21 +195,10 @@ public class GameObject
     
     //<editor-fold desc="--- GENERIC ---">
     
-    @Override
-    public @NotNull FxWeaver weaver() {
-        return springable.weaver();
-    }
+    @Override public @NotNull FxWeaver weaver() { return springable.weaver(); }
+    @Override public @NotNull ConfigurableApplicationContext ctx() { return springable.ctx(); }
     
-    @Override
-    public @NotNull ConfigurableApplicationContext ctx() {
-        return springable.ctx();
-    }
-    
-    
-    @Override
-    public @NotNull Lock getLock() {
-        return null;
-    }
+    @Override public @NotNull Lock getLock() { return lock; }
     
     //</editor-fold>
     
