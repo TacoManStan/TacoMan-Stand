@@ -152,6 +152,7 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         
         getTestObject().getCommand().setTargetX((int) viewToMap.getX());
         getTestObject().getCommand().setTargetY((int) viewToMap.getY());
+        
         getTestObject().getCommand().setPaused(false);
         
         return true;

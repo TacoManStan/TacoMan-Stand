@@ -1,6 +1,8 @@
 package com.taco.suit_lady.logic;
 
 import com.taco.suit_lady.util.springable.Springable;
+import com.taco.suit_lady.util.timing.Timer;
+import com.taco.suit_lady.util.timing.Timers;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
@@ -28,6 +30,10 @@ public class LogiCore
     private final ScheduledThreadPoolExecutor gameLoopExecutor;
     private final ListProperty<Tickable> tickables;
     
+    private int tickCount = 0;
+    
+    private final Timer timer;
+    
     public LogiCore(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         this.weaver = weaver;
         this.ctx = ctx;
@@ -39,6 +45,8 @@ public class LogiCore
         
         this.gameLoopExecutor = new ScheduledThreadPoolExecutor(1);
         this.tickables = new SimpleListProperty<>(FXCollections.observableArrayList());
+        
+        this.timer = Timers.newStopwatch(true);
     }
     
     public final ListProperty<Tickable> getTickables() { return tickables; }
@@ -50,9 +58,19 @@ public class LogiCore
     
     public final void init() {
         gameLoopExecutor.scheduleAtFixedRate(this::tick, 0, (long) 1000 / 60, TimeUnit.MILLISECONDS);
+        timer.setTimeout(3000);
+        timer.setOnTimeout(() -> {
+            System.out.println("Ticks in 3s: " + tickCount);
+            tickCount = 0;
+            timer.reset(3000);
+        });
+        timer.start();
     }
     
     private void tick() {
+        tickCount++;
+        if (timer.isTimedOut())
+            timer.getOnTimeout().run();
         tickables.forEach(Tickable::tick);
     }
     

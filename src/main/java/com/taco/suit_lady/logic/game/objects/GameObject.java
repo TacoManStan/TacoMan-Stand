@@ -129,9 +129,8 @@ public class GameObject
     
     
     public final boolean isAtPoint(@NotNull Point2D point) {
-        return (int) getLocationX() == (int) point.getX() && (int) getLocationY() == (int) point.getY();
+        return Math.abs(Math.round(getLocationX()) - Math.round(point.getX())) <= 1 && Math.abs(Math.round(getLocationY()) - Math.round(point.getY())) <= 1;
     }
-    
     
     public final IntegerProperty widthProperty() {
         return widthProperty;

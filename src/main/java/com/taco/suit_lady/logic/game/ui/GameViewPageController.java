@@ -77,7 +77,15 @@ public class GameViewPageController extends UIPageController<GameViewPage>
         });
         testButton3.setText("Print Occupying Tiles");
         
-        testButton4.setOnAction(event -> { });
+        testButton4.setOnAction(event -> {
+            System.out.println("Movement Target X: " + getGame().getTestObject().getCommand().getTargetX());
+            System.out.println("Movement Target Y: " + getGame().getTestObject().getCommand().getTargetY());
+            
+            System.out.println("Test Object Location X: " + getGame().getTestObject().getLocationX());
+            System.out.println("Test Object Location Y: " + getGame().getTestObject().getLocationY());
+        });
+        testButton4.setText("Print Movement Data");
+        
         testButton5.setOnAction(event -> { });
         testButton6.setOnAction(event -> { });
         testButton7.setOnAction(event -> { });
