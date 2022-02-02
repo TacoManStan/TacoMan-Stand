@@ -3,6 +3,7 @@ package com.taco.suit_lady.logic;
 import com.taco.suit_lady.util.springable.Springable;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -37,7 +38,7 @@ public class LogiCore
         //
         
         this.gameLoopExecutor = new ScheduledThreadPoolExecutor(1);
-        this.tickables = new SimpleListProperty<>();
+        this.tickables = new SimpleListProperty<>(FXCollections.observableArrayList());
     }
     
     public final ListProperty<Tickable> getTickables() { return tickables; }

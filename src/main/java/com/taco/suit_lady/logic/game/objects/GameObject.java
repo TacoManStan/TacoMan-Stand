@@ -2,12 +2,14 @@ package com.taco.suit_lady.logic.game.objects;
 
 import com.taco.suit_lady.logic.game.AttributeContainer;
 import com.taco.suit_lady.logic.game.Entity;
+import com.taco.suit_lady.logic.game.commands.MoveCommand;
 import com.taco.suit_lady.logic.game.interfaces.AttributeContainable;
 import com.taco.suit_lady.logic.game.ui.GameViewContent;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import javafx.beans.property.*;
+import javafx.geometry.Point2D;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -62,6 +64,8 @@ public class GameObject
     // TO-EXPAND
     private final ReadOnlyDoubleWrapper moveSpeedProperty;
     
+    private final MoveCommand command;
+    
     public GameObject(@NotNull GameViewContent content, @Nullable ReentrantLock lock) {
         this(content, lock, 0, 0);
     }
@@ -87,6 +91,10 @@ public class GameObject
         //
         
         this.moveSpeedProperty = new ReadOnlyDoubleWrapper();
+        
+        //
+        
+        this.command = new MoveCommand(this);
     }
     
     public final GameObject init() {
@@ -97,6 +105,8 @@ public class GameObject
     //<editor-fold desc="--- PROPERTIES ---">
     
     public final GameObjectModel getModel() { return model; }
+    
+    public final MoveCommand getCommand() { return command; }
     
     //<editor-fold desc="--- MAP PROPERTIES ---">
     
@@ -116,6 +126,11 @@ public class GameObject
     public final double setTileLocationY(@NotNull Number newValue) { return PropertiesSL.setProperty(yLocationProperty, newValue.doubleValue() * getGameMap().getTileSize()); }
     public final double moveY(@NotNull Number amount) { return setLocationY(getLocationY() + amount.doubleValue()); }
     public final double moveTileY(@NotNull Number amount) { return setLocationY(getLocationY() + (amount.doubleValue() * getGameMap().getTileSize())); }
+    
+    
+    public final boolean isAtPoint(@NotNull Point2D point) {
+        return (int) getLocationX() == (int) point.getX() && (int) getLocationY() == (int) point.getY();
+    }
     
     
     public final IntegerProperty widthProperty() {

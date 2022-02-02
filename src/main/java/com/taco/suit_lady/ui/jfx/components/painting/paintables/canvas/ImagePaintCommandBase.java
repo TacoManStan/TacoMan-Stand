@@ -48,7 +48,7 @@ public abstract class ImagePaintCommandBase extends PaintCommand {
     }
     
     @Override protected void onPaint() {
-        System.out.println("On Paint: " + this);
+//        System.out.println("On Paint: " + this);
         sync(() -> {
             Image image = getImage();
             if (image != null && isValidDimensions())

@@ -15,6 +15,7 @@ import com.taco.suit_lady.util.tools.PropertiesSL;
 import com.taco.suit_lady.util.tools.ResourcesSL;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -103,6 +104,8 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         
         getCamera().xLocationProperty().bind(testObject.xLocProperty());
         getCamera().yLocationProperty().bind(testObject.yLocationProperty());
+        
+        logiCore().submit(getTestObject().getCommand());
     }
     
     //</editor-fold>
@@ -143,11 +146,17 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
     }
     
     @Override protected boolean handleMousePressEvent(@NotNull MouseEvent event) {
-        System.out.println("Mouse Pressed: [" + event.getX() + ", " + event.getY() + "]");
+        final Point2D viewToMap = getCamera().viewToMap(event.getX(), event.getY());
+        
+        System.out.println("Moving To: [" + viewToMap.getX() + ", " + viewToMap.getY() + "]");
+        
+        getTestObject().getCommand().setTargetX((int) viewToMap.getX());
+        getTestObject().getCommand().setTargetY((int) viewToMap.getY());
+        getTestObject().getCommand().setPaused(false);
+        
         return true;
     }
     @Override protected boolean handleMouseReleaseEvent(@NotNull MouseEvent event) {
-        System.out.println("Mouse Released: [" + event.getX() + ", " + event.getY() + "]");
         return true;
     }
     

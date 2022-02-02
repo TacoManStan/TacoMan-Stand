@@ -3,6 +3,7 @@ package com.taco.suit_lady.logic.game;
 import com.taco.suit_lady.logic.game.interfaces.GameComponent;
 import com.taco.suit_lady.logic.game.ui.GameViewContent;
 import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.CroppedImagePaintCommand;
+import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
@@ -14,7 +15,9 @@ import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.locks.ReentrantLock;
@@ -235,6 +238,15 @@ public class Camera
     @Override public @NotNull ReentrantLock getLock() { return lock; }
     
     //</editor-fold>
+    
+    public final @NotNull Point2D viewToMap(double x, double y) {
+        return viewToMap(new Point2D(x, y));
+    }
+    
+    @Contract("_ -> new")
+    public final @NotNull Point2D viewToMap(@NotNull Point2D pointOnView) {
+        return new Point2D(pointOnView.getX() + getAggregateX(), pointOnView.getY() + getAggregateY());
+    }
     
     public final void print() {
         System.out.println("X Location: " + getLocationX());
