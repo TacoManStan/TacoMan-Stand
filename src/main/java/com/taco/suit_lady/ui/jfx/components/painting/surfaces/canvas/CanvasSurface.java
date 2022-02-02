@@ -81,7 +81,7 @@ public class CanvasSurface extends Canvas
     public final Image getImage() { return imageProperty.get(); }
     
     public void refreshImage() {
-        sync(() -> imageProperty.set(snapshot(new SnapshotParameters(), null)));
+        imageProperty.set(snapshot(new SnapshotParameters(), null));
     }
     
     //</editor-fold>
@@ -100,7 +100,7 @@ public class CanvasSurface extends Canvas
             if (listener != null)
                 listener.redraw(this, width, height);
             
-            refreshImage();
+//            refreshImage();
             
             return this;
         });

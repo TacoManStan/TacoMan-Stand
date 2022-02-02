@@ -110,7 +110,7 @@ public class GameObject
     
     //<editor-fold desc="--- MAP PROPERTIES ---">
     
-    public final DoubleProperty xLocProperty() { return xLocationProperty; }
+    public final DoubleProperty xLocationProperty() { return xLocationProperty; }
     public final double getLocationX() { return xLocationProperty.get(); }
     public final double setLocationX(@NotNull Number newValue) { return PropertiesSL.setProperty(xLocationProperty, newValue.doubleValue()); }
     

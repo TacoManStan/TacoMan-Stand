@@ -16,7 +16,6 @@ import com.taco.suit_lady.util.tools.ResourcesSL;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import org.jetbrains.annotations.NotNull;
@@ -102,7 +101,7 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         testObject2.setTileLocationY(20);
         getGameMap().mapObjects().add(testObject2.init());
         
-        getCamera().xLocationProperty().bind(testObject.xLocProperty());
+        getCamera().xLocationProperty().bind(testObject.xLocationProperty());
         getCamera().yLocationProperty().bind(testObject.yLocationProperty());
         
         logiCore().submit(getTestObject().getCommand());

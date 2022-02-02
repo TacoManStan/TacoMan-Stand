@@ -150,12 +150,12 @@ public class GameMapModel
      * <p>A helper method that fully resets the JFX UI elements comprising the map image and parent pane.</p>
      */
     private void refreshCanvas() {
-        syncFX(() -> {
+        ToolsFX.runFX(() -> {
             StackPane parent = getParentPane();
             if (parent != null) {
                 parent.getChildren().retainAll();
                 parent.getChildren().add(canvasPane);
             }
-        });
+        }, true);
     }
 }
