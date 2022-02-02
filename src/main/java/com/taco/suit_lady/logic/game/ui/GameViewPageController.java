@@ -81,8 +81,16 @@ public class GameViewPageController extends UIPageController<GameViewPage>
             System.out.println("Movement Target X: " + getGame().getTestObject().getCommand().getTargetX());
             System.out.println("Movement Target Y: " + getGame().getTestObject().getCommand().getTargetY());
             
-            System.out.println("Test Object Location X: " + getGame().getTestObject().getLocationX());
-            System.out.println("Test Object Location Y: " + getGame().getTestObject().getLocationY());
+            
+            System.out.println("Test Object Width: " + getGame().getTestObject().getWidth());
+            System.out.println("Test Object Height: " + getGame().getTestObject().getHeight());
+            
+            
+            System.out.println("Test Object Location X: " + getGame().getTestObject().getLocationX(false));
+            System.out.println("Test Object Location Y: " + getGame().getTestObject().getLocationY(false));
+    
+            System.out.println("Test Object Location X (Center): " + getGame().getTestObject().getLocationX(true));
+            System.out.println("Test Object Location Y (Center): " + getGame().getTestObject().getLocationY(true));
         });
         testButton4.setText("Print Movement Data");
         

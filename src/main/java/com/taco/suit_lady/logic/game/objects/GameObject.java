@@ -7,7 +7,9 @@ import com.taco.suit_lady.logic.game.interfaces.AttributeContainable;
 import com.taco.suit_lady.logic.game.ui.GameViewContent;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
+import com.taco.suit_lady.util.tools.BindingsSL;
 import com.taco.suit_lady.util.tools.PropertiesSL;
+import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.*;
 import javafx.geometry.Point2D;
 import net.rgielen.fxweaver.core.FxWeaver;
@@ -37,6 +39,11 @@ public class GameObject
     
     private final IntegerProperty widthProperty;
     private final IntegerProperty heightProperty;
+    
+    //
+    
+    private final DoubleBinding xLocationCenteredBinding;
+    private final DoubleBinding yLocationCenteredBinding;
     
     //
     
@@ -85,8 +92,13 @@ public class GameObject
         this.xLocationProperty = new SimpleDoubleProperty(locationX);
         this.yLocationProperty = new SimpleDoubleProperty(locationY);
         
-        this.widthProperty = new SimpleIntegerProperty();
-        this.heightProperty = new SimpleIntegerProperty();
+        this.widthProperty = new SimpleIntegerProperty(32);
+        this.heightProperty = new SimpleIntegerProperty(32);
+        
+        //
+        
+        this.xLocationCenteredBinding = BindingsSL.doubleBinding(() -> getLocationX(false) + (getWidth() / 2D), xLocationProperty, widthProperty);
+        this.yLocationCenteredBinding = BindingsSL.doubleBinding(() -> getLocationY(false) + (getHeight() / 2D), yLocationProperty, heightProperty);
         
         //
         
@@ -108,28 +120,36 @@ public class GameObject
     
     public final MoveCommand getCommand() { return command; }
     
-    //<editor-fold desc="--- MAP PROPERTIES ---">
+    //<editor-fold desc="> Map Properties">
+    
+    //<editor-fold desc=">> Location Properties">
     
     public final DoubleProperty xLocationProperty() { return xLocationProperty; }
-    public final double getLocationX() { return xLocationProperty.get(); }
+    public final DoubleBinding xLocationCenteredBinding() { return xLocationCenteredBinding; }
+    
+    public final double getLocationX(boolean center) { return center ? xLocationCenteredBinding.get() : xLocationProperty.get(); }
     public final double setLocationX(@NotNull Number newValue) { return PropertiesSL.setProperty(xLocationProperty, newValue.doubleValue()); }
     
     public final double setTileLocationX(@NotNull Number newValue) { return PropertiesSL.setProperty(xLocationProperty, newValue.doubleValue() * getGameMap().getTileSize()); }
-    public final double moveX(@NotNull Number amount) { return setLocationX(getLocationX() + amount.doubleValue()); }
-    public final double moveTileX(@NotNull Number amount) { return setLocationX(getLocationX() + (amount.doubleValue() * getGameMap().getTileSize())); }
+    public final double moveX(@NotNull Number amount) { return setLocationX(getLocationX(false) + amount.doubleValue()); }
+    public final double moveTileX(@NotNull Number amount) { return setLocationX(getLocationX(false) + (amount.doubleValue() * getGameMap().getTileSize())); }
     
     
     public final DoubleProperty yLocationProperty() { return yLocationProperty; }
-    public final double getLocationY() { return yLocationProperty.get(); }
+    public final DoubleBinding yLocationCenteredBinding() { return yLocationCenteredBinding; }
+    
+    public final double getLocationY(boolean center) { return center ? yLocationCenteredBinding.get() : yLocationProperty.get(); }
     public final double setLocationY(@NotNull Number newValue) { return PropertiesSL.setProperty(yLocationProperty, newValue.doubleValue()); }
     
     public final double setTileLocationY(@NotNull Number newValue) { return PropertiesSL.setProperty(yLocationProperty, newValue.doubleValue() * getGameMap().getTileSize()); }
-    public final double moveY(@NotNull Number amount) { return setLocationY(getLocationY() + amount.doubleValue()); }
-    public final double moveTileY(@NotNull Number amount) { return setLocationY(getLocationY() + (amount.doubleValue() * getGameMap().getTileSize())); }
+    public final double moveY(@NotNull Number amount) { return setLocationY(getLocationY(false) + amount.doubleValue()); }
+    public final double moveTileY(@NotNull Number amount) { return setLocationY(getLocationY(false) + (amount.doubleValue() * getGameMap().getTileSize())); }
     
     
-    public final boolean isAtPoint(@NotNull Point2D point) {
-        return Math.abs(Math.round(getLocationX()) - Math.round(point.getX())) <= 1 && Math.abs(Math.round(getLocationY()) - Math.round(point.getY())) <= 1;
+    //</editor-fold>
+    
+    public final boolean isAtPoint(@NotNull Point2D point, boolean center) {
+        return Math.abs(Math.round((getLocationX(center))) - Math.round(point.getX())) <= 1 && Math.abs(Math.round(getLocationY(center)) - Math.round(point.getY())) <= 1;
     }
     
     public final IntegerProperty widthProperty() {
@@ -204,10 +224,10 @@ public class GameObject
     //</editor-fold>
     
     public final @NotNull GameTile[][] getOccupyingTiles() {
-        final int adjustedMinX = (int) getLocationX() / getGameMap().getTileSize();
-        final int adjustedMinY = (int) getLocationY() / getGameMap().getTileSize();
-        final int adjustedMaxX = (int) Math.ceil((getWidth() + getLocationX()) / (double) getGameMap().getTileSize());
-        final int adjustedMaxY = (int) Math.ceil((getHeight() + getLocationY()) / (double) getGameMap().getTileSize());
+        final int adjustedMinX = (int) getLocationX(false) / getGameMap().getTileSize();
+        final int adjustedMinY = (int) getLocationY(false) / getGameMap().getTileSize();
+        final int adjustedMaxX = (int) Math.ceil((getWidth() + getLocationX(false)) / (double) getGameMap().getTileSize());
+        final int adjustedMaxY = (int) Math.ceil((getHeight() + getLocationY(false)) / (double) getGameMap().getTileSize());
         
         final GameTile[][] occupyingGameTiles = new GameTile[(adjustedMaxX - adjustedMinX) + 1][(adjustedMaxY - adjustedMinY) + 1];
         for (int i = 0; i < occupyingGameTiles.length; i++)

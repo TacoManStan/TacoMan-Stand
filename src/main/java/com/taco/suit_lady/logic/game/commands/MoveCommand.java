@@ -24,7 +24,7 @@ public class MoveCommand
     private final BooleanProperty pausedProperty;
     
     public MoveCommand(@NotNull GameObject owner) {
-        this(owner, (int) owner.getLocationX(), (int) owner.getLocationY());
+        this(owner, (int) owner.getLocationX(false), (int) owner.getLocationY(false));
     }
     
     public MoveCommand(@NotNull GameObject owner, int targetX, int targetY) {
@@ -63,8 +63,8 @@ public class MoveCommand
     @Override public void tick() {
         if (!isPaused()) {
             final double pixelsPerTick = 1.5;
-            final double xDistance = getTargetX() - getOwner().getLocationX();
-            final double yDistance = getTargetY() - getOwner().getLocationY();
+            final double xDistance = getTargetX() - getOwner().getLocationX(true);
+            final double yDistance = getTargetY() - getOwner().getLocationY(true);
             
             double multiplier = Math.sqrt(Math.pow(pixelsPerTick, 2) / (Math.pow(xDistance, 2) + Math.pow(yDistance, 2)));
             
@@ -74,7 +74,7 @@ public class MoveCommand
             ToolsFX.runFX(() -> {
                 getOwner().moveX(xMovement);
                 getOwner().moveY(yMovement);
-                if (getOwner().isAtPoint(getLocation()))
+                if (getOwner().isAtPoint(getLocation(), true))
                     setPaused(true);
             }, true);
         }

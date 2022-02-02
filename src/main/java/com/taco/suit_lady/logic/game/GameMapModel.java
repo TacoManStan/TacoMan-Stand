@@ -96,8 +96,8 @@ public class GameMapModel
     }
     
     private void initPaintCommand() {
-        camera.xOffsetProperty().bind(BindingsSL.intBinding(() -> -(camera.getViewportWidth() / 2), camera.viewportWidthBinding()));
-        camera.yOffsetProperty().bind(BindingsSL.intBinding(() -> -(camera.getViewportHeight() / 2), camera.viewportHeightBinding()));
+        camera.xOffsetProperty().bind(BindingsSL.intBinding(() -> -Math.round(camera.getViewportWidth() / 2d), camera.viewportWidthBinding()));
+        camera.yOffsetProperty().bind(BindingsSL.intBinding(() -> -Math.round(camera.getViewportHeight() / 2d), camera.viewportHeightBinding()));
         
         mapImagePaintCommand.imageProperty().bind(getGameMap().getModel().mapImageProperty());
         

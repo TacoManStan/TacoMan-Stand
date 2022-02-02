@@ -41,8 +41,8 @@ public class GameObjectModel
     }
     
     public GameObjectModel init() {
-        this.xPaintPositionBinding = BindingsSL.intBinding(() -> -getOwner().getGameMap().getModel().getCamera().getAggregateX() + getOwner().getLocationX(), getOwner().getGameMap().getModel().getCamera().xAggregateBinding(), getOwner().xLocationProperty());
-        this.yPaintPositionBinding = BindingsSL.intBinding(() -> -getOwner().getGameMap().getModel().getCamera().getAggregateY() + getOwner().getLocationY(), getOwner().getGameMap().getModel().getCamera().yAggregateBinding(), getOwner().yLocationProperty());
+        this.xPaintPositionBinding = BindingsSL.intBinding(() -> (-getOwner().getGameMap().getModel().getCamera().getAggregateX() + getOwner().getLocationX(false)), getOwner().getGameMap().getModel().getCamera().xAggregateBinding(), getOwner().xLocationProperty());
+        this.yPaintPositionBinding = BindingsSL.intBinding(() -> (-getOwner().getGameMap().getModel().getCamera().getAggregateY() + getOwner().getLocationY(false)), getOwner().getGameMap().getModel().getCamera().yAggregateBinding(), getOwner().yLocationProperty());
         
         this.modelPaintCommand.init();
         

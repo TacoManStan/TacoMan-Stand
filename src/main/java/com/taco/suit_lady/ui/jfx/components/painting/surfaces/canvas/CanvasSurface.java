@@ -75,7 +75,7 @@ public class CanvasSurface extends Canvas
             else
                 snapshotTimer.reset(newValue);
         });
-        setSnapshotFrequency(5000L);
+        setSnapshotFrequency(-1L);
         
         this.snapshotTimer.setOnTimeout(() -> sync(() -> {
             updateSnapshot();
