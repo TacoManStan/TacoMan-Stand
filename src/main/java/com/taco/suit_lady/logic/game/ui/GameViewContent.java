@@ -95,7 +95,7 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
             }));
         });
         
-        setGameMap(GameMap.newTestInstance(this, lock));
+        setGameMap(GameMap.newTestInstance(this, lock,  "test-map-jid"));
         
         initTestObjects();
     }
@@ -104,12 +104,12 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         testObject.init();
         testObject.setTileLocationX(20);
         testObject.setTileLocationY(20);
-        getGameMap().mapObjects().add(testObject);
+        getGameMap().gameObjects().add(testObject);
     
         testObject2.init();
         testObject2.setTileLocationX(30);
         testObject2.setTileLocationY(20);
-        getGameMap().mapObjects().add(testObject2);
+        getGameMap().gameObjects().add(testObject2);
     
         getCamera().xLocationProperty().bind(testObject.xLocationProperty());
         getCamera().yLocationProperty().bind(testObject.yLocationProperty());

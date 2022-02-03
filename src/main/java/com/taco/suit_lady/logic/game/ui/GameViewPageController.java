@@ -3,6 +3,7 @@ package com.taco.suit_lady.logic.game.ui;
 import com.taco.suit_lady.logic.game.interfaces.GameComponent;
 import com.taco.suit_lady.logic.game.objects.GameTile;
 import com.taco.suit_lady.ui.UIPageController;
+import com.taco.tacository.json.JFiles;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
@@ -62,7 +63,7 @@ public class GameViewPageController extends UIPageController<GameViewPage>
             debugger().setErrorEnabled(true);
             debugger().setWarnEnabled(true);
             
-            debugger().printList(getGameMap().mapObjects(), "Map Objects");
+            debugger().printList(getGameMap().gameObjects(), "Map Objects");
         });
         testButton2.setText("Print Game Objects");
         
@@ -92,8 +93,17 @@ public class GameViewPageController extends UIPageController<GameViewPage>
         });
         testButton4.setText("Print Movement Data");
         
-        testButton5.setOnAction(event -> { });
-        testButton6.setOnAction(event -> { });
+        testButton5.setOnAction(event -> {
+            JFiles.save(getGameMap());
+        });
+        testButton5.setText("Save Map");
+        
+        testButton6.setOnAction(event -> {
+            JFiles.load(getGameMap());
+            getGameMap().getModel().getCanvas().repaint();
+        });
+        testButton6.setText("Load Map");
+        
         testButton7.setOnAction(event -> { });
         testButton8.setOnAction(event -> { });
     }

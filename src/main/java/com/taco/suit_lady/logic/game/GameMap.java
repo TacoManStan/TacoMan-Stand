@@ -1,15 +1,16 @@
 package com.taco.suit_lady.logic.game;
 
+import com.github.cliftonlabs.json_simple.JsonObject;
 import com.taco.suit_lady.logic.game.interfaces.GameComponent;
 import com.taco.suit_lady.logic.game.objects.GameObject;
 import com.taco.suit_lady.logic.game.objects.GameTile;
 import com.taco.suit_lady.logic.game.ui.GameViewContent;
-import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.ArraysSL;
 import com.taco.suit_lady.util.tools.MathSL;
+import com.taco.tacository.json.*;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,9 +20,9 @@ import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class GameMap
-        implements SpringableWrapper, Lockable, GameComponent {
+        implements SpringableWrapper, Lockable, GameComponent, JObject, JLoadableObject {
     
-    private final int tileSize; // The number of "pixels" comprising each tile.
+    private int tileSize; // The number of "pixels" comprising each tile.
     
     //
     
@@ -30,16 +31,19 @@ public class GameMap
     
     //
     
-    private final int width;
-    private final int height;
+    private int width;
+    private int height;
     
     private final GameTile[][] tileMap;
-    private final ArrayList<GameObject> mapObjects;
+    private final ArrayList<GameObject> gameObjects;
     
     
     private GameMapModel model;
     
-    public GameMap(@NotNull GameViewContent content, @Nullable ReentrantLock lock, int width, int height, int tileSize) {
+    
+    private String mapID;
+    
+    public GameMap(@NotNull GameViewContent content, @Nullable ReentrantLock lock, int width, int height, int tileSize, String mapID) {
         this.content = content;
         this.lock = lock != null ? lock : new ReentrantLock();
         
@@ -52,7 +56,10 @@ public class GameMap
         
         
         this.tileMap = new GameTile[width][height];
-        this.mapObjects = new ArrayList<>();
+        this.gameObjects = new ArrayList<>();
+        
+        
+        this.mapID = mapID;
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">
@@ -84,6 +91,11 @@ public class GameMap
     //<editor-fold desc="--- PROPERTIES ---">
     
     public final int getTileSize() { return tileSize; }
+    public final int setTileSize(int newValue) {
+        int oldValue = getTileSize();
+        tileSize = newValue;
+        return oldValue;
+    }
     
     
     /**
@@ -92,6 +104,11 @@ public class GameMap
      * @return The {@code width} of this {@link GameMap} in {@link GameTile tiles}.
      */
     public final int getWidth() { return width; }
+    private int setWidth(int newValue) {
+        int oldValue = getWidth();
+        width = newValue;
+        return oldValue;
+    }
     
     /**
      * <p>Returns the {@code height} of this {@link GameMap} in {@link GameTile tiles}.</p>
@@ -99,6 +116,11 @@ public class GameMap
      * @return The {@code height} of this {@link GameMap} in {@link GameTile tiles}.
      */
     public final int getHeight() { return height; }
+    private int setHeight(int newValue) {
+        int oldValue = getHeight();
+        height = newValue;
+        return oldValue;
+    }
     
     /**
      * <p>Returns the {@code width} of this {@link GameMap} in {@code virtual pixels}.</p>
@@ -120,9 +142,17 @@ public class GameMap
     
     
     public final GameTile[][] getTileMap() { return tileMap; }
-    public final ArrayList<GameObject> mapObjects() { return mapObjects; }
+    public final ArrayList<GameObject> gameObjects() { return gameObjects; }
     
     public final GameMapModel getModel() { return model; }
+    
+    
+    /**
+     * <p>Returns the {@link String} representing the {@code ID} used to {@link JFiles#save(JObject) save} and {@link JFiles#load(JLoadable) load} this {@link GameMap}.</p>
+     *
+     * @return The {@link String} representing the {@code ID} used to {@link JFiles#save(JObject) save} and {@link JFiles#load(JLoadable) load} this {@link GameMap}.
+     */
+    public final String getMapID() { return mapID; }
     
     //</editor-fold>
     
@@ -209,25 +239,57 @@ public class GameMap
     //<editor-fold desc="--- STATIC FACTORY METHODS ---">
     
     /**
-     * <p>Identical to <i>{@link #newTestInstance(GameViewContent, ReentrantLock)}</i> except the {@link ReentrantLock} passed to the {@link GameMap Game Map's} {@link GameMap#GameMap(GameViewContent, ReentrantLock, int, int, int) constructor} is always {@code null}.</p>
+     * <p>Identical to <i>{@link #newTestInstance(GameViewContent, ReentrantLock, String)}</i> except the {@link ReentrantLock} passed to the {@link GameMap Game Map's} {@link GameMap#GameMap(GameViewContent, ReentrantLock, int, int, int, String) constructor} is always {@code null}.</p>
      * <p>Note that a new {@link ReentrantLock} is automatically created by the {@link GameMap} constructor if the specified value is {@code null}, so the returned {@link GameMap} object will still be {@code synchronized}, just only with itself.</p>
      *
      * @param content Any non-null {@link Springable} object used to enable {@link Springable} features in the returned {@link GameMap} object.
      *
      * @return The newly constructed {@link GameMap} instance.
      *
-     * @see #newTestInstance(GameViewContent, ReentrantLock)
+     * @see #newTestInstance(GameViewContent, ReentrantLock, String)
      * @see GameMap
-     * @see GameMap#GameMap(GameViewContent, ReentrantLock, int, int, int)
+     * @see GameMap#GameMap(GameViewContent, ReentrantLock, int, int, int, String)
      */
-    public static @NotNull GameMap newTestInstance(@NotNull GameViewContent content) {
-        return newTestInstance(content, null);
+    public static @NotNull GameMap newTestInstance(@NotNull GameViewContent content, @NotNull String mapID) {
+        return newTestInstance(content, null, mapID);
     }
     
-
-    public static @NotNull GameMap newTestInstance(@NotNull GameViewContent content, @Nullable ReentrantLock lock) {
-        return new GameMap(content, lock, 96, 64, 32);
+    
+    public static @NotNull GameMap newTestInstance(@NotNull GameViewContent content, @Nullable ReentrantLock lock, @NotNull String mapID) {
+        return new GameMap(content, lock, 96, 64, 32, mapID);
     }
+    
+    
+    //<editor-fold desc="> JSON">
+    
+    @Override public String getJID() { return mapID; }
+    @Override public void setJID(String jID) { mapID = jID; }
+    
+    @Override public JElement[] jFields() {
+        return new JElement[]{
+                JUtil.create("map-width", getWidth()),
+                JUtil.create("map-height", getHeight()),
+                JUtil.create("tile-size", getTileSize()),
+                JUtil.createArray("map-objects", gameObjects().toArray(new GameObject[0]))
+        };
+    }
+    
+    @Override public void doLoad(JsonObject parent) {
+        setWidth(JUtil.loadInt(parent, "map-width"));
+        setHeight(JUtil.loadInt(parent, "map-height"));
+        setTileSize(JUtil.loadInt(parent, "tile-size"));
+        final List<GameObject> gameObjects = JUtil.loadArray(parent, "map-objects", o -> {
+            JsonObject jsonObject = (JsonObject) o;
+            GameObject gameObject = new GameObject(getGame(), lock).init();
+            gameObject.load(jsonObject);
+            System.out.println("Loaded GameObject: " + gameObject);
+            return gameObject;
+        });
+        gameObjects().addAll(gameObjects);
+        debugger().printList(gameObjects(), "Game Objects");
+    }
+    
+    //</editor-fold>
     
     //</editor-fold>
 }

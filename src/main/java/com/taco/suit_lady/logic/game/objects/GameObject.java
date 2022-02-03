@@ -1,5 +1,6 @@
 package com.taco.suit_lady.logic.game.objects;
 
+import com.github.cliftonlabs.json_simple.JsonObject;
 import com.taco.suit_lady.logic.game.AttributeContainer;
 import com.taco.suit_lady.logic.game.Entity;
 import com.taco.suit_lady.logic.game.commands.MoveCommand;
@@ -9,6 +10,10 @@ import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.BindingsSL;
 import com.taco.suit_lady.util.tools.PropertiesSL;
+import com.taco.tacository.json.JElement;
+import com.taco.tacository.json.JLoadable;
+import com.taco.tacository.json.JObject;
+import com.taco.tacository.json.JUtil;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;
@@ -22,7 +27,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class GameObject
-        implements Lockable, AttributeContainable, Entity {
+        implements Lockable, AttributeContainable, Entity, JObject, JLoadable {
     
     private final StrictSpringable springable;
     private final ReentrantLock lock;
@@ -47,6 +52,9 @@ public class GameObject
     private final DoubleBinding yLocationCenteredBinding;
     
     private ObjectBinding<GameTile[][]> occupiedTilesBinding = null;
+    
+    
+    private String objID;
     
     //
     
@@ -110,10 +118,8 @@ public class GameObject
     
     public final GameObject init() {
         getModel().init();
-        this.occupiedTilesBinding = BindingsSL.objBinding(() -> {
-            return calculateOccupiedTiles();
-        }, xLocationProperty, yLocationProperty, widthProperty, heightProperty, gameMapProperty());
-    
+        this.occupiedTilesBinding = BindingsSL.objBinding(() -> calculateOccupiedTiles(), xLocationProperty, yLocationProperty, widthProperty, heightProperty, gameMapProperty());
+        
         this.occupiedTilesBinding.addListener((observable, oldValue, newValue) -> {
             if (oldValue != null) {
                 for (int i = 0; i < oldValue.length; i++)
@@ -125,14 +131,15 @@ public class GameObject
                     for (int j = 0; j < newValue[i].length; j++)
                         newValue[i][j].getOccupyingObjects().add(this);
         });
+        
         return this;
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
     
     public final GameObjectModel getModel() { return model; }
-    
     public final MoveCommand getCommand() { return command; }
+    public final String getObjID() { return objID; }
     
     //<editor-fold desc="> Map Properties">
     
@@ -205,17 +212,17 @@ public class GameObject
     //</editor-fold>
     
     private @NotNull GameTile[][] calculateOccupiedTiles() {
-            final int adjustedMinX = (int) Math.floor(getLocationX(false) / getGameMap().getTileSize());
-            final int adjustedMinY = (int) Math.floor(getLocationY(false) / getGameMap().getTileSize());
-            final int adjustedMaxX = (int) Math.floor((getWidth() - 1 + getLocationX(false)) / getGameMap().getTileSize());
-            final int adjustedMaxY = (int) Math.floor((getHeight() - 1 + getLocationY(false)) / getGameMap().getTileSize());
-            
-            final GameTile[][] occupyingGameTiles = new GameTile[(adjustedMaxX - adjustedMinX) + 1][(adjustedMaxY - adjustedMinY) + 1];
-            for (int i = 0; i < occupyingGameTiles.length; i++)
-                for (int j = 0; j < occupyingGameTiles[i].length; j++)
-                    occupyingGameTiles[i][j] = getGameMap().getTileMap()[i + adjustedMinX][j + adjustedMinY];
-            
-            return occupyingGameTiles;
+        final int adjustedMinX = (int) Math.floor(getLocationX(false) / getGameMap().getTileSize());
+        final int adjustedMinY = (int) Math.floor(getLocationY(false) / getGameMap().getTileSize());
+        final int adjustedMaxX = (int) Math.floor((getWidth() - 1 + getLocationX(false)) / getGameMap().getTileSize());
+        final int adjustedMaxY = (int) Math.floor((getHeight() - 1 + getLocationY(false)) / getGameMap().getTileSize());
+        
+        final GameTile[][] occupyingGameTiles = new GameTile[(adjustedMaxX - adjustedMinX) + 1][(adjustedMaxY - adjustedMinY) + 1];
+        for (int i = 0; i < occupyingGameTiles.length; i++)
+            for (int j = 0; j < occupyingGameTiles[i].length; j++)
+                occupyingGameTiles[i][j] = getGameMap().getTileMap()[i + adjustedMinX][j + adjustedMinY];
+        
+        return occupyingGameTiles;
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
@@ -225,6 +232,40 @@ public class GameObject
     @Override public void tick() {
         //TODO
     }
+    
+    //<editor-fold desc="> JSON">
+    
+    @Override public String getJID() { return getObjID(); }
+    
+    @Override public JElement[] jFields() {
+        return new JElement[]{
+                JUtil.create("width", getWidth()),
+                JUtil.create("height", getHeight()),
+                JUtil.create("x-location", getLocationX(false)),
+                JUtil.create("y-location", getLocationY(false))
+        };
+    }
+    
+    @Override public void load(JsonObject parent) {
+        setWidth(JUtil.loadInt(parent, "width"));
+        setHeight(JUtil.loadInt(parent, "height"));
+        setLocationX(JUtil.loadDouble(parent, "x-location"));
+        setLocationY(JUtil.loadDouble(parent, "y-location"));
+    }
+    
+    //</editor-fold>
+    @Override public String toString() {
+        return "GameObject{" +
+               "xLocation=" + xLocationProperty.get() +
+               ", yLocation=" + yLocationProperty.get() +
+               ", width=" + widthProperty.get() +
+               ", height=" + heightProperty.get() +
+               ", xLocationCentered=" + xLocationCenteredBinding.get() +
+               ", yLocationCentered=" + yLocationCenteredBinding.get() +
+               ", objID='" + objID + '\'' +
+               '}';
+    }
+    
     
     //</editor-fold>
 }

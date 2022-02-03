@@ -54,8 +54,6 @@ public class Camera
     private final GameViewContent content;
     private final ObjectBinding<GameMap> mapBinding;
     
-    private final CroppedImagePaintCommand mapImagePaintCommand;
-    
     //<editor-fold desc="--- BINDING FIELDS ---">
     
     private IntegerBinding xAggregateBinding;
@@ -85,8 +83,6 @@ public class Camera
         
         this.content = content;
         this.mapBinding = BindingsSL.directObjBinding(content.gameMapProperty());
-        
-        this.mapImagePaintCommand = new CroppedImagePaintCommand(this, lock).init();
         
         //
         
@@ -126,8 +122,6 @@ public class Camera
     //</editor-fold>
     
     //<editor-fold desc="--- PROPERTIES ---">
-    
-    public final CroppedImagePaintCommand getPaintCommand() { return mapImagePaintCommand; }
     
     //<editor-fold desc="> Coordinates">
     
