@@ -217,7 +217,7 @@ public class GameObject
         final GameTile[][] occupyingGameTiles = new GameTile[(adjustedMaxX - adjustedMinX) + 1][(adjustedMaxY - adjustedMinY) + 1];
         for (int i = 0; i < occupyingGameTiles.length; i++)
             for (int j = 0; j < occupyingGameTiles[i].length; j++)
-                occupyingGameTiles[i][j] = getGameMap().getTileMap()[i + adjustedMinX][j + adjustedMinY];
+                occupyingGameTiles[i][j] = getGameMap().getTileMatrix()[i + adjustedMinX][j + adjustedMinY];
         
         return occupyingGameTiles;
     }

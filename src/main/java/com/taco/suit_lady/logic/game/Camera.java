@@ -217,8 +217,8 @@ public class Camera
     
     //</editor-fold>
     
-    public final int getMapWidth() { return getGameMap().getFullWidth(); }
-    public final int getMapHeight() { return getGameMap().getFullHeight(); }
+    public final int getMapWidth() { return getGameMap().getPixelWidth(); }
+    public final int getMapHeight() { return getGameMap().getPixelHeight(); }
     
     //</editor-fold>
     
@@ -258,8 +258,8 @@ public class Camera
         System.out.println("Map Image Width: " + getMapImageWidth());
         System.out.println("Map Image Height: " + getMapImageHeight());
         
-        System.out.println("Game Map Width: " + getGameMap().getFullWidth());
-        System.out.println("Game Map Height: " + getGameMap().getFullHeight());
+        System.out.println("Game Map Width: " + getGameMap().getPixelWidth());
+        System.out.println("Game Map Height: " + getGameMap().getPixelHeight());
         
         
         System.out.println("X Multiplier: " + getMultiplierX());

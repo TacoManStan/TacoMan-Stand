@@ -9,9 +9,18 @@ import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.ArraysSL;
+import com.taco.suit_lady.util.tools.BindingsSL;
 import com.taco.suit_lady.util.tools.MathSL;
+import com.taco.suit_lady.util.tools.PropertiesSL;
 import com.taco.tacository.json.*;
+import javafx.beans.binding.IntegerBinding;
+import javafx.beans.binding.ObjectBinding;
+import javafx.beans.property.ReadOnlyIntegerProperty;
+import javafx.beans.property.ReadOnlyIntegerWrapper;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.geometry.Point2D;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,19 +31,21 @@ import java.util.concurrent.locks.ReentrantLock;
 public class GameMap
         implements SpringableWrapper, Lockable, GameComponent, JObject, JLoadableObject {
     
-    private int tileSize; // The number of "pixels" comprising each tile.
-    
-    //
-    
     private final GameViewContent content;
     private final ReentrantLock lock;
     
     //
     
-    private int width;
-    private int height;
+    private final ReadOnlyIntegerWrapper tileSizeProperty; // The number of "pixels" comprising each tile.
     
-    private final GameTile[][] tileMap;
+    private final ReadOnlyIntegerWrapper widthProperty;
+    private final ReadOnlyIntegerWrapper heightProperty;
+    
+    private final IntegerBinding pixelWidthBinding;
+    private final IntegerBinding pixelHeightBinding;
+    
+    
+    private final ObjectBinding<GameTile[][]> tileMatrixBinding;
     private final ArrayList<GameObject> gameObjects;
     
     
@@ -49,13 +60,17 @@ public class GameMap
         
         //
         
-        this.width = width;
-        this.height = height;
+        this.tileSizeProperty = new ReadOnlyIntegerWrapper(tileSize);
         
-        this.tileSize = tileSize;
+        this.widthProperty = new ReadOnlyIntegerWrapper(width);
+        this.heightProperty = new ReadOnlyIntegerWrapper(height);
         
+        this.pixelWidthBinding = BindingsSL.intBinding(() -> getWidth() * getTileSize(), widthProperty, tileSizeProperty);
+        this.pixelHeightBinding = BindingsSL.intBinding(() -> getHeight() * getTileSize(), heightProperty, tileSizeProperty);
         
-        this.tileMap = new GameTile[width][height];
+        //
+        
+        this.tileMatrixBinding = BindingsSL.objBinding(() -> resetGameTiles(), widthProperty, heightProperty);
         this.gameObjects = new ArrayList<>();
         
         
@@ -65,7 +80,7 @@ public class GameMap
     //<editor-fold desc="--- INITIALIZATION ---">
     
     public final GameMap init() {
-        initTiles();
+        resetGameTiles();
         initModel();
         return this;
     }
@@ -80,70 +95,43 @@ public class GameMap
      * <p>Populates the {@link GameTile} array for this {@link GameMap} with new {@link GameTile} objects.</p>
      * <p>Note that eventually, this method should load tiles based on a specified data template that represents the contents of the {@link GameMap}.</p>
      */
-    private void initTiles() {
-        for (int i = 0; i < width; i++)
-            for (int j = 0; j < height; j++)
-                tileMap[i][j] = new GameTile(this, i, j);
+    private GameTile[][] resetGameTiles() {
+        return sync(() -> ArraysSL.fillMatrix((x, y) -> new GameTile(this, x, y), new GameTile[getWidth()][getHeight()]));
     }
     
     //</editor-fold>
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final int getTileSize() { return tileSize; }
-    public final int setTileSize(int newValue) {
-        int oldValue = getTileSize();
-        tileSize = newValue;
-        return oldValue;
-    }
+    //<editor-fold desc="> Dimensions Properties">
     
+    protected final ReadOnlyIntegerWrapper tileSizeProperty() { return tileSizeProperty; }
+    public final ReadOnlyIntegerProperty readOnlyTileSizeProperty() { return tileSizeProperty.getReadOnlyProperty(); }
+    public final int getTileSize() { return tileSizeProperty.get(); }
+    public final int setTileSize(@NotNull Number newValue) { return PropertiesSL.setProperty(tileSizeProperty, newValue.intValue()); }
     
-    /**
-     * <p>Returns the {@code width} of this {@link GameMap} in {@link GameTile tiles}.</p>
-     *
-     * @return The {@code width} of this {@link GameMap} in {@link GameTile tiles}.
-     */
-    public final int getWidth() { return width; }
-    private int setWidth(int newValue) {
-        int oldValue = getWidth();
-        width = newValue;
-        return oldValue;
-    }
+    protected final ReadOnlyIntegerWrapper widthProperty() { return widthProperty; }
+    public final ReadOnlyIntegerProperty readOnlyWidthProperty() { return widthProperty.getReadOnlyProperty(); }
+    public final int getWidth() { return widthProperty.get(); }
+    public final int setWidth(@NotNull Number newValue) { return PropertiesSL.setProperty(widthProperty, newValue.intValue()); }
     
-    /**
-     * <p>Returns the {@code height} of this {@link GameMap} in {@link GameTile tiles}.</p>
-     *
-     * @return The {@code height} of this {@link GameMap} in {@link GameTile tiles}.
-     */
-    public final int getHeight() { return height; }
-    private int setHeight(int newValue) {
-        int oldValue = getHeight();
-        height = newValue;
-        return oldValue;
-    }
+    protected final ReadOnlyIntegerWrapper heightProperty() { return heightProperty; }
+    public final ReadOnlyIntegerProperty readOnlyHeightProperty() { return heightProperty.getReadOnlyProperty(); }
+    public final int getHeight() { return heightProperty.get(); }
+    public final int setHeight(@NotNull Number newValue) { return PropertiesSL.setProperty(heightProperty, newValue.intValue()); }
     
-    /**
-     * <p>Returns the {@code width} of this {@link GameMap} in {@code virtual pixels}.</p>
-     * <p><b>Passthrough Definition:</b></p>
-     * <blockquote><i>{@link #getWidth()} <b>*</b> {@link #getTileSize()}</i></blockquote>
-     *
-     * @return The {@code width} of this {@link GameMap} in {@code virtual pixels}.
-     */
-    public final int getFullWidth() { return width * tileSize; }
+    public final IntegerBinding pixelWidthBinding() { return pixelWidthBinding; }
+    public final int getPixelWidth() { return pixelWidthBinding.get(); }
     
-    /**
-     * <p>Returns the {@code height} of this {@link GameMap} in {@code virtual pixels}.</p>
-     * <p><b>Passthrough Definition:</b></p>
-     * <blockquote><i>{@link #getHeight()} <b>*</b> {@link #getTileSize()}</i></blockquote>
-     *
-     * @return The {@code height} of this {@link GameMap} in {@code virtual pixels}.
-     */
-    public final int getFullHeight() { return height * tileSize; }
+    public final IntegerBinding pixelHeightBinding() { return pixelHeightBinding; }
+    public final int getPixelHeight() { return pixelHeightBinding.get(); }
     
+    //</editor-fold>
     
-    public final GameTile[][] getTileMap() { return tileMap; }
+    public final ObjectBinding<GameTile[][]> tileMatrixBinding() { return tileMatrixBinding; }
+    public final GameTile[][] getTileMatrix() { return tileMatrixBinding.get(); }
+    
     public final ArrayList<GameObject> gameObjects() { return gameObjects; }
-    
     public final GameMapModel getModel() { return model; }
     
     
@@ -159,10 +147,10 @@ public class GameMap
     public final @Nullable GameTile getNeighbor(@NotNull GameTile gameTile, int xTranslate, int yTranslate) {
         int xTemp = gameTile.getXLoc() + xTranslate;
         int yTemp = gameTile.getYLoc() + yTranslate;
-        if (xTemp < 0 || xTemp >= width || yTemp < 0 || yTemp >= height)
+        if (xTemp < 0 || xTemp >= getWidth() || yTemp < 0 || yTemp >= getHeight())
             return null; // Indicate to caller in some way that the returned value does not exist on this GMap.
         
-        return tileMap[xTemp][yTemp];
+        return getTileMatrix()[xTemp][yTemp];
     }
     
     public final @NotNull GameTile[][] getNeighbors(@NotNull GameTile gameTile, int xReach, int yReach) {
@@ -174,8 +162,8 @@ public class GameMap
             for (int j = -yReach; j < yReach; j++) {
                 int xLoc = gameTile.getXLoc() + i;
                 int yLoc = gameTile.getYLoc() + j;
-                if (ArraysSL.isInMatrixBounds(getTileMap(), xLoc, yLoc))
-                    neighbors[i][j] = tileMap[gameTile.getXLoc() + i][gameTile.getYLoc() + j];
+                if (ArraysSL.isInMatrixBounds(getTileMatrix(), xLoc, yLoc))
+                    neighbors[i][j] = getTileMatrix()[gameTile.getXLoc() + i][gameTile.getYLoc() + j];
             }
         
         return neighbors;
@@ -192,8 +180,8 @@ public class GameMap
         
         //TODO: Include Offsets
         
-        int pxMapWidth = getFullWidth();
-        int pxMapHeight = getFullHeight();
+        int pxMapWidth = getPixelWidth();
+        int pxMapHeight = getPixelHeight();
         
         int tileMinX = Math.floorDiv(xLoc, getTileSize());
         int tileMinY = Math.floorDiv(yLoc, getTileSize());
@@ -203,22 +191,16 @@ public class GameMap
         ArrayList<GameTile> returnTiles = new ArrayList<>();
         for (int i = tileMinX; i <= tileMaxX; i++)
             for (int j = tileMinY; j <= tileMaxY; j++)
-                if (ArraysSL.isInMatrixBounds(getTileMap(), i, j))
-                    returnTiles.add(getTileMap()[i][j]);
+                if (ArraysSL.isInMatrixBounds(getTileMatrix(), i, j))
+                    returnTiles.add(getTileMatrix()[i][j]);
         return returnTiles;
     }
     
-    public final @NotNull GameTile getTileAtPoint(@NotNull Number x, @NotNull Number y) {
-        return getTileAtPoint(new Point2D(x.doubleValue(), y.doubleValue()));
-    }
+    public final @NotNull GameTile getTileAtPoint(@NotNull Number x, @NotNull Number y) { return getTileAtPoint(new Point2D(x.doubleValue(), y.doubleValue())); }
+    public final @NotNull GameTile getTileAtPoint(@NotNull Point2D point) { return getTileMatrix()[(int) Math.floor(point.getX() / getTileSize())][(int) Math.floor(point.getY() / getTileSize())]; }
     
-    public final @NotNull GameTile getTileAtPoint(@NotNull Point2D point) {
-        return tileMap[(int) Math.floor(point.getX() / getTileSize())][(int) Math.floor(point.getY() / getTileSize())];
-    }
-    
-    public final ArrayList<GameObject> getObjectsAtPoint(@NotNull Point2D point) {
-        return new ArrayList<>(getTileAtPoint(point).getOccupyingObjects());
-    }
+    @Contract("_ -> new")
+    public final @NotNull ArrayList<GameObject> getObjectsAtPoint(@NotNull Point2D point) { return new ArrayList<>(getTileAtPoint(point).getOccupyingObjects()); }
     
     public boolean shutdown() {
         //TODO
@@ -250,15 +232,8 @@ public class GameMap
      * @see GameMap
      * @see GameMap#GameMap(GameViewContent, ReentrantLock, int, int, int, String)
      */
-    public static @NotNull GameMap newTestInstance(@NotNull GameViewContent content, @NotNull String mapID) {
-        return newTestInstance(content, null, mapID);
-    }
-    
-    
-    public static @NotNull GameMap newTestInstance(@NotNull GameViewContent content, @Nullable ReentrantLock lock, @NotNull String mapID) {
-        return new GameMap(content, lock, 96, 64, 32, mapID);
-    }
-    
+    public static @NotNull GameMap newTestInstance(@NotNull GameViewContent content, @NotNull String mapID) { return newTestInstance(content, null, mapID); }
+    public static @NotNull GameMap newTestInstance(@NotNull GameViewContent content, @Nullable ReentrantLock lock, @NotNull String mapID) { return new GameMap(content, lock, 96, 64, 32, mapID); }
     
     //<editor-fold desc="> JSON">
     
@@ -278,15 +253,12 @@ public class GameMap
         setWidth(JUtil.loadInt(parent, "map-width"));
         setHeight(JUtil.loadInt(parent, "map-height"));
         setTileSize(JUtil.loadInt(parent, "tile-size"));
-        final List<GameObject> gameObjects = JUtil.loadArray(parent, "map-objects", o -> {
+        gameObjects().addAll(JUtil.loadArray(parent, "map-objects", o -> {
             JsonObject jsonObject = (JsonObject) o;
             GameObject gameObject = new GameObject(getGame(), lock).init();
             gameObject.load(jsonObject);
-            System.out.println("Loaded GameObject: " + gameObject);
             return gameObject;
-        });
-        gameObjects().addAll(gameObjects);
-        debugger().printList(gameObjects(), "Game Objects");
+        }));
     }
     
     //</editor-fold>
