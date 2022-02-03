@@ -3,6 +3,8 @@ package com.taco.suit_lady.util.tools;
 import com.taco.suit_lady.util.UID;
 import com.taco.tacository.quick.ConsoleBB;
 import javafx.scene.image.Image;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -134,17 +136,44 @@ public class ResourcesSL {
         String hashID = StringsSL.replaceSeparator((pathID != null ? pathID : "") + imageID);
         String filePath = StringsSL.replaceSeparator("images/" + hashID + "." + extension);
         
+        System.out.println("Retrieving Image: " + filePath);
+        
         //noinspection Duplicates
         return get(image_type_key, hashID, () ->
         {
             try (InputStream inputStream = getResourceStream(filePath)) {
-                if (inputStream != null)
+                if (inputStream != null) {
                     return new Image(inputStream);
+                }
             } catch (IOException ignored) { } // Ignore because when an IOException is thrown, Missingno is loaded.
             
             ConsoleBB.CONSOLE.dev("WARNING: Input stream was null for image: " + filePath);
             return null;
         });
+    }
+    
+    public static final String SIZE_16x16 = "16x16";
+    public static final String SIZE_32x32 = "32x32";
+    
+    public static Image getGameImage(@NotNull String name) { return getGameImage(null, null, name); }
+    public static Image getGameImage(@NotNull String pathID, @NotNull String name) { return getGameImage(pathID, null, name); }
+    public static Image getGameImage(@Nullable String pathID, @Nullable String sizeID, @NotNull String name) { return getGameImage(pathID, sizeID, name, "png"); }
+    public static Image getGameImage(@Nullable String pathID, @Nullable String sizeID, @NotNull String name, @NotNull String extension) {
+        pathID = pathID != null ? pathID : "";
+        sizeID = sizeID != null ? sizeID : SIZE_32x32;
+        
+        System.out.println("Retrieving Game Image: " + pathID + " | " + sizeID + " | " + name + " | " + extension);
+        
+        return switch (sizeID) {
+            case SIZE_16x16 -> {
+                yield getImage("game/" + sizeID + "/" + pathID, name, extension);
+            }
+            case SIZE_32x32 -> {
+                yield getImage("game/" + sizeID + "/" + pathID, name, extension);
+            }
+            
+            default -> throw ExceptionsSL.unsupported("Unsupported Size ID: " + sizeID);
+        };
     }
     
     /**

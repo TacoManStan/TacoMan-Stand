@@ -15,7 +15,7 @@ public class ImagePaintNode extends PaintNode {
     
     public ImagePaintNode(@NotNull Springable springable, @Nullable ReentrantLock lock) {
         super(springable, lock);
-        this.imageView = new ImageView(ResourcesSL.getDummyImage(ResourcesSL.AVATAR));
+        this.imageView = new ImageView(ResourcesSL.getGameImage("units/", "taco"));
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">

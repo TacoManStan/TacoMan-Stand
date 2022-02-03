@@ -958,7 +958,6 @@ public class ToolsFX {
             final int xDestF = Math.max(-xMinO, 0);
             final int yDestF = Math.max(-yMinO, 0);
             
-            
             canvas.getGraphicsContext2D().drawImage(
                     image,
                     xMinF, yMinF, widthF, heightF,

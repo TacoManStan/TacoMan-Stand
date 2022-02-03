@@ -60,7 +60,7 @@ public class GameMapModel
         this.parentPaneProperty = new SimpleObjectProperty<>();
         this.canvasPane = new CanvasPane(this);
         
-        this.mapImageProperty = new SimpleObjectProperty<>(ResourcesSL.getDummyImage(ResourcesSL.MAP_XL));
+        this.mapImageProperty = new SimpleObjectProperty<>(ResourcesSL.getGameImage("map"));
         this.mapImagePaintCommand = new CroppedImagePaintCommand(this, lock);
         this.mapImagePaintCommand.setPaintPriority(5);
     }

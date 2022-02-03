@@ -35,7 +35,8 @@ public class GameObjectModel
         //
         
         this.imageIdProperty = new SimpleObjectProperty<>();
-        this.imageBinding = BindingsSL.constObjBinding(ResourcesSL.getDummyImage(ResourcesSL.AVATAR_32));
+//        this.imageBinding = BindingsSL.constObjBinding(ResourcesSL.getDummyImage(ResourcesSL.AVATAR_32));
+        this.imageBinding = BindingsSL.constObjBinding(ResourcesSL.getGameImage("units/", "taco"));
         
         this.modelPaintCommand = new ImagePaintCommand(this, null);
     }
@@ -46,6 +47,9 @@ public class GameObjectModel
         
         this.modelPaintCommand.init();
         
+//        imageBinding.addListener((observable, oldValue, newValue) -> {
+//            if (newValue != null)
+//        });
         modelPaintCommand.imageProperty().bind(imageBinding);
         
         modelPaintCommand.boundsBinding().widthProperty().set(getGameMap().getTileSize());

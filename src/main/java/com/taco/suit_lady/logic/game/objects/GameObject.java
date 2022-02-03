@@ -10,10 +10,7 @@ import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.BindingsSL;
 import com.taco.suit_lady.util.tools.PropertiesSL;
-import com.taco.tacository.json.JElement;
-import com.taco.tacository.json.JLoadable;
-import com.taco.tacository.json.JObject;
-import com.taco.tacository.json.JUtil;
+import com.taco.tacository.json.*;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;
@@ -27,7 +24,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class GameObject
-        implements Lockable, AttributeContainable, Entity, JObject, JLoadable {
+        implements Lockable, AttributeContainable, Entity, JObject, JLoadableObject {
     
     private final StrictSpringable springable;
     private final ReentrantLock lock;
@@ -236,6 +233,7 @@ public class GameObject
     //<editor-fold desc="> JSON">
     
     @Override public String getJID() { return getObjID(); }
+    @Override public void setJID(String jID) { this.objID = jID; }
     
     @Override public JElement[] jFields() {
         return new JElement[]{
@@ -246,7 +244,7 @@ public class GameObject
         };
     }
     
-    @Override public void load(JsonObject parent) {
+    @Override public void doLoad(JsonObject parent) {
         setWidth(JUtil.loadInt(parent, "width"));
         setHeight(JUtil.loadInt(parent, "height"));
         setLocationX(JUtil.loadDouble(parent, "x-location"));

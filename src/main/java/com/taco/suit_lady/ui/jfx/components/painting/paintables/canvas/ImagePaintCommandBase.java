@@ -42,7 +42,9 @@ public abstract class ImagePaintCommandBase extends PaintCommand {
     
     @Override public @NotNull ImagePaintCommandBase init() {
         imageProperty.addListener((observable, oldValue, newValue) -> repaintSurface());
-        imageProperty.set(ResourcesSL.getDummyImage(ResourcesSL.MAP));
+        imageProperty.set(ResourcesSL.getGameImage("map"));
+        
+        System.out.println("Game Image: " + getImage());
         
         return (ImagePaintCommandBase) super.init();
     }
