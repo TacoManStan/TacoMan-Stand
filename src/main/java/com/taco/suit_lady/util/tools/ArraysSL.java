@@ -10,12 +10,21 @@ import java.lang.reflect.Array;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
+import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-// TODO - Convert to non-static
 public class ArraysSL {
+    
+    @Contract("_, _ -> param2")
+    public static <E> E[][] fillMatrix(@NotNull BiFunction<Integer, Integer, E> elementFactory, @NotNull E[][] matrix) {
+        for (int i = 0; i < matrix.length; i++)
+            for (int j =0; j < matrix[i].length; j++)
+                matrix[i][j] = elementFactory.apply(i, j);
+        return matrix;
+    }
+    
     /**
      * <p>Sorts the specified {@link List} using the {@link Comparator#naturalOrder() Natural Order} as the {@link Comparator}.</p>
      * <hr>
