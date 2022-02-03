@@ -1,0 +1,22 @@
+{
+  "map-width": 96,
+  "jID": "test-map-jid",
+  "tile-size": 32,
+  "map-objects": [
+    {
+      "jID": null,
+      "y-location": 422.61813843904633,
+      "width": 32,
+      "x-location": 642.9423113603,
+      "height": 32
+    },
+    {
+      "jID": null,
+      "y-location": 640.0,
+      "width": 32,
+      "x-location": 960.0,
+      "height": 32
+    }
+  ],
+  "map-height": 64
+}
