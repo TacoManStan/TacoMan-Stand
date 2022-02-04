@@ -72,7 +72,7 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         
         ui().getContentManager().setContent(this);
         
-        getController().getContentPane().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {});
+        getController().getContentPane().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> { });
         
         return super.init();
     }
@@ -96,7 +96,7 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
             }));
         });
         
-        setGameMap(GameMap.newTestInstance(this, lock,  "test-map-jid"));
+        setGameMap(GameMap.newTestInstance(this, lock, "test-map-jid"));
         
         initTestObjects();
     }
@@ -106,15 +106,15 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         testObject.setTileLocationX(20);
         testObject.setTileLocationY(20);
         getGameMap().gameObjects().add(testObject);
-    
+        
         testObject2.init();
         testObject2.setTileLocationX(30);
         testObject2.setTileLocationY(20);
         getGameMap().gameObjects().add(testObject2);
-    
+        
         getCamera().xLocationProperty().bind(testObject.xLocationProperty());
         getCamera().yLocationProperty().bind(testObject.yLocationProperty());
-    
+        
         logiCore().submit(getTestObject().getCommand());
         logiCore().submit(getTestObject2().getCommand());
         
@@ -153,7 +153,7 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
     @Override protected boolean handleKeyEvent(@NotNull KeyEvent keyEvent) {
         return switch (keyEvent.getCode()) {
             case W -> keyInputAction(() -> testObject.moveTileY(-1));
-            case A -> keyInputAction(() ->  testObject.moveTileX(-1));
+            case A -> keyInputAction(() -> testObject.moveTileX(-1));
             case S -> keyInputAction(() -> testObject.moveTileY(1));
             case D -> keyInputAction(() -> testObject.moveTileX(1));
             
@@ -174,20 +174,12 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
     @Override protected boolean handleMousePressEvent(@NotNull MouseEvent event) {
         final Point2D viewToMap = getCamera().viewToMap(event.getX(), event.getY());
         
-        if (event.getButton().equals(MouseButton.PRIMARY)) {
-            processMovementOrder(event);
-        } else if (event.getButton().equals(MouseButton.MIDDLE)) {
-            GameTile tile = getGameMap().getTileAtPoint(viewToMap);
-            System.out.println("Tile At Point [" + viewToMap.getX() + ", " + viewToMap.getY() + "]: " + tile);
-            debugger().printList(tile.getOccupyingObjects(), "Occupying Objects for Tile [" + tile.getXLoc() + ", " + tile.getYLoc() + "]");
-        } else if (event.getButton().equals(MouseButton.SECONDARY)) {
-            System.out.println("Moving Test Object 2 To: [" + viewToMap.getX() + ", " + viewToMap.getY() + "]");
-    
-            getTestObject2().getCommand().setTargetX((int) viewToMap.getX());
-            getTestObject2().getCommand().setTargetY((int) viewToMap.getY());
-    
-            getTestObject2().getCommand().setPaused(false);
-        }
+        if (event.getButton().equals(MouseButton.PRIMARY))
+            processMovementOrder(event, getTestObject());
+        else if (event.getButton().equals(MouseButton.SECONDARY))
+            processMovementOrder(event, getTestObject2());
+        else if (event.getButton().equals(MouseButton.MIDDLE))
+            printTileInformation(event);
         
         return true;
     }
@@ -196,17 +188,27 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
     }
     @Override protected boolean handleMouseDragEvent(@NotNull MouseEvent event) {
         if (event.getButton() == MouseButton.PRIMARY)
-            processMovementOrder(event);
+            processMovementOrder(event, getTestObject());
+        else if (event.getButton() == MouseButton.SECONDARY)
+            processMovementOrder(event, getTestObject2());
         return true;
     }
     
-    private void processMovementOrder(@NotNull MouseEvent event) {
+    private void processMovementOrder(@NotNull MouseEvent event, @NotNull GameObject source) {
         final Point2D viewToMap = getCamera().viewToMap(event.getX(), event.getY());
         
-        getTestObject().getCommand().setTargetX((int) viewToMap.getX());
-        getTestObject().getCommand().setTargetY((int) viewToMap.getY());
+        source.getCommand().setTargetX((int) viewToMap.getX());
+        source.getCommand().setTargetY((int) viewToMap.getY());
+        
+        source.getCommand().setPaused(false);
+    }
     
-        getTestObject().getCommand().setPaused(false);
+    private void printTileInformation(@NotNull MouseEvent event) {
+        final Point2D viewToMap = getCamera().viewToMap(event.getX(), event.getY());
+        
+        GameTile tile = getGameMap().getTileAtPoint(viewToMap);
+        System.out.println("Tile At Point [" + viewToMap.getX() + ", " + viewToMap.getY() + "]: " + tile);
+        debugger().printList(tile.getOccupyingObjects(), "Occupying Objects for Tile [" + tile.getXLoc() + ", " + tile.getYLoc() + "]");
     }
     
     //
