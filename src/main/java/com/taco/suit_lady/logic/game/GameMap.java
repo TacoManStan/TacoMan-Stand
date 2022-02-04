@@ -38,15 +38,17 @@ public class GameMap
     
     private final ReadOnlyIntegerWrapper tileSizeProperty; // The number of "pixels" comprising each tile.
     
-    private final ReadOnlyIntegerWrapper widthProperty;
-    private final ReadOnlyIntegerWrapper heightProperty;
+    private final ReadOnlyObjectWrapper<GameTile[][]> tileMatrixProperty;
+    private final ArrayList<GameObject> gameObjects;
+    
+    
+    private final IntegerBinding widthBinding;
+    private final IntegerBinding heightBinding;
     
     private final IntegerBinding pixelWidthBinding;
     private final IntegerBinding pixelHeightBinding;
     
     
-    private final ObjectBinding<GameTile[][]> tileMatrixBinding;
-    private final ArrayList<GameObject> gameObjects;
     
     
     private GameMapModel model;
@@ -54,23 +56,27 @@ public class GameMap
     
     private String mapID;
     
-    public GameMap(@NotNull GameViewContent content, @Nullable ReentrantLock lock, int width, int height, int tileSize, String mapID) {
+    public GameMap(@NotNull GameViewContent content, @Nullable ReentrantLock lock, int tileSize, String mapID) {
         this.content = content;
         this.lock = lock != null ? lock : new ReentrantLock();
         
         //
+    
+        this.tileMatrixProperty = new ReadOnlyObjectWrapper<>();
+        
+        setTileMatrix(new GameTile[96][64]);
         
         this.tileSizeProperty = new ReadOnlyIntegerWrapper(tileSize);
         
-        this.widthProperty = new ReadOnlyIntegerWrapper(width);
-        this.heightProperty = new ReadOnlyIntegerWrapper(height);
+        this.widthBinding = BindingsSL.intBinding(() -> getTileMatrix().length, tileMatrixProperty);
+        this.heightBinding = BindingsSL.intBinding(() -> getWidth() > 0 ? getTileMatrix()[0].length : 0, tileMatrixProperty);
         
-        this.pixelWidthBinding = BindingsSL.intBinding(() -> getWidth() * getTileSize(), widthProperty, tileSizeProperty);
-        this.pixelHeightBinding = BindingsSL.intBinding(() -> getHeight() * getTileSize(), heightProperty, tileSizeProperty);
+        this.pixelWidthBinding = BindingsSL.intBinding(() -> getWidth() * getTileSize(), widthBinding, tileSizeProperty);
+        this.pixelHeightBinding = BindingsSL.intBinding(() -> getHeight() * getTileSize(), heightBinding, tileSizeProperty);
+        
         
         //
         
-        this.tileMatrixBinding = BindingsSL.objBinding(() -> resetGameTiles(), widthProperty, heightProperty);
         this.gameObjects = new ArrayList<>();
         
         
@@ -80,14 +86,11 @@ public class GameMap
     //<editor-fold desc="--- INITIALIZATION ---">
     
     public final GameMap init() {
-        resetGameTiles();
-        initModel();
-        return this;
-    }
-    
-    public final GameMap initModel() {
+//        setTileMatrix(resetGameTiles());
         this.model = new GameMapModel(getGame(), lock);
         this.model.init();
+        JFiles.load(this);
+        this.model.initMapImage();
         return this;
     }
     
@@ -111,15 +114,14 @@ public class GameMap
     public final int getTileSize() { return tileSizeProperty.get(); }
     public final int setTileSize(@NotNull Number newValue) { return PropertiesSL.setProperty(tileSizeProperty, newValue.intValue()); }
     
-    protected final ReadOnlyIntegerWrapper widthProperty() { return widthProperty; }
-    public final ReadOnlyIntegerProperty readOnlyWidthProperty() { return widthProperty.getReadOnlyProperty(); }
-    public final int getWidth() { return widthProperty.get(); }
-    public final int setWidth(@NotNull Number newValue) { return PropertiesSL.setProperty(widthProperty, newValue.intValue()); }
+    //
+
+    public final IntegerBinding widthBinding() { return widthBinding; }
+    public final int getWidth() { return widthBinding.get(); }
     
-    protected final ReadOnlyIntegerWrapper heightProperty() { return heightProperty; }
-    public final ReadOnlyIntegerProperty readOnlyHeightProperty() { return heightProperty.getReadOnlyProperty(); }
-    public final int getHeight() { return heightProperty.get(); }
-    public final int setHeight(@NotNull Number newValue) { return PropertiesSL.setProperty(heightProperty, newValue.intValue()); }
+    public final IntegerBinding heightBinding() { return heightBinding; }
+    public final int getHeight() { return heightBinding.get(); }
+    
     
     public final IntegerBinding pixelWidthBinding() { return pixelWidthBinding; }
     public final int getPixelWidth() { return pixelWidthBinding.get(); }
@@ -129,8 +131,9 @@ public class GameMap
     
     //</editor-fold>
     
-    public final ObjectBinding<GameTile[][]> tileMatrixBinding() { return tileMatrixBinding; }
-    public final GameTile[][] getTileMatrix() { return tileMatrixBinding.get(); }
+    public final ReadOnlyObjectProperty<GameTile[][]> readOnlyTileMatrixProperty() { return tileMatrixProperty.getReadOnlyProperty(); }
+    public final GameTile[][] getTileMatrix() { return tileMatrixProperty.get(); }
+    private GameTile[][] setTileMatrix(GameTile[][] newValue) { return PropertiesSL.setProperty(tileMatrixProperty, newValue); }
     
     public final ArrayList<GameObject> gameObjects() { return gameObjects; }
     public final GameMapModel getModel() { return model; }
@@ -217,25 +220,6 @@ public class GameMap
     @Override public @NotNull Springable springable() { return content; }
     @Override public @NotNull ReentrantLock getLock() { return lock; }
     
-    //</editor-fold>
-    
-    //<editor-fold desc="--- STATIC FACTORY METHODS ---">
-    
-    /**
-     * <p>Identical to <i>{@link #newTestInstance(GameViewContent, ReentrantLock, String)}</i> except the {@link ReentrantLock} passed to the {@link GameMap Game Map's} {@link GameMap#GameMap(GameViewContent, ReentrantLock, int, int, int, String) constructor} is always {@code null}.</p>
-     * <p>Note that a new {@link ReentrantLock} is automatically created by the {@link GameMap} constructor if the specified value is {@code null}, so the returned {@link GameMap} object will still be {@code synchronized}, just only with itself.</p>
-     *
-     * @param content Any non-null {@link Springable} object used to enable {@link Springable} features in the returned {@link GameMap} object.
-     *
-     * @return The newly constructed {@link GameMap} instance.
-     *
-     * @see #newTestInstance(GameViewContent, ReentrantLock, String)
-     * @see GameMap
-     * @see GameMap#GameMap(GameViewContent, ReentrantLock, int, int, int, String)
-     */
-    public static @NotNull GameMap newTestInstance(@NotNull GameViewContent content, @NotNull String mapID) { return newTestInstance(content, null, mapID); }
-    public static @NotNull GameMap newTestInstance(@NotNull GameViewContent content, @Nullable ReentrantLock lock, @NotNull String mapID) { return new GameMap(content, lock, 96, 64, 32, mapID); }
-    
     //<editor-fold desc="> JSON">
     
     @Override public String getJID() { return mapID; }
@@ -243,17 +227,33 @@ public class GameMap
     
     @Override public JElement[] jFields() {
         return new JElement[]{
-                JUtil.create("map-width", getWidth()),
-                JUtil.create("map-height", getHeight()),
                 JUtil.create("tile-size", getTileSize()),
-                JUtil.createArray("map-objects", gameObjects().toArray(new GameObject[0]))
+                JUtil.createArray("map-objects", gameObjects().toArray(new GameObject[0])),
+                JUtil.createMatrix("tile-matrix", getTileMatrix())
         };
     }
     
     @Override public void doLoad(JsonObject parent) {
-        setWidth(JUtil.loadInt(parent, "map-width"));
-        setHeight(JUtil.loadInt(parent, "map-height"));
         setTileSize(JUtil.loadInt(parent, "tile-size"));
+        
+        final List<List<GameTile>> tileMatrixList = JUtil.loadMatrix(parent, "tile-matrix", o -> {
+            JsonObject jsonObject = (JsonObject) o;
+            GameTile gameTile = new GameTile(this);
+            gameTile.load(jsonObject);
+            return gameTile;
+        });
+        final int tileMatrixWidth = tileMatrixList.size();
+        if (tileMatrixWidth > 0) {
+            final int tileMatrixHeight = tileMatrixList.get(0).size();
+            if (tileMatrixHeight > 0) {
+                final GameTile[][] tileMatrixArray = new GameTile[tileMatrixWidth][tileMatrixHeight];
+                for (int i = 0; i < tileMatrixList.size(); i++)
+                    for (int j = 0; j < tileMatrixList.get(i).size(); j++)
+                        tileMatrixArray[i][j] = tileMatrixList.get(i).get(j);
+                setTileMatrix(tileMatrixArray);
+            }
+        }
+    
         gameObjects().addAll(JUtil.loadArray(parent, "map-objects", o -> {
             JsonObject jsonObject = (JsonObject) o;
             GameObject gameObject = new GameObject(getGame(), lock).init();
@@ -263,6 +263,25 @@ public class GameMap
     }
     
     //</editor-fold>
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- STATIC FACTORY METHODS ---">
+    
+    /**
+     * <p>Identical to <i>{@link #newTestInstance(GameViewContent, ReentrantLock, String)}</i> except the {@link ReentrantLock} passed to the {@link GameMap Game Map's} {@link GameMap#GameMap(GameViewContent, ReentrantLock, int, String) constructor} is always {@code null}.</p>
+     * <p>Note that a new {@link ReentrantLock} is automatically created by the {@link GameMap} constructor if the specified value is {@code null}, so the returned {@link GameMap} object will still be {@code synchronized}, just only with itself.</p>
+     *
+     * @param content Any non-null {@link Springable} object used to enable {@link Springable} features in the returned {@link GameMap} object.
+     *
+     * @return The newly constructed {@link GameMap} instance.
+     *
+     * @see #newTestInstance(GameViewContent, ReentrantLock, String)
+     * @see GameMap
+     * @see GameMap#GameMap(GameViewContent, ReentrantLock, int, String)
+     */
+    public static @NotNull GameMap newTestInstance(@NotNull GameViewContent content, @NotNull String mapID) { return newTestInstance(content, null, mapID); }
+    public static @NotNull GameMap newTestInstance(@NotNull GameViewContent content, @Nullable ReentrantLock lock, @NotNull String mapID) { return new GameMap(content, lock, 32, mapID); }
     
     //</editor-fold>
 }

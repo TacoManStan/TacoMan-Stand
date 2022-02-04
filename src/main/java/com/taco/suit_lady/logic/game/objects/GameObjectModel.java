@@ -1,13 +1,19 @@
 package com.taco.suit_lady.logic.game.objects;
 
+import com.github.cliftonlabs.json_simple.JsonObject;
 import com.taco.suit_lady.logic.game.interfaces.GameComponent;
 import com.taco.suit_lady.logic.game.ui.GameViewContent;
 import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.ImagePaintCommand;
+import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.BindingsSL;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import com.taco.suit_lady.util.tools.ResourcesSL;
+import com.taco.tacository.json.JElement;
+import com.taco.tacository.json.JLoadable;
+import com.taco.tacository.json.JObject;
+import com.taco.tacository.json.JUtil;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;
@@ -16,8 +22,10 @@ import org.eclipse.persistence.annotations.ReadOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.concurrent.locks.Lock;
+
 public class GameObjectModel
-        implements SpringableWrapper, GameComponent {
+        implements SpringableWrapper, Lockable, GameComponent, JObject, JLoadable {
     
     private final GameObject owner;
     
@@ -105,8 +113,25 @@ public class GameObjectModel
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override public @NotNull Springable springable() { return owner; }
+    @Override public @NotNull Lock getLock() { return owner.getLock(); }
     
     @Override public @NotNull GameViewContent getGame() { return getOwner().getGame(); }
+    
+    //
+    
+    @Override public String getJID() {
+        return "game-object-model";
+    }
+    @Override public void load(JsonObject parent) {
+        setImageId(JUtil.loadString(parent, "image-id"));
+        setImageType(JUtil.loadString(parent, "image-type"));
+    }
+    @Override public JElement[] jFields() {
+        return new JElement[]{
+                JUtil.create("image-id", getImageId()),
+                JUtil.create("image-type", getImageType())
+        };
+    }
     
     //</editor-fold>
 }

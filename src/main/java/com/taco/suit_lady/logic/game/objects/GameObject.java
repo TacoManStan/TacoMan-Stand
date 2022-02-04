@@ -24,7 +24,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class GameObject
-        implements Lockable, AttributeContainable, Entity, JObject, JLoadableObject {
+        implements Lockable, AttributeContainable, Entity, JObject, JLoadable {
     
     private final StrictSpringable springable;
     private final ReentrantLock lock;
@@ -232,23 +232,24 @@ public class GameObject
     
     //<editor-fold desc="> JSON">
     
-    @Override public String getJID() { return getObjID(); }
-    @Override public void setJID(String jID) { this.objID = jID; }
+    @Override public String getJID() { return "game-object"; }
     
     @Override public JElement[] jFields() {
         return new JElement[]{
                 JUtil.create("width", getWidth()),
                 JUtil.create("height", getHeight()),
                 JUtil.create("x-location", getLocationX(false)),
-                JUtil.create("y-location", getLocationY(false))
+                JUtil.create("y-location", getLocationY(false)),
+                JUtil.createObject("model", getModel())
         };
     }
     
-    @Override public void doLoad(JsonObject parent) {
+    @Override public void load(JsonObject parent) {
         setWidth(JUtil.loadInt(parent, "width"));
         setHeight(JUtil.loadInt(parent, "height"));
         setLocationX(JUtil.loadDouble(parent, "x-location"));
         setLocationY(JUtil.loadDouble(parent, "y-location"));
+        JUtil.loadObject(parent, "model", getModel());
     }
     
     //</editor-fold>
