@@ -197,33 +197,6 @@ public class GameObject
     
     @Override public final @NotNull AttributeContainer attributes() { return attributes; }
     
-    //<editor-fold desc="--- GENERIC ---">
-    
-    @Override public @NotNull FxWeaver weaver() { return springable.weaver(); }
-    @Override public @NotNull ConfigurableApplicationContext ctx() { return springable.ctx(); }
-    
-    @Override public @NotNull Lock getLock() { return lock; }
-    
-    //</editor-fold>
-    
-    //</editor-fold>
-    
-    private @NotNull GameTile[][] calculateOccupiedTiles() {
-        final int adjustedMinX = (int) Math.floor(getLocationX(false) / getGameMap().getTileSize());
-        final int adjustedMinY = (int) Math.floor(getLocationY(false) / getGameMap().getTileSize());
-        final int adjustedMaxX = (int) Math.floor((getWidth() - 1 + getLocationX(false)) / getGameMap().getTileSize());
-        final int adjustedMaxY = (int) Math.floor((getHeight() - 1 + getLocationY(false)) / getGameMap().getTileSize());
-        
-        final GameTile[][] occupyingGameTiles = new GameTile[(adjustedMaxX - adjustedMinX) + 1][(adjustedMaxY - adjustedMinY) + 1];
-        for (int i = 0; i < occupyingGameTiles.length; i++)
-            for (int j = 0; j < occupyingGameTiles[i].length; j++)
-                occupyingGameTiles[i][j] = getGameMap().getTileMatrix()[i + adjustedMinX][j + adjustedMinY];
-        
-        return occupyingGameTiles;
-    }
-    
-    //<editor-fold desc="--- IMPLEMENTATIONS ---">
-    
     @Override public @NotNull GameViewContent getGame() { return content; }
     
     @Override public void tick() {
@@ -253,6 +226,15 @@ public class GameObject
     }
     
     //</editor-fold>
+    
+    //<editor-fold desc="> Generic">
+    
+    @Override public @NotNull FxWeaver weaver() { return springable.weaver(); }
+    @Override public @NotNull ConfigurableApplicationContext ctx() { return springable.ctx(); }
+    
+    @Override public @NotNull Lock getLock() { return lock; }
+    
+    
     @Override public String toString() {
         return "GameObject{" +
                "xLocation=" + xLocationProperty.get() +
@@ -264,6 +246,27 @@ public class GameObject
                ", objID='" + objID + '\'' +
                '}';
     }
+    
+    //</editor-fold>
+    
+    //</editor-fold>
+    
+    private @NotNull GameTile[][] calculateOccupiedTiles() {
+        final int adjustedMinX = (int) Math.floor(getLocationX(false) / getGameMap().getTileSize());
+        final int adjustedMinY = (int) Math.floor(getLocationY(false) / getGameMap().getTileSize());
+        final int adjustedMaxX = (int) Math.floor((getWidth() - 1 + getLocationX(false)) / getGameMap().getTileSize());
+        final int adjustedMaxY = (int) Math.floor((getHeight() - 1 + getLocationY(false)) / getGameMap().getTileSize());
+        
+        final GameTile[][] occupyingGameTiles = new GameTile[(adjustedMaxX - adjustedMinX) + 1][(adjustedMaxY - adjustedMinY) + 1];
+        for (int i = 0; i < occupyingGameTiles.length; i++)
+            for (int j = 0; j < occupyingGameTiles[i].length; j++)
+                occupyingGameTiles[i][j] = getGameMap().getTileMatrix()[i + adjustedMinX][j + adjustedMinY];
+        
+        return occupyingGameTiles;
+    }
+    
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
     
     
     //</editor-fold>
