@@ -1,5 +1,6 @@
 package com.taco.suit_lady.util.tools;
 
+import com.taco.suit_lady.ui.jfx.util.Dimensions;
 import org.checkerframework.checker.index.qual.NonNegative;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -10,18 +11,24 @@ import java.lang.reflect.Array;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
-import java.util.function.BiFunction;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.function.*;
 import java.util.stream.Stream;
 
 public class ArraysSL {
     
     @Contract("_, _ -> param2")
-    public static <E> E[][] fillMatrix(@NotNull BiFunction<Integer, Integer, E> elementFactory, @NotNull E[][] matrix) {
+    public static <E> E[][] fillMatrix(@NotNull Function<Dimensions, E> elementFactory, @NotNull E[][] matrix) {
         for (int i = 0; i < matrix.length; i++)
             for (int j =0; j < matrix[i].length; j++)
-                matrix[i][j] = elementFactory.apply(i, j);
+                matrix[i][j] = elementFactory.apply(new Dimensions(i, j));
+        return matrix;
+    }
+    
+    @Contract("_, _ -> param2")
+    public static <E> E[][] iterateMatrix(@NotNull BiConsumer<Dimensions, E> function, @NotNull E[][] matrix) {
+        for (int i = 0; i < matrix.length; i++)
+            for (int j = 0; j < matrix[i].length; j++)
+                function.accept(new Dimensions(i, j), matrix[i][j]);
         return matrix;
     }
     

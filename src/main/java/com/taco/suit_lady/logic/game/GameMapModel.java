@@ -65,6 +65,12 @@ public class GameMapModel
         this.mapImagePaintCommand.setPaintPriority(5);
     }
     
+    public final @NotNull Image generateDemoImage() {
+        return ToolsFX.generateTiledImage(32, getGameMap().getTileMatrix(), gameTile -> {
+            return ResourcesSL.getGameImage("tiles/", "grass");
+        });
+    }
+    
     //<editor-fold desc="--- INITIALIZATION ---">
     
     public final GameMapModel init() {
@@ -91,6 +97,8 @@ public class GameMapModel
         
         mapImagePaintCommand.init();
         initPaintCommand();
+        
+        mapImageProperty.set(generateDemoImage());
         
         return this;
     }

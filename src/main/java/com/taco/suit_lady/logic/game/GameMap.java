@@ -96,7 +96,8 @@ public class GameMap
      * <p>Note that eventually, this method should load tiles based on a specified data template that represents the contents of the {@link GameMap}.</p>
      */
     private GameTile[][] resetGameTiles() {
-        return sync(() -> ArraysSL.fillMatrix((x, y) -> new GameTile(this, x, y), new GameTile[getWidth()][getHeight()]));
+        //TODO: Load GameTile information from JSON data
+        return sync(() -> ArraysSL.fillMatrix(dimensions -> new GameTile(this, dimensions), new GameTile[getWidth()][getHeight()]));
     }
     
     //</editor-fold>

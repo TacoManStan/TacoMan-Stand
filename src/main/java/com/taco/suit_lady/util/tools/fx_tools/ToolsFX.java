@@ -39,6 +39,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -59,7 +60,9 @@ import java.util.List;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * Contains a variety of classes that provide JavaFX utility features.
@@ -963,6 +966,23 @@ public class ToolsFX {
                     xMinF, yMinF, widthF, heightF,
                     xDestF, yDestF, widthF, heightF);
         }, true);
+    }
+    
+    public static <T> @NotNull Image generateTiledImage(int tileSize, @NotNull T[][] sourceMatrix, @NotNull Function<T, Image> factory) {
+        if (sourceMatrix.length == 0)
+            throw ExceptionsSL.ex("Source matrix width must be greater than 0.");
+        else if (sourceMatrix[0].length == 0)
+            throw ExceptionsSL.ex("Source matrix height must be greater than 0.");
+        
+        final WritableImage aggregateImage = new WritableImage(tileSize * sourceMatrix.length, tileSize * sourceMatrix[0].length);
+        
+        ArraysSL.iterateMatrix((dimensions, tile) -> aggregateImage.getPixelWriter().setPixels(
+                tileSize * dimensions.width(), tileSize * dimensions.height(),
+                tileSize, tileSize,
+                factory.apply(sourceMatrix[dimensions.width()][dimensions.height()]).getPixelReader(),
+                0, 0), sourceMatrix);
+        
+        return aggregateImage;
     }
     
     

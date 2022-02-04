@@ -1,9 +1,11 @@
 package com.taco.suit_lady.logic.game.objects;
 
 import com.taco.suit_lady.logic.game.GameMap;
+import com.taco.suit_lady.ui.jfx.util.Dimensions;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
+import org.jetbrains.annotations.NotNull;
 
 public class GameTile {
     
@@ -14,7 +16,11 @@ public class GameTile {
     
     private final ListProperty<GameObject> occupyingObjects;
     
-    public GameTile(GameMap owner, int xLoc, int yLoc) {
+    public GameTile(@NotNull GameMap owner, @NotNull Dimensions dimensions) {
+        this(owner, dimensions.width(), dimensions.height());
+    }
+    
+    public GameTile(@NotNull GameMap owner, int xLoc, int yLoc) {
         this.owner = owner;
         
         this.xLoc = xLoc;
