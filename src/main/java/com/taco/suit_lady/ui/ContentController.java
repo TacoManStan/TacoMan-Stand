@@ -39,12 +39,34 @@ public abstract class ContentController<T extends Content<T, D, C>, D extends Co
     //
     
     @Override public void initialize() {
+        initMouseEventHandling();
+    }
+    
+    private void initMouseEventHandling() {
         getContentPane().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
             if (getContent().handleMousePressEvent(event))
                 event.consume();
         });
         getContentPane().addEventFilter(MouseEvent.MOUSE_RELEASED, event -> {
             if (getContent().handleMouseReleaseEvent(event))
+                event.consume();
+        });
+    
+        getContentPane().addEventFilter(MouseEvent.MOUSE_MOVED, event -> {
+            if (getContent().handleMouseMoveEvent(event))
+                event.consume();
+        });
+        getContentPane().addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
+            if (getContent().handleMouseDragEvent(event))
+                event.consume();
+        });
+    
+        getContentPane().addEventFilter(MouseEvent.MOUSE_ENTERED, event -> {
+            if (getContent().handleMouseEnterEvent(event))
+                event.consume();
+        });
+        getContentPane().addEventFilter(MouseEvent.MOUSE_EXITED, event -> {
+            if (getContent().handleMouseExitEvent(event))
                 event.consume();
         });
     }

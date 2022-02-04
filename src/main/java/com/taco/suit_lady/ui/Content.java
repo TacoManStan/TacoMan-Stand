@@ -100,6 +100,12 @@ public abstract class Content<T extends Content<T, D, C>, D extends ContentData<
     protected boolean handleMousePressEvent(@NotNull MouseEvent event) { return false; }
     protected boolean handleMouseReleaseEvent(@NotNull MouseEvent event) { return false; }
     
+    protected boolean handleMouseMoveEvent(@NotNull MouseEvent event) { return false; }
+    protected boolean handleMouseDragEvent(@NotNull MouseEvent event) { return false; }
+    
+    protected boolean handleMouseEnterEvent(@NotNull MouseEvent event) { return false; }
+    protected boolean handleMouseExitEvent(@NotNull MouseEvent event) { return false; }
+    
     //<editor-fold desc="--- EVENTS ---">
     
     /**

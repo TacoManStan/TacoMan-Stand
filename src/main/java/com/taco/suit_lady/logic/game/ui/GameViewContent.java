@@ -174,18 +174,13 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
     @Override protected boolean handleMousePressEvent(@NotNull MouseEvent event) {
         final Point2D viewToMap = getCamera().viewToMap(event.getX(), event.getY());
         
-        if (event.getButton().equals(MouseButton.SECONDARY)) {
-            System.out.println("Moving Test Object To: [" + viewToMap.getX() + ", " + viewToMap.getY() + "]");
-    
-            getTestObject().getCommand().setTargetX((int) viewToMap.getX());
-            getTestObject().getCommand().setTargetY((int) viewToMap.getY());
-    
-            getTestObject().getCommand().setPaused(false);
-        } else if (event.getButton().equals(MouseButton.PRIMARY)) {
+        if (event.getButton().equals(MouseButton.PRIMARY)) {
+            processMovementOrder(event);
+        } else if (event.getButton().equals(MouseButton.MIDDLE)) {
             GameTile tile = getGameMap().getTileAtPoint(viewToMap);
             System.out.println("Tile At Point [" + viewToMap.getX() + ", " + viewToMap.getY() + "]: " + tile);
             debugger().printList(tile.getOccupyingObjects(), "Occupying Objects for Tile [" + tile.getXLoc() + ", " + tile.getYLoc() + "]");
-        } else if (event.getButton().equals(MouseButton.MIDDLE)) {
+        } else if (event.getButton().equals(MouseButton.SECONDARY)) {
             System.out.println("Moving Test Object 2 To: [" + viewToMap.getX() + ", " + viewToMap.getY() + "]");
     
             getTestObject2().getCommand().setTargetX((int) viewToMap.getX());
@@ -198,6 +193,20 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
     }
     @Override protected boolean handleMouseReleaseEvent(@NotNull MouseEvent event) {
         return true;
+    }
+    @Override protected boolean handleMouseDragEvent(@NotNull MouseEvent event) {
+        if (event.getButton() == MouseButton.PRIMARY)
+            processMovementOrder(event);
+        return true;
+    }
+    
+    private void processMovementOrder(@NotNull MouseEvent event) {
+        final Point2D viewToMap = getCamera().viewToMap(event.getX(), event.getY());
+        
+        getTestObject().getCommand().setTargetX((int) viewToMap.getX());
+        getTestObject().getCommand().setTargetY((int) viewToMap.getY());
+    
+        getTestObject().getCommand().setPaused(false);
     }
     
     //
