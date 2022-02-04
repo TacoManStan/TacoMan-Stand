@@ -6,13 +6,15 @@ import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.ImagePain
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.BindingsSL;
+import com.taco.suit_lady.util.tools.PropertiesSL;
 import com.taco.suit_lady.util.tools.ResourcesSL;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.ObjectBinding;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.scene.image.Image;
+import org.eclipse.persistence.annotations.ReadOnly;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class GameObjectModel
         implements SpringableWrapper, GameComponent {
@@ -21,7 +23,8 @@ public class GameObjectModel
     
     //
     
-    private final ObjectProperty<String> imageIdProperty;
+    private final ReadOnlyStringWrapper imageTypeProperty;
+    private final ReadOnlyStringWrapper imageIdProperty;
     private final ObjectBinding<Image> imageBinding;
     
     private final ImagePaintCommand modelPaintCommand;
@@ -30,13 +33,23 @@ public class GameObjectModel
     private IntegerBinding yPaintPositionBinding;
     
     public GameObjectModel(@NotNull GameObject owner) {
+        this(owner, "unit", "taco");
+    }
+    
+    public GameObjectModel(@NotNull GameObject owner, @Nullable String imageType, @Nullable String imageId) {
         this.owner = owner;
         
         //
         
-        this.imageIdProperty = new SimpleObjectProperty<>();
-//        this.imageBinding = BindingsSL.constObjBinding(ResourcesSL.getDummyImage(ResourcesSL.AVATAR_32));
-        this.imageBinding = BindingsSL.constObjBinding(ResourcesSL.getGameImage("units/", "taco"));
+        this.imageTypeProperty = new ReadOnlyStringWrapper();
+        this.imageIdProperty = new ReadOnlyStringWrapper();
+        this.imageBinding = BindingsSL.objBinding(() -> {
+            final String imageTypeImpl = getImageType();
+            final String imageIdImpl = getImageId();
+            if (imageTypeImpl != null && imageIdImpl != null)
+                return ResourcesSL.getGameImage(getImageType() + "/", getImageId());
+            return ResourcesSL.getGameImage("units/", "taco");
+        }, imageTypeProperty, imageIdProperty);
         
         this.modelPaintCommand = new ImagePaintCommand(this, null);
     }
@@ -47,9 +60,9 @@ public class GameObjectModel
         
         this.modelPaintCommand.init();
         
-//        imageBinding.addListener((observable, oldValue, newValue) -> {
-//            if (newValue != null)
-//        });
+        //        imageBinding.addListener((observable, oldValue, newValue) -> {
+        //            if (newValue != null)
+        //        });
         modelPaintCommand.imageProperty().bind(imageBinding);
         
         modelPaintCommand.boundsBinding().widthProperty().set(getGameMap().getTileSize());
@@ -62,6 +75,8 @@ public class GameObjectModel
         
         getGameMap().getModel().getCanvas().addPaintable(modelPaintCommand);
         
+        setImageData(null, null);
+        
         return this;
     }
     
@@ -69,7 +84,21 @@ public class GameObjectModel
     
     public final GameObject getOwner() { return owner; }
     
+    
     public final ImagePaintCommand getPaintCommand() { return modelPaintCommand; }
+    
+    public final ReadOnlyStringProperty readOnlyImageIdProperty() { return imageIdProperty.getReadOnlyProperty(); }
+    public final String getImageId() { return imageIdProperty.get(); }
+    public final String setImageId(@Nullable String newValue) { return PropertiesSL.setProperty(imageIdProperty, newValue != null ? newValue : "taco"); }
+    
+    public final ReadOnlyStringProperty readOnlyImageTypeProperty() { return imageTypeProperty.getReadOnlyProperty(); }
+    public final String getImageType() { return imageTypeProperty.get(); }
+    public final String setImageType(@Nullable String newValue) { return PropertiesSL.setProperty(imageTypeProperty, newValue != null ? newValue : "units"); }
+    
+    public final void setImageData(@Nullable String imageId, @Nullable String imageType) {
+        setImageId(imageId);
+        setImageType(imageType);
+    }
     
     //</editor-fold>
     

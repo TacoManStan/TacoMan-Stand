@@ -21,6 +21,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import org.jetbrains.annotations.NotNull;
+import org.plutext.jaxb.svg11.G;
 
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -116,6 +117,21 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
     
         logiCore().submit(getTestObject().getCommand());
         logiCore().submit(getTestObject2().getCommand());
+        
+        //
+        
+        final GameObject rock1 = new GameObject(this, lock).init();
+        rock1.getModel().setImageData("rock_1", "scenery");
+        rock1.setTileLocationX(5);
+        rock1.setTileLocationY(15);
+        
+        final GameObject rock2 = new GameObject(this, lock).init();
+        rock2.getModel().setImageData("rock_2", "scenery");
+        rock2.setTileLocationX(40);
+        rock2.setTileLocationY(13);
+        
+        getGameMap().gameObjects().add(rock1);
+        getGameMap().gameObjects().add(rock2);
     }
     
     //</editor-fold>

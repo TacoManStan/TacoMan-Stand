@@ -136,8 +136,6 @@ public class ResourcesSL {
         String hashID = StringsSL.replaceSeparator((pathID != null ? pathID : "") + imageID);
         String filePath = StringsSL.replaceSeparator("images/" + hashID + "." + extension);
         
-        System.out.println("Retrieving Image: " + filePath);
-        
         //noinspection Duplicates
         return get(image_type_key, hashID, () ->
         {
@@ -161,8 +159,6 @@ public class ResourcesSL {
     public static Image getGameImage(@Nullable String pathID, @Nullable String sizeID, @NotNull String name, @NotNull String extension) {
         pathID = pathID != null ? pathID : "";
         sizeID = sizeID != null ? sizeID : SIZE_32x32;
-        
-        System.out.println("Retrieving Game Image: " + pathID + " | " + sizeID + " | " + name + " | " + extension);
         
         return switch (sizeID) {
             case SIZE_16x16 -> {
