@@ -13,6 +13,9 @@ public interface JArray<T> extends JElement {
     
     @Override
     default Object getJValue() {
-        return Arrays.stream(jArrayElements()).map(this::convertElement).collect(Collectors.toCollection(JsonArray::new));
+        final JsonArray jsonArray = new JsonArray();
+        for (T t: jArrayElements())
+            jsonArray.add(convertElement(t));
+        return jsonArray;
     }
 }

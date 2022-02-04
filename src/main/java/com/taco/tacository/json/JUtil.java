@@ -54,35 +54,43 @@ public final class JUtil {
     
     @Contract(value = "_, _ -> new", pure = true)
     @SafeVarargs
-    public static <T> @NotNull JArray<T> createArray(String jID, T... jElements) {
+    public static <T> @NotNull JArray<T> createArray(String jID, T... elementArray) {
         return createArray(
                 jID, e -> {
-                    if (e instanceof JObject)
-                        return appendTo(((JObject) e).getJValue(), create("jID", ((JObject) e).getJID()));
-                    else if (e instanceof JElement)
-                        return ((JElement) e).getJValue();
+                    if (e instanceof JObject eObject)
+                        return appendTo(eObject.getJValue(), create("jID", eObject.getJID()));
+                    else if (e instanceof JElement eElement)
+                        return eElement.getJValue();
                     return e;
-                }, jElements);
+                }, elementArray);
     }
     
     @Contract(value = "_, _, _ -> new", pure = true)
     @SafeVarargs
-    public static <T> @NotNull JArray<T> createArray(String jID, Function<T, Object> processor, T... jElements) {
+    public static <T> @NotNull JArray<T> createArray(String jID, Function<T, Object> processor, T... elementArray) {
         return new JArray<>() {
-            @Override
-            public T[] jArrayElements() {
-                return jElements;
-            }
-            
-            @Override
-            public Object convertElement(T jArrayElement) {
-                return processor.apply(jArrayElement);
-            }
-            
-            @Override
-            public String getJID() {
-                return jID;
-            }
+            @Override public T[] jArrayElements() { return elementArray; }
+            @Override public Object convertElement(T jArrayElement) { return processor.apply(jArrayElement); }
+            @Override public String getJID() { return jID; }
+        };
+    }
+    
+    
+    public static <T> @NotNull JMatrix<T> createMatrix(String jID, T[][] elementMatrix) {
+        return createMatrix(jID, e -> {
+            if (e instanceof JObject eObject)
+                return appendTo(eObject.getJValue(), create("jID", eObject.getJID()));
+            else if (e instanceof JElement eElement)
+                return eElement.getJValue();
+            return e;
+        }, elementMatrix);
+    }
+    
+    public static <T> @NotNull JMatrix<T> createMatrix(String jID, Function<T, Object> processor, T[][] elementMatrix) {
+        return new JMatrix<>() {
+            @Override public T[][] jMatrixElements() { return elementMatrix; }
+            @Override public Object convertElement(T jMatrixElement) { return processor.apply(jMatrixElement); }
+            @Override public String getJID() { return jID; }
         };
     }
     
@@ -140,6 +148,18 @@ public final class JUtil {
             ts.add(t);
         }
         return ts;
+    }
+    
+    public static <T> @NotNull List<List<T>> loadMatrix(@NotNull JsonObject root, String jID, Function<Object, T> elementFactory) {
+        final ArrayList<List<T>> columns = new ArrayList<>();
+        for (Object o: ((JsonArray) root.get(jID))) {
+            final JsonArray jsonColumn = (JsonArray) o;
+            final ArrayList<T> column = new ArrayList<>();
+            for (Object o2: jsonColumn)
+                column.add(elementFactory.apply(o2));
+            columns.add(column);
+        }
+        return columns;
     }
     
     //</editor-fold>

@@ -21,7 +21,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import org.jetbrains.annotations.NotNull;
-import org.plutext.jaxb.svg11.G;
 
 import java.util.concurrent.locks.ReentrantLock;
 

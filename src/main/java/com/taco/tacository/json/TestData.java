@@ -2,6 +2,7 @@ package com.taco.tacository.json;
 
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.taco.suit_lady._to_sort._new.Debugger;
+import com.taco.suit_lady.util.tools.ExceptionsSL;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,17 +15,18 @@ public class TestData implements JObject, JLoadableObject {
     private int var2;
     private TestSubData var3;
     private TestSubData[] var4;
-    private String[] var5;
+    private String[][] var5;
+    private String[] var6;
     
     public TestData() {
-        this(null, null, -1, null, null);
+        this(null, null, -1, null, null, null);
     }
     
     public TestData(String jID) {
-        this(jID, null, -1, null, null);
+        this(jID, null, -1, null, null, null);
     }
     
-    public TestData(String jID, String var1, int var2, TestSubData var3, TestSubData[] var4, String... var5) {
+    public TestData(String jID, String var1, int var2, TestSubData var3, TestSubData[] var4, String[][] var5, String... var6) {
         this.jID = jID;
         
         this.var1 = var1;
@@ -32,6 +34,7 @@ public class TestData implements JObject, JLoadableObject {
         this.var3 = var3;
         this.var4 = var4;
         this.var5 = var5;
+        this.var6 = var6;
     }
     
     public String var1() {
@@ -50,8 +53,12 @@ public class TestData implements JObject, JLoadableObject {
         return var4;
     }
     
-    public String[] var5() {
+    public String[][] var5() {
         return var5;
+    }
+    
+    public String[] var6() {
+        return var6;
     }
     
     //
@@ -64,7 +71,9 @@ public class TestData implements JObject, JLoadableObject {
         debugger.print("Var 2: " + var2);
         debugger.print("Var 3: " + var3);
         debugger.printList(Arrays.asList(var4), "var4");
-        debugger.printList(Arrays.asList(var5), "var5");
+        for (int i = 0; i < var5.length; i++)
+            debugger.printList(Arrays.asList(var5[i]), "var5 " + i);
+        debugger.printList(Arrays.asList(var6), "var6");
     }
     
     @Override
@@ -90,8 +99,24 @@ public class TestData implements JObject, JLoadableObject {
             return subData;
         });
         var4 = subDataList.toArray(new TestSubData[0]);
-        List<String> stringList = JUtil.loadArray(parent, "var5", o -> (String) o);
-        var5 = stringList.toArray(new String[0]);
+        
+        
+        final List<List<String>> stringMatrix = JUtil.loadMatrix(parent, "var5", o -> (String) o);
+        final int matrixWidth = stringMatrix.size();
+        if (matrixWidth == 0)
+            throw ExceptionsSL.ex("Matrix Width cannot be 0");
+        final int matrixHeight = stringMatrix.get(0).size();
+        if (matrixHeight == 0)
+            throw ExceptionsSL.ex("Matrix Height cannot be 0");
+        
+        var5 = new String[matrixWidth][matrixHeight];
+        for (int i = 0; i < matrixWidth; i++)
+            for (int j = 0; j < matrixHeight; j++)
+                var5[i][j] = stringMatrix.get(i).get(j);
+        
+            
+        List<String> stringList = JUtil.loadArray(parent, "var6", o -> (String) o);
+        var6 = stringList.toArray(new String[0]);
     }
     
     @Override
@@ -101,7 +126,8 @@ public class TestData implements JObject, JLoadableObject {
                 JUtil.create("var2", var2),
                 JUtil.createObject("var3", var3),
                 JUtil.createArray("var4", var4),
-                JUtil.createArray("var5", var5)
+                JUtil.createMatrix("var5", var5),
+                JUtil.createArray("var6", var6)
         };
     }
     
@@ -113,7 +139,8 @@ public class TestData implements JObject, JLoadableObject {
                ", var2=" + var2 +
                ", var3=" + var3 +
                ", var4=" + Arrays.toString(var4) +
-               ", var5=" + Arrays.toString(var5) +
+               ", var4=" + Arrays.toString(var5) +
+               ", var6=" + Arrays.toString(var6) +
                '}';
     }
 }
