@@ -18,7 +18,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 @Component
-@FxmlView("/fxml/game_view/content/game_view_content.fxml")
+@FxmlView("/fxml/game/content/game_view_content.fxml")
 @Scope("prototype")
 public class GameViewContentController extends ContentController<GameViewContent, GameViewContentData, GameViewContentController>
         implements Lockable, GameComponent {
@@ -33,6 +33,9 @@ public class GameViewContentController extends ContentController<GameViewContent
     
     private GameViewContent content;
     private final ReentrantLock lock;
+    
+    //
+    
     
     public GameViewContentController(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         super(weaver, ctx);

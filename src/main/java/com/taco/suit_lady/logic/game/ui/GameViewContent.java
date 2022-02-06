@@ -32,6 +32,7 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
     //
     
     private GameViewPage coverPage;
+    private GameTileEditorPage tileEditorPage;
     
     private final ObjectProperty<GameMap> gameMapProperty;
     
@@ -56,15 +57,25 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
     //<editor-fold desc="--- INITIALIZATION ---">
     
     @Override public GameViewContent init() {
-        injectBookshelf("Game View", new UIBook(
-                this,
-                "Game View",
-                "game_engine",
-                uiBook -> ResourcesSL.get(
-                        "pages",
-                        uiBook.getUID(uiBook.getButtonID()),
-                        () -> coverPage = new GameViewPage(uiBook, this)),
-                null));
+        injectBookshelf("Game View",
+                        new UIBook(
+                                this,
+                                "Game View",
+                                "game_engine",
+                                uiBook -> ResourcesSL.get(
+                                        "pages",
+                                        uiBook.getUID(uiBook.getButtonID()),
+                                        () -> coverPage = new GameViewPage(uiBook, this)),
+                                null),
+                        new UIBook(
+                                this,
+                                "Tile Selector",
+                                "details",
+                                uiBook -> ResourcesSL.get(
+                                        "pages",
+                                        uiBook.getUID(uiBook.getButtonID()),
+                                        () -> tileEditorPage = new GameTileEditorPage(uiBook, this).init()),
+                                null));
         
         initUIPage();
         initGame();
@@ -72,6 +83,8 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         ui().getContentManager().setContent(this);
         
         getController().getContentPane().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> { });
+        
+        //        tileEditorPage.init();
         
         return super.init();
     }
@@ -119,18 +132,18 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         
         //
         
-//        final GameObject rock1 = new GameObject(this, lock).init();
-//        rock1.getModel().setImageData("rock_1", "scenery");
-//        rock1.setTileLocationX(5);
-//        rock1.setTileLocationY(15);
-//
-//        final GameObject rock2 = new GameObject(this, lock).init();
-//        rock2.getModel().setImageData("rock_2", "scenery");
-//        rock2.setTileLocationX(40);
-//        rock2.setTileLocationY(13);
-//
-//        getGameMap().gameObjects().add(rock1);
-//        getGameMap().gameObjects().add(rock2);
+        //        final GameObject rock1 = new GameObject(this, lock).init();
+        //        rock1.getModel().setImageData("rock_1", "scenery");
+        //        rock1.setTileLocationX(5);
+        //        rock1.setTileLocationY(15);
+        //
+        //        final GameObject rock2 = new GameObject(this, lock).init();
+        //        rock2.getModel().setImageData("rock_2", "scenery");
+        //        rock2.setTileLocationX(40);
+        //        rock2.setTileLocationY(13);
+        //
+        //        getGameMap().gameObjects().add(rock1);
+        //        getGameMap().gameObjects().add(rock2);
     }
     
     //</editor-fold>
@@ -139,9 +152,9 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
     
     protected GameViewPage getCoverPage() { return coverPage; }
     
-    @Override public final @NotNull ObjectProperty<GameMap> gameMapProperty() { return gameMapProperty; }
-    @Override public final GameMap getGameMap() { return gameMapProperty.get(); }
-    @Override public final GameMap setGameMap(@NotNull GameMap newValue) { return PropertiesSL.setProperty(gameMapProperty, newValue); }
+    public final @NotNull ObjectProperty<GameMap> gameMapProperty() { return gameMapProperty; }
+    public final GameMap getGameMap() { return gameMapProperty.get(); }
+    public final GameMap setGameMap(@NotNull GameMap newValue) { return PropertiesSL.setProperty(gameMapProperty, newValue); }
     
     public final @NotNull Camera getCamera() { return getGameMap().getModel().getCamera(); }
     
@@ -178,7 +191,7 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         else if (event.getButton().equals(MouseButton.SECONDARY))
             processMovementOrder(event, getTestObject2());
         else if (event.getButton().equals(MouseButton.MIDDLE))
-            printTileInformation(event);
+            addTileObject(event);
         
         return true;
     }
@@ -210,9 +223,18 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         debugger().printList(tile.getOccupyingObjects(), "Occupying Objects for Tile [" + tile.getXLoc() + ", " + tile.getYLoc() + "]");
     }
     
+    private void addTileObject(@NotNull MouseEvent event) {
+        final Point2D viewToMap = getCamera().viewToMap(event.getX(), event.getY());
+        final GameTile tile = getGameMap().getTileAtPoint(viewToMap);
+        System.out.println("Selecting Tile: " + tile);
+        if (tile != null)
+            getUIData().setSelectedTile(tile);
+    }
+    
     //
     
-    @Override public @NotNull GameViewContent getGame() { return this; }
+    public @NotNull GameViewContent getGame() { return this; }
+    public @NotNull GameUIData getUIData() { return getData().getUIData(); }
     
     
     @Override protected @NotNull GameViewContentData loadData() { return new GameViewContentData(this); }

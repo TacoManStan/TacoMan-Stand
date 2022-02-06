@@ -3,9 +3,12 @@ package com.taco.suit_lady.logic.game.ui;
 import com.taco.suit_lady.logic.game.interfaces.GameComponent;
 import com.taco.suit_lady.logic.game.objects.GameTile;
 import com.taco.suit_lady.ui.UIPageController;
+import com.taco.suit_lady.util.tools.BindingsSL;
 import com.taco.tacository.json.JFiles;
+import javafx.beans.binding.StringBinding;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import net.rgielen.fxweaver.core.FxWeaver;
@@ -18,7 +21,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 
 @Component
-@FxmlView("/fxml/game_view/pages/game_view_page.fxml")
+@FxmlView("/fxml/game/pages/game_view_page.fxml")
 @Scope("prototype")
 public class GameViewPageController extends UIPageController<GameViewPage>
         implements GameComponent {
@@ -34,13 +37,17 @@ public class GameViewPageController extends UIPageController<GameViewPage>
     @FXML private Button testButton7;
     @FXML private Button testButton8;
     
+    @FXML private ChoiceBox<String> terrainObjectChoiceBox;
+    private StringBinding terrainObjectBinding = null;
+    
     protected GameViewPageController(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         super(weaver, ctx);
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    //
+    public final StringBinding terrainObjectBinding() { return terrainObjectBinding; }
+    public final String getTerrainObject() { return terrainObjectBinding.get(); }
     
     //</editor-fold>
     
@@ -106,6 +113,11 @@ public class GameViewPageController extends UIPageController<GameViewPage>
         
         testButton7.setOnAction(event -> { });
         testButton8.setOnAction(event -> { });
+        
+        terrainObjectChoiceBox.getItems().addAll("grass", "dirt", "sand", "rock", "rock_n", "rock_e", "rock_s", "rock_w", "rock_ne", "rock_nw", "rock_se", "rock_sw");
+        terrainObjectChoiceBox.getSelectionModel().selectFirst();
+    
+        this.terrainObjectBinding = BindingsSL.directStringBinding(terrainObjectChoiceBox.valueProperty());
     }
     
     //</editor-fold>

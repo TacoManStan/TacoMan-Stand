@@ -143,10 +143,12 @@ public final class JUtil {
     
     public static <T> @NotNull List<T> loadArray(@NotNull JsonObject root, String jID, Function<Object, T> elementFactory) {
         ArrayList<T> ts = new ArrayList<>();
-        for (Object o: ((JsonArray) root.get(jID))) {
-            T t = elementFactory.apply(o);
-            ts.add(t);
-        }
+        JsonArray jArr = (JsonArray) root.get(jID);
+        
+        if (jArr != null)
+            for (Object o: jArr)
+                ts.add(elementFactory.apply(o));
+        
         return ts;
     }
     

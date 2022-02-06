@@ -761,8 +761,9 @@ public class ArraysSL {
      * @param list The {@link Collection}.
      * @param <T>  The type of elements in the host {@link Collection}.
      */
-    public static <T> void removeNull(Collection<T> list) {
+    public static <T> Collection<T> removeNull(Collection<T> list) {
         list.removeIf(element -> element == null);
+        return list;
     }
     
     /**

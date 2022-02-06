@@ -27,7 +27,8 @@ public class GameViewPage extends UIPage<GameViewPageController>
     
     //
     
-    @Override protected void initializePage(@NotNull Object[] constructorParams) { }
+    @Override protected void initializePage(@NotNull Object[] constructorParams) {
+    }
     @Override protected @NotNull Class<GameViewPageController> controllerDefinition() { return GameViewPageController.class; }
     
     //</editor-fold>
