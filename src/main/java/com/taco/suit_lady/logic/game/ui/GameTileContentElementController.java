@@ -31,16 +31,17 @@ public class GameTileContentElementController extends CellController<GameObject>
         super(weaver, ctx);
     }
     
-    @Override public Pane root() {
-        return root;
-    }
-    @Override public void initialize() {
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    }
+    @Override public Pane root() { return root; }
+    
+    @Override public void initialize() { }
     
     @Override protected void onContentChange(GameObject oldCellContents, GameObject newCellContents) {
         objectNameLabel.textProperty().unbind();
         if (newCellContents != null)
             objectNameLabel.textProperty().bind(newCellContents.getModel().readOnlyImageIdProperty());
     }
+    
+    //</editor-fold>
 }
