@@ -6,6 +6,7 @@ import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotContentData;
 import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotContentHandler;
 import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotContentSelectorPage;
 import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotContentSelectorPageController;
+import com.taco.suit_lady.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.ui.pages.impl.content_selector.ContentElementController;
 import com.taco.suit_lady.ui.ui_internal.controllers.CellController;
 import javafx.fxml.FXML;
@@ -26,6 +27,7 @@ public class GameTileContentElementController extends CellController<GameObject>
     @FXML private AnchorPane root;
     
     @FXML private Label objectNameLabel;
+    @FXML private ImagePane objectImagePane;
     
     public GameTileContentElementController(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         super(weaver, ctx);
@@ -39,8 +41,11 @@ public class GameTileContentElementController extends CellController<GameObject>
     
     @Override protected void onContentChange(GameObject oldCellContents, GameObject newCellContents) {
         objectNameLabel.textProperty().unbind();
-        if (newCellContents != null)
+        objectImagePane.imageProperty().unbind();
+        if (newCellContents != null) {
             objectNameLabel.textProperty().bind(newCellContents.getModel().readOnlyImageIdProperty());
+            objectImagePane.imageProperty().bind(newCellContents.getModel().imageBinding());
+        }
     }
     
     //</editor-fold>

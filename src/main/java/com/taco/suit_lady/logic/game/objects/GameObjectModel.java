@@ -95,6 +95,10 @@ public class GameObjectModel
     
     public final ImagePaintCommand getPaintCommand() { return modelPaintCommand; }
     
+    public final ObjectBinding<Image> imageBinding() { return imageBinding; }
+    public final Image getImage() { return imageBinding.get(); }
+    
+    
     public final ReadOnlyStringProperty readOnlyImageIdProperty() { return imageIdProperty.getReadOnlyProperty(); }
     public final String getImageId() { return imageIdProperty.get(); }
     public final String setImageId(@Nullable String newValue) { return PropertiesSL.setProperty(imageIdProperty, newValue != null ? newValue : "taco"); }

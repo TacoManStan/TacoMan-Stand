@@ -12,10 +12,14 @@ import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.tools.BindingsSL;
 import com.taco.suit_lady.util.tools.ResourcesSL;
 import com.taco.suit_lady.util.tools.list_tools.ListsSL;
+import com.taco.suit_lady.util.tools.list_tools.ListsSL.SimpleOperationResponder;
 import com.taco.suit_lady.util.tools.list_tools.Operation;
+import javafx.beans.property.ListProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -25,6 +29,7 @@ import javafx.scene.layout.Pane;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -39,18 +44,16 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
     
     @FXML private AnchorPane root;
     
-    @FXML private Label titleLabel;
-    @FXML private ListView<GameObject> tileContentsListView;
     
-    private final ReadOnlyObjectWrapper<ObservableList<GameObject>> selectedTileContentsProperty;
+    @FXML private Label titleLabel;
+    
+    @FXML private ListView<GameObject> tileContentsListView;
+    private final ListProperty<GameObject> selectedTileContents;
     
     protected GameTileEditorPageController(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         super(weaver, ctx);
-        selectedTileContentsProperty = new ReadOnlyObjectWrapper<>();
+        this.selectedTileContents = new SimpleListProperty<>(FXCollections.observableArrayList());
     }
-    
-    public final ReadOnlyObjectProperty<ObservableList<GameObject>> readOnlySelectedTileContentsProperty() { return selectedTileContentsProperty.getReadOnlyProperty(); }
-    public final ObservableList<GameObject> getSelectedTileContents() { return selectedTileContentsProperty.get(); }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
@@ -71,14 +74,22 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
                 return "No Tile Selected";
         }, getUIData().readOnlySelectedTileProperty()));
         
+        getUIData().readOnlySelectedTileProperty().addListener((observable, oldValue, newValue) -> {
+            sync(() -> {
+                selectedTileContents.unbind();
+                selectedTileContents.clear();
+                if (newValue != null)
+                    selectedTileContents.bind(newValue.getOccupyingObjects());
+            });
+        });
         
-        selectedTileContentsProperty.bind(BindingsSL.objBinding(() -> {
-            final GameTile selectedTile = getUIData().getSelectedTile();
-            if (selectedTile != null)
-                return selectedTile.getOccupyingObjects();
-            else
-                return FXCollections.observableArrayList();
-        }, getUIData().readOnlySelectedTileProperty()));
+        ListsSL.applyListener(selectedTileContents, (op1, op2, opType, triggerType) -> {
+            if (triggerType == Operation.TriggerType.CHANGE) switch (opType) {
+                case ADDITION -> onAdded(op1.contents());
+                case REMOVAL -> onRemoved(op1.contents());
+                case PERMUTATION -> System.out.println("Permutation");
+            }
+        });
         
         tileContentsListView.setCellFactory(listView -> new ListCellFX<>(
                 listCellFX -> new CellControlManager<>(
@@ -88,25 +99,23 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
                                 () -> weaver().loadController(GameTileContentElementController.class),
                                 listView.hashCode()))));
         
-        selectedTileContentsProperty.addListener((observable, oldValue, newValue) -> {
-            sync(() -> {
-                tileContentsListView.getItems().clear();
-                if (newValue != null) {
-                    System.out.println("Adding All: " + newValue);
-                    tileContentsListView.getItems().addAll(newValue);
-                }
-            });
-        });
-        
-        //        ListsSL.applyListener(, (op, opType, triggerType) -> {
-        //            if (triggerType == Operation.TriggerType.CHANGE)
-        //                switch (opType) {
-        //                    case ADDITION -> onAdded(op.contents());
-        //                    case REMOVAL -> onRemoved(op.contents());
-        //                }
-        //        });
-        
         return this;
+    }
+    
+    private void onAdded(GameObject obj) {
+        tileContentsListView.getItems().add(obj);
+    }
+    
+    private void onRemoved(GameObject obj) {
+        tileContentsListView.getItems().remove(obj);
+    }
+    
+    private void refreshListView(@Nullable GameObject obj) {
+        tileContentsListView.getItems().clear();
+        if (obj != null) {
+            System.out.println("Adding All: " + obj);
+            tileContentsListView.getItems().addAll(obj);
+        }
     }
     
     
