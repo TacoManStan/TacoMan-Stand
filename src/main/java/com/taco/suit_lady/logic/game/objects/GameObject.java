@@ -7,6 +7,8 @@ import com.taco.suit_lady.logic.game.commands.MoveCommand;
 import com.taco.suit_lady.logic.game.interfaces.AttributeContainable;
 import com.taco.suit_lady.logic.game.ui.GameViewContent;
 import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.UIDProcessable;
+import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.BindingsSL;
 import com.taco.suit_lady.util.tools.PropertiesSL;
@@ -24,7 +26,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class GameObject
-        implements Lockable, AttributeContainable, Entity, JObject, JLoadable {
+        implements Lockable, AttributeContainable, Entity, JObject, JLoadable, UIDProcessable {
     
     private final StrictSpringable springable;
     private final ReentrantLock lock;
@@ -235,6 +237,14 @@ public class GameObject
     @Override public @NotNull Lock getLock() { return lock; }
     
     
+    private UIDProcessor uidProcessor;
+    @Override public UIDProcessor getUIDProcessor() {
+        if (uidProcessor == null)
+            return new UIDProcessor("game-objects");
+        return uidProcessor;
+    }
+    
+    
     @Override public String toString() {
         return "GameObject{" +
                "xLocation=" + xLocationProperty.get() +
@@ -264,10 +274,4 @@ public class GameObject
         
         return occupyingGameTiles;
     }
-    
-    //<editor-fold desc="--- IMPLEMENTATIONS ---">
-    
-    
-    
-    //</editor-fold>
 }
