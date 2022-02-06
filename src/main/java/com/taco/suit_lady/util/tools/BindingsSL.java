@@ -255,6 +255,13 @@ public class BindingsSL {
         return directDoubleBinding(recursiveBinding(lock, function, updateObservable), dependencies);
     }
     
+    public static <U> @NotNull StringBinding recursiveStringBinding(Function<U, ObservableValue<String>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
+        return recursiveStringBinding(null, function, updateObservable, dependencies);
+    }
+    public static <U> @NotNull StringBinding recursiveStringBinding(@Nullable ReentrantLock lock, Function<U, ObservableValue<String>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
+        return directStringBinding(recursiveBinding(lock, function, updateObservable), dependencies);
+    }
+    
     public static <U, V> @NotNull ObjectBinding<V> recursiveObjBinding(Function<U, ObservableValue<V>> function, ObservableValue<U> updateObservable, Observable... dependencies) {
         return recursiveObjBinding(null, function, updateObservable, dependencies);
     }
