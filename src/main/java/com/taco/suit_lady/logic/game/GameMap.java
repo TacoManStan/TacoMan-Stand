@@ -225,9 +225,12 @@ public class GameMap
     @Override public void setJID(String jID) { mapID = jID; }
     
     @Override public JElement[] jFields() {
+        final ArrayList<GameObject> gameObjectsImpl = new ArrayList<>(gameObjects);
+        gameObjectsImpl.remove(getGame().getTestObject());
+        gameObjectsImpl.remove(getGame().getTestObject2());
         return new JElement[]{
                 JUtil.create("tile-size", getTileSize()),
-                JUtil.createArray("map-objects", gameObjects().toArray(new GameObject[0])),
+                JUtil.createArray("map-objects", gameObjectsImpl.toArray(new GameObject[0])),
                 JUtil.createMatrix("tile-matrix", getTileMatrix())
         };
     }

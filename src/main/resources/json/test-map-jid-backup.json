@@ -55515,30 +55515,6 @@
       },
       "x-location": 828.6940069892,
       "height": 32
-    },
-    {
-      "jID": "game-object",
-      "y-location": 480.0,
-      "width": 32,
-      "model": {
-        "jID": "model",
-        "image-type": "scenery",
-        "image-id": "rock_1"
-      },
-      "x-location": 160.0,
-      "height": 32
-    },
-    {
-      "jID": "game-object",
-      "y-location": 416.0,
-      "width": 32,
-      "model": {
-        "jID": "model",
-        "image-type": "scenery",
-        "image-id": "rock_2"
-      },
-      "x-location": 1280.0,
-      "height": 32
     }
   ]
 }
