@@ -49,13 +49,17 @@ public class GameTileModel
         this.terrainTileObjects = new SimpleListProperty<>(FXCollections.observableArrayList());
         
         this.imageBinding = BindingsSL.objBinding(() -> {
+            System.out.println("Updating Tile Model [" + getOwner().getXLoc() + ", " + getOwner().getYLoc() + "]: " + terrainTileObjects);
+            
             final int tileSize = getGameMap().getTileSize();
             final Image baseImage = ResourcesSL.getGameImage("tiles/", getImageId());
             final WritableImage aggregateImage = new WritableImage(tileSize, tileSize);
             
             aggregateImage.getPixelWriter().setPixels(0, 0, tileSize, tileSize, baseImage.getPixelReader(), 0, 0);
-            for (String s: terrainTileObjects)
+            for (String s: terrainTileObjects) {
+                System.out.println("Loading Terrain Tile Obj: " + s);
                 aggregateImage.getPixelWriter().setPixels(0, 0, tileSize, tileSize, ResourcesSL.getGameImage("tiles/", s).getPixelReader(), 0, 0);
+            }
             
             return aggregateImage;
         }, imageIdProperty, terrainTileObjects);
@@ -102,7 +106,7 @@ public class GameTileModel
         setImageId(JUtil.loadString(parent, "image-id"));
         final ArrayList<String> tempTerrainObjs = new ArrayList<>(JUtil.loadArray(parent, "tile-objs", o -> {
             if (o instanceof String os)
-                return (String) o;
+                return os;
             return null;
         }));
         terrainTileObjects.addAll(ArraysSL.removeNull(tempTerrainObjs));
@@ -111,7 +115,7 @@ public class GameTileModel
     @Override public JElement[] jFields() {
         return new JElement[]{
                 JUtil.create("image-id", getImageId()),
-                JUtil.createArray("tile-objs", terrainTileObjects)
+                JUtil.createArray("tile-objs", terrainTileObjects.toArray(new String[0]))
         };
     }
     

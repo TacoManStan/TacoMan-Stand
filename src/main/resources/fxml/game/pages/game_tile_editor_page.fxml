@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.taco.suit_lady.ui.jfx.components.ImagePane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
 <AnchorPane fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="500.0" prefWidth="250.0" stylesheets="/css/main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.taco.suit_lady.logic.game.ui.GameTileEditorPageController">
     <children>
@@ -14,22 +19,53 @@
                     <center>
                         <Label fx:id="titleLabel" text="&lt;placeholder text&gt;" BorderPane.alignment="CENTER" />
                     </center>
+               <left>
+                  <ImagePane fx:id="tileImagePane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" BorderPane.alignment="CENTER" />
+               </left>
                 </BorderPane>
             </top>
-         <center>
-            <AnchorPane BorderPane.alignment="CENTER">
-               <children>
-                  <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="8.0">
-                     <center>
-                        <ListView fx:id="tileContentsListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" BorderPane.alignment="CENTER" />
-                     </center>
-                  </BorderPane>
-               </children>
-            </AnchorPane>
-         </center>
-         <bottom>
-            <ChoiceBox fx:id="tileImageIdChoiceBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" BorderPane.alignment="CENTER" />
-         </bottom>
+            <center>
+                <AnchorPane BorderPane.alignment="CENTER">
+                    <children>
+                        <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="8.0">
+                            <center>
+                                <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" spacing="5.0" BorderPane.alignment="CENTER">
+                                    <children>
+                                        <ListView fx:id="tileContentsListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" />
+                              <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0">
+                                 <center>
+                                              <ListView fx:id="terrainObjListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="200.0" />
+                                 </center>
+                                 <bottom>
+                                    <VBox spacing="2.0" BorderPane.alignment="CENTER">
+                                       <children>
+                                          <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" spacing="10.0">
+                                             <children>
+                                                <Button fx:id="addTerrainObjButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" text="Add Terrain Obj" HBox.hgrow="ALWAYS" />
+                                                <Button fx:id="removeTerrainObjButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" text="Remove Terrain Obj" HBox.hgrow="ALWAYS" />
+                                             </children>
+                                             <padding>
+                                                <Insets top="5.0" />
+                                             </padding>
+                                          </HBox>
+                                          <ChoiceBox fx:id="terrainObjSelectorChoiceBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" />
+                                       </children>
+                                    </VBox>
+                                 </bottom>
+                              </BorderPane>
+                                    </children>
+                                </VBox>
+                            </center>
+                        </BorderPane>
+                    </children>
+                </AnchorPane>
+            </center>
+            <bottom>
+                <ChoiceBox fx:id="tileImageIdChoiceBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets top="5.0" />
+               </BorderPane.margin></ChoiceBox>
+            </bottom>
         </BorderPane>
     </children>
 </AnchorPane>
