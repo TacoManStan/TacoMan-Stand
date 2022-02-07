@@ -124,8 +124,11 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         testObject2.setTileLocationY(20);
         getGameMap().gameObjects().add(testObject2);
         
-        getCamera().xLocationProperty().bind(testObject.xLocationProperty());
-        getCamera().yLocationProperty().bind(testObject.yLocationProperty());
+        //        getCamera().xLocationProperty().bind(testObject.xLocationProperty());
+        //        getCamera().yLocationProperty().bind(testObject.yLocationProperty());s
+        
+        getCamera().setLocationX((int) testObject.getLocationX(true));
+        getCamera().setLocationY((int) testObject.getLocationY(true));
         
         logiCore().submit(getTestObject().getCommand());
         logiCore().submit(getTestObject2().getCommand());
@@ -164,10 +167,30 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
     
     @Override protected boolean handleKeyEvent(@NotNull KeyEvent keyEvent) {
         return switch (keyEvent.getCode()) {
-            case W -> keyInputAction(() -> testObject.moveTileY(-1));
-            case A -> keyInputAction(() -> testObject.moveTileX(-1));
-            case S -> keyInputAction(() -> testObject.moveTileY(1));
-            case D -> keyInputAction(() -> testObject.moveTileX(1));
+            case W -> keyInputAction(() -> {
+                if (keyEvent.isShiftDown())
+                    getCamera().moveY(-1);
+                else
+                    getCamera().moveTileY(-1);
+            });
+            case A -> keyInputAction(() -> {
+                if (keyEvent.isShiftDown())
+                    getCamera().moveX(-1);
+                else
+                    getCamera().moveTileX(-1);
+            });
+            case S -> keyInputAction(() -> {
+                if (keyEvent.isShiftDown())
+                    getCamera().moveY(1);
+                else
+                    getCamera().moveTileY(1);
+            });
+            case D -> keyInputAction(() -> {
+                if (keyEvent.isShiftDown())
+                    getCamera().moveX(1);
+                else
+                    getCamera().moveTileX(1);
+            });
             
             case UP -> keyInputAction(() -> testObject.moveY(-1));
             case LEFT -> keyInputAction(() -> testObject.moveX(-1));
@@ -187,11 +210,9 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         final Point2D viewToMap = getCamera().viewToMap(event.getX(), event.getY());
         
         if (event.getButton().equals(MouseButton.PRIMARY))
-            processMovementOrder(event, getTestObject());
+            selectTile(event);
         else if (event.getButton().equals(MouseButton.SECONDARY))
-            processMovementOrder(event, getTestObject2());
-        else if (event.getButton().equals(MouseButton.MIDDLE))
-            addTileObject(event);
+            processMovementOrder(event, getTestObject());
         
         return true;
     }
@@ -199,10 +220,9 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         return true;
     }
     @Override protected boolean handleMouseDragEvent(@NotNull MouseEvent event) {
-        if (event.getButton() == MouseButton.PRIMARY)
+        if (event.getButton() == MouseButton.SECONDARY)
             processMovementOrder(event, getTestObject());
-        else if (event.getButton() == MouseButton.SECONDARY)
-            processMovementOrder(event, getTestObject2());
+        
         return true;
     }
     
@@ -223,10 +243,8 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         debugger().printList(tile.getOccupyingObjects(), "Occupying Objects for Tile [" + tile.getXLoc() + ", " + tile.getYLoc() + "]");
     }
     
-    private void addTileObject(@NotNull MouseEvent event) {
-        final Point2D viewToMap = getCamera().viewToMap(event.getX(), event.getY());
-        final GameTile tile = getGameMap().getTileAtPoint(viewToMap);
-        System.out.println("Selecting Tile: " + tile);
+    private void selectTile(@NotNull MouseEvent event) {
+        final GameTile tile = getGameMap().getTileAtPoint(getCamera().viewToMap(event.getX(), event.getY()));
         if (tile != null)
             getUIData().setSelectedTile(tile);
     }
