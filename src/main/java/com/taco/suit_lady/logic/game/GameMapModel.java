@@ -67,7 +67,10 @@ public class GameMapModel
     
     public final @NotNull Image generateMapImage() {
         return ToolsFX.generateTiledImage(32, getGameMap().getTileMatrix(), gameTile -> {
-            return ResourcesSL.getGameImage("tiles/", gameTile.getModel().getImageId());
+            if (gameTile != null)
+                return ResourcesSL.getGameImage("tiles/", gameTile.getModel().getImageId());
+            else
+                return null;
         });
     }
     
@@ -107,7 +110,7 @@ public class GameMapModel
         return this;
     }
     
-    protected final void initMapImage() {
+    public final void refreshMapImage() {
         mapImageProperty.set(generateMapImage());
     }
     

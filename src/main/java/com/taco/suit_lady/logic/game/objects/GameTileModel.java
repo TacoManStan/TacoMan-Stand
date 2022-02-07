@@ -1,6 +1,8 @@
 package com.taco.suit_lady.logic.game.objects;
 
 import com.github.cliftonlabs.json_simple.JsonObject;
+import com.taco.suit_lady.logic.game.GameMap;
+import com.taco.suit_lady.logic.game.GameMapModel;
 import com.taco.suit_lady.logic.game.interfaces.GameComponent;
 import com.taco.suit_lady.logic.game.ui.GameViewContent;
 import com.taco.suit_lady.util.Lockable;
@@ -57,6 +59,15 @@ public class GameTileModel
             
             return aggregateImage;
         }, imageIdProperty, terrainTileObjects);
+        
+        this.imageBinding.addListener((observable, oldValue, newValue) -> {
+            final GameMap gameMap = getGameMap();
+            if (gameMap != null) {
+                final GameMapModel gameMapModel = gameMap.getModel();
+                if (gameMapModel != null)
+                    gameMapModel.refreshMapImage();
+            }
+        });
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
@@ -64,6 +75,7 @@ public class GameTileModel
     public final GameTile getOwner() { return owner; }
     
     
+    public final ReadOnlyStringWrapper imageIdProperty() { return imageIdProperty; }
     public final ReadOnlyStringProperty readOnlyImageIdProperty() { return imageIdProperty.getReadOnlyProperty(); }
     public final String getImageId() { return imageIdProperty.get(); }
     public final String setImageId(@NotNull String newValue) { return PropertiesSL.setProperty(imageIdProperty, newValue); }
@@ -90,7 +102,7 @@ public class GameTileModel
         setImageId(JUtil.loadString(parent, "image-id"));
         final ArrayList<String> tempTerrainObjs = new ArrayList<>(JUtil.loadArray(parent, "tile-objs", o -> {
             if (o instanceof String os)
-            return (String) o;
+                return (String) o;
             return null;
         }));
         terrainTileObjects.addAll(ArraysSL.removeNull(tempTerrainObjs));

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -26,6 +27,9 @@
                </children>
             </AnchorPane>
          </center>
+         <bottom>
+            <ChoiceBox fx:id="tileImageIdChoiceBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" BorderPane.alignment="CENTER" />
+         </bottom>
         </BorderPane>
     </children>
 </AnchorPane>

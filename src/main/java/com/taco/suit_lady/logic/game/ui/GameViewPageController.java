@@ -37,17 +37,11 @@ public class GameViewPageController extends UIPageController<GameViewPage>
     @FXML private Button testButton7;
     @FXML private Button testButton8;
     
-    @FXML private ChoiceBox<String> terrainObjectChoiceBox;
-    private StringBinding terrainObjectBinding = null;
-    
     protected GameViewPageController(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         super(weaver, ctx);
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
-    
-    public final StringBinding terrainObjectBinding() { return terrainObjectBinding; }
-    public final String getTerrainObject() { return terrainObjectBinding.get(); }
     
     //</editor-fold>
     
@@ -113,11 +107,6 @@ public class GameViewPageController extends UIPageController<GameViewPage>
         
         testButton7.setOnAction(event -> { });
         testButton8.setOnAction(event -> { });
-        
-        terrainObjectChoiceBox.getItems().addAll("grass", "dirt", "sand", "rock", "rock_n", "rock_e", "rock_s", "rock_w", "rock_ne", "rock_nw", "rock_se", "rock_sw");
-        terrainObjectChoiceBox.getSelectionModel().selectFirst();
-    
-        this.terrainObjectBinding = BindingsSL.directStringBinding(terrainObjectChoiceBox.valueProperty());
     }
     
     //</editor-fold>

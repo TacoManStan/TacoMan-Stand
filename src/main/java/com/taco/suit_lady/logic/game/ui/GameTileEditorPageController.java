@@ -12,16 +12,14 @@ import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.tools.BindingsSL;
 import com.taco.suit_lady.util.tools.ResourcesSL;
 import com.taco.suit_lady.util.tools.list_tools.ListsSL;
-import com.taco.suit_lady.util.tools.list_tools.ListsSL.SimpleOperationResponder;
 import com.taco.suit_lady.util.tools.list_tools.Operation;
+import javafx.beans.binding.StringBinding;
 import javafx.beans.property.ListProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
@@ -44,15 +42,19 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
     
     @FXML private AnchorPane root;
     
-    
     @FXML private Label titleLabel;
-    
     @FXML private ListView<GameObject> tileContentsListView;
+    @FXML private ChoiceBox<String> tileImageIdChoiceBox;
+    
+    private final ReadOnlyStringWrapper selectedTileImageIdProperty;
+    
     private final ListProperty<GameObject> selectedTileContents;
     
     protected GameTileEditorPageController(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         super(weaver, ctx);
+        
         this.selectedTileContents = new SimpleListProperty<>(FXCollections.observableArrayList());
+        this.selectedTileImageIdProperty = new ReadOnlyStringWrapper();
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
@@ -63,7 +65,10 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
     
     @Override public Pane root() { return root; }
     
-    @Override public void initialize() { }
+    @Override public void initialize() {
+        tileImageIdChoiceBox.getItems().addAll("grass", "dirt", "sand", "rock", "rock_n", "rock_e", "rock_s", "rock_w", "rock_ne", "rock_nw", "rock_se", "rock_sw");
+        tileImageIdChoiceBox.valueProperty().bindBidirectional(selectedTileImageIdProperty);
+    }
     
     public GameTileEditorPageController init() {
         titleLabel.textProperty().bind(BindingsSL.stringBinding(() -> {
@@ -74,14 +79,6 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
                 return "No Tile Selected";
         }, getUIData().readOnlySelectedTileProperty()));
         
-        getUIData().readOnlySelectedTileProperty().addListener((observable, oldValue, newValue) -> {
-            sync(() -> {
-                selectedTileContents.unbind();
-                selectedTileContents.clear();
-                if (newValue != null)
-                    selectedTileContents.bind(newValue.getOccupyingObjects());
-            });
-        });
         
         ListsSL.applyListener(selectedTileContents, (op1, op2, opType, triggerType) -> {
             if (triggerType == Operation.TriggerType.CHANGE) switch (opType) {
@@ -98,6 +95,19 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
                                 cellData,
                                 () -> weaver().loadController(GameTileContentElementController.class),
                                 listView.hashCode()))));
+        
+        getUIData().readOnlySelectedTileProperty().addListener((observable, oldValue, newValue) -> {
+            sync(() -> {
+                if (oldValue != null) {
+                    selectedTileContents.unbind();
+                    selectedTileImageIdProperty.unbindBidirectional(oldValue.getModel().imageIdProperty());
+                }
+                if (newValue != null) {
+                    selectedTileContents.bind(newValue.getOccupyingObjects());
+                    selectedTileImageIdProperty.bindBidirectional(newValue.getModel().imageIdProperty());
+                }
+            });
+        });
         
         return this;
     }

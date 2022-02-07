@@ -14,7 +14,6 @@ import com.taco.suit_lady.util.tools.MathSL;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import com.taco.tacository.json.*;
 import javafx.beans.binding.IntegerBinding;
-import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -90,7 +89,7 @@ public class GameMap
         this.model = new GameMapModel(getGame(), lock);
         this.model.init();
         JFiles.load(this);
-        this.model.initMapImage();
+        this.model.refreshMapImage();
         return this;
     }
     

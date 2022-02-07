@@ -27,6 +27,7 @@ public class GameUIData
     
     //<editor-fold desc="--- PROPERTIES ---">
     
+    protected final ReadOnlyObjectWrapper<GameTile> selectedTileProperty() { return selectedTileProperty; }
     public final ReadOnlyObjectProperty<GameTile> readOnlySelectedTileProperty() { return selectedTileProperty.getReadOnlyProperty(); }
     public final GameTile getSelectedTile() { return selectedTileProperty.get(); }
     protected final GameTile setSelectedTile(GameTile newValue) { return PropertiesSL.setProperty(selectedTileProperty, newValue); }

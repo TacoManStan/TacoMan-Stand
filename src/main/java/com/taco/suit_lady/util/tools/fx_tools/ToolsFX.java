@@ -39,6 +39,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
@@ -976,11 +977,18 @@ public class ToolsFX {
         
         final WritableImage aggregateImage = new WritableImage(tileSize * sourceMatrix.length, tileSize * sourceMatrix[0].length);
         
-        ArraysSL.iterateMatrix((dimensions, tile) -> aggregateImage.getPixelWriter().setPixels(
-                tileSize * dimensions.width(), tileSize * dimensions.height(),
-                tileSize, tileSize,
-                factory.apply(sourceMatrix[dimensions.width()][dimensions.height()]).getPixelReader(),
-                0, 0), sourceMatrix);
+        ArraysSL.iterateMatrix((dimensions, tile) -> {
+            final T t = sourceMatrix[dimensions.width()][dimensions.height()];
+            if (t != null) {
+                final Image image = factory.apply(t);
+                if (image != null)
+                    aggregateImage.getPixelWriter().setPixels(
+                            tileSize * dimensions.width(), tileSize * dimensions.height(),
+                            tileSize, tileSize,
+                            image.getPixelReader(),
+                            0, 0);
+            }
+        }, sourceMatrix);
         
         return aggregateImage;
     }
