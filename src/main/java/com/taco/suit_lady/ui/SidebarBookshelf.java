@@ -242,8 +242,9 @@ public class SidebarBookshelf extends UIBookshelf {
      * <p>Sets the {@link Sidebar#selectedBookshelfProperty() selection} of the {@link #getOwner() Sidebar} containing this {@link SidebarBookshelf} instance to this {@link SidebarBookshelf}.</p>
      * <blockquote><b>Passthrough Definition:</b> <i><code>{@link #getOwner()}<b>.</b>{@link Sidebar#setSelectedBookshelf(SidebarBookshelf) setSelectedBookshelf}<b>(</b>this<b>)</b></code></i></blockquote>
      */
-    public void select() {
+    public SidebarBookshelf select() {
         getOwner().setSelectedBookshelf(this);
+        return this;
     }
     
     

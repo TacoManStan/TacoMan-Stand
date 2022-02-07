@@ -6,7 +6,9 @@ import com.taco.suit_lady.logic.game.interfaces.GameComponent;
 import com.taco.suit_lady.logic.game.objects.GameObject;
 import com.taco.suit_lady.logic.game.objects.GameTile;
 import com.taco.suit_lady.ui.Content;
+import com.taco.suit_lady.ui.SidebarBookshelf;
 import com.taco.suit_lady.ui.UIBook;
+import com.taco.suit_lady.ui.UIBookshelf;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
@@ -31,6 +33,7 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
     
     //
     
+    private SidebarBookshelf bookshelf;
     private GameViewPage coverPage;
     private GameTileEditorPage tileEditorPage;
     
@@ -57,16 +60,7 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
     //<editor-fold desc="--- INITIALIZATION ---">
     
     @Override public GameViewContent init() {
-        injectBookshelf("Game View",
-                        new UIBook(
-                                this,
-                                "Game View",
-                                "game_engine",
-                                uiBook -> ResourcesSL.get(
-                                        "pages",
-                                        uiBook.getUID(uiBook.getButtonID()),
-                                        () -> coverPage = new GameViewPage(uiBook, this)),
-                                null),
+        bookshelf = injectBookshelf("Game View",
                         new UIBook(
                                 this,
                                 "Tile Selector",
@@ -75,16 +69,22 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
                                         "pages",
                                         uiBook.getUID(uiBook.getButtonID()),
                                         () -> tileEditorPage = new GameTileEditorPage(uiBook, this).init()),
-                                null));
+                                null),
+                        new UIBook(
+                                this,
+                                "Game View",
+                                "game_engine",
+                                uiBook -> ResourcesSL.get(
+                                        "pages",
+                                        uiBook.getUID(uiBook.getButtonID()),
+                                        () -> coverPage = new GameViewPage(uiBook, this)),
+                                null)).select();
         
         initUIPage();
         initGame();
         
         ui().getContentManager().setContent(this);
         
-        getController().getContentPane().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> { });
-        
-        //        tileEditorPage.init();
         
         return super.init();
     }
