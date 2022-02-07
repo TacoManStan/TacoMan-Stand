@@ -44,18 +44,14 @@ public abstract class ImagePaintCommandBase extends PaintCommand {
         imageProperty.addListener((observable, oldValue, newValue) -> repaintSurface());
         imageProperty.set(ResourcesSL.getGameImage("map"));
         
-        System.out.println("Game Image: " + getImage());
-        
         return (ImagePaintCommandBase) super.init();
     }
     
     @Override protected void onPaint() {
-//        System.out.println("On Paint: " + this);
-        sync(() -> {
-            Image image = getImage();
-            if (image != null && isValidDimensions())
-                drawImage(image, getSurface(), getBounds());
-        });
+        //        System.out.println("On Paint: " + this);
+        Image image = getImage();
+        if (image != null && isValidDimensions())
+            drawImage(image, getSurface(), getBounds());
         
         // Below is example use case for both source & target Bounds.
         // The example clips the image to show only the top left quadrant of the image

@@ -98,14 +98,14 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
                 return value.shutdown();
             }));
             
-            ObjectsSL.getIf(() -> newValue, value -> value != null && !ObjectsSL.equals(newValue, oldValue), value -> syncFX(() -> {
+            ObjectsSL.getIf(() -> newValue, value -> value != null && !ObjectsSL.equals(newValue, oldValue), value -> {
                 value.init();
                 
                 getController().getMapPane().getChildren().retainAll();
                 getController().getMapPane().getChildren().add(value.getModel().getParentPane());
                 
                 return value;
-            }));
+            });
         });
         
         setGameMap(GameMap.newTestInstance(this, lock, "test-map-jid"));
@@ -240,7 +240,7 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         
         GameTile tile = getGameMap().getTileAtPoint(viewToMap);
         System.out.println("Tile At Point [" + viewToMap.getX() + ", " + viewToMap.getY() + "]: " + tile);
-        debugger().printList(tile.getOccupyingObjects(), "Occupying Objects for Tile [" + tile.getXLoc() + ", " + tile.getYLoc() + "]");
+        debugger().printList(tile.getOccupyingObjects(), "Occupying Objects for Tile [" + tile.getLocationX() + ", " + tile.getLocationY() + "]");
     }
     
     private void selectTile(@NotNull MouseEvent event) {

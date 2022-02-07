@@ -23,6 +23,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
@@ -48,8 +49,6 @@ public class GameMap
     private final IntegerBinding pixelHeightBinding;
     
     
-    
-    
     private GameMapModel model;
     
     
@@ -60,7 +59,7 @@ public class GameMap
         this.lock = lock != null ? lock : new ReentrantLock();
         
         //
-    
+        
         this.tileMatrixProperty = new ReadOnlyObjectWrapper<>();
         
         setTileMatrix(new GameTile[96][64]);
@@ -85,11 +84,42 @@ public class GameMap
     //<editor-fold desc="--- INITIALIZATION ---">
     
     public final GameMap init() {
-//        setTileMatrix(resetGameTiles());
+        //        setTileMatrix(resetGameTiles());
         this.model = new GameMapModel(getGame(), lock);
         this.model.init();
+//        tileMatrixProperty.addListener((observable, oldValue, newValue) -> {
+//            if (newValue != null)
+//                syncFX(() -> {
+//                    ArraysSL.iterateMatrix((dimensions, tile) -> {
+//                        tile.init();
+//                    }, newValue);
+//                });
+//        });
         JFiles.load(this);
         this.model.refreshMapImage();
+//        getModel().getCanvas().repaint();
+//        ArrayList<Image> terrainObjImages = new ArrayList<>();
+        final GameTile[][] tileMatrix = getTileMatrix();
+        for (int i = 0; i < tileMatrix.length; i++) {
+            for (int j = 0; j < tileMatrix[i].length; j++) {
+                final GameTile tile = tileMatrix[i][j];
+                tile.init();
+            }
+        }
+//        ArraysSL.iterateMatrix((dimensions, tile) -> {
+//            tile.init();
+//        }, getTileMatrix());
+        getModel().getCanvas().repaint();
+        for (int i = 0; i < tileMatrix.length; i++) {
+            for (int j = 0; j < tileMatrix[i].length; j++) {
+                final GameTile tile = tileMatrix[i][j];
+                tile.getModel().getTerrainObjPaintCommand().setSurfaceRepaintDisabled(false);
+            }
+        }
+//        ArraysSL.iterateMatrix((dimensions, tile) -> {
+//            tile.getModel().getTerrainObjPaintCommand().setSurfaceRepaintDisabled(false);
+//        }, getTileMatrix());
+        //        tileMatrixProperty.get()[20][20].init();
         return this;
     }
     
@@ -114,7 +144,7 @@ public class GameMap
     public final int setTileSize(@NotNull Number newValue) { return PropertiesSL.setProperty(tileSizeProperty, newValue.intValue()); }
     
     //
-
+    
     public final IntegerBinding widthBinding() { return widthBinding; }
     public final int getWidth() { return widthBinding.get(); }
     
@@ -148,8 +178,8 @@ public class GameMap
     //</editor-fold>
     
     public final @Nullable GameTile getNeighbor(@NotNull GameTile gameTile, int xTranslate, int yTranslate) {
-        int xTemp = gameTile.getXLoc() + xTranslate;
-        int yTemp = gameTile.getYLoc() + yTranslate;
+        int xTemp = gameTile.getLocationX() + xTranslate;
+        int yTemp = gameTile.getLocationY() + yTranslate;
         if (xTemp < 0 || xTemp >= getWidth() || yTemp < 0 || yTemp >= getHeight())
             return null; // Indicate to caller in some way that the returned value does not exist on this GMap.
         
@@ -163,10 +193,10 @@ public class GameMap
         
         for (int i = -xReach; i < xReach; i++)
             for (int j = -yReach; j < yReach; j++) {
-                int xLoc = gameTile.getXLoc() + i;
-                int yLoc = gameTile.getYLoc() + j;
+                int xLoc = gameTile.getLocationX() + i;
+                int yLoc = gameTile.getLocationY() + j;
                 if (ArraysSL.isInMatrixBounds(getTileMatrix(), xLoc, yLoc))
-                    neighbors[i][j] = getTileMatrix()[gameTile.getXLoc() + i][gameTile.getYLoc() + j];
+                    neighbors[i][j] = getTileMatrix()[gameTile.getLocationX() + i][gameTile.getLocationY() + j];
             }
         
         return neighbors;
@@ -255,7 +285,7 @@ public class GameMap
                 setTileMatrix(tileMatrixArray);
             }
         }
-    
+        
         gameObjects().addAll(JUtil.loadArray(parent, "map-objects", o -> {
             JsonObject jsonObject = (JsonObject) o;
             GameObject gameObject = new GameObject(getGame(), lock).init();

@@ -42,7 +42,6 @@ public interface Paintable<P extends Paintable<P, S>, S extends Surface<P, S>>
         
         setDisabled(false);
         
-        
         return self();
     }
     
@@ -53,10 +52,12 @@ public interface Paintable<P extends Paintable<P, S>, S extends Surface<P, S>>
     }
     
     default P repaintSurface() {
-        //        System.out.println("Repainting Surface w/ Bounds : " + getBounds() + " for Paintable: " + this);
-        S surface = getSurface();
-        if (surface != null)
-            sync(() -> ToolsFX.runFX(() -> surface.repaint(), true));
+                System.out.println("Repainting Surface w/ Bounds : " + getBounds() + " for Paintable: " + this);
+        if (!isSurfaceRepaintDisabled()) {
+            S surface = getSurface();
+            if (surface != null)
+                surface.repaint();
+        }
         return self();
     }
     
@@ -79,6 +80,10 @@ public interface Paintable<P extends Paintable<P, S>, S extends Surface<P, S>>
     default boolean setPaused(boolean newValue) { return PropertiesSL.setProperty(pausedProperty(), newValue); }
     default boolean pause() { return setPaused(true); }
     default boolean resume() { return setPaused(false); }
+    
+    default @NotNull BooleanProperty surfaceRepaintDisabledProperty() { return data().repaintSurfaceDisabledProperty(); }
+    default boolean isSurfaceRepaintDisabled() { return surfaceRepaintDisabledProperty().get(); }
+    default boolean setSurfaceRepaintDisabled(boolean newValue) { return PropertiesSL.setProperty(surfaceRepaintDisabledProperty(), newValue); }
     
     default @NotNull IntegerProperty paintPriorityProperty() { return data().paintPriorityProperty(); }
     default int getPaintPriority() { return paintPriorityProperty().get(); }

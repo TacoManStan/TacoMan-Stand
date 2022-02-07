@@ -30,6 +30,7 @@ public class PaintableData<P extends Paintable<P, S>, S extends Surface<P, S>>
     private final BooleanProperty disabledProperty;
     private final BooleanProperty pausedProperty;
     private final IntegerProperty paintPriorityProperty;
+    private final BooleanProperty repaintSurfaceDisabledProperty;
     
     private final BoundsBinding boundsBinding;
     private final BooleanBinding activeBinding;
@@ -45,6 +46,7 @@ public class PaintableData<P extends Paintable<P, S>, S extends Surface<P, S>>
         this.disabledProperty = new SimpleBooleanProperty(true);
         this.pausedProperty = new SimpleBooleanProperty(false);
         this.paintPriorityProperty = new SimpleIntegerProperty(1);
+        this.repaintSurfaceDisabledProperty = new SimpleBooleanProperty(false);
         
         this.boundsBinding = new BoundsBinding();
         this.activeBinding = Bindings.and(Bindings.not(disabledProperty), Bindings.not(pausedProperty));
@@ -60,6 +62,7 @@ public class PaintableData<P extends Paintable<P, S>, S extends Surface<P, S>>
     public @NotNull BooleanProperty disabledProperty() { return disabledProperty; }
     public @NotNull BooleanProperty pausedProperty() { return pausedProperty; }
     public @NotNull IntegerProperty paintPriorityProperty() { return paintPriorityProperty; }
+    public @NotNull BooleanProperty repaintSurfaceDisabledProperty() { return repaintSurfaceDisabledProperty; }
     
     public @NotNull BoundsBinding boundsBinding() { return boundsBinding; }
     public @NotNull BooleanBinding activeBinding() { return activeBinding; }

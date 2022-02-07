@@ -43,9 +43,9 @@ public class SurfaceData<P extends Paintable<P, S>, S extends Surface<P, S>>
         this.widthBinding = Bindings.createIntegerBinding(() -> observableWidth.intValue(), observableWidth);
         this.heightBinding = Bindings.createIntegerBinding(() -> observableHeight.intValue(), observableHeight);
         
-        this.paintables.addListener((observable, oldValue, newValue) -> {
-            System.out.println("Paintable Added: " + newValue);
-        });
+//        this.paintables.addListener((observable, oldValue, newValue) -> {
+//            System.out.println("Paintable Added: " + newValue);
+//        });
     }
     
     //<editor-fold desc="--- PROPERTIES ---">

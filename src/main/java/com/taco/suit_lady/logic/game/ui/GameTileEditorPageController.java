@@ -30,7 +30,6 @@ import javafx.scene.layout.Pane;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -91,7 +90,7 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
         titleLabel.textProperty().bind(BindingsSL.stringBinding(() -> {
             final GameTile tile = getUIData().getSelectedTile();
             if (tile != null)
-                return "Tile [" + tile.getXLoc() + ", " + tile.getYLoc() + "]";
+                return "Tile [" + tile.getLocationX() + ", " + tile.getLocationY() + "]";
             else
                 return "No Tile Selected";
         }, getUIData().readOnlySelectedTileProperty()));
