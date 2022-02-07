@@ -79,11 +79,11 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
         tileImageIdChoiceBox.valueProperty().bindBidirectional(selectedTileImageIdProperty);
         
         
-        terrainObjSelectorChoiceBox.getItems().addAll("rock_e", "rock_s", "rock_w", "rock_ne", "rock_nw", "rock_se", "rock_sw");
+        terrainObjSelectorChoiceBox.getItems().addAll("rock", "rock_n", "rock_e", "rock_s", "rock_w", "rock_ne", "rock_nw", "rock_se", "rock_sw");
         terrainObjSelectorChoiceBox.getSelectionModel().selectFirst();
         
-        addTerrainObjButton.setOnAction(event -> onAddTerrainObj(event));
-        removeTerrainObjButton.setOnAction(event -> onRemoveTerrainObj(event));
+        addTerrainObjButton.setOnAction(this::onAddTerrainObj);
+        removeTerrainObjButton.setOnAction(this::onRemoveTerrainObj);
     }
     
     public GameTileEditorPageController init() {

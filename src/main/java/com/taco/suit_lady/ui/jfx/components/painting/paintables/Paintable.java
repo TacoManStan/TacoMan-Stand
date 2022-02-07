@@ -52,7 +52,7 @@ public interface Paintable<P extends Paintable<P, S>, S extends Surface<P, S>>
     }
     
     default P repaintSurface() {
-                System.out.println("Repainting Surface w/ Bounds : " + getBounds() + " for Paintable: " + this);
+//        System.out.println("Repainting Surface w/ Bounds : " + getBounds() + " for Paintable: " + this);
         if (!isSurfaceRepaintDisabled()) {
             S surface = getSurface();
             if (surface != null)

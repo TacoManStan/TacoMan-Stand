@@ -13,6 +13,7 @@ import com.taco.suit_lady.util.tools.ArraysSL;
 import com.taco.suit_lady.util.tools.BindingsSL;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import com.taco.suit_lady.util.tools.ResourcesSL;
+import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import com.taco.suit_lady.util.tools.list_tools.ListsSL;
 import com.taco.suit_lady.util.tools.list_tools.Operation;
 import com.taco.tacository.json.JElement;
@@ -27,10 +28,12 @@ import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -46,7 +49,7 @@ public class GameTileModel
     private final ObjectBinding<Image> imageBinding;
     
     
-    private final AggregateImagePaintCommand terrainObjPaintCommand;
+//    private final AggregateImagePaintCommand terrainObjPaintCommand;
     
     private IntegerBinding xPaintPositionBinding;
     private IntegerBinding yPaintPositionBinding;
@@ -58,10 +61,27 @@ public class GameTileModel
         this.imageIdProperty = new ReadOnlyStringWrapper("grass");
         this.terrainTileObjects = new SimpleListProperty<>(FXCollections.observableArrayList());
         
+//        this.imageBinding = BindingsSL.objBinding(() -> {
+//            //            System.out.println("Updating Tile Model [" + getOwner().getXLoc() + ", " + getOwner().getYLoc() + "]: " + terrainTileObjects);
+//            return ResourcesSL.getGameImage("tiles/", getImageId());
+//        }, imageIdProperty);
+    
         this.imageBinding = BindingsSL.objBinding(() -> {
-            //            System.out.println("Updating Tile Model [" + getOwner().getXLoc() + ", " + getOwner().getYLoc() + "]: " + terrainTileObjects);
-            return ResourcesSL.getGameImage("tiles/", getImageId());
-        }, imageIdProperty);
+//            System.out.println("Updating Tile Model [" + getOwner().getLocationX() + ", " + getOwner().getLocationY() + "]: " + terrainTileObjects);
+        
+            final int tileSize = getGameMap().getTileSize();
+            final Image baseImage = ResourcesSL.getGameImage("tiles/", getImageId());
+            
+            return ToolsFX.generateCompositeImage(tileSize, tileSize, getImageList().toArray(new Image[0]));
+        
+//            aggregateImage.getPixelWriter().setPixels(0, 0, tileSize, tileSize, baseImage.getPixelReader(), 0, 0);
+//            for (String s: terrainTileObjects) {
+//                System.out.println("Loading Terrain Tile Obj: " + s);
+//                aggregateImage.getPixelWriter().setPixels(0, 0, tileSize, tileSize, ResourcesSL.getGameImage("tiles/", s).getPixelReader(), 0, 0);
+//            }
+
+//            return aggregateImage;
+        }, imageIdProperty, terrainTileObjects);
         
         this.imageBinding.addListener((observable, oldValue, newValue) -> {
             final GameMap gameMap = getGameMap();
@@ -72,7 +92,15 @@ public class GameTileModel
             }
         });
         
-        this.terrainObjPaintCommand = new AggregateImagePaintCommand(this, (ReentrantLock) getLock());
+//        this.terrainObjPaintCommand = new AggregateImagePaintCommand(this, (ReentrantLock) getLock());
+    }
+    
+    private List<Image> getImageList() {
+        ArrayList<Image> resultList = new ArrayList<>();
+        resultList.add(ResourcesSL.getGameImage("tiles/", getImageId()));
+        for (String imgId: terrainTileObjects)
+            resultList.add(ResourcesSL.getGameImage("tiles/", imgId));
+        return resultList;
     }
     
     public final GameTileModel init() {
@@ -84,40 +112,40 @@ public class GameTileModel
                                                            getOwner().readOnlyYLocationProperty());
         
         
-        terrainObjPaintCommand.setSurfaceRepaintDisabled(true);
+//        terrainObjPaintCommand.setSurfaceRepaintDisabled(true);
+//
+//        terrainObjPaintCommand.boundsBinding().setWidth(getGameMap().getTileSize());
+//        terrainObjPaintCommand.boundsBinding().setHeight(getGameMap().getTileSize());
+//
+//        terrainObjPaintCommand.boundsBinding().xProperty().bind(xPaintPositionBinding);
+//        terrainObjPaintCommand.boundsBinding().yProperty().bind(yPaintPositionBinding);
+//
+//        terrainObjPaintCommand.setPaintPriority(3);
+//
+//        terrainObjPaintCommand.init();
         
-        terrainObjPaintCommand.boundsBinding().setWidth(getGameMap().getTileSize());
-        terrainObjPaintCommand.boundsBinding().setHeight(getGameMap().getTileSize());
+//        fillTerrainObjsPaintCommand();
         
-        terrainObjPaintCommand.boundsBinding().xProperty().bind(xPaintPositionBinding);
-        terrainObjPaintCommand.boundsBinding().yProperty().bind(yPaintPositionBinding);
-        
-        terrainObjPaintCommand.setPaintPriority(3);
-    
-        terrainObjPaintCommand.init();
-        
-        fillTerrainObjsPaintCommand();
-        
-        ListsSL.applyListener(terrainTileObjects, op -> refreshTerrainObjsImage());
-        
-        getGameMap().getModel().getCanvas().addPaintable(terrainObjPaintCommand);
+//        ListsSL.applyListener(terrainTileObjects, op -> refreshTerrainObjsImage());
+//
+//        getGameMap().getModel().getCanvas().addPaintable(terrainObjPaintCommand);
 //        terrainObjPaintCommand.setSurfaceRepaintDisabled(false);
 //        getGameMap().getModel().getCanvas().repaint();
         
         return this;
     }
     
-    private void refreshTerrainObjsImage() {
-        sync(() -> {
-            terrainObjPaintCommand.clearImageList(true);
-            fillTerrainObjsPaintCommand();
-        });
-    }
-    
-    private void fillTerrainObjsPaintCommand() {
-        for (String terrainTileObj: terrainTileObjects)
-            terrainObjPaintCommand.addImage(ResourcesSL.getGameImage("tiles/", terrainTileObj), true);
-    }
+//    private void refreshTerrainObjsImage() {
+//        sync(() -> {
+//            terrainObjPaintCommand.clearImageList(true);
+//            fillTerrainObjsPaintCommand();
+//        });
+//    }
+//
+//    private void fillTerrainObjsPaintCommand() {
+//        for (String terrainTileObj: terrainTileObjects)
+//            terrainObjPaintCommand.addImage(ResourcesSL.getGameImage("tiles/", terrainTileObj), true);
+//    }
     
     //<editor-fold desc="--- PROPERTIES ---">
     
@@ -134,7 +162,7 @@ public class GameTileModel
     public final ObjectBinding<Image> imageBinding() { return imageBinding; }
     public final Image getImage() { return imageBinding.get(); }
     
-    public final AggregateImagePaintCommand getTerrainObjPaintCommand() { return terrainObjPaintCommand; }
+//    public final AggregateImagePaintCommand getTerrainObjPaintCommand() { return terrainObjPaintCommand; }
     
     //</editor-fold>
     

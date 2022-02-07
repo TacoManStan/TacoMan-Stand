@@ -84,52 +84,14 @@ public class GameMap
     //<editor-fold desc="--- INITIALIZATION ---">
     
     public final GameMap init() {
-        //        setTileMatrix(resetGameTiles());
         this.model = new GameMapModel(getGame(), lock);
         this.model.init();
-//        tileMatrixProperty.addListener((observable, oldValue, newValue) -> {
-//            if (newValue != null)
-//                syncFX(() -> {
-//                    ArraysSL.iterateMatrix((dimensions, tile) -> {
-//                        tile.init();
-//                    }, newValue);
-//                });
-//        });
         JFiles.load(this);
+        
+        ArraysSL.iterateMatrix(GameTile::init, getTileMatrix());
         this.model.refreshMapImage();
-//        getModel().getCanvas().repaint();
-//        ArrayList<Image> terrainObjImages = new ArrayList<>();
-        final GameTile[][] tileMatrix = getTileMatrix();
-        for (int i = 0; i < tileMatrix.length; i++) {
-            for (int j = 0; j < tileMatrix[i].length; j++) {
-                final GameTile tile = tileMatrix[i][j];
-                tile.init();
-            }
-        }
-//        ArraysSL.iterateMatrix((dimensions, tile) -> {
-//            tile.init();
-//        }, getTileMatrix());
-        getModel().getCanvas().repaint();
-        for (int i = 0; i < tileMatrix.length; i++) {
-            for (int j = 0; j < tileMatrix[i].length; j++) {
-                final GameTile tile = tileMatrix[i][j];
-                tile.getModel().getTerrainObjPaintCommand().setSurfaceRepaintDisabled(false);
-            }
-        }
-//        ArraysSL.iterateMatrix((dimensions, tile) -> {
-//            tile.getModel().getTerrainObjPaintCommand().setSurfaceRepaintDisabled(false);
-//        }, getTileMatrix());
-        //        tileMatrixProperty.get()[20][20].init();
+        
         return this;
-    }
-    
-    /**
-     * <p>Populates the {@link GameTile} array for this {@link GameMap} with new {@link GameTile} objects.</p>
-     * <p>Note that eventually, this method should load tiles based on a specified data template that represents the contents of the {@link GameMap}.</p>
-     */
-    private GameTile[][] resetGameTiles() {
-        //TODO: Load GameTile information from JSON data
-        return sync(() -> ArraysSL.fillMatrix(dimensions -> new GameTile(this, dimensions), new GameTile[getWidth()][getHeight()]));
     }
     
     //</editor-fold>

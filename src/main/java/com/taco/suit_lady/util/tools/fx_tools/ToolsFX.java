@@ -993,6 +993,61 @@ public class ToolsFX {
         return aggregateImage;
     }
     
+    public static @NotNull Image generateCompositeImage(int width, int height, @NotNull Image... images) {
+        final WritableImage compositeImage = new WritableImage(width, height);
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                Color color = null;
+                for (int q = 0; q < images.length; q++) {
+                    color = blendPixels(color, images[q].getPixelReader().getColor(i, j));
+                }
+                compositeImage.getPixelWriter().setColor(i, j, color);
+            }
+        }
+        return compositeImage;
+    }
+    
+    private static Color blendPixels(Color pixelB, Color pixelA) {
+        if (pixelA == null && pixelB == null)
+            throw ExceptionsSL.ex("PixelA & PixelB cannot both be null.");
+        else if (pixelA == null && pixelB != null)
+            return pixelB;
+        else if (pixelB == null && pixelA != null)
+            return pixelA;
+        else {
+            int aA = (int) (pixelA.getOpacity() * 255);
+            int rA = (int) (pixelA.getRed() * 255);
+            int gA = (int) (pixelA.getGreen() * 255);
+            int bA = (int) (pixelA.getBlue() * 255);
+            
+            int aB = (int) (pixelB.getOpacity() * 255);
+            int rB = (int) (pixelB.getRed() * 255);
+            int gB = (int) (pixelB.getGreen() * 255);
+            int bB = (int) (pixelB.getBlue() * 255);
+            
+            int aOut = aA + (aB * ((255 - aA) / 255));
+            int rOut = ((rA * aA) + (rB * aB) * ((255 - aA) / 255)) / aOut;
+            int gOut = ((gA * aA) + (gB * aB) * ((255 - aA) / 255)) / aOut;
+            int bOut = ((bA * aA) + (bB * aB) * ((255 - aA) / 255)) / aOut;
+            
+//            System.out.println(
+//                    "aA: " + aA + " | "
+//                    + "rA: " + rA + " | "
+//                    + "gA: " + gA + " | "
+//                    + "bA: " + bA + " | "
+//                    + "aB: " + aB + " | "
+//                    + "rB: " + rB + " | "
+//                    + "gB: " + gB + " | "
+//                    + "bB: " + bB + " | "
+//                    + "aOut: " + aOut + " | "
+//                    + "rOut: " + rOut + " | "
+//                    + "gOut: " + gOut + " | "
+//                    + "bOut: " + bOut);
+            
+            return new Color(rOut / 255D, gOut / 255D, bOut / 255D, aOut / 255D);
+        }
+    }
+    
     
     public static Canvas clearCanvasUnsafe(Canvas canvas) {
         return clearCanvas(canvas, null);

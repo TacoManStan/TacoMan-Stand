@@ -32,6 +32,14 @@ public class ArraysSL {
         return matrix;
     }
     
+    @Contract("_, _ -> param2")
+    public static <E> E[][] iterateMatrix(@NotNull Consumer<E> function, @NotNull E[][] matrix) {
+        for (int i = 0; i < matrix.length; i++)
+            for (int j = 0; j < matrix[i].length; j++)
+                function.accept(matrix[i][j]);
+        return matrix;
+    }
+    
     /**
      * <p>Sorts the specified {@link List} using the {@link Comparator#naturalOrder() Natural Order} as the {@link Comparator}.</p>
      * <hr>
