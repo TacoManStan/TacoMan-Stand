@@ -6,10 +6,12 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="500.0" prefWidth="250.0" stylesheets="/css/main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.taco.suit_lady.logic.game.ui.GameTileEditorPageController">
     <children>
@@ -17,7 +19,10 @@
             <top>
                 <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" BorderPane.alignment="CENTER">
                     <center>
-                        <Label fx:id="titleLabel" text="&lt;placeholder text&gt;" BorderPane.alignment="CENTER" />
+                        <Label fx:id="titleLabel" text="&lt;Title&gt;" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font></Label>
                     </center>
                <left>
                   <ImagePane fx:id="tileImagePane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" BorderPane.alignment="CENTER" />
@@ -31,15 +36,43 @@
                             <center>
                                 <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" spacing="5.0" BorderPane.alignment="CENTER">
                                     <children>
-                                        <ListView fx:id="tileContentsListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" />
-                              <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0">
+                              <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" VBox.vgrow="ALWAYS">
                                  <center>
-                                              <ListView fx:id="terrainObjListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="200.0" />
+                                              <ListView fx:id="tileContentsListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" style="-fx-border-color: border-color; -fx-border-width: 1;" />
+                                 </center>
+                                 <top>
+                                    <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" text="Occupying GameObjects" BorderPane.alignment="CENTER">
+                                       <BorderPane.margin>
+                                          <Insets bottom="3.0" />
+                                       </BorderPane.margin>
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </top>
+                              </BorderPane>
+                              <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" VBox.vgrow="NEVER">
+                                 <center>
+                                    <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0">
+                                       <center>
+                                                    <ListView fx:id="terrainObjListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="300.0" style="-fx-border-color: border-color; -fx-border-width: 1;" />
+                                       </center>
+                                       <top>
+                                          <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" text="Terrain Objects" BorderPane.alignment="CENTER">
+                                             <BorderPane.margin>
+                                                <Insets bottom="3.0" />
+                                             </BorderPane.margin>
+                                             <font>
+                                                <Font name="System Bold" size="14.0" />
+                                             </font>
+                                          </Label>
+                                       </top>
+                                    </BorderPane>
                                  </center>
                                  <bottom>
-                                    <VBox spacing="2.0" BorderPane.alignment="CENTER">
+                                    <VBox spacing="5.0" BorderPane.alignment="CENTER">
                                        <children>
-                                          <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" spacing="10.0">
+                                          <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" spacing="5.0">
                                              <children>
                                                 <Button fx:id="addTerrainObjButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" text="Add Terrain Obj" HBox.hgrow="ALWAYS" />
                                                 <Button fx:id="removeTerrainObjButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" text="Remove Terrain Obj" HBox.hgrow="ALWAYS" />
@@ -54,8 +87,21 @@
                                  </bottom>
                               </BorderPane>
                                     </children>
+                           <padding>
+                              <Insets top="5.0" />
+                           </padding>
                                 </VBox>
                             </center>
+                     <top>
+                        <Separator maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" BorderPane.alignment="CENTER" />
+                     </top>
+                     <bottom>
+                        <Separator maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" BorderPane.alignment="CENTER">
+                           <padding>
+                              <Insets top="8.0" />
+                           </padding>
+                        </Separator>
+                     </bottom>
                         </BorderPane>
                     </children>
                 </AnchorPane>
