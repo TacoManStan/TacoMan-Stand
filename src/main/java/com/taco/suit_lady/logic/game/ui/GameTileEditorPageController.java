@@ -132,7 +132,7 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
                     selectedTileContents.bind(newValue.getOccupyingObjects());
                     selectedTileTerrainObjsProperty.bind(newValue.getModel().terrainTileObjects());
                     selectedTileImageIdProperty.bindBidirectional(newValue.getModel().imageIdProperty());
-                    tileImagePane.imageProperty().bind(newValue.getModel().imageBinding());
+                    tileImagePane.imageProperty().bind(newValue.getModel().borderlessImageBinding());
 //                    System.out.println("Terrain Objs for Tile [" + newValue.getXLoc() + ", " + newValue.getYLoc() + "]: " + newValue.getModel().terrainTileObjects());
                 }
             });

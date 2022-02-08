@@ -47,6 +47,8 @@ public class GameTileModel
     
     private final BooleanProperty showBorderProperty;
     private final ObjectBinding<Image> imageBinding;
+    private final ObjectBinding<Image> borderlessImageBinding;
+    private final ObjectBinding<Image> textureOnlyImageBinding;
     
     public GameTileModel(@NotNull GameTile owner) {
         this.owner = owner;
@@ -58,7 +60,13 @@ public class GameTileModel
         this.showBorderProperty = new SimpleBooleanProperty(false);
         
         this.imageBinding = BindingsSL.objBinding(
-                () -> ToolsFX.generateCompositeImage(getGameMap().getTileSize(), getGameMap().getTileSize(), getImageList().toArray(new Image[0])),
+                () -> ToolsFX.generateCompositeImage(getGameMap().getTileSize(), getGameMap().getTileSize(), getImageList(ImageListType.ALL).toArray(new Image[0])),
+                imageIdProperty, terrainTileObjects, showBorderProperty);
+        this.borderlessImageBinding = BindingsSL.objBinding(
+                () -> ToolsFX.generateCompositeImage(getGameMap().getTileSize(), getGameMap().getTileSize(), getImageList(ImageListType.BORDERLESS).toArray(new Image[0])),
+                imageIdProperty, terrainTileObjects, showBorderProperty);
+        this.textureOnlyImageBinding = BindingsSL.objBinding(
+                () -> ToolsFX.generateCompositeImage(getGameMap().getTileSize(), getGameMap().getTileSize(), getImageList(ImageListType.TEXTURE_ONLY).toArray(new Image[0])),
                 imageIdProperty, terrainTileObjects, showBorderProperty);
         
         this.imageBinding.addListener((observable, oldValue, newValue) -> {
@@ -71,14 +79,19 @@ public class GameTileModel
         });
     }
     
-    private List<Image> getImageList() {
+    private List<Image> getImageList(@NotNull ImageListType listType) {
         ArrayList<Image> resultList = new ArrayList<>();
         resultList.add(ResourcesSL.getGameImage("tiles/", getImageId()));
-        for (String imgId: terrainTileObjects)
-            resultList.add(ResourcesSL.getGameImage("tiles/", imgId));
-        if (isBorderShowing())
+        if (listType.equals(ImageListType.BORDERLESS) || listType.equals(ImageListType.ALL))
+            for (String imgId: terrainTileObjects)
+                resultList.add(ResourcesSL.getGameImage("tiles/", imgId));
+        if (listType.equals(ImageListType.ALL) && isBorderShowing())
             resultList.add(ToolsFX.generateSelectionBorder(getGameMap().getTileSize(), getGameMap().getTileSize(), 2, null));
         return resultList;
+    }
+    
+    private enum ImageListType {
+        ALL, BORDERLESS, TEXTURE_ONLY
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
@@ -98,8 +111,15 @@ public class GameTileModel
     public final boolean isBorderShowing() { return showBorderProperty.get(); }
     public final boolean setBorderShowing(boolean newValue) { return PropertiesSL.setProperty(showBorderProperty, newValue); }
     
+    
     public final ObjectBinding<Image> imageBinding() { return imageBinding; }
     public final Image getImage() { return imageBinding.get(); }
+    
+    public final ObjectBinding<Image> borderlessImageBinding() { return borderlessImageBinding; }
+    public final Image getBorderlessImage() { return borderlessImageBinding.get(); }
+    
+    public final ObjectBinding<Image> textureOnlyImageBinding() { return textureOnlyImageBinding; }
+    public final Image getTextureOnlyImage() { return textureOnlyImageBinding.get(); }
     
     //    public final AggregateImagePaintCommand getTerrainObjPaintCommand() { return terrainObjPaintCommand; }
     
