@@ -1,7 +1,6 @@
 package com.taco.suit_lady.ui;
 
-import com.taco.suit_lady.logic.game.ui.GameViewContent;
-import com.taco.suit_lady.ui.console.Console;
+import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.ui.console.ConsoleMessageable;
 import com.taco.suit_lady.ui.jfx.components.button.ImageButton;
 import com.taco.suit_lady.ui.jfx.components.ImagePane;
