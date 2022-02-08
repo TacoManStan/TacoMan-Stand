@@ -117,7 +117,7 @@ public class GameObject
     
     public final GameObject init() {
         getModel().init();
-        this.occupiedTilesBinding = BindingsSL.objBinding(() -> calculateOccupiedTiles(), xLocationProperty, yLocationProperty, widthProperty, heightProperty, gameMapProperty());
+        this.occupiedTilesBinding = BindingsSL.objBinding(this::calculateOccupiedTiles, xLocationProperty, yLocationProperty, widthProperty, heightProperty, gameMapProperty());
         
         this.occupiedTilesBinding.addListener((observable, oldValue, newValue) -> {
             if (oldValue != null) {
