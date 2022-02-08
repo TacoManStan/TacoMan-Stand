@@ -51,11 +51,6 @@ public class GameTile
         this.model = new GameTileModel(this);
     }
     
-    public final GameTile init() {
-        getModel().init();
-        return this;
-    }
-    
     public final GameTile getNeighbor(int x, int y) { return owner.getNeighbor(this, x, y); }
     
     //<editor-fold desc="--- PROPERTIES ---">

@@ -21,6 +21,12 @@ public class GameUIData
     
     protected GameUIData(@NotNull GameViewContentData parent) {
         this.selectedTileProperty = new ReadOnlyObjectWrapper<>();
+        this.selectedTileProperty.addListener((observable, oldValue, newValue) -> {
+            if (oldValue != null)
+                oldValue.getModel().setBorderShowing(false);
+            if (newValue != null)
+                newValue.getModel().setBorderShowing(true);
+        });
         
         this.parent = parent;
     }

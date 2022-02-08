@@ -88,7 +88,7 @@ public class GameMap
         this.model.init();
         JFiles.load(this);
         
-        ArraysSL.iterateMatrix(GameTile::init, getTileMatrix());
+//        ArraysSL.iterateMatrix(GameTile::init, getTileMatrix());
         this.model.refreshMapImage();
         
         return this;

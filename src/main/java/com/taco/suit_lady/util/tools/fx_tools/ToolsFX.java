@@ -1030,22 +1030,40 @@ public class ToolsFX {
             int gOut = ((gA * aA) + (gB * aB) * ((255 - aA) / 255)) / aOut;
             int bOut = ((bA * aA) + (bB * aB) * ((255 - aA) / 255)) / aOut;
             
-//            System.out.println(
-//                    "aA: " + aA + " | "
-//                    + "rA: " + rA + " | "
-//                    + "gA: " + gA + " | "
-//                    + "bA: " + bA + " | "
-//                    + "aB: " + aB + " | "
-//                    + "rB: " + rB + " | "
-//                    + "gB: " + gB + " | "
-//                    + "bB: " + bB + " | "
-//                    + "aOut: " + aOut + " | "
-//                    + "rOut: " + rOut + " | "
-//                    + "gOut: " + gOut + " | "
-//                    + "bOut: " + bOut);
+            //            System.out.println(
+            //                    "aA: " + aA + " | "
+            //                    + "rA: " + rA + " | "
+            //                    + "gA: " + gA + " | "
+            //                    + "bA: " + bA + " | "
+            //                    + "aB: " + aB + " | "
+            //                    + "rB: " + rB + " | "
+            //                    + "gB: " + gB + " | "
+            //                    + "bB: " + bB + " | "
+            //                    + "aOut: " + aOut + " | "
+            //                    + "rOut: " + rOut + " | "
+            //                    + "gOut: " + gOut + " | "
+            //                    + "bOut: " + bOut);
             
             return new Color(rOut / 255D, gOut / 255D, bOut / 255D, aOut / 255D);
         }
+    }
+    
+    public static @NotNull Image generateSelectionBorder(int width, int height, int thickness, @Nullable BiFunction<Integer, Integer, Color> pixelColorFactory) {
+        pixelColorFactory = pixelColorFactory != null ? pixelColorFactory : (integer, integer2) -> Color.GRAY;
+        final WritableImage borderImage = new WritableImage(width, height);
+        for (int x = 0; x < width; x++) {
+            for (int t = 0; t < thickness; t++ ) {
+                borderImage.getPixelWriter().setColor(x, t, pixelColorFactory.apply(x, 0));
+                borderImage.getPixelWriter().setColor(x, height - (t + 1), pixelColorFactory.apply(x, height - 1));
+            }
+        }
+        for (int y = 0; y < height; y++) {
+            for (int t = 0; t < thickness; t++ ) {
+                borderImage.getPixelWriter().setColor(t, y, pixelColorFactory.apply(0, y));
+                borderImage.getPixelWriter().setColor(width - (t + 1), y, pixelColorFactory.apply(width - 1, y));
+            }
+        }
+        return borderImage;
     }
     
     
