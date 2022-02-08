@@ -1049,7 +1049,7 @@ public class ToolsFX {
     }
     
     public static @NotNull Image generateSelectionBorder(int width, int height, int thickness, @Nullable BiFunction<Integer, Integer, Color> pixelColorFactory) {
-        pixelColorFactory = pixelColorFactory != null ? pixelColorFactory : (integer, integer2) -> Color.GRAY;
+        pixelColorFactory = pixelColorFactory != null ? pixelColorFactory : (integer, integer2) -> Color.DIMGRAY;
         final WritableImage borderImage = new WritableImage(width, height);
         for (int x = 0; x < width; x++) {
             for (int t = 0; t < thickness; t++ ) {
