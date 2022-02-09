@@ -9,6 +9,7 @@ import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.springable.StrictSpringable;
+import com.taco.suit_lady.util.tools.ArraysSL;
 import com.taco.suit_lady.util.tools.BindingsSL;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import com.taco.tacository.json.JElement;
@@ -94,15 +95,8 @@ public class GameObject
         this.occupiedTilesBinding = BindingsSL.objBinding(this::calculateOccupiedTiles, xLocationProperty, yLocationProperty, widthProperty, heightProperty, gameMapProperty());
         
         this.occupiedTilesBinding.addListener((observable, oldValue, newValue) -> {
-            if (oldValue != null) {
-                for (int i = 0; i < oldValue.length; i++)
-                    for (int j = 0; j < oldValue[i].length; j++)
-                        oldValue[i][j].getOccupyingObjects().remove(this);
-            }
-            if (newValue != null)
-                for (int i = 0; i < newValue.length; i++)
-                    for (int j = 0; j < newValue[i].length; j++)
-                        newValue[i][j].getOccupyingObjects().add(this);
+            ArraysSL.iterateMatrix(tile -> tile.getOccupyingObjects().remove(this), oldValue);
+            ArraysSL.iterateMatrix(tile -> tile.getOccupyingObjects().add(this), newValue);
         });
         
         return this;
