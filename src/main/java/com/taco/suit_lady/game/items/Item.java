@@ -1,7 +1,5 @@
 package com.taco.suit_lady.game.items;
 
-import com.taco.suit_lady.game.interfaces.AttributeContainable;
-import com.taco.suit_lady.game.AttributeContainer;
 import com.taco.suit_lady.game.Entity;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.util.Lockable;
@@ -23,18 +21,14 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 // TO-IMPROVE
 public class Item
-        implements Lockable, AttributeContainable, Entity {
+        implements Lockable, Entity {
     
     private final GameViewContent content;
     private final ReentrantLock lock;
     
-    private final AttributeContainer attributes;
-    
     public Item(@NotNull GameViewContent content, @Nullable ReentrantLock lock) {
         this.content = content;
         this.lock = lock != null ? lock : new ReentrantLock();
-        
-        this.attributes = new AttributeContainer(this, lock, this);
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
@@ -46,7 +40,6 @@ public class Item
     //
     
     @Override public @NotNull GameViewContent getGame() { return content; }
-    @Override public @NotNull AttributeContainer attributes() { return attributes; }
     
     //<editor-fold desc="--- GENERIC ---">
     

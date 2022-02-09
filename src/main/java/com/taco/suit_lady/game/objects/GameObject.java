@@ -1,8 +1,6 @@
 package com.taco.suit_lady.game.objects;
 
 import com.github.cliftonlabs.json_simple.JsonObject;
-import com.taco.suit_lady.game.interfaces.AttributeContainable;
-import com.taco.suit_lady.game.AttributeContainer;
 import com.taco.suit_lady.game.Entity;
 import com.taco.suit_lady.game.commands.MoveCommand;
 import com.taco.suit_lady.game.objects.tiles.GameTile;
@@ -13,7 +11,10 @@ import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.BindingsSL;
 import com.taco.suit_lady.util.tools.PropertiesSL;
-import com.taco.tacository.json.*;
+import com.taco.tacository.json.JElement;
+import com.taco.tacository.json.JLoadable;
+import com.taco.tacository.json.JObject;
+import com.taco.tacository.json.JUtil;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;
@@ -27,7 +28,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class GameObject
-        implements Lockable, AttributeContainable, Entity, JObject, JLoadable, UIDProcessable {
+        implements Lockable, Entity, JObject, JLoadable, UIDProcessable {
     
     private final StrictSpringable springable;
     private final ReentrantLock lock;
@@ -37,7 +38,7 @@ public class GameObject
     private final GameViewContent content;
     
     private final GameObjectModel model;
-    private final AttributeContainer attributes;
+    private final AttributeManager attributes;
     
     
     private final DoubleProperty xLocationProperty;
@@ -93,7 +94,7 @@ public class GameObject
         this.content = content;
         
         this.model = new GameObjectModel(this);
-        this.attributes = new AttributeContainer(this, lock, this);
+        this.attributes = new AttributeManager(this);
         
         
         this.xLocationProperty = new SimpleDoubleProperty();
@@ -136,6 +137,8 @@ public class GameObject
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
+    
+    public final @NotNull AttributeManager attributes() { return attributes; }
     
     public final GameObjectModel getModel() { return model; }
     public final MoveCommand getCommand() { return command; }
@@ -197,8 +200,6 @@ public class GameObject
     //</editor-fold>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
-    
-    @Override public final @NotNull AttributeContainer attributes() { return attributes; }
     
     @Override public @NotNull GameViewContent getGame() { return content; }
     
