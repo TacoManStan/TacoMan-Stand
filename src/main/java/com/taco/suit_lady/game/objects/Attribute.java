@@ -6,10 +6,7 @@ import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.PropertiesSL;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyStringProperty;
-import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.locks.Lock;
@@ -17,12 +14,13 @@ import java.util.concurrent.locks.Lock;
 public class Attribute<T>
         implements SpringableWrapper, Lockable, GameComponent {
     
-    private final GameObject owner;
+    private final AttributeManager owner;
     
     private final ReadOnlyStringWrapper idProperty;
     private final ObjectProperty<T> valueProperty;
     
-    public Attribute(@NotNull GameObject owner) {
+    
+    public Attribute(@NotNull AttributeManager owner) {
         this.owner = owner;
         
         this.valueProperty = new SimpleObjectProperty<>();
@@ -31,7 +29,7 @@ public class Attribute<T>
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final GameObject getOwner() { return owner; }
+    public final AttributeManager getOwner() { return owner; }
     
     
     public final ReadOnlyStringProperty readOnlyIdProperty() { return idProperty.getReadOnlyProperty(); }

@@ -41,8 +41,10 @@ public class AttributeManager
                     System.err.println("WARNING: AttributeManager already contains Attribute [" + attribute + "]");
                 else if (attributeMap.containsKey(attribute.getId()))
                     System.err.println("WARNING: Attribute with ID \"" + attribute.getId() + "\" is already present in this AttributeManager [" + attributeMap.get(attribute.getId()));
-                else
+                else {
+                    
                     return attributeMap.put(attribute.getId(), attribute);
+                }
             return null;
         });
     }
