@@ -17,26 +17,38 @@ import java.util.stream.Stream;
 public class ArraysSL {
     
     @Contract("_, _ -> param2")
-    public static <E> E[][] fillMatrix(@NotNull Function<Dimensions, E> elementFactory, @NotNull E[][] matrix) {
+    public static <E> E[][] fillMatrix(@NotNull Function<Dimensions, E> elementFactory, @Nullable E[][] matrix) {
+        if (matrix == null)
+            return null;
+        
         for (int i = 0; i < matrix.length; i++)
             for (int j =0; j < matrix[i].length; j++)
                 matrix[i][j] = elementFactory.apply(new Dimensions(i, j));
+        
         return matrix;
     }
     
     @Contract("_, _ -> param2")
-    public static <E> E[][] iterateMatrix(@NotNull BiConsumer<Dimensions, E> function, @NotNull E[][] matrix) {
+    public static <E> E[][] iterateMatrix(@NotNull BiConsumer<Dimensions, E> function, @Nullable E[][] matrix) {
+        if (matrix == null)
+            return null;
+        
         for (int i = 0; i < matrix.length; i++)
             for (int j = 0; j < matrix[i].length; j++)
                 function.accept(new Dimensions(i, j), matrix[i][j]);
+        
         return matrix;
     }
     
     @Contract("_, _ -> param2")
-    public static <E> E[][] iterateMatrix(@NotNull Consumer<E> function, @NotNull E[][] matrix) {
+    public static <E> E[][] iterateMatrix(@NotNull Consumer<E> function, @Nullable E[][] matrix) {
+        if (matrix == null)
+            return null;
+        
         for (int i = 0; i < matrix.length; i++)
             for (int j = 0; j < matrix[i].length; j++)
                 function.accept(matrix[i][j]);
+        
         return matrix;
     }
     
