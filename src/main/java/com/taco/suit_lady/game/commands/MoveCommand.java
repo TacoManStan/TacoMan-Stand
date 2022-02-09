@@ -62,11 +62,12 @@ public class MoveCommand
     
     @Override public void tick() {
         if (!isPaused()) {
-            final double pixelsPerTick = 1.5;
+            final double speed = getOwner().attributes().getDoubleValue("move-speed", () -> 3.5);
+//            final double speed = 1.5;
             final double xDistance = getTargetX() - getOwner().getLocationX(true);
             final double yDistance = getTargetY() - getOwner().getLocationY(true);
             
-            double multiplier = Math.sqrt(Math.pow(pixelsPerTick, 2) / (Math.pow(xDistance, 2) + Math.pow(yDistance, 2)));
+            double multiplier = Math.sqrt(Math.pow(speed, 2) / (Math.pow(xDistance, 2) + Math.pow(yDistance, 2)));
             
             final double xMovement = multiplier * xDistance;
             final double yMovement = multiplier * yDistance;

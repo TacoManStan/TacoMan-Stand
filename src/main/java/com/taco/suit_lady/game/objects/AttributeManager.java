@@ -41,10 +41,8 @@ public class AttributeManager
                     System.err.println("WARNING: AttributeManager already contains Attribute [" + attribute + "]");
                 else if (attributeMap.containsKey(attribute.getId()))
                     System.err.println("WARNING: Attribute with ID \"" + attribute.getId() + "\" is already present in this AttributeManager [" + attributeMap.get(attribute.getId()));
-                else {
-                    
+                else
                     return attributeMap.put(attribute.getId(), attribute);
-                }
             return null;
         });
     }
@@ -68,7 +66,9 @@ public class AttributeManager
         final Attribute<T> attribute = getAttribute(id, type);
         if (attribute != null)
             return attribute.getValue();
-        return defaultValueSupplier.get();
+        final T factoryValue = defaultValueSupplier.get();
+        addAttribute(new Attribute<>(this, id, factoryValue));
+        return factoryValue;
     }
     
     

@@ -8,6 +8,7 @@ import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import javafx.beans.property.*;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.locks.Lock;
 
@@ -19,12 +20,15 @@ public class Attribute<T>
     private final ReadOnlyStringWrapper idProperty;
     private final ObjectProperty<T> valueProperty;
     
-    
     public Attribute(@NotNull AttributeManager owner) {
+        this(owner, null, null);
+    }
+    
+    public Attribute(@NotNull AttributeManager owner, @Nullable String id, @Nullable T value) {
         this.owner = owner;
         
-        this.valueProperty = new SimpleObjectProperty<>();
-        this.idProperty = new ReadOnlyStringWrapper();
+        this.idProperty = new ReadOnlyStringWrapper(id);
+        this.valueProperty = new SimpleObjectProperty<>(value);
     }
     
     //<editor-fold desc="--- PROPERTIES ---">

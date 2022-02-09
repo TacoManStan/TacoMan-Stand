@@ -59,30 +59,6 @@ public class GameObject
     
     //
     
-    /**
-     * <p>Represents the number of units (pixels, for now, at least) this GameObject can move per tick.</p>
-     * <p><b>Details</b></p>
-     * <ol>
-     *     <li>
-     *         Interpolation can be used to handle decimal values.
-     *         <ul>
-     *             <li>For example, if the unit can move .25 units per tick, the object's location is expected to have moved 1 unit every 4 ticks.</li>
-     *         </ul>
-     *     </li>
-     *     <li>Keep in mind that you're going to need properties for both max move speed & current move speed (i.e., velocity).</li>
-     *     <li>
-     *         A collection of "forces" dictates how an object moves.
-     *         <ul>
-     *             <li>For example, if a unit is knocked-back, it has the force of the knock-back applied to it.</li>
-     *             <li>Eventually, forces will be defined by velocity, impact location, impact angle, impacting object weight, impacting object speed, etc.</li>
-     *             <li>For now, however, forces should be defined by simple equations that dictate how the speed of an object is influenced each tick.</li>
-     *         </ul>
-     *     </li>
-     * </ol>
-     */
-    // TO-EXPAND
-    private final ReadOnlyDoubleWrapper moveSpeedProperty;
-    
     private final MoveCommand command;
     
     public GameObject(@NotNull GameViewContent content, @Nullable ReentrantLock lock) {
@@ -107,10 +83,6 @@ public class GameObject
         
         this.xLocationCenteredBinding = BindingsSL.doubleBinding(() -> getLocationX(false) + (getWidth() / 2D), xLocationProperty, widthProperty);
         this.yLocationCenteredBinding = BindingsSL.doubleBinding(() -> getLocationY(false) + (getHeight() / 2D), yLocationProperty, heightProperty);
-        
-        //
-        
-        this.moveSpeedProperty = new ReadOnlyDoubleWrapper();
         
         //
         
@@ -187,13 +159,6 @@ public class GameObject
     public final IntegerProperty heightProperty() { return heightProperty; }
     public final int getHeight() { return heightProperty.get(); }
     public final int setHeight(int newValue) { return PropertiesSL.setProperty(heightProperty, newValue); }
-    
-    //</editor-fold>
-    
-    //<editor-fold desc="--- GAME STAT PROPERTIES ---">
-    
-    public final ReadOnlyDoubleProperty readOnlyMoveSpeedProperty() { return moveSpeedProperty.getReadOnlyProperty(); }
-    public final double getMoveSpeed() { return moveSpeedProperty.get(); }
     
     //</editor-fold>
     
