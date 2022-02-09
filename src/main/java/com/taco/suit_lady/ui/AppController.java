@@ -574,9 +574,13 @@ public class AppController
         sidebarImagePane.visibleProperty().bind(Bindings.not(stage.maximizedProperty()));
     }
     
+    private GameViewContent gameContent;
+    
     private void initContent() {
-        new GameViewContent(this).init();
+        gameContent = (new GameViewContent(this)).init();
     }
+    
+    public final GameViewContent getGameContent() { return gameContent; }
     
     //
     
