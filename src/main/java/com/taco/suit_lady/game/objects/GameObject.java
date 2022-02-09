@@ -204,7 +204,7 @@ public class GameObject
     @Override public @NotNull GameViewContent getGame() { return content; }
     
     @Override public void tick() {
-        //TODO
+        getCommand().tick(); //TODO: Implement as list of Tickables that are automatically executed by the internal loop framework
     }
     
     //<editor-fold desc="> JSON">

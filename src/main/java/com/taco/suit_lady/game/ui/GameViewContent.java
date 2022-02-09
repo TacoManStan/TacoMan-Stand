@@ -129,8 +129,10 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         getCamera().setLocationX((int) testObject.getLocationX(true));
         getCamera().setLocationY((int) testObject.getLocationY(true));
         
-        logiCore().submit(getTestObject().getCommand());
-        logiCore().submit(getTestObject2().getCommand());
+        logiCore().submit(getTestObject());
+        logiCore().submit(getTestObject2());
+//        logiCore().submit(getTestObject().getCommand());
+//        logiCore().submit(getTestObject2().getCommand());
     }
     
     //</editor-fold>

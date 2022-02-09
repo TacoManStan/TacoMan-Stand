@@ -32,7 +32,7 @@ public class AttributeManager
     
     public final GameObject getOwner() { return owner; }
     
-    //
+    //<editor-fold desc="> Attributes">
     
     public final Attribute<?> addAttribute(@Nullable Attribute<?> attribute) {
         return sync(() -> {
@@ -49,6 +49,7 @@ public class AttributeManager
         });
     }
     
+    //<editor-fold desc=">> Attribute Accessors">
     
     public final <T> Attribute<T> getAttribute(@NotNull String id, @NotNull Class<T> type) { return sync(() -> (Attribute<T>) attributeMap.get(id)); }
     
@@ -59,7 +60,9 @@ public class AttributeManager
     public final Attribute<Double> getDoubleAttribute(@NotNull String id) { return getAttribute(id, Double.class); }
     public final Attribute<String> getStringAttribute(@NotNull String id) { return getAttribute(id, String.class); }
     
-    //<editor-fold desc="> Attribute Map Accessors">
+    //</editor-fold>
+    
+    //<editor-fold desc=">> Attribute Value Accessors">
     
     public final <T> @Nullable T getValue(@NotNull String id, @NotNull Class<T> type, @NotNull Supplier<T> defaultValueSupplier) {
         final Attribute<T> attribute = getAttribute(id, type);
@@ -86,6 +89,8 @@ public class AttributeManager
     
     public final String getStringValue(@NotNull String id) { return getStringValue(id, () -> ""); }
     public final String getStringValue(@NotNull String id, @NotNull Supplier<String> defaultValueSupplier) { return getValue(id, String.class, defaultValueSupplier); }
+    
+    //</editor-fold>
     
     //</editor-fold>
     
