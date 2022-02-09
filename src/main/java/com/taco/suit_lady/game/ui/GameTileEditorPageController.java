@@ -3,6 +3,7 @@ package com.taco.suit_lady.game.ui;
 import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.game.objects.tiles.GameTile;
+import com.taco.suit_lady.game.objects.tiles.TileModel;
 import com.taco.suit_lady.game.objects.tiles.TileTerrainObject;
 import com.taco.suit_lady.game.objects.tiles.TileTerrainObjectOrientationID;
 import com.taco.suit_lady.ui.UIPageController;
@@ -16,6 +17,7 @@ import com.taco.suit_lady.util.tools.BindingsSL;
 import com.taco.suit_lady.util.tools.ResourcesSL;
 import com.taco.suit_lady.util.tools.list_tools.ListsSL;
 import com.taco.suit_lady.util.tools.list_tools.Operation;
+import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -27,6 +29,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import net.rgielen.fxweaver.core.FxWeaver;
@@ -37,6 +40,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Component
 @FxmlView("/fxml/game/pages/game_tile_editor_page.fxml")
@@ -53,9 +57,12 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
     @FXML private Button addTerrainObjButton;
     @FXML private Button removeTerrainObjButton;
     @FXML private ImagePane tileImagePane;
+    @FXML private ImagePane texturePreviewImagePane;
     
     private final ReadOnlyStringWrapper selectedTileImageIdProperty;
     private final ReadOnlyListWrapper<TileTerrainObject> selectedTileTerrainObjsProperty;
+    
+    private ObjectBinding<Image> texturePreviewImageBinding;
     
     private final ListProperty<GameObject> selectedTileContents;
     
@@ -64,6 +71,7 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
         
         this.selectedTileContents = new SimpleListProperty<>(FXCollections.observableArrayList());
         this.selectedTileImageIdProperty = new ReadOnlyStringWrapper();
+        
         this.selectedTileTerrainObjsProperty = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
     }
     
@@ -78,7 +86,6 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
     @Override public void initialize() {
         tileImageIdChoiceBox.getItems().addAll("grass", "dirt", "sand", "rock");
         tileImageIdChoiceBox.valueProperty().bindBidirectional(selectedTileImageIdProperty);
-        
         
         addTerrainObjButton.setOnAction(this::onAddTerrainObj);
         removeTerrainObjButton.setOnAction(this::onRemoveTerrainObj);
@@ -144,6 +151,19 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
             });
         });
         
+        
+        texturePreviewImageBinding = BindingsSL.recursiveObjBinding(getLock(), tile -> {
+            System.out.println("Recalculating... " + tile);
+            if (tile != null) {
+                final TileModel model = tile.getModel();
+                if (model != null)
+                    return model.textureOnlyImageBinding();
+            }
+            return null;
+        }, getUIData().readOnlySelectedTileProperty());
+        texturePreviewImagePane.imageProperty().bind(texturePreviewImageBinding);
+        
+        
         return this;
     }
     
@@ -165,8 +185,8 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
         if (obj != null) {
             terrainObjListView.getItems().add(obj);
             terrainObjListView.getSelectionModel().select(obj);
-//            if (terrainObjListView.getSelectionModel().getSelectedItem() == null)
-//                terrainObjListView.getSelectionModel().selectFirst();
+            //            if (terrainObjListView.getSelectionModel().getSelectedItem() == null)
+            //                terrainObjListView.getSelectionModel().selectFirst();
         }
     }
     private void onTerrainObjRemoved(TileTerrainObject obj) {

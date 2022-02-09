@@ -21,13 +21,14 @@
                 <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" BorderPane.alignment="CENTER">
                     <center>
                         <Label fx:id="titleLabel" text="&lt;Title&gt;" BorderPane.alignment="CENTER">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font></Label>
+                            <font>
+                                <Font name="System Bold" size="14.0" />
+                            </font>
+                        </Label>
                     </center>
-               <left>
-                  <ImagePane fx:id="tileImagePane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" BorderPane.alignment="CENTER" />
-               </left>
+                    <left>
+                        <ImagePane fx:id="tileImagePane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" BorderPane.alignment="CENTER" />
+                    </left>
                 </BorderPane>
             </top>
             <center>
@@ -35,91 +36,96 @@
                     <children>
                         <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="8.0">
                             <center>
-                        <SplitPane dividerPositions="0.5" orientation="VERTICAL" BorderPane.alignment="CENTER">
-                           <items>
-                              <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0">
-                                 <center>
-                                              <ListView fx:id="tileContentsListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" style="-fx-border-color: border-color; -fx-border-width: 1;" />
-                                 </center>
-                                 <top>
-                                    <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" text="Occupying GameObjects" BorderPane.alignment="CENTER">
-                                       <BorderPane.margin>
-                                          <Insets bottom="3.0" />
-                                       </BorderPane.margin>
-                                       <font>
-                                          <Font name="System Bold" size="12.0" />
-                                       </font>
-                                    </Label>
-                                 </top>
-                              </BorderPane>
-                              <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0">
-                                 <center>
-                                    <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0">
-                                       <center>
-                                                    <ListView fx:id="terrainObjListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" style="-fx-border-color: border-color; -fx-border-width: 1;" />
-                                       </center>
-                                       <top>
-                                          <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" text="Terrain Objects" BorderPane.alignment="CENTER">
-                                             <BorderPane.margin>
-                                                <Insets bottom="3.0" />
-                                             </BorderPane.margin>
-                                             <font>
-                                                <Font name="System Bold" size="12.0" />
-                                             </font>
-                                          </Label>
-                                       </top>
-                                    </BorderPane>
-                                 </center>
-                                 <bottom>
-                                    <VBox spacing="5.0" BorderPane.alignment="CENTER">
-                                       <children>
-                                          <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" spacing="5.0">
-                                             <children>
-                                                <Button fx:id="addTerrainObjButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" text="Add Terrain Obj" HBox.hgrow="ALWAYS" />
-                                                <Button fx:id="removeTerrainObjButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" text="Remove Terrain Obj" HBox.hgrow="ALWAYS" />
-                                             </children>
-                                             <padding>
-                                                <Insets top="5.0" />
-                                             </padding>
-                                          </HBox>
-                                       </children>
-                                    </VBox>
-                                 </bottom>
-                              </BorderPane>
-                           </items>
-                        </SplitPane>
+                                <SplitPane dividerPositions="0.5" orientation="VERTICAL" BorderPane.alignment="CENTER">
+                                    <items>
+                                        <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0">
+                                            <center>
+                                                <ListView fx:id="tileContentsListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" style="-fx-border-color: border-color; -fx-border-width: 1;" />
+                                            </center>
+                                            <top>
+                                                <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" text="Occupying GameObjects" BorderPane.alignment="CENTER">
+                                                    <BorderPane.margin>
+                                                        <Insets bottom="3.0" />
+                                                    </BorderPane.margin>
+                                                    <font>
+                                                        <Font name="System Bold" size="12.0" />
+                                                    </font>
+                                                </Label>
+                                            </top>
+                                        </BorderPane>
+                                        <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0">
+                                            <center>
+                                                <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0">
+                                                    <center>
+                                                        <ListView fx:id="terrainObjListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" style="-fx-border-color: border-color; -fx-border-width: 1;" />
+                                                    </center>
+                                                    <top>
+                                                        <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" text="Terrain Objects" BorderPane.alignment="CENTER">
+                                                            <BorderPane.margin>
+                                                                <Insets bottom="3.0" />
+                                                            </BorderPane.margin>
+                                                            <font>
+                                                                <Font name="System Bold" size="12.0" />
+                                                            </font>
+                                                        </Label>
+                                                    </top>
+                                                </BorderPane>
+                                            </center>
+                                            <bottom>
+                                                <VBox spacing="5.0" BorderPane.alignment="CENTER">
+                                                    <children>
+                                                        <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" spacing="5.0">
+                                                            <children>
+                                                                <Button fx:id="addTerrainObjButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" text="Add Terrain Obj" HBox.hgrow="ALWAYS" />
+                                                                <Button fx:id="removeTerrainObjButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" text="Remove Terrain Obj" HBox.hgrow="ALWAYS" />
+                                                            </children>
+                                                            <padding>
+                                                                <Insets top="5.0" />
+                                                            </padding>
+                                                        </HBox>
+                                                    </children>
+                                                </VBox>
+                                            </bottom>
+                                        </BorderPane>
+                                    </items>
+                                </SplitPane>
                             </center>
-                     <top>
-                        <Separator maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" BorderPane.alignment="CENTER" />
-                     </top>
-                     <bottom>
-                        <Separator maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" BorderPane.alignment="CENTER">
-                           <padding>
-                              <Insets top="8.0" />
-                           </padding>
-                        </Separator>
-                     </bottom>
+                            <top>
+                                <Separator maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" BorderPane.alignment="CENTER" />
+                            </top>
+                            <bottom>
+                                <Separator maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" BorderPane.alignment="CENTER">
+                                    <padding>
+                                        <Insets top="8.0" />
+                                    </padding>
+                                </Separator>
+                            </bottom>
                         </BorderPane>
                     </children>
                 </AnchorPane>
             </center>
             <bottom>
-            <VBox BorderPane.alignment="CENTER">
-               <BorderPane.margin>
-                  <Insets top="5.0" />
-               </BorderPane.margin>
-               <children>
-                  <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" text="Texture">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets bottom="3.0" />
-                     </VBox.margin>
-                  </Label>
-                      <ChoiceBox fx:id="tileImageIdChoiceBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" />
-               </children>
-            </VBox>
+                <VBox BorderPane.alignment="CENTER">
+                    <BorderPane.margin>
+                        <Insets top="5.0" />
+                    </BorderPane.margin>
+                    <children>
+                        <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" text="Texture">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                            <VBox.margin>
+                                <Insets bottom="3.0" />
+                            </VBox.margin>
+                        </Label>
+                        <HBox spacing="8.0">
+                            <children>
+                                <ImagePane fx:id="texturePreviewImagePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="32.0" HBox.hgrow="NEVER" />
+                                <ChoiceBox fx:id="tileImageIdChoiceBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" HBox.hgrow="ALWAYS" />
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
             </bottom>
         </BorderPane>
     </children>
