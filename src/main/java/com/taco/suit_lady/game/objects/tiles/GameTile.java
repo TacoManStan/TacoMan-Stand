@@ -1,8 +1,9 @@
-package com.taco.suit_lady.game.objects;
+package com.taco.suit_lady.game.objects.tiles;
 
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.taco.suit_lady.game.GameMap;
 import com.taco.suit_lady.game.interfaces.GameComponent;
+import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.ui.jfx.util.Dimensions;
 import com.taco.suit_lady.util.Lockable;
@@ -29,7 +30,7 @@ public class GameTile
     private final ListProperty<GameObject> occupyingObjects;
     
     
-    private GameTileModel model;
+    private TileModel model;
     
     public GameTile(@NotNull GameMap owner) {
         this(owner, 0, 0);
@@ -48,7 +49,7 @@ public class GameTile
         this.occupyingObjects = new SimpleListProperty<>(FXCollections.observableArrayList());
         
         
-        this.model = new GameTileModel(this);
+        this.model = new TileModel(this);
     }
     
     public final GameTile getNeighbor(int x, int y) { return owner.getNeighbor(this, x, y); }
@@ -70,8 +71,8 @@ public class GameTile
     public final GameMap getOwner() { return owner; }
     public final ListProperty<GameObject> getOccupyingObjects() { return occupyingObjects; }
     
-    public final GameTileModel getModel() { return model; }
-    private void setModel(@NotNull GameTileModel model) { this.model = model; }
+    public final TileModel getModel() { return model; }
+    private void setModel(@NotNull TileModel model) { this.model = model; }
     
     //</editor-fold>
     
@@ -96,7 +97,7 @@ public class GameTile
     
     @Override public String getJID() { return "map-tile"; }
     @Override public void load(JsonObject parent) {
-        setModel(JUtil.loadObject(parent, new GameTileModel(this)));
+        setModel(JUtil.loadObject(parent, new TileModel(this)));
         setLocationX(JUtil.loadInt(parent, "x-loc"));
         setLocationY(JUtil.loadInt(parent, "y-loc"));
     }

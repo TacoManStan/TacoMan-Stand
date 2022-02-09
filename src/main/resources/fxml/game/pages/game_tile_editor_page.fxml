@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -21,7 +22,7 @@
                     <center>
                         <Label fx:id="titleLabel" text="&lt;Title&gt;" BorderPane.alignment="CENTER">
                      <font>
-                        <Font name="System Bold" size="18.0" />
+                        <Font name="System Bold" size="14.0" />
                      </font></Label>
                     </center>
                <left>
@@ -34,9 +35,9 @@
                     <children>
                         <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="8.0">
                             <center>
-                                <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" spacing="5.0" BorderPane.alignment="CENTER">
-                                    <children>
-                              <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" VBox.vgrow="ALWAYS">
+                        <SplitPane dividerPositions="0.5" orientation="VERTICAL" BorderPane.alignment="CENTER">
+                           <items>
+                              <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0">
                                  <center>
                                               <ListView fx:id="tileContentsListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" style="-fx-border-color: border-color; -fx-border-width: 1;" />
                                  </center>
@@ -46,16 +47,16 @@
                                           <Insets bottom="3.0" />
                                        </BorderPane.margin>
                                        <font>
-                                          <Font name="System Bold" size="14.0" />
+                                          <Font name="System Bold" size="12.0" />
                                        </font>
                                     </Label>
                                  </top>
                               </BorderPane>
-                              <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" VBox.vgrow="NEVER">
+                              <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0">
                                  <center>
                                     <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0">
                                        <center>
-                                                    <ListView fx:id="terrainObjListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="300.0" style="-fx-border-color: border-color; -fx-border-width: 1;" />
+                                                    <ListView fx:id="terrainObjListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" style="-fx-border-color: border-color; -fx-border-width: 1;" />
                                        </center>
                                        <top>
                                           <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" text="Terrain Objects" BorderPane.alignment="CENTER">
@@ -63,7 +64,7 @@
                                                 <Insets bottom="3.0" />
                                              </BorderPane.margin>
                                              <font>
-                                                <Font name="System Bold" size="14.0" />
+                                                <Font name="System Bold" size="12.0" />
                                              </font>
                                           </Label>
                                        </top>
@@ -81,16 +82,12 @@
                                                 <Insets top="5.0" />
                                              </padding>
                                           </HBox>
-                                          <ChoiceBox fx:id="terrainObjSelectorChoiceBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" />
                                        </children>
                                     </VBox>
                                  </bottom>
                               </BorderPane>
-                                    </children>
-                           <padding>
-                              <Insets top="5.0" />
-                           </padding>
-                                </VBox>
+                           </items>
+                        </SplitPane>
                             </center>
                      <top>
                         <Separator maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" BorderPane.alignment="CENTER" />
@@ -107,10 +104,22 @@
                 </AnchorPane>
             </center>
             <bottom>
-                <ChoiceBox fx:id="tileImageIdChoiceBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" BorderPane.alignment="CENTER">
+            <VBox BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets top="5.0" />
-               </BorderPane.margin></ChoiceBox>
+               </BorderPane.margin>
+               <children>
+                  <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" text="Texture">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="3.0" />
+                     </VBox.margin>
+                  </Label>
+                      <ChoiceBox fx:id="tileImageIdChoiceBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" />
+               </children>
+            </VBox>
             </bottom>
         </BorderPane>
     </children>

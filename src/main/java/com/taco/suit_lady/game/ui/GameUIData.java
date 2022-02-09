@@ -1,7 +1,7 @@
 package com.taco.suit_lady.game.ui;
 
 import com.taco.suit_lady.game.interfaces.GameComponent;
-import com.taco.suit_lady.game.objects.GameTile;
+import com.taco.suit_lady.game.objects.tiles.GameTile;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;

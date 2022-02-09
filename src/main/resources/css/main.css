@@ -100,6 +100,11 @@
     -fx-background-color: transparent;
 }
 
+.split-pane {
+    -fx-background-color: transparent;
+    -fx-text-fill: faintest-text-color;
+}
+
 /*******************************************************************************
  *                                                                             *
  * Progress Bar                                                                *

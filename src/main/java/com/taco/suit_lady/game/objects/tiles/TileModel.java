@@ -1,4 +1,4 @@
-package com.taco.suit_lady.game.objects;
+package com.taco.suit_lady.game.objects.tiles;
 
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.taco.suit_lady.game.GameMap;
@@ -27,22 +27,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 
-public class GameTileModel
+public class TileModel
         implements SpringableWrapper, Lockable, GameComponent, JObject, JLoadable {
     
     private final GameTile owner;
     
+    private final ReadOnlyIntegerWrapper manualRefreshProperty;
+    
     
     private final ReadOnlyStringWrapper imageIdProperty;
-    private final ListProperty<String> terrainTileObjects;
+    private final ListProperty<TileTerrainObject> terrainTileObjects;
+    
     
     private final BooleanProperty showBorderProperty;
+    
     private final ObjectBinding<Image> imageBinding;
     private final ObjectBinding<Image> borderlessImageBinding;
     private final ObjectBinding<Image> textureOnlyImageBinding;
     
-    public GameTileModel(@NotNull GameTile owner) {
+    public TileModel(@NotNull GameTile owner) {
         this.owner = owner;
+        
+        this.manualRefreshProperty = new ReadOnlyIntegerWrapper(0);
         
         
         this.imageIdProperty = new ReadOnlyStringWrapper("grass");
@@ -52,13 +58,13 @@ public class GameTileModel
         
         this.imageBinding = BindingsSL.objBinding(
                 () -> ToolsFX.generateCompositeImage(getGameMap().getTileSize(), getGameMap().getTileSize(), getImageList(ImageListType.ALL).toArray(new Image[0])),
-                imageIdProperty, terrainTileObjects, showBorderProperty);
+                imageIdProperty, terrainTileObjects, showBorderProperty, manualRefreshProperty);
         this.borderlessImageBinding = BindingsSL.objBinding(
                 () -> ToolsFX.generateCompositeImage(getGameMap().getTileSize(), getGameMap().getTileSize(), getImageList(ImageListType.BORDERLESS).toArray(new Image[0])),
-                imageIdProperty, terrainTileObjects, showBorderProperty);
+                imageIdProperty, terrainTileObjects, showBorderProperty, manualRefreshProperty);
         this.textureOnlyImageBinding = BindingsSL.objBinding(
                 () -> ToolsFX.generateCompositeImage(getGameMap().getTileSize(), getGameMap().getTileSize(), getImageList(ImageListType.TEXTURE_ONLY).toArray(new Image[0])),
-                imageIdProperty, terrainTileObjects, showBorderProperty);
+                imageIdProperty, terrainTileObjects, showBorderProperty, manualRefreshProperty);
         
         this.imageBinding.addListener((observable, oldValue, newValue) -> {
             final GameMap gameMap = getGameMap();
@@ -70,12 +76,12 @@ public class GameTileModel
         });
     }
     
-    private List<Image> getImageList(@NotNull ImageListType listType) {
+    private @NotNull List<Image> getImageList(@NotNull ImageListType listType) {
         ArrayList<Image> resultList = new ArrayList<>();
         resultList.add(ResourcesSL.getGameImage("tiles/", getImageId()));
         if (listType.equals(ImageListType.BORDERLESS) || listType.equals(ImageListType.ALL))
-            for (String imgId: terrainTileObjects)
-                resultList.add(ResourcesSL.getGameImage("tiles/", imgId));
+            for (TileTerrainObject terrainObj: terrainTileObjects)
+                resultList.add(ResourcesSL.getGameImage("tiles/", terrainObj.getAggregateTextureId()));
         if (listType.equals(ImageListType.ALL) && isBorderShowing())
             resultList.add(ToolsFX.generateSelectionBorder(getGameMap().getTileSize(), getGameMap().getTileSize(), 2, null));
         return resultList;
@@ -84,6 +90,9 @@ public class GameTileModel
     private enum ImageListType {
         ALL, BORDERLESS, TEXTURE_ONLY
     }
+    
+    
+    public final void refresh() { sync(() -> manualRefreshProperty.set(manualRefreshProperty.get() + 1)); }
     
     //<editor-fold desc="--- PROPERTIES ---">
     
@@ -95,7 +104,7 @@ public class GameTileModel
     public final String getImageId() { return imageIdProperty.get(); }
     public final String setImageId(@NotNull String newValue) { return PropertiesSL.setProperty(imageIdProperty, newValue); }
     
-    public final ListProperty<String> terrainTileObjects() { return terrainTileObjects; }
+    public final ListProperty<TileTerrainObject> terrainTileObjects() { return terrainTileObjects; }
     
     
     public final BooleanProperty showBorderProperty() { return showBorderProperty; }
@@ -129,18 +138,23 @@ public class GameTileModel
     
     @Override public void load(JsonObject parent) {
         setImageId(JUtil.loadString(parent, "image-id"));
-        final ArrayList<String> tempTerrainObjs = new ArrayList<>(JUtil.loadArray(parent, "tile-objs", o -> {
-            if (o instanceof String os)
-                return os;
+        terrainTileObjects.addAll(ArraysSL.removeNull(new ArrayList<>(JUtil.loadArray(parent, "tile-objs", o -> {
+            if (o instanceof JsonObject jo) {
+                final TileTerrainObject terrainObj = new TileTerrainObject(this);
+                terrainObj.load(jo);
+                return terrainObj;
+            } else if (o instanceof String so)
+                System.out.println("Attempting to load legacy save file... skipping " + so + " load process");
+            else
+                System.err.println("Attempting to load unknown JsonArray element: " + o);
             return null;
-        }));
-        terrainTileObjects.addAll(ArraysSL.removeNull(tempTerrainObjs));
+        }))));
     }
     
     @Override public JElement[] jFields() {
         return new JElement[]{
                 JUtil.create("image-id", getImageId()),
-                JUtil.createArray("tile-objs", terrainTileObjects.toArray(new String[0]))
+                JUtil.createArray("tile-objs", terrainTileObjects.toArray(new TileTerrainObject[0]))
         };
     }
     

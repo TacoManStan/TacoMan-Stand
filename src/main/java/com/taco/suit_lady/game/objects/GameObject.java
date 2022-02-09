@@ -5,6 +5,7 @@ import com.taco.suit_lady.game.interfaces.AttributeContainable;
 import com.taco.suit_lady.game.AttributeContainer;
 import com.taco.suit_lady.game.Entity;
 import com.taco.suit_lady.game.commands.MoveCommand;
+import com.taco.suit_lady.game.objects.tiles.GameTile;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.UIDProcessable;

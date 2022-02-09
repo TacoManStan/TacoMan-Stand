@@ -1,6 +1,6 @@
 package com.taco.suit_lady.game.ui;
 
-import com.taco.suit_lady.game.objects.GameTile;
+import com.taco.suit_lady.game.objects.tiles.GameTile;
 import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.ui.UIPageController;
 import com.taco.tacository.json.JFiles;

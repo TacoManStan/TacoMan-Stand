@@ -17,22 +17,19 @@ import java.util.concurrent.locks.ReentrantLock;
  *     <li>The parent {@link #buttons() contents} are bound to the {@link #buttonViewables() ButtonViewables} in this {@link BoundImageButtonGroup}.</li>
  * </ol>
  */
-public class BoundImageButtonGroup<T extends ButtonViewable> extends ImageButtonGroup
-{
+public class BoundImageButtonGroup<T extends ButtonViewable> extends ImageButtonGroup {
+    
     private final ObservableList<T> buttonViewables;
     
-    public BoundImageButtonGroup()
-    {
+    public BoundImageButtonGroup() {
         this(null, null);
     }
     
-    public BoundImageButtonGroup(ObservableList<T> buttonViewables)
-    {
+    public BoundImageButtonGroup(ObservableList<T> buttonViewables) {
         this(buttonViewables, null);
     }
     
-    public BoundImageButtonGroup(ObservableList<T> buttonViewables, ReentrantLock lock)
-    {
+    public BoundImageButtonGroup(ObservableList<T> buttonViewables, ReentrantLock lock) {
         super(lock);
         this.buttonViewables = buttonViewables != null ? buttonViewables : FXCollections.observableArrayList();
         
@@ -41,14 +38,13 @@ public class BoundImageButtonGroup<T extends ButtonViewable> extends ImageButton
         // ListChangeListener binding the buttonViewables list to the parent buttons list.
         this.buttonViewables.addListener((ListChangeListener<T>) change -> {
             while (change.next()) {
-                change.getAddedSubList().forEach(buttonViewable -> onViewableAdded(buttonViewable));
-                change.getRemoved().forEach(buttonViewable -> onViewableRemoved(buttonViewable));
+                change.getAddedSubList().forEach(this::onViewableAdded);
+                change.getRemoved().forEach(this::onViewableRemoved);
             }
         });
     }
     
-    private void onViewableAdded(T buttonViewable)
-    {
+    private void onViewableAdded(T buttonViewable) {
         if (buttonViewable != null) {
             final ImageButton imageButton = buttonViewable.getButtonView();
             if (imageButton != null)
@@ -56,8 +52,7 @@ public class BoundImageButtonGroup<T extends ButtonViewable> extends ImageButton
         }
     }
     
-    private void onViewableRemoved(T buttonViewable)
-    {
+    private void onViewableRemoved(T buttonViewable) {
         if (buttonViewable != null) {
             final ImageButton imageButton = buttonViewable.getButtonView();
             if (imageButton != null)
@@ -76,8 +71,7 @@ public class BoundImageButtonGroup<T extends ButtonViewable> extends ImageButton
      *
      * @return The {@link ObservableList} containing all {@link ButtonViewable ButtonViewables} in this {@link BoundImageButtonGroup}.
      */
-    public ObservableList<T> buttonViewables()
-    {
+    public ObservableList<T> buttonViewables() {
         return buttonViewables;
     }
     
@@ -92,10 +86,10 @@ public class BoundImageButtonGroup<T extends ButtonViewable> extends ImageButton
      * </ol>
      *
      * @param button The {@link ImageButton} being used as the {@code lookup key} to retrieve the desired {@link ButtonViewable} instance.
+     *
      * @return The {@link ButtonViewable} object the specified {@link ImageButton} is assigned to.
      */
-    public T getViewableByButton(ImageButton button)
-    {
+    public T getViewableByButton(ImageButton button) {
         if (button != null) {
             lock.lock();
             try {

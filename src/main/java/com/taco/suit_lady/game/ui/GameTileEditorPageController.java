@@ -2,7 +2,9 @@ package com.taco.suit_lady.game.ui;
 
 import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.objects.GameObject;
-import com.taco.suit_lady.game.objects.GameTile;
+import com.taco.suit_lady.game.objects.tiles.GameTile;
+import com.taco.suit_lady.game.objects.tiles.TileTerrainObject;
+import com.taco.suit_lady.game.objects.tiles.TileTerrainObjectOrientationID;
 import com.taco.suit_lady.ui.UIPageController;
 import com.taco.suit_lady.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.ui.jfx.lists.CellControlManager;
@@ -46,15 +48,14 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
     
     @FXML private Label titleLabel;
     @FXML private ListView<GameObject> tileContentsListView;
-    @FXML private ListView<String> terrainObjListView;
+    @FXML private ListView<TileTerrainObject> terrainObjListView;
     @FXML private ChoiceBox<String> tileImageIdChoiceBox;
     @FXML private Button addTerrainObjButton;
     @FXML private Button removeTerrainObjButton;
-    @FXML private ChoiceBox<String> terrainObjSelectorChoiceBox;
     @FXML private ImagePane tileImagePane;
     
     private final ReadOnlyStringWrapper selectedTileImageIdProperty;
-    private final ReadOnlyListWrapper<String> selectedTileTerrainObjsProperty;
+    private final ReadOnlyListWrapper<TileTerrainObject> selectedTileTerrainObjsProperty;
     
     private final ListProperty<GameObject> selectedTileContents;
     
@@ -78,9 +79,6 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
         tileImageIdChoiceBox.getItems().addAll("grass", "dirt", "sand", "rock");
         tileImageIdChoiceBox.valueProperty().bindBidirectional(selectedTileImageIdProperty);
         
-        
-        terrainObjSelectorChoiceBox.getItems().addAll("rock", "rock_n", "rock_e", "rock_s", "rock_w", "rock_ne", "rock_nw", "rock_se", "rock_sw");
-        terrainObjSelectorChoiceBox.getSelectionModel().selectFirst();
         
         addTerrainObjButton.setOnAction(this::onAddTerrainObj);
         removeTerrainObjButton.setOnAction(this::onRemoveTerrainObj);
@@ -120,20 +118,28 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
                                 () -> weaver().loadController(GameTileContentElementController.class),
                                 listView.hashCode()))));
         
+        terrainObjListView.setCellFactory(listView -> new ListCellFX<>(
+                listCellFX -> new CellControlManager<>(
+                        listCellFX,
+                        cellData -> ResourcesSL.get(
+                                cellData,
+                                () -> weaver().loadController(TerrainTileContentElementController.class),
+                                listView.hashCode()))));
+        
         getUIData().readOnlySelectedTileProperty().addListener((observable, oldValue, newValue) -> {
             sync(() -> {
                 if (oldValue != null) {
                     selectedTileContents.unbind();
-                    selectedTileTerrainObjsProperty.unbind();
+                    selectedTileTerrainObjsProperty.unbindBidirectional(oldValue.getModel().terrainTileObjects());
                     selectedTileImageIdProperty.unbindBidirectional(oldValue.getModel().imageIdProperty());
                     tileImagePane.imageProperty().unbind();
                 }
                 if (newValue != null) {
                     selectedTileContents.bind(newValue.getOccupyingObjects());
-                    selectedTileTerrainObjsProperty.bind(newValue.getModel().terrainTileObjects());
+                    selectedTileTerrainObjsProperty.bindBidirectional(newValue.getModel().terrainTileObjects());
                     selectedTileImageIdProperty.bindBidirectional(newValue.getModel().imageIdProperty());
                     tileImagePane.imageProperty().bind(newValue.getModel().borderlessImageBinding());
-//                    System.out.println("Terrain Objs for Tile [" + newValue.getXLoc() + ", " + newValue.getYLoc() + "]: " + newValue.getModel().terrainTileObjects());
+                    //                    System.out.println("Terrain Objs for Tile [" + newValue.getXLoc() + ", " + newValue.getYLoc() + "]: " + newValue.getModel().terrainTileObjects());
                 }
             });
         });
@@ -141,22 +147,46 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
         return this;
     }
     
-    private void onObjAdded(GameObject obj) { tileContentsListView.getItems().add(obj); }
-    private void onObjRemoved(GameObject obj) { tileContentsListView.getItems().remove(obj); }
+    private void onObjAdded(GameObject obj) {
+        if (obj != null) {
+            tileContentsListView.getItems().add(obj);
+            tileContentsListView.getSelectionModel().select(obj);
+        }
+    }
+    private void onObjRemoved(GameObject obj) {
+        if (obj != null) {
+            tileContentsListView.getItems().remove(obj);
+            if (tileContentsListView.getSelectionModel().getSelectedItem() == null)
+                tileContentsListView.getSelectionModel().selectFirst();
+        }
+    }
     
-    private void onTerrainObjAdded(String obj) { terrainObjListView.getItems().add(obj); }
-    private void onTerrainObjRemoved(String obj) { terrainObjListView.getItems().remove(obj); }
+    private void onTerrainObjAdded(TileTerrainObject obj) {
+        if (obj != null) {
+            terrainObjListView.getItems().add(obj);
+            terrainObjListView.getSelectionModel().select(obj);
+//            if (terrainObjListView.getSelectionModel().getSelectedItem() == null)
+//                terrainObjListView.getSelectionModel().selectFirst();
+        }
+    }
+    private void onTerrainObjRemoved(TileTerrainObject obj) {
+        if (obj != null) {
+            terrainObjListView.getItems().remove(obj);
+            if (terrainObjListView.getSelectionModel().getSelectedItem() == null)
+                terrainObjListView.getSelectionModel().selectFirst();
+        }
+    }
     
     private void onAddTerrainObj(ActionEvent event) {
         syncFX(() -> {
-            selectedTileTerrainObjsProperty.add(terrainObjSelectorChoiceBox.getValue());
+            selectedTileTerrainObjsProperty.add(new TileTerrainObject(getUIData().getSelectedTile().getModel()));
         });
     }
     private void onRemoveTerrainObj(ActionEvent event) {
         syncFX(() -> {
-            final String selectedTerrainObj = terrainObjListView.getSelectionModel().getSelectedItem();
-            if (selectedTerrainObj != null)
-                selectedTileTerrainObjsProperty.remove(selectedTerrainObj);
+            final TileTerrainObject selectedTerrainObject = terrainObjListView.getSelectionModel().getSelectedItem();
+            if (selectedTerrainObject != null)
+                selectedTileTerrainObjsProperty.remove(selectedTerrainObject);
             else
                 System.err.println("WARNING: Attempting to remove null terrain obj.");
         });

@@ -1,31 +1,35 @@
 package com.taco.suit_lady.ui.jfx.components.button;
 
+import com.taco.suit_lady.util.tools.PropertiesSL;
 import com.taco.suit_lady.util.tools.ToolsSL;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 
 import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
 
-// TODO - Fix synchronization issues with selecting an element as the elements list is being modified
-public class ImageButtonGroup
-{
+/**
+ * <p>Represents a collection of {@link ImageButton} objects that are linked together as mutually-exclusive selectable values.</p>
+ * <p><b>Details</b></p>
+ * <ol>
+ *     <li>To add/remove an {@link ImageButton} to/from an {@link ImageButtonGroup}, use the <i>{@link ImageButton#setButtonGroup(ImageButtonGroup)}</i> method in the {@link ImageButton} class itself.</li>
+ *     <li>The {@link BoundImageButtonGroup} implementation of {@link ImageButtonGroup this class} allows you to add objects directly so long as they implement the {@link ButtonViewable} interface.</li>
+ * </ol>
+ */
+//TO-EXPAND
+public class ImageButtonGroup {
+    
     protected final ReentrantLock lock;
     
     protected final ListProperty<ImageButton> buttons;
     private final ReadOnlyObjectWrapper<ImageButton> selectedButtonProperty;
     
-    public ImageButtonGroup()
-    {
+    public ImageButtonGroup() {
         this(null);
     }
     
-    public ImageButtonGroup(ReentrantLock lock)
-    {
+    public ImageButtonGroup(ReentrantLock lock) {
         this.lock = lock != null ? lock : new ReentrantLock();
         
         this.buttons = new SimpleListProperty<>(FXCollections.observableArrayList());
@@ -37,8 +41,8 @@ public class ImageButtonGroup
             this.lock.lock();
             try {
                 while (change.next()) {
-                    change.getAddedSubList().forEach(button -> onButtonAdded(button));
-                    change.getRemoved().forEach(button -> onButtonRemoved(button));
+                    change.getAddedSubList().forEach(this::onButtonAdded);
+                    change.getRemoved().forEach(this::onButtonRemoved);
                 }
             } finally {
                 this.lock.unlock();
@@ -53,13 +57,11 @@ public class ImageButtonGroup
         });
     }
     
-    private void onButtonAdded(ImageButton button)
-    {
+    private void onButtonAdded(ImageButton button) {
         button.setButtonGroup(this);
     }
     
-    private void onButtonRemoved(ImageButton button)
-    {
+    private void onButtonRemoved(ImageButton button) {
         button.setButtonGroup(null);
     }
     
@@ -74,19 +76,22 @@ public class ImageButtonGroup
      *
      * @return The {@link ListProperty} containing the {@link ImageButton buttons} in this {@link ImageButtonGroup}.
      */
-    protected ListProperty<ImageButton> buttons()
-    {
+    protected ListProperty<ImageButton> buttons() {
         return buttons;
     }
     
     /**
      * <p>Returns the {@link ReadOnlyObjectProperty} representing the {@link #getSelectedButton() selected} {@link ImageButton button} in this {@link ImageButtonGroup}.</p>
+     * <p><i>
+     * <b>EDIT:</b> Now returns a writable {@link ObjectProperty} instead of a {@link ReadOnlyObjectProperty}.
+     * <br>
+     * Note that the returned value is in reality still an instance of {@link ReadOnlyObjectWrapper} so rolling back to {@link ReadOnlyObjectProperty} will be easy if necessary.
+     * </i></p>
      *
      * @return The {@link ReadOnlyObjectProperty} representing the {@link #getSelectedButton() selected} {@link ImageButton button} in this {@link ImageButtonGroup}.
      */
-    public ReadOnlyObjectProperty<ImageButton> selectedButtonProperty()
-    {
-        return selectedButtonProperty.getReadOnlyProperty();
+    public ObjectProperty<ImageButton> selectedButtonProperty() {
+        return selectedButtonProperty;
     }
     
     /**
@@ -96,12 +101,12 @@ public class ImageButtonGroup
      * </ol>
      *
      * @return The {@link #getSelectedButton() selected} {@link ImageButton button} in this {@link ImageButtonGroup}.
+     *
      * @see #selectedButtonProperty()
      * @see #setSelectedButton(ImageButton)
      * @see #isButtonSelected(ImageButton)
      */
-    public ImageButton getSelectedButton()
-    {
+    public ImageButton getSelectedButton() {
         return selectedButtonProperty.get();
     }
     
@@ -112,13 +117,14 @@ public class ImageButtonGroup
      * </ol>
      *
      * @param button The {@link ImageButton} being checked.
+     *
      * @return True if the specified {@link ImageButton} is {@link #getSelectedButton() selected}, false otherwise.
+     *
      * @see #selectedButtonProperty()
      * @see #getSelectedButton()
      * @see #setSelectedButton(ImageButton)
      */
-    public boolean isButtonSelected(ImageButton button)
-    {
+    public boolean isButtonSelected(ImageButton button) {
         return button != null && Objects.equals(button, getSelectedButton());
     }
     
@@ -126,18 +132,17 @@ public class ImageButtonGroup
      * <p>Sets the {@link #getSelectedButton() selected} {@link ImageButton button} to the specified value.</p>
      *
      * @param button The {@link ImageButton} to be {@link #getSelectedButton() selected}.
+     *
      * @return The previously {@link #getSelectedButton() selected} {@link ImageButton button}.
      * <br>
      * If no {@link ImageButton button} was {@link #getSelectedButton() selected}, this method returns {@code null}.
+     *
      * @see #selectedButtonProperty()
      * @see #getSelectedButton()
      * @see #isButtonSelected(ImageButton)
      */
-    public ImageButton setSelectedButton(ImageButton button)
-    {
-        ImageButton oldSelection = getSelectedButton();
-        selectedButtonProperty.set(button);
-        return oldSelection;
+    public ImageButton setSelectedButton(ImageButton button) {
+        return PropertiesSL.setProperty(selectedButtonProperty, button);
     }
     
     /**
@@ -153,13 +158,14 @@ public class ImageButtonGroup
      * </ol>
      *
      * @param buttons The {@code array} of {@link ImageButton buttons} to be compared for clearing.
+     *
      * @return True if the selection was successfully cleared, false if it was not.
+     *
      * @see #selectedButtonProperty()
      * @see #getSelectedButton()
      * @see #setSelectedButton(ImageButton)
      */
-    public boolean clearSelection(ImageButton... buttons)
-    {
+    public boolean clearSelection(ImageButton... buttons) {
         if (buttons == null)
             throw new NullPointerException("Button array cannot be null.");
         
@@ -180,13 +186,13 @@ public class ImageButtonGroup
      * </ol>
      *
      * @return The previously selected {@link ImageButton button}, or {@code null} if there are no {@link ImageButton buttons} in this {@link ImageButtonGroup}.
+     *
      * @see #selectLast()
      * @see #selectedButtonProperty()
      * @see #getSelectedButton()
      * @see #setSelectedButton(ImageButton)
      */
-    public ImageButton selectFirst()
-    {
+    public ImageButton selectFirst() {
         try {
             return setSelectedButton(buttons().get(0));
         } catch (IndexOutOfBoundsException e) {
@@ -201,13 +207,13 @@ public class ImageButtonGroup
      * </ol>
      *
      * @return The previously selected {@link ImageButton button}, or {@code null} if there are no {@link ImageButton buttons} in this {@link ImageButtonGroup}.
+     *
      * @see #selectFirst()
      * @see #selectedButtonProperty()
      * @see #getSelectedButton()
      * @see #setSelectedButton(ImageButton)
      */
-    public ImageButton selectLast()
-    {
+    public ImageButton selectLast() {
         try {
             return setSelectedButton(buttons().get(buttons().size() - 1));
         } catch (IndexOutOfBoundsException e) {

@@ -1,7 +1,7 @@
 package com.taco.suit_lady.game;
 
 import com.taco.suit_lady.game.interfaces.GameComponent;
-import com.taco.suit_lady.game.objects.GameTileModel;
+import com.taco.suit_lady.game.objects.tiles.TileModel;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.CroppedImagePaintCommand;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasPane;
@@ -69,9 +69,9 @@ public class GameMapModel
     public final @NotNull Image generateMapImage() {
         return ToolsFX.generateTiledImage(32, getGameMap().getTileMatrix(), gameTile -> {
             if (gameTile != null) {
-                GameTileModel gameTileModel = gameTile.getModel();
-                if (gameTileModel != null)
-                    return gameTileModel.getImage();
+                TileModel tileModel = gameTile.getModel();
+                if (tileModel != null)
+                    return tileModel.getImage();
             }
             return null;
         });
