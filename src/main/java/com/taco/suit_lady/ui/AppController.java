@@ -12,6 +12,7 @@ import com.taco.suit_lady.ui.pages.tester_page.TesterPage;
 import com.taco.suit_lady.ui.ui_internal.console.ConsoleUIDataContainer;
 import com.taco.suit_lady.ui.ui_internal.controllers.SettingsController;
 import com.taco.suit_lady.util.springable.Springable;
+import com.taco.suit_lady.util.tools.BindingsSL;
 import com.taco.suit_lady.util.tools.ResourcesSL;
 import com.taco.suit_lady.util.tools.WebSL;
 import com.taco.suit_lady.util.tools.fx_tools.DialogsFX;
@@ -165,6 +166,8 @@ public class AppController
     @FXML private CheckBox consoleScriptCheckBox;
     @FXML private CheckBox consoleSelectedInstanceOnlyCheckBox;
     
+    @FXML private Label upsLabel;
+    
     // </editor-fold>
     
     private final FxWeaver weaver;
@@ -193,9 +196,8 @@ public class AppController
     // As some properties may not yet be finished loading, all actual UI initialization should be done in initialize(Stage).
     @FXML
     public final void initialize() {
-        final AppUI ui = ctx().getBean(AppUI.class);
-        ui.setController(this);
-        ui.setSidebar(new Sidebar(weaver(), ctx(), sidebarChildButtonsPane, sidebarContentPane, backImagePane, sidebarButtonBar));
+        ui().setController(this);
+        ui().setSidebar(new Sidebar(weaver(), ctx(), sidebarChildButtonsPane, sidebarContentPane, backImagePane, sidebarButtonBar));
     }
     
     public final void initialize(@NotNull Stage stage) {
@@ -253,6 +255,10 @@ public class AppController
         });
         
         logiCore().init();
+        
+        //
+        
+        upsLabel.textProperty().bind(BindingsSL.stringBinding(() -> "" + logiCore().getUps(), logiCore().readOnlyUpsProperty()));
     }
     
     private void initSidebar() {
