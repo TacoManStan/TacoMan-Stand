@@ -10,6 +10,8 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ObservableIntegerValue;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,15 +26,11 @@ public class MoveCommand
     private final BooleanProperty pausedProperty;
     
     public MoveCommand(@NotNull GameObject owner) {
-        this(owner, (int) owner.getLocationX(false), (int) owner.getLocationY(false));
-    }
-    
-    public MoveCommand(@NotNull GameObject owner, int targetX, int targetY) {
         this.owner = owner;
-        
-        this.xTargetProperty = new SimpleIntegerProperty(targetX);
-        this.yTargetProperty = new SimpleIntegerProperty(targetY);
-        
+    
+        this.xTargetProperty = new SimpleIntegerProperty((int) owner.getLocationX(false));
+        this.yTargetProperty = new SimpleIntegerProperty((int) owner.getLocationY(false));
+    
         this.pausedProperty = new SimpleBooleanProperty(true);
     }
     
