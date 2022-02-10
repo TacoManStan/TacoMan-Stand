@@ -5,6 +5,7 @@ import com.taco.suit_lady.game.Entity;
 import com.taco.suit_lady.game.commands.MoveCommand;
 import com.taco.suit_lady.game.objects.tiles.GameTile;
 import com.taco.suit_lady.game.ui.GameViewContent;
+import com.taco.suit_lady.logic.Tickable;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
@@ -12,6 +13,8 @@ import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.ArraysSL;
 import com.taco.suit_lady.util.tools.BindingsSL;
 import com.taco.suit_lady.util.tools.PropertiesSL;
+import com.taco.suit_lady.util.tools.list_tools.ListsSL;
+import com.taco.suit_lady.util.tools.list_tools.Operation;
 import com.taco.tacository.json.JElement;
 import com.taco.tacository.json.JLoadable;
 import com.taco.tacository.json.JObject;
@@ -19,12 +22,17 @@ import com.taco.tacository.json.JUtil;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -62,6 +70,8 @@ public class GameObject
     
     private final MoveCommand command;
     
+    private final ObservableList<Tickable> tickables;
+    
     public GameObject(@NotNull GameViewContent content, @Nullable ReentrantLock lock) {
         this.springable = content.asStrict();
         this.lock = lock != null ? lock : new ReentrantLock();
@@ -88,6 +98,9 @@ public class GameObject
         //
         
         this.command = new MoveCommand(this);
+        
+        this.tickables = new SimpleListProperty<>(FXCollections.observableArrayList());
+        tickables.add(command);
     }
     
     public final GameObject init() {
@@ -162,11 +175,18 @@ public class GameObject
     
     @Override public @NotNull GameViewContent getGame() { return content; }
     
-    @Override public void tick() {
-        getCommand().tick(); //TODO: Implement as list of Tickables that are automatically executed by the internal loop framework
-    }
+    //
     
-    //<editor-fold desc="> JSON">
+    //<editor-fold desc="> Logic">
+    
+    @Override public void tick() { }
+    
+    @Override public boolean hasSubActions() { return true; }
+    @Override public final @NotNull List<Tickable> subActions() { return tickables; }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="> Json">
     
     @Override public String getJID() { return "game-object"; }
     

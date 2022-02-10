@@ -12,6 +12,8 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.*;
 
 @Component
@@ -30,6 +32,7 @@ public class LogiCore
     
     private final ScheduledThreadPoolExecutor gameLoopExecutor;
     private final ListProperty<Tickable> tickables;
+    private final List<Tickable> empty;
     
     private final int targetUPS = 144;
     private final ReadOnlyIntegerWrapper upsProperty;
@@ -49,6 +52,7 @@ public class LogiCore
         
         this.gameLoopExecutor = new ScheduledThreadPoolExecutor(1);
         this.tickables = new SimpleListProperty<>(FXCollections.observableArrayList());
+        this.empty = new ArrayList<>();
         
         this.upsProperty = new ReadOnlyIntegerWrapper();
         
@@ -57,7 +61,8 @@ public class LogiCore
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final ListProperty<Tickable> getTickables() { return tickables; }
+    public final @NotNull ListProperty<Tickable> getTickables() { return tickables; }
+    public final @NotNull List<Tickable> getEmpty() { return empty; }
     
     public final boolean submit(@NotNull Tickable tickable) { return tickables.add(tickable); }
     public final boolean remove(@NotNull Tickable tickable) { return tickables.remove(tickable); }
@@ -66,8 +71,8 @@ public class LogiCore
     
     public final int getTargetUPS() { return targetUPS; }
     
-    public final ReadOnlyIntegerProperty readOnlyUpsProperty() { return upsProperty.getReadOnlyProperty(); }
-    protected final ReadOnlyIntegerWrapper upsProperty() { return upsProperty; }
+    public final @NotNull ReadOnlyIntegerProperty readOnlyUpsProperty() { return upsProperty.getReadOnlyProperty(); }
+    protected final @NotNull ReadOnlyIntegerWrapper upsProperty() { return upsProperty; }
     public final int getUps() { return upsProperty.get(); }
     protected final int setUps(int newValue) { return ToolsFX.runFX(() -> PropertiesSL.setProperty(upsProperty, newValue)); }
     
@@ -81,7 +86,7 @@ public class LogiCore
         gameLoopExecutor.scheduleAtFixedRate(this::tick, 0, (long) 1000000 / getTargetUPS(), TimeUnit.MICROSECONDS);
         timer.setTimeout(upsRefreshTime);
         timer.setOnTimeout(() -> {
-//            System.out.println("Tick Rate: " + (tickCount / 3));
+            //            System.out.println("Tick Rate: " + (tickCount / 3));
             setUps((int) (tickCount / (upsRefreshTime / 1000)));
             tickCount = 0;
             timer.reset(upsRefreshTime);
@@ -93,8 +98,15 @@ public class LogiCore
         tickCount++;
         if (timer.isTimedOut())
             timer.getOnTimeout().run();
-        tickables.forEach(Tickable::tick);
+        tickables.forEach(this::tick);
     }
+    
+    private void tick(@NotNull Tickable tickable) {
+        tickable.tick();
+        if (tickable.hasSubActions())
+            tickable.subActions().forEach(this::tick);
+    }
+    
     
     //</editor-fold>
     

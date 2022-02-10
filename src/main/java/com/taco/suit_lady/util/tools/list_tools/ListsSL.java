@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -148,7 +149,7 @@ public final class ListsSL {
         return applyListener(null, list, listener);
     }
     
-    public static <E> OperationHandler<E> applyListener(@Nullable ReentrantLock lock, @NotNull ObservableList<E> list, @NotNull OperationListener<E> listener) {
+    public static <E> OperationHandler<E> applyListener(@Nullable Lock lock, @NotNull ObservableList<E> list, @NotNull OperationListener<E> listener) {
         return ListsSL.wrap(lock, null, list, listener).apply();
     }
     
@@ -158,7 +159,7 @@ public final class ListsSL {
         return applyListener(null, list, listener);
     }
     
-    public static <E> OperationHandler<E> applyListener(@Nullable ReentrantLock lock, @NotNull ObservableList<E> list, @NotNull SimpleOperationListener<E> listener) {
+    public static <E> OperationHandler<E> applyListener(@Nullable Lock lock, @NotNull ObservableList<E> list, @NotNull SimpleOperationListener<E> listener) {
         return applyListener(lock, list, (OperationListener<E>) listener);
     }
     
@@ -167,7 +168,7 @@ public final class ListsSL {
         return applyListener(null, list, listener);
     }
     
-    public static <E> OperationHandler<E> applyListener(@Nullable ReentrantLock lock, @NotNull ObservableList<E> list, @NotNull OperationResponder<E> listener) {
+    public static <E> OperationHandler<E> applyListener(@Nullable Lock lock, @NotNull ObservableList<E> list, @NotNull OperationResponder<E> listener) {
         return applyListener(lock, list, (OperationListener<E>) listener);
     }
     
@@ -176,7 +177,7 @@ public final class ListsSL {
         return applyListener(null, list, listener);
     }
     
-    public static <E> OperationHandler<E> applyListener(@Nullable ReentrantLock lock, @NotNull ObservableList<E> list, @NotNull UnlinkedOperationResponder<E> listener) {
+    public static <E> OperationHandler<E> applyListener(@Nullable Lock lock, @NotNull ObservableList<E> list, @NotNull UnlinkedOperationResponder<E> listener) {
         return applyListener(lock, list, (OperationListener<E>) listener);
     }
     
@@ -185,7 +186,7 @@ public final class ListsSL {
         return applyListener(null, list, listener);
     }
     
-    public static <E> OperationHandler<E> applyListener(@Nullable ReentrantLock lock, @NotNull ObservableList<E> list, @NotNull SimpleOperationResponder<E> listener) {
+    public static <E> OperationHandler<E> applyListener(@Nullable Lock lock, @NotNull ObservableList<E> list, @NotNull SimpleOperationResponder<E> listener) {
         return applyListener(lock, list, (OperationListener<E>) listener);
     }
     
@@ -212,7 +213,7 @@ public final class ListsSL {
      */
     // TO-EXPAND
     @Contract("_, _, _, _ -> new")
-    public static <E> @NotNull OperationHandler<E> wrap(@Nullable ReentrantLock lock, @Nullable String name, @NotNull ObservableList<E> list, OperationListener<E> listener) {
+    public static <E> @NotNull OperationHandler<E> wrap(@Nullable Lock lock, @Nullable String name, @NotNull ObservableList<E> list, OperationListener<E> listener) {
         return new OperationHandler<>(lock, name, list) {
             
             @Override

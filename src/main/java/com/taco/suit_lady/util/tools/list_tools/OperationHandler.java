@@ -30,9 +30,9 @@ import java.util.stream.IntStream;
  * <h2>Details</h2>
  * <ol>
  *     <li>
- *         {@link OperationHandler} objects are constructed by <i>{@link ListsSL}<b>.</b>{@link ListsSL#wrap(ReentrantLock, String, ObservableList, OperationListener) wrap(...)}</i> and other factory methods in the {@link ListsSL} utility class.
+ *         {@link OperationHandler} objects are constructed by <i>{@link ListsSL}<b>.</b>{@link ListsSL#wrap(Lock, String, ObservableList, OperationListener) wrap(...)}</i> and other factory methods in the {@link ListsSL} utility class.
  *         <ul>
- *             <li>Most factory methods return a {@link OperationHandler} that was constructed using <i>{@link ListsSL}<b>.</b>{@link ListsSL#wrap(ReentrantLock, String, ObservableList, OperationListener) wrap(...)}</i>.</li>
+ *             <li>Most factory methods return a {@link OperationHandler} that was constructed using <i>{@link ListsSL}<b>.</b>{@link ListsSL#wrap(Lock, String, ObservableList, OperationListener) wrap(...)}</i>.</li>
  *         </ul>
  *     </li>
  *     <li>The primary function of {@link OperationHandler} is to streamline the event data provided by <i>{@link ListChangeListener#onChanged(Change) ListChangeListener#onChanged(Change)}</i>.</li>
@@ -71,7 +71,7 @@ import java.util.stream.IntStream;
 public abstract class OperationHandler<E>
         implements OperationListener<E>, ListChangeListener<E>, Lockable, Nameable, UIDProcessable {
     
-    private final ReentrantLock lock;
+    private final Lock lock;
     private final String name;
     
     private final ObservableList<E> list;
@@ -79,7 +79,7 @@ public abstract class OperationHandler<E>
     
     private final BooleanProperty smartConvertProperty;
     
-    protected OperationHandler(@Nullable ReentrantLock lock, @Nullable String name, @NotNull ObservableList<E> list) {
+    protected OperationHandler(@Nullable Lock lock, @Nullable String name, @NotNull ObservableList<E> list) {
         this.lock = lock;
         this.name = name;
         
