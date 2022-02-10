@@ -22,7 +22,12 @@ import org.jetbrains.annotations.NotNull;
 public class MoveCommand
         implements SpringableWrapper, Tickable {
     
+    public static final String ATTRIBUTE_ID = "move-speed";
+    
+    //
+    
     private final GameObject owner;
+    
     
     private final IntegerProperty xTargetProperty;
     private final IntegerProperty yTargetProperty;
@@ -41,7 +46,7 @@ public class MoveCommand
         this.pausedProperty = new SimpleBooleanProperty(true);
         
         
-        this.speedBinding = BindingsSL.directDoubleBinding(owner.attributes().getDoubleProperty("move-speed"));
+        this.speedBinding = BindingsSL.directDoubleBinding(owner.attributes().getDoubleProperty(MoveCommand.ATTRIBUTE_ID));
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
@@ -64,13 +69,18 @@ public class MoveCommand
     public final boolean isPaused() { return pausedProperty.get(); }
     public final boolean setPaused(boolean newValue) { return PropertiesSL.setProperty(pausedProperty, newValue); }
     
+    //
+    
+    public final @NotNull DoubleBinding speedBinding() { return speedBinding; }
+    public final double getSpeed() { return speedBinding.get(); }
+    
     //</editor-fold>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override public void tick() {
         if (!isPaused()) {
-            final double speed = getOwner().attributes().getDoubleValue("move-speed", () -> 2D);
+            final double speed = getSpeed();
             
             final double xDistance = getTargetX() - getOwner().getLocationX(true);
             final double yDistance = getTargetY() - getOwner().getLocationY(true);

@@ -97,6 +97,9 @@ public class GameObject
         
         //
         
+        initAttributes();
+        
+        
         this.command = new MoveCommand(this);
         
         this.tickables = new SimpleListProperty<>(FXCollections.observableArrayList());
@@ -113,6 +116,10 @@ public class GameObject
         });
         
         return this;
+    }
+    
+    private void initAttributes() {
+        attributes().addAttribute(MoveCommand.ATTRIBUTE_ID, 2D);
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
