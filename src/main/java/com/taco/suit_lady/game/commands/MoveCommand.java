@@ -4,8 +4,11 @@ import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.logic.Tickable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
+import com.taco.suit_lady.util.tools.BindingsSL;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
+import javafx.beans.binding.DoubleBinding;
+import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -13,6 +16,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ObservableIntegerValue;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Point2D;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public class MoveCommand
@@ -25,32 +29,38 @@ public class MoveCommand
     
     private final BooleanProperty pausedProperty;
     
+    
+    private final DoubleBinding speedBinding;
+    
     public MoveCommand(@NotNull GameObject owner) {
         this.owner = owner;
-    
+        
         this.xTargetProperty = new SimpleIntegerProperty((int) owner.getLocationX(false));
         this.yTargetProperty = new SimpleIntegerProperty((int) owner.getLocationY(false));
-    
+        
         this.pausedProperty = new SimpleBooleanProperty(true);
+        
+        
+        this.speedBinding = BindingsSL.directDoubleBinding(owner.attributes().getDoubleProperty("move-speed"));
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final GameObject getOwner() { return owner; }
+    public final @NotNull GameObject getOwner() { return owner; }
     
     
-    public final IntegerProperty xTargetProperty() { return xTargetProperty; }
+    public final @NotNull IntegerProperty xTargetProperty() { return xTargetProperty; }
     public final int getTargetX() { return xTargetProperty.get(); }
     public final int setTargetX(int newValue) { return PropertiesSL.setProperty(xTargetProperty, newValue); }
     
-    public final IntegerProperty yTargetProperty() { return yTargetProperty; }
+    public final @NotNull IntegerProperty yTargetProperty() { return yTargetProperty; }
     public final int getTargetY() { return yTargetProperty.get(); }
     public final int setTargetY(int newValue) { return PropertiesSL.setProperty(yTargetProperty, newValue); }
     
-    public final Point2D getLocation() { return new Point2D(getTargetX(), getTargetY()); }
+    @Contract(" -> new") public final @NotNull Point2D getLocation() { return new Point2D(getTargetX(), getTargetY()); }
     
     
-    public final BooleanProperty pausedProperty() { return pausedProperty; }
+    public final @NotNull BooleanProperty pausedProperty() { return pausedProperty; }
     public final boolean isPaused() { return pausedProperty.get(); }
     public final boolean setPaused(boolean newValue) { return PropertiesSL.setProperty(pausedProperty, newValue); }
     

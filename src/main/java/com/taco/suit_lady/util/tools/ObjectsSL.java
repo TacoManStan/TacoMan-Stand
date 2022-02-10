@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 public class ObjectsSL {
     private ObjectsSL() { } //No Instance
     
-    //<editor-fold desc="--- EQUALS ---">
+    //<editor-fold desc="--- EQUALITY CHECKS ---">
     
     public static boolean equals(Object obj1, Object obj2) {
         return Objects.equals(obj1, obj2);
@@ -66,7 +66,7 @@ public class ObjectsSL {
     }
     
     public static <T> void doIfNonNull(@NotNull Supplier<T> valueFactory, @NotNull Consumer<T> filterPassedOperation, @Nullable Consumer<T> filterFailedOperation) {
-        doIf(valueFactory, value -> value != null, filterPassedOperation, filterFailedOperation);
+        doIf(valueFactory, Objects::nonNull, filterPassedOperation, filterFailedOperation);
     }
     
     
@@ -88,7 +88,7 @@ public class ObjectsSL {
     }
     
     public static <T, R> @Nullable R getIfNonNull(@NotNull Supplier<T> valueFactory, @NotNull Function<T, R> filterPassedOperation, @Nullable Function<T, R> filterFailedOperation) {
-        return getIf(valueFactory, value -> value != null, filterPassedOperation, filterFailedOperation);
+        return getIf(valueFactory, Objects::nonNull, filterPassedOperation, filterFailedOperation);
     }
     
     
