@@ -13,8 +13,6 @@ import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.ArraysSL;
 import com.taco.suit_lady.util.tools.BindingsSL;
 import com.taco.suit_lady.util.tools.PropertiesSL;
-import com.taco.suit_lady.util.tools.list_tools.ListsSL;
-import com.taco.suit_lady.util.tools.list_tools.Operation;
 import com.taco.tacository.json.JElement;
 import com.taco.tacository.json.JLoadable;
 import com.taco.tacository.json.JObject;
@@ -23,7 +21,6 @@ import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import net.rgielen.fxweaver.core.FxWeaver;
@@ -62,6 +59,7 @@ public class GameObject
     private final DoubleBinding yLocationCenteredBinding;
     
     private ObjectBinding<GameTile[][]> occupiedTilesBinding = null;
+    private final ListProperty<GameTile> occupiedTilesList;
     
     
     private String objID;
@@ -104,16 +102,42 @@ public class GameObject
         
         this.tickables = new SimpleListProperty<>(FXCollections.observableArrayList());
         tickables.add(command);
+        
+        //
+        
+        this.occupiedTilesList = new SimpleListProperty<>(FXCollections.observableArrayList());
     }
     
     public final GameObject init() {
         getModel().init();
-        this.occupiedTilesBinding = BindingsSL.objBinding(this::calculateOccupiedTiles, xLocationProperty, yLocationProperty, widthProperty, heightProperty, gameMapProperty());
         
+        this.occupiedTilesBinding = BindingsSL.objBinding(this::calculateOccupiedTiles, xLocationProperty, yLocationProperty, widthProperty, heightProperty, gameMapProperty());
+        //TODO: This is more efficient than before but still comically inefficient - not a problem now but will quickly become one as more GameObjects are added to the map (and moving at the same time)
         this.occupiedTilesBinding.addListener((observable, oldValue, newValue) -> {
-            ArraysSL.iterateMatrix(tile -> tile.getOccupyingObjects().remove(this), oldValue);
-            ArraysSL.iterateMatrix(tile -> tile.getOccupyingObjects().add(this), newValue);
+            final ArrayList<GameTile> oldTiles = new ArrayList<>();
+            final ArrayList<GameTile> newTiles = new ArrayList<>();
+            
+            ArraysSL.iterateMatrix(tile -> oldTiles.add(tile), oldValue);
+            ArraysSL.iterateMatrix(tile -> newTiles.add(tile), newValue);
+            
+            oldTiles.forEach(tile -> {
+                if (!newTiles.contains(tile))
+                    tile.getOccupyingObjects().remove(this);
+            });
+            newTiles.forEach(tile -> {
+                if (!tile.getOccupyingObjects().contains(this))
+                    tile.getOccupyingObjects().add(this);
+            });
         });
+        
+        //        this.occupiedTilesBinding.addListener((observable, oldValue, newValue) -> {
+        //
+        //
+        //            ArraysSL.iterateMatrix((dimensions, tile) -> {
+        //                tile.getOccupyingObjects().remove(this);
+        //            }, oldValue);
+        //            ArraysSL.iterateMatrix(tile -> tile.getOccupyingObjects().add(this), newValue);
+        //        });
         
         return this;
     }
@@ -254,6 +278,7 @@ public class GameObject
         final int adjustedMinY = (int) Math.floor(getLocationY(false) / getGameMap().getTileSize());
         final int adjustedMaxX = (int) Math.floor((getWidth() - 1 + getLocationX(false)) / getGameMap().getTileSize());
         final int adjustedMaxY = (int) Math.floor((getHeight() - 1 + getLocationY(false)) / getGameMap().getTileSize());
+        
         
         final GameTile[][] occupyingGameTiles = new GameTile[(adjustedMaxX - adjustedMinX) + 1][(adjustedMaxY - adjustedMinY) + 1];
         for (int i = 0; i < occupyingGameTiles.length; i++)

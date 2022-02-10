@@ -35,7 +35,7 @@ public class MoveCommand
     private final BooleanProperty pausedProperty;
     
     
-    private final DoubleBinding speedBinding;
+//    private final DoubleBinding speedBinding;
     
     public MoveCommand(@NotNull GameObject owner) {
         this.owner = owner;
@@ -46,7 +46,7 @@ public class MoveCommand
         this.pausedProperty = new SimpleBooleanProperty(true);
         
         
-        this.speedBinding = BindingsSL.directDoubleBinding(owner.attributes().getDoubleProperty(MoveCommand.ATTRIBUTE_ID));
+//        this.speedBinding = BindingsSL.directDoubleBinding(owner.attributes().getDoubleProperty(MoveCommand.ATTRIBUTE_ID));
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
@@ -71,8 +71,8 @@ public class MoveCommand
     
     //
     
-    public final @NotNull DoubleBinding speedBinding() { return speedBinding; }
-    public final double getSpeed() { return speedBinding.get(); }
+//    public final @NotNull DoubleBinding speedBinding() { return speedBinding; }
+//    public final double getSpeed() { return speedBinding.get(); }
     
     //</editor-fold>
     
@@ -80,7 +80,8 @@ public class MoveCommand
     
     @Override public void tick() {
         if (!isPaused()) {
-            final double speed = getSpeed();
+//            final double speed = getOwner().attributes().getDoubleValue(MoveCommand.ATTRIBUTE_ID, () -> 2D);
+            final double speed = 2D;
             
             final double xDistance = getTargetX() - getOwner().getLocationX(true);
             final double yDistance = getTargetY() - getOwner().getLocationY(true);
@@ -91,12 +92,12 @@ public class MoveCommand
             final double yMovement = multiplier * yDistance;
             
             
-            ToolsFX.runFX(() -> {
+//            ToolsFX.runFX(() -> {
                 getOwner().moveX(xMovement);
                 getOwner().moveY(yMovement);
                 if (getOwner().isAtPoint(getLocation(), true))
                     setPaused(true);
-            }, true);
+//            }, true);
         }
     }
     
