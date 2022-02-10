@@ -31,7 +31,7 @@ public class LogiCore
     private final ScheduledThreadPoolExecutor gameLoopExecutor;
     private final ListProperty<Tickable> tickables;
     
-    private final IntegerProperty upsTargetProperty;
+    private final int targetUPS = 144;
     private final ReadOnlyIntegerWrapper upsProperty;
     
     private int tickCount = 0;
@@ -50,7 +50,6 @@ public class LogiCore
         this.gameLoopExecutor = new ScheduledThreadPoolExecutor(1);
         this.tickables = new SimpleListProperty<>(FXCollections.observableArrayList());
         
-        this.upsTargetProperty = new ReadOnlyIntegerWrapper(144);
         this.upsProperty = new ReadOnlyIntegerWrapper();
         
         this.timer = Timers.newStopwatch(true);
@@ -65,9 +64,7 @@ public class LogiCore
     
     //
     
-    public final IntegerProperty upsTargetProperty() { return upsTargetProperty; }
-    public final int getTargetUPS() { return upsTargetProperty.get(); }
-    public final int setTargetUPS(int newValue) { return PropertiesSL.setProperty(upsTargetProperty, newValue); }
+    public final int getTargetUPS() { return targetUPS; }
     
     public final ReadOnlyIntegerProperty readOnlyUpsProperty() { return upsProperty.getReadOnlyProperty(); }
     protected final ReadOnlyIntegerWrapper upsProperty() { return upsProperty; }
@@ -78,14 +75,16 @@ public class LogiCore
     
     //<editor-fold desc="--- GAME LOOP ---">
     
+    public long upsRefreshTime = 2000;
+    
     public final void init() {
         gameLoopExecutor.scheduleAtFixedRate(this::tick, 0, (long) 1000000 / getTargetUPS(), TimeUnit.MICROSECONDS);
-        timer.setTimeout(3000);
+        timer.setTimeout(upsRefreshTime);
         timer.setOnTimeout(() -> {
-            System.out.println("Tick Rate: " + (tickCount / 3));
-            setUps(tickCount / 3);
+//            System.out.println("Tick Rate: " + (tickCount / 3));
+            setUps((int) (tickCount / (upsRefreshTime / 1000)));
             tickCount = 0;
-            timer.reset(3000);
+            timer.reset(upsRefreshTime);
         });
         timer.start();
     }

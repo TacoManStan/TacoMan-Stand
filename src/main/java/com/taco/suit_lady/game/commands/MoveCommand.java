@@ -62,8 +62,8 @@ public class MoveCommand
     
     @Override public void tick() {
         if (!isPaused()) {
-            final double speed = getOwner().attributes().getDoubleValue("move-speed", () -> 3.5);
-//            final double speed = 1.5;
+            final double speed = getOwner().attributes().getDoubleValue("move-speed", () -> 2D);
+            
             final double xDistance = getTargetX() - getOwner().getLocationX(true);
             final double yDistance = getTargetY() - getOwner().getLocationY(true);
             
@@ -71,6 +71,7 @@ public class MoveCommand
             
             final double xMovement = multiplier * xDistance;
             final double yMovement = multiplier * yDistance;
+            
             
             ToolsFX.runFX(() -> {
                 getOwner().moveX(xMovement);
