@@ -164,8 +164,8 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
             return null;
         }, getUIData().readOnlySelectedTileProperty());
         texturePreviewImagePane.imageProperty().bind(texturePreviewImageBinding);
-    
-    
+        
+        
         selectedGameObjectBinding = BindingsSL.objBinding(() -> tileContentsListView.getSelectionModel().getSelectedItem(), tileContentsListView.getSelectionModel().selectedItemProperty());
         editGameObjectButton.disableProperty().bind(BindingsSL.boolBinding(() -> getSelectedGameObject() == null, selectedGameObjectBinding));
         
@@ -194,25 +194,30 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
     
     private void onObjAdded(GameObject obj) {
         if (obj != null) {
-            tileContentsListView.getItems().add(obj);
-            tileContentsListView.getSelectionModel().select(obj);
+            syncFX(() -> {
+                tileContentsListView.getItems().add(obj);
+                tileContentsListView.getSelectionModel().select(obj);
+            });
         }
     }
     private void onObjRemoved(GameObject obj) {
         if (obj != null) {
-            tileContentsListView.getItems().remove(obj);
-            if (tileContentsListView.getSelectionModel().getSelectedItem() == null)
-                tileContentsListView.getSelectionModel().selectFirst();
+            syncFX(() -> {
+                tileContentsListView.getItems().remove(obj);
+                if (tileContentsListView.getSelectionModel().getSelectedItem() == null)
+                    tileContentsListView.getSelectionModel().selectFirst();
+            });
         }
     }
     
     private void onTerrainObjAdded(TileTerrainObject obj) {
-        if (obj != null) {
-            terrainObjListView.getItems().add(obj);
-            terrainObjListView.getSelectionModel().select(obj);
-            //            if (terrainObjListView.getSelectionModel().getSelectedItem() == null)
-            //                terrainObjListView.getSelectionModel().selectFirst();
-        }
+        if (obj != null)
+            syncFX(() -> {
+                terrainObjListView.getItems().add(obj);
+                terrainObjListView.getSelectionModel().select(obj);
+                //            if (terrainObjListView.getSelectionModel().getSelectedItem() == null)
+                //                terrainObjListView.getSelectionModel().selectFirst();
+            });
     }
     private void onTerrainObjRemoved(TileTerrainObject obj) {
         if (obj != null) {
@@ -240,9 +245,9 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
     
     private void onEditGameObject(@NotNull ActionEvent event) {
         final GameObject selectedGameObject = getSelectedGameObject();
-        if (selectedGameObject != null) {
-            getPage().turnToNew(new GameObjectEditorPage(getPage().getOwner(), getPage()).init());
-        } else
+        if (selectedGameObject != null)
+            syncFX(() -> getPage().turnToNew(new GameObjectEditorPage(getPage().getOwner(), getPage()).init()));
+        else
             System.err.println("WARNING: Attempting to edit a null GameObject.");
     }
     

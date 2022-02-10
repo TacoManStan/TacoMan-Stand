@@ -1,5 +1,7 @@
 package com.taco.suit_lady.ui;
 
+import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import com.taco.tacository.collections.ObservableLinkedList;
 import com.taco.suit_lady.util.tools.ExceptionsSL;
 import javafx.beans.binding.Bindings;
@@ -14,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.Objects;
+import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
 
@@ -21,7 +24,8 @@ import java.util.function.Function;
 
 // TO-DOC
 public class UIPageHandler
-{
+        implements Lockable {
+    
     private final ReentrantLock lock;
     private final UIBook owner;
     
@@ -67,8 +71,7 @@ public class UIPageHandler
      * @param owner     The {@link UIBook owner} of this {@link UIPageHandler}.
      * @param coverPage The {@link #getCoverPage() Cover Page} of this {@link UIPageHandler}.
      */
-    UIPageHandler(ReentrantLock lock, UIBook owner, UIPage<?> coverPage)
-    {
+    UIPageHandler(ReentrantLock lock, UIBook owner, UIPage<?> coverPage) {
         this.lock = lock;
         this.owner = owner;
         
@@ -86,8 +89,7 @@ public class UIPageHandler
      *
      * @return The {@link UIBook} containing this {@link UIPage}.
      */
-    public UIBook getOwner()
-    {
+    public UIBook getOwner() {
         return owner;
     }
     
@@ -102,8 +104,7 @@ public class UIPageHandler
      *
      * @return The {@link ObjectProperty property} containing the {@link UIPage Cover Page} assigned to this {@link UIPageHandler}.
      */
-    public @NotNull ObjectProperty<UIPage<?>> coverPageProperty()
-    {
+    public @NotNull ObjectProperty<UIPage<?>> coverPageProperty() {
         return coverPageProperty;
     }
     
@@ -113,8 +114,7 @@ public class UIPageHandler
      *
      * @return The {@link UIPage Cover Page} assigned to this {@link UIPageHandler}.
      */
-    public @Nullable UIPage<?> getCoverPage()
-    {
+    public @Nullable UIPage<?> getCoverPage() {
         return coverPageProperty.get();
     }
     
@@ -124,8 +124,7 @@ public class UIPageHandler
      *
      * @param coverPage The {@link UIPage} to be the new {@link #coverPageProperty() Cover Page} assigned to this {@link UIPageHandler}.
      */
-    public void setCoverPage(UIPage<?> coverPage)
-    {
+    public void setCoverPage(UIPage<?> coverPage) {
         coverPageProperty.set(coverPage);
     }
     
@@ -138,8 +137,7 @@ public class UIPageHandler
      *
      * @return The {@link ObservableLinkedList Observable List} of {@link UIPage UIPages} managed and displayed by this {@link UIPageHandler}.
      */
-    public ObservableLinkedList<UIPage<?>> getPages()
-    {
+    public ObservableLinkedList<UIPage<?>> getPages() {
         return pages;
     }
     
@@ -155,8 +153,7 @@ public class UIPageHandler
      *
      * @return A convenience {@link ObjectBinding binding} containing the {@link UIPage} that is currently displayed by this {@link UIPageHandler}.
      */
-    public @NotNull ObjectBinding<UIPage<?>> visiblePageBinding()
-    {
+    public @NotNull ObjectBinding<UIPage<?>> visiblePageBinding() {
         return visiblePageBinding;
     }
     
@@ -166,8 +163,7 @@ public class UIPageHandler
      *
      * @return The {@link UIPage} that is currently displayed by this {@link UIPageHandler}.
      */
-    public @Nullable UIPage<?> getVisiblePage()
-    {
+    public @Nullable UIPage<?> getVisiblePage() {
         return visiblePageBinding.get();
     }
     
@@ -177,8 +173,7 @@ public class UIPageHandler
      *
      * @return A {@link BooleanBinding} that reflects whether this {@link UIPageHandler} is {@link ObservableLinkedList#isEmpty() empty} or not.
      */
-    public BooleanBinding isEmptyBinding()
-    {
+    public BooleanBinding isEmptyBinding() {
         return isEmptyBinding;
     }
     
@@ -188,12 +183,19 @@ public class UIPageHandler
      *
      * @return True if this {@link UIPageHandler} is {@link ObservableLinkedList#isEmpty() empty}, false if it is not.
      */
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return isEmptyBinding.get();
     }
     
     //</editor-fold>
+    
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+    @Override public @NotNull Lock getLock() { return lock; }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- PAGE ACTIONS ---">
     
     /**
      * <p>Checks if this {@link UIPageHandler} contains the specified {@link UIPage} or not.</p>
@@ -213,8 +215,7 @@ public class UIPageHandler
      *
      * @return True if this {@link UIPageHandler} contains the specified {@link UIPage}, false if it does not.
      */
-    public boolean containsPage(UIPage<?> page)
-    {
+    public boolean containsPage(UIPage<?> page) {
         lock.lock();
         try {
             return page != null && getCoverPage() != page && !pages.contains(page);
@@ -222,6 +223,7 @@ public class UIPageHandler
             lock.unlock();
         }
     }
+    
     
     /**
      * <p>Turns this {@link UIPageHandler} to the specified {@link UIPage}.</p>
@@ -238,8 +240,7 @@ public class UIPageHandler
      * @return True if the specified {@link UIPage} was successfully turned to, false if it was not.
      */
     // TO-TEST
-    public boolean turnTo(@Nullable UIPage<?> page)
-    {
+    public boolean turnTo(@Nullable UIPage<?> page) {
         lock.lock();
         try {
             if (page != null) {
@@ -271,8 +272,7 @@ public class UIPageHandler
      * @param page The {@link UIPage} being turned to.
      */
     // TO-UPDATE
-    public void turnToNew(@NotNull UIPage<?> page)
-    {
+    public void turnToNew(@NotNull UIPage<?> page) {
         lock.lock();
         try {
             ExceptionsSL.nullCheck(page, "Page cannot be null");
@@ -286,49 +286,34 @@ public class UIPageHandler
         }
     }
     
+    
     /**
      * <p>{@link #turnTo(UIPage) Turns} this {@link UIPageHandler} back one {@link UIPage page}.</p>
      * <blockquote><b>Passthrough Definition:</b> <i><code>{@link #getPages()}<b>.</b>{@link ObservableLinkedList#pollLast() pollLast()}</code></i></blockquote>
      *
      * @return The {@link UIPage} that was previously displayed before this {@link UIPageHandler} was {@link #turnTo(UIPage) turned} {@link #back() back}.
+     *
+     * @see #backUnchecked()
      */
-    public UIPage<?> back()
-    {
-        lock.lock();
-        try {
-            return pages.pollLast();
-        } finally {
-            lock.unlock();
-        }
-    }
+    public UIPage<?> back() { return ToolsFX.runFX(() -> getPages().pollLast()); }
     
     /**
      * <p>Identical to <code><i>{@link #back()}</i></code>, except an {@link RuntimeException exception} is thrown if the {@link #getPages() Page List} is {@link #isEmpty() empty}.</p>
-     * <blockquote><b>Passthrough Definition:</b> <i><code>{@link #getPages()}<b>.</b>{@link ObservableLinkedList#removeLast() pollLast()}</code></i></blockquote>
+     * <blockquote><b>Passthrough Definition:</b> <i><code>{@link #getPages()}<b>.</b>{@link ObservableLinkedList#removeLast() removeLast()}</code></i></blockquote>
      *
      * @return The {@link UIPage} that was previously displayed before this {@link UIPageHandler} was {@link #turnTo(UIPage) turned} {@link #backUnchecked() back}.
+     *
+     * @see #back()
      */
-    public UIPage<?> backUnchecked()
-    {
-        lock.lock();
-        try {
-            return pages.removeLast();
-        } finally {
-            lock.unlock();
-        }
-    }
+    public UIPage<?> backUnchecked() { return pages.removeLast(); }
     
     // TO-DOC
-    private UIPage<?> calcVisiblePage()
-    {
-        lock.lock();
-        try {
-            UIPage<?> pagedPage;
-            if ((pagedPage = getPages().peekLast()) != null)
-                return pagedPage;
-            return getCoverPage();
-        } finally {
-            lock.unlock();
-        }
+    private UIPage<?> calcVisiblePage() {
+        UIPage<?> pagedPage;
+        if ((pagedPage = getPages().peekLast()) != null)
+            return pagedPage;
+        return getCoverPage();
     }
+    
+    //</editor-fold>
 }
