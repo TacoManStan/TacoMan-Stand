@@ -135,27 +135,24 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
                                 listView.hashCode()))));
         
         
-        getUIData().readOnlySelectedTileProperty().addListener((observable, oldValue, newValue) -> {
-            sync(() -> {
-                if (oldValue != null) {
-                    selectedTileContents.unbind();
-                    selectedTileTerrainObjsProperty.unbindBidirectional(oldValue.getModel().terrainTileObjects());
-                    selectedTileImageIdProperty.unbindBidirectional(oldValue.getModel().imageIdProperty());
-                    tileImagePane.imageProperty().unbind();
-                }
-                if (newValue != null) {
-                    selectedTileContents.bind(newValue.getOccupyingObjects());
-                    selectedTileTerrainObjsProperty.bindBidirectional(newValue.getModel().terrainTileObjects());
-                    selectedTileImageIdProperty.bindBidirectional(newValue.getModel().imageIdProperty());
-                    tileImagePane.imageProperty().bind(newValue.getModel().borderlessImageBinding());
-                    //                    System.out.println("Terrain Objs for Tile [" + newValue.getXLoc() + ", " + newValue.getYLoc() + "]: " + newValue.getModel().terrainTileObjects());
-                }
-            });
-        });
+        getUIData().readOnlySelectedTileProperty().addListener((observable, oldValue, newValue) -> syncFX(() -> {
+            if (oldValue != null) {
+                selectedTileContents.unbind();
+                selectedTileTerrainObjsProperty.unbindBidirectional(oldValue.getModel().terrainTileObjects());
+                selectedTileImageIdProperty.unbindBidirectional(oldValue.getModel().imageIdProperty());
+                tileImagePane.imageProperty().unbind();
+            }
+            if (newValue != null) {
+                selectedTileContents.bind(newValue.getOccupyingObjects());
+                selectedTileTerrainObjsProperty.bindBidirectional(newValue.getModel().terrainTileObjects());
+                selectedTileImageIdProperty.bindBidirectional(newValue.getModel().imageIdProperty());
+                tileImagePane.imageProperty().bind(newValue.getModel().borderlessImageBinding());
+                //                    System.out.println("Terrain Objs for Tile [" + newValue.getXLoc() + ", " + newValue.getYLoc() + "]: " + newValue.getModel().terrainTileObjects());
+            }
+        }));
         
         
         texturePreviewImageBinding = BindingsSL.recursiveObjBinding(getLock(), tile -> {
-            System.out.println("Recalculating... " + tile);
             if (tile != null) {
                 final TileModel model = tile.getModel();
                 if (model != null)
@@ -215,8 +212,6 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
             syncFX(() -> {
                 terrainObjListView.getItems().add(obj);
                 terrainObjListView.getSelectionModel().select(obj);
-                //            if (terrainObjListView.getSelectionModel().getSelectedItem() == null)
-                //                terrainObjListView.getSelectionModel().selectFirst();
             });
     }
     private void onTerrainObjRemoved(TileTerrainObject obj) {
