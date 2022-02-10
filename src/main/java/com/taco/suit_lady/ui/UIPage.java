@@ -56,6 +56,9 @@ public abstract class UIPage<C extends UIPageController<?>>
         this.initializePage(constructorParams);
     }
     
+    public final void turnToNew(@NotNull UIPage<?> page) { getOwner().getPageHandler().turnToNew(page); }
+    public final void turnTo(@NotNull UIPage<?> page) { getOwner().getPageHandler().turnTo(page); }
+    
     //<editor-fold desc="--- PROPERTIES ---">
     
     
