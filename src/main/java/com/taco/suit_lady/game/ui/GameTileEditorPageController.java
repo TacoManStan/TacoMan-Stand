@@ -117,6 +117,7 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
             }
         });
         
+        
         tileContentsListView.setCellFactory(listView -> new ListCellFX<>(
                 listCellFX -> new CellControlManager<>(
                         listCellFX,
@@ -132,6 +133,7 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
                                 cellData,
                                 () -> weaver().loadController(TerrainTileContentElementController.class),
                                 listView.hashCode()))));
+        
         
         getUIData().readOnlySelectedTileProperty().addListener((observable, oldValue, newValue) -> {
             sync(() -> {
