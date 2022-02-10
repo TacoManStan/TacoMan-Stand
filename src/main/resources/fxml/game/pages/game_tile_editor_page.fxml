@@ -52,6 +52,16 @@
                                                     </font>
                                                 </Label>
                                             </top>
+                                 <bottom>
+                                    <Button fx:id="editGameObjectButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" text="Edit" BorderPane.alignment="CENTER">
+                                       <BorderPane.margin>
+                                          <Insets bottom="3.0" top="5.0" />
+                                       </BorderPane.margin>
+                                    </Button>
+                                 </bottom>
+                                 <padding>
+                                    <Insets bottom="3.0" />
+                                 </padding>
                                         </BorderPane>
                                         <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0">
                                             <center>
@@ -86,6 +96,9 @@
                                                     </children>
                                                 </VBox>
                                             </bottom>
+                                 <padding>
+                                    <Insets top="3.0" />
+                                 </padding>
                                         </BorderPane>
                                     </items>
                                 </SplitPane>

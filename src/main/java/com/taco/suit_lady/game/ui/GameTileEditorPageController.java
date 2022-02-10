@@ -58,6 +58,7 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
     @FXML private Button removeTerrainObjButton;
     @FXML private ImagePane tileImagePane;
     @FXML private ImagePane texturePreviewImagePane;
+    @FXML private Button editGameObjectButton;
     
     private final ReadOnlyStringWrapper selectedTileImageIdProperty;
     private final ReadOnlyListWrapper<TileTerrainObject> selectedTileTerrainObjsProperty;
@@ -65,6 +66,9 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
     private ObjectBinding<Image> texturePreviewImageBinding;
     
     private final ListProperty<GameObject> selectedTileContents;
+    
+    
+    private ObjectBinding<GameObject> selectedGameObjectBinding;
     
     protected GameTileEditorPageController(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         super(weaver, ctx);
@@ -75,13 +79,7 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
         this.selectedTileTerrainObjsProperty = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
     }
     
-    //<editor-fold desc="--- IMPLEMENTATIONS ---">
-    
-    @Override public @NotNull Lock getLock() { return getPage().getLock(); }
-    
-    //
-    
-    @Override public Pane root() { return root; }
+    //<editor-fold desc="--- INITIALIZATION ---">
     
     @Override public void initialize() {
         tileImageIdChoiceBox.getItems().addAll("grass", "dirt", "sand", "rock");
@@ -89,6 +87,8 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
         
         addTerrainObjButton.setOnAction(this::onAddTerrainObj);
         removeTerrainObjButton.setOnAction(this::onRemoveTerrainObj);
+        
+        editGameObjectButton.setOnAction(this::onEditGameObject);
     }
     
     public GameTileEditorPageController init() {
@@ -164,10 +164,33 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
             return null;
         }, getUIData().readOnlySelectedTileProperty());
         texturePreviewImagePane.imageProperty().bind(texturePreviewImageBinding);
+    
+    
+        selectedGameObjectBinding = BindingsSL.objBinding(() -> tileContentsListView.getSelectionModel().getSelectedItem(), tileContentsListView.getSelectionModel().selectedItemProperty());
+        editGameObjectButton.disableProperty().bind(BindingsSL.boolBinding(() -> getSelectedGameObject() == null, selectedGameObjectBinding));
         
         
         return this;
     }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- PROPERTIES ---">
+    
+    public final ObjectBinding<GameObject> selectedGameObjectBinding() { return selectedGameObjectBinding; }
+    public final GameObject getSelectedGameObject() { return selectedGameObjectBinding.get(); }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+    @Override public @NotNull Lock getLock() { return getPage().getLock(); }
+    
+    //
+    
+    @Override public Pane root() { return root; }
+    
+    //
     
     private void onObjAdded(GameObject obj) {
         if (obj != null) {
@@ -212,6 +235,15 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
             else
                 System.err.println("WARNING: Attempting to remove null terrain obj.");
         });
+    }
+    
+    
+    private void onEditGameObject(@NotNull ActionEvent event) {
+        final GameObject selectedGameObject = getSelectedGameObject();
+        if (selectedGameObject != null) {
+            getPage().turnToNew(new GameObjectEditorPage(getPage().getOwner(), getPage()).init());
+        } else
+            System.err.println("WARNING: Attempting to edit a null GameObject.");
     }
     
     
