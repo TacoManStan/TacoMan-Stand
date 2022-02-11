@@ -217,20 +217,20 @@ public class AppController
         ui().init();
         
         contentAnchorPane.getChildren().add(ui().getContentManager().getContentBasePane());
-        ToolsFX.setAnchors(ui().getContentManager().getContentBasePane(), 0.0);
+        ToolsFX.setAnchors(ui().getContentManager().getContentBasePane());
         
         initImageButtons();
         initSidebar();
         initContent();
         
-        console().consolify(
-                new ConsoleUIDataContainer(
-                        consoleTree,
-                        consoleTRiBotCheckBox.selectedProperty(),
-                        consoleClientCheckBox.selectedProperty(),
-                        consoleScriptCheckBox.selectedProperty(),
-                        consoleSelectedInstanceOnlyCheckBox.selectedProperty()
-                ));
+//        console().consolify(
+//                new ConsoleUIDataContainer(
+//                        consoleTree,
+//                        consoleTRiBotCheckBox.selectedProperty(),
+//                        consoleClientCheckBox.selectedProperty(),
+//                        consoleScriptCheckBox.selectedProperty(),
+//                        consoleSelectedInstanceOnlyCheckBox.selectedProperty()
+//                ));
         
         ToolsFX.constructDraggableNode(dragBar);
         ToolsFX.constructResizableNode(getStage(), cornerResizePane, topResizePane, bottomResizePane, leftResizePane, rightResizePane,
