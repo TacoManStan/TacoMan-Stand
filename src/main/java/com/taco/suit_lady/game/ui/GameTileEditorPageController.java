@@ -147,7 +147,6 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
                 selectedTileTerrainObjsProperty.bindBidirectional(newValue.getModel().terrainTileObjects());
                 selectedTileImageIdProperty.bindBidirectional(newValue.getModel().imageIdProperty());
                 tileImagePane.imageProperty().bind(newValue.getModel().borderlessImageBinding());
-                //                    System.out.println("Terrain Objs for Tile [" + newValue.getXLoc() + ", " + newValue.getYLoc() + "]: " + newValue.getModel().terrainTileObjects());
             }
         }));
         
@@ -190,42 +189,35 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
     //
     
     private void onObjAdded(GameObject obj) {
-        if (obj != null) {
-            syncFX(() -> {
-                tileContentsListView.getItems().add(obj);
-                tileContentsListView.getSelectionModel().select(obj);
-            });
-        }
+        if (obj != null) syncFX(() -> {
+            tileContentsListView.getItems().add(obj);
+            tileContentsListView.getSelectionModel().select(obj);
+        });
     }
     private void onObjRemoved(GameObject obj) {
-        if (obj != null) {
-            syncFX(() -> {
-                tileContentsListView.getItems().remove(obj);
-                if (tileContentsListView.getSelectionModel().getSelectedItem() == null)
-                    tileContentsListView.getSelectionModel().selectFirst();
-            });
-        }
+        if (obj != null) syncFX(() -> {
+            tileContentsListView.getItems().remove(obj);
+            if (tileContentsListView.getSelectionModel().getSelectedItem() == null)
+                tileContentsListView.getSelectionModel().selectFirst();
+        });
     }
     
     private void onTerrainObjAdded(TileTerrainObject obj) {
-        if (obj != null)
-            syncFX(() -> {
-                terrainObjListView.getItems().add(obj);
-                terrainObjListView.getSelectionModel().select(obj);
-            });
+        if (obj != null) syncFX(() -> {
+            terrainObjListView.getItems().add(obj);
+            terrainObjListView.getSelectionModel().select(obj);
+        });
     }
     private void onTerrainObjRemoved(TileTerrainObject obj) {
-        if (obj != null) {
+        if (obj != null) syncFX(() -> {
             terrainObjListView.getItems().remove(obj);
             if (terrainObjListView.getSelectionModel().getSelectedItem() == null)
                 terrainObjListView.getSelectionModel().selectFirst();
-        }
+        });
     }
     
     private void onAddTerrainObj(ActionEvent event) {
-        syncFX(() -> {
-            selectedTileTerrainObjsProperty.add(new TileTerrainObject(getUIData().getSelectedTile().getModel()));
-        });
+        syncFX(() -> selectedTileTerrainObjsProperty.add(new TileTerrainObject(getUIData().getSelectedTile().getModel())));
     }
     private void onRemoveTerrainObj(ActionEvent event) {
         syncFX(() -> {
