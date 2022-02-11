@@ -5,10 +5,11 @@ import com.taco.suit_lady.ui.ui_internal.controllers.CellController;
 import javafx.scene.control.ListCell;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
 import java.util.concurrent.locks.Lock;
 import java.util.function.Function;
 
-public class ListCellFX<T, C extends CellController<T>> extends ListCell<T>
+public class ListCellFX<T extends Serializable, C extends CellController<T>> extends ListCell<T>
         implements IndexedCellFXable<T, C> {
     
     private final Lock lock;

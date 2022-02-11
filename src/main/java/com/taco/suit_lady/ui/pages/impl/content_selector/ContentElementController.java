@@ -63,6 +63,8 @@ public abstract class ContentElementController<
     
     @Override
     public void initialize() {
+        super.initialize();
+        
 //        this.iconButton = new ImageButton(this, iconImagePane, "logo", this::icon, null, false, new Point2D(50, 50)).initialize();
         this.closeButton = new ImageButton(
                 this,

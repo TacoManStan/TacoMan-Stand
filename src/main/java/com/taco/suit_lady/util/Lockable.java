@@ -18,7 +18,7 @@ import java.util.function.Supplier;
 @SuppressWarnings("unchecked") public interface Lockable
         extends Lock {
     
-    @NotNull Lock getLock();
+    @Nullable Lock getLock();
     
     /* *************************************************************************** *
      *                                                                             *

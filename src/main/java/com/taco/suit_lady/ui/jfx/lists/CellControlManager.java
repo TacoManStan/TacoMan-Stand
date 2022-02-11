@@ -10,6 +10,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.TreeCell;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
@@ -31,7 +32,7 @@ import java.util.function.Function;
  * @param <C> The type of {@link CellController} assigned to the {@link IndexedCell}.
  */
 // TO-EXPAND
-public class CellControlManager<T, C extends CellController<T>> {
+public class CellControlManager<T extends Serializable, C extends CellController<T>> {
     
     private final Lock lock;
     
@@ -57,14 +58,14 @@ public class CellControlManager<T, C extends CellController<T>> {
      *         <blockquote><i>Refer to <code>{@link #getControllerFactory()}</code> for additional information.</i></blockquote>
      *         <ol>
      *             <li>Used to retrieve a new {@link CellController} instance to assign to the {@link #getWrappedCell() Wrapped Cell}.</li>
-     *             <li>The {@link CellController} is automatically {@link #doUpdateItem(Object, boolean) updated} in the {@link TreeCellFX} and {@link ListCellFX} implementations of <code><i>{@link IndexedCell#updateItem(Object, boolean)}</i></code>.</li>
-     *             <li>The {@link #controllerProperty() Controller Property} is automatically {@link #updateController(Object) updated} upon aforementioned changes.</li>
+     *             <li>The {@link CellController} is automatically {@link #doUpdateItem(Serializable, boolean)}  updated} in the {@link TreeCellFX} and {@link ListCellFX} implementations of <code><i>{@link IndexedCell#updateItem(Object, boolean)}</i></code>.</li>
+     *             <li>The {@link #controllerProperty() Controller Property} is automatically {@link #updateController(Serializable) updated} upon aforementioned changes.</li>
      *         </ol>
      *     </li>
      * </ol>
      *
      * @param wrappedCell       The wrapped {@link IndexedCell}.
-     * @param controllerFactory The {@link Function} used to retrieve a new {@link CellController} instance for the {@link #getWrappedCell() Wrapped Cell} whenever <code><i>{@link #doUpdateItem(Object, boolean)}</i></code> is called.
+     * @param controllerFactory The {@link Function} used to retrieve a new {@link CellController} instance for the {@link #getWrappedCell() Wrapped Cell} whenever <code><i>{@link #doUpdateItem(Serializable, boolean)}</i></code> is called.
      */
     public CellControlManager(IndexedCell<T> wrappedCell, Function<T, C> controllerFactory) {
         this.lock = new ReentrantLock();
@@ -96,9 +97,9 @@ public class CellControlManager<T, C extends CellController<T>> {
     }
     
     /**
-     * <p>Returns the {@link Function} used to retrieve the appropriate {@link CellController} for the {@link #getWrappedCell() Wrapped Cell} whenever <code><i>{@link #doUpdateItem(Object, boolean)}</i></code> is called.</p>
+     * <p>Returns the {@link Function} used to retrieve the appropriate {@link CellController} for the {@link #getWrappedCell() Wrapped Cell} whenever <code><i>{@link #doUpdateItem(Serializable, boolean)}</i></code> is called.</p>
      *
-     * @return The {@link Function} used to retrieve the appropriate {@link CellController} for the {@link #getWrappedCell() Wrapped Cell} whenever <code><i>{@link #doUpdateItem(Object, boolean)}</i></code> is called.
+     * @return The {@link Function} used to retrieve the appropriate {@link CellController} for the {@link #getWrappedCell() Wrapped Cell} whenever <code><i>{@link #doUpdateItem(Serializable, boolean)}</i></code> is called.
      */
     protected final Function<T, C> getControllerFactory() {
         return controllerFactory;

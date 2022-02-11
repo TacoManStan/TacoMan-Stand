@@ -12,6 +12,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
 import java.util.concurrent.locks.Lock;
 
 public abstract class ListableContent<
@@ -22,7 +23,7 @@ public abstract class ListableContent<
         EC extends ContentElementController<D, P, SC, EC, H, T>,
         H extends ContentHandler<D, P, SC, EC, H, T>,
         T extends ListableContent<D, C, P, SC, EC, H, T>>
-        extends Content<T, D, C> implements UIDProcessable, Lockable {
+        extends Content<T, D, C> implements UIDProcessable, Lockable, Serializable {
     
     private final H contentHandler;
     

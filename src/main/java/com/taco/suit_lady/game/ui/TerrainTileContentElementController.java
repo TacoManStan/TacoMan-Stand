@@ -82,6 +82,8 @@ public class TerrainTileContentElementController extends CellController<TileTerr
     @Override public Pane root() { return root; }
     
     @Override public void initialize() {
+        super.initialize();
+        
         initImageButtons();
         buttonGroup.selectedButtonProperty().addListener((observable, oldValue, newValue) -> {
             if (oldValue == null && newValue == null)

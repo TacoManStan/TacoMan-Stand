@@ -1,10 +1,10 @@
 package com.taco.suit_lady.ui.jfx.lists;
 
-import com.taco.suit_lady.util.tools.BindingsSL;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
 import com.taco.suit_lady.ui.jfx.lists.treehandler.IndexedCellFXable;
 import com.taco.suit_lady.ui.jfx.lists.treehandler.TreeItemFX;
 import com.taco.suit_lady.ui.ui_internal.controllers.CellController;
+import com.taco.suit_lady.util.tools.BindingsSL;
+import com.taco.suit_lady.util.tools.ExceptionsSL;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.ObjectBinding;
@@ -13,6 +13,7 @@ import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
 import java.util.concurrent.locks.Lock;
 import java.util.function.Function;
 
@@ -23,7 +24,7 @@ import java.util.function.Function;
  * @param <C> The type of {@link CellController} used to display the {@link #getItemFX() contents} of this {@link TreeCellFX} object.
  */
 // TO-EXPAND
-public class TreeCellFX<T, C extends CellController<T>> extends TreeCell<T>
+public class TreeCellFX<T extends Serializable, C extends CellController<T>> extends TreeCell<T>
         implements IndexedCellFXable<T, C> {
     
     private final Lock lock;
@@ -36,7 +37,7 @@ public class TreeCellFX<T, C extends CellController<T>> extends TreeCell<T>
     /**
      * <p>Constructs a new {@link TreeCellFX} instance managed by the {@link CellControlManager} constructed by the specified {@link Function cellControlManagerFactory} object.</p>
      *
-     * @param cellControlManagerFactory The {@link Function} called to construct a new {@link CellControlManager} to display and manage the new the {@link #getItemFX() content} of this {@link TreeCellFX} whenever the {@link #getItemFX() content} is {@link #updateItem(Object, boolean) changed}.
+     * @param cellControlManagerFactory The {@link Function} called to construct a new {@link CellControlManager} to display and manage the new the {@link #getItemFX() content} of this {@link TreeCellFX} whenever the {@link #getItemFX() content} is {@link #updateItem(Serializable, boolean) changed}.
      *
      * @throws NullPointerException If the specified {@link Function cellControlManagerFactory} is {@code null}.
      */
@@ -144,7 +145,7 @@ public class TreeCellFX<T, C extends CellController<T>> extends TreeCell<T>
      *     <li>The {@link TreeCell parent} implementation of <code><i>{@link Cell#updateItem(Object, boolean)}</i></code> is executed.</li>
      *     <li>
      *         Passes specified <i>{@link T item}</i> and <i>{@link Boolean empty}</i> parameters to...
-     *         <blockquote><code><i>{@link #getCellControlManager()}<b>.</b>{@link CellControlManager#doUpdateItem(Object, boolean) doUpdateItem}<b>(</b>{@link T item}<b>, </b>{@link Boolean empty}<b>)</b></i></code></blockquote>
+     *         <blockquote><code><i>{@link #getCellControlManager()}<b>.</b>{@link CellControlManager#doUpdateItem(Serializable, boolean) doUpdateItem}<b>(</b>{@link T item}<b>, </b>{@link Boolean empty}<b>)</b></i></code></blockquote>
      *     </li>
      * </ol>
      *

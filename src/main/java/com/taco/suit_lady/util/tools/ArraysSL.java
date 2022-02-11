@@ -22,7 +22,7 @@ public class ArraysSL {
             return null;
         
         for (int i = 0; i < matrix.length; i++)
-            for (int j =0; j < matrix[i].length; j++)
+            for (int j = 0; j < matrix[i].length; j++)
                 matrix[i][j] = elementFactory.apply(new Dimensions(i, j));
         
         return matrix;
@@ -193,12 +193,12 @@ public class ArraysSL {
         return value;
     }
     
-    public static boolean isEmpty(boolean @NotNull [] arr) { return arr.length == 0; }
-    public static boolean isEmpty(int @NotNull [] arr) { return arr.length == 0; }
-    public static boolean isEmpty(double @NotNull [] arr) { return arr.length == 0; }
-    public static boolean isEmpty(float @NotNull [] arr) { return arr.length == 0; }
-    @Contract(pure = true) public static boolean isEmpty(@NotNull Object @NotNull [] arr) { return arr.length == 0; }
-    public static boolean isNullOrEmpty(@Nullable Object @Nullable [] arr) { return arr == null || arr.length == 0; }
+    public static boolean isEmpty(boolean[] arr) { return arr.length == 0; }
+    public static boolean isEmpty(int[] arr) { return arr.length == 0; }
+    public static boolean isEmpty(double[] arr) { return arr.length == 0; }
+    public static boolean isEmpty(float[] arr) { return arr.length == 0; }
+    @Contract(pure = true) public static boolean isEmpty(@NotNull Object[] arr) { return arr.length == 0; }
+    public static boolean isNullOrEmpty(@Nullable Object[] arr) { return arr == null || arr.length == 0; }
     
     /**
      * Filters any duplicates in the specified array and returns a new array
@@ -1568,8 +1568,8 @@ public class ArraysSL {
      * simple class name} of each element of the array, using the
      * default toString method of {@link List}.
      */
-    public static String toString(Object... arr) {
-        return toString(java.util.Arrays.asList(arr));
+    public static String toString(Object[] arr) {
+        return toString(Arrays.asList(arr));
     }
     
     /**

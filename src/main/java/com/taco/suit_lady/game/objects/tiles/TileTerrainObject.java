@@ -19,8 +19,10 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
+
 public class TileTerrainObject
-        implements SpringableWrapper, GameComponent, UIDProcessable, JObject, JLoadable {
+        implements SpringableWrapper, Serializable, GameComponent, UIDProcessable, JObject, JLoadable {
     
     private final TileModel owner;
     

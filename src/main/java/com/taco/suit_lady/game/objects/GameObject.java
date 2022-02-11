@@ -28,6 +28,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import java.io.IOException;
+import java.io.ObjectStreamException;
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
@@ -268,6 +271,14 @@ public class GameObject
                ", objID='" + objID + '\'' +
                '}';
     }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="> Serialization">
+    
+    @Serial private void writeObject(java.io.ObjectOutputStream out) throws IOException { }
+    @Serial private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException { }
+    @Serial private void readObjectNoData() throws ObjectStreamException { }
     
     //</editor-fold>
     

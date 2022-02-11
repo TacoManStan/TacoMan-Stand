@@ -6,12 +6,11 @@ import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ConfigurableApplicationContext;
 
-public abstract class UIPageController<T extends UIPage<?>> extends Controller
-{
+public abstract class UIPageController<T extends UIPage<?>> extends Controller {
+    
     private T page; // Functionally Final
     
-    protected UIPageController(FxWeaver weaver, ConfigurableApplicationContext ctx)
-    {
+    protected UIPageController(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         super(weaver, ctx);
     }
     
@@ -20,10 +19,7 @@ public abstract class UIPageController<T extends UIPage<?>> extends Controller
      *
      * @return The {@link UIPage} that is controller by this {@link UIPageController}.
      */
-    public @NotNull T getPage()
-    {
-        return page;
-    }
+    public @NotNull T getPage() { return page; }
     
     /**
      * <p>Sets the {@link UIPage} whose UI is controlled by this {@link UIPageController} to the specified value.</p>
@@ -36,8 +32,7 @@ public abstract class UIPageController<T extends UIPage<?>> extends Controller
      *
      * @param page The {@link UIPage} this {@link UIPageController} is to control.
      */
-    protected void setPage(@NotNull UIPage<?> page)
-    {
+    protected void setPage(@NotNull UIPage<?> page) {
         try {
             this.page = (T) ExceptionsSL.nullCheck(page, "UIPage");
         } catch (Exception e) {

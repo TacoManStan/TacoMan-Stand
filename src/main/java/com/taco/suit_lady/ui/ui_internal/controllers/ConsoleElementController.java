@@ -21,8 +21,8 @@ import org.springframework.stereotype.Component;
 @Component
 @FxmlView("/fxml/console/console_element.fxml")
 @Scope("prototype")
-public final class ConsoleElementController extends CellController<WrappingTreeCellData<ConsoleMessageable<?>>>
-{
+public final class ConsoleElementController extends CellController<WrappingTreeCellData<ConsoleMessageable<?>>> {
+    
     //<editor-fold desc="Static">
     
     private static final Color TEXT_COLOR = new Color(153D / 255D, 153D / 255D, 153D / 255D, 1D);
@@ -45,22 +45,21 @@ public final class ConsoleElementController extends CellController<WrappingTreeC
     private Label timestampLabel;
     private Label messageLabel;
     
-    public ConsoleElementController(FxWeaver weaver, ConfigurableApplicationContext ctx)
-    {
+    public ConsoleElementController(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         super(weaver, ctx);
     }
     
     @Override
-    public Pane root()
-    {
+    public Pane root() {
         return root;
     }
     
     //<editor-fold desc="Initialize">
     
     @Override
-    public void initialize()
-    {
+    public void initialize() {
+        super.initialize();
+        
         this.settingsButton = new ImageButton(
                 this,
                 "Details",
@@ -84,8 +83,7 @@ public final class ConsoleElementController extends CellController<WrappingTreeC
     //<editor-fold desc="Implementation">
     
     @Override
-    protected void onContentChange(WrappingTreeCellData<ConsoleMessageable<?>> oldCellData, WrappingTreeCellData<ConsoleMessageable<?>> newCellData)
-    {
+    protected void onContentChange(WrappingTreeCellData<ConsoleMessageable<?>> oldCellData, WrappingTreeCellData<ConsoleMessageable<?>> newCellData) {
         //        ConsoleBB.CONSOLE.print(
         //                "Content Changed: "
         //                + "[" + oldCellData + "]"
@@ -111,14 +109,12 @@ public final class ConsoleElementController extends CellController<WrappingTreeC
     
     //<editor-fold desc="Helpers">
     
-    private void onDetails()
-    {
+    private void onDetails() {
         ConsoleBB.CONSOLE.dev("Settings ImageButton Pressed");
         ConsoleBB.CONSOLE.dev("Let's type out a really long message as a test to see what the console will do when the message is too long to fit inside of the allocated console area.");
     }
     
-    private void addLabel(Label label)
-    {
+    private void addLabel(Label label) {
         ToolsFX.runFX(() -> contentHBox.getChildren().add(label), true);
     }
     

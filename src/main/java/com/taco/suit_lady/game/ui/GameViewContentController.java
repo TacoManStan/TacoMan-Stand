@@ -1,9 +1,13 @@
 package com.taco.suit_lady.game.ui;
 
 import com.taco.suit_lady.game.interfaces.GameComponent;
+import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.ui.ContentController;
+import com.taco.suit_lady.ui.ui_internal.controllers.CellController;
+import com.taco.suit_lady.ui.ui_internal.drag_and_drop.DragAndDropHandler;
 import com.taco.suit_lady.util.Lockable;
 import javafx.fxml.FXML;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -36,11 +40,32 @@ public class GameViewContentController extends ContentController<GameViewContent
     
     //
     
+    private DragAndDropHandler<GameObject> testDDHandler;
     
     public GameViewContentController(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         super(weaver, ctx);
         this.lock = new ReentrantLock();
     }
+    
+    //<editor-fold desc="--- INITIALIZATION ---">
+    
+    @Override public void initialize() {
+        super.initialize();
+        
+        this.testDDHandler = new DragAndDropHandler<>(this, getLock(), root(), CellController.TEST_FORMAT, TransferMode.MOVE);
+        testDDHandler.init();
+    
+        
+        testDDHandler.setDragDetectedHandler(eventData -> System.out.println("Drag " + eventData.eventType() + " for " + getContent()));
+        testDDHandler.setDragDoneHandler(eventData -> System.out.println("Drag " + eventData.eventType() + " for " + getContent()));
+    
+        testDDHandler.setDragOverHandler(eventData -> System.out.println("Drag " + eventData.eventType() + " for " + getContent()));
+        testDDHandler.setDragEnteredHandler(eventData -> System.out.println("Drag " + eventData.eventType() + " for " + getContent()));
+        testDDHandler.setDragExitedHandler(eventData -> System.out.println("Drag " + eventData.eventType() + " for " + getContent()));
+        testDDHandler.setDragDroppedHandler(eventData -> System.out.println("Drag " + eventData.eventType() + " for " + getContent()));
+    }
+    
+    //</editor-fold>
     
     //<editor-fold desc="--- PROPERTIES ---">
     
@@ -60,8 +85,6 @@ public class GameViewContentController extends ContentController<GameViewContent
     
     @Override public Pane root() { return root; }
     @Override public AnchorPane getContentPane() { return mapPane; }
-    
-    @Override public void initialize() { super.initialize(); }
     
     //</editor-fold>
 }

@@ -7,13 +7,12 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ConfigurableApplicationContext;
 
 public abstract class Controller
-        implements Springable
-{
+        implements Springable {
+    
     private final FxWeaver weaver;
     private final ConfigurableApplicationContext ctx;
     
-    public Controller(FxWeaver weaver, ConfigurableApplicationContext ctx)
-    {
+    public Controller(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         this.weaver = weaver;
         this.ctx = ctx;
     }
@@ -23,14 +22,12 @@ public abstract class Controller
     //<editor-fold desc="--- SPRING ---">
     
     @Override
-    public @NotNull FxWeaver weaver()
-    {
+    public @NotNull FxWeaver weaver() {
         return this.weaver;
     }
     
     @Override
-    public @NotNull ConfigurableApplicationContext ctx()
-    {
+    public @NotNull ConfigurableApplicationContext ctx() {
         return this.ctx;
     }
     
