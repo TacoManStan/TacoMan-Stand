@@ -1,6 +1,5 @@
 package com.taco.suit_lady.ui.ui_internal.drag_and_drop;
 
-import com.taco.suit_lady.ui.ui_internal.controllers.CellController;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
@@ -73,13 +72,12 @@ public class DragAndDropHandler<T extends Serializable>
     
     public final DragAndDropHandler<T> init() {
         getOwner().setOnDragDetected(this::onDragDetected);
-        getOwner().setOnDragDone(event -> onDragEvent(event, getDragDoneHandler(), DragEventType.DONE));
+        getOwner().setOnDragDone(this::onDragDone);
         
         getOwner().setOnDragOver(this::onDragOver);
-        getOwner().setOnDragEntered(event -> onDragEvent(event, getDragEnteredHandler(), DragEventType.ENTERED));
-        getOwner().setOnDragExited(event -> onDragEvent(event, getDragExitedHandler(), DragEventType.EXITED));
         getOwner().setOnDragDropped(this::onDragDropped);
-        
+        getOwner().setOnDragEntered(this::onDragEntered);
+        getOwner().setOnDragExited(this::onDragExited);
         
         return this;
     }
@@ -96,7 +94,6 @@ public class DragAndDropHandler<T extends Serializable>
     public final @NotNull ReadOnlyObjectProperty<T> valueProperty() { return valueProperty.getReadOnlyProperty(); }
     public final @Nullable T getValue() { return valueProperty.get(); }
     public final @Nullable T setValue(@Nullable T newValue) { return PropertiesSL.setProperty(valueProperty, newValue); }
-    
     
     //<editor-fold desc="> Drag Handler Properties">
     
@@ -140,7 +137,8 @@ public class DragAndDropHandler<T extends Serializable>
     
     //<editor-fold desc="--- INTERNAL ---">
     
-    //Note: SyncFX might be unnecessary overhead
+    //<editor-fold desc="> Drag Event Handling">
+    
     private void onDragDetected(@NotNull MouseEvent event) {
         syncFX(() -> {
             final T value = getValue();
@@ -159,6 +157,11 @@ public class DragAndDropHandler<T extends Serializable>
         });
     }
     
+    private void onDragDone(@NotNull DragEvent event) {
+        syncFX(() -> ObjectsSL.doIfNonNull(this::getDragDoneHandler, handler -> handler.accept(new DragEventData<>(event, this, DragEventType.DONE))));
+    }
+    
+    //
     
     private void onDragOver(@NotNull DragEvent event) {
         syncFX(() -> {
@@ -185,6 +188,18 @@ public class DragAndDropHandler<T extends Serializable>
         });
     }
     
+    
+    private void onDragEntered(@NotNull DragEvent event) {
+        syncFX(() -> ObjectsSL.doIfNonNull(this::getDragEnteredHandler, handler -> handler.accept(new DragEventData<>(event, this, DragEventType.ENTERED))));
+    }
+    
+    private void onDragExited(@NotNull DragEvent event) {
+        syncFX(() -> ObjectsSL.doIfNonNull(this::getDragExitedHandler, handler -> handler.accept(new DragEventData<>(event, this, DragEventType.EXITED))));
+    }
+    
+    //
+    
+    @Deprecated
     private void onDragEvent(@NotNull DragEvent event, @Nullable Consumer<DragEventData<T, DragEvent>> eventHandler, @NotNull DragEventType eventType) {
         ObjectsSL.doIfNonNull(
                 () -> eventHandler,
@@ -192,6 +207,8 @@ public class DragAndDropHandler<T extends Serializable>
                 handler -> System.err.println("WARNING: Drag Handler is null [ " + event + " ]  |  [ " + eventType + " ]"));
         event.consume();
     }
+    
+    //</editor-fold>
     
     //</editor-fold>
 }
