@@ -12,6 +12,7 @@ import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.ArraysSL;
 import com.taco.suit_lady.util.tools.BindingsSL;
+import com.taco.suit_lady.util.tools.ObjectsSL;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import com.taco.tacository.json.JElement;
 import com.taco.tacository.json.JLoadable;
@@ -111,6 +112,8 @@ public class GameObject
         this.occupiedTilesList = new SimpleListProperty<>(FXCollections.observableArrayList());
     }
     
+    //<editor-fold desc="--- INITIALIZATION ---">
+    
     public final GameObject init() {
         getModel().init();
         
@@ -123,24 +126,9 @@ public class GameObject
             ArraysSL.iterateMatrix(tile -> oldTiles.add(tile), oldValue);
             ArraysSL.iterateMatrix(tile -> newTiles.add(tile), newValue);
             
-            oldTiles.forEach(tile -> {
-                if (!newTiles.contains(tile))
-                    tile.getOccupyingObjects().remove(this);
-            });
-            newTiles.forEach(tile -> {
-                if (!tile.getOccupyingObjects().contains(this))
-                    tile.getOccupyingObjects().add(this);
-            });
+            oldTiles.forEach(tile -> ObjectsSL.doIf(() -> tile, t -> !newTiles.contains(t), t -> t.getOccupyingObjects().remove(this)));
+            newTiles.forEach(tile -> ObjectsSL.doIf(() -> tile, t -> !t.getOccupyingObjects().contains(this), t -> t.getOccupyingObjects().add(this)));
         });
-        
-        //        this.occupiedTilesBinding.addListener((observable, oldValue, newValue) -> {
-        //
-        //
-        //            ArraysSL.iterateMatrix((dimensions, tile) -> {
-        //                tile.getOccupyingObjects().remove(this);
-        //            }, oldValue);
-        //            ArraysSL.iterateMatrix(tile -> tile.getOccupyingObjects().add(this), newValue);
-        //        });
         
         return this;
     }
@@ -148,6 +136,8 @@ public class GameObject
     private void initAttributes() {
         attributes().addAttribute(MoveCommand.ATTRIBUTE_ID, 2D);
     }
+    
+    //</editor-fold>
     
     //<editor-fold desc="--- PROPERTIES ---">
     
