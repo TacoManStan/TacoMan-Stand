@@ -190,6 +190,7 @@ public class DragAndDropHandler<T extends Serializable>
                 () -> eventHandler,
                 handler -> handler.accept(new DragEventData<>(event, this, eventType)),
                 handler -> System.err.println("WARNING: Drag Handler is null [ " + event + " ]  |  [ " + eventType + " ]"));
+        event.consume();
     }
     
     //</editor-fold>

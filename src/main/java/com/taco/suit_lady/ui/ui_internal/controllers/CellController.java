@@ -54,7 +54,6 @@ public abstract class CellController<T extends Serializable> extends Controller 
         this.ddHandler.setDragDetectedHandler(eventData -> System.out.println("Drag " + eventData.eventType() + " for " + getContents()));
         this.ddHandler.setDragDoneHandler(eventData -> System.out.println("Drag " + eventData.eventType() + " for " + getContents()));
         
-        this.ddHandler.setDragOverHandler(eventData -> System.out.println("Drag " + eventData.eventType() + " for " + getContents()));
         this.ddHandler.setDragEnteredHandler(eventData -> System.out.println("Drag " + eventData.eventType() + " for " + getContents()));
         this.ddHandler.setDragExitedHandler(eventData -> System.out.println("Drag " + eventData.eventType() + " for " + getContents()));
         this.ddHandler.setDragDroppedHandler(eventData -> System.out.println("Drag " + eventData.eventType() + " for " + getContents()));

@@ -59,7 +59,6 @@ public class GameViewContentController extends ContentController<GameViewContent
         testDDHandler.setDragDetectedHandler(eventData -> System.out.println("Drag " + eventData.eventType() + " for " + getContent()));
         testDDHandler.setDragDoneHandler(eventData -> System.out.println("Drag " + eventData.eventType() + " for " + getContent()));
     
-        testDDHandler.setDragOverHandler(eventData -> System.out.println("Drag " + eventData.eventType() + " for " + getContent()));
         testDDHandler.setDragEnteredHandler(eventData -> System.out.println("Drag " + eventData.eventType() + " for " + getContent()));
         testDDHandler.setDragExitedHandler(eventData -> System.out.println("Drag " + eventData.eventType() + " for " + getContent()));
         testDDHandler.setDragDroppedHandler(eventData -> System.out.println("Drag " + eventData.eventType() + " for " + getContent()));
