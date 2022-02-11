@@ -2,15 +2,12 @@
 
 <?import com.taco.suit_lady.ui.jfx.components.ImagePane?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -169,35 +166,9 @@
                             <GridPane.margin>
                                 <Insets />
                             </GridPane.margin>
-                            <center>
-                                <TreeView fx:id="consoleTree" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="125.0" BorderPane.alignment="CENTER">
-                                    <BorderPane.margin>
-                                        <Insets />
-                                    </BorderPane.margin>
-                                </TreeView>
-                            </center>
-                            <bottom>
-                                <AnchorPane maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" style="-fx-border-color: border-color; -fx-border-width: 1 0 0 0;" BorderPane.alignment="CENTER">
-                                    <BorderPane.margin>
-                                        <Insets />
-                                    </BorderPane.margin>
-                                    <children>
-                                        <BorderPane layoutX="5.0" layoutY="2.0" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
-                                            <center>
-                                                <HBox maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" spacing="10.0">
-                                                    <children>
-                                                        <CheckBox fx:id="consoleTRiBotCheckBox" mnemonicParsing="false" text="TRiBot Messages" />
-                                                        <CheckBox fx:id="consoleClientCheckBox" mnemonicParsing="false" text="Client Messages" />
-                                                        <CheckBox fx:id="consoleScriptCheckBox" mnemonicParsing="false" text="Script Messages" />
-                                                        <Separator orientation="VERTICAL" />
-                                                        <CheckBox fx:id="consoleSelectedInstanceOnlyCheckBox" mnemonicParsing="false" text="Selected Instance Only" />
-                                                    </children>
-                                                </HBox>
-                                            </center>
-                                        </BorderPane>
-                                    </children>
-                                </AnchorPane>
-                            </bottom>
+                     <center>
+                        <AnchorPane fx:id="dockAnchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="150.0" BorderPane.alignment="CENTER" />
+                     </center>
                         </BorderPane>
                         <AnchorPane minHeight="-Infinity" prefHeight="25.0" style="-fx-border-color: border-color; -fx-border-width: 1 0 1 0;" GridPane.columnSpan="2147483647" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.vgrow="NEVER">
                             <children>

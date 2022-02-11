@@ -121,7 +121,7 @@ public class AppController
     @FXML private GridPane gridPane;
     @FXML private AnchorPane contentAnchorPane;
     
-    @FXML private TreeView<WrappingTreeCellData<ConsoleMessageable<?>>> consoleTree;
+//    @FXML private TreeView<WrappingTreeCellData<ConsoleMessageable<?>>> consoleTree;
     
     @FXML private Label bookshelfTitleLabel;
     
@@ -167,6 +167,9 @@ public class AppController
     @FXML private CheckBox consoleSelectedInstanceOnlyCheckBox;
     
     @FXML private Label upsLabel;
+    
+    
+    @FXML private AnchorPane dockAnchorPane;
     
     // </editor-fold>
     
@@ -606,9 +609,9 @@ public class AppController
         return stage;
     }
     
-    public final TreeView<WrappingTreeCellData<ConsoleMessageable<?>>> getConsoleTree() {
-        return consoleTree;
-    }
+//    public final TreeView<WrappingTreeCellData<ConsoleMessageable<?>>> getConsoleTree() {
+//        return consoleTree;
+//    }
     
     //</editor-fold>
     
