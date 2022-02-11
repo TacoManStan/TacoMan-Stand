@@ -135,6 +135,7 @@ public class GameObject
     
     private void initAttributes() {
         attributes().addAttribute(MoveCommand.ATTRIBUTE_ID, 2D);
+        attributes().addAttribute("health", 500);
     }
     
     //</editor-fold>
