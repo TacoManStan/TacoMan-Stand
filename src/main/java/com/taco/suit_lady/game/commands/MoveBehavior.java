@@ -66,7 +66,7 @@ public class MoveBehavior
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public void tick() {
+    @Override public void tick(double ups) {
         sync(() -> {
             owner.moveX(getDirectionX() * getSpeedPerTick());
             owner.moveY(getDirectionY() * getSpeedPerTick());

@@ -3,8 +3,10 @@ package com.taco.suit_lady.logic;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.timing.Timer;
 import com.taco.suit_lady.util.timing.Timers;
+import com.taco.suit_lady.util.tools.BindingsSL;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
+import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import net.rgielen.fxweaver.core.FxWeaver;
@@ -34,7 +36,7 @@ public class LogiCore
     private final ListProperty<Tickable> tickables;
     private final List<Tickable> empty;
     
-    private final int targetUPS = 144;
+    private final int targetUPS = 60;
     private final ReadOnlyIntegerWrapper upsProperty;
     
     private int tickCount = 0;
@@ -102,7 +104,7 @@ public class LogiCore
     }
     
     private void tick(@NotNull Tickable tickable) {
-        tickable.tick();
+        tickable.tick(getTargetUPS());
         if (tickable.hasSubActions())
             tickable.subActions().forEach(this::tick);
     }
