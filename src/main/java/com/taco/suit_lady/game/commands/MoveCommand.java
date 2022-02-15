@@ -1,6 +1,7 @@
 package com.taco.suit_lady.game.commands;
 
 import com.taco.suit_lady.game.objects.GameObject;
+import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.logic.Tickable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
@@ -78,10 +79,9 @@ public class MoveCommand
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public void tick(double ups) {
+    @Override public void tick(double ups, @NotNull GameViewContent game) {
         if (!isPaused()) {
-            final double speed = getOwner().attributes().getDoubleValue(MoveCommand.ATTRIBUTE_ID) / ups;
-//            final double speed = 2D;
+            final double speed = (getOwner().attributes().getDoubleValue(MoveCommand.ATTRIBUTE_ID) / ups) * game.getGameMap().getTileSize();
             
             final double xDistance = getTargetX() - getOwner().getLocationX(true);
             final double yDistance = getTargetY() - getOwner().getLocationY(true);

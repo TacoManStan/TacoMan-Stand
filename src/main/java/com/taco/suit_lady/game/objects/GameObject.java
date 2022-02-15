@@ -134,7 +134,7 @@ public class GameObject
     }
     
     private void initAttributes() {
-        attributes().addDoubleAttribute(MoveCommand.ATTRIBUTE_ID, 100);
+        attributes().addDoubleAttribute(MoveCommand.ATTRIBUTE_ID, 10);
         attributes().addAttribute("health", 500);
     }
     
@@ -204,7 +204,7 @@ public class GameObject
     
     //<editor-fold desc="> Logic">
     
-    @Override public void tick(double ups) { }
+    @Override public void tick(double ups, @NotNull GameViewContent game) { }
     
     @Override public boolean hasSubActions() { return true; }
     @Override public final @NotNull List<Tickable> subActions() { return tickables; }

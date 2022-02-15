@@ -1,5 +1,10 @@
 package com.taco.suit_lady.logic;
 
+import com.taco.suit_lady._to_sort._new.initialization.Initializable;
+import com.taco.suit_lady._to_sort._new.initialization.Initializer;
+import com.taco.suit_lady._to_sort._new.initialization.LockMode;
+import com.taco.suit_lady.game.interfaces.GameComponent;
+import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.timing.Timer;
 import com.taco.suit_lady.util.timing.Timers;
@@ -11,6 +16,7 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -20,10 +26,12 @@ import java.util.concurrent.*;
 
 @Component
 public class LogiCore
-        implements Springable {
+        implements Springable, GameComponent, Initializable<LogiCore> {
     
     private final FxWeaver weaver;
     private final ConfigurableApplicationContext ctx;
+    
+    private final ReadOnlyObjectWrapper<GameViewContent> gameProperty;
     
     //
     
@@ -36,7 +44,7 @@ public class LogiCore
     private final ListProperty<Tickable> tickables;
     private final List<Tickable> empty;
     
-    private final int targetUPS = 60;
+    private final int targetUPS = 144;
     private final ReadOnlyIntegerWrapper upsProperty;
     
     private int tickCount = 0;
@@ -46,6 +54,10 @@ public class LogiCore
     public LogiCore(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         this.weaver = weaver;
         this.ctx = ctx;
+        
+        this.gameProperty = new ReadOnlyObjectWrapper<>();
+        
+        //
         
         this.sequentialExecutor = new ThreadPoolExecutor(1, 1, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
         this.scheduledExecutor = new ScheduledThreadPoolExecutor(10);
@@ -62,6 +74,13 @@ public class LogiCore
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
+    
+    public final @NotNull ReadOnlyObjectProperty<GameViewContent> readOnlyGameProperty() {
+        return gameProperty.getReadOnlyProperty();
+    }
+    @Override public final @NotNull GameViewContent getGame() { return gameProperty.get(); }
+    
+    //
     
     public final @NotNull ListProperty<Tickable> getTickables() { return tickables; }
     public final @NotNull List<Tickable> getEmpty() { return empty; }
@@ -84,18 +103,6 @@ public class LogiCore
     
     public long upsRefreshTime = 2000;
     
-    public final void init() {
-        gameLoopExecutor.scheduleAtFixedRate(this::tick, 0, (long) 1000000 / getTargetUPS(), TimeUnit.MICROSECONDS);
-        timer.setTimeout(upsRefreshTime);
-        timer.setOnTimeout(() -> {
-            //            System.out.println("Tick Rate: " + (tickCount / 3));
-            setUps((int) (tickCount / (upsRefreshTime / 1000)));
-            tickCount = 0;
-            timer.reset(upsRefreshTime);
-        });
-        timer.start();
-    }
-    
     private void tick() {
         tickCount++;
         if (timer.isTimedOut())
@@ -104,7 +111,7 @@ public class LogiCore
     }
     
     private void tick(@NotNull Tickable tickable) {
-        tickable.tick(getTargetUPS());
+        tickable.tick(getTargetUPS(), getGame());
         if (tickable.hasSubActions())
             tickable.subActions().forEach(this::tick);
     }
@@ -122,15 +129,29 @@ public class LogiCore
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override
-    public @NotNull FxWeaver weaver() {
-        return weaver;
+    private Initializer<LogiCore> initializer;
+    @Override public final @NotNull Initializer<LogiCore> initializer() {
+        if (initializer == null)
+            initializer = new Initializer<>(this, objects -> {
+                gameProperty.set((GameViewContent) objects[0]);
+                
+                gameLoopExecutor.scheduleAtFixedRate(this::tick, 0, (long) 1000000 / getTargetUPS(), TimeUnit.MICROSECONDS);
+                timer.setTimeout(upsRefreshTime);
+                timer.setOnTimeout(() -> {
+                    //            System.out.println("Tick Rate: " + (tickCount / 3));
+                    setUps((int) (tickCount / (upsRefreshTime / 1000)));
+                    tickCount = 0;
+                    timer.reset(upsRefreshTime);
+                });
+                timer.start();
+            }, null, LockMode.OWNER_OR_NEW_LOCK);
+        return initializer;
     }
     
-    @Override
-    public @NotNull ConfigurableApplicationContext ctx() {
-        return ctx;
-    }
+    //
+    
+    @Override public @NotNull FxWeaver weaver() { return weaver; }
+    @Override public @NotNull ConfigurableApplicationContext ctx() { return ctx; }
     
     //</editor-fold>
 }

@@ -257,7 +257,7 @@ public class AppController
                 event.consume();
         });
         
-        logiCore().init();
+        logiCore().init(getGameContent());
         
         //
         

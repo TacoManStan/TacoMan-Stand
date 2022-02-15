@@ -33,7 +33,7 @@ public class Item
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public void tick(double ups) {
+    @Override public void tick(double ups, @NotNull GameViewContent game) {
         //TODO
     }
     

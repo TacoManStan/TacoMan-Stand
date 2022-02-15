@@ -34,7 +34,7 @@ public final class Initializer<T extends Initializable<T>> {
         //
         
         this.initOperation = initOperation;
-        this.shutdownOperation = shutdownOperation;
+        this.shutdownOperation = shutdownOperation != null ? shutdownOperation : objects -> { };
         
         this.lockMode = lockMode != null ? lockMode : LockMode.getDefault();
     }

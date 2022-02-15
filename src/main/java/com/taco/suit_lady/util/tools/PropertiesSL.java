@@ -1,10 +1,16 @@
 package com.taco.suit_lady.util.tools;
 
+import com.taco.suit_lady.ui.console.Console;
 import javafx.beans.property.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+
 public class PropertiesSL {
     private PropertiesSL() { } //No Instance
+    
+    //<editor-fold desc="--- SET PROPERTY ---">
     
     public static boolean setProperty(@NotNull BooleanProperty property, boolean newValue) {
         boolean oldValue = property.get();
@@ -41,4 +47,6 @@ public class PropertiesSL {
         property.set(newValue);
         return oldValue;
     }
+    
+    //</editor-fold>
 }
