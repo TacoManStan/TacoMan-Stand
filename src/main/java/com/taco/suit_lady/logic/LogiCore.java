@@ -3,7 +3,7 @@ package com.taco.suit_lady.logic;
 import com.taco.suit_lady._to_sort._new.initialization.Initializable;
 import com.taco.suit_lady._to_sort._new.initialization.Initializer;
 import com.taco.suit_lady._to_sort._new.initialization.LockMode;
-import com.taco.suit_lady.game.galaxy.events.triggers.TriggerManager;
+import com.taco.suit_lady.logic.triggers.TriggerManager;
 import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.logic.legacy.TickableMk1;

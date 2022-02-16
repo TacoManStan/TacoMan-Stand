@@ -1,4 +1,4 @@
-package com.taco.suit_lady.game.galaxy.events.triggers;
+package com.taco.suit_lady.logic.triggers;
 
 import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.interfaces.WrappedGameComponent;

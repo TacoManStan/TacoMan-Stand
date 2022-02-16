@@ -1,4 +1,4 @@
-package com.taco.suit_lady.game.galaxy.events.triggers;
+package com.taco.suit_lady.logic.triggers;
 
 import com.taco.suit_lady.game.interfaces.WrappedGameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
@@ -7,7 +7,7 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import org.jetbrains.annotations.NotNull;
 
-public class TriggerGroup<T extends TriggerEvent<T>>
+public final class TriggerGroup<T extends TriggerEvent<T>>
         implements WrappedGameComponent {
     
     private final TriggerManager manager;
@@ -18,20 +18,27 @@ public class TriggerGroup<T extends TriggerEvent<T>>
         this.triggers = new SimpleListProperty<>(FXCollections.observableArrayList());
     }
     
-    protected void trigger(@NotNull T event) {
-        triggers.forEach(trigger -> trigger.trigger(event));
-    }
+    //<editor-fold desc="--- LOGIC ---">
     
-    //<editor-fold desc="--- ABSTRACT ---">
+    void trigger(@NotNull T event) { triggers.forEach(trigger -> process(event, trigger)); }
     
-    protected boolean register(@NotNull Trigger<T> trigger) { return triggers.add(trigger); }
-    protected boolean unregister(@NotNull Trigger<T> trigger) { return triggers.remove(trigger); }
+    boolean register(@NotNull Trigger<T> trigger) { return triggers.add(trigger); }
+    boolean unregister(@NotNull Trigger<T> trigger) { return triggers.remove(trigger); }
     
     //</editor-fold>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public final @NotNull GameViewContent getGame() { return manager.getGame(); }
+    @Override public @NotNull GameViewContent getGame() { return manager.getGame(); }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- INTERNAL ---">
+    
+    private void process(@NotNull T event, @NotNull Trigger<T> trigger) {
+        if (trigger.test(event))
+            trigger.trigger(event);
+    }
     
     //</editor-fold>
 }
