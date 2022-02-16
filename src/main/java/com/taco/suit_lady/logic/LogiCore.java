@@ -3,7 +3,7 @@ package com.taco.suit_lady.logic;
 import com.taco.suit_lady._to_sort._new.initialization.Initializable;
 import com.taco.suit_lady._to_sort._new.initialization.Initializer;
 import com.taco.suit_lady._to_sort._new.initialization.LockMode;
-import com.taco.suit_lady.logic.triggers.TriggerManager;
+import com.taco.suit_lady.logic.triggers.TriggerEventManager;
 import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.logic.legacy.TickableMk1;
@@ -50,7 +50,7 @@ public class LogiCore
     
     private final Timer timer;
     
-    private final TriggerManager triggers;
+    private final TriggerEventManager triggers;
     
     public LogiCore(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         this.weaver = weaver;
@@ -74,7 +74,7 @@ public class LogiCore
         
         this.timer = Timers.newStopwatch(true);
         
-        this.triggers = new TriggerManager(this);
+        this.triggers = new TriggerEventManager(this);
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">
@@ -109,7 +109,7 @@ public class LogiCore
     }
     @Override public final @NotNull GameViewContent getGame() { return gameProperty.get(); }
     
-    public final @NotNull TriggerManager triggers() { return triggers; }
+    public final @NotNull TriggerEventManager triggers() { return triggers; }
     
     
     //

@@ -10,10 +10,10 @@ import org.jetbrains.annotations.NotNull;
 public final class TriggerGroup<T extends TriggerEvent<T>>
         implements WrappedGameComponent {
     
-    private final TriggerManager manager;
+    private final TriggerEventManager manager;
     private final ListProperty<Trigger<T>> triggers;
     
-    public TriggerGroup(@NotNull TriggerManager manager) {
+    public TriggerGroup(@NotNull TriggerEventManager manager) {
         this.manager = manager;
         this.triggers = new SimpleListProperty<>(FXCollections.observableArrayList());
     }

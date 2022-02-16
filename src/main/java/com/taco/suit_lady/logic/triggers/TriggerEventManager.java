@@ -7,13 +7,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
-public class TriggerManager
+public class TriggerEventManager
         implements WrappedGameComponent {
     
     private final GameViewContent game;
     private final HashMap<Class<? extends TriggerEvent<?>>, TriggerGroup<?>> triggerMap;
     
-    public TriggerManager(@NotNull GameComponent gameComponent) {
+    public TriggerEventManager(@NotNull GameComponent gameComponent) {
         this.game = gameComponent.getGame();
         this.triggerMap = new HashMap<>();
     }
