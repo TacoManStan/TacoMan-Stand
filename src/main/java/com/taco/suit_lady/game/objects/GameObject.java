@@ -5,6 +5,7 @@ import com.taco.suit_lady.game.Entity;
 import com.taco.suit_lady.game.commands.MoveCommand;
 import com.taco.suit_lady.game.objects.tiles.GameTile;
 import com.taco.suit_lady.game.ui.GameViewContent;
+import com.taco.suit_lady.logic.LogiCore;
 import com.taco.suit_lady.logic.Tickable;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.UIDProcessable;
@@ -134,7 +135,7 @@ public class GameObject
     }
     
     private void initAttributes() {
-        attributes().addDoubleAttribute(MoveCommand.ATTRIBUTE_ID, 10);
+        attributes().addDoubleAttribute(MoveCommand.ATTRIBUTE_ID, .15);
         attributes().addAttribute("health", 500);
     }
     
@@ -204,7 +205,7 @@ public class GameObject
     
     //<editor-fold desc="> Logic">
     
-    @Override public void tick(double ups, @NotNull GameViewContent game) { }
+    @Override public void tick(@NotNull LogiCore logiCore) { }
     
     @Override public boolean hasSubActions() { return true; }
     @Override public final @NotNull List<Tickable> subActions() { return tickables; }

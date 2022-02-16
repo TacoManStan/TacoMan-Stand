@@ -1,21 +1,15 @@
 package com.taco.suit_lady.game.commands;
 
 import com.taco.suit_lady.game.objects.GameObject;
-import com.taco.suit_lady.game.ui.GameViewContent;
+import com.taco.suit_lady.logic.LogiCore;
 import com.taco.suit_lady.logic.Tickable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
-import com.taco.suit_lady.util.tools.BindingsSL;
 import com.taco.suit_lady.util.tools.PropertiesSL;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
-import javafx.beans.binding.DoubleBinding;
-import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ObservableIntegerValue;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -79,9 +73,9 @@ public class MoveCommand
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public void tick(double ups, @NotNull GameViewContent game) {
+    @Override public void tick(@NotNull LogiCore logiCore) {
         if (!isPaused()) {
-            final double speed = (getOwner().attributes().getDoubleValue(MoveCommand.ATTRIBUTE_ID) / ups) * game.getGameMap().getTileSize();
+            final double speed = (getOwner().attributes().getDoubleValue(MoveCommand.ATTRIBUTE_ID) * logiCore.getUPSMultiplier()) * logiCore.getGameMap().getTileSize();
             
             final double xDistance = getTargetX() - getOwner().getLocationX(true);
             final double yDistance = getTargetY() - getOwner().getLocationY(true);

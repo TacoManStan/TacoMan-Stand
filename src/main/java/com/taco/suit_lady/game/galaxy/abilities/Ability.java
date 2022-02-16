@@ -1,4 +1,7 @@
 package com.taco.suit_lady.game.galaxy.abilities;
 
-public abstract class Ability {
+import com.taco.suit_lady.game.foundational.GameObjectComponent;
+
+public abstract class Ability
+        implements GameObjectComponent {
 }

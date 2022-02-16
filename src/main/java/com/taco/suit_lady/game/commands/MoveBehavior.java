@@ -1,5 +1,6 @@
 package com.taco.suit_lady.game.commands;
 
+import com.taco.suit_lady.logic.LogiCore;
 import com.taco.suit_lady.logic.Tickable;
 import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.objects.GameObject;
@@ -66,7 +67,7 @@ public class MoveBehavior
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public void tick(double ups, @NotNull GameViewContent game) {
+    @Override public void tick(@NotNull LogiCore logiCore) {
         sync(() -> {
             owner.moveX(getDirectionX() * getSpeedPerTick());
             owner.moveY(getDirectionY() * getSpeedPerTick());

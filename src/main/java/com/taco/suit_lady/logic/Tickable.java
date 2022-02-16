@@ -10,10 +10,11 @@ import java.util.List;
 public interface Tickable
         extends Springable {
     
-    void tick(double ups, @NotNull GameViewContent game);
+    void tick(@NotNull LogiCore logiCore);
     
     //
     
     default boolean hasSubActions() { return false; }
     default @Nullable List<Tickable> subActions() { return null; }
+    default boolean autoRemove() { return false; }
 }

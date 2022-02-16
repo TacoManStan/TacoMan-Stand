@@ -8,15 +8,12 @@ import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.timing.Timer;
 import com.taco.suit_lady.util.timing.Timers;
-import com.taco.suit_lady.util.tools.BindingsSL;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
-import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -45,6 +42,7 @@ public class LogiCore
     private final List<Tickable> empty;
     
     private final int targetUPS = 144;
+    private final int baselineUPS = 60;
     private final ReadOnlyIntegerWrapper upsProperty;
     
     private int tickCount = 0;
@@ -73,6 +71,31 @@ public class LogiCore
         this.timer = Timers.newStopwatch(true);
     }
     
+    //<editor-fold desc="--- INITIALIZATION ---">
+    
+    private void startup(@NotNull Object[] params) {
+        gameProperty.set((GameViewContent) params[0]);
+        
+        initExecutors();
+        initTimer();
+    }
+    
+    private void initExecutors() {
+        gameLoopExecutor.scheduleAtFixedRate(this::tick, 0, (long) 1000000 / getTargetUPS(), TimeUnit.MICROSECONDS);
+    }
+    
+    private void initTimer() {
+        timer.setTimeout(upsRefreshTime);
+        timer.setOnTimeout(() -> {
+            setUps((int) (tickCount / (upsRefreshTime / 1000)));
+            tickCount = 0;
+            timer.reset(upsRefreshTime);
+        });
+        timer.start();
+    }
+    
+    //</editor-fold>
+    
     //<editor-fold desc="--- PROPERTIES ---">
     
     public final @NotNull ReadOnlyObjectProperty<GameViewContent> readOnlyGameProperty() {
@@ -91,6 +114,8 @@ public class LogiCore
     //
     
     public final int getTargetUPS() { return targetUPS; }
+    public final int getBaselineUPS() { return baselineUPS; }
+    public final double getUPSMultiplier() { return (double) getBaselineUPS() / (double) getTargetUPS(); }
     
     public final @NotNull ReadOnlyIntegerProperty readOnlyUpsProperty() { return upsProperty.getReadOnlyProperty(); }
     protected final @NotNull ReadOnlyIntegerWrapper upsProperty() { return upsProperty; }
@@ -111,11 +136,10 @@ public class LogiCore
     }
     
     private void tick(@NotNull Tickable tickable) {
-        tickable.tick(getTargetUPS(), getGame());
+        tickable.tick(this);
         if (tickable.hasSubActions())
             tickable.subActions().forEach(this::tick);
     }
-    
     
     //</editor-fold>
     
@@ -132,19 +156,11 @@ public class LogiCore
     private Initializer<LogiCore> initializer;
     @Override public final @NotNull Initializer<LogiCore> initializer() {
         if (initializer == null)
-            initializer = new Initializer<>(this, objects -> {
-                gameProperty.set((GameViewContent) objects[0]);
-                
-                gameLoopExecutor.scheduleAtFixedRate(this::tick, 0, (long) 1000000 / getTargetUPS(), TimeUnit.MICROSECONDS);
-                timer.setTimeout(upsRefreshTime);
-                timer.setOnTimeout(() -> {
-                    //            System.out.println("Tick Rate: " + (tickCount / 3));
-                    setUps((int) (tickCount / (upsRefreshTime / 1000)));
-                    tickCount = 0;
-                    timer.reset(upsRefreshTime);
-                });
-                timer.start();
-            }, null, LockMode.OWNER_OR_NEW_LOCK);
+            initializer = new Initializer<>(
+                    this,
+                    this::startup,
+                    null,
+                    LockMode.OWNER_OR_NEW_LOCK);
         return initializer;
     }
     
