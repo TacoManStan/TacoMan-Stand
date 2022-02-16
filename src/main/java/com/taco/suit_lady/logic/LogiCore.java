@@ -38,8 +38,8 @@ public class LogiCore
     //
     
     private final ScheduledThreadPoolExecutor gameLoopExecutor;
-    private final ListProperty<Tickable> tickables;
-    private final List<Tickable> empty;
+    private final ListProperty<TickableMk1> tickables;
+    private final List<TickableMk1> empty;
     
     private final int targetUPS = 144;
     private final int baselineUPS = 60;
@@ -105,11 +105,11 @@ public class LogiCore
     
     //
     
-    public final @NotNull ListProperty<Tickable> getTickables() { return tickables; }
-    public final @NotNull List<Tickable> getEmpty() { return empty; }
+    public final @NotNull ListProperty<TickableMk1> getTickables() { return tickables; }
+    public final @NotNull List<TickableMk1> getEmpty() { return empty; }
     
-    public final boolean submit(@NotNull Tickable tickable) { return tickables.add(tickable); }
-    public final boolean remove(@NotNull Tickable tickable) { return tickables.remove(tickable); }
+    public final boolean submit(@NotNull TickableMk1 tickable) { return tickables.add(tickable); }
+    public final boolean remove(@NotNull TickableMk1 tickable) { return tickables.remove(tickable); }
     
     //
     
@@ -135,7 +135,7 @@ public class LogiCore
         tickables.forEach(this::tick);
     }
     
-    private void tick(@NotNull Tickable tickable) {
+    private void tick(@NotNull TickableMk1 tickable) {
         tickable.tick(this);
         if (tickable.hasSubActions())
             tickable.subActions().forEach(this::tick);

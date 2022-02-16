@@ -1,7 +1,7 @@
 package com.taco.suit_lady.game.commands;
 
 import com.taco.suit_lady.logic.LogiCore;
-import com.taco.suit_lady.logic.Tickable;
+import com.taco.suit_lady.logic.TickableMk1;
 import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.game.ui.GameViewContent;
@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.locks.Lock;
 
 public class MoveBehavior
-        implements SpringableWrapper, Lockable, GameComponent, Tickable {
+        implements SpringableWrapper, Lockable, GameComponent, TickableMk1 {
     
     private final GameObject owner;
     

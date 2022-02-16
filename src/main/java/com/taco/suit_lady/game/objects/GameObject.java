@@ -6,7 +6,7 @@ import com.taco.suit_lady.game.commands.MoveCommand;
 import com.taco.suit_lady.game.objects.tiles.GameTile;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.logic.LogiCore;
-import com.taco.suit_lady.logic.Tickable;
+import com.taco.suit_lady.logic.TickableMk1;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
@@ -73,7 +73,7 @@ public class GameObject
     
     private final MoveCommand command;
     
-    private final ObservableList<Tickable> tickables;
+    private final ObservableList<TickableMk1> tickables;
     
     public GameObject(@NotNull GameViewContent content, @Nullable ReentrantLock lock) {
         this.springable = content.asStrict();
@@ -208,7 +208,7 @@ public class GameObject
     @Override public void tick(@NotNull LogiCore logiCore) { }
     
     @Override public boolean hasSubActions() { return true; }
-    @Override public final @NotNull List<Tickable> subActions() { return tickables; }
+    @Override public final @NotNull List<TickableMk1> subActions() { return tickables; }
     
     //</editor-fold>
     

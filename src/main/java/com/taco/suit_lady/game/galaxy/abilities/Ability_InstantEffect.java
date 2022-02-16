@@ -31,5 +31,9 @@ public class Ability_InstantEffect extends Ability {
     
     }
     
+    @Override public boolean autoRemove() {
+    
+    }
+    
     //</editor-fold>
 }

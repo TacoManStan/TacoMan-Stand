@@ -2,7 +2,7 @@ package com.taco.suit_lady.game.commands;
 
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.logic.LogiCore;
-import com.taco.suit_lady.logic.Tickable;
+import com.taco.suit_lady.logic.TickableMk1;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.PropertiesSL;
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public class MoveCommand
-        implements SpringableWrapper, Tickable {
+        implements SpringableWrapper, TickableMk1 {
     
     public static final String ATTRIBUTE_ID = "move-speed";
     
