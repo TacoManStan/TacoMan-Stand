@@ -63,6 +63,9 @@ public class GameObject
     private final DoubleBinding xLocationCenteredBinding;
     private final DoubleBinding yLocationCenteredBinding;
     
+    private final ObjectBinding<Point2D> locationBinding;
+    private final ObjectBinding<Point2D> locationCenteredBinding;
+    
     private ObjectBinding<GameTile[][]> occupiedTilesBinding = null;
     private final ListProperty<GameTile> occupiedTilesList;
     
@@ -92,6 +95,9 @@ public class GameObject
         
         this.xLocationCenteredBinding = BindingsSL.doubleBinding(() -> getLocationX(false) + (getWidth() / 2D), xLocationProperty, widthProperty);
         this.yLocationCenteredBinding = BindingsSL.doubleBinding(() -> getLocationY(false) + (getHeight() / 2D), yLocationProperty, heightProperty);
+        
+        this.locationBinding = BindingsSL.objBinding(() -> new Point2D(getLocationX(false), getLocationY(false)), xLocationProperty, yLocationProperty);
+        this.locationCenteredBinding = BindingsSL.objBinding(() -> new Point2D(getLocationX(true), getLocationY(true)), xLocationProperty, yLocationProperty);
         
         //
         
@@ -127,12 +133,18 @@ public class GameObject
             newTiles.forEach(tile -> ObjectsSL.doIf(() -> tile, t -> !t.getOccupyingObjects().contains(this), t -> t.getOccupyingObjects().add(this)));
         });
         
+        initTriggerEvents();
+        
         return this;
     }
     
     private void initAttributes() {
         attributes().addDoubleAttribute(MoveCommand.ATTRIBUTE_ID, 5); //Measured in tiles/second
         attributes().addAttribute("health", 500);
+    }
+    
+    private void initTriggerEvents() {
+    
     }
     
     public void launchMissileTest() {
@@ -175,6 +187,14 @@ public class GameObject
     public final double moveTileY(@NotNull Number amount) { return setLocationY(getLocationY(false) + (amount.doubleValue() * getGameMap().getTileSize())); }
     
     
+    public final ObjectBinding<Point2D> locationBinding() { return locationBinding; }
+    public final Point2D getLocation() { return locationBinding.get(); }
+    
+    public final ObjectBinding<Point2D> locationCenteredBinding() { return locationCenteredBinding; }
+    public final Point2D getLocationCentered() { return locationCenteredBinding.get(); }
+    
+    //
+    
     public final ObjectBinding<GameTile[][]> occupiedTilesBinding() { return occupiedTilesBinding; }
     public final GameTile[][] getOccupiedTiles() { return occupiedTilesBinding.get(); }
     
@@ -201,8 +221,6 @@ public class GameObject
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override public @NotNull GameViewContent getGame() { return content; }
-    
-    //
     
     //<editor-fold desc="> Logic">
     
