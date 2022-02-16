@@ -3,9 +3,7 @@ package com.taco.suit_lady.game.commands;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.logic.GameTask;
 import com.taco.suit_lady.logic.LogiCore;
-import com.taco.suit_lady.logic.TickableMk1;
-import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.springable.SpringableWrapper;
+import com.taco.suit_lady.logic.legacy.TickableMk1;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -28,7 +26,7 @@ public class MoveCommand extends GameTask<GameObject>
     private final BooleanProperty pausedProperty;
     
     
-//    private final DoubleBinding speedBinding;
+    //    private final DoubleBinding speedBinding;
     
     public MoveCommand(@NotNull GameObject owner) {
         super(owner);
@@ -39,7 +37,7 @@ public class MoveCommand extends GameTask<GameObject>
         this.pausedProperty = new SimpleBooleanProperty(true);
         
         
-//        this.speedBinding = BindingsSL.directDoubleBinding(owner.attributes().getDoubleProperty(MoveCommand.ATTRIBUTE_ID));
+        //        this.speedBinding = BindingsSL.directDoubleBinding(owner.attributes().getDoubleProperty(MoveCommand.ATTRIBUTE_ID));
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
@@ -61,8 +59,8 @@ public class MoveCommand extends GameTask<GameObject>
     
     //
     
-//    public final @NotNull DoubleBinding speedBinding() { return speedBinding; }
-//    public final double getSpeed() { return speedBinding.get(); }
+    //    public final @NotNull DoubleBinding speedBinding() { return speedBinding; }
+    //    public final double getSpeed() { return speedBinding.get(); }
     
     //</editor-fold>
     
@@ -70,7 +68,10 @@ public class MoveCommand extends GameTask<GameObject>
     
     @Override public void tick(@NotNull LogiCore logiCore) {
         if (!isPaused()) {
-            final double speed = (getOwner().attributes().getDoubleValue(MoveCommand.ATTRIBUTE_ID) * logiCore.getUPSMultiplier()) * logiCore.getGameMap().getTileSize();
+//            final double speed = ((getOwner().attributes().getDoubleValue(MoveCommand.ATTRIBUTE_ID) * logiCore.getUPSMultiplier()) * logiCore.getGameMap().getTileSize()) / 100D;
+//            System.out.println("Pre-Speed: " + logiCore().secondsToTicks(getOwner().attributes().getDoubleValue(MoveCommand.ATTRIBUTE_ID)));
+            final double speed = logiCore().secondsToTicks(getOwner().attributes().getDoubleValue(MoveCommand.ATTRIBUTE_ID) * getGameMap().getTileSize());
+//            System.out.println("Speed: " + speed);
             
             final double xDistance = getTargetX() - getOwner().getLocationX(true);
             final double yDistance = getTargetY() - getOwner().getLocationY(true);
@@ -81,19 +82,21 @@ public class MoveCommand extends GameTask<GameObject>
             final double yMovement = (multiplier * yDistance);
             
             
-//            ToolsFX.runFX(() -> {
-                getOwner().moveX(xMovement);
-                getOwner().moveY(yMovement);
-                if (getOwner().isAtPoint(getLocation(), true))
-                    setPaused(true);
-//            }, true);
+            //            ToolsFX.runFX(() -> {
+            getOwner().moveX(xMovement);
+            getOwner().moveY(yMovement);
+            if (getOwner().isAtPoint(getLocation(), true))
+                setPaused(true);
+            //            }, true);
         }
     }
     
-    @Override protected void execute() {
+    @Override protected void tick() {
         tick(logiCore());
     }
     @Override protected void shutdown() { }
+    
+    @Override protected boolean isDone() { return false; }
     
     //</editor-fold>
 }

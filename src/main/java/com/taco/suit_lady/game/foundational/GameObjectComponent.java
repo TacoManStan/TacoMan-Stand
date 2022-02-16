@@ -3,7 +3,7 @@ package com.taco.suit_lady.game.foundational;
 import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.game.ui.GameViewContent;
-import com.taco.suit_lady.logic.TickableMk1;
+import com.taco.suit_lady.logic.legacy.TickableMk1;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;

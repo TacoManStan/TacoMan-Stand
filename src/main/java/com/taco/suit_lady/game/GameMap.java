@@ -249,7 +249,7 @@ public class GameMap
         
         gameObjects().addAll(JUtil.loadArray(parent, "map-objects", o -> {
             JsonObject jsonObject = (JsonObject) o;
-            GameObject gameObject = new GameObject(getGame(), lock).init();
+            GameObject gameObject = new GameObject(getGame()).init();
             gameObject.load(jsonObject);
             return gameObject;
         }));

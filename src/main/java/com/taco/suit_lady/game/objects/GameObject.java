@@ -3,15 +3,18 @@ package com.taco.suit_lady.game.objects;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.taco.suit_lady.game.Entity;
 import com.taco.suit_lady.game.commands.MoveCommand;
+import com.taco.suit_lady.game.interfaces.GameComponent;
+import com.taco.suit_lady.game.interfaces.WrappedGameComponent;
 import com.taco.suit_lady.game.objects.tiles.GameTile;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.logic.LogiCore;
 import com.taco.suit_lady.logic.TaskManager;
-import com.taco.suit_lady.logic.TickableMk1;
+import com.taco.suit_lady.logic.legacy.TickableMk1;
 import com.taco.suit_lady.logic.TickableMk2;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
+import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.ArraysSL;
 import com.taco.suit_lady.util.tools.BindingsSL;
@@ -41,12 +44,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class GameObject
-        implements Lockable, Entity, JObject, JLoadable, UIDProcessable, TickableMk2<GameObject> {
-    
-    private final StrictSpringable springable;
-    private final ReentrantLock lock;
-    
-    //
+        implements WrappedGameComponent, Entity, JObject, JLoadable, UIDProcessable, TickableMk2<GameObject> {
     
     private final GameViewContent content;
     
@@ -77,13 +75,8 @@ public class GameObject
     
     private final ObservableList<TickableMk1> tickables;
     
-    public GameObject(@NotNull GameViewContent content, @Nullable ReentrantLock lock) {
-        this.springable = content.asStrict();
-        this.lock = lock != null ? lock : new ReentrantLock();
-        
-        //
-        
-        this.content = content;
+    public GameObject(@NotNull GameComponent gameComponent) {
+        this.content = gameComponent.getGame();
         
         this.model = new GameObjectModel(this);
         this.attributes = new AttributeManager(this);
@@ -138,8 +131,12 @@ public class GameObject
     }
     
     private void initAttributes() {
-        attributes().addDoubleAttribute(MoveCommand.ATTRIBUTE_ID, .15);
+        attributes().addDoubleAttribute(MoveCommand.ATTRIBUTE_ID, 5); //Measured in tiles/second
         attributes().addAttribute("health", 500);
+    }
+    
+    public void launchMissileTest() {
+        final GameObject missile = new GameObject(getGame());
     }
     
     //</editor-fold>
@@ -184,6 +181,7 @@ public class GameObject
     
     //</editor-fold>
     
+    public final boolean isAtPoint(@NotNull Point2D point) { return isAtPoint(point, true); }
     public final boolean isAtPoint(@NotNull Point2D point, boolean center) {
         return Math.abs(Math.round((getLocationX(center))) - Math.round(point.getX())) <= 1 && Math.abs(Math.round(getLocationY(center)) - Math.round(point.getY())) <= 1;
     }
@@ -240,12 +238,6 @@ public class GameObject
     //</editor-fold>
     
     //<editor-fold desc="> Generic">
-    
-    @Override public @NotNull FxWeaver weaver() { return springable.weaver(); }
-    @Override public @NotNull ConfigurableApplicationContext ctx() { return springable.ctx(); }
-    
-    @Override public @NotNull Lock getLock() { return lock; }
-    
     
     private UIDProcessor uidProcessor;
     @Override public UIDProcessor getUIDProcessor() {

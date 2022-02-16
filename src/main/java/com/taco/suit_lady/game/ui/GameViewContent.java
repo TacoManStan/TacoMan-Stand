@@ -49,8 +49,8 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         
         this.gameMapProperty = new SimpleObjectProperty<>();
         
-        this.testObject = new GameObject(this, lock);
-        this.testObject2 = new GameObject(this, lock);
+        this.testObject = new GameObject(this);
+        this.testObject2 = new GameObject(this);
     }
     
     public final GameObject getTestObject() { return testObject; }
@@ -129,9 +129,9 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         getCamera().setLocationX((int) testObject.getLocationX(true));
         getCamera().setLocationY((int) testObject.getLocationY(true));
         
-        logiCore().submit(getTestObject());
+//        logiCore().submit(getTestObject());
+//        logiCore().submit(getTestObject2());
         logiCore().submitMk2(getTestObject());
-        logiCore().submit(getTestObject2());
         logiCore().submitMk2(getTestObject2());
 //        logiCore().submit(getTestObject().getCommand());
 //        logiCore().submit(getTestObject2().getCommand());

@@ -5,6 +5,7 @@ import com.taco.suit_lady._to_sort._new.initialization.Initializer;
 import com.taco.suit_lady._to_sort._new.initialization.LockMode;
 import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
+import com.taco.suit_lady.logic.legacy.TickableMk1;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.timing.Timer;
 import com.taco.suit_lady.util.timing.Timers;
@@ -38,18 +39,17 @@ public class LogiCore
     //
     
     private final ScheduledThreadPoolExecutor gameLoopExecutor;
-    private final ListProperty<TickableMk1> tickables;
     private final ListProperty<TickableMk2<?>> tickablesMk2;
-    private final List<TickableMk1> empty;
     private final List<TickableMk2<?>> emptyMk2;
     
     private final int targetUPS = 144;
-    private final int baselineUPS = 60;
     private final ReadOnlyIntegerWrapper upsProperty;
     
     private int tickCount = 0;
     
     private final Timer timer;
+    
+    
     
     public LogiCore(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         this.weaver = weaver;
@@ -65,9 +65,8 @@ public class LogiCore
         //
         
         this.gameLoopExecutor = new ScheduledThreadPoolExecutor(1);
-        this.tickables = new SimpleListProperty<>(FXCollections.observableArrayList());
+        
         this.tickablesMk2 = new SimpleListProperty<>(FXCollections.observableArrayList());
-        this.empty = new ArrayList<>();
         this.emptyMk2 = new ArrayList<>();
         
         this.upsProperty = new ReadOnlyIntegerWrapper();
@@ -108,19 +107,11 @@ public class LogiCore
     @Override public final @NotNull GameViewContent getGame() { return gameProperty.get(); }
     
     //
-    
-    public final @NotNull ListProperty<TickableMk1> getTickables() { return tickables; }
-    public final @NotNull List<TickableMk1> getEmpty() { return empty; }
-    
-    public final boolean submit(@NotNull TickableMk1 tickable) { return tickables.add(tickable); }
     public final boolean submitMk2(@NotNull TickableMk2<?> tickable) { return tickablesMk2.add(tickable); }
-    public final boolean remove(@NotNull TickableMk1 tickable) { return tickables.remove(tickable); }
     
     //
     
     public final int getTargetUPS() { return targetUPS; }
-    public final int getBaselineUPS() { return baselineUPS; }
-    public final double getUPSMultiplier() { return (double) getBaselineUPS() / (double) getTargetUPS(); }
     
     public final @NotNull ReadOnlyIntegerProperty readOnlyUpsProperty() { return upsProperty.getReadOnlyProperty(); }
     protected final @NotNull ReadOnlyIntegerWrapper upsProperty() { return upsProperty; }
@@ -175,4 +166,8 @@ public class LogiCore
     @Override public @NotNull ConfigurableApplicationContext ctx() { return ctx; }
     
     //</editor-fold>
+    
+    public double secondsToTicks(@NotNull Number input) {
+        return input.doubleValue() / getTargetUPS();
+    }
 }

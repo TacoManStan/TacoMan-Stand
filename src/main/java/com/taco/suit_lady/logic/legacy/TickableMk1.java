@@ -1,5 +1,6 @@
-package com.taco.suit_lady.logic;
+package com.taco.suit_lady.logic.legacy;
 
+import com.taco.suit_lady.logic.LogiCore;
 import com.taco.suit_lady.util.springable.Springable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
