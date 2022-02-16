@@ -10,11 +10,11 @@ import java.util.HashMap;
 public class TriggerEventManager
         implements WrappedGameComponent {
     
-    private final GameViewContent game;
+    private final GameComponent gameComponent;
     private final HashMap<Class<? extends TriggerEvent<?>>, TriggerGroup<?>> triggerMap;
     
     public TriggerEventManager(@NotNull GameComponent gameComponent) {
-        this.game = gameComponent.getGame();
+        this.gameComponent = gameComponent;
         this.triggerMap = new HashMap<>();
     }
     
@@ -22,8 +22,9 @@ public class TriggerEventManager
     
     final @NotNull HashMap<Class<? extends TriggerEvent<?>>, TriggerGroup<?>> triggerMap() { return triggerMap; }
     
+    //
     
-    public final <T extends TriggerEvent<T>> void trigger(@NotNull T event) { getTriggerGroup(event).trigger(event); }
+    public final <T extends TriggerEvent<T>> void submit(@NotNull T event) { getTriggerGroup(event).trigger(event); }
     
     public final <T extends TriggerEvent<T>> boolean register(@NotNull Trigger<T> trigger) { return getTriggerGroup(trigger).register(trigger); }
     public final <T extends TriggerEvent<T>> boolean unregister(@NotNull Trigger<T> trigger) { return getTriggerGroup(trigger).unregister(trigger); }
@@ -32,7 +33,7 @@ public class TriggerEventManager
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public final @NotNull GameViewContent getGame() { return game; }
+    @Override public final @NotNull GameViewContent getGame() { return gameComponent.getGame(); }
     
     //</editor-fold>
     

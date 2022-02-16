@@ -11,6 +11,8 @@ import com.taco.suit_lady.logic.LogiCore;
 import com.taco.suit_lady.logic.TaskManager;
 import com.taco.suit_lady.logic.legacy.TickableMk1;
 import com.taco.suit_lady.logic.TickableMk2;
+import com.taco.suit_lady.logic.triggers.Galaxy;
+import com.taco.suit_lady.logic.triggers.UnitMovedEvent;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
@@ -144,7 +146,10 @@ public class GameObject
     }
     
     private void initTriggerEvents() {
-    
+        locationCenteredBinding.addListener((observable, oldValue, newValue) -> triggers().submit(new UnitMovedEvent(this, oldValue, newValue)));
+        triggers().register(Galaxy.newUnitMovedTrigger(this, event -> {
+            System.out.println("Unit Moved  [" + event.getMovedFrom() + "  -->  " + event.getMovedTo());
+        }));
     }
     
     public void launchMissileTest() {

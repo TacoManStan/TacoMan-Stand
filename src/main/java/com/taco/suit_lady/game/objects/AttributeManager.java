@@ -1,25 +1,19 @@
 package com.taco.suit_lady.game.objects;
 
-import com.taco.suit_lady.game.interfaces.GameComponent;
+import com.taco.suit_lady.game.interfaces.WrappedGameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
-import com.taco.suit_lady.util.Lockable;
-import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.springable.SpringableWrapper;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.collections.FXCollections;
-import org.docx4j.org.apache.xpath.operations.Bool;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.concurrent.locks.Lock;
 import java.util.function.Supplier;
 
 public class AttributeManager
-        implements SpringableWrapper, Lockable, GameComponent {
+        implements WrappedGameComponent {
     
     private final GameObject owner;
     private final MapProperty<String, Attribute<?>> attributeMap;
@@ -152,9 +146,6 @@ public class AttributeManager
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override public @NotNull GameViewContent getGame() { return owner.getGame(); }
-    
-    @Override public @NotNull Springable springable() { return owner; }
-    @Override public @NotNull Lock getLock() { return owner.getLock(); }
     
     //</editor-fold>
 }

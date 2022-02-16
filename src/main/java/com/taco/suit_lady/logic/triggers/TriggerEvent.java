@@ -11,23 +11,24 @@ import org.jetbrains.annotations.NotNull;
 public abstract class TriggerEvent<T extends TriggerEvent<T>>
         implements WrappedGameComponent {
     
-    private final GameViewContent game;
+    private final GameComponent source;
     private final ListProperty<Trigger<T>> triggers;
     
-    public TriggerEvent(@NotNull GameComponent gameComponent) {
-        this.game = gameComponent.getGame();
+    public TriggerEvent(@NotNull GameComponent source) {
+        this.source = source;
         this.triggers = new SimpleListProperty<>(FXCollections.observableArrayList());
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
     
+    public GameComponent getSource() { return source; }
     public final ListProperty<Trigger<T>> triggerList() { return triggers; }
     
     //</editor-fold>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public final @NotNull GameViewContent getGame() { return game; }
+    @Override public final @NotNull GameViewContent getGame() { return source.getGame(); }
     
     //</editor-fold>
 }

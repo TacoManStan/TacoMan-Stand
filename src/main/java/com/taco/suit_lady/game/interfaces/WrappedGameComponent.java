@@ -18,7 +18,6 @@ import java.util.concurrent.locks.Lock;
  */
 public interface WrappedGameComponent
         extends GameComponent, SpringableWrapper, Lockable {
-    
     default @Override @Nullable Lock getLock() { return getGame().getLock(); }
     default @Override @NotNull Springable springable() { return getGame(); }
 }

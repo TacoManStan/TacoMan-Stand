@@ -1,6 +1,7 @@
 package com.taco.suit_lady.game.objects;
 
 import com.taco.suit_lady.game.interfaces.GameComponent;
+import com.taco.suit_lady.game.interfaces.WrappedGameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
@@ -13,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.locks.Lock;
 
 public class Attribute<T>
-        implements SpringableWrapper, Lockable, GameComponent {
+        implements WrappedGameComponent {
     
     private final AttributeManager owner;
     
@@ -48,8 +49,7 @@ public class Attribute<T>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull Springable springable() { return owner; }
-    @Override public @NotNull Lock getLock() { return owner.getLock(); }
+    @Override public @NotNull GameViewContent getGame() { return owner.getGame(); }
     
     //</editor-fold>
 }

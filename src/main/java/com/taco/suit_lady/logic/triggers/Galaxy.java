@@ -18,6 +18,10 @@ public final class Galaxy {
     
     //<editor-fold desc="> Trigger Factory Methods">
     
+    public static @NotNull UnitMovedTrigger newUnitMovedTrigger(@NotNull GameObject source, @NotNull Consumer<UnitMovedEvent> action) {
+        return newUnitMovedTrigger(source, event -> true, action);
+    }
+    
     @Contract("_, _, _ -> new")
     public static @NotNull UnitMovedTrigger newUnitMovedTrigger(@NotNull GameObject source, @NotNull Predicate<UnitMovedEvent> condition, @NotNull Consumer<UnitMovedEvent> action) {
         return new UnitMovedTrigger(source, newCondition(source, condition)) {
