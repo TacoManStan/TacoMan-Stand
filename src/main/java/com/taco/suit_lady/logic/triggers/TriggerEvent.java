@@ -21,7 +21,7 @@ public abstract class TriggerEvent<T extends TriggerEvent<T>>
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final ListProperty<Trigger<T>> triggers() { return triggers; }
+    public final ListProperty<Trigger<T>> triggerList() { return triggers; }
     
     //</editor-fold>
     

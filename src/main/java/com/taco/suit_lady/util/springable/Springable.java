@@ -1,6 +1,8 @@
 package com.taco.suit_lady.util.springable;
 
 import com.taco.suit_lady._to_sort._new.Debugger;
+import com.taco.suit_lady.game.interfaces.GameComponent;
+import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.logic.LogiCore;
 import com.taco.suit_lady.logic.triggers.TriggerEventManager;
 import com.taco.suit_lady.ui.Sidebar;
@@ -25,7 +27,8 @@ import org.springframework.context.ConfigurableApplicationContext;
  *     <li>Annotating implemented methods as either {@link Nullable} or {@link NotNull} to reflect nullity is strongly recommended.</li>
  * </ol>
  */
-public interface Springable {
+public interface Springable
+        extends GameComponent {
     
     /**
      * <p>Grants access to the appropriate {@link FxWeaver} instance for use in this {@link Springable} implementation.</p>
@@ -73,6 +76,9 @@ public interface Springable {
     
     // TO-DOC
     default @NotNull LogiCore logiCore() { return ctx().getBean(LogiCore.class); }
+    default @NotNull TriggerEventManager triggers() { return logiCore().triggers(); }
+    
+    default @Override @NotNull GameViewContent getGame() { return logiCore().getGame(); }
     
     //
     

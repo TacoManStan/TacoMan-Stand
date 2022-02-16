@@ -20,7 +20,7 @@ public class TriggerEventManager
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    final @NotNull HashMap<Class<? extends TriggerEvent<?>>, TriggerGroup<?>> triggers() { return triggerMap; }
+    final @NotNull HashMap<Class<? extends TriggerEvent<?>>, TriggerGroup<?>> triggerMap() { return triggerMap; }
     
     
     public final <T extends TriggerEvent<T>> void trigger(@NotNull T event) { getTriggerGroup(event).trigger(event); }
