@@ -48,8 +48,6 @@ public class Attribute<T>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull GameViewContent getGame() { return owner.getGame(); }
-    
     @Override public @NotNull Springable springable() { return owner; }
     @Override public @NotNull Lock getLock() { return owner.getLock(); }
     
