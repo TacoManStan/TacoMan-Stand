@@ -1,4 +1,4 @@
-package com.taco.suit_lady.game.foundational;
+package com.taco.suit_lady.game.interfaces;
 
 import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.objects.GameObject;
