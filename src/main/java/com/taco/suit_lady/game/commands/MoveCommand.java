@@ -1,6 +1,7 @@
 package com.taco.suit_lady.game.commands;
 
 import com.taco.suit_lady.game.objects.GameObject;
+import com.taco.suit_lady.logic.GameTask;
 import com.taco.suit_lady.logic.LogiCore;
 import com.taco.suit_lady.logic.TickableMk1;
 import com.taco.suit_lady.util.springable.Springable;
@@ -14,15 +15,12 @@ import javafx.geometry.Point2D;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-public class MoveCommand
-        implements SpringableWrapper, TickableMk1 {
+public class MoveCommand extends GameTask<GameObject>
+        implements TickableMk1 {
     
     public static final String ATTRIBUTE_ID = "move-speed";
     
     //
-    
-    private final GameObject owner;
-    
     
     private final IntegerProperty xTargetProperty;
     private final IntegerProperty yTargetProperty;
@@ -33,7 +31,7 @@ public class MoveCommand
 //    private final DoubleBinding speedBinding;
     
     public MoveCommand(@NotNull GameObject owner) {
-        this.owner = owner;
+        super(owner);
         
         this.xTargetProperty = new SimpleIntegerProperty((int) owner.getLocationX(false));
         this.yTargetProperty = new SimpleIntegerProperty((int) owner.getLocationY(false));
@@ -45,9 +43,6 @@ public class MoveCommand
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
-    
-    public final @NotNull GameObject getOwner() { return owner; }
-    
     
     public final @NotNull IntegerProperty xTargetProperty() { return xTargetProperty; }
     public final int getTargetX() { return xTargetProperty.get(); }
@@ -95,7 +90,10 @@ public class MoveCommand
         }
     }
     
-    @Override public @NotNull Springable springable() { return owner; }
+    @Override protected void execute() {
+        tick(logiCore());
+    }
+    @Override protected void shutdown() { }
     
     //</editor-fold>
 }

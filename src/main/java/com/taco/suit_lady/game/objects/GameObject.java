@@ -6,7 +6,9 @@ import com.taco.suit_lady.game.commands.MoveCommand;
 import com.taco.suit_lady.game.objects.tiles.GameTile;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.logic.LogiCore;
+import com.taco.suit_lady.logic.TaskManager;
 import com.taco.suit_lady.logic.TickableMk1;
+import com.taco.suit_lady.logic.TickableMk2;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
@@ -39,7 +41,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class GameObject
-        implements Lockable, Entity, JObject, JLoadable, UIDProcessable {
+        implements Lockable, Entity, JObject, JLoadable, UIDProcessable, TickableMk2<GameObject> {
     
     private final StrictSpringable springable;
     private final ReentrantLock lock;
@@ -107,6 +109,7 @@ public class GameObject
         
         this.tickables = new SimpleListProperty<>(FXCollections.observableArrayList());
         tickables.add(command);
+        taskManager().tasks().add(command);
         
         //
         
@@ -289,5 +292,12 @@ public class GameObject
                 occupyingGameTiles[i][j] = getGameMap().getTileMatrix()[i + adjustedMinX][j + adjustedMinY];
         
         return occupyingGameTiles;
+    }
+    
+    private TaskManager<GameObject> taskManager;
+    @Override public final @NotNull TaskManager<GameObject> taskManager() {
+        if (taskManager == null)
+            taskManager = new TaskManager<>(this);
+        return taskManager;
     }
 }

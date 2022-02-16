@@ -39,7 +39,9 @@ public class LogiCore
     
     private final ScheduledThreadPoolExecutor gameLoopExecutor;
     private final ListProperty<TickableMk1> tickables;
+    private final ListProperty<TickableMk2<?>> tickablesMk2;
     private final List<TickableMk1> empty;
+    private final List<TickableMk2<?>> emptyMk2;
     
     private final int targetUPS = 144;
     private final int baselineUPS = 60;
@@ -64,7 +66,9 @@ public class LogiCore
         
         this.gameLoopExecutor = new ScheduledThreadPoolExecutor(1);
         this.tickables = new SimpleListProperty<>(FXCollections.observableArrayList());
+        this.tickablesMk2 = new SimpleListProperty<>(FXCollections.observableArrayList());
         this.empty = new ArrayList<>();
+        this.emptyMk2 = new ArrayList<>();
         
         this.upsProperty = new ReadOnlyIntegerWrapper();
         
@@ -109,6 +113,7 @@ public class LogiCore
     public final @NotNull List<TickableMk1> getEmpty() { return empty; }
     
     public final boolean submit(@NotNull TickableMk1 tickable) { return tickables.add(tickable); }
+    public final boolean submitMk2(@NotNull TickableMk2<?> tickable) { return tickablesMk2.add(tickable); }
     public final boolean remove(@NotNull TickableMk1 tickable) { return tickables.remove(tickable); }
     
     //
@@ -132,7 +137,7 @@ public class LogiCore
         tickCount++;
         if (timer.isTimedOut())
             timer.getOnTimeout().run();
-        tickables.forEach(this::tick);
+        tickablesMk2.forEach(tickable -> tickable.taskManager().execute());
     }
     
     private void tick(@NotNull TickableMk1 tickable) {
