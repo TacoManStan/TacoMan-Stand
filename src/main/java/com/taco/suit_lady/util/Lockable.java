@@ -13,6 +13,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 @SuppressWarnings("unchecked") public interface Lockable
@@ -41,7 +42,13 @@ import java.util.function.Supplier;
      * @param onFinallyActions See {@link TasksSL#sync(Lock, Runnable, boolean, Consumer[])}.
      */
     default void sync(Runnable action, Consumer<Throwable>... onFinallyActions) {
-        TasksSL.sync(getLock(), action, isNullableLock(), onFinallyActions);
+        syncIf(action, null, onFinallyActions);
+    }
+    default void syncIf(Runnable action, Supplier<Boolean> syncCondition, Consumer<Throwable>... onFinallyActions) {
+        if (syncCondition == null || syncCondition.get())
+            TasksSL.sync(getLock(), action, isNullableLock(), onFinallyActions);
+        else
+            action.run();
     }
     
     /**
@@ -51,7 +58,13 @@ import java.util.function.Supplier;
      * @param onFinallyActions See {@link TasksSL#sync(Lock, Supplier, boolean, Consumer[])}.
      */
     default <R> R sync(Supplier<R> action, Consumer<Throwable>... onFinallyActions) {
-        return TasksSL.sync(getLock(), action, isNullableLock(), onFinallyActions);
+        return syncIf(action, null, onFinallyActions);
+    }
+    default <R> R syncIf(Supplier<R> action, Supplier<Boolean> syncCondition, Consumer<Throwable>... onFinallyActions) {
+        if (syncCondition == null || syncCondition.get())
+            return TasksSL.sync(getLock(), action, isNullableLock(), onFinallyActions);
+        else
+            return action.get();
     }
     
     /**
@@ -62,16 +75,35 @@ import java.util.function.Supplier;
      * @param onFinallyActions See {@link TasksSL#sync(Lock, Function, Supplier, boolean, Consumer[])}.
      */
     default <T, R> R sync(Function<T, R> action, Supplier<T> actionSupplier, Consumer<Throwable>... onFinallyActions) {
-        return TasksSL.sync(getLock(), action, actionSupplier, isNullableLock(), onFinallyActions);
+        return syncIf(action, actionSupplier, null, onFinallyActions);
+    }
+    default <T, R> R syncIf(Function<T, R> action, Supplier<T> actionSupplier, Predicate<T> syncCondition, Consumer<Throwable>... onFinallyActions) {
+        final T input = actionSupplier.get();
+        if (syncCondition == null || syncCondition.test(input))
+            return TasksSL.sync(getLock(), action, () -> input, isNullableLock(), onFinallyActions);
+        else
+            return action.apply(input);
     }
     
     
     default void syncFX(Runnable action, Consumer<Throwable>... onFinallyActions) {
         TasksSL.sync(getLock(), () -> ToolsFX.runFX(action, true), isNullableLock(), onFinallyActions);
     }
+    default void syncIfFX(Runnable action, Supplier<Boolean> syncCondition, Consumer<Throwable>... onFinallyActions) {
+        if (syncCondition == null || syncCondition.get())
+            TasksSL.sync(getLock(), () -> ToolsFX.runFX(action, true), isNullableLock(), onFinallyActions);
+        else
+            ToolsFX.runFX(action, true);
+    }
     
     default <R> R syncFX(Supplier<R> action, Consumer<Throwable>... onFinallyActions) {
-        return TasksSL.sync(getLock(), () -> ToolsFX.runFX(() -> action.get()), isNullableLock(), onFinallyActions);
+        return TasksSL.sync(getLock(), () -> ToolsFX.runFX(action::get), isNullableLock(), onFinallyActions);
+    }
+    default <R> R syncIfFX(Supplier<R> action, Supplier<Boolean> syncCondition, Consumer<Throwable>... onFinallyActions) {
+        if (syncCondition == null || syncCondition.get())
+            return TasksSL.sync(getLock(), () -> ToolsFX.runFX(action::get), isNullableLock(), onFinallyActions);
+        else
+            return ToolsFX.runFX(action::get);
     }
     
     /**
@@ -84,6 +116,13 @@ import java.util.function.Supplier;
     //TO-EXPAND
     default <T, R> R syncFX(Function<T, R> action, Supplier<T> actionSupplier, Consumer<Throwable>... onFinallyActions) {
         return TasksSL.sync(getLock(), t -> ToolsFX.runFX(() -> action.apply(t)), actionSupplier, isNullableLock(), onFinallyActions);
+    }
+    default <T, R> R syncIfFX(Function<T, R> action, Supplier<T> actionSupplier, Predicate<T> syncCondition, Consumer<Throwable>... onFinallyActions) {
+        final T input = actionSupplier.get();
+        if (syncCondition == null || syncCondition.test(input))
+            return TasksSL.sync(getLock(), t -> ToolsFX.runFX(() -> action.apply(t)), () -> input, isNullableLock(), onFinallyActions);
+        else
+            return ToolsFX.runFX(() -> action.apply(input));
     }
     
     // Lock Methods
