@@ -5,7 +5,7 @@ import com.taco.suit_lady.game.interfaces.WrappedGameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class Trigger<T extends TriggerEvent>
+public abstract class Trigger<T extends TriggerEvent<T>>
         implements WrappedGameComponent {
     
     private final Entity owner;
