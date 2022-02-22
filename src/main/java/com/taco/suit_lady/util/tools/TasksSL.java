@@ -1,12 +1,19 @@
 package com.taco.suit_lady.util.tools;
 
+import com.taco.suit_lady._to_sort._new.interfaces.functional.TriFunction;
 import com.taco.suit_lady.util.UndefinedRuntimeException;
+import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
+import javafx.application.Platform;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.Stack;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 /**
  * Contains utility methods related to threading, including synchronization.
@@ -319,4 +326,66 @@ public class TasksSL {
     }
     
     //</editor-fold>
+    
+    //<editor-fold desc="Threads">
+    
+    @Contract(pure = true) public static @NotNull Thread currentThread() { return Thread.currentThread(); }
+    
+    
+    //<editor-fold desc="> Thread Printing">
+    
+    //<editor-fold desc="> Preset Filters">
+    
+    /**
+     * <p>Checks if the {@link Predicate#test(Object) tested} {@link Thread} is the {@link Platform#isFxApplicationThread() JavaFX Application Thread}.</p>
+     */
+    public static final Predicate<Thread> REQ_FX = thread -> thread.getName() != null && thread.getName().equalsIgnoreCase("JavaFX Application Thread");
+    
+    /**
+     * <p>Checks if the {@link Predicate#test(Object) tested} {@link Thread} is managed by a {@link ThreadPoolExecutor thread pool}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>Pooled threads constructed via a custom {@link ThreadFactory} might throw a {@code false negative} if {@code "pool"} is not in the {@link Thread thread's} {@link Thread#getName() name}.</li>
+     * </ol>
+     */
+    public static final Predicate<Thread> REQ_POOLED = thread -> thread.getName() != null && thread.getName().toLowerCase().contains("pool");
+    
+    /**
+     * <p>Checks if the {@link Predicate#test(Object) tested} {@link Thread} is a {@code generic thread}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>This filter will <i>not</i> pass any {@link Thread threads} that match the preset {@link #REQ_POOLED} filter.</li>
+     *     <li>This filter will throw a {@code false positive} if the {@link Predicate#test(Object) tested} {@link Thread} has {@code "thread"} contained within its name, regardless of its source.</li>
+     * </ol>
+     */
+    public static final Predicate<Thread> REQ_GENERIC = thread -> thread.getName() != null && thread.getName().toLowerCase().contains("thread") && !thread.getName().toLowerCase().contains("pool");
+    
+    //</editor-fold>
+    
+    //TO-DOC
+    public static void printThread(@Nullable Supplier<Thread> threadSupplier, @Nullable Predicate<Thread> printCondition, @Nullable TriFunction<Integer, Thread, StackTraceElement, String> textSupplier) {
+        final Thread thread = ExceptionsSL.nullCheck(threadSupplier != null ? threadSupplier.get() : Thread.currentThread(), "Supplied Thread");
+        printCondition = printCondition != null ? printCondition : t -> true;
+        textSupplier = textSupplier != null ? textSupplier : (i, t, ste) -> i + ". [" + ste.getLineNumber() + "]: " + ste;
+        
+        if (printCondition.test(thread)) {
+            final StackTraceElement[] es = thread.getStackTrace();
+            System.out.println();
+            System.out.println("STACK TRACE  [" + thread.getName() + "]   (TasksSL  |  Line ~350)");
+            for (int i = 0; i < es.length; i++)
+                System.out.println(textSupplier.apply(i, thread, es[i]));
+            System.out.println();
+        }
+    }
+    
+    public static void printThread(@Nullable Supplier<Thread> threadSupplier, @Nullable TriFunction<Integer, Thread, StackTraceElement, String> textSupplier) { printThread(threadSupplier, null, textSupplier); }
+    public static void printThreadConditional(@Nullable Supplier<Thread> threadSupplier, @Nullable Predicate<Thread> printCondition) { printThread(threadSupplier, printCondition, null); }
+    public static void printThread(@Nullable Supplier<Thread> threadSupplier) { printThread(threadSupplier, null, null); }
+    public static void printThread() { printThread(null, null, null); }
+    
+    //</editor-fold>
+    
+    //</editor-fold>
+    
+    
 }
