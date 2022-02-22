@@ -126,8 +126,8 @@ public class LogiCore
     public final boolean submit(@NotNull Tickable<?> tickable) { return tickables.add(tickable); }
     
     public final boolean addGfxObject(@NotNull GFXObject gfxObject) {
-//        if (getLock() != null)
-//            return sync(() -> gfxActions2.add(gfxObject));
+        //        if (getLock() != null)
+        //            return sync(() -> gfxActions2.add(gfxObject));
         return gfxObjects.add(gfxObject);
     }
     
@@ -146,21 +146,19 @@ public class LogiCore
     
     public long upsRefreshTime = 2000;
     
-    private void tick() {
+    @SuppressWarnings("UnnecessaryReturnStatement") private void tick() {
+        if (checkSpringClosure(null)) return;
         if (getLock() != null) {
             sync(() -> {
-                tickCount++;
-                if (checkSpringClosure()) return;
-                if (timer.isTimedOut()) {
-                    if (checkSpringClosure()) return;
-                    timer.getOnTimeout().run();
-                }
-                tickables.forEach(tickable -> {
-                    if (checkSpringClosure()) return;
-                    tickable.taskManager().execute();
-                });
+                if (checkSpringClosure(() -> {
+                    tickCount++;
+                    if (timer.isTimedOut())
+                        timer.getOnTimeout().run();
+                })) return;
                 
-                ToolsFX.runFX(() -> gfxObjects.forEach(GFXObject::execute), true);
+                tickables.forEach(tickable -> { if (checkSpringClosure(() -> tickable.taskManager().execute())) return; });
+                
+                checkSpringClosure(() -> ToolsFX.runFX(() -> gfxObjects.forEach(GFXObject::execute), true));
             });
         }
     }
@@ -169,12 +167,14 @@ public class LogiCore
     
     public final ThreadPoolExecutor executor() { return gameLoopExecutor; }
     
-    private boolean checkSpringClosure() {
+    private boolean checkSpringClosure(@Nullable Runnable action) {
         if (!ctx().isRunning()) {
             shutdown();
             return true;
+        } else {
+            if (action != null) action.run();
+            return false;
         }
-        return false;
     }
     
     private void shutdown() {
