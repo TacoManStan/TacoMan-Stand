@@ -2,6 +2,7 @@ package com.taco.suit_lady.game.objects;
 
 import com.taco.suit_lady.game.interfaces.WrappedGameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
+import com.taco.suit_lady.util.tools.TasksSL;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleMapProperty;
@@ -10,15 +11,20 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
 
 public class AttributeManager
         implements WrappedGameComponent {
     
+    private final ReentrantLock testLock;
+    
     private final GameObject owner;
     private final MapProperty<String, Attribute<?>> attributeMap;
     
     public AttributeManager(@NotNull GameObject owner) {
+        this.testLock = new ReentrantLock();
+        
         this.owner = owner;
         this.attributeMap = new SimpleMapProperty<>(FXCollections.observableHashMap());
     }
@@ -32,7 +38,7 @@ public class AttributeManager
     //<editor-fold desc=">> Attribute Add Methods">
     
     public final @Nullable Attribute<?> addAttribute(@Nullable Attribute<?> attribute) {
-        return sync(() -> {
+        return TasksSL.sync(testLock, () -> {
             if (attribute != null && attribute.getId() != null)
                 if (attributeMap.containsValue(attribute))
                     System.err.println("WARNING: AttributeManager already contains Attribute [" + attribute + "]");
@@ -62,7 +68,7 @@ public class AttributeManager
     
     //<editor-fold desc=">> Attribute Accessor Methods">
     
-    public final <T> Attribute<T> getAttribute(@NotNull String id, @NotNull Class<T> type) { return sync(() -> (Attribute<T>) attributeMap.get(id)); }
+    public final <T> Attribute<T> getAttribute(@NotNull String id, @NotNull Class<T> type) { return TasksSL.sync(testLock, () -> (Attribute<T>) attributeMap.get(id)); }
     
     
     public final Attribute<Boolean> getBooleanAttribute(@NotNull String id) { return getAttribute(id, Boolean.class); }

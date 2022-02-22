@@ -152,8 +152,21 @@ public class GameObject
         }));
     }
     
-    public void launchMissileTest() {
-        final GameObject missile = new GameObject(getGame());
+    public GameObject launchMissileTest() {
+        final GameObject missile = new GameObject(getGame()).init();
+        
+        missile.setLocationX(getLocationX(false));
+        missile.setLocationY(getLocationY(false));
+        
+        getGameMap().gameObjects().add(missile);
+        
+        
+        logiCore().submitMk2(missile);
+        
+//        missile.getCommand().setTargetX((int) target.getX());
+//        missile.getCommand().setTargetY((int) target.getY());
+        
+        return missile;
     }
     
     //</editor-fold>

@@ -60,24 +60,24 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
     
     @Override public GameViewContent init() {
         bookshelf = injectBookshelf("Game View",
-                        new UIBook(
-                                this,
-                                "Tile Selector",
-                                "details",
-                                uiBook -> ResourcesSL.get(
-                                        "pages",
-                                        uiBook.getUID(uiBook.getButtonID()),
-                                        () -> tileEditorPage = new GameTileEditorPage(uiBook, this).init()),
-                                null),
-                        new UIBook(
-                                this,
-                                "Game View",
-                                "game_engine",
-                                uiBook -> ResourcesSL.get(
-                                        "pages",
-                                        uiBook.getUID(uiBook.getButtonID()),
-                                        () -> coverPage = new GameViewPage(uiBook, this)),
-                                null)).select();
+                                    new UIBook(
+                                            this,
+                                            "Tile Selector",
+                                            "details",
+                                            uiBook -> ResourcesSL.get(
+                                                    "pages",
+                                                    uiBook.getUID(uiBook.getButtonID()),
+                                                    () -> tileEditorPage = new GameTileEditorPage(uiBook, this).init()),
+                                            null),
+                                    new UIBook(
+                                            this,
+                                            "Game View",
+                                            "game_engine",
+                                            uiBook -> ResourcesSL.get(
+                                                    "pages",
+                                                    uiBook.getUID(uiBook.getButtonID()),
+                                                    () -> coverPage = new GameViewPage(uiBook, this)),
+                                            null)).select();
         
         initUIPage();
         initGame();
@@ -129,12 +129,12 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         getCamera().setLocationX((int) testObject.getLocationX(true));
         getCamera().setLocationY((int) testObject.getLocationY(true));
         
-//        logiCore().submit(getTestObject());
-//        logiCore().submit(getTestObject2());
+        //        logiCore().submit(getTestObject());
+        //        logiCore().submit(getTestObject2());
         logiCore().submitMk2(getTestObject());
         logiCore().submitMk2(getTestObject2());
-//        logiCore().submit(getTestObject().getCommand());
-//        logiCore().submit(getTestObject2().getCommand());
+        //        logiCore().submit(getTestObject().getCommand());
+        //        logiCore().submit(getTestObject2().getCommand());
     }
     
     //</editor-fold>
@@ -199,8 +199,12 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         
         if (event.getButton().equals(MouseButton.PRIMARY))
             selectTile(event);
-        else if (event.getButton().equals(MouseButton.SECONDARY))
-            processMovementOrder(event, getTestObject());
+        else if (event.getButton().equals(MouseButton.SECONDARY)) {
+            if (event.isShiftDown())
+                processMovementOrder(event, testObject.launchMissileTest());
+            else
+                processMovementOrder(event, getTestObject());
+        }
         
         return true;
     }
@@ -208,7 +212,7 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         return true;
     }
     @Override protected boolean handleMouseDragEvent(@NotNull MouseEvent event) {
-        if (event.getButton() == MouseButton.SECONDARY)
+        if (event.getButton() == MouseButton.SECONDARY && !event.isShiftDown())
             processMovementOrder(event, getTestObject());
         
         return true;
