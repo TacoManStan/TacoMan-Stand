@@ -2,13 +2,11 @@ package com.taco.suit_lady.util.tools;
 
 import com.taco.suit_lady._to_sort._new.interfaces.functional.TriFunction;
 import com.taco.suit_lady.util.UndefinedRuntimeException;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import javafx.application.Platform;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Stack;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.locks.Lock;
@@ -332,6 +330,12 @@ public class TasksSL {
     @Contract(pure = true) public static @NotNull Thread currentThread() { return Thread.currentThread(); }
     
     
+    public static int getCallingLine() { return currentThread().getStackTrace()[5].getLineNumber(); }
+    public static @NotNull String getCallingClass() { return currentThread().getStackTrace()[5].getClassName(); }
+    public static @NotNull String getCallingMethod() { return currentThread().getStackTrace()[5].getMethodName(); }
+    
+    public static @NotNull String getCallingPrefix() { return "[" + getCallingClass() + " :: " + getCallingMethod() + " :: " + getCallingLine() + "]"; }
+    
     //<editor-fold desc="> Thread Printing">
     
     //<editor-fold desc="> Preset Filters">
@@ -378,14 +382,14 @@ public class TasksSL {
         }
     }
     
-    public static void printThread(@Nullable Supplier<Thread> threadSupplier, @Nullable TriFunction<Integer, Thread, StackTraceElement, String> textSupplier) { printThread(threadSupplier, null, textSupplier); }
-    public static void printThreadConditional(@Nullable Supplier<Thread> threadSupplier, @Nullable Predicate<Thread> printCondition) { printThread(threadSupplier, printCondition, null); }
-    public static void printThread(@Nullable Supplier<Thread> threadSupplier) { printThread(threadSupplier, null, null); }
+    public static void printThread(@NotNull Supplier<Thread> threadSupplier, @NotNull Predicate<Thread> printCondition) { printThread(threadSupplier, printCondition, null); }
+    public static void printThread(@NotNull Supplier<Thread> threadSupplier, @NotNull TriFunction<Integer, Thread, StackTraceElement, String> textSupplier) { printThread(threadSupplier, null, textSupplier); }
+    public static void printThread(@NotNull Supplier<Thread> threadSupplier) { printThread(threadSupplier, null, null); }
+    public static void printThread(@NotNull Predicate<Thread> printCondition) { printThread(null, printCondition, null); }
+    public static void printThread(@NotNull TriFunction<Integer, Thread, StackTraceElement, String> textSupplier) { printThread(null, null, textSupplier); }
     public static void printThread() { printThread(null, null, null); }
     
     //</editor-fold>
     
     //</editor-fold>
-    
-    
 }

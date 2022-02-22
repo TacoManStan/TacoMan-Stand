@@ -1,5 +1,6 @@
 package com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas;
 
+import com.taco.suit_lady.game.ui.GFXObject;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasSurface;
 import com.taco.suit_lady.ui.jfx.components.painting.paintables.Paintable;
 import com.taco.suit_lady.ui.jfx.components.painting.paintables.PaintableData;
@@ -21,7 +22,6 @@ public abstract class PaintCommand
         this.data = new PaintableData<>(springable, lock, this);
     }
     
-    
     //<editor-fold desc="--- ABSTRACT ---">
     
     protected abstract void onPaint();
@@ -36,14 +36,17 @@ public abstract class PaintCommand
     @Override public void onRemove(CanvasSurface surface) { }
     
     @Override public @NotNull PaintCommand paint() {
-        if (isActive())
-            ToolsFX.runFX(() -> sync(() -> {
+        if (isActive()) {
+            //            ToolsFX.runFX(() -> sync(() -> {
+//            logiCore().submitGfxAction(() -> {
                 Predicate<CanvasSurface> autoRemoveCondition = getAutoRemoveCondition();
                 if (autoRemoveCondition != null && autoRemoveCondition.test(getSurface()))
                     getSurface().removePaintable(this);
                 else
                     onPaint();
-            }), true);
+//            });
+            //            }), true);
+        }
         return this;
     }
     

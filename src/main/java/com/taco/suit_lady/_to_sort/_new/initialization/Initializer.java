@@ -81,19 +81,26 @@ public final class Initializer<T extends Initializable<T>> {
     private void operation(boolean init, @NotNull Object[] params) {
         switch (lockMode) {
             case OWNER_ONLY -> {
-                if (getOwner() instanceof Lockable lockableOwner)
+                if (getOwner() instanceof Lockable lockableOwner && (lockableOwner.isNullableLock() || lockableOwner.getLock() != null))
                     lockableOwner.sync(() -> doOperation(init, params));
                 else
                     doOperation(init, params);
             }
             
-            case NEW_LOCK_ONLY -> TasksSL.sync(getLock(), () -> doOperation(init, params));
+            case NEW_LOCK_ONLY -> {
+                if (getLock() != null)
+                    TasksSL.sync(getLock(), () -> doOperation(init, params));
+                else
+                    doOperation(init, params);
+            }
             
             case OWNER_OR_NEW_LOCK -> {
-                if (getOwner() instanceof Lockable lockableOwner)
+                if (getOwner() instanceof Lockable lockableOwner && (lockableOwner.isNullableLock() || lockableOwner.getLock() != null))
                     lockableOwner.sync(() -> doOperation(init, params));
-                else
+                else if (getLock() != null)
                     TasksSL.sync(getLock(), () -> doOperation(init, params));
+                else
+                    doOperation(init, params);
             }
             
             case DO_NOT_LOCK -> doOperation(init, params);

@@ -148,7 +148,7 @@ public class GameObject
     private void initTriggerEvents() {
         locationCenteredBinding.addListener((observable, oldValue, newValue) -> triggers().submit(new UnitMovedEvent(this, oldValue, newValue)));
         triggers().register(Galaxy.newUnitMovedTrigger(this, event -> {
-            System.out.println("Unit Moved  [" + event.getMovedFrom() + "  -->  " + event.getMovedTo());
+//            System.out.println("Unit Moved  [" + event.getMovedFrom() + "  -->  " + event.getMovedTo());
         }));
     }
     

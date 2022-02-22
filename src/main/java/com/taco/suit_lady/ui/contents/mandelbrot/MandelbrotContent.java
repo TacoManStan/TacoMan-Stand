@@ -91,8 +91,8 @@ public class MandelbrotContent extends ListableContent<
         
         //
         
-        getController().setDragConsumer(dragData -> zoom(dragData));
-        getController().setMoveConsumer(dragData -> updateZoomBox(dragData));
+        getController().setDragConsumer(this::zoom);
+        getController().setMoveConsumer(this::updateZoomBox);
         
         iconImageProperty().bind(getController().canvas().snapshotProperty());
         initUIPage();
@@ -225,7 +225,7 @@ public class MandelbrotContent extends ListableContent<
     }
     
     private void refreshCanvas() {
-        sync(() -> ToolsFX.runFX(() -> {
+        syncFX(() -> {
             final CanvasSurface canvas = getController().canvas();
             final double newWidth = getController().canvas().getWidth();
             final double newHeight = getController().canvas().getHeight();
@@ -235,11 +235,11 @@ public class MandelbrotContent extends ListableContent<
             getData().resizeTo(newWidth, newHeight);
             
             iterator.run();
-        }, true));
+        });
     }
     
     private void redraw(MandelbrotColor[][] colors) {
-        ToolsFX.runFX(() -> TasksSL.sync(lock, () -> {
+        syncFX(() -> {
             getCoverPage().getController().getProgressBar().setVisible(false);
             for (int i = 0; i < colors.length; i++)
                 for (int j = 0; j < colors[i].length; j++) {
@@ -247,7 +247,7 @@ public class MandelbrotContent extends ListableContent<
                     final Color color = mandelbrotColor != null ? mandelbrotColor.getColor() : Color.BLACK;
                     getController().canvas().getGraphicsContext2D().getPixelWriter().setColor(i, j, color);
                 }
-        }), true);
+        });
     }
     
     private void zoom(@NotNull MouseDragData dragData) {
@@ -259,7 +259,7 @@ public class MandelbrotContent extends ListableContent<
     }
     
     private void updateZoomBox(MouseDragData moveData) {
-        TasksSL.sync(lock, () -> {
+        sync(() -> {
             Arrays.stream(paintables).forEach(paintable -> paintable.setPaused(false));
             Arrays.stream(paintables).forEach(paintable -> paintable.boundsBinding().setBounds(moveData.getBounds()));
         });

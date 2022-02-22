@@ -3,29 +3,34 @@ package com.taco.suit_lady.logic;
 import com.taco.suit_lady._to_sort._new.initialization.Initializable;
 import com.taco.suit_lady._to_sort._new.initialization.Initializer;
 import com.taco.suit_lady._to_sort._new.initialization.LockMode;
+import com.taco.suit_lady.game.ui.GFXObject;
 import com.taco.suit_lady.logic.triggers.TriggerEventManager;
 import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.logic.legacy.TickableMk1;
+import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.timing.Timer;
 import com.taco.suit_lady.util.timing.Timers;
+import com.taco.suit_lady.util.tools.Print;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
+import java.util.concurrent.locks.Lock;
 
 @Component
 public class LogiCore
-        implements Springable, GameComponent, Initializable<LogiCore> {
+        implements Springable, Lockable, GameComponent, Initializable<LogiCore> {
     
     private final FxWeaver weaver;
     private final ConfigurableApplicationContext ctx;
@@ -34,14 +39,16 @@ public class LogiCore
     
     //
     
-    private final ThreadPoolExecutor sequentialExecutor; // TODO - Implement both asynchronous and synchronous executor options
-    private final ScheduledThreadPoolExecutor scheduledExecutor;
+    //    private final ThreadPoolExecutor sequentialExecutor; // TODO - Implement both asynchronous and synchronous executor options
+    //    private final ScheduledThreadPoolExecutor scheduledExecutor;
     
     //
     
     private final ScheduledThreadPoolExecutor gameLoopExecutor;
-    private final ListProperty<TickableMk2<?>> tickablesMk2;
+    private final ListProperty<TickableMk2<?>> tickablesMk2; //Absolutely NO blocking calls to FX thread can be made here. None.
     private final List<TickableMk2<?>> emptyMk2;
+    
+    private final ListProperty<GFXObject> gfxActions2;
     
     private final int targetUPS = 144;
     private final ReadOnlyIntegerWrapper upsProperty;
@@ -56,12 +63,13 @@ public class LogiCore
         this.weaver = weaver;
         this.ctx = ctx;
         
+        
         this.gameProperty = new ReadOnlyObjectWrapper<>();
         
         //
         
-        this.sequentialExecutor = new ThreadPoolExecutor(1, 1, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
-        this.scheduledExecutor = new ScheduledThreadPoolExecutor(10);
+        //        this.sequentialExecutor = new ThreadPoolExecutor(10, 10, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
+        //        this.scheduledExecutor = new ScheduledThreadPoolExecutor(10);
         
         //
         
@@ -69,6 +77,8 @@ public class LogiCore
         
         this.tickablesMk2 = new SimpleListProperty<>(FXCollections.observableArrayList());
         this.emptyMk2 = new ArrayList<>();
+        
+        this.gfxActions2 = new SimpleListProperty<>(FXCollections.observableArrayList());
         
         this.upsProperty = new ReadOnlyIntegerWrapper();
         
@@ -113,7 +123,14 @@ public class LogiCore
     
     
     //
+    
     public final boolean submitMk2(@NotNull TickableMk2<?> tickable) { return tickablesMk2.add(tickable); }
+    
+    public final boolean submitGfxAction2(@NotNull GFXObject gfxObject) {
+        if (getLock() != null)
+            return sync(() -> gfxActions2.add(gfxObject));
+        return gfxActions2.add(gfxObject);
+    }
     
     //
     
@@ -131,10 +148,33 @@ public class LogiCore
     public long upsRefreshTime = 2000;
     
     private void tick() {
-        tickCount++;
-        if (timer.isTimedOut())
-            timer.getOnTimeout().run();
-        tickablesMk2.forEach(tickable -> tickable.taskManager().execute());
+        if (getLock() != null) {
+            sync(() -> {
+//            TasksSL.printThread();
+                tickCount++;
+                if (checkSpringClosure()) return;
+                if (timer.isTimedOut()) {
+                    if (checkSpringClosure()) return;
+                    timer.getOnTimeout().run();
+                }
+                tickablesMk2.forEach(tickable -> {
+                    if (checkSpringClosure()) return;
+                    tickable.taskManager().execute();
+                });
+//                Print.errCallingInfo();
+//                System.out.println(gfxActions2);
+                ToolsFX.runFX(() -> gfxActions2.forEach(action -> {
+//                    Print.err();
+                    if (checkSpringClosure()) return;
+                    if (action.needsUpdate())
+                        action.update();
+                }), true);
+                //                gfxActions.forEach(runnable -> {
+                //                    runnable.run();
+                //                });
+                //                gfxActions.clear();
+            });
+        }
     }
     
     private void tick(@NotNull TickableMk1 tickable) {
@@ -145,12 +185,21 @@ public class LogiCore
     
     //</editor-fold>
     
-    public final ThreadPoolExecutor executor() {
-        return sequentialExecutor;
+    public final ThreadPoolExecutor executor() { return gameLoopExecutor; }
+    
+    private boolean checkSpringClosure() {
+        if (!ctx().isRunning()) {
+            shutdown();
+            return true;
+        }
+        return false;
     }
     
-    public final ScheduledThreadPoolExecutor scheduledExecutor() {
-        return scheduledExecutor;
+    private void shutdown() {
+        Print.err("Shutting Down LogiCore");
+        gameLoopExecutor.shutdown();
+        //        sequentialExecutor.shutdown();
+        //        scheduledExecutor.shutdown();
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
@@ -170,6 +219,13 @@ public class LogiCore
     
     @Override public @NotNull FxWeaver weaver() { return weaver; }
     @Override public @NotNull ConfigurableApplicationContext ctx() { return ctx; }
+    
+    @Override public @Nullable Lock getLock() {
+        return gameProperty.get() != null ? gameProperty.get().getLock() : null;
+    }
+    
+    
+    //    @Override public boolean isNullableLock() { return true; }
     
     //</editor-fold>
     

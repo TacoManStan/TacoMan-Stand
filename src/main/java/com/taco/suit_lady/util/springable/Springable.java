@@ -8,12 +8,15 @@ import com.taco.suit_lady.logic.triggers.TriggerEventManager;
 import com.taco.suit_lady.ui.Sidebar;
 import com.taco.suit_lady.ui.console.Console;
 import com.taco.suit_lady.ui.AppUI;
+import com.taco.suit_lady.util.tools.TasksSL;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
+
+import java.util.function.Supplier;
 
 /**
  * <p>Guarantees that all implementing classes will have direct access to...</p>
@@ -52,7 +55,7 @@ public interface Springable {
      *
      * @return The singleton {@link Console} instance stored and managed by the {@link SpringApplication Spring} framework.
      */
-    default @NotNull Console console() { return ctx().getBean(Console.class); }
+    default @NotNull Console console() { return getSafely(Console.class); }
     
     /**
      * <p>Returns the singleton {@link AppUI} instance stored and managed by the {@link SpringApplication Spring} framework.</p>
@@ -60,7 +63,7 @@ public interface Springable {
      *
      * @return The singleton {@link AppUI} instance stored and managed by the {@link SpringApplication Spring} framework.
      */
-    default @NotNull AppUI ui() { return ctx().getBean(AppUI.class); }
+    default @NotNull AppUI ui() { return getSafely(AppUI.class); }
     
     /**
      * <p>Returns the {@link Sidebar} instance contained within the {@link AppUI} singleton stored and managed by the {@link SpringApplication Spring} framework.</p>
@@ -71,10 +74,10 @@ public interface Springable {
     default @NotNull Sidebar sidebar() { return ui().getSidebar(); }
     
     // TO-DOC
-    default @NotNull Debugger debugger() { return ctx().getBean(Debugger.class); }
+    default @NotNull Debugger debugger() { return getSafely(Debugger.class); }
     
     // TO-DOC
-    default @NotNull LogiCore logiCore() { return ctx().getBean(LogiCore.class); }
+    default @NotNull LogiCore logiCore() { return getSafely(LogiCore.class); }
     default @NotNull TriggerEventManager triggers() { return logiCore().triggers(); }
     
     //
@@ -109,4 +112,14 @@ public interface Springable {
     }
     
     //</editor-fold>
+    
+    default <T> @Nullable T getSafely(@NotNull Class<T> c) {
+        if (ctx().isActive() && ctx().isRunning()) {
+            return ctx().getBean(c);
+        } else {
+            System.err.println("Cannot retrieve Spring element as context is not active [" + c.getName() + "]");
+            TasksSL.printThread();
+            return null;
+        }
+    }
 }

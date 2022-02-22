@@ -1,5 +1,6 @@
 package com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas;
 
+import com.taco.suit_lady.game.ui.GFXObject;
 import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.PaintCommand;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.Surface;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.SurfaceData;
@@ -7,7 +8,9 @@ import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.timing.Timer;
 import com.taco.suit_lady.util.timing.Timers;
 import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Print;
 import com.taco.suit_lady.util.tools.PropertiesSL;
+import com.taco.suit_lady.util.tools.TasksSL;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import javafx.beans.property.*;
 import javafx.scene.SnapshotParameters;
@@ -23,7 +26,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * <p>A {@link #isResizable() resizable} implementation of {@link Canvas}.</p>
  */
 public class CanvasSurface extends Canvas
-        implements Surface<PaintCommand, CanvasSurface> {
+        implements Surface<PaintCommand, CanvasSurface>, GFXObject {
     
     private final ReadOnlyObjectWrapper<CanvasListener> canvasListenerProperty;
     private final SurfaceData<PaintCommand, CanvasSurface> data;
@@ -31,6 +34,8 @@ public class CanvasSurface extends Canvas
     private final ReadOnlyObjectWrapper<Image> snapshotProperty;
     private final LongProperty snapshotFrequencyProperty;
     private final Timer snapshotTimer;
+    
+    private boolean needsUpdate;
     
     //<editor-fold desc="--- CONSTRUCTORS ---">
     
@@ -82,6 +87,9 @@ public class CanvasSurface extends Canvas
             updateSnapshot();
             snapshotTimer.reset(getSnapshotFrequency());
         }));
+        
+        this.needsUpdate = false;
+        logiCore().submitGfxAction2(this);
     }
     
     //</editor-fold>
@@ -122,20 +130,33 @@ public class CanvasSurface extends Canvas
     @Override public @NotNull SurfaceData<PaintCommand, CanvasSurface> data() { return data; }
     
     @Override public @NotNull CanvasSurface repaint() {
-        return ToolsFX.runFX(() -> {
-            ToolsFX.clearCanvasUnsafe(this);
-            
-            paintables().forEach(uiCommand -> uiCommand.paint());
-            
-            final CanvasListener listener = getCanvasListener();
-            if (listener != null)
-                listener.redraw(this, width, height);
-            
-            if (snapshotTimer.isTimedOut())
-                snapshotTimer.getOnTimeout().run();
-            
-            return this;
-        });
+//        TasksSL.printThread();
+        //        if (!ToolsFX.isFXThread()) {
+        //            final Thread current = Thread.currentThread();
+        //            final StackTraceElement[] es = current.getStackTrace();
+        //            System.out.println("STACK TRACE ELEMENTS  [" + current.getName() + "]  (CanvasSurface.java | Line ~127)");
+        //            for (int i = 0; i < es.length; i++)
+        //                System.out.println(i + ": " + es[i]);
+        //        }
+        
+        needsUpdate = true;
+        
+        return this;
+        
+        //        return ToolsFX.runFX(() -> {
+        //            ToolsFX.clearCanvasUnsafe(this);
+        //
+        //            paintables().forEach(PaintCommand::paint);
+        //
+        //            final CanvasListener listener = getCanvasListener();
+        //            if (listener != null)
+        //                listener.redraw(this, width, height);
+        //
+        //            if (snapshotTimer.isTimedOut())
+        //                snapshotTimer.getOnTimeout().run();
+        //
+        //            return this;
+        //        });
     }
     
     //<editor-fold desc="--- CANVAS ---">
@@ -164,6 +185,25 @@ public class CanvasSurface extends Canvas
         super.setHeight(height);
         
         repaint();
+    }
+    
+    @Override public boolean needsUpdate() {
+        return needsUpdate;
+    }
+    
+    @Override public void update() {
+        ToolsFX.clearCanvasUnsafe(this);
+        
+        paintables().forEach(PaintCommand::paint);
+        
+        final CanvasListener listener = getCanvasListener();
+        if (listener != null)
+            listener.redraw(this, width, height);
+        
+        if (snapshotTimer.isTimedOut())
+            snapshotTimer.getOnTimeout().run();
+        
+        needsUpdate = false;
     }
     
     //</editor-fold>

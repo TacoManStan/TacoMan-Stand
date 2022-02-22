@@ -34,6 +34,7 @@ public class ImagePaintCommand extends ImagePaintCommandBase {
     @Override protected void drawImage(@NotNull Image image, @NotNull CanvasSurface surface, @NotNull Bounds bounds) {
 //        System.out.println("Image Width: " + image.getWidth());
 //        System.out.println("Image Height: " + image.getHeight());
+        
         ToolsFX.drawImage(getSurface(), bounds, image, false, false);
     }
     
