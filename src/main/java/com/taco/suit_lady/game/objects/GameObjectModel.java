@@ -137,4 +137,8 @@ public class GameObjectModel
     }
     
     //</editor-fold>
+    
+    void shutdown() {
+        getGameMap().getModel().getCanvas().removePaintable(modelPaintCommand);
+    }
 }

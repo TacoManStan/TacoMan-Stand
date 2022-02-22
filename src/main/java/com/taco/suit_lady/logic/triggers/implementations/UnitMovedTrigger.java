@@ -1,6 +1,8 @@
-package com.taco.suit_lady.logic.triggers;
+package com.taco.suit_lady.logic.triggers.implementations;
 
 import com.taco.suit_lady.game.objects.GameObject;
+import com.taco.suit_lady.logic.triggers.Trigger;
+import com.taco.suit_lady.logic.triggers.TriggerCondition;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class UnitMovedTrigger extends Trigger<UnitMovedEvent> {

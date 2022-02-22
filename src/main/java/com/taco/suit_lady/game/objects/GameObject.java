@@ -7,17 +7,14 @@ import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.interfaces.WrappedGameComponent;
 import com.taco.suit_lady.game.objects.tiles.GameTile;
 import com.taco.suit_lady.game.ui.GameViewContent;
-import com.taco.suit_lady.logic.LogiCore;
 import com.taco.suit_lady.logic.TaskManager;
 import com.taco.suit_lady.logic.Tickable;
 import com.taco.suit_lady.logic.triggers.Galaxy;
-import com.taco.suit_lady.logic.triggers.UnitMovedEvent;
+import com.taco.suit_lady.logic.triggers.implementations.UnitArrivedTrigger;
+import com.taco.suit_lady.logic.triggers.implementations.UnitMovedEvent;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
-import com.taco.suit_lady.util.tools.ArraysSL;
-import com.taco.suit_lady.util.tools.BindingsSL;
-import com.taco.suit_lady.util.tools.ObjectsSL;
-import com.taco.suit_lady.util.tools.PropertiesSL;
+import com.taco.suit_lady.util.tools.*;
 import com.taco.tacository.json.JElement;
 import com.taco.tacository.json.JLoadable;
 import com.taco.tacository.json.JObject;
@@ -26,7 +23,6 @@ import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,7 +30,6 @@ import java.io.IOException;
 import java.io.ObjectStreamException;
 import java.io.Serial;
 import java.util.ArrayList;
-import java.util.List;
 
 public class GameObject
         implements WrappedGameComponent, Entity, JObject, JLoadable, UIDProcessable, Tickable<GameObject> {
@@ -120,6 +115,7 @@ public class GameObject
         });
         
         initTriggerEvents();
+        initTaskManager();
         
         return this;
     }
@@ -136,14 +132,23 @@ public class GameObject
         }));
     }
     
+    private void initTaskManager() {
+        taskManager().addShutdownOperation(() -> getGameMap().gameObjects().remove(this));
+        taskManager().addShutdownOperation(() -> getModel().shutdown());
+        taskManager().addShutdownOperation(() -> getGameMap().getModel().refreshMapImage());
+    }
+    
     public GameObject launchMissileTest() {
         final GameObject missile = new GameObject(getGame()).init();
         
         missile.setLocationX(getLocationX(false));
         missile.setLocationY(getLocationY(false));
         
-        getGameMap().gameObjects().add(missile);
-        
+//        getGameMap().gameObjects().add(missile);
+        logiCore().triggers().register(Galaxy.newUnitArrivedTrigger(missile, event -> {
+            Print.print("Unit Arrived [" + missile + "]  ||  [" + event.getMovedFrom() + "  -->  " + event.getMovedTo());
+            missile.taskManager().shutdown();
+        }));
         
         logiCore().submit(missile);
         
@@ -280,6 +285,17 @@ public class GameObject
     
     //</editor-fold>
     
+    //<editor-fold desc="> Tickable">
+    
+    private TaskManager<GameObject> taskManager;
+    @Override public final @NotNull TaskManager<GameObject> taskManager() {
+        if (taskManager == null)
+            taskManager = new TaskManager<>(this);
+        return taskManager;
+    }
+    
+    //</editor-fold>
+    
     //</editor-fold>
     
     private @NotNull GameTile[][] calculateOccupiedTiles() {
@@ -295,12 +311,5 @@ public class GameObject
                 occupyingGameTiles[i][j] = getGameMap().getTileMatrix()[i + adjustedMinX][j + adjustedMinY];
         
         return occupyingGameTiles;
-    }
-    
-    private TaskManager<GameObject> taskManager;
-    @Override public final @NotNull TaskManager<GameObject> taskManager() {
-        if (taskManager == null)
-            taskManager = new TaskManager<>(this);
-        return taskManager;
     }
 }

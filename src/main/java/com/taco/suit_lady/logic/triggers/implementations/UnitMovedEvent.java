@@ -1,6 +1,7 @@
-package com.taco.suit_lady.logic.triggers;
+package com.taco.suit_lady.logic.triggers.implementations;
 
 import com.taco.suit_lady.game.objects.GameObject;
+import com.taco.suit_lady.logic.triggers.TriggerEvent;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
 

@@ -3,6 +3,7 @@ package com.taco.suit_lady.game.commands;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.logic.GameTask;
 import com.taco.suit_lady.logic.LogiCore;
+import com.taco.suit_lady.logic.triggers.implementations.UnitArrivedEvent;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -70,21 +71,26 @@ public class MoveCommand extends GameTask<GameObject> {
             //            System.out.println("Pre-Speed: " + logiCore().secondsToTicks(getOwner().attributes().getDoubleValue(MoveCommand.ATTRIBUTE_ID)));
             final double speed = logiCore().secondsToTicks(getOwner().attributes().getDoubleValue(MoveCommand.ATTRIBUTE_ID) * getGameMap().getTileSize());
             //            System.out.println("Speed: " + speed);
-        
+            
             final double xDistance = getTargetX() - getOwner().getLocationX(true);
             final double yDistance = getTargetY() - getOwner().getLocationY(true);
-        
+            
             double multiplier = Math.sqrt(Math.pow(speed, 2) / (Math.pow(xDistance, 2) + Math.pow(yDistance, 2)));
-        
+            
             final double xMovement = (multiplier * xDistance);
             final double yMovement = (multiplier * yDistance);
-        
-        
+            
+            
             //            ToolsFX.runFX(() -> {
+            final Point2D oldLoc = new Point2D(getOwner().getLocationX(false), getOwner().getLocationY(false));
             getOwner().moveX(xMovement);
             getOwner().moveY(yMovement);
-            if (getOwner().isAtPoint(getLocation(), true))
+            final Point2D newLoc = new Point2D(getOwner().getLocationX(false), getOwner().getLocationY(false));
+            
+            if (getOwner().isAtPoint(getLocation(), true)) {
+                logiCore().triggers().submit(new UnitArrivedEvent(getOwner(), oldLoc, newLoc));
                 setPaused(true);
+            }
             //            }, true);
         }
     }
