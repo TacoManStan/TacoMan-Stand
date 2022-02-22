@@ -149,7 +149,6 @@ public class LogiCore
     private void tick() {
         if (getLock() != null) {
             sync(() -> {
-//            TasksSL.printThread();
                 tickCount++;
                 if (checkSpringClosure()) return;
                 if (timer.isTimedOut()) {
@@ -161,10 +160,7 @@ public class LogiCore
                     tickable.taskManager().execute();
                 });
                 
-                ToolsFX.runFX(() -> gfxObjects.forEach(action -> {
-                    if (action.needsUpdate())
-                        action.update();
-                }), true);
+                ToolsFX.runFX(() -> gfxObjects.forEach(GFXObject::execute), true);
             });
         }
     }
