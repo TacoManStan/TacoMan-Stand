@@ -39,7 +39,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
@@ -118,13 +117,14 @@ public class ToolsFX {
                 throw ExceptionsSL.ex(e);
         }
     }
+    public static void runFX(Runnable runnable) { runFX(runnable, true); }
     
     /**
      * Runs the specified Callable on the JavaFX Thread, and then returns its result when it is done.
      *
      * @param callable The Callable to be executed.
      */
-    public static <V> V runFX(Callable<V> callable) {
+    public static <V> V callFX(Callable<V> callable) {
         ExceptionsSL.nullCheck(callable, "Callable cannot be null");
         try {
             if (isFXThread())

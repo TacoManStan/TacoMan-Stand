@@ -295,7 +295,7 @@ public class UIPageHandler
      *
      * @see #backUnchecked()
      */
-    public UIPage<?> back() { return ToolsFX.runFX(() -> getPages().pollLast()); }
+    public UIPage<?> back() { return ToolsFX.callFX(() -> getPages().pollLast()); }
     
     /**
      * <p>Identical to <code><i>{@link #back()}</i></code>, except an {@link RuntimeException exception} is thrown if the {@link #getPages() Page List} is {@link #isEmpty() empty}.</p>

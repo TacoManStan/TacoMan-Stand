@@ -340,7 +340,7 @@ public class DialogsFX {
      * @return The value returned by the {@link DialogCallback}.
      */
     public static <T> T showDialog(String title, String message, Node content, Node contentToFocus, double spacing, ButtonType[] buttonTypes, SizeType sizeType, DialogCallback<T> callback) {
-        return ToolsFX.runFX(() -> {
+        return ToolsFX.callFX(() -> {
             final Dialog<T> dialog; final DialogPane dialog_pane;
             
             final BorderPane parent_container = new BorderPane(); final Node container; final Node final_content_to_focus = contentToFocus != null ? contentToFocus : content;

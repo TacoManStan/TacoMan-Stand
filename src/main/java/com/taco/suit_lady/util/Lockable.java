@@ -97,32 +97,32 @@ import java.util.function.Supplier;
     }
     
     default <R> R syncFX(Supplier<R> action, Consumer<Throwable>... onFinallyActions) {
-        return TasksSL.sync(getLock(), () -> ToolsFX.runFX(action::get), isNullableLock(), onFinallyActions);
+        return TasksSL.sync(getLock(), () -> ToolsFX.callFX(action::get), isNullableLock(), onFinallyActions);
     }
     default <R> R syncIfFX(Supplier<R> action, Supplier<Boolean> syncCondition, Consumer<Throwable>... onFinallyActions) {
         if (syncCondition == null || syncCondition.get())
-            return TasksSL.sync(getLock(), () -> ToolsFX.runFX(action::get), isNullableLock(), onFinallyActions);
+            return TasksSL.sync(getLock(), () -> ToolsFX.callFX(action::get), isNullableLock(), onFinallyActions);
         else
-            return ToolsFX.runFX(action::get);
+            return ToolsFX.callFX(action::get);
     }
     
     /**
-     * <p>Identical to <i>{@link #sync(Function, Supplier, Consumer[])}</i> except the specified {@link Function} is executed on the {@link ToolsFX#runFX(Callable) Java FX Thread}.</p>
+     * <p>Identical to <i>{@link #sync(Function, Supplier, Consumer[])}</i> except the specified {@link Function} is executed on the {@link ToolsFX#callFX(Callable) Java FX Thread}.</p>
      * <p><b>Details</b></p>
      * <ol>
-     *     <li>Only the specified {@link Function} operation is executed on the {@link ToolsFX#runFX(Callable) Java FX Thread}.</li>
+     *     <li>Only the specified {@link Function} operation is executed on the {@link ToolsFX#callFX(Callable) Java FX Thread}.</li>
      * </ol>
      */
     //TO-EXPAND
     default <T, R> R syncFX(Function<T, R> action, Supplier<T> actionSupplier, Consumer<Throwable>... onFinallyActions) {
-        return TasksSL.sync(getLock(), t -> ToolsFX.runFX(() -> action.apply(t)), actionSupplier, isNullableLock(), onFinallyActions);
+        return TasksSL.sync(getLock(), t -> ToolsFX.callFX(() -> action.apply(t)), actionSupplier, isNullableLock(), onFinallyActions);
     }
     default <T, R> R syncIfFX(Function<T, R> action, Supplier<T> actionSupplier, Predicate<T> syncCondition, Consumer<Throwable>... onFinallyActions) {
         final T input = actionSupplier.get();
         if (syncCondition == null || syncCondition.test(input))
-            return TasksSL.sync(getLock(), t -> ToolsFX.runFX(() -> action.apply(t)), () -> input, isNullableLock(), onFinallyActions);
+            return TasksSL.sync(getLock(), t -> ToolsFX.callFX(() -> action.apply(t)), () -> input, isNullableLock(), onFinallyActions);
         else
-            return ToolsFX.runFX(() -> action.apply(input));
+            return ToolsFX.callFX(() -> action.apply(input));
     }
     
     // Lock Methods

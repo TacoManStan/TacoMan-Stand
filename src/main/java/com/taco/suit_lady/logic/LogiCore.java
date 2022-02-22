@@ -138,7 +138,7 @@ public class LogiCore
     public final @NotNull ReadOnlyIntegerProperty readOnlyUpsProperty() { return upsProperty.getReadOnlyProperty(); }
     protected final @NotNull ReadOnlyIntegerWrapper upsProperty() { return upsProperty; }
     public final int getUps() { return upsProperty.get(); }
-    protected final int setUps(int newValue) { return ToolsFX.runFX(() -> PropertiesSL.setProperty(upsProperty, newValue)); }
+    protected final int setUps(int newValue) { return ToolsFX.callFX(() -> PropertiesSL.setProperty(upsProperty, newValue)); }
     
     //</editor-fold>
     
