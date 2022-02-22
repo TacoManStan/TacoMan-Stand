@@ -131,8 +131,8 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         
         //        logiCore().submit(getTestObject());
         //        logiCore().submit(getTestObject2());
-        logiCore().submitMk2(getTestObject());
-        logiCore().submitMk2(getTestObject2());
+        logiCore().submit(getTestObject());
+        logiCore().submit(getTestObject2());
         //        logiCore().submit(getTestObject().getCommand());
         //        logiCore().submit(getTestObject2().getCommand());
     }

@@ -8,7 +8,4 @@ public class Ability_TargetEffect extends Ability {
     @Override public @NotNull GameObject getOwner() {
         return null;
     }
-    @Override public void tick(@NotNull LogiCore logiCore) {
-    
-    }
 }

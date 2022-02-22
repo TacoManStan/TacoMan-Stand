@@ -3,7 +3,6 @@ package com.taco.suit_lady.ui;
 import com.taco.suit_lady.game.ui.GFXObject;
 import com.taco.suit_lady.ui.ui_internal.controllers.Controller;
 import com.taco.suit_lady.util.tools.ExceptionsSL;
-import com.taco.suit_lady.util.tools.Print;
 import com.taco.suit_lady.util.tools.TasksSL;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -42,7 +41,7 @@ public abstract class ContentController<T extends Content<T, D, C>, D extends Co
             throw ExceptionsSL.unsupported("Content has already been set (" + getContent() + ")");
         this.content = content;
         
-        logiCore().submitGfxAction2(this);
+        logiCore().addGfxObject(this);
         
         return (C) this;
     }

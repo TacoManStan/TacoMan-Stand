@@ -8,15 +8,12 @@ import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.timing.Timer;
 import com.taco.suit_lady.util.timing.Timers;
 import com.taco.suit_lady.util.tools.ExceptionsSL;
-import com.taco.suit_lady.util.tools.Print;
 import com.taco.suit_lady.util.tools.PropertiesSL;
-import com.taco.suit_lady.util.tools.TasksSL;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import javafx.beans.property.*;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -89,7 +86,7 @@ public class CanvasSurface extends Canvas
         }));
         
         this.needsUpdate = false;
-        logiCore().submitGfxAction2(this);
+        logiCore().addGfxObject(this);
     }
     
     //</editor-fold>

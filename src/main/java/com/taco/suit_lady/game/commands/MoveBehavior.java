@@ -1,10 +1,9 @@
 package com.taco.suit_lady.game.commands;
 
-import com.taco.suit_lady.logic.LogiCore;
-import com.taco.suit_lady.logic.legacy.TickableMk1;
 import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.game.ui.GameViewContent;
+import com.taco.suit_lady.logic.LogiCore;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
@@ -20,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.locks.Lock;
 
 public class MoveBehavior
-        implements SpringableWrapper, Lockable, GameComponent, TickableMk1 {
+        implements SpringableWrapper, Lockable, GameComponent {
     
     private final GameObject owner;
     
@@ -66,14 +65,6 @@ public class MoveBehavior
     //</editor-fold>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
-    
-    @Override public void tick(@NotNull LogiCore logiCore) {
-        sync(() -> {
-            owner.moveX(getDirectionX() * getSpeedPerTick());
-            owner.moveY(getDirectionY() * getSpeedPerTick());
-        });
-    }
-    
     
     @Override public @NotNull GameViewContent getGame() { return owner.getGame(); }
     

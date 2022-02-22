@@ -7,7 +7,6 @@ import com.taco.suit_lady.game.ui.GFXObject;
 import com.taco.suit_lady.logic.triggers.TriggerEventManager;
 import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
-import com.taco.suit_lady.logic.legacy.TickableMk1;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.timing.Timer;
@@ -45,10 +44,10 @@ public class LogiCore
     //
     
     private final ScheduledThreadPoolExecutor gameLoopExecutor;
-    private final ListProperty<TickableMk2<?>> tickablesMk2; //Absolutely NO blocking calls to FX thread can be made here. None.
-    private final List<TickableMk2<?>> emptyMk2;
+    private final ListProperty<Tickable<?>> tickables; //Absolutely NO blocking calls to FX thread can be made here. None.
+    private final List<Tickable<?>> empty;
     
-    private final ListProperty<GFXObject> gfxActions2;
+    private final ListProperty<GFXObject> gfxObjects;
     
     private final int targetUPS = 144;
     private final ReadOnlyIntegerWrapper upsProperty;
@@ -75,10 +74,10 @@ public class LogiCore
         
         this.gameLoopExecutor = new ScheduledThreadPoolExecutor(1);
         
-        this.tickablesMk2 = new SimpleListProperty<>(FXCollections.observableArrayList());
-        this.emptyMk2 = new ArrayList<>();
+        this.tickables = new SimpleListProperty<>(FXCollections.observableArrayList());
+        this.empty = new ArrayList<>();
         
-        this.gfxActions2 = new SimpleListProperty<>(FXCollections.observableArrayList());
+        this.gfxObjects = new SimpleListProperty<>(FXCollections.observableArrayList());
         
         this.upsProperty = new ReadOnlyIntegerWrapper();
         
@@ -124,12 +123,12 @@ public class LogiCore
     
     //
     
-    public final boolean submitMk2(@NotNull TickableMk2<?> tickable) { return tickablesMk2.add(tickable); }
+    public final boolean submit(@NotNull Tickable<?> tickable) { return tickables.add(tickable); }
     
-    public final boolean submitGfxAction2(@NotNull GFXObject gfxObject) {
-        if (getLock() != null)
-            return sync(() -> gfxActions2.add(gfxObject));
-        return gfxActions2.add(gfxObject);
+    public final boolean addGfxObject(@NotNull GFXObject gfxObject) {
+//        if (getLock() != null)
+//            return sync(() -> gfxActions2.add(gfxObject));
+        return gfxObjects.add(gfxObject);
     }
     
     //
@@ -157,30 +156,17 @@ public class LogiCore
                     if (checkSpringClosure()) return;
                     timer.getOnTimeout().run();
                 }
-                tickablesMk2.forEach(tickable -> {
+                tickables.forEach(tickable -> {
                     if (checkSpringClosure()) return;
                     tickable.taskManager().execute();
                 });
-//                Print.errCallingInfo();
-//                System.out.println(gfxActions2);
-                ToolsFX.runFX(() -> gfxActions2.forEach(action -> {
-//                    Print.err();
-                    if (checkSpringClosure()) return;
+                
+                ToolsFX.runFX(() -> gfxObjects.forEach(action -> {
                     if (action.needsUpdate())
                         action.update();
                 }), true);
-                //                gfxActions.forEach(runnable -> {
-                //                    runnable.run();
-                //                });
-                //                gfxActions.clear();
             });
         }
-    }
-    
-    private void tick(@NotNull TickableMk1 tickable) {
-        tickable.tick(this);
-        if (tickable.hasSubActions())
-            tickable.subActions().forEach(this::tick);
     }
     
     //</editor-fold>

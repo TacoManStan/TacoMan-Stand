@@ -27,10 +27,5 @@ public class Ability_InstantEffect extends Ability {
     
     @Override public final @NotNull GameObject getOwner() { return owner; }
     
-    @Override public void tick(@NotNull LogiCore logiCore) {
-    
-    }
-    
-    
     //</editor-fold>
 }

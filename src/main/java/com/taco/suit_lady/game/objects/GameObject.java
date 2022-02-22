@@ -9,15 +9,11 @@ import com.taco.suit_lady.game.objects.tiles.GameTile;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.logic.LogiCore;
 import com.taco.suit_lady.logic.TaskManager;
-import com.taco.suit_lady.logic.legacy.TickableMk1;
-import com.taco.suit_lady.logic.TickableMk2;
+import com.taco.suit_lady.logic.Tickable;
 import com.taco.suit_lady.logic.triggers.Galaxy;
 import com.taco.suit_lady.logic.triggers.UnitMovedEvent;
-import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
-import com.taco.suit_lady.util.springable.SpringableWrapper;
-import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.ArraysSL;
 import com.taco.suit_lady.util.tools.BindingsSL;
 import com.taco.suit_lady.util.tools.ObjectsSL;
@@ -32,21 +28,16 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
-import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.springframework.context.ConfigurableApplicationContext;
 
 import java.io.IOException;
 import java.io.ObjectStreamException;
 import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class GameObject
-        implements WrappedGameComponent, Entity, JObject, JLoadable, UIDProcessable, TickableMk2<GameObject> {
+        implements WrappedGameComponent, Entity, JObject, JLoadable, UIDProcessable, Tickable<GameObject> {
     
     private final GameViewContent content;
     
@@ -78,8 +69,6 @@ public class GameObject
     
     private final MoveCommand command;
     
-    private final ObservableList<TickableMk1> tickables;
-    
     public GameObject(@NotNull GameComponent gameComponent) {
         this.content = gameComponent.getGame();
         
@@ -105,12 +94,7 @@ public class GameObject
         
         initAttributes();
         
-        
-        this.command = new MoveCommand(this);
-        
-        this.tickables = new SimpleListProperty<>(FXCollections.observableArrayList());
-        tickables.add(command);
-        taskManager().tasks().add(command);
+        taskManager().tasks().add(this.command = new MoveCommand(this));
         
         //
         
@@ -161,7 +145,7 @@ public class GameObject
         getGameMap().gameObjects().add(missile);
         
         
-        logiCore().submitMk2(missile);
+        logiCore().submit(missile);
         
 //        missile.getCommand().setTargetX((int) target.getX());
 //        missile.getCommand().setTargetY((int) target.getY());
@@ -239,15 +223,6 @@ public class GameObject
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override public @NotNull GameViewContent getGame() { return content; }
-    
-    //<editor-fold desc="> Logic">
-    
-    @Override public void tick(@NotNull LogiCore logiCore) { }
-    
-    @Override public boolean hasSubActions() { return true; }
-    @Override public final @NotNull List<TickableMk1> subActions() { return tickables; }
-    
-    //</editor-fold>
     
     //<editor-fold desc="> Json">
     

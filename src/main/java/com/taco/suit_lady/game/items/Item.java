@@ -34,12 +34,6 @@ public class Item
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public void tick(@NotNull LogiCore logiCore) {
-        //TODO
-    }
-    
-    //
-    
     @Override public @NotNull GameViewContent getGame() { return content; }
     
     //<editor-fold desc="--- GENERIC ---">

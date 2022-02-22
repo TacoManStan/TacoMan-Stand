@@ -3,7 +3,6 @@ package com.taco.suit_lady.game.commands;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.logic.GameTask;
 import com.taco.suit_lady.logic.LogiCore;
-import com.taco.suit_lady.logic.legacy.TickableMk1;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -13,8 +12,7 @@ import javafx.geometry.Point2D;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-public class MoveCommand extends GameTask<GameObject>
-        implements TickableMk1 {
+public class MoveCommand extends GameTask<GameObject> {
     
     public static final String ATTRIBUTE_ID = "move-speed";
     
@@ -66,22 +64,22 @@ public class MoveCommand extends GameTask<GameObject>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public void tick(@NotNull LogiCore logiCore) {
+    @Override protected void tick() {
         if (!isPaused()) {
-//            final double speed = ((getOwner().attributes().getDoubleValue(MoveCommand.ATTRIBUTE_ID) * logiCore.getUPSMultiplier()) * logiCore.getGameMap().getTileSize()) / 100D;
-//            System.out.println("Pre-Speed: " + logiCore().secondsToTicks(getOwner().attributes().getDoubleValue(MoveCommand.ATTRIBUTE_ID)));
+            //            final double speed = ((getOwner().attributes().getDoubleValue(MoveCommand.ATTRIBUTE_ID) * logiCore.getUPSMultiplier()) * logiCore.getGameMap().getTileSize()) / 100D;
+            //            System.out.println("Pre-Speed: " + logiCore().secondsToTicks(getOwner().attributes().getDoubleValue(MoveCommand.ATTRIBUTE_ID)));
             final double speed = logiCore().secondsToTicks(getOwner().attributes().getDoubleValue(MoveCommand.ATTRIBUTE_ID) * getGameMap().getTileSize());
-//            System.out.println("Speed: " + speed);
-            
+            //            System.out.println("Speed: " + speed);
+        
             final double xDistance = getTargetX() - getOwner().getLocationX(true);
             final double yDistance = getTargetY() - getOwner().getLocationY(true);
-            
+        
             double multiplier = Math.sqrt(Math.pow(speed, 2) / (Math.pow(xDistance, 2) + Math.pow(yDistance, 2)));
-            
+        
             final double xMovement = (multiplier * xDistance);
             final double yMovement = (multiplier * yDistance);
-            
-            
+        
+        
             //            ToolsFX.runFX(() -> {
             getOwner().moveX(xMovement);
             getOwner().moveY(yMovement);
@@ -89,10 +87,6 @@ public class MoveCommand extends GameTask<GameObject>
                 setPaused(true);
             //            }, true);
         }
-    }
-    
-    @Override protected void tick() {
-        tick(logiCore());
     }
     @Override protected void shutdown() { }
     
