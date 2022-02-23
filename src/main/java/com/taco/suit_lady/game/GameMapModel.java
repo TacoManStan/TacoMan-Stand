@@ -66,58 +66,28 @@ public class GameMapModel
         this.mapImagePaintCommand.setPaintPriority(5);
     }
     
-    public final @NotNull Image generateMapImage() {
-        return ToolsFX.generateTiledImage(32, getGameMap().getTileMatrix(), gameTile -> {
-            if (gameTile != null) {
-                TileModel tileModel = gameTile.getModel();
-                if (tileModel != null)
-                    return tileModel.getImage();
-            }
-            return null;
-        });
-    }
-    
-    public final @NotNull Image generateDemoImage() {
-        return ToolsFX.generateTiledImage(32, getGameMap().getTileMatrix(), gameTile -> {
-            return ResourcesSL.getGameImage("tiles/", "grass");
-        });
-    }
-    
     //<editor-fold desc="--- INITIALIZATION ---">
     
     public final GameMapModel init() {
+        initPane();
+        getCamera().init();
+        initPaintCommand();
+        return this;
+    }
+    
+    private void initPane() {
         parentPaneProperty.addListener((observable, oldValue, newValue) -> ObjectsSL.doIfNonNull(
                 () -> newValue, value -> {
                     ToolsFX.setAnchors(value);
                     refreshCanvas();
                 }));
-        
-        setParentPane(new StackPane());
-        
-        //        getParentPane().setStyle("-fx-border-color: red");
-        //        getCanvasPane().setStyle("-fx-border-color: blue");
-        
-        //        CroppedImagePaintCommand paintCommand = new CroppedImagePaintCommand(this, lock).init();
-        //        //TODO: Configure the paint command initialization properly & bind w & h to correct values (in Camera)
-        //        paintCommand.croppingBoundsBinding().setWidth(getOwner().get)
-        //        paintCommand.croppingBoundsBinding().setHeight(getOwner().getFullHeight());
-        //
-        //        getCanvas().addPaintable(paintCommand);
-        //        getCanvas().repaint();
-        
-        getCamera().init();
-        
-        mapImagePaintCommand.init();
-        initPaintCommand();
-        
-        return this;
-    }
     
-    public final void refreshMapImage() {
-        mapImageProperty.set(generateMapImage());
+        setParentPane(new StackPane());
     }
     
     private void initPaintCommand() {
+        mapImagePaintCommand.init();
+        
         camera.xOffsetProperty().bind(BindingsSL.intBinding(() -> -Math.round(camera.getViewportWidth() / 2d), camera.viewportWidthBinding()));
         camera.yOffsetProperty().bind(BindingsSL.intBinding(() -> -Math.round(camera.getViewportHeight() / 2d), camera.viewportHeightBinding()));
         
@@ -168,6 +138,8 @@ public class GameMapModel
     
     //</editor-fold>
     
+    //<editor-fold desc="--- INTERNAL ---">
+    
     /**
      * <p>A helper method that fully resets the JFX UI elements comprising the map image and parent pane.</p>
      */
@@ -179,5 +151,28 @@ public class GameMapModel
                 parent.getChildren().add(canvasPane);
             }
         }, true);
+    }
+    
+    //</editor-fold>
+    
+    public final void refreshMapImage() {
+        mapImageProperty.set(generateMapImage());
+    }
+    
+    public final @NotNull Image generateMapImage() {
+        return ToolsFX.generateTiledImage(32, getGameMap().getTileMatrix(), gameTile -> {
+            if (gameTile != null) {
+                TileModel tileModel = gameTile.getModel();
+                if (tileModel != null)
+                    return tileModel.getImage();
+            }
+            return null;
+        });
+    }
+    
+    public final @NotNull Image generateDemoImage() {
+        return ToolsFX.generateTiledImage(32, getGameMap().getTileMatrix(), gameTile -> {
+            return ResourcesSL.getGameImage("tiles/", "grass");
+        });
     }
 }

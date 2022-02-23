@@ -199,12 +199,10 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         
         if (event.getButton().equals(MouseButton.PRIMARY))
             selectTile(event);
-        else if (event.getButton().equals(MouseButton.SECONDARY)) {
-            if (event.isShiftDown())
-                processMovementOrder(event, testObject.launchMissileTest());
-            else
-                processMovementOrder(event, getTestObject());
-        }
+        else if (event.getButton().equals(MouseButton.SECONDARY))
+            processMovementOrder(event, getTestObject());
+        else if (event.getButton().equals(MouseButton.MIDDLE))
+            processMovementOrder(event, testObject.launchMissileTest());
         
         return true;
     }
@@ -212,7 +210,7 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         return true;
     }
     @Override protected boolean handleMouseDragEvent(@NotNull MouseEvent event) {
-        if (event.getButton() == MouseButton.SECONDARY && !event.isShiftDown())
+        if (event.getButton() == MouseButton.SECONDARY)
             processMovementOrder(event, getTestObject());
         
         return true;
