@@ -48,10 +48,7 @@ public class TaskManager<E extends Tickable<E>>
     //<editor-fold desc="--- INITIALIZATION ---">
     
     public TaskManager<E> init() {
-        Print.print(getGfxOwner() + ":  " + isGfxOwner());
         logiCore().submit(getOwner());
-        //        logiCore().addGfxObject(getGfxOwner());
-        
         return this;
     }
     

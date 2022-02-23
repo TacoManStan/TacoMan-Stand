@@ -187,10 +187,6 @@ public class MandelbrotContent extends ListableContent<
         return MandelbrotContentController.class;
     }
     
-    @Override protected boolean handleKeyEvent(@NotNull KeyEvent keyEvent) {
-        return false;
-    }
-    
     
     @Override
     protected void onActivate() { }

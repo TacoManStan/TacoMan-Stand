@@ -151,10 +151,10 @@ public class ContentManager
         }, true);
     }
     
-    protected boolean submitKeyEvent(@NotNull KeyEvent keyEvent) {
+    protected boolean submitKeyEvent(@NotNull KeyEvent keyEvent, boolean fx) {
         Content<?, ?, ?> content = getContent();
         if (content != null)
-            return content.handleKeyEvent(keyEvent);
+            return content.handleKeyEvent(keyEvent, fx);
         return false;
     }
 }

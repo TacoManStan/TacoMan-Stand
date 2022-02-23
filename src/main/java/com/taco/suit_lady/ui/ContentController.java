@@ -61,49 +61,40 @@ public abstract class ContentController<T extends Content<T, D, C>, D extends Co
     
     //
     
-    @Override public void initialize() {
-    
-    }
+    @Override public void initialize() { }
     
     private void initMouseEventHandling() {
         getContentPane().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-            taskManager().addTask(Galaxy.newOneTimeTask((C) this, () -> {
-                if (getContent().handleMousePressEvent(event))
-                    event.consume();
-            }));
-            //            addOperation(() -> { });
+            if (getContent().handleMousePressEvent(event, true))
+                event.consume();
+            taskManager().addTask(Galaxy.newOneTimeTask((C) this, () -> getContent().handleMousePressEvent(event, false)));
         });
         getContentPane().addEventFilter(MouseEvent.MOUSE_RELEASED, event -> {
-            taskManager().addTask(Galaxy.newOneTimeTask((C) this, () -> {
-                if (getContent().handleMouseReleaseEvent(event))
-                    event.consume();
-            }));
+            if (getContent().handleMouseReleaseEvent(event, true))
+                event.consume();
+            taskManager().addTask(Galaxy.newOneTimeTask((C) this, () -> getContent().handleMouseReleaseEvent(event, false)));
         });
         
         getContentPane().addEventFilter(MouseEvent.MOUSE_MOVED, event -> {
-            taskManager().addTask(Galaxy.newOneTimeTask((C) this, () -> {
-                if (getContent().handleMouseMoveEvent(event))
-                    event.consume();
-            }));
+            if (getContent().handleMouseMoveEvent(event, true))
+                event.consume();
+            taskManager().addTask(Galaxy.newOneTimeTask((C) this, () -> getContent().handleMouseMoveEvent(event, false)));
         });
         getContentPane().addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
-            taskManager().addTask(Galaxy.newOneTimeTask((C) this, () -> {
-                if (getContent().handleMouseDragEvent(event))
-                    event.consume();
-            }));
+            if (getContent().handleMouseDragEvent(event, true))
+                event.consume();
+            taskManager().addTask(Galaxy.newOneTimeTask((C) this, () -> getContent().handleMouseDragEvent(event, false)));
         });
         
         getContentPane().addEventFilter(MouseEvent.MOUSE_ENTERED, event -> {
-            taskManager().addTask(Galaxy.newOneTimeTask((C) this, () -> {
-                if (getContent().handleMouseEnterEvent(event))
-                    event.consume();
-            }));
+            if (getContent().handleMouseEnterEvent(event, true))
+                event.consume();
+            taskManager().addTask(Galaxy.newOneTimeTask((C) this, () -> getContent().handleMouseEnterEvent(event, false)));
         });
         getContentPane().addEventFilter(MouseEvent.MOUSE_EXITED, event -> {
-            taskManager().addTask(Galaxy.newOneTimeTask((C) this, () -> {
-                if (getContent().handleMouseExitEvent(event))
-                    event.consume();
-            }));
+            if (getContent().handleMouseExitEvent(event, true))
+                event.consume();
+            taskManager().addTask(Galaxy.newOneTimeTask((C) this, () -> getContent().handleMouseExitEvent(event, false)));
         });
     }
     

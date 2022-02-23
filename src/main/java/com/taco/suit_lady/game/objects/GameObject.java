@@ -135,6 +135,7 @@ public class GameObject
         taskManager().addShutdownOperation(() -> getGameMap().gameObjects().remove(this));
         taskManager().addGfxShutdownOperation(() -> getModel().shutdown());
         taskManager().addGfxShutdownOperation(() -> getGameMap().getModel().refreshMapImage());
+        taskManager().addShutdownOperation(() -> ArraysSL.iterateMatrix(tile -> tile.getOccupyingObjects().remove(this), getOccupiedTiles()));
     }
     
     public GameObject launchMissileTest() {
@@ -146,16 +147,10 @@ public class GameObject
         missile.attributes().addDoubleAttribute(MoveCommand.ACCELERATION_ID, 1.025D);
         missile.attributes().getDoubleAttribute(MoveCommand.SPEED_ID).setValue(1D);
         
-        //        getGameMap().gameObjects().add(missile);
         logiCore().triggers().register(Galaxy.newUnitArrivedTrigger(missile, event -> {
             Print.print("Unit Arrived [" + missile + "]  ||  [" + event.getMovedFrom() + "  -->  " + event.getMovedTo());
             missile.taskManager().shutdown();
         }));
-        
-        //        logiCore().submit(missile);
-        
-        //        missile.getCommand().setTargetX((int) target.getX());
-        //        missile.getCommand().setTargetY((int) target.getY());
         
         return missile;
     }

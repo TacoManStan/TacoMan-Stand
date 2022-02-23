@@ -95,16 +95,16 @@ public abstract class Content<T extends Content<T, D, C>, D extends ContentData<
     protected abstract @NotNull D loadData();
     protected abstract @NotNull Class<C> controllerDefinition();
     
-    protected boolean handleKeyEvent(@NotNull KeyEvent keyEvent) { return false; }
+    protected boolean handleKeyEvent(@NotNull KeyEvent keyEvent, boolean fx) { return false; }
     
-    protected boolean handleMousePressEvent(@NotNull MouseEvent event) { return false; }
-    protected boolean handleMouseReleaseEvent(@NotNull MouseEvent event) { return false; }
+    protected boolean handleMousePressEvent(@NotNull MouseEvent event, boolean fx) { return false; }
+    protected boolean handleMouseReleaseEvent(@NotNull MouseEvent event, boolean fx) { return false; }
     
-    protected boolean handleMouseMoveEvent(@NotNull MouseEvent event) { return false; }
-    protected boolean handleMouseDragEvent(@NotNull MouseEvent event) { return false; }
+    protected boolean handleMouseMoveEvent(@NotNull MouseEvent event, boolean fx) { return false; }
+    protected boolean handleMouseDragEvent(@NotNull MouseEvent event, boolean fx) { return false; }
     
-    protected boolean handleMouseEnterEvent(@NotNull MouseEvent event) { return false; }
-    protected boolean handleMouseExitEvent(@NotNull MouseEvent event) { return false; }
+    protected boolean handleMouseEnterEvent(@NotNull MouseEvent event, boolean fx) { return false; }
+    protected boolean handleMouseExitEvent(@NotNull MouseEvent event, boolean fx) { return false; }
     
     //<editor-fold desc="--- EVENTS ---">
     

@@ -15,6 +15,7 @@ import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ObjectsSL;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import com.taco.suit_lady.util.tools.ResourcesSL;
+import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
@@ -131,8 +132,8 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         
         //        logiCore().submit(getTestObject());
         //        logiCore().submit(getTestObject2());
-//        logiCore().submit(getTestObject());
-//        logiCore().submit(getTestObject2());
+        //        logiCore().submit(getTestObject());
+        //        logiCore().submit(getTestObject2());
         //        logiCore().submit(getTestObject().getCommand());
         //        logiCore().submit(getTestObject2().getCommand());
     }
@@ -153,40 +154,42 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override protected boolean handleKeyEvent(@NotNull KeyEvent keyEvent) {
-        return switch (keyEvent.getCode()) {
-            case W -> keyInputAction(() -> {
-                if (keyEvent.isShiftDown())
-                    getCamera().moveY(-1);
-                else
-                    getCamera().moveTileY(-1);
-            });
-            case A -> keyInputAction(() -> {
-                if (keyEvent.isShiftDown())
-                    getCamera().moveX(-1);
-                else
-                    getCamera().moveTileX(-1);
-            });
-            case S -> keyInputAction(() -> {
-                if (keyEvent.isShiftDown())
-                    getCamera().moveY(1);
-                else
-                    getCamera().moveTileY(1);
-            });
-            case D -> keyInputAction(() -> {
-                if (keyEvent.isShiftDown())
-                    getCamera().moveX(1);
-                else
-                    getCamera().moveTileX(1);
-            });
-            
-            case UP -> keyInputAction(() -> testObject.moveY(-1));
-            case LEFT -> keyInputAction(() -> testObject.moveX(-1));
-            case DOWN -> keyInputAction(() -> testObject.moveY(1));
-            case RIGHT -> keyInputAction(() -> testObject.moveX(1));
-            
-            default -> false;
-        };
+    @Override protected boolean handleKeyEvent(@NotNull KeyEvent keyEvent, boolean fx) {
+        if (!fx)
+            return switch (keyEvent.getCode()) {
+                case W -> keyInputAction(() -> {
+                    if (keyEvent.isShiftDown())
+                        getCamera().moveY(-1);
+                    else
+                        getCamera().moveTileY(-1);
+                });
+                case A -> keyInputAction(() -> {
+                    if (keyEvent.isShiftDown())
+                        getCamera().moveX(-1);
+                    else
+                        getCamera().moveTileX(-1);
+                });
+                case S -> keyInputAction(() -> {
+                    if (keyEvent.isShiftDown())
+                        getCamera().moveY(1);
+                    else
+                        getCamera().moveTileY(1);
+                });
+                case D -> keyInputAction(() -> {
+                    if (keyEvent.isShiftDown())
+                        getCamera().moveX(1);
+                    else
+                        getCamera().moveTileX(1);
+                });
+                
+                case UP -> keyInputAction(() -> testObject.moveY(-1));
+                case LEFT -> keyInputAction(() -> testObject.moveX(-1));
+                case DOWN -> keyInputAction(() -> testObject.moveY(1));
+                case RIGHT -> keyInputAction(() -> testObject.moveX(1));
+                
+                default -> false;
+            };
+        return true;
     }
     
     private boolean keyInputAction(@NotNull Runnable action) {
@@ -194,24 +197,29 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         return true;
     }
     
-    @Override protected boolean handleMousePressEvent(@NotNull MouseEvent event) {
+    @Override protected boolean handleMousePressEvent(@NotNull MouseEvent event, boolean fx) {
         final Point2D viewToMap = getCamera().viewToMap(event.getX(), event.getY());
-        
-        if (event.getButton().equals(MouseButton.PRIMARY))
-            selectTile(event);
-        else if (event.getButton().equals(MouseButton.SECONDARY))
-            processMovementOrder(event, getTestObject());
-        else if (event.getButton().equals(MouseButton.MIDDLE))
-            processMovementOrder(event, testObject.launchMissileTest());
+        if (event.getButton().equals(MouseButton.PRIMARY)) {
+            if (fx)
+                selectTile(event);
+        } else if (event.getButton().equals(MouseButton.SECONDARY)) {
+            if (!fx)
+                processMovementOrder(event, getTestObject());
+        } else if (event.getButton().equals(MouseButton.MIDDLE)) {
+            if (!fx)
+                processMovementOrder(event, testObject.launchMissileTest());
+        }
         
         return true;
     }
-    @Override protected boolean handleMouseReleaseEvent(@NotNull MouseEvent event) {
+    @Override protected boolean handleMouseReleaseEvent(@NotNull MouseEvent event, boolean fx) {
         return true;
     }
-    @Override protected boolean handleMouseDragEvent(@NotNull MouseEvent event) {
-        if (event.getButton() == MouseButton.SECONDARY)
-            processMovementOrder(event, getTestObject());
+    @Override protected boolean handleMouseDragEvent(@NotNull MouseEvent event, boolean fx) {
+        if (event.getButton() == MouseButton.SECONDARY) {
+            if (!fx)
+                processMovementOrder(event, getTestObject());
+        }
         
         return true;
     }
@@ -236,7 +244,7 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
     private void selectTile(@NotNull MouseEvent event) {
         final GameTile tile = getGameMap().getTileAtPoint(getCamera().viewToMap(event.getX(), event.getY()));
         if (tile != null)
-            getUIData().setSelectedTile(tile);
+            ToolsFX.runFX(() -> getUIData().setSelectedTile(tile));
     }
     
     //
