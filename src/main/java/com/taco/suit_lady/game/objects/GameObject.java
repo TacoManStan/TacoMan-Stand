@@ -143,7 +143,8 @@ public class GameObject
         missile.setLocationX(getLocationX(false), false);
         missile.setLocationY(getLocationY(false), false);
         
-        missile.attributes().addDoubleAttribute(MoveCommand.ACCELERATION_ID, 1.005D);
+        missile.attributes().addDoubleAttribute(MoveCommand.ACCELERATION_ID, 1.025D);
+        missile.attributes().getDoubleAttribute(MoveCommand.SPEED_ID).setValue(1D);
         
         //        getGameMap().gameObjects().add(missile);
         logiCore().triggers().register(Galaxy.newUnitArrivedTrigger(missile, event -> {
@@ -177,10 +178,7 @@ public class GameObject
     public final DoubleBinding xLocationCenteredBinding() { return xLocationCenteredBinding; }
     
     public final double getLocationX(boolean center) { return center ? xLocationCenteredBinding.get() : xLocationProperty.get(); }
-    public final double setLocationX(@NotNull Number newValue, boolean center) {
-        final double difference = getLocationX(false) - getLocationX(true);
-        return PropertiesSL.setProperty(xLocationProperty, center ? newValue.doubleValue() + difference : newValue.doubleValue());
-    }
+    public final double setLocationX(@NotNull Number newValue, boolean center) { return PropertiesSL.setProperty(xLocationProperty, center ? newValue.doubleValue() + (getLocationX(false) - getLocationX(true)) : newValue.doubleValue()); }
     
     public final double setTileLocationX(@NotNull Number newValue) { return PropertiesSL.setProperty(xLocationProperty, newValue.doubleValue() * getGameMap().getTileSize()); }
     public final double moveX(@NotNull Number amount) { return setLocationX(getLocationX(false) + amount.doubleValue(), false); }
@@ -191,10 +189,7 @@ public class GameObject
     public final DoubleBinding yLocationCenteredBinding() { return yLocationCenteredBinding; }
     
     public final double getLocationY(boolean center) { return center ? yLocationCenteredBinding.get() : yLocationProperty.get(); }
-    public final double setLocationY(@NotNull Number newValue, boolean center) {
-        final double difference = getLocationY(false) - getLocationY(true);
-        return PropertiesSL.setProperty(yLocationProperty, center ? newValue.doubleValue() + difference : newValue.doubleValue());
-    }
+    public final double setLocationY(@NotNull Number newValue, boolean center) { return PropertiesSL.setProperty(yLocationProperty, center ? newValue.doubleValue() + (getLocationY(false) - getLocationY(true)) : newValue.doubleValue()); }
     
     public final double setTileLocationY(@NotNull Number newValue) { return PropertiesSL.setProperty(yLocationProperty, newValue.doubleValue() * getGameMap().getTileSize()); }
     public final double moveY(@NotNull Number amount) { return setLocationY(getLocationY(false) + amount.doubleValue(), false); }
@@ -216,9 +211,7 @@ public class GameObject
     //</editor-fold>
     
     public final boolean isAtPoint(@NotNull Point2D point) { return isAtPoint(point, true); }
-    public final boolean isAtPoint(@NotNull Point2D point, boolean center) {
-        return Math.abs(Math.round((getLocationX(center))) - Math.round(point.getX())) == 0 && Math.abs(Math.round(getLocationY(center)) - Math.round(point.getY())) == 0;
-    }
+    public final boolean isAtPoint(@NotNull Point2D point, boolean center) { return Math.abs(Math.round((getLocationX(center))) - Math.round(point.getX())) == 0 && Math.abs(Math.round(getLocationY(center)) - Math.round(point.getY())) == 0; }
     
     public final IntegerProperty widthProperty() { return widthProperty; }
     public final int getWidth() { return widthProperty.get(); }
