@@ -140,8 +140,8 @@ public class GameObject
     public GameObject launchMissileTest() {
         final GameObject missile = new GameObject(getGame()).init();
         
-        missile.setLocationX(getLocationX(false));
-        missile.setLocationY(getLocationY(false));
+        missile.setLocationX(getLocationX(false), false);
+        missile.setLocationY(getLocationY(false), false);
         
         missile.attributes().addDoubleAttribute(MoveCommand.ACCELERATION_ID, 1.005D);
         
@@ -151,7 +151,7 @@ public class GameObject
             missile.taskManager().shutdown();
         }));
         
-//        logiCore().submit(missile);
+        //        logiCore().submit(missile);
         
         //        missile.getCommand().setTargetX((int) target.getX());
         //        missile.getCommand().setTargetY((int) target.getY());
@@ -177,22 +177,28 @@ public class GameObject
     public final DoubleBinding xLocationCenteredBinding() { return xLocationCenteredBinding; }
     
     public final double getLocationX(boolean center) { return center ? xLocationCenteredBinding.get() : xLocationProperty.get(); }
-    public final double setLocationX(@NotNull Number newValue) { return PropertiesSL.setProperty(xLocationProperty, newValue.doubleValue()); }
+    public final double setLocationX(@NotNull Number newValue, boolean center) {
+        final double difference = getLocationX(false) - getLocationX(true);
+        return PropertiesSL.setProperty(xLocationProperty, center ? newValue.doubleValue() + difference : newValue.doubleValue());
+    }
     
     public final double setTileLocationX(@NotNull Number newValue) { return PropertiesSL.setProperty(xLocationProperty, newValue.doubleValue() * getGameMap().getTileSize()); }
-    public final double moveX(@NotNull Number amount) { return setLocationX(getLocationX(false) + amount.doubleValue()); }
-    public final double moveTileX(@NotNull Number amount) { return setLocationX(getLocationX(false) + (amount.doubleValue() * getGameMap().getTileSize())); }
+    public final double moveX(@NotNull Number amount) { return setLocationX(getLocationX(false) + amount.doubleValue(), false); }
+    public final double moveTileX(@NotNull Number amount) { return setLocationX(getLocationX(false) + (amount.doubleValue() * getGameMap().getTileSize()), false); }
     
     
     public final DoubleProperty yLocationProperty() { return yLocationProperty; }
     public final DoubleBinding yLocationCenteredBinding() { return yLocationCenteredBinding; }
     
     public final double getLocationY(boolean center) { return center ? yLocationCenteredBinding.get() : yLocationProperty.get(); }
-    public final double setLocationY(@NotNull Number newValue) { return PropertiesSL.setProperty(yLocationProperty, newValue.doubleValue()); }
+    public final double setLocationY(@NotNull Number newValue, boolean center) {
+        final double difference = getLocationY(false) - getLocationY(true);
+        return PropertiesSL.setProperty(yLocationProperty, center ? newValue.doubleValue() + difference : newValue.doubleValue());
+    }
     
     public final double setTileLocationY(@NotNull Number newValue) { return PropertiesSL.setProperty(yLocationProperty, newValue.doubleValue() * getGameMap().getTileSize()); }
-    public final double moveY(@NotNull Number amount) { return setLocationY(getLocationY(false) + amount.doubleValue()); }
-    public final double moveTileY(@NotNull Number amount) { return setLocationY(getLocationY(false) + (amount.doubleValue() * getGameMap().getTileSize())); }
+    public final double moveY(@NotNull Number amount) { return setLocationY(getLocationY(false) + amount.doubleValue(), false); }
+    public final double moveTileY(@NotNull Number amount) { return setLocationY(getLocationY(false) + (amount.doubleValue() * getGameMap().getTileSize()), false); }
     
     
     public final ObjectBinding<Point2D> locationBinding() { return locationBinding; }
@@ -211,7 +217,7 @@ public class GameObject
     
     public final boolean isAtPoint(@NotNull Point2D point) { return isAtPoint(point, true); }
     public final boolean isAtPoint(@NotNull Point2D point, boolean center) {
-        return Math.abs(Math.round((getLocationX(center))) - Math.round(point.getX())) <= 2 && Math.abs(Math.round(getLocationY(center)) - Math.round(point.getY())) <= 2;
+        return Math.abs(Math.round((getLocationX(center))) - Math.round(point.getX())) == 0 && Math.abs(Math.round(getLocationY(center)) - Math.round(point.getY())) == 0;
     }
     
     public final IntegerProperty widthProperty() { return widthProperty; }
@@ -247,8 +253,8 @@ public class GameObject
     @Override public void load(JsonObject parent) {
         setWidth(JUtil.loadInt(parent, "width"));
         setHeight(JUtil.loadInt(parent, "height"));
-        setLocationX(JUtil.loadDouble(parent, "x-location"));
-        setLocationY(JUtil.loadDouble(parent, "y-location"));
+        setLocationX(JUtil.loadDouble(parent, "x-location"),false);
+        setLocationY(JUtil.loadDouble(parent, "y-location"), false);
         JUtil.loadObject(parent, "model", getModel());
     }
     

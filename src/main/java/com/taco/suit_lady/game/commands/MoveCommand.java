@@ -4,7 +4,6 @@ import com.taco.suit_lady.game.objects.Attribute;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.logic.GameTask;
 import com.taco.suit_lady.logic.triggers.implementations.UnitArrivedEvent;
-import com.taco.suit_lady.util.tools.Print;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -51,7 +50,7 @@ public class MoveCommand extends GameTask<GameObject> {
     public final int getTargetY() { return yTargetProperty.get(); }
     public final int setTargetY(int newValue) { return PropertiesSL.setProperty(yTargetProperty, newValue); }
     
-    @Contract(" -> new") public final @NotNull Point2D getLocation() { return new Point2D(getTargetX(), getTargetY()); }
+    @Contract(" -> new") public final @NotNull Point2D getTargetPoint() { return new Point2D(getTargetX(), getTargetY()); }
     
     
     public final @NotNull BooleanProperty pausedProperty() { return pausedProperty; }
@@ -80,19 +79,39 @@ public class MoveCommand extends GameTask<GameObject> {
             final double xDistance = getTargetX() - getOwner().getLocationX(true);
             final double yDistance = getTargetY() - getOwner().getLocationY(true);
             
-            double multiplier = Math.sqrt(Math.pow(speed, 2) / (Math.pow(xDistance, 2) + Math.pow(yDistance, 2)));
+            final double multiplier = Math.sqrt(Math.pow(speed, 2) / (Math.pow(xDistance, 2) + Math.pow(yDistance, 2)));
             
             final double xMovement = (multiplier * xDistance);
             final double yMovement = (multiplier * yDistance);
             
             
             //            ToolsFX.runFX(() -> {
-            final Point2D oldLoc = new Point2D(getOwner().getLocationX(false), getOwner().getLocationY(false));
-            getOwner().moveX(xMovement);
-            getOwner().moveY(yMovement);
-            final Point2D newLoc = new Point2D(getOwner().getLocationX(false), getOwner().getLocationY(false));
+            final Point2D oldLoc = new Point2D(getOwner().getLocationX(true), getOwner().getLocationY(true));
             
-            if (getOwner().isAtPoint(getLocation(), true)) {
+            if (xMovement > 0 && getTargetX() <= getOwner().getLocationX(true) + xMovement) {
+                if (getTargetX() != getOwner().getLocationX(true))
+                    getOwner().setLocationX(getTargetX(), true);
+            } else if (xMovement < 0 && getTargetX() >= getOwner().getLocationX(true) + xMovement) {
+                if (getTargetX() != getOwner().getLocationX(true))
+                    getOwner().setLocationX(getTargetX(), true);
+            } else
+                getOwner().moveX(xMovement);
+            
+            if (yMovement > 0 && getTargetY() <= getOwner().getLocationY(true) + yMovement) {
+                if (getTargetY() != getOwner().getLocationY(true))
+                    getOwner().setLocationY(getTargetY(), true);
+            } else if (yMovement < 0 && getTargetY() >= getOwner().getLocationY(true) + yMovement) {
+                if (getTargetY() != getOwner().getLocationY(true))
+                    getOwner().setLocationY(getTargetY(), true);
+            } else
+                getOwner().moveY(yMovement);
+            
+            
+//            getOwner().moveX(xMovement);
+//            getOwner().moveY(yMovement);
+            final Point2D newLoc = new Point2D(getOwner().getLocationX(true), getOwner().getLocationY(true));
+            
+            if (getOwner().isAtPoint(getTargetPoint(), true)) {
                 logiCore().triggers().submit(new UnitArrivedEvent(getOwner(), oldLoc, newLoc));
                 setPaused(true);
             }
