@@ -27,6 +27,7 @@ public class TaskManager<E extends Entity>
     
     private final ReadOnlyBooleanWrapper shutdownProperty;
     private final ListProperty<Runnable> shutdownOperations;
+    private final ListProperty<Runnable> gfxShutdownOperations;
     
     public TaskManager(@NotNull E owner) {
         this.internalLock = new ReentrantLock();
@@ -39,6 +40,7 @@ public class TaskManager<E extends Entity>
         
         this.shutdownProperty = new ReadOnlyBooleanWrapper(false);
         this.shutdownOperations = new SimpleListProperty<>(FXCollections.observableArrayList());
+        this.gfxShutdownOperations = new SimpleListProperty<>(FXCollections.observableArrayList());
     }
     
     void execute() {
@@ -63,6 +65,14 @@ public class TaskManager<E extends Entity>
             });
     }
     
+    void gfxShutdownOperations() {
+        if (isShutdown())
+            syncFX(() -> {
+                for (Runnable gfxShutdownOperation: gfxShutdownOperations)
+                    gfxShutdownOperation.run();
+            });
+    }
+    
     //<editor-fold desc="--- PROPERTIES ---">
     
     public final E getOwner() { return owner; }
@@ -82,6 +92,7 @@ public class TaskManager<E extends Entity>
     public final void shutdown() { shutdownProperty.set(true); }
     
     public final boolean addShutdownOperation(@NotNull Runnable operation) { return sync(() -> shutdownOperations.add(operation)); }
+    public final boolean addGfxShutdownOperation(@NotNull Runnable operation) { return sync(() -> gfxShutdownOperations.add(operation)); }
     
     //</editor-fold>
     

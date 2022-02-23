@@ -133,8 +133,8 @@ public class GameObject
     
     private void initTaskManager() {
         taskManager().addShutdownOperation(() -> getGameMap().gameObjects().remove(this));
-        taskManager().addShutdownOperation(() -> getModel().shutdown());
-        taskManager().addShutdownOperation(() -> getGameMap().getModel().refreshMapImage());
+        taskManager().addGfxShutdownOperation(() -> getModel().shutdown());
+        taskManager().addGfxShutdownOperation(() -> getGameMap().getModel().refreshMapImage());
     }
     
     public GameObject launchMissileTest() {

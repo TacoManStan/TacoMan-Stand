@@ -194,6 +194,7 @@ public class LogiCore
                     if (tickable.taskManager().isShutdown()) {
                         tickables.remove(tickable);
                         tickable.taskManager().shutdownOperations();
+                        tickable.taskManager().gfxShutdownOperations();
                     } else
                         tickable.taskManager().execute();
                 }))
