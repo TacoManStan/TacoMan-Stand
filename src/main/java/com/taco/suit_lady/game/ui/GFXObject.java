@@ -1,14 +1,16 @@
 package com.taco.suit_lady.game.ui;
 
-public interface GFXObject {
+import com.taco.suit_lady.logic.Tickable;
+
+public interface GFXObject<E extends Tickable<E>> extends Tickable<E> {
     
-    boolean needsUpdate();
-    void update();
+    boolean needsGfxUpdate();
+    void onGfxUpdate();
     
     //
     
-    default void execute() {
-        if (needsUpdate())
-            update();
+    default void updateGfx() {
+        if (needsGfxUpdate())
+            onGfxUpdate();
     }
 }

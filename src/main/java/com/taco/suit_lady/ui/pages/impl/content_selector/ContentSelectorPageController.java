@@ -124,7 +124,7 @@ public abstract class ContentSelectorPageController<
     private void onAdded(T content) { ToolsFX.runFX(() -> ToolsFX.addElement(content, contentList, true), true); }
     private void onRemoved(T content) { ToolsFX.runFX(() -> contentList.getItems().remove(content), true); }
     
-    private void addInstance() { logiCore().executor().execute(() -> getPage().getContentHandler().addInstance()); }
+    private void addInstance() { logiCore().execute(() -> getPage().getContentHandler().addInstance()); }
     
     //</editor-fold>
 }

@@ -2,6 +2,7 @@ package com.taco.suit_lady.game.ui;
 
 import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.objects.GameObject;
+import com.taco.suit_lady.logic.TaskManager;
 import com.taco.suit_lady.ui.ContentController;
 import com.taco.suit_lady.ui.ui_internal.controllers.CellController;
 import com.taco.suit_lady.ui.ui_internal.drag_and_drop.DragAndDropHandler;
@@ -48,6 +49,13 @@ public class GameViewContentController extends ContentController<GameViewContent
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">
+    
+    @Override public GameViewContentController init(@NotNull GameViewContent content) {
+        super.init(content);
+        
+        this.setGame(content);
+        return this;
+    }
     
     @Override public void initialize() {
         super.initialize();

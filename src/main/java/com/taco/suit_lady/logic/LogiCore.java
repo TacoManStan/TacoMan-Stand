@@ -3,7 +3,6 @@ package com.taco.suit_lady.logic;
 import com.taco.suit_lady._to_sort._new.initialization.Initializable;
 import com.taco.suit_lady._to_sort._new.initialization.Initializer;
 import com.taco.suit_lady._to_sort._new.initialization.LockMode;
-import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.game.ui.GFXObject;
 import com.taco.suit_lady.logic.triggers.TriggerEventManager;
 import com.taco.suit_lady.game.interfaces.GameComponent;
@@ -12,7 +11,6 @@ import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.timing.Timer;
 import com.taco.suit_lady.util.timing.Timers;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
 import com.taco.suit_lady.util.tools.Print;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import com.taco.suit_lady.util.tools.TasksSL;
@@ -30,6 +28,7 @@ import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Consumer;
 
 @Component
 public class LogiCore
@@ -39,6 +38,7 @@ public class LogiCore
     private final ConfigurableApplicationContext ctx;
     
     private final ReentrantLock tickableLock;
+    private final ReentrantLock gfxLock;
     
     private final ReadOnlyObjectWrapper<GameViewContent> gameProperty;
     
@@ -53,7 +53,7 @@ public class LogiCore
     private final ListProperty<Tickable<?>> tickables; //Absolutely NO blocking calls to FX thread can be made here. None.
     private final List<Tickable<?>> empty;
     
-    private final ListProperty<GFXObject> gfxObjects;
+    private final ListProperty<GFXObject<?>> gfxObjects;
     
     private final int targetUPS = 144;
     private final ReadOnlyIntegerWrapper upsProperty;
@@ -69,6 +69,7 @@ public class LogiCore
         this.ctx = ctx;
         
         this.tickableLock = new ReentrantLock();
+        this.gfxLock = new ReentrantLock();
         
         
         this.gameProperty = new ReadOnlyObjectWrapper<>();
@@ -121,48 +122,10 @@ public class LogiCore
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final @NotNull ReadOnlyObjectProperty<GameViewContent> readOnlyGameProperty() {
-        return gameProperty.getReadOnlyProperty();
-    }
+    public final @NotNull ReadOnlyObjectProperty<GameViewContent> readOnlyGameProperty() { return gameProperty.getReadOnlyProperty(); }
     @Override public final @NotNull GameViewContent getGame() { return gameProperty.get(); }
     
     public final @NotNull TriggerEventManager triggers() { return triggers; }
-    
-    
-    //
-    
-    public final boolean submit(@NotNull Tickable<?> tickable) {
-        //        if (getLock() != null)
-        //            return sync(() -> tickables.add(tickable));
-        return TasksSL.sync(tickableLock, () -> tickables.add(tickable));
-    }
-    
-    //    /**
-    //     * <p>Performs all {@link LogiCore} shutdown operations for the specified {@link Tickable} instance.</p>
-    //     * <p><b>Details</b></p>
-    //     * <ol>
-    //     *     <li>This method is called automatically by <i>{@link GameObject#shutdown()}</i>.</li>
-    //     *     <li>Calling this method directly on a {@link GameObject} instance will result in an incomplete shutdown of the specified {@link GameObject}.</li>
-    //     *     <li>Other implementations of {@link Tickable} may be shutdown correctly, but this is not guaranteed.</li>
-    //     *     <li>TODO: Add {@code shutdown} method to {@link Tickable} to ensure all {@link Tickable} implementations know they are responsible for their own shutdown operations.</li>
-    //     * </ol>
-    //     *
-    //     * @param tickable The {@link Tickable} being shut down.
-    //     *
-    //     * @return True if the shutdown was successful, false if it was not.
-    //     */
-    //    public final boolean shutdown(@NotNull Tickable<?> tickable) {
-    //        return TasksSL.sync(tickableLock, () -> tickables.remove(tickable));
-    //    }
-    public final List<Tickable<?>> tickablesCopy() {
-        return sync(() -> new ArrayList<>(tickables));
-    }
-    
-    public final boolean addGfxObject(@NotNull GFXObject gfxObject) {
-        //        if (getLock() != null)
-        //            return sync(() -> gfxActions2.add(gfxObject));
-        return gfxObjects.add(gfxObject);
-    }
     
     //
     
@@ -175,39 +138,89 @@ public class LogiCore
     
     //</editor-fold>
     
-    //<editor-fold desc="--- GAME LOOP ---">
+    //<editor-fold desc="--- LOGIC ---">
+    
+    //<editor-fold desc="> Execution">
+    
+    public final void execute(@Nullable Runnable action) {
+        if (action != null)
+            gameLoopExecutor.execute(action);
+    }
+    public final <V> V execute(@Nullable Callable<V> action, @NotNull Consumer<Throwable> exceptionHandler) {
+        if (action != null) try {
+            return gameLoopExecutor.schedule(action, 0L, TimeUnit.MILLISECONDS).get();
+        } catch (Exception e) {
+            exceptionHandler.accept(e);
+        }
+        return null;
+    }
+    public final <V> V execute(@Nullable Callable<V> action) { return execute(action, Throwable::printStackTrace); }
+    
+    //
+    
+    public final boolean submit(@NotNull Tickable<?> tickable) { return TasksSL.sync(tickableLock, () -> tickables.add(tickable)); }
+    public final List<Tickable<?>> tickablesCopy() { return TasksSL.sync(tickableLock, () -> new ArrayList<>(tickables)); }
+    
+    public final boolean addGfxObject(@Nullable GFXObject<?> gfxObject) { return gfxObject != null & TasksSL.sync(gfxLock, () -> gfxObjects.add(gfxObject)); }
+    public final boolean removeGfxObject(@Nullable GFXObject<?> gfxObject) { return gfxObject != null & TasksSL.sync(gfxLock, () -> gfxObjects.remove(gfxObject)); }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="> Game Loop">
     
     public long upsRefreshTime = 2000;
     
     @SuppressWarnings("UnnecessaryReturnStatement")
     private void tick() {
         if (checkSpringClosure(null)) return;
-        if (getLock() != null) sync(() -> {
-            if (checkSpringClosure(() -> {
-                tickCount++;
-                if (timer.isTimedOut())
-                    timer.getOnTimeout().run();
-            })) return;
-            
-            tickablesCopy().forEach(tickable -> {
+        if (checkSpringClosure(() -> {
+            tickCount++;
+            if (timer.isTimedOut())
+                timer.getOnTimeout().run();
+        })) return;
+        
+        final ArrayList<Tickable<?>> toRemove = new ArrayList<>();
+        final ArrayList<GFXObject<?>> gfxObjects = new ArrayList<>();
+        final List<Tickable<?>> tickableCopy = tickablesCopy();
+        
+        TasksSL.sync(tickableLock, () -> {
+            tickableCopy.forEach(tickable -> {
                 if (checkSpringClosure(() -> {
-                    if (tickable.taskManager().isShutdown()) {
-                        tickables.remove(tickable);
-                        tickable.taskManager().shutdownOperations();
-                        tickable.taskManager().gfxShutdownOperations();
-                    } else
+                    if (tickable.taskManager().isShutdown())
+                        toRemove.add(tickable);
+                    else {
                         tickable.taskManager().execute();
+                        //                        if (tickable instanceof GFXObject gfxObject)
+                        //                            gfxObjects.add(gfxObject);
+                    }
                 }))
                     return;
             });
-            
-            checkSpringClosure(() -> ToolsFX.runFX(() -> gfxObjects.forEach(GFXObject::execute), true));
+            toRemove.forEach(tickables::remove);
+            //        checkSpringClosure(() -> TasksSL.sync(gfxLock, () -> ToolsFX.runFX(() -> gfxObjects.forEach(GFXObject::execute))));
         });
+        tickableCopy.forEach(tickable -> ToolsFX.runFX(() -> tickable.taskManager().executeGfx()));
+        //        TasksSL.sync(gfxLock, () -> {
+        //            //                ToolsFX.runFX(() -> gfxObjects.forEach(GFXObject::execute));
+        //            gfxObjects.forEach(gfxObject -> ToolsFX.runFX(gfxObject::update));
+        //        });
+        toRemove.forEach(this::shutdown);
+        
+    }
+    
+    private Tickable<?> shutdown(@NotNull Tickable<?> tickable) {
+        tickable.taskManager().shutdownOperations();
+        tickable.taskManager().gfxShutdownOperations();
+        
+        //        if (tickable instanceof GFXObject gfxObject)
+        //            TasksSL.sync(gfxLock, () -> gfxObjects.remove(gfxObject));
+        
+        return tickable;
     }
     
     //</editor-fold>
     
-    public final ThreadPoolExecutor executor() { return gameLoopExecutor; }
+    //</editor-fold>
     
     private boolean checkSpringClosure(@Nullable Runnable action) {
         if (!ctx().isRunning()) {

@@ -2,10 +2,13 @@ package com.taco.suit_lady.logic.triggers;
 
 import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.objects.GameObject;
+import com.taco.suit_lady.logic.OneTimeTask;
+import com.taco.suit_lady.logic.Tickable;
 import com.taco.suit_lady.logic.triggers.implementations.UnitArrivedEvent;
 import com.taco.suit_lady.logic.triggers.implementations.UnitArrivedTrigger;
 import com.taco.suit_lady.logic.triggers.implementations.UnitMovedEvent;
 import com.taco.suit_lady.logic.triggers.implementations.UnitMovedTrigger;
+import com.taco.suit_lady.util.tools.Print;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -53,6 +56,28 @@ public final class Galaxy {
     public static @NotNull <T extends TriggerEvent<T>> TriggerCondition<T> newCondition(@NotNull GameComponent gameComponent, @NotNull Predicate<T> condition) {
         return new TriggerCondition<>(gameComponent) {
             @Override public boolean test(T event) { return condition.test(event); }
+        };
+    }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="> GameTask Factory Methods">
+    
+    public static <E extends  Tickable<E>> @NotNull OneTimeTask<E> newOneTimeTask(@NotNull E owner, @NotNull Runnable action) {
+        return new OneTimeTask<>(owner) {
+            @Override protected void tick() {
+                Print.print("Running 1  [" + getOwner() + "]");
+                action.run();
+            }
+        };
+    }
+    
+    public static <E extends Tickable<E>> @NotNull OneTimeTask<E> newOneTimeTask(@NotNull GameComponent gameComponent, @NotNull E owner, @NotNull Runnable action) {
+        return new OneTimeTask<>(gameComponent, owner) {
+            @Override protected void tick() {
+                Print.print("Running 2  [" + getOwner() + "]");
+                action.run();
+            }
         };
     }
     

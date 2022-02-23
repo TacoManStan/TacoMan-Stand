@@ -1,5 +1,7 @@
 package com.taco.suit_lady.ui.contents.mandelbrot;
 
+import com.taco.suit_lady.game.ui.GameViewContentController;
+import com.taco.suit_lady.logic.TaskManager;
 import com.taco.suit_lady.ui.ContentController;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasSurface;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasPane;
@@ -92,6 +94,15 @@ public class MandelbrotContentController extends ContentController<MandelbrotCon
         canvas().setOnMouseDragged(event -> onMouseDragged(event));
         
         super.initialize();
+    }
+    
+    //
+    
+    private TaskManager<MandelbrotContentController> taskManager;
+    @Override public @NotNull TaskManager<MandelbrotContentController> taskManager() {
+        if (taskManager == null)
+            taskManager = new TaskManager<>(this).init();
+        return taskManager;
     }
     
     //</editor-fold>

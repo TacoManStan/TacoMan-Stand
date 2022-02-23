@@ -95,7 +95,7 @@ public abstract class ContentHandler<
     
     public void shutdown() {
         // TODO: Move to separate, synchronized task threads for each DummyClient instance.
-        logiCore().executor().execute(() -> {
+        logiCore().execute(() -> {
             TasksSL.sync(lock, () -> contentList.forEach(client -> onShutdown(client)));
             if (!contentList.isEmpty())
                 throw ExceptionsSL.ex("Mandelbrot Content List should be empty! (" + contentList + ")");

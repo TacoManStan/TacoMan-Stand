@@ -88,7 +88,7 @@ public class GameObject
         
         initAttributes();
         
-        taskManager().tasks().add(this.command = new MoveCommand(this));
+        taskManager().addTask(this.command = new MoveCommand(this));
         
         //
         
@@ -127,7 +127,7 @@ public class GameObject
     private void initTriggerEvents() {
         locationCenteredBinding.addListener((observable, oldValue, newValue) -> triggers().submit(new UnitMovedEvent(this, oldValue, newValue)));
         triggers().register(Galaxy.newUnitMovedTrigger(this, event -> {
-//            System.out.println("Unit Moved  [" + event.getMovedFrom() + "  -->  " + event.getMovedTo());
+            //            System.out.println("Unit Moved  [" + event.getMovedFrom() + "  -->  " + event.getMovedTo());
         }));
     }
     
@@ -145,16 +145,16 @@ public class GameObject
         
         missile.attributes().addDoubleAttribute(MoveCommand.ACCELERATION_ID, 1.005D);
         
-//        getGameMap().gameObjects().add(missile);
+        //        getGameMap().gameObjects().add(missile);
         logiCore().triggers().register(Galaxy.newUnitArrivedTrigger(missile, event -> {
             Print.print("Unit Arrived [" + missile + "]  ||  [" + event.getMovedFrom() + "  -->  " + event.getMovedTo());
             missile.taskManager().shutdown();
         }));
         
-        logiCore().submit(missile);
+//        logiCore().submit(missile);
         
-//        missile.getCommand().setTargetX((int) target.getX());
-//        missile.getCommand().setTargetY((int) target.getY());
+        //        missile.getCommand().setTargetX((int) target.getX());
+        //        missile.getCommand().setTargetY((int) target.getY());
         
         return missile;
     }
@@ -291,7 +291,7 @@ public class GameObject
     private TaskManager<GameObject> taskManager;
     @Override public final @NotNull TaskManager<GameObject> taskManager() {
         if (taskManager == null)
-            taskManager = new TaskManager<>(this);
+            taskManager = new TaskManager<>(this).init();
         return taskManager;
     }
     

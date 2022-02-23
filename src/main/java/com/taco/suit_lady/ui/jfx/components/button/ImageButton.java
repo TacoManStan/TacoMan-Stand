@@ -1055,7 +1055,7 @@ public class ImageButton
     private void onAction() {
         final Runnable actionResponder = getActionResponder();
         if (actionResponder != null)
-            ctx().getBean(LogiCore.class).executor().execute(actionResponder);
+            logiCore().execute(actionResponder);
         
         final Runnable actionResponderFX = getActionResponderFX();
         if (actionResponderFX != null)

@@ -1,21 +1,23 @@
 package com.taco.suit_lady.logic;
 
-import com.taco.suit_lady.game.Entity;
-import com.taco.suit_lady.game.interfaces.WrappedGameComponent;
-import com.taco.suit_lady.game.ui.GameViewContent;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.game.ui.GFXObject;
+import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.springable.Springable;
+import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.Print;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class TaskManager<E extends Entity>
-        implements WrappedGameComponent {
+public class TaskManager<E extends Tickable<E>>
+        implements SpringableWrapper, Lockable {
     
     private final ReentrantLock internalLock;
     
@@ -43,15 +45,45 @@ public class TaskManager<E extends Entity>
         this.gfxShutdownOperations = new SimpleListProperty<>(FXCollections.observableArrayList());
     }
     
+    //<editor-fold desc="--- INITIALIZATION ---">
+    
+    public TaskManager<E> init() {
+        Print.print(getGfxOwner() + ":  " + isGfxOwner());
+        logiCore().submit(getOwner());
+        //        logiCore().addGfxObject(getGfxOwner());
+        
+        return this;
+    }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- LOGIC ---">
+    
     void execute() {
-        if (!isShutdown())
-            syncIf(() -> tasks.forEach(task -> {
-                if (task.isDone())
-                    tasks.remove(task);
-                else
-                    task.execute();
-                tickCountProperty.set(getTickCount() + 1);
-            }), this::isSynchronizationEnabled);
+        if (!isShutdown()) {
+            final ArrayList<GameTask<E>> toRemove = new ArrayList<>();
+            syncIf(() -> {
+                tasks.forEach(task -> {
+                    if (task.isDone())
+                        toRemove.add(task);
+                    else
+                        task.execute();
+                    tickCountProperty.set(getTickCount() + 1);
+                });
+                toRemove.forEach(tasks::remove);
+            }, this::isSynchronizationEnabled);
+        }
+    }
+    
+    void executeGfx() {
+        if (!isShutdown() && isGfxOwner()) {
+            final GFXObject<E> gfxObject = getGfxOwner();
+            if (gfxObject != null) {
+                gfxObject.updateGfx();
+                //                    Print.print("Updating Gfx");
+            } else
+                Print.err("GFXObject is null  [" + getOwner() + "]");
+        }
     }
     
     void shutdownOperations() {
@@ -60,6 +92,7 @@ public class TaskManager<E extends Entity>
                 //                if (getOwner() instanceof Tickable<?> tickableOwner && !tickableOwner.shutdown())
                 //                        throw ExceptionsSL.ex("Shutdown operation failed for Tickable  [" + tickableOwner + "]");
                 Print.print("Running shutdown operation");
+                logiCore().removeGfxObject(getGfxOwner());
                 for (Runnable shutdownOperation: shutdownOperations)
                     shutdownOperation.run();
             });
@@ -73,10 +106,19 @@ public class TaskManager<E extends Entity>
             });
     }
     
+    //</editor-fold>
+    
     //<editor-fold desc="--- PROPERTIES ---">
     
     public final E getOwner() { return owner; }
-    public final ListProperty<GameTask<E>> tasks() { return tasks; }
+    @Contract(pure = true) public final @Nullable GFXObject<E> getGfxOwner() { return (owner instanceof GFXObject<?>) ? (GFXObject<E>) owner : null; }
+    public final boolean isGfxOwner() { return getGfxOwner() != null; }
+    
+    
+    //    public final ListProperty<GameTask<E>> tasks() { return tasks; }
+    public final boolean addTask(@NotNull GameTask<E> task) { return syncIf(() -> tasks.add(task), this::isSynchronizationEnabled); }
+    public final boolean removeTask(@NotNull GameTask<E> task) { return syncIf(() -> tasks.remove(task), this::isSynchronizationEnabled); }
+    public final void clearTasks() { syncIf(tasks::clear, this::isSynchronizationEnabled); }
     
     
     public final ReadOnlyBooleanProperty readOnlyEnableSynchronizationProperty() { return enableSynchronizationProperty.getReadOnlyProperty(); }
@@ -98,8 +140,8 @@ public class TaskManager<E extends Entity>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull GameViewContent getGame() { return owner.getGame(); }
-    
+    @Override public @NotNull Springable springable() { return owner; }
     @Override public @Nullable Lock getLock() { return internalLock; }
+    
     //</editor-fold>
 }

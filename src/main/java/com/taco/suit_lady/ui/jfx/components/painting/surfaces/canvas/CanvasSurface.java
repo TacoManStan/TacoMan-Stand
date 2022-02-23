@@ -1,6 +1,9 @@
 package com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas;
 
+import com.taco.suit_lady.game.Entity;
 import com.taco.suit_lady.game.ui.GFXObject;
+import com.taco.suit_lady.logic.TaskManager;
+import com.taco.suit_lady.logic.Tickable;
 import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.PaintCommand;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.Surface;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.SurfaceData;
@@ -23,7 +26,9 @@ import java.util.concurrent.locks.ReentrantLock;
  * <p>A {@link #isResizable() resizable} implementation of {@link Canvas}.</p>
  */
 public class CanvasSurface extends Canvas
-        implements Surface<PaintCommand, CanvasSurface>, GFXObject {
+        implements Surface<PaintCommand, CanvasSurface>, GFXObject<CanvasSurface> {
+    
+    private final TaskManager<CanvasSurface> taskManager;
     
     private final ReadOnlyObjectWrapper<CanvasListener> canvasListenerProperty;
     private final SurfaceData<PaintCommand, CanvasSurface> data;
@@ -86,7 +91,8 @@ public class CanvasSurface extends Canvas
         }));
         
         this.needsUpdate = false;
-        logiCore().addGfxObject(this);
+        this.taskManager = new TaskManager<>(this).init();
+//        logiCore().addGfxObject(this);
     }
     
     //</editor-fold>
@@ -127,7 +133,7 @@ public class CanvasSurface extends Canvas
     @Override public @NotNull SurfaceData<PaintCommand, CanvasSurface> data() { return data; }
     
     @Override public @NotNull CanvasSurface repaint() {
-//        TasksSL.printThread();
+        //        TasksSL.printThread();
         //        if (!ToolsFX.isFXThread()) {
         //            final Thread current = Thread.currentThread();
         //            final StackTraceElement[] es = current.getStackTrace();
@@ -184,11 +190,7 @@ public class CanvasSurface extends Canvas
         repaint();
     }
     
-    @Override public boolean needsUpdate() {
-        return needsUpdate;
-    }
-    
-    @Override public void update() {
+    @Override public void onGfxUpdate() {
         ToolsFX.clearCanvasUnsafe(this);
         
         paintables().forEach(PaintCommand::paint);
@@ -202,6 +204,9 @@ public class CanvasSurface extends Canvas
         
         needsUpdate = false;
     }
+    @Override public boolean needsGfxUpdate() { return needsUpdate; }
+    
+    @Override public @NotNull TaskManager<CanvasSurface> taskManager() { return taskManager; }
     
     //</editor-fold>
     

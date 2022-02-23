@@ -140,13 +140,13 @@ public class ContentManager
                 oldContent.getOverlayHandler().root().maxWidthProperty().unbind();
                 oldContent.getOverlayHandler().root().maxHeightProperty().unbind();
                 
-                logiCore().executor().execute(() -> oldContent.onRemovedInternal());
+                logiCore().execute(oldContent::onRemovedInternal);
             }
             if (newContent != null) {
                 ToolsFX.bindToParent(newContent.getController().root(), getContentPrimaryPane(), true);
                 ToolsFX.bindToParent(newContent.getOverlayHandler().root(), getContentPrimaryPane(), true);
                 
-                logiCore().executor().execute(() -> newContent.onSetInternal());
+                logiCore().execute(newContent::onSetInternal);
             }
         }, true);
     }

@@ -2,8 +2,11 @@ package com.taco.suit_lady.game.objects;
 
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.taco.suit_lady.game.interfaces.GameComponent;
+import com.taco.suit_lady.game.ui.GFXObject;
 import com.taco.suit_lady.game.ui.GameViewContent;
+import com.taco.suit_lady.logic.TaskManager;
 import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.ImagePaintCommand;
+import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
@@ -24,9 +27,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.locks.Lock;
 
 public class GameObjectModel
-        implements SpringableWrapper, Lockable, GameComponent, JObject, JLoadable {
+        implements SpringableWrapper, Lockable, GameComponent, GFXObject<GameObjectModel>, JObject, JLoadable {
     
     private final GameObject owner;
+    private final TaskManager<GameObjectModel> taskManager;
     
     //
     
@@ -38,6 +42,10 @@ public class GameObjectModel
     
     private IntegerBinding xPaintPositionBinding;
     private IntegerBinding yPaintPositionBinding;
+    
+    private ObjectBinding<Bounds> paintBoundsBinding;
+    
+    private boolean needsUpdate;
     
     public GameObjectModel(@NotNull GameObject owner) {
         this(owner, "unit", "taco");
@@ -59,24 +67,34 @@ public class GameObjectModel
         }, imageTypeProperty, imageIdProperty);
         
         this.modelPaintCommand = new ImagePaintCommand(this, null);
+        
+        this.needsUpdate = false;
+        this.taskManager = new TaskManager<>(this).init();
     }
     
     public GameObjectModel init() {
         this.xPaintPositionBinding = BindingsSL.intBinding(() -> (-getOwner().getGameMap().getModel().getCamera().getAggregateX() + getOwner().getLocationX(false)), getOwner().getGameMap().getModel().getCamera().xAggregateBinding(), getOwner().xLocationProperty());
         this.yPaintPositionBinding = BindingsSL.intBinding(() -> (-getOwner().getGameMap().getModel().getCamera().getAggregateY() + getOwner().getLocationY(false)), getOwner().getGameMap().getModel().getCamera().yAggregateBinding(), getOwner().yLocationProperty());
         
+        this.paintBoundsBinding = BindingsSL.objBinding(
+                () -> new Bounds(getPaintPositionX(), getPaintPositionY(), getGameMap().getTileSize(), getGameMap().getTileSize()),
+                xPaintPositionBinding, yPaintPositionBinding);
+        
         this.modelPaintCommand.init();
         
         //        imageBinding.addListener((observable, oldValue, newValue) -> {
         //            if (newValue != null)
         //        });
-        modelPaintCommand.imageProperty().bind(imageBinding);
+        //        modelPaintCommand.imageProperty().bind(imageBinding);
         
         modelPaintCommand.boundsBinding().widthProperty().set(getGameMap().getTileSize());
         modelPaintCommand.boundsBinding().heightProperty().set(getGameMap().getTileSize());
         
-        modelPaintCommand.boundsBinding().xProperty().bind(xPaintPositionBinding);
-        modelPaintCommand.boundsBinding().yProperty().bind(yPaintPositionBinding);
+        //        modelPaintCommand.boundsBinding().xProperty().bind(xPaintPositionBinding);
+        //        modelPaintCommand.boundsBinding().yProperty().bind(yPaintPositionBinding);
+        
+        paintBoundsBinding.addListener((observable, oldValue, newValue) -> needsUpdate = true);
+        imageBinding.addListener((observable, oldValue, newValue) -> needsUpdate = true);
         
         modelPaintCommand.setPaintPriority(1);
         
@@ -93,6 +111,17 @@ public class GameObjectModel
     
     
     public final ImagePaintCommand getPaintCommand() { return modelPaintCommand; }
+    
+    
+    private IntegerBinding xPaintPositionBinding() { return xPaintPositionBinding; }
+    private int getPaintPositionX() { return xPaintPositionBinding.get(); }
+    
+    private IntegerBinding yPaintPositionBinding() { return yPaintPositionBinding; }
+    private int getPaintPositionY() { return yPaintPositionBinding.get(); }
+    
+    private ObjectBinding<Bounds> paintBoundsBinding() { return paintBoundsBinding; }
+    private Bounds getPaintBounds() { return paintBoundsBinding.get(); }
+    
     
     public final ObjectBinding<Image> imageBinding() { return imageBinding; }
     public final Image getImage() { return imageBinding.get(); }
@@ -122,6 +151,16 @@ public class GameObjectModel
     
     //
     
+    @Override public void onGfxUpdate() {
+        modelPaintCommand.boundsBinding().setBounds(getPaintBounds());
+        modelPaintCommand.setImage(getImage());
+        
+        needsUpdate = false;
+    }
+    @Override public boolean needsGfxUpdate() { return needsUpdate; }
+    
+    //
+    
     @Override public String getJID() {
         return "game-object-model";
     }
@@ -135,6 +174,10 @@ public class GameObjectModel
                 JUtil.create("image-type", getImageType())
         };
     }
+    
+    //
+    
+    @Override public @NotNull TaskManager<GameObjectModel> taskManager() { return taskManager; }
     
     //</editor-fold>
     

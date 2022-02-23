@@ -1,5 +1,6 @@
 package com.taco.suit_lady.ui.contents.test;
 
+import com.taco.suit_lady.logic.TaskManager;
 import com.taco.suit_lady.ui.ContentController;
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
@@ -36,4 +37,12 @@ public class TestContentController extends ContentController<TestContent, TestCo
     
     @Override
     public void initialize() { super.initialize(); }
+    
+    
+    private TaskManager<TestContentController> taskManager;
+    @Override public @NotNull TaskManager<TestContentController> taskManager() {
+        if (taskManager == null)
+            taskManager = new TaskManager<>(this).init();
+        return taskManager;
+    }
 }

@@ -1,6 +1,9 @@
 package com.taco.suit_lady.ui;
 
 import com.taco.suit_lady.game.ui.GFXObject;
+import com.taco.suit_lady.logic.OneTimeTask;
+import com.taco.suit_lady.logic.TaskManager;
+import com.taco.suit_lady.logic.triggers.Galaxy;
 import com.taco.suit_lady.ui.ui_internal.controllers.Controller;
 import com.taco.suit_lady.util.tools.ExceptionsSL;
 import com.taco.suit_lady.util.tools.TasksSL;
@@ -15,9 +18,10 @@ import java.util.ArrayList;
 import java.util.concurrent.locks.ReentrantLock;
 
 public abstract class ContentController<T extends Content<T, D, C>, D extends ContentData<T, D, C>, C extends ContentController<T, D, C>> extends Controller
-        implements GFXObject {
+        implements GFXObject<C> {
     
     private final ReentrantLock gfxLock;
+    private TaskManager<C> taskManager;
     
     private T content;
     private final StackPane overlayStackPane;
@@ -41,7 +45,8 @@ public abstract class ContentController<T extends Content<T, D, C>, D extends Co
             throw ExceptionsSL.unsupported("Content has already been set (" + getContent() + ")");
         this.content = content;
         
-        logiCore().addGfxObject(this);
+        this.taskManager = new TaskManager<>((C) this).init();
+        initMouseEventHandling();
         
         return (C) this;
     }
@@ -57,55 +62,55 @@ public abstract class ContentController<T extends Content<T, D, C>, D extends Co
     //
     
     @Override public void initialize() {
-        initMouseEventHandling();
+    
     }
     
     private void initMouseEventHandling() {
         getContentPane().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-            addOperation(() -> {
+            taskManager().addTask(Galaxy.newOneTimeTask((C) this, () -> {
                 if (getContent().handleMousePressEvent(event))
                     event.consume();
-            });
+            }));
+            //            addOperation(() -> { });
         });
         getContentPane().addEventFilter(MouseEvent.MOUSE_RELEASED, event -> {
-            addOperation(() -> {
+            taskManager().addTask(Galaxy.newOneTimeTask((C) this, () -> {
                 if (getContent().handleMouseReleaseEvent(event))
                     event.consume();
-            });
+            }));
         });
         
         getContentPane().addEventFilter(MouseEvent.MOUSE_MOVED, event -> {
-            addOperation(() -> {
+            taskManager().addTask(Galaxy.newOneTimeTask((C) this, () -> {
                 if (getContent().handleMouseMoveEvent(event))
                     event.consume();
-            });
+            }));
         });
         getContentPane().addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
-            addOperation(() -> {
+            taskManager().addTask(Galaxy.newOneTimeTask((C) this, () -> {
                 if (getContent().handleMouseDragEvent(event))
                     event.consume();
-            });
+            }));
         });
         
         getContentPane().addEventFilter(MouseEvent.MOUSE_ENTERED, event -> {
-            addOperation(() -> {
+            taskManager().addTask(Galaxy.newOneTimeTask((C) this, () -> {
                 if (getContent().handleMouseEnterEvent(event))
                     event.consume();
-            });
+            }));
         });
         getContentPane().addEventFilter(MouseEvent.MOUSE_EXITED, event -> {
-            addOperation(() -> {
+            taskManager().addTask(Galaxy.newOneTimeTask((C) this, () -> {
                 if (getContent().handleMouseExitEvent(event))
                     event.consume();
-            });
+            }));
         });
     }
     
-    @Override public boolean needsUpdate() {
+    @Override public boolean needsGfxUpdate() {
         return needsUpdate;
     }
-    @Override public void update() {
-//        Print.print("Updating ContentController");
+    @Override public void onGfxUpdate() {
         TasksSL.sync(gfxLock, () -> {
             gfxOperations.forEach(Runnable::run);
             gfxOperations.clear();
@@ -118,4 +123,6 @@ public abstract class ContentController<T extends Content<T, D, C>, D extends Co
             needsUpdate = true;
         });
     }
+    
+    @Override public @NotNull TaskManager<C> taskManager() { return taskManager; }
 }

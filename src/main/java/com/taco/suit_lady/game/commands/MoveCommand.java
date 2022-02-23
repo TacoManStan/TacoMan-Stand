@@ -30,7 +30,7 @@ public class MoveCommand extends GameTask<GameObject> {
     //    private final DoubleBinding speedBinding;
     
     public MoveCommand(@NotNull GameObject owner) {
-        super(owner);
+        super(owner, owner);
         
         this.xTargetProperty = new SimpleIntegerProperty((int) owner.getLocationX(false));
         this.yTargetProperty = new SimpleIntegerProperty((int) owner.getLocationY(false));
