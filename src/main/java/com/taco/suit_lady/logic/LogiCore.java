@@ -11,12 +11,15 @@ import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.timing.Timer;
 import com.taco.suit_lady.util.timing.Timers;
+import com.taco.suit_lady.util.tools.ArraysSL;
 import com.taco.suit_lady.util.tools.Print;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import com.taco.suit_lady.util.tools.TasksSL;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
+import com.taco.suit_lady.util.tools.list_tools.ListsSL;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -51,7 +54,9 @@ public class LogiCore
     
     private final ScheduledThreadPoolExecutor gameLoopExecutor;
     private final ListProperty<Tickable<?>> tickables; //Absolutely NO blocking calls to FX thread can be made here. None.
+    private ArrayList<Tickable<?>> tickablesCopy;
     private final List<Tickable<?>> empty;
+    private boolean needsCopyRefresh;
     
     private final ListProperty<GFXObject<?>> gfxObjects;
     
@@ -84,7 +89,9 @@ public class LogiCore
         this.gameLoopExecutor = new ScheduledThreadPoolExecutor(1);
         
         this.tickables = new SimpleListProperty<>(FXCollections.observableArrayList());
+        this.tickablesCopy = new ArrayList<>();
         this.empty = new ArrayList<>();
+        this.needsCopyRefresh = false;
         
         this.gfxObjects = new SimpleListProperty<>(FXCollections.observableArrayList());
         
@@ -99,6 +106,17 @@ public class LogiCore
     
     private void startup(@NotNull Object @NotNull [] params) {
         gameProperty.set((GameViewContent) params[0]);
+        
+        Print.print("Starting Up");
+        tickables.addListener((ListChangeListener<? super Tickable<?>>)  c -> {
+            needsCopyRefresh = true;
+            Print.err("Value Changed");
+        });
+        needsCopyRefresh = true;
+//        ListsSL.applyListener(null, tickables, op -> {
+//            needsCopyRefresh = true;
+//            Print.err("Value Changes " + needsCopyRefresh);
+//        });
         
         initExecutors();
         initTimer();
@@ -159,7 +177,14 @@ public class LogiCore
     //
     
     public final boolean submit(@NotNull Tickable<?> tickable) { return TasksSL.sync(tickableLock, () -> tickables.add(tickable)); }
-    public final List<Tickable<?>> tickablesCopy() { return TasksSL.sync(tickableLock, () -> new ArrayList<>(tickables)); }
+    
+    
+    private List<Tickable<?>> tickablesCopy() {
+        if (needsCopyRefresh)
+            tickablesCopy = TasksSL.sync(tickableLock, () -> new ArrayList<>(tickables));
+        needsCopyRefresh = false;
+        return tickablesCopy;
+    }
     
     public final boolean addGfxObject(@Nullable GFXObject<?> gfxObject) { return gfxObject != null & TasksSL.sync(gfxLock, () -> gfxObjects.add(gfxObject)); }
     public final boolean removeGfxObject(@Nullable GFXObject<?> gfxObject) { return gfxObject != null & TasksSL.sync(gfxLock, () -> gfxObjects.remove(gfxObject)); }
@@ -184,12 +209,13 @@ public class LogiCore
         final List<Tickable<?>> tickableCopy = tickablesCopy();
         
         TasksSL.sync(tickableLock, () -> {
-            tickableCopy.forEach(tickable -> {
+            tickablesCopy().forEach(tickable -> {
                 if (checkSpringClosure(() -> {
                     if (tickable.taskManager().isShutdown())
                         toRemove.add(tickable);
                     else {
                         tickable.taskManager().execute();
+                        ToolsFX.runFX(() -> tickable.taskManager().executeGfx());
                         //                        if (tickable instanceof GFXObject gfxObject)
                         //                            gfxObjects.add(gfxObject);
                     }
@@ -199,7 +225,7 @@ public class LogiCore
             toRemove.forEach(tickables::remove);
             //        checkSpringClosure(() -> TasksSL.sync(gfxLock, () -> ToolsFX.runFX(() -> gfxObjects.forEach(GFXObject::execute))));
         });
-        tickableCopy.forEach(tickable -> ToolsFX.runFX(() -> tickable.taskManager().executeGfx()));
+        //        tickableCopy.forEach(tickable -> ToolsFX.runFX(() -> tickable.taskManager().executeGfx()));
         //        TasksSL.sync(gfxLock, () -> {
         //            //                ToolsFX.runFX(() -> gfxObjects.forEach(GFXObject::execute));
         //            gfxObjects.forEach(gfxObject -> ToolsFX.runFX(gfxObject::update));

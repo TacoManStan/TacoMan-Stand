@@ -11,6 +11,7 @@ import com.taco.suit_lady.logic.triggers.implementations.UnitMovedTrigger;
 import com.taco.suit_lady.util.tools.Print;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -63,21 +64,10 @@ public final class Galaxy {
     
     //<editor-fold desc="> GameTask Factory Methods">
     
-    public static <E extends  Tickable<E>> @NotNull OneTimeTask<E> newOneTimeTask(@NotNull E owner, @NotNull Runnable action) {
-        return new OneTimeTask<>(owner) {
-            @Override protected void tick() {
-                Print.print("Running 1  [" + getOwner() + "]");
-                action.run();
-            }
-        };
-    }
-    
-    public static <E extends Tickable<E>> @NotNull OneTimeTask<E> newOneTimeTask(@NotNull GameComponent gameComponent, @NotNull E owner, @NotNull Runnable action) {
+    public static <E extends Tickable<E>> @NotNull OneTimeTask<E> newOneTimeTask(@NotNull E owner, @NotNull Runnable action) { return newOneTimeTask(null, owner, action); }
+    public static <E extends Tickable<E>> @NotNull OneTimeTask<E> newOneTimeTask(@Nullable GameComponent gameComponent, @NotNull E owner, @NotNull Runnable action) {
         return new OneTimeTask<>(gameComponent, owner) {
-            @Override protected void tick() {
-                Print.print("Running 2  [" + getOwner() + "]");
-                action.run();
-            }
+            @Override protected void tick() { action.run(); }
         };
     }
     

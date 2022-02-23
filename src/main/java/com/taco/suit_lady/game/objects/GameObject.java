@@ -211,7 +211,7 @@ public class GameObject
     
     public final boolean isAtPoint(@NotNull Point2D point) { return isAtPoint(point, true); }
     public final boolean isAtPoint(@NotNull Point2D point, boolean center) {
-        return Math.abs(Math.round((getLocationX(center))) - Math.round(point.getX())) <= 1 && Math.abs(Math.round(getLocationY(center)) - Math.round(point.getY())) <= 1;
+        return Math.abs(Math.round((getLocationX(center))) - Math.round(point.getX())) <= 2 && Math.abs(Math.round(getLocationY(center)) - Math.round(point.getY())) <= 2;
     }
     
     public final IntegerProperty widthProperty() { return widthProperty; }

@@ -11,6 +11,7 @@ import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyLongProperty;
 import javafx.beans.property.ReadOnlyLongWrapper;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class GameTask<E extends Tickable<E>>
         implements WrappedGameComponent {
@@ -21,19 +22,13 @@ public abstract class GameTask<E extends Tickable<E>>
     private final ReadOnlyLongWrapper tickCountProperty;
     private final ReadOnlyBooleanWrapper synchronizationEnabledProperty;
     
-    public GameTask(@NotNull E owner) {
-        if (owner instanceof GameComponent gameComponent)
+    public GameTask(@Nullable GameComponent gameComponent, @NotNull E owner) {
+        if (gameComponent != null)
             this.game = gameComponent.getGame();
+        else if (owner instanceof GameComponent gameComponentOwner)
+            this.game = gameComponentOwner.getGame();
         else
-            throw ExceptionsSL.ex("Owner must be an implementation of GameComponent (" + owner + ")");
-        this.owner = owner;
-    
-        this.tickCountProperty = new ReadOnlyLongWrapper(0);
-        this.synchronizationEnabledProperty = new ReadOnlyBooleanWrapper(false);
-    }
-    
-    public GameTask(@NotNull GameComponent gameComponent, @NotNull E owner) {
-        this.game = gameComponent.getGame();
+            throw ExceptionsSL.ex("GameComponent param is null and owner is not implementation of GameComponent (" + owner + ")");
         this.owner = owner;
         
         this.tickCountProperty = new ReadOnlyLongWrapper(0);
