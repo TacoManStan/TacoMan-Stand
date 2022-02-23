@@ -1,9 +1,10 @@
 package com.taco.suit_lady.game.commands;
 
+import com.taco.suit_lady.game.objects.Attribute;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.logic.GameTask;
-import com.taco.suit_lady.logic.LogiCore;
 import com.taco.suit_lady.logic.triggers.implementations.UnitArrivedEvent;
+import com.taco.suit_lady.util.tools.Print;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -15,7 +16,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class MoveCommand extends GameTask<GameObject> {
     
-    public static final String ATTRIBUTE_ID = "move-speed";
+    public static final String SPEED_ID = "move-speed";
+    public static final String ACCELERATION_ID = "acceleration";
     
     //
     
@@ -69,7 +71,10 @@ public class MoveCommand extends GameTask<GameObject> {
         if (!isPaused()) {
             //            final double speed = ((getOwner().attributes().getDoubleValue(MoveCommand.ATTRIBUTE_ID) * logiCore.getUPSMultiplier()) * logiCore.getGameMap().getTileSize()) / 100D;
             //            System.out.println("Pre-Speed: " + logiCore().secondsToTicks(getOwner().attributes().getDoubleValue(MoveCommand.ATTRIBUTE_ID)));
-            final double speed = logiCore().secondsToTicks(getOwner().attributes().getDoubleValue(MoveCommand.ATTRIBUTE_ID) * getGameMap().getTileSize());
+            final double acceleration = getOwner().attributes().getDoubleValue(MoveCommand.ACCELERATION_ID, () -> 1D);
+            final Attribute<Double> speedAttribute = getOwner().attributes().getDoubleAttribute(MoveCommand.SPEED_ID);
+            speedAttribute.setValue(speedAttribute.getValue() * acceleration);
+            final double speed = logiCore().secondsToTicks(getOwner().attributes().getDoubleValue(MoveCommand.SPEED_ID) * getGameMap().getTileSize());
             //            System.out.println("Speed: " + speed);
             
             final double xDistance = getTargetX() - getOwner().getLocationX(true);

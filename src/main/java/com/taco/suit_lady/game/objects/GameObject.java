@@ -10,7 +10,6 @@ import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.logic.TaskManager;
 import com.taco.suit_lady.logic.Tickable;
 import com.taco.suit_lady.logic.triggers.Galaxy;
-import com.taco.suit_lady.logic.triggers.implementations.UnitArrivedTrigger;
 import com.taco.suit_lady.logic.triggers.implementations.UnitMovedEvent;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
@@ -121,7 +120,7 @@ public class GameObject
     }
     
     private void initAttributes() {
-        attributes().addDoubleAttribute(MoveCommand.ATTRIBUTE_ID, 5); //Measured in tiles/second
+        attributes().addDoubleAttribute(MoveCommand.SPEED_ID, 5); //Measured in tiles/second
         attributes().addAttribute("health", 500);
     }
     
@@ -143,6 +142,8 @@ public class GameObject
         
         missile.setLocationX(getLocationX(false));
         missile.setLocationY(getLocationY(false));
+        
+        missile.attributes().addDoubleAttribute(MoveCommand.ACCELERATION_ID, 1.005D);
         
 //        getGameMap().gameObjects().add(missile);
         logiCore().triggers().register(Galaxy.newUnitArrivedTrigger(missile, event -> {
