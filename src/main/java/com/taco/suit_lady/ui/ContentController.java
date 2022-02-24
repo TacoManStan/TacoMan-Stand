@@ -123,17 +123,20 @@ public abstract class ContentController<T extends Content<T, D, C>, D extends Co
     
     //<editor-fold desc="> Mouse Location Properties">
     
-    private @NotNull ReadOnlyObjectWrapper<Point2D> mouseOnContentProperty() { return ToolsFX.requireFX(() -> mouseOnScreenProperty); }
+    //    private @NotNull ReadOnlyObjectWrapper<Point2D> mouseOnContentProperty() { return ToolsFX.requireFX(() -> mouseOnScreenProperty); }
+    private @NotNull ReadOnlyObjectWrapper<Point2D> mouseOnContentProperty() { return mouseOnContentProperty; }
     private Point2D setMouseOnContent(@Nullable Point2D newValue) { return PropertiesSL.setProperty(mouseOnContentProperty(), newValue); }
     public final @NotNull ReadOnlyObjectProperty<Point2D> readOnlyMouseOnContentProperty() { return mouseOnContentProperty().getReadOnlyProperty(); }
     public final Point2D getMouseOnContent() { return mouseOnContentProperty().get(); }
     
-    private @NotNull ReadOnlyObjectWrapper<Point2D> mouseOnSceneProperty() { return ToolsFX.requireFX(() -> mouseOnSceneProperty); }
+    //    private @NotNull ReadOnlyObjectWrapper<Point2D> mouseOnSceneProperty() { return ToolsFX.requireFX(() -> mouseOnSceneProperty); }
+    private @NotNull ReadOnlyObjectWrapper<Point2D> mouseOnSceneProperty() { return mouseOnSceneProperty; }
     private Point2D setMouseOnScene(@Nullable Point2D newValue) { return PropertiesSL.setProperty(mouseOnSceneProperty(), newValue); }
     public final @NotNull ReadOnlyObjectProperty<Point2D> readOnlyMouseOnSceneProperty() { return mouseOnSceneProperty().getReadOnlyProperty(); }
     public final Point2D getMouseOnScene() { return mouseOnSceneProperty().get(); }
     
-    private @NotNull ReadOnlyObjectWrapper<Point2D> mouseOnScreenProperty() { return ToolsFX.requireFX(() -> mouseOnScreenProperty); }
+    //    private @NotNull ReadOnlyObjectWrapper<Point2D> mouseOnScreenProperty() { return ToolsFX.requireFX(() -> mouseOnScreenProperty); }
+    private @NotNull ReadOnlyObjectWrapper<Point2D> mouseOnScreenProperty() { return mouseOnScreenProperty; }
     private Point2D setMouseOnScreen(@Nullable Point2D newValue) { return PropertiesSL.setProperty(mouseOnScreenProperty(), newValue); }
     public final @NotNull ReadOnlyObjectProperty<Point2D> readOnlyMouseOnScreenProperty() { return mouseOnScreenProperty().getReadOnlyProperty(); }
     public final Point2D getMouseOnScreen() { return mouseOnScreenProperty().get(); }

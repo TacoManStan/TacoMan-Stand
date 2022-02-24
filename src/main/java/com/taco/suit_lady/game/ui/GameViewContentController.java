@@ -6,6 +6,8 @@ import com.taco.suit_lady.ui.ContentController;
 import com.taco.suit_lady.ui.ui_internal.controllers.CellController;
 import com.taco.suit_lady.ui.ui_internal.drag_and_drop.DragAndDropHandler;
 import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.tools.BindingsSL;
+import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.fxml.FXML;
@@ -44,6 +46,7 @@ public class GameViewContentController extends ContentController<GameViewContent
     //
     
     private DragAndDropHandler<GameObject> testDDHandler;
+    private ObjectBinding<Point2D> mouseOnMapBinding;
     
     public GameViewContentController(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         super(weaver, ctx);
@@ -57,6 +60,9 @@ public class GameViewContentController extends ContentController<GameViewContent
         super.init(content);
         
         this.setGame(content);
+    
+        this.mouseOnMapBinding = BindingsSL.objBinding(() -> getContent().getCamera().viewToMap(getMouseOnContent()), readOnlyMouseOnContentProperty());
+        
         return this;
     }
     
@@ -83,6 +89,11 @@ public class GameViewContentController extends ContentController<GameViewContent
     protected final void setGame(@NotNull GameViewContent content) { this.content = content; }
     
     public final AnchorPane getMapPane() { return mapPane; }
+    
+    //
+    
+    public final ObjectBinding<Point2D> mouseOnMapBinding() { return mouseOnMapBinding; }
+    public final Point2D getMouseOnMap() { return mouseOnMapBinding.get(); }
     
     //</editor-fold>
     
