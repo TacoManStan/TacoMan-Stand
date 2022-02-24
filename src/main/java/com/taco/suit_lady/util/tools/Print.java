@@ -8,7 +8,7 @@ public class Print {
     //<editor-fold desc="--- GENERIC ---">
     
     private static void print(@Nullable Object msg, boolean err) {
-        final String fullMsg = msg != null ? TasksSL.getCallingPrefix() + " :   " + msg : TasksSL.getCallingPrefix();
+        final String fullMsg = msg != null ? TasksSL.getCallingPrefix() + ":   " + msg : TasksSL.getCallingPrefix();
         if (err)
             System.err.println(fullMsg);
         else

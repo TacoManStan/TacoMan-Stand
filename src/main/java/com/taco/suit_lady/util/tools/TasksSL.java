@@ -335,7 +335,7 @@ public class TasksSL {
     public static @NotNull String getCallingMethod() { return currentThread().getStackTrace()[5].getMethodName(); }
     public static @NotNull String getCallingThread() { return currentThread().toString(); }
     
-    public static @NotNull String getCallingPrefix() { return "[" + getCallingClass() + " :: " + getCallingMethod() + " :: " + getCallingLine() + " :: " + getCallingThread() + "]"; }
+    public static @NotNull String getCallingPrefix() { return "[" + getCallingClass() + "::" + getCallingLine() + "::" + getCallingMethod() + " | " + getCallingThread() + "]"; }
     
     //<editor-fold desc="> Thread Printing">
     

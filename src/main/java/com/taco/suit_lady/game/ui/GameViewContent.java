@@ -151,31 +151,29 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         return switch (keyEvent.getCode()) {
             case W -> keyInputAction(() -> {
                 if (keyEvent.isShiftDown())
-                    keyInputAction(() -> getCamera().moveY(-1), !fx);
+                    getCamera().moveY(-1);
                 else
-                    keyInputAction(() -> getCamera().moveTileY(-1), !fx);
+                    getCamera().moveTileY(-1);
             }, fx);
             case A -> keyInputAction(() -> {
                 if (keyEvent.isShiftDown())
-                    keyInputAction(() -> getCamera().moveX(-1), !fx);
+                    getCamera().moveX(-1);
                 else
-                    keyInputAction(() -> getCamera().moveTileX(-1), !fx);
+                    getCamera().moveTileX(-1);
             }, fx);
             case S -> keyInputAction(() -> {
                 if (keyEvent.isShiftDown())
-                    keyInputAction(() -> getCamera().moveY(1), !fx);
+                    getCamera().moveY(1);
                 else
-                    keyInputAction(() -> getCamera().moveTileY(1), !fx);
+                   getCamera().moveTileY(1);
             }, fx);
             case D -> keyInputAction(() -> {
                 if (keyEvent.isShiftDown())
-                    keyInputAction(() -> getCamera().moveX(1), !fx);
+                    getCamera().moveX(1);
                 else
-                    keyInputAction(() -> getCamera().moveTileX(1), !fx);
+                    getCamera().moveTileX(1);
             }, fx);
-            case Q -> keyInputAction(() -> {
-                getCamera().toggleViewBinding(getTestObject());
-            }, !fx);
+            case Q -> keyInputAction(() -> getCamera().toggleViewBinding(getTestObject()), !fx);
             
             //                case UP -> keyInputAction(() -> testObject.moveY(-1), fx);
             //                case LEFT -> keyInputAction(() -> testObject.moveX(-1), fx);

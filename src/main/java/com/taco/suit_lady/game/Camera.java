@@ -151,6 +151,7 @@ public class Camera
     public final IntegerProperty xLocationProperty() { return xLocationProperty; }
     public final int getLocationX() { return xLocationProperty.get(); }
     public final int setLocationX(int newValue) {
+        Print.print("Changing Camera Location X: " + newValue);
         if (!isViewBound())
             return PropertiesSL.setProperty(xLocationProperty, newValue);
         
