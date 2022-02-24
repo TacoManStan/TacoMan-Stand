@@ -226,7 +226,7 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
                 selectTileAtMouse();
         } else if (event.getButton().equals(MouseButton.SECONDARY)) {
             if (!fx)
-                processMovementOrder(getTestObject());
+                getTestObject().getCommand().move(getMouseOnMap());
         } else if (event.getButton().equals(MouseButton.MIDDLE)) {
             if (!fx)
                 abilityTest(1);
@@ -242,7 +242,7 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
             sync(() -> mouseOnMapProperty.set(getCamera().viewToMap(event.getX(), event.getY())));
         if (event.getButton() == MouseButton.SECONDARY) {
             if (!fx)
-                processMovementOrder(getTestObject());
+                getTestObject().getCommand().move(getMouseOnMap());
         }
         
         return true;
@@ -252,14 +252,6 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         if (!fx)
             sync(() -> mouseOnMapProperty.set(getCamera().viewToMap(event.getX(), event.getY())));
         return false;
-    }
-    
-    private void processMovementOrder(@NotNull GameObject source) {
-        //        final Point2D viewToMap = getCamera().viewToMap(event.getX(), event.getY());
-        final Point2D viewToMap = getMouseOnMap();
-        
-        Print.print("View To Map: " + viewToMap);
-        source.getCommand().move(viewToMap);
     }
     
     private void printTileInformation(@NotNull MouseEvent event) {
