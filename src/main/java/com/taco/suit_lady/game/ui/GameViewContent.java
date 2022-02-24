@@ -220,9 +220,6 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         
         return true;
     }
-    @Override protected boolean handleMouseReleaseEvent(@NotNull MouseEvent event, boolean fx) {
-        return true;
-    }
     @Override protected boolean handleMouseDragEvent(@NotNull MouseEvent event, boolean fx) {
 //        if (!fx)
 //            sync(() -> mouseOnMapProperty.set(getCamera().viewToMap(event.getX(), event.getY())));
@@ -232,12 +229,6 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         }
         
         return true;
-    }
-    
-    @Override protected boolean handleMouseMoveEvent(@NotNull MouseEvent event, boolean fx) {
-//        if (!fx)
-//            sync(() -> mouseOnMapProperty.set(getCamera().viewToMap(event.getX(), event.getY())));
-        return false;
     }
     
     private void printTileInformation(@NotNull MouseEvent event) {
