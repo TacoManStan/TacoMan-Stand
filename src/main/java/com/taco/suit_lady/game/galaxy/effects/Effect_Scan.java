@@ -31,7 +31,7 @@ public class Effect_Scan extends Effect_Targeted {
     @Contract("_ -> new")
     public final @NotNull Effect_Targeted getScanEffectTest(@NotNull GameObject missile) {
         return new Effect_Targeted(missile) {
-            @Override public boolean trigger(@NotNull Map<String, ?> params) {
+            @Override public boolean trigger(@NotNull Map<String, Object> params) {
                 final GameObject target = (GameObject) params.get("target");
                 target.taskManager().shutdown();
                 return true;
@@ -45,7 +45,7 @@ public class Effect_Scan extends Effect_Targeted {
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public boolean trigger(@NotNull Map<String, ?> params) {
+    @Override public boolean trigger(@NotNull Map<String, Object> params) {
         final GameObject missile = (GameObject) params.get("missile");
         final double radius = (double) params.get("radius");
         

@@ -1,6 +1,7 @@
 package com.taco.suit_lady.game.ui;
 
 import com.taco.suit_lady.game.commands.MoveCommand;
+import com.taco.suit_lady.game.galaxy.abilities.specific.Ability_LaunchMissile;
 import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.game.objects.tiles.GameTile;
@@ -16,6 +17,7 @@ import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.*;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
+import com.taco.suit_lady.util.tools.util.ValuePair;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -129,10 +131,10 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         testObject.setTileLocationY(20);
         getGameMap().gameObjects().add(testObject);
         
-        //        testObject2.init();
-        //        testObject2.setTileLocationX(30);
-        //        testObject2.setTileLocationY(20);
-        //        getGameMap().gameObjects().add(testObject2);
+        testObject2.init();
+        testObject2.setTileLocationX(30);
+        testObject2.setTileLocationY(20);
+        getGameMap().gameObjects().add(testObject2);
         
         getCamera().setLocationX((int) testObject.getLocationX(true));
         getCamera().setLocationY((int) testObject.getLocationY(true));
@@ -243,8 +245,10 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
             if (!fx)
                 processMovementOrder(getTestObject());
         } else if (event.getButton().equals(MouseButton.MIDDLE)) {
-            if (!fx)
-                processMovementOrder(testObject.launchMissileTest());
+            if (!fx) {
+                //                processMovementOrder(testObject.launchMissileTest());
+                new Ability_LaunchMissile(testObject).use(new ValuePair<>("target", viewToMap));
+            }
         }
         
         return true;
@@ -274,11 +278,7 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         final Point2D viewToMap = getMouseOnMap();
         
         Print.print("View To Map: " + viewToMap);
-        
-        source.getCommand().setTargetX((int) viewToMap.getX());
-        source.getCommand().setTargetY((int) viewToMap.getY());
-        
-        source.getCommand().setPaused(false);
+        source.getCommand().move(viewToMap);
     }
     
     private void printTileInformation(@NotNull MouseEvent event) {

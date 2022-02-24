@@ -12,6 +12,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class MoveCommand extends GameTask<GameObject> {
     
@@ -51,6 +52,18 @@ public class MoveCommand extends GameTask<GameObject> {
     public final int setTargetY(int newValue) { return PropertiesSL.setProperty(yTargetProperty, newValue); }
     
     @Contract(" -> new") public final @NotNull Point2D getTargetPoint() { return new Point2D(getTargetX(), getTargetY()); }
+    public final @NotNull Point2D setTargetPoint(@Nullable Point2D newValue) {
+        final Point2D oldValue = getTargetPoint();
+        setTargetX((int) newValue.getX());
+        setTargetY((int) newValue.getY());
+        return oldValue;
+    }
+    
+    public final @NotNull Point2D move(@NotNull Point2D targetPoint) {
+        final Point2D oldValue = setTargetPoint(targetPoint);
+        setPaused(false);
+        return oldValue;
+    }
     
     
     public final @NotNull BooleanProperty pausedProperty() { return pausedProperty; }

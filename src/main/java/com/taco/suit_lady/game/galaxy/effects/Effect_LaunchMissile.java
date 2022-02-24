@@ -32,7 +32,10 @@ public class Effect_LaunchMissile extends Effect_Targeted {
     public final ReadOnlyObjectProperty<Effect> readOnlyImpactEffectProperty() { return impactEffectProperty.getReadOnlyProperty(); }
     public final Effect getImpactEffect() { return impactEffectProperty.get(); }
     
-    public final Effect getImpactEffectTest() { return new Effect_LaunchMissile(getSource()); }
+    public final Effect getImpactEffectTest() {
+//        return new Effect_LaunchMissile(getSource());
+        return new Effect_Scan(getSource());
+    }
     
     public final ReadOnlyStringProperty readOnlyMissileObjectProperty() { return missileObjectProperty.getReadOnlyProperty(); }
     public final String getMissileObject() { return missileObjectProperty.get(); }
@@ -41,7 +44,7 @@ public class Effect_LaunchMissile extends Effect_Targeted {
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public boolean trigger(@NotNull Map<String, ?> params) {
+    @Override public boolean trigger(@NotNull Map<String, Object> params) {
         final Point2D target = (Point2D) params.get("target");
         launchMissileTest(target);
         return true;
@@ -69,6 +72,8 @@ public class Effect_LaunchMissile extends Effect_Targeted {
                         new ValuePair<>("radius", 25D)));
             missile.taskManager().shutdown();
         }));
+        
+        missile.getCommand().move(target);
         
         return missile;
     }
