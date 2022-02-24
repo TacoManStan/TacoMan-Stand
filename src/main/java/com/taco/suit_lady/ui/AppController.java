@@ -1,6 +1,7 @@
 package com.taco.suit_lady.ui;
 
 import com.taco.suit_lady.game.ui.GameViewContent;
+import com.taco.suit_lady.logic.triggers.Galaxy;
 import com.taco.suit_lady.ui.console.ConsoleMessageable;
 import com.taco.suit_lady.ui.jfx.components.button.ImageButton;
 import com.taco.suit_lady.ui.jfx.components.ImagePane;
@@ -121,7 +122,7 @@ public class AppController
     @FXML private GridPane gridPane;
     @FXML private AnchorPane contentAnchorPane;
     
-//    @FXML private TreeView<WrappingTreeCellData<ConsoleMessageable<?>>> consoleTree;
+    //    @FXML private TreeView<WrappingTreeCellData<ConsoleMessageable<?>>> consoleTree;
     
     @FXML private Label bookshelfTitleLabel;
     
@@ -226,14 +227,14 @@ public class AppController
         initSidebar();
         initContent();
         
-//        console().consolify(
-//                new ConsoleUIDataContainer(
-//                        consoleTree,
-//                        consoleTRiBotCheckBox.selectedProperty(),
-//                        consoleClientCheckBox.selectedProperty(),
-//                        consoleScriptCheckBox.selectedProperty(),
-//                        consoleSelectedInstanceOnlyCheckBox.selectedProperty()
-//                ));
+        //        console().consolify(
+        //                new ConsoleUIDataContainer(
+        //                        consoleTree,
+        //                        consoleTRiBotCheckBox.selectedProperty(),
+        //                        consoleClientCheckBox.selectedProperty(),
+        //                        consoleScriptCheckBox.selectedProperty(),
+        //                        consoleSelectedInstanceOnlyCheckBox.selectedProperty()
+        //                ));
         
         ToolsFX.constructDraggableNode(dragBar);
         ToolsFX.constructResizableNode(getStage(), cornerResizePane, topResizePane, bottomResizePane, leftResizePane, rightResizePane,
@@ -253,9 +254,12 @@ public class AppController
         //
         
         root.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            ui().getContentManager().submitKeyEvent(event, true);
-            if (ui().getContentManager().submitKeyEvent(event, false))
+            if (ui().getContentManager().submitKeyEvent(event, true))
                 event.consume();
+            getGameContent().getController().taskManager().addTask(
+                    Galaxy.newOneTimeTask(
+                            getGameContent().getController(),
+                            () -> ui().getContentManager().submitKeyEvent(event, false)));
         });
         
         logiCore().init(getGameContent());
@@ -610,9 +614,9 @@ public class AppController
         return stage;
     }
     
-//    public final TreeView<WrappingTreeCellData<ConsoleMessageable<?>>> getConsoleTree() {
-//        return consoleTree;
-//    }
+    //    public final TreeView<WrappingTreeCellData<ConsoleMessageable<?>>> getConsoleTree() {
+    //        return consoleTree;
+    //    }
     
     //</editor-fold>
     

@@ -1,10 +1,12 @@
 package com.taco.suit_lady.game.ui;
 
+import com.taco.suit_lady.game.commands.MoveCommand;
 import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.game.objects.tiles.GameTile;
 import com.taco.suit_lady.game.Camera;
 import com.taco.suit_lady.game.GameMap;
+import com.taco.suit_lady.logic.triggers.Galaxy;
 import com.taco.suit_lady.ui.Content;
 import com.taco.suit_lady.ui.SidebarBookshelf;
 import com.taco.suit_lady.ui.UIBook;
@@ -20,12 +22,15 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
+import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Predicate;
 
 public class GameViewContent extends Content<GameViewContent, GameViewContentData, GameViewContentController>
         implements UIDProcessable, Lockable, GameComponent {
@@ -162,48 +167,70 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
                         getCamera().moveY(-1);
                     else
                         getCamera().moveTileY(-1);
-                });
+                }, fx);
                 case A -> keyInputAction(() -> {
                     if (keyEvent.isShiftDown())
                         getCamera().moveX(-1);
                     else
                         getCamera().moveTileX(-1);
-                });
+                }, fx);
                 case S -> keyInputAction(() -> {
                     if (keyEvent.isShiftDown())
                         getCamera().moveY(1);
                     else
                         getCamera().moveTileY(1);
-                });
+                }, fx);
                 case D -> keyInputAction(() -> {
                     if (keyEvent.isShiftDown())
                         getCamera().moveX(1);
                     else
                         getCamera().moveTileX(1);
-                });
+                }, fx);
                 
-                case UP -> keyInputAction(() -> testObject.moveY(-1));
-                case LEFT -> keyInputAction(() -> testObject.moveX(-1));
-                case DOWN -> keyInputAction(() -> testObject.moveY(1));
-                case RIGHT -> keyInputAction(() -> testObject.moveX(1));
+                case UP -> keyInputAction(() -> testObject.moveY(-1), fx);
+                case LEFT -> keyInputAction(() -> testObject.moveX(-1), fx);
+                case DOWN -> keyInputAction(() -> testObject.moveY(1), fx);
+                case RIGHT -> keyInputAction(() -> testObject.moveX(1), fx);
                 
-                case DIGIT1 -> keyInputAction(() -> abilityTest(1));
-                case DIGIT2 -> keyInputAction(() -> abilityTest(2));
-                case DIGIT3 -> keyInputAction(() -> abilityTest(3));
-                case DIGIT4 -> keyInputAction(() -> abilityTest(4));
+                case DIGIT1 -> keyInputAction(() -> abilityTest(1), fx);
+                case DIGIT2 -> keyInputAction(() -> abilityTest(2), fx);
+                case DIGIT3 -> keyInputAction(() -> abilityTest(3), fx);
+                case DIGIT4 -> keyInputAction(() -> abilityTest(4), fx);
                 
                 default -> false;
             };
         return true;
     }
     
-    private boolean keyInputAction(@NotNull Runnable action) {
-        action.run();
-        return true;
+    private boolean keyInputAction(@NotNull Runnable action, boolean fx) {
+        if (!fx) {
+            action.run();
+            return true;
+        }
+        return false;
     }
     
     private void abilityTest(int abilityNum) {
         Print.print("Ability Used: " + abilityNum);
+        if (abilityNum == 1)
+            processMovementOrder(launchMissileTest());
+    }
+    
+    private @NotNull GameObject launchMissileTest() {
+        final GameObject missile = new GameObject(getGame()).init();
+        
+        missile.setLocationX(getTestObject().getLocationX(false), false);
+        missile.setLocationY(getTestObject().getLocationY(false), false);
+        
+        missile.attributes().addDoubleAttribute(MoveCommand.ACCELERATION_ID, 1.025D);
+        missile.attributes().getDoubleAttribute(MoveCommand.SPEED_ID).setValue(1D);
+        
+        logiCore().triggers().register(Galaxy.newUnitArrivedTrigger(missile, event -> {
+            Print.print("Unit Arrived [" + missile + "]  ||  [" + event.getMovedFrom() + "  -->  " + event.getMovedTo());
+            missile.taskManager().shutdown();
+        }));
+        
+        return missile;
     }
     
     @Override protected boolean handleMousePressEvent(@NotNull MouseEvent event, boolean fx) {
@@ -214,10 +241,10 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
                 selectTile(event);
         } else if (event.getButton().equals(MouseButton.SECONDARY)) {
             if (!fx)
-                processMovementOrder(event, getTestObject());
+                processMovementOrder(getTestObject());
         } else if (event.getButton().equals(MouseButton.MIDDLE)) {
             if (!fx)
-                processMovementOrder(event, testObject.launchMissileTest());
+                processMovementOrder(testObject.launchMissileTest());
         }
         
         return true;
@@ -230,7 +257,7 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
             sync(() -> mouseOnMapProperty.set(getCamera().viewToMap(event.getX(), event.getY())));
         if (event.getButton() == MouseButton.SECONDARY) {
             if (!fx)
-                processMovementOrder(event, getTestObject());
+                processMovementOrder(getTestObject());
         }
         
         return true;
@@ -242,7 +269,7 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         return false;
     }
     
-    private void processMovementOrder(@NotNull MouseEvent event, @NotNull GameObject source) {
+    private void processMovementOrder(@NotNull GameObject source) {
         //        final Point2D viewToMap = getCamera().viewToMap(event.getX(), event.getY());
         final Point2D viewToMap = getMouseOnMap();
         
