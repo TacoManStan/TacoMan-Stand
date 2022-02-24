@@ -50,7 +50,7 @@ public class Effect_Scan extends Effect_Targeted {
         final double radius = (double) params.get("radius");
         
         getGameMap().scanMap(missile.getLocationCentered(), radius)
-                    .forEach(gameObject -> getScanEffect().trigger(
+                    .forEach(gameObject -> getScanEffectTest(missile).trigger(
                             ListsSL.map(new ValuePair<>("target", gameObject))));
         
         return true;

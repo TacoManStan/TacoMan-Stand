@@ -17,7 +17,7 @@ public abstract class Ability
     
     //<editor-fold desc="--- ABSTRACT ---">
     
-    public abstract void use(@NotNull Map<String, ?> params);
+    public abstract void use(@NotNull Map<String, Object> params);
     
     //</editor-fold>
     
