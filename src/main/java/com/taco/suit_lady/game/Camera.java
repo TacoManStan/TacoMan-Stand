@@ -1,6 +1,8 @@
 package com.taco.suit_lady.game;
 
 import com.taco.suit_lady.game.interfaces.GameComponent;
+import com.taco.suit_lady.game.objects.GameObject;
+import com.taco.suit_lady.game.objects.MapObject;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
@@ -193,6 +195,7 @@ public class Camera
         setLocationY((int) newValue.getY());
         return oldValue;
     }
+    public final Point2D setLocation(@NotNull GameObject gameObject, boolean center) { return setLocation(gameObject.getLocation(center)); }
     
     public final ObjectBinding<Point2D> offsetsBinding() { return offsetsBinding; }
     public final Point2D getOffsets() { return offsetsBinding.get(); }

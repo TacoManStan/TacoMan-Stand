@@ -176,12 +176,16 @@ public class GameObject
     public final double moveY(@NotNull Number amount) { return setLocationY(getLocationY(false) + amount.doubleValue(), false); }
     public final double moveTileY(@NotNull Number amount) { return setLocationY(getLocationY(false) + (amount.doubleValue() * getGameMap().getTileSize()), false); }
     
+    //
     
-    public final ObjectBinding<Point2D> locationBinding() { return locationBinding; }
-    public final @NotNull Point2D getLocation() { return locationBinding.get(); }
-    
-    public final ObjectBinding<Point2D> locationCenteredBinding() { return locationCenteredBinding; }
-    public final Point2D getLocationCentered() { return locationCenteredBinding.get(); }
+    public final ObjectBinding<Point2D> locationBinding(boolean center) { return center ? locationCenteredBinding : locationBinding; }
+    public final Point2D getLocation(boolean center) { return locationBinding(center).get(); }
+    public final Point2D setLocation(@NotNull Point2D newValue, boolean center) {
+        final Point2D oldValue = locationBinding(center).get();
+        setLocationX(newValue.getX(), center);
+        setLocationY(newValue.getY(), center);
+        return oldValue;
+    }
     
     //
     
@@ -227,7 +231,7 @@ public class GameObject
     @Override public void load(JsonObject parent) {
         setWidth(JUtil.loadInt(parent, "width"));
         setHeight(JUtil.loadInt(parent, "height"));
-        setLocationX(JUtil.loadDouble(parent, "x-location"),false);
+        setLocationX(JUtil.loadDouble(parent, "x-location"), false);
         setLocationY(JUtil.loadDouble(parent, "y-location"), false);
         JUtil.loadObject(parent, "model", getModel());
     }
