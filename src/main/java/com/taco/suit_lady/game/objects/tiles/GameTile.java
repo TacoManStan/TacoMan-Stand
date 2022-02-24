@@ -65,8 +65,9 @@ public class GameTile
     @Override public final @NotNull IntegerBinding xLocationProperty() { return xPixelLocationBinding; }
     @Override public @NotNull Integer getLocationY() { return MapObject.super.getLocationY().intValue(); }
     
-    public final ReadOnlyIntegerProperty readOnlyTileLocationXBinding() { return xTileLocationProperty.getReadOnlyProperty(); }
+    public final ReadOnlyIntegerProperty readOnlyTileLocationXProperty() { return xTileLocationProperty.getReadOnlyProperty(); }
     public final int setTileLocationX(int newValue) { return PropertiesSL.setProperty(xTileLocationProperty, newValue); }
+    public final int getTileLocationX() { return xTileLocationProperty.get(); }
     
     
     @Override public final @NotNull IntegerBinding yLocationProperty() { return yPixelLocationBinding; }
@@ -74,6 +75,7 @@ public class GameTile
     
     public final ReadOnlyIntegerProperty readOnlyTileLocationYProperty() { return yTileLocationProperty.getReadOnlyProperty(); }
     public final int setTileLocationY(int newValue) { return PropertiesSL.setProperty(yTileLocationProperty, newValue); }
+    public final int getTileLocationY() { return yTileLocationProperty.get(); }
     
     
     
