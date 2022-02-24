@@ -1,13 +1,11 @@
 package com.taco.suit_lady.game.ui;
 
-import com.taco.suit_lady.game.commands.MoveCommand;
 import com.taco.suit_lady.game.galaxy.abilities.specific.Ability_LaunchMissile;
 import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.game.objects.tiles.GameTile;
 import com.taco.suit_lady.game.Camera;
 import com.taco.suit_lady.game.GameMap;
-import com.taco.suit_lady.logic.triggers.Galaxy;
 import com.taco.suit_lady.ui.Content;
 import com.taco.suit_lady.ui.SidebarBookshelf;
 import com.taco.suit_lady.ui.UIBook;
@@ -16,23 +14,16 @@ import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.*;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import com.taco.suit_lady.util.tools.util.ValuePair;
-import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
-import javafx.scene.input.InputEvent;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.function.Predicate;
 
 public class GameViewContent extends Content<GameViewContent, GameViewContentData, GameViewContentController>
         implements UIDProcessable, Lockable, GameComponent {
@@ -162,50 +153,60 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override protected boolean handleKeyEvent(@NotNull KeyEvent keyEvent, boolean fx) {
-        if (!fx)
-            return switch (keyEvent.getCode()) {
-                case W -> keyInputAction(() -> {
-                    if (keyEvent.isShiftDown())
-                        getCamera().moveY(-1);
-                    else
-                        getCamera().moveTileY(-1);
-                }, fx);
-                case A -> keyInputAction(() -> {
-                    if (keyEvent.isShiftDown())
-                        getCamera().moveX(-1);
-                    else
-                        getCamera().moveTileX(-1);
-                }, fx);
-                case S -> keyInputAction(() -> {
-                    if (keyEvent.isShiftDown())
-                        getCamera().moveY(1);
-                    else
-                        getCamera().moveTileY(1);
-                }, fx);
-                case D -> keyInputAction(() -> {
-                    if (keyEvent.isShiftDown())
-                        getCamera().moveX(1);
-                    else
-                        getCamera().moveTileX(1);
-                }, fx);
-                
-                case UP -> keyInputAction(() -> testObject.moveY(-1), fx);
-                case LEFT -> keyInputAction(() -> testObject.moveX(-1), fx);
-                case DOWN -> keyInputAction(() -> testObject.moveY(1), fx);
-                case RIGHT -> keyInputAction(() -> testObject.moveX(1), fx);
-                
-                case DIGIT1 -> keyInputAction(() -> abilityTest(1), fx);
-                case DIGIT2 -> keyInputAction(() -> abilityTest(2), fx);
-                case DIGIT3 -> keyInputAction(() -> abilityTest(3), fx);
-                case DIGIT4 -> keyInputAction(() -> abilityTest(4), fx);
-                
-                default -> false;
-            };
-        return true;
+        return switch (keyEvent.getCode()) {
+            case W -> keyInputAction(() -> {
+                if (keyEvent.isShiftDown())
+                    keyInputAction(() -> getCamera().moveY(-1), !fx);
+                else
+                    keyInputAction(() -> getCamera().moveTileY(-1), !fx);
+            }, fx);
+            case A -> keyInputAction(() -> {
+                if (keyEvent.isShiftDown())
+                    keyInputAction(() -> getCamera().moveX(-1), !fx);
+                else
+                    keyInputAction(() -> getCamera().moveTileX(-1), !fx);
+            }, fx);
+            case S -> keyInputAction(() -> {
+                if (keyEvent.isShiftDown())
+                    keyInputAction(() -> getCamera().moveY(1), !fx);
+                else
+                    keyInputAction(() -> getCamera().moveTileY(1), !fx);
+            }, fx);
+            case D -> keyInputAction(() -> {
+                if (keyEvent.isShiftDown())
+                    keyInputAction(() -> getCamera().moveX(1), !fx);
+                else
+                    keyInputAction(() -> getCamera().moveTileX(1), !fx);
+            }, fx);
+            case Q -> keyInputAction(() -> {
+                if (getCamera().xLocationProperty().isBound())
+                    getCamera().xLocationProperty().unbind();
+                else
+                    getCamera().xLocationProperty().bind(getTestObject().xLocationCenteredBinding());
+                if (getCamera().yLocationProperty().isBound())
+                    getCamera().yLocationProperty().unbind();
+                else
+                    getCamera().yLocationProperty().bind(getTestObject().yLocationCenteredBinding());
+            }, !fx);
+            
+            //                case UP -> keyInputAction(() -> testObject.moveY(-1), fx);
+            //                case LEFT -> keyInputAction(() -> testObject.moveX(-1), fx);
+            //                case DOWN -> keyInputAction(() -> testObject.moveY(1), fx);
+            //                case RIGHT -> keyInputAction(() -> testObject.moveX(1), fx);
+            
+            case NUMPAD1, NUMPAD2, NUMPAD3, NUMPAD4, NUMPAD5, NUMPAD6, NUMPAD7, NUMPAD8, NUMPAD9 -> keyInputAction(() -> shiftTile(keyEvent.getCode()), !fx);
+            
+            case DIGIT1 -> keyInputAction(() -> abilityTest(1), fx);
+            case DIGIT2 -> keyInputAction(() -> abilityTest(2), fx);
+            case DIGIT3 -> keyInputAction(() -> abilityTest(3), fx);
+            case DIGIT4 -> keyInputAction(() -> abilityTest(4), fx);
+            
+            default -> false;
+        };
     }
     
-    private boolean keyInputAction(@NotNull Runnable action, boolean fx) {
-        if (!fx) {
+    private boolean keyInputAction(@NotNull Runnable action, boolean skip) {
+        if (!skip) {
             action.run();
             return true;
         }
@@ -220,10 +221,9 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
     
     @Override protected boolean handleMousePressEvent(@NotNull MouseEvent event, boolean fx) {
         //        final Point2D viewToMap = getCamera().viewToMap(event.getX(), event.getY());
-        final Point2D viewToMap = getMouseOnMap();
         if (event.getButton().equals(MouseButton.PRIMARY)) {
             if (fx)
-                selectTile(event);
+                selectTileAtMouse();
         } else if (event.getButton().equals(MouseButton.SECONDARY)) {
             if (!fx)
                 processMovementOrder(getTestObject());
@@ -266,15 +266,49 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         //        final Point2D viewToMap = getCamera().viewToMap(event.getX(), event.getY());
         final Point2D viewToMap = getMouseOnMap();
         
-        GameTile tile = getGameMap().getTileAtPoint(viewToMap);
+        GameTile tile = getGameMap().getTileAtTileIndex(viewToMap);
         System.out.println("Tile At Point [" + viewToMap.getX() + ", " + viewToMap.getY() + "]: " + tile);
         debugger().printList(tile.getOccupyingObjects(), "Occupying Objects for Tile [" + tile.getLocationX() + ", " + tile.getLocationY() + "]");
     }
     
-    private void selectTile(@NotNull MouseEvent event) {
-        final GameTile tile = getGameMap().getTileAtPoint(getCamera().viewToMap(event.getX(), event.getY()));
+    //
+    
+    private void selectTileAtMouse() { selectTileAtPoint(getMouseOnMap()); }
+    private void selectTileRoot() { selectTileAtPoint(new Point2D(1.0, 1.0)); }
+    private void selectTileAtPoint(@NotNull Point2D targetPoint) {
+        final GameTile tile = getGameMap().getTileAtPoint(targetPoint);
         if (tile != null)
-            ToolsFX.runFX(() -> getUIData().setSelectedTile(tile));
+            getUIData().setSelectedTile(tile);
+    }
+    
+    private void shiftTile(@NotNull KeyCode direction) {
+        switch (direction) {
+            case NUMPAD1 -> shiftTile(-1, 1);
+            case NUMPAD2 -> shiftTile(0, 1);
+            case NUMPAD3 -> shiftTile(1, 1);
+            case NUMPAD4 -> shiftTile(-1, 0);
+            
+            case NUMPAD5 -> getCamera().setLocation(getTestObject(), true);
+            
+            case NUMPAD6 -> shiftTile(1, 0);
+            case NUMPAD7 -> shiftTile(-1, -1);
+            case NUMPAD8 -> shiftTile(0, -1);
+            case NUMPAD9 -> shiftTile(1, -1);
+            //            case UP -> shiftTile(0, -1);
+            //            case DOWN -> shiftTile(0, 1);
+            //            case LEFT -> shiftTile(0, -1);
+            //            case RIGHT -> shiftTile(0, 1);
+            
+            default -> Print.err("Unrecognized Direction :" + direction);
+        }
+    }
+    
+    private void shiftTile(int xShift, int yShift) {
+        final GameTile selectedTile = getUIData().getSelectedTile();
+        if (selectedTile != null)
+            getUIData().setSelectedTile(getGameMap().getTileAtTileIndex(selectedTile.getTileLocationX() + xShift, selectedTile.getTileLocationY() + yShift));
+        else
+            Print.err("Selected Tile is Null.");
     }
     
     //

@@ -333,8 +333,9 @@ public class TasksSL {
     public static int getCallingLine() { return currentThread().getStackTrace()[5].getLineNumber(); }
     public static @NotNull String getCallingClass() { return currentThread().getStackTrace()[5].getClassName(); }
     public static @NotNull String getCallingMethod() { return currentThread().getStackTrace()[5].getMethodName(); }
+    public static @NotNull String getCallingThread() { return currentThread().toString(); }
     
-    public static @NotNull String getCallingPrefix() { return "[" + getCallingClass() + " :: " + getCallingMethod() + " :: " + getCallingLine() + "]"; }
+    public static @NotNull String getCallingPrefix() { return "[" + getCallingClass() + " :: " + getCallingMethod() + " :: " + getCallingLine() + " :: " + getCallingThread() + "]"; }
     
     //<editor-fold desc="> Thread Printing">
     

@@ -6,6 +6,7 @@ import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasSurfa
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.springable.StrictSpringable;
+import com.taco.suit_lady.util.tools.Print;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -153,8 +154,11 @@ public class ContentManager
     
     protected boolean submitKeyEvent(@NotNull KeyEvent keyEvent, boolean fx) {
         Content<?, ?, ?> content = getContent();
+        Print.print("Submitting Key Event:  [" + keyEvent.getCode() + "  |  " + content.getClass().getSimpleName() + "  |  " + fx + "]");
         if (content != null)
             return content.handleKeyEvent(keyEvent, fx);
+        else
+            Print.err("Content is Null");
         return false;
     }
 }

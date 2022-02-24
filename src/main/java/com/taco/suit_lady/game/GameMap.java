@@ -3,7 +3,6 @@ package com.taco.suit_lady.game;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.objects.GameObject;
-import com.taco.suit_lady.game.objects.MapObject;
 import com.taco.suit_lady.game.objects.tiles.GameTile;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.util.Lockable;
@@ -25,7 +24,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
@@ -195,8 +193,10 @@ public class GameMap
         return returnTiles;
     }
     
+    public final @NotNull GameTile getTileAtTileIndex(@NotNull Number x, @NotNull Number y) { return getTileAtTileIndex(new Point2D(x.doubleValue(), y.doubleValue())); }
+    public final @NotNull GameTile getTileAtTileIndex(@NotNull Point2D point) { return getTileMatrix()[(int) Math.floor(point.getX())][(int) Math.floor(point.getY())]; }
     public final @NotNull GameTile getTileAtPoint(@NotNull Number x, @NotNull Number y) { return getTileAtPoint(new Point2D(x.doubleValue(), y.doubleValue())); }
-    public final @NotNull GameTile getTileAtPoint(@NotNull Point2D point) { return getTileMatrix()[(int) Math.floor(point.getX() / getTileSize())][(int) Math.floor(point.getY() / getTileSize())]; }
+    public final @NotNull GameTile getTileAtPoint(@NotNull Point2D point) { return getTileAtTileIndex(point.getX() / getTileSize(), point.getY() / getTileSize()); }
     
     @Contract("_ -> new")
     public final @NotNull ArrayList<GameObject> getObjectsAtPoint(@NotNull Point2D point) { return new ArrayList<>(getTileAtPoint(point).getOccupyingObjects()); }
@@ -206,7 +206,7 @@ public class GameMap
         filter = filter != null ? filter : gameObject -> true;
         return gameObjects().stream()
                             .filter(Objects::nonNull)
-                            .filter(gameObject -> gameObject.getLocationCentered().distance(targetPoint) <= radius)
+                            .filter(gameObject -> gameObject.getLocation(true).distance(targetPoint) <= radius)
                             .filter(filter)
                             .collect(Collectors.toCollection(ArrayList::new));
     }

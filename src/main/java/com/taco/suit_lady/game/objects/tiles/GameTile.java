@@ -49,8 +49,8 @@ public class GameTile
         this.xTileLocationProperty = new ReadOnlyIntegerWrapper(xLoc);
         this.yTileLocationProperty = new ReadOnlyIntegerWrapper(yLoc);
         
-        this.xPixelLocationBinding = BindingsSL.intBinding(() -> getLocationX() * getGameMap().getTileSize());
-        this.yPixelLocationBinding = BindingsSL.intBinding(() -> getLocationY() * getGameMap().getTileSize());
+        this.xPixelLocationBinding = BindingsSL.intBinding(() -> getTileLocationX() * getGameMap().getTileSize(), readOnlyTileLocationXProperty());
+        this.yPixelLocationBinding = BindingsSL.intBinding(() -> getTileLocationY() * getGameMap().getTileSize(), readOnlyTileLocationYProperty());
         
         this.occupyingObjects = new SimpleListProperty<>(FXCollections.observableArrayList());
         
