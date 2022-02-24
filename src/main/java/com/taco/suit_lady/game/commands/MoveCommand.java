@@ -17,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 public class MoveCommand extends GameTask<GameObject> {
     
     public static final String SPEED_ID = "move-speed";
+    public static final String MAX_SPEED_ID = "max-speed";
     public static final String ACCELERATION_ID = "acceleration";
     
     //

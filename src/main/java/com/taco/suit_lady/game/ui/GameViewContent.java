@@ -215,24 +215,7 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
     private void abilityTest(int abilityNum) {
         Print.print("Ability Used: " + abilityNum);
         if (abilityNum == 1)
-            processMovementOrder(launchMissileTest());
-    }
-    
-    private @NotNull GameObject launchMissileTest() {
-        final GameObject missile = new GameObject(getGame()).init();
-        
-        missile.setLocationX(getTestObject().getLocationX(false), false);
-        missile.setLocationY(getTestObject().getLocationY(false), false);
-        
-        missile.attributes().addDoubleAttribute(MoveCommand.ACCELERATION_ID, 1.025D);
-        missile.attributes().getDoubleAttribute(MoveCommand.SPEED_ID).setValue(1D);
-        
-        logiCore().triggers().register(Galaxy.newUnitArrivedTrigger(missile, event -> {
-            Print.print("Unit Arrived [" + missile + "]  ||  [" + event.getMovedFrom() + "  -->  " + event.getMovedTo());
-            missile.taskManager().shutdown();
-        }));
-        
-        return missile;
+            new Ability_LaunchMissile(testObject).use(new ValuePair<>("target", getMouseOnMap()));
     }
     
     @Override protected boolean handleMousePressEvent(@NotNull MouseEvent event, boolean fx) {
@@ -245,10 +228,8 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
             if (!fx)
                 processMovementOrder(getTestObject());
         } else if (event.getButton().equals(MouseButton.MIDDLE)) {
-            if (!fx) {
-                //                processMovementOrder(testObject.launchMissileTest());
-                new Ability_LaunchMissile(testObject).use(new ValuePair<>("target", viewToMap));
-            }
+            if (!fx)
+                abilityTest(1);
         }
         
         return true;

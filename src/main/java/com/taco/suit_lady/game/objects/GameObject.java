@@ -121,6 +121,7 @@ public class GameObject
     
     private void initAttributes() {
         attributes().addDoubleAttribute(MoveCommand.SPEED_ID, 5); //Measured in tiles/second
+        attributes().addDoubleAttribute(MoveCommand.MAX_SPEED_ID, 100);
         attributes().addAttribute("health", 500);
     }
     
@@ -136,23 +137,6 @@ public class GameObject
         taskManager().addGfxShutdownOperation(() -> getModel().shutdown());
         taskManager().addGfxShutdownOperation(() -> getGameMap().getModel().refreshMapImage());
         taskManager().addShutdownOperation(() -> ArraysSL.iterateMatrix(tile -> tile.getOccupyingObjects().remove(this), getOccupiedTiles()));
-    }
-    
-    public GameObject launchMissileTest() {
-        final GameObject missile = new GameObject(getGame()).init();
-        
-        missile.setLocationX(getLocationX(false), false);
-        missile.setLocationY(getLocationY(false), false);
-        
-        missile.attributes().addDoubleAttribute(MoveCommand.ACCELERATION_ID, 1.025D);
-        missile.attributes().getDoubleAttribute(MoveCommand.SPEED_ID).setValue(1D);
-        
-        logiCore().triggers().register(Galaxy.newUnitArrivedTrigger(missile, event -> {
-            Print.print("Unit Arrived [" + missile + "]  ||  [" + event.getMovedFrom() + "  -->  " + event.getMovedTo());
-            missile.taskManager().shutdown();
-        }));
-        
-        return missile;
     }
     
     //</editor-fold>
