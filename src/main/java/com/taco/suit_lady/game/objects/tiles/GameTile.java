@@ -4,27 +4,30 @@ import com.github.cliftonlabs.json_simple.JsonObject;
 import com.taco.suit_lady.game.GameMap;
 import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.objects.GameObject;
+import com.taco.suit_lady.game.objects.MapObject;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.ui.jfx.util.Dimensions;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
+import com.taco.suit_lady.util.tools.BindingsSL;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import com.taco.tacository.json.*;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.ReadOnlyIntegerProperty;
-import javafx.beans.property.ReadOnlyIntegerWrapper;
-import javafx.beans.property.SimpleListProperty;
+import javafx.beans.binding.IntegerBinding;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.locks.Lock;
 
 public class GameTile
-        implements SpringableWrapper, Lockable, GameComponent, JObject, JLoadable {
+        implements SpringableWrapper, Lockable, GameComponent, MapObject, JObject, JLoadable {
     
-    private final ReadOnlyIntegerWrapper xLocationProperty;
-    private final ReadOnlyIntegerWrapper yLocationProperty;
+    private final ReadOnlyIntegerWrapper xTileLocationProperty;
+    private final ReadOnlyIntegerWrapper yTileLocationProperty;
+    
+    private final IntegerBinding xPixelLocationBinding;
+    private final IntegerBinding yPixelLocationBinding;
     
     private final GameMap owner;
     private final ListProperty<GameObject> occupyingObjects;
@@ -43,8 +46,11 @@ public class GameTile
     public GameTile(@NotNull GameMap owner, int xLoc, int yLoc) {
         this.owner = owner;
         
-        this.xLocationProperty = new ReadOnlyIntegerWrapper(xLoc);
-        this.yLocationProperty = new ReadOnlyIntegerWrapper(yLoc);
+        this.xTileLocationProperty = new ReadOnlyIntegerWrapper(xLoc);
+        this.yTileLocationProperty = new ReadOnlyIntegerWrapper(yLoc);
+        
+        this.xPixelLocationBinding = BindingsSL.intBinding(() -> getLocationX() * getGameMap().getTileSize());
+        this.yPixelLocationBinding = BindingsSL.intBinding(() -> getLocationY() * getGameMap().getTileSize());
         
         this.occupyingObjects = new SimpleListProperty<>(FXCollections.observableArrayList());
         
@@ -56,15 +62,18 @@ public class GameTile
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final ReadOnlyIntegerProperty readOnlyXLocationProperty() { return xLocationProperty.getReadOnlyProperty(); }
-    public final int getPixelLocationX() { return getLocationX() * getOwner().getTileSize(); }
-    public final int getLocationX() { return xLocationProperty.get(); }
-    public final int setLocationX(int newValue) { return PropertiesSL.setProperty(xLocationProperty, newValue); }
+    @Override public final @NotNull IntegerBinding xLocationProperty() { return xPixelLocationBinding; }
+    @Override public @NotNull Integer getLocationY() { return MapObject.super.getLocationY().intValue(); }
     
-    public final ReadOnlyIntegerProperty readOnlyYLocationProperty() { return yLocationProperty.getReadOnlyProperty(); }
-    public final int getPixelLocationY() { return getLocationY() * getOwner().getTileSize(); }
-    public final int getLocationY() { return yLocationProperty.get(); }
-    public final int setLocationY(int newValue) { return PropertiesSL.setProperty(yLocationProperty, newValue); }
+    public final ReadOnlyIntegerProperty readOnlyTileLocationXBinding() { return xTileLocationProperty.getReadOnlyProperty(); }
+    public final int setTileLocationX(int newValue) { return PropertiesSL.setProperty(xTileLocationProperty, newValue); }
+    
+    
+    @Override public final @NotNull IntegerBinding yLocationProperty() { return yPixelLocationBinding; }
+    @Override public @NotNull Integer getLocationX() { return MapObject.super.getLocationX().intValue(); }
+    
+    public final ReadOnlyIntegerProperty readOnlyTileLocationYProperty() { return yTileLocationProperty.getReadOnlyProperty(); }
+    public final int setTileLocationY(int newValue) { return PropertiesSL.setProperty(yTileLocationProperty, newValue); }
     
     
     
@@ -98,8 +107,8 @@ public class GameTile
     @Override public String getJID() { return "map-tile"; }
     @Override public void load(JsonObject parent) {
         setModel(JUtil.loadObject(parent, new TileModel(this)));
-        setLocationX(JUtil.loadInt(parent, "x-loc"));
-        setLocationY(JUtil.loadInt(parent, "y-loc"));
+        setTileLocationX(JUtil.loadInt(parent, "x-loc"));
+        setTileLocationY(JUtil.loadInt(parent, "y-loc"));
     }
     @Override public JElement[] jFields() {
         return new JElement[]{

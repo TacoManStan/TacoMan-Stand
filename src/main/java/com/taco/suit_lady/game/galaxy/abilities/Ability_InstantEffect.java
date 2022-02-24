@@ -9,23 +9,18 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import org.jetbrains.annotations.NotNull;
 
-public class Ability_InstantEffect extends Ability {
-    
-    private final GameObject owner;
+import java.util.Map;
+
+
+public class Ability_InstantEffect {
+
+    //TODO
     
     private final ReadOnlyObjectWrapper<Effect> effectProperty;
     
-    public Ability_InstantEffect(@NotNull GameObject owner) {
-        this.owner = owner;
-        
+    public Ability_InstantEffect(@NotNull GameObject source) {
         this.effectProperty = new ReadOnlyObjectWrapper<>();
     }
     
     public final ReadOnlyObjectProperty<Effect> readOnlyEffectProperty() { return effectProperty.getReadOnlyProperty(); }
-    
-    //<editor-fold desc="--- IMPLEMENTATIONS ---">
-    
-    @Override public final @NotNull GameObject getOwner() { return owner; }
-    
-    //</editor-fold>
 }

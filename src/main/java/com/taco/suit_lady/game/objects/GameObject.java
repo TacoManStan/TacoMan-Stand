@@ -31,7 +31,7 @@ import java.io.Serial;
 import java.util.ArrayList;
 
 public class GameObject
-        implements WrappedGameComponent, Entity, JObject, JLoadable, UIDProcessable, Tickable<GameObject> {
+        implements WrappedGameComponent, Entity, MapObject, JObject, JLoadable, UIDProcessable, Tickable<GameObject> {
     
     private final GameViewContent content;
     
@@ -169,9 +169,10 @@ public class GameObject
     
     //<editor-fold desc=">> Location Properties">
     
-    public final DoubleProperty xLocationProperty() { return xLocationProperty; }
+    @Override public final @NotNull DoubleProperty xLocationProperty() { return xLocationProperty; }
     public final DoubleBinding xLocationCenteredBinding() { return xLocationCenteredBinding; }
     
+    @Override public @NotNull Double getLocationX() { return MapObject.super.getLocationX().doubleValue(); }
     public final double getLocationX(boolean center) { return center ? xLocationCenteredBinding.get() : xLocationProperty.get(); }
     public final double setLocationX(@NotNull Number newValue, boolean center) { return PropertiesSL.setProperty(xLocationProperty, center ? newValue.doubleValue() + (getLocationX(false) - getLocationX(true)) : newValue.doubleValue()); }
     
@@ -180,9 +181,10 @@ public class GameObject
     public final double moveTileX(@NotNull Number amount) { return setLocationX(getLocationX(false) + (amount.doubleValue() * getGameMap().getTileSize()), false); }
     
     
-    public final DoubleProperty yLocationProperty() { return yLocationProperty; }
+    @Override public final @NotNull DoubleProperty yLocationProperty() { return yLocationProperty; }
     public final DoubleBinding yLocationCenteredBinding() { return yLocationCenteredBinding; }
     
+    @Override public @NotNull Double getLocationY() { return MapObject.super.getLocationY().doubleValue(); }
     public final double getLocationY(boolean center) { return center ? yLocationCenteredBinding.get() : yLocationProperty.get(); }
     public final double setLocationY(@NotNull Number newValue, boolean center) { return PropertiesSL.setProperty(yLocationProperty, center ? newValue.doubleValue() + (getLocationY(false) - getLocationY(true)) : newValue.doubleValue()); }
     
@@ -192,7 +194,7 @@ public class GameObject
     
     
     public final ObjectBinding<Point2D> locationBinding() { return locationBinding; }
-    public final Point2D getLocation() { return locationBinding.get(); }
+    public final @NotNull Point2D getLocation() { return locationBinding.get(); }
     
     public final ObjectBinding<Point2D> locationCenteredBinding() { return locationCenteredBinding; }
     public final Point2D getLocationCentered() { return locationCenteredBinding.get(); }

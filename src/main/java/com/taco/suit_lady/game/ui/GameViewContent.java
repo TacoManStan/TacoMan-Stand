@@ -45,7 +45,7 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
     
     private final ObjectProperty<GameMap> gameMapProperty;
     
-    private final GameObject testObject;
+    private final GameObject testObject; //Move to Player class
     private final GameObject testObject2;
     
     private ReadOnlyObjectWrapper<Point2D> mouseOnMapProperty;

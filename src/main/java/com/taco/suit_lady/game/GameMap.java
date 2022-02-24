@@ -3,6 +3,7 @@ package com.taco.suit_lady.game;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.objects.GameObject;
+import com.taco.suit_lady.game.objects.MapObject;
 import com.taco.suit_lady.game.objects.tiles.GameTile;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.util.Lockable;
@@ -24,8 +25,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class GameMap
         implements SpringableWrapper, Lockable, GameComponent, JObject, JLoadableObject {
@@ -87,7 +92,7 @@ public class GameMap
         this.model.init();
         JFiles.load(this);
         
-//        ArraysSL.iterateMatrix(GameTile::init, getTileMatrix());
+        //        ArraysSL.iterateMatrix(GameTile::init, getTileMatrix());
         this.model.refreshMapImage();
         
         return this;
@@ -195,6 +200,34 @@ public class GameMap
     
     @Contract("_ -> new")
     public final @NotNull ArrayList<GameObject> getObjectsAtPoint(@NotNull Point2D point) { return new ArrayList<>(getTileAtPoint(point).getOccupyingObjects()); }
+    
+    
+    public final @NotNull ArrayList<GameObject> scanMap(@NotNull Point2D targetPoint, double radius, @Nullable Predicate<GameObject> filter) {
+        filter = filter != null ? filter : gameObject -> true;
+        return gameObjects().stream()
+                            .filter(Objects::nonNull)
+                            .filter(gameObject -> gameObject.getLocationCentered().distance(targetPoint) <= radius)
+                            .filter(filter)
+                            .collect(Collectors.toCollection(ArrayList::new));
+    }
+    public final @NotNull ArrayList<GameObject> scanMap(@NotNull Point2D targetPoint, double radius) { return scanMap(targetPoint, radius, null); }
+    
+    //    public final @NotNull ArrayList<MapObject> scanMap(@NotNull GameObject target, double radius) {
+    //        final ArrayList<MapObject> scannedObjects = new ArrayList<>();
+    //        ArraysSL.iterateMatrix(tile -> scannedObjects.addAll(scanMap(tile, gameObject -> tile.inRange(gameObject, radius))), target.getOccupiedTiles());
+    //        return scannedObjects;
+    //    }
+    //
+    //    //TODO: Add support for different scan types - e.g., "any point on object", "center point", etc.
+    //    private @NotNull ArrayList<MapObject> scanMap(@NotNull GameTile tile, @NotNull Predicate<GameObject> filter) {
+    //        final ArrayList<MapObject> scannedObjects = new ArrayList<>();
+    //        tile.getOccupyingObjects()
+    //            .stream()
+    //            .filter(filter)
+    //            .forEach(scannedObjects::add);
+    //        scannedObjects.add(tile);
+    //        return scannedObjects;
+    //    }
     
     public boolean shutdown() {
         //TODO
