@@ -9,6 +9,7 @@ import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.BindingsSL;
 import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Print;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.IntegerBinding;
@@ -149,7 +150,13 @@ public class Camera
      */
     public final IntegerProperty xLocationProperty() { return xLocationProperty; }
     public final int getLocationX() { return xLocationProperty.get(); }
-    public final int setLocationX(int newValue) { return PropertiesSL.setProperty(xLocationProperty, newValue); }
+    public final int setLocationX(int newValue) {
+        if (!isViewBound())
+            return PropertiesSL.setProperty(xLocationProperty, newValue);
+        
+        Print.err("Cannot change Camera location: View is bound.");
+        return getLocationX();
+    }
     
     /**
      * <p>Defines the {@code y} coordinate at which this camera is assigned.</p>
@@ -161,7 +168,13 @@ public class Camera
      */
     public final IntegerProperty yLocationProperty() { return yLocationProperty; }
     public final int getLocationY() { return yLocationProperty.get(); }
-    public final int setLocationY(int newValue) { return PropertiesSL.setProperty(yLocationProperty, newValue); }
+    public final int setLocationY(int newValue) {
+        if (!isViewBound())
+            return PropertiesSL.setProperty(yLocationProperty, newValue);
+        
+        Print.err("Cannot change Camera location: View is bound.");
+        return getLocationY();
+    }
     
     //
     
@@ -260,7 +273,6 @@ public class Camera
             
             isBound = true;
         }
-        
         return isBound;
     }
     
@@ -292,6 +304,11 @@ public class Camera
         }
         
         return isBound;
+    }
+    
+    public final boolean isViewBound() {
+        validateLocationBindings();
+        return xLocationProperty.isBound();
     }
     
     private void validateLocationBindings() {
