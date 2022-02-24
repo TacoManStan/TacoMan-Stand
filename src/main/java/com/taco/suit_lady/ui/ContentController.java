@@ -72,34 +72,39 @@ public abstract class ContentController<T extends Content<T, D, C>, D extends Co
     
     private void initMouseEventHandling() {
         getContentPane().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-            
+            updateMouseLocation(event);
             if (getContent().handleMousePressEvent(event, true))
                 event.consume();
             taskManager().addTask(Galaxy.newOneTimeTask((C) this, () -> getContent().handleMousePressEvent(event, false)));
         });
         getContentPane().addEventFilter(MouseEvent.MOUSE_RELEASED, event -> {
+            updateMouseLocation(event);
             if (getContent().handleMouseReleaseEvent(event, true))
                 event.consume();
             taskManager().addTask(Galaxy.newOneTimeTask((C) this, () -> getContent().handleMouseReleaseEvent(event, false)));
         });
         
         getContentPane().addEventFilter(MouseEvent.MOUSE_MOVED, event -> {
+            updateMouseLocation(event);
             if (getContent().handleMouseMoveEvent(event, true))
                 event.consume();
             taskManager().addTask(Galaxy.newOneTimeTask((C) this, () -> getContent().handleMouseMoveEvent(event, false)));
         });
         getContentPane().addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
+            updateMouseLocation(event);
             if (getContent().handleMouseDragEvent(event, true))
                 event.consume();
             taskManager().addTask(Galaxy.newOneTimeTask((C) this, () -> getContent().handleMouseDragEvent(event, false)));
         });
         
         getContentPane().addEventFilter(MouseEvent.MOUSE_ENTERED, event -> {
+            updateMouseLocation(event);
             if (getContent().handleMouseEnterEvent(event, true))
                 event.consume();
             taskManager().addTask(Galaxy.newOneTimeTask((C) this, () -> getContent().handleMouseEnterEvent(event, false)));
         });
         getContentPane().addEventFilter(MouseEvent.MOUSE_EXITED, event -> {
+            updateMouseLocation(event);
             if (getContent().handleMouseExitEvent(event, true))
                 event.consume();
             taskManager().addTask(Galaxy.newOneTimeTask((C) this, () -> getContent().handleMouseExitEvent(event, false)));
