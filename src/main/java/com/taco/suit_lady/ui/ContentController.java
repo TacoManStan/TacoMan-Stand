@@ -147,9 +147,6 @@ public abstract class ContentController<T extends Content<T, D, C>, D extends Co
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public boolean needsGfxUpdate() {
-        return needsUpdate;
-    }
     @Override public void onGfxUpdate() {
         TasksSL.sync(gfxLock, () -> {
             gfxOperations.forEach(Runnable::run);
@@ -157,6 +154,7 @@ public abstract class ContentController<T extends Content<T, D, C>, D extends Co
             needsUpdate = false;
         });
     }
+    @Override public boolean needsGfxUpdate() { return needsUpdate; }
     private void addOperation(@NotNull Runnable operation) {
         TasksSL.sync(gfxLock, () -> {
             gfxOperations.add(operation);
