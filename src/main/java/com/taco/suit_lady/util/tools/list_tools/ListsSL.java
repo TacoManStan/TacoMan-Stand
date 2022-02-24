@@ -2,14 +2,18 @@ package com.taco.suit_lady.util.tools.list_tools;
 
 import com.taco.suit_lady.util.tools.list_tools.Operation.OperationType;
 import com.taco.suit_lady.util.tools.list_tools.Operation.TriggerType;
+import com.taco.suit_lady.util.tools.util.ValuePair;
 import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Objects;
 import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Predicate;
 
 /**
  * <p>The {@link ListsSL} utility class provides a wide variety of static factory methods for applying an {@link OperationListener} implementation to an {@link ObservableList}.</p>
@@ -125,8 +129,8 @@ import java.util.concurrent.locks.ReentrantLock;
  * <br>
  * <h3>{@link SimpleOperationResponder}</h3>
  * <p>
- *     The {@link SimpleOperationResponder} interface removes all but the first {@link Operation} input from {@link OperationResponder} for more basic event handling.
- *     <br>Only responds to {@link TriggerType#CHANGE Change} triggers.
+ * The {@link SimpleOperationResponder} interface removes all but the first {@link Operation} input from {@link OperationResponder} for more basic event handling.
+ * <br>Only responds to {@link TriggerType#CHANGE Change} triggers.
  * </p>
  * <pre>{@code
  * ObservableList<E> list = ...;
@@ -400,4 +404,20 @@ public final class ListsSL {
     //</editor-fold>
     
     //</editor-fold>
+    
+    @SafeVarargs
+    public static <K, V> @NotNull HashMap<K, V> map(@Nullable Predicate<ValuePair<K, V>> filter, @NotNull ValuePair<K, V>... contents) {
+        filter = filter != null ? filter : valuePair -> true;
+        final HashMap<K, V> map = new HashMap<>();
+        Arrays.stream(contents)
+              .filter(Objects::nonNull)
+              .filter(filter)
+              .forEach(valuePair -> map.put(valuePair.a(), valuePair.b()));
+        return map;
+    }
+    
+    @SafeVarargs
+    public static <K, V> @NotNull HashMap<K, V> map(@NotNull ValuePair<K, V>... contents) {
+        return map(null, contents);
+    }
 }
