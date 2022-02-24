@@ -48,6 +48,9 @@ public class Camera
     private final IntegerProperty xOffsetProperty;
     private final IntegerProperty yOffsetProperty;
     
+    private final ObjectBinding<Point2D> locationBinding;
+    private final ObjectBinding<Point2D> offsetsBinding;
+    
     
     private final GameViewContent content;
     private final ObjectBinding<GameMap> mapBinding;
@@ -89,6 +92,9 @@ public class Camera
         
         this.xOffsetProperty = new SimpleIntegerProperty(0);
         this.yOffsetProperty = new SimpleIntegerProperty(0);
+        
+        this.locationBinding = BindingsSL.objBinding(() -> new Point2D(getLocationX(), getLocationY()), xLocationProperty, yLocationProperty);
+        this.offsetsBinding = BindingsSL.objBinding(() -> new Point2D(getOffsetX(), getOffsetY()), xOffsetProperty, yOffsetProperty);
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">
@@ -151,6 +157,7 @@ public class Camera
     public final int moveY(int amount) { return setLocationY(getLocationY() + amount); }
     public final int moveTileY(int amount) { return setLocationY(getLocationY() + (amount * getGameMap().getTileSize())); }
     
+    //
     
     /**
      * <p>Represents the number of units (pixels, not tiles) this camera's view is shifted on the {@code x} plane.</p>
@@ -175,6 +182,26 @@ public class Camera
     public final IntegerProperty yOffsetProperty() { return yOffsetProperty; }
     public final int getOffsetY() { return yOffsetProperty.get(); }
     public final int setOffsetY(int newValue) { return PropertiesSL.setProperty(yOffsetProperty, newValue); }
+    
+    //
+    
+    public final ObjectBinding<Point2D> locationBinding() { return locationBinding; }
+    public final Point2D getLocation() { return locationBinding.get(); }
+    public final Point2D setLocation(@NotNull Point2D newValue) {
+        final Point2D oldValue = getLocation();
+        setLocationX((int) newValue.getX());
+        setLocationY((int) newValue.getY());
+        return oldValue;
+    }
+    
+    public final ObjectBinding<Point2D> offsetsBinding() { return offsetsBinding; }
+    public final Point2D getOffsets() { return offsetsBinding.get(); }
+    public final Point2D setOffsets(@NotNull Point2D newValue) {
+        final Point2D oldValue = getOffsets();
+        setOffsetX((int) newValue.getX());
+        setOffsetY((int) newValue.getY());
+        return oldValue;
+    }
     
     //</editor-fold>
     
