@@ -63,6 +63,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Contains a variety of classes that provide JavaFX utility features.
@@ -205,6 +206,20 @@ public class ToolsFX {
         if (!isFXThread())
             throw ExceptionsSL.ex(new IllegalStateException("Operation must be executed on the FX Thread."));
     }
+    
+    public static void requireFX(@Nullable Runnable action) {
+        requireFX();
+        if (action != null)
+            action.run();
+    }
+    
+    public static <T> @Nullable T requireFX(@Nullable Supplier<T> action) {
+        requireFX();
+        if (action != null)
+            return action.get();
+        return null;
+    }
+    
     
     /**
      * Throws a {@link RuntimeException} if the current {@link Thread} is not the EDT.
@@ -1052,13 +1067,13 @@ public class ToolsFX {
         pixelColorFactory = pixelColorFactory != null ? pixelColorFactory : (integer, integer2) -> Color.DIMGRAY;
         final WritableImage borderImage = new WritableImage(width, height);
         for (int x = 0; x < width; x++) {
-            for (int t = 0; t < thickness; t++ ) {
+            for (int t = 0; t < thickness; t++) {
                 borderImage.getPixelWriter().setColor(x, t, pixelColorFactory.apply(x, 0));
                 borderImage.getPixelWriter().setColor(x, height - (t + 1), pixelColorFactory.apply(x, height - 1));
             }
         }
         for (int y = 0; y < height; y++) {
-            for (int t = 0; t < thickness; t++ ) {
+            for (int t = 0; t < thickness; t++) {
                 borderImage.getPixelWriter().setColor(t, y, pixelColorFactory.apply(0, y));
                 borderImage.getPixelWriter().setColor(width - (t + 1), y, pixelColorFactory.apply(width - 1, y));
             }
