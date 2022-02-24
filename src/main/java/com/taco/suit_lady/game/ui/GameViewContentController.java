@@ -2,12 +2,14 @@ package com.taco.suit_lady.game.ui;
 
 import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.objects.GameObject;
-import com.taco.suit_lady.logic.TaskManager;
 import com.taco.suit_lady.ui.ContentController;
 import com.taco.suit_lady.ui.ui_internal.controllers.CellController;
 import com.taco.suit_lady.ui.ui_internal.drag_and_drop.DragAndDropHandler;
 import com.taco.suit_lady.util.Lockable;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.fxml.FXML;
+import javafx.geometry.Point2D;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -45,6 +47,7 @@ public class GameViewContentController extends ContentController<GameViewContent
     
     public GameViewContentController(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         super(weaver, ctx);
+        
         this.lock = new ReentrantLock();
     }
     
@@ -62,15 +65,16 @@ public class GameViewContentController extends ContentController<GameViewContent
         
         this.testDDHandler = new DragAndDropHandler<>(this, getLock(), root(), CellController.TEST_FORMAT, TransferMode.MOVE);
         testDDHandler.init();
-    
+        
         
         testDDHandler.setDragDetectedHandler(eventData -> System.out.println("Drag " + eventData.eventType() + " for " + getContent()));
         testDDHandler.setDragDoneHandler(eventData -> System.out.println("Drag " + eventData.eventType() + " for " + getContent()));
-    
+        
         testDDHandler.setDragEnteredHandler(eventData -> System.out.println("Drag " + eventData.eventType() + " for " + getContent()));
         testDDHandler.setDragExitedHandler(eventData -> System.out.println("Drag " + eventData.eventType() + " for " + getContent()));
         testDDHandler.setDragDroppedHandler(eventData -> System.out.println("Drag " + eventData.eventType() + " for " + getContent()));
     }
+    
     
     //</editor-fold>
     
