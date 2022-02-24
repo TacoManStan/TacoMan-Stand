@@ -2,13 +2,13 @@ package com.taco.suit_lady.game;
 
 import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.objects.GameObject;
-import com.taco.suit_lady.game.objects.MapObject;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.BindingsSL;
+import com.taco.suit_lady.util.tools.ExceptionsSL;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.IntegerBinding;
@@ -19,6 +19,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -52,6 +53,8 @@ public class Camera
     
     private final ObjectBinding<Point2D> locationBinding;
     private final ObjectBinding<Point2D> offsetsBinding;
+    
+    private final ObjectBinding<Point2D> tileLocationBinding;
     
     
     private final GameViewContent content;
@@ -95,8 +98,13 @@ public class Camera
         this.xOffsetProperty = new SimpleIntegerProperty(0);
         this.yOffsetProperty = new SimpleIntegerProperty(0);
         
+        
         this.locationBinding = BindingsSL.objBinding(() -> new Point2D(getLocationX(), getLocationY()), xLocationProperty, yLocationProperty);
         this.offsetsBinding = BindingsSL.objBinding(() -> new Point2D(getOffsetX(), getOffsetY()), xOffsetProperty, yOffsetProperty);
+        
+        this.tileLocationBinding = BindingsSL.objBinding(
+                () -> new Point2D(getLocationX() * getGameMap().getTileSize(), getLocationY() * getGameMap().getTileSize()),
+                xLocationProperty, yLocationProperty);
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">
@@ -112,15 +120,15 @@ public class Camera
         
         this.xAggregateBinding = BindingsSL.intBinding(() -> getLocationX() + getOffsetX(), xLocationProperty(), xOffsetProperty());
         this.yAggregateBinding = BindingsSL.intBinding(() -> getLocationY() + getOffsetY(), yLocationProperty(), yOffsetProperty());
-    
+        
         //
-    
+        
         this.mapImageBinding = BindingsSL.directObjBinding(getGameMap().getModel().mapImageProperty());
-    
+        
         this.mapImageWidthBinding = BindingsSL.recursiveIntBinding(lock, image -> image.widthProperty(), mapImageBinding);
         this.mapImageHeightBinding = BindingsSL.recursiveIntBinding(lock, image -> image.heightProperty(), mapImageBinding);
-    
-    
+        
+        
         this.xMultiplierBinding = BindingsSL.doubleBinding(() -> ((double) getMapImageWidth() / (double) getMapWidth()), mapImageWidthBinding);
         this.yMultiplierBinding = BindingsSL.doubleBinding(() -> ((double) getMapImageHeight() / (double) getMapHeight()), mapImageHeightBinding);
     }
@@ -142,8 +150,6 @@ public class Camera
     public final IntegerProperty xLocationProperty() { return xLocationProperty; }
     public final int getLocationX() { return xLocationProperty.get(); }
     public final int setLocationX(int newValue) { return PropertiesSL.setProperty(xLocationProperty, newValue); }
-    public final int moveX(int amount) { return setLocationX(getLocationX() + amount); }
-    public final int moveTileX(int amount) { return setLocationX(getLocationX() + (amount * getGameMap().getTileSize())); }
     
     /**
      * <p>Defines the {@code y} coordinate at which this camera is assigned.</p>
@@ -156,8 +162,6 @@ public class Camera
     public final IntegerProperty yLocationProperty() { return yLocationProperty; }
     public final int getLocationY() { return yLocationProperty.get(); }
     public final int setLocationY(int newValue) { return PropertiesSL.setProperty(yLocationProperty, newValue); }
-    public final int moveY(int amount) { return setLocationY(getLocationY() + amount); }
-    public final int moveTileY(int amount) { return setLocationY(getLocationY() + (amount * getGameMap().getTileSize())); }
     
     //
     
@@ -204,6 +208,95 @@ public class Camera
         setOffsetX((int) newValue.getX());
         setOffsetY((int) newValue.getY());
         return oldValue;
+    }
+    
+    
+    public final ObjectBinding<Point2D> tileLocationBinding() { return tileLocationBinding; }
+    public final Point2D getTileLocation() { return tileLocationBinding.get(); }
+    public final Point2D setTileLocation(@NotNull Point2D newValue) {
+        final Point2D oldValue = getTileLocation();
+        setLocation(new Point2D(newValue.getX() * getGameMap().getTileSize(), newValue.getY() * getGameMap().getTileSize()));
+        return oldValue;
+    }
+    
+    //
+    
+    public final int moveX(@NotNull Number amount) { return setLocationX((int) (getLocationX() + amount.doubleValue())); }
+    public final int moveTileX(@NotNull Number amount) { return setLocationX(getLocationX() + (int) (amount.doubleValue() * getGameMap().getTileSize())); }
+    
+    public final int moveY(@NotNull Number amount) { return setLocationY((int) (getLocationY() + amount.doubleValue())); }
+    public final int moveTileY(@NotNull Number amount) { return setLocationY(getLocationY() + (int) (amount.doubleValue() * getGameMap().getTileSize())); }
+    
+    
+    public final Point2D move(@NotNull Point2D amounts) {
+        final Point2D oldValue = getLocation();
+        moveX(amounts.getX());
+        moveY(amounts.getY());
+        return oldValue;
+    }
+    
+    public final Point2D moveTile(@NotNull Point2D amounts) {
+        final Point2D oldValue = getTileLocation();
+        moveTileX(amounts.getX());
+        moveTileY(amounts.getY());
+        return oldValue;
+    }
+    
+    //
+    
+    public final boolean bindViewTo(@Nullable GameObject gameObject) {
+        boolean isBound;
+        if (gameObject == null) {
+            xLocationProperty.unbind();
+            yLocationProperty.unbind();
+            isBound = false;
+        } else {
+            validateLocationBindings();
+            
+            xLocationProperty.bind(gameObject.xLocationCenteredBinding());
+            yLocationProperty.bind(gameObject.yLocationCenteredBinding());
+            
+            validateLocationBindings();
+            
+            isBound = true;
+        }
+        
+        return isBound;
+    }
+    
+    public final boolean toggleViewBinding(@Nullable GameObject gameObject) {
+        boolean isBound;
+        if (gameObject == null) {
+            xLocationProperty.unbind();
+            yLocationProperty.unbind();
+            
+            isBound = false;
+        } else {
+            validateLocationBindings();
+            
+            if (xLocationProperty.isBound()) {
+                xLocationProperty.unbind();
+                isBound = false;
+            } else {
+                xLocationProperty.bind(gameObject.xLocationCenteredBinding());
+                isBound = true;
+            }
+            
+            if (yLocationProperty.isBound()) {
+                yLocationProperty.unbind();
+            } else {
+                yLocationProperty.bind(gameObject.yLocationCenteredBinding());
+            }
+            
+            validateLocationBindings();
+        }
+        
+        return isBound;
+    }
+    
+    private void validateLocationBindings() {
+        if (xLocationProperty.isBound() != yLocationProperty.isBound())
+            throw ExceptionsSL.ex("ERROR: X and Y Camera Location Property Binding Statuses Do Not Match  [X: " + xLocationProperty.isBound() + "  Y: " + yLocationProperty.isBound() + "]");
     }
     
     //</editor-fold>

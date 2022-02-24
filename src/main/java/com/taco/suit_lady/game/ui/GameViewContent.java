@@ -127,9 +127,8 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
         testObject2.setTileLocationX(30);
         testObject2.setTileLocationY(20);
         getGameMap().gameObjects().add(testObject2);
-        
-        getCamera().setLocationX((int) testObject.getLocationX(true));
-        getCamera().setLocationY((int) testObject.getLocationY(true));
+     
+        getCamera().bindViewTo(testObject);
     }
     
     //</editor-fold>
@@ -175,14 +174,7 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
                     keyInputAction(() -> getCamera().moveTileX(1), !fx);
             }, fx);
             case Q -> keyInputAction(() -> {
-                if (getCamera().xLocationProperty().isBound())
-                    getCamera().xLocationProperty().unbind();
-                else
-                    getCamera().xLocationProperty().bind(getTestObject().xLocationCenteredBinding());
-                if (getCamera().yLocationProperty().isBound())
-                    getCamera().yLocationProperty().unbind();
-                else
-                    getCamera().yLocationProperty().bind(getTestObject().yLocationCenteredBinding());
+                getCamera().toggleViewBinding(getTestObject());
             }, !fx);
             
             //                case UP -> keyInputAction(() -> testObject.moveY(-1), fx);
