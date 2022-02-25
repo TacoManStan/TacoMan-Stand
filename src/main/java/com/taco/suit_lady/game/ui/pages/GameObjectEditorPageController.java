@@ -1,8 +1,9 @@
-package com.taco.suit_lady.game.ui;
+package com.taco.suit_lady.game.ui.pages;
 
 import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.game.objects.GameObjectModel;
+import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.ui.UIPageController;
 import com.taco.suit_lady.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.util.Lockable;

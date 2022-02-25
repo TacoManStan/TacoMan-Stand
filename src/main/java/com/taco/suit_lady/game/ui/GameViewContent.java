@@ -1,11 +1,14 @@
 package com.taco.suit_lady.game.ui;
 
+import com.taco.suit_lady.game.attributes.AttributePage;
 import com.taco.suit_lady.game.galaxy.abilities.specific.Ability_LaunchMissile;
 import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.game.objects.tiles.GameTile;
 import com.taco.suit_lady.game.Camera;
 import com.taco.suit_lady.game.GameMap;
+import com.taco.suit_lady.game.ui.pages.GameTileEditorPage;
+import com.taco.suit_lady.game.ui.pages.GameViewPage;
 import com.taco.suit_lady.ui.Content;
 import com.taco.suit_lady.ui.SidebarBookshelf;
 import com.taco.suit_lady.ui.UIBook;
@@ -17,8 +20,6 @@ import com.taco.suit_lady.util.tools.*;
 import com.taco.suit_lady.util.tools.util.ValuePair;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.input.*;
@@ -34,8 +35,11 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
     //
     
     private SidebarBookshelf bookshelf;
+    
     private GameViewPage coverPage;
     private GameTileEditorPage tileEditorPage;
+    private AttributePage attributePage;
+    
     
     private final ObjectProperty<GameMap> gameMapProperty;
     
@@ -71,6 +75,15 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
                                                     "pages",
                                                     uiBook.getUID(uiBook.getButtonID()),
                                                     () -> tileEditorPage = new GameTileEditorPage(uiBook, this).init()),
+                                            null),
+                                    new UIBook(
+                                            this,
+                                            "Attribute List Test",
+                                            "clients",
+                                            uiBook -> ResourcesSL.get(
+                                                    "pages",
+                                                    uiBook.getUID(uiBook.getButtonID()),
+                                                    () -> attributePage = new AttributePage(uiBook, this)),
                                             null),
                                     new UIBook(
                                             this,

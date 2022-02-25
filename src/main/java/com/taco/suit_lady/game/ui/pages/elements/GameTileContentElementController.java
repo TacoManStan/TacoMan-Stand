@@ -1,4 +1,4 @@
-package com.taco.suit_lady.game.ui;
+package com.taco.suit_lady.game.ui.pages.elements;
 
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.ui.jfx.components.ImagePane;

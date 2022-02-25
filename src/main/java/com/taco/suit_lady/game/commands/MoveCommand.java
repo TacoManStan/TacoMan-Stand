@@ -1,6 +1,6 @@
 package com.taco.suit_lady.game.commands;
 
-import com.taco.suit_lady.game.objects.Attribute;
+import com.taco.suit_lady.game.attributes.Attribute;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.logic.GameTask;
 import com.taco.suit_lady.logic.triggers.implementations.UnitArrivedEvent;

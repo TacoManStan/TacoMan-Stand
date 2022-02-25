@@ -1,6 +1,7 @@
 package com.taco.suit_lady.game.objects;
 
 import com.github.cliftonlabs.json_simple.JsonObject;
+import com.taco.suit_lady.game.attributes.AttributeManager;
 import com.taco.suit_lady.game.Entity;
 import com.taco.suit_lady.game.commands.MoveCommand;
 import com.taco.suit_lady.game.interfaces.GameComponent;

@@ -1,7 +1,8 @@
-package com.taco.suit_lady.game.ui;
+package com.taco.suit_lady.game.ui.pages;
 
 import com.taco.suit_lady.game.objects.tiles.GameTile;
 import com.taco.suit_lady.game.interfaces.GameComponent;
+import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.ui.UIPageController;
 import com.taco.tacository.json.JFiles;
 import javafx.fxml.FXML;

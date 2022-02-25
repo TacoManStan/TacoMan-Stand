@@ -1,4 +1,4 @@
-package com.taco.suit_lady.game.ui;
+package com.taco.suit_lady.game.ui.pages.elements;
 
 import com.taco.suit_lady.game.objects.tiles.TileTerrainObject;
 import com.taco.suit_lady.game.objects.tiles.TileTerrainObjectID;
