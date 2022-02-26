@@ -123,6 +123,9 @@ public class AppController
     @FXML private GridPane gridPane;
     @FXML private AnchorPane contentAnchorPane;
     
+    @FXML private BorderPane footerRootPane;
+    @FXML private AnchorPane footerPane;
+    
     //    @FXML private TreeView<WrappingTreeCellData<ConsoleMessageable<?>>> consoleTree;
     
     @FXML private Label bookshelfTitleLabel;
@@ -170,9 +173,6 @@ public class AppController
     
     @FXML private Label upsLabel;
     
-    
-    @FXML private AnchorPane dockAnchorPane;
-    
     // </editor-fold>
     
     private final FxWeaver weaver;
@@ -199,8 +199,7 @@ public class AppController
     
     // Called automatically by FXML loader.
     // As some properties may not yet be finished loading, all actual UI initialization should be done in initialize(Stage).
-    @FXML
-    public final void initialize() {
+    @FXML public final void initialize() {
         ui().setController(this);
         ui().setSidebar(new Sidebar(weaver(), ctx(), sidebarChildButtonsPane, sidebarContentPane, backImagePane, sidebarButtonBar));
     }
@@ -612,13 +611,10 @@ public class AppController
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final Stage getStage() {
-        return stage;
-    }
+    public final Stage getStage() { return stage; }
     
-    //    public final TreeView<WrappingTreeCellData<ConsoleMessageable<?>>> getConsoleTree() {
-    //        return consoleTree;
-    //    }
+    protected final BorderPane footerRootPane() { return footerRootPane; }
+    protected final AnchorPane footerPane() { return footerPane; }
     
     //</editor-fold>
     

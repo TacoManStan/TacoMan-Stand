@@ -2,6 +2,7 @@ package com.taco.suit_lady.ui;
 
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Print;
 import javafx.scene.layout.Pane;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +23,7 @@ public abstract class Footer<F extends Footer<F, FC, T, TD, TC>, FC extends Foot
     public Footer(@NotNull T content, Object... constructorParams) {
         this.weaver = ExceptionsSL.nullCheck(content.weaver(), "FxWeaver");
         this.ctx = ExceptionsSL.nullCheck(content.ctx(), "ApplicationContext");
-    
+        
         this.content = content;
         
         // Compound expression containing null checks for both the controller definition and the resulting constructor instance itself
@@ -31,7 +32,7 @@ public abstract class Footer<F extends Footer<F, FC, T, TD, TC>, FC extends Foot
                 "Error Loading Controller of Type [" + controllerDefinition() + "] — Ensure controller class is defined in FXML file.");
         
         this.controller.setFooter(this);
-        this.initializePage(constructorParams);
+        this.initializeFooter(constructorParams);
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
@@ -52,8 +53,12 @@ public abstract class Footer<F extends Footer<F, FC, T, TD, TC>, FC extends Foot
     
     //<editor-fold desc="--- ABSTRACT ---">
     
-    protected abstract void initializePage(@NotNull Object[] constructorParams);
+    protected abstract void initializeFooter(@NotNull Object[] constructorParams);
     protected abstract @NotNull Class<FC> controllerDefinition();
+    
+    protected void onContentChange(boolean shown) {
+        Print.print(shown ? "Content Shown (" + getContent() + ")" : "Content Hidden (" + getContent() + ")");
+    }
     
     //</editor-fold>
 }

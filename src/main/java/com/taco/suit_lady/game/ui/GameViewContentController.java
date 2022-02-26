@@ -101,6 +101,7 @@ public class GameViewContentController extends ContentController<GameViewContent
     
     @Override public @NotNull GameViewContent getGame() { return content; }
     
+    @Override protected boolean hasFooter() { return true; }
     //
     
     @Override public @NotNull Lock getLock() { return lock; }

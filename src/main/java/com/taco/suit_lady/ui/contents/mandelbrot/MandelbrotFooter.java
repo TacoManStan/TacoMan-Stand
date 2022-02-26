@@ -15,12 +15,8 @@ public class MandelbrotFooter
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override protected void initializePage(@NotNull Object[] constructorParams) {
-    
-    }
-    @Override protected @NotNull Class<MandelbrotFooterController> controllerDefinition() {
-        return null;
-    }
+    @Override protected void initializeFooter(@NotNull Object[] constructorParams) { }
+    @Override protected @NotNull Class<MandelbrotFooterController> controllerDefinition() { return MandelbrotFooterController.class; }
     
     //</editor-fold>
 }

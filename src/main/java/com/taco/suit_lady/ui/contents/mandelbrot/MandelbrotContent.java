@@ -188,6 +188,9 @@ public class MandelbrotContent extends ListableContent<
     protected @NotNull Class<MandelbrotContentController> controllerDefinition() {
         return MandelbrotContentController.class;
     }
+    @Override protected MandelbrotFooter constructFooter() {
+        return new MandelbrotFooter(this);
+    }
     
     
     @Override

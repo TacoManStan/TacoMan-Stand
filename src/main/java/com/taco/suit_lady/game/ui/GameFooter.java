@@ -12,12 +12,14 @@ public class GameFooter
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override protected void initializePage(@NotNull Object[] constructorParams) {
+    @Override protected void initializeFooter(@NotNull Object[] constructorParams) {
+    }
     
+    @Override protected void onContentChange(boolean shown) {
+        super.onContentChange(shown); //TODO
     }
-    @Override protected @NotNull Class<GameFooterController> controllerDefinition() {
-        return null;
-    }
+    
+    @Override protected @NotNull Class<GameFooterController> controllerDefinition() { return GameFooterController.class; }
     
     //</editor-fold>
 }

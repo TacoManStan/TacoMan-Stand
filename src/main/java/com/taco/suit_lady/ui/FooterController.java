@@ -2,6 +2,7 @@ package com.taco.suit_lady.ui;
 
 import com.taco.suit_lady.ui.ui_internal.controllers.Controller;
 import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -21,6 +22,10 @@ public abstract class FooterController<F extends Footer<F, FC, T, TD, TC>, FC ex
     public @NotNull F getFooter() { return footer; }
     
     //</editor-fold>
+    @Override public void initialize() {
+        ToolsFX.setAnchors(root());
+    }
+    
     
     //<editor-fold desc="--- INTERNAL ---">
     

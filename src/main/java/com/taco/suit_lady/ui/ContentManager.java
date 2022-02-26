@@ -141,11 +141,21 @@ public class ContentManager
                 oldContent.getOverlayHandler().root().maxWidthProperty().unbind();
                 oldContent.getOverlayHandler().root().maxHeightProperty().unbind();
                 
+                if (oldContent.getController().hasFooter()) {
+                    ui().getController().footerPane().getChildren().remove(oldContent.getFooter().getController().root());
+                    oldContent.getFooter().onContentChange(false);
+                }
+                
                 logiCore().execute(oldContent::onRemovedInternal);
             }
             if (newContent != null) {
                 ToolsFX.bindToParent(newContent.getController().root(), getContentPrimaryPane(), true);
                 ToolsFX.bindToParent(newContent.getOverlayHandler().root(), getContentPrimaryPane(), true);
+    
+                if (newContent.getController().hasFooter()) {
+                    ui().getController().footerPane().getChildren().add(newContent.getFooter().getController().root());
+                    newContent.getFooter().onContentChange(true);
+                }
                 
                 logiCore().execute(newContent::onSetInternal);
             }

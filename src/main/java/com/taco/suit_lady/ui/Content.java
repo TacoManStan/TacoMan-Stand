@@ -25,6 +25,7 @@ public abstract class Content<T extends Content<T, TD, TC, F, FC>, TD extends Co
     
     private final TD data;
     private final TC controller;
+    private F footer;
     
     private final OverlayHandler overlayHandler;
     
@@ -42,30 +43,25 @@ public abstract class Content<T extends Content<T, TD, TC, F, FC>, TD extends Co
         this.overlayHandler.addOverlay(new OverlaySurface(this, null, "default", 1));
         
         this.bookshelves = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
+        
+        this.footer = constructFooter();
     }
     
     public T init() {
+//        footer = constructFooter();
         getController().init((T) this);
         return (T) this;
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final @NotNull TD getData() {
-        return data;
-    }
+    public final @NotNull TD getData() { return data; }
+    public final @NotNull TC getController() { return controller; }
+    public final F getFooter() { return footer; }
     
-    public final @NotNull TC getController() {
-        return controller;
-    }
+    public final @NotNull OverlayHandler getOverlayHandler() { return overlayHandler; }
     
-    public final @NotNull OverlayHandler getOverlayHandler() {
-        return overlayHandler;
-    }
-    
-    protected final @NotNull ReadOnlyListProperty<SidebarBookshelf> getBookshelves() {
-        return bookshelves.getReadOnlyProperty();
-    }
+    protected final @NotNull ReadOnlyListProperty<SidebarBookshelf> getBookshelves() { return bookshelves.getReadOnlyProperty(); }
     
     //</editor-fold>
     
@@ -94,6 +90,9 @@ public abstract class Content<T extends Content<T, TD, TC, F, FC>, TD extends Co
     
     protected abstract @NotNull TD loadData();
     protected abstract @NotNull Class<TC> controllerDefinition();
+    protected abstract F constructFooter();
+    
+    //
     
     protected boolean handleKeyEvent(@NotNull KeyEvent keyEvent, boolean fx) { return false; }
     

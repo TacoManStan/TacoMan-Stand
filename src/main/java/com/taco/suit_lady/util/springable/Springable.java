@@ -5,6 +5,7 @@ import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.logic.LogiCore;
 import com.taco.suit_lady.logic.triggers.TriggerEventManager;
+import com.taco.suit_lady.ui.ContentManager;
 import com.taco.suit_lady.ui.Sidebar;
 import com.taco.suit_lady.ui.console.Console;
 import com.taco.suit_lady.ui.AppUI;
@@ -64,6 +65,8 @@ public interface Springable {
      * @return The singleton {@link AppUI} instance stored and managed by the {@link SpringApplication Spring} framework.
      */
     default @NotNull AppUI ui() { return getSafely(AppUI.class); }
+    
+    default @NotNull ContentManager manager() { return ui().getContentManager(); }
     
     /**
      * <p>Returns the {@link Sidebar} instance contained within the {@link AppUI} singleton stored and managed by the {@link SpringApplication Spring} framework.</p>

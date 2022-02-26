@@ -73,6 +73,8 @@ public abstract class ContentController<T extends Content<T, TD, TC, F, FC>, TD 
         this.taskManager = new TaskManager<>((TC) this).init();
         initMouseEventHandling();
         
+        
+        
         return (TC) this;
     }
     
@@ -172,6 +174,14 @@ public abstract class ContentController<T extends Content<T, TD, TC, F, FC>, TD 
     
     //</editor-fold>
     
+    //<editor-fold desc="--- ABSTRACT ---">
+    
+    protected boolean hasFooter() { return false; }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- INTERNAL ---">
+    
     private void updateMouseLocation(@NotNull InputEvent event) {
         final Point2D contentLocation;
         final Point2D sceneLocation;
@@ -192,4 +202,6 @@ public abstract class ContentController<T extends Content<T, TD, TC, F, FC>, TD 
         setMouseOnScene(sceneLocation);
         setMouseOnScreen(screenLocation);
     }
+    
+    //</editor-fold>
 }

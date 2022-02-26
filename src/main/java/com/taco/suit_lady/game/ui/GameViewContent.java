@@ -27,7 +27,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-public class GameViewContent extends Content<GameViewContent, GameViewContentData, GameViewContentController, GameFooter, GameFooterController>
+public class GameViewContent
+        extends Content<GameViewContent, GameViewContentData, GameViewContentController, GameFooter, GameFooterController>
         implements UIDProcessable, Lockable, GameComponent {
     
     private final ReentrantLock lock;
@@ -301,6 +302,7 @@ public class GameViewContent extends Content<GameViewContent, GameViewContentDat
     
     @Override protected @NotNull GameViewContentData loadData() { return new GameViewContentData(this); }
     @Override protected @NotNull Class<GameViewContentController> controllerDefinition() { return GameViewContentController.class; }
+    @Override protected GameFooter constructFooter() { return new GameFooter(this); }
     
     @Override protected void onActivate() { }
     @Override protected void onDeactivate() { }
