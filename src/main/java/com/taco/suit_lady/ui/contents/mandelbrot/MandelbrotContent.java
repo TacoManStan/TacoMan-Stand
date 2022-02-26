@@ -37,7 +37,9 @@ public class MandelbrotContent extends ListableContent<
         MandelbrotContentSelectorPageController,
         MandelbrotElementController,
         MandelbrotContentHandler,
-        MandelbrotContent>
+        MandelbrotContent,
+        MandelbrotFooter,
+        MandelbrotFooterController>
         implements UIDProcessable {
     
     private final ReentrantLock lock;

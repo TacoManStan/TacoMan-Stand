@@ -19,12 +19,12 @@ import org.springframework.context.ConfigurableApplicationContext;
 import java.util.concurrent.locks.ReentrantLock;
 
 public abstract class ContentHandler<
-        D extends ContentData<T, D, ?>,
+        D extends ContentData<T, D, ?, ?, ?>,
         P extends ContentSelectorPage<D, P, SC, EC, H, T>,
         SC extends ContentSelectorPageController<D, P, SC, EC, H, T>,
         EC extends ContentElementController<D, P, SC, EC, H, T>,
         H extends ContentHandler<D, P, SC, EC, H, T>,
-        T extends ListableContent<D, ?, P, SC, EC, H, T>>
+        T extends ListableContent<D, ?, P, SC, EC, H, T, ?, ?>>
         implements Springable, Lockable {
     
     private final StrictSpringable springable;

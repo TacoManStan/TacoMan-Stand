@@ -32,7 +32,7 @@ import java.util.function.Consumer;
 @Component
 @FxmlView("/fxml/content/mandelbrot/mandelbrot_content.fxml")
 @Scope("prototype")
-public class MandelbrotContentController extends ContentController<MandelbrotContent, MandelbrotContentData, MandelbrotContentController>
+public class MandelbrotContentController extends ContentController<MandelbrotContent, MandelbrotContentData, MandelbrotContentController, MandelbrotFooter, MandelbrotFooterController>
         implements Lockable {
     
     //<editor-fold desc="--- FXML FIELDS ---">

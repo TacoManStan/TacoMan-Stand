@@ -1,9 +1,6 @@
 package com.taco.suit_lady.ui;
 
-import com.taco.suit_lady.ui.jfx.components.ContentPane;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.ui.console.Console;
-import com.taco.suit_lady.ui.contents.test.TestContent;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -47,25 +44,6 @@ public class AppUI
     
     //<editor-fold desc="--- INITIALIZATION ---">
     
-    /**
-     * <p>Initializes this {@link AppUI}.</p>
-     * <p><b>Initialization Process</b></p>
-     * <ol>
-     *     <li>{@link Console#initialize() Initializes} the {@code singleton} {@link Console} object.</li>
-     *     <li>
-     *         Sets the {@link #contentManager} of this {@link AppUI} to a new {@link ContentManager}.
-     *         <ul>
-     *             <li>The {@link ContentPane Content Stack Pane} of this {@link AppUI} is used as the {@link ContentManager#getContentBasePane()  Content Base} for the constructed {@link ContentManager} object.</li>
-     *         </ul>
-     *     </li>
-     *     <li>
-     *         Sets the {@link ContentManager#getContent() content} of the constructed {@link ContentManager} to a new {@link TestContent}.
-     *         <ul>
-     *             <li>This {@link AppUI} instance is used only to pass its {@link Springable} values to the constructed {@link TestContent}.</li>
-     *         </ul>
-     *     </li>
-     * </ol>
-     */
     protected void init() {
         console().initialize();
         this.contentManager = new ContentManager(this);

@@ -23,7 +23,7 @@ public class ContentManager
     //
     
     private final ContentPane contentBase;
-    private final ReadOnlyObjectWrapper<Content<?, ?, ?>> contentProperty; // Add support for a list of overlapping Content, each overlapping on the Content Base StackPane?
+    private final ReadOnlyObjectWrapper<Content<?, ?, ?, ?, ?>> contentProperty; // Add support for a list of overlapping Content, each overlapping on the Content Base StackPane?
     
     public ContentManager(@NotNull Springable springable) {
         this.springable = springable.asStrict();
@@ -103,15 +103,15 @@ public class ContentManager
     
     //</editor-fold>
     
-    public @NotNull ReadOnlyObjectProperty<Content<?, ?, ?>> contentProperty() {
+    public @NotNull ReadOnlyObjectProperty<Content<?, ?, ?, ?, ?>> contentProperty() {
         return contentProperty.getReadOnlyProperty();
     }
     
-    public @Nullable Content<?, ?, ?> getContent() {
+    public @Nullable Content<?, ?, ?, ?, ?> getContent() {
         return contentProperty.get();
     }
     
-    public boolean setContent(@Nullable Content<?, ?, ?> newContent) {
+    public boolean setContent(@Nullable Content<?, ?, ?, ?, ?> newContent) {
         contentProperty.set(newContent);
         return true; // TODO - Add actual validity checks here
     }
@@ -124,7 +124,7 @@ public class ContentManager
     
     //</editor-fold>
     
-    private void onChange(@Nullable Content<?, ?, ?> oldContent, @Nullable Content<?, ?, ?> newContent) {
+    private void onChange(@Nullable Content<?, ?, ?, ?, ?> oldContent, @Nullable Content<?, ?, ?, ?, ?> newContent) {
         // TODO - Execute onRemoved() and onSet via a JavaFX Task implementation. For now, though, this will work.
         // When the above is completed, don't forget to update the onRemoved() and onSet() Javadocs as well.
         ToolsFX.runFX(() -> {
@@ -153,7 +153,7 @@ public class ContentManager
     }
     
     protected boolean submitKeyEvent(@NotNull KeyEvent keyEvent, boolean fx) {
-        Content<?, ?, ?> content = getContent();
+        Content<?, ?, ?, ?, ?> content = getContent();
         Print.print("Submitting Key Event:  [" + keyEvent.getCode() + "  |  " + content.getClass().getSimpleName() + "  |  " + fx + "]");
         if (content != null)
             return content.handleKeyEvent(keyEvent, fx);

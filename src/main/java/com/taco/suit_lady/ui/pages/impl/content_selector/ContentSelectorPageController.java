@@ -37,12 +37,12 @@ import java.util.concurrent.locks.ReentrantLock;
  * @param <T>  The {@link ListableContent} implementation type used as the {@link Content} objects managed by the {@link ContentHandler}.
  */
 public abstract class ContentSelectorPageController<
-        D extends ContentData<T, D, ?>,
+        D extends ContentData<T, D, ?, ?, ?>,
         P extends ContentSelectorPage<D, P, SC, EC, H, T>,
         SC extends ContentSelectorPageController<D, P, SC, EC, H, T>,
         EC extends ContentElementController<D, P, SC, EC, H, T>,
         H extends ContentHandler<D, P, SC, EC, H, T>,
-        T extends ListableContent<D, ?, P, SC, EC, H, T>>
+        T extends ListableContent<D, ?, P, SC, EC, H, T, ?, ?>>
         extends UIPageController<ContentSelectorPage<D, P, SC, EC, H, T>> {
     
     //<editor-fold desc="--- FXML FIELDS ---">
