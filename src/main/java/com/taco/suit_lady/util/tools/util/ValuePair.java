@@ -5,7 +5,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
-public record ValuePair<A, B>(A a, B b) {
+public record ValuePair<A, B>(A a, B b)
+        implements ValuePairable<A, B> {
+    
     public @NotNull Supplier<A> aSupplier() { return this::a; }
     public @NotNull Supplier<B> bSupplier() { return this::b; }
     

@@ -1,14 +1,16 @@
 package com.taco.suit_lady.ui.jfx.util;
 
 import com.taco.suit_lady.util.tools.util.ValuePair;
+import com.taco.suit_lady.util.tools.util.ValuePairable;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 
 public record Dimensions(int width, int height)
-        implements Serializable {
+        implements Serializable, ValuePairable<Integer, Integer> {
     
     //<editor-fold desc="--- COPY METHODS ---">
     
@@ -29,6 +31,11 @@ public record Dimensions(int width, int height)
     //</editor-fold>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+    @Override public @Nullable Integer a() { return width(); }
+    @Override public @Nullable Integer b() { return height(); }
+    
+    //
     
     @Contract(pure = true)
     @Override public @NotNull String toString() {

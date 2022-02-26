@@ -4,7 +4,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
-public record ValueTrio<A, B, C>(A a, B b, C c) {
+public record ValueTrio<A, B, C>(A a, B b, C c)
+        implements ValueTrioable<A, B, C> {
     
     public @NotNull Value<A> aResult() { return new Value<>(a()); }
     public @NotNull Value<B> bResult() { return new Value<>(b()); }
