@@ -9,7 +9,6 @@ import com.taco.suit_lady.ui.jfx.components.painting.surfaces.OverlayHandler;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.collections.FXCollections;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import net.rgielen.fxweaver.core.FxWeaver;
@@ -18,13 +17,14 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.concurrent.ThreadPoolExecutor;
 
-public abstract class Content<T extends Content<T, D, C>, D extends ContentData<T, D, C>, C extends ContentController<T, D, C>>
+public abstract class Content<T extends Content<T, TD, TC, F, FC>, TD extends ContentData<T, TD, TC, F, FC>, TC extends ContentController<T, TD, TC, F, FC>,
+        F extends Footer<F, FC, T, TD, TC>, FC extends FooterController<F, FC, T, TD, TC>>
         implements Springable {
     
     private final Springable strictSpringable;
     
-    private final D data;
-    private final C controller;
+    private final TD data;
+    private final TC controller;
     
     private final OverlayHandler overlayHandler;
     
@@ -51,11 +51,11 @@ public abstract class Content<T extends Content<T, D, C>, D extends ContentData<
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final @NotNull D getData() {
+    public final @NotNull TD getData() {
         return data;
     }
     
-    public final @NotNull C getController() {
+    public final @NotNull TC getController() {
         return controller;
     }
     
@@ -92,8 +92,8 @@ public abstract class Content<T extends Content<T, D, C>, D extends ContentData<
     
     //<editor-fold desc="--- ABSTRACT ---">
     
-    protected abstract @NotNull D loadData();
-    protected abstract @NotNull Class<C> controllerDefinition();
+    protected abstract @NotNull TD loadData();
+    protected abstract @NotNull Class<TC> controllerDefinition();
     
     protected boolean handleKeyEvent(@NotNull KeyEvent keyEvent, boolean fx) { return false; }
     

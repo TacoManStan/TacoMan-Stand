@@ -40,15 +40,14 @@ public class AttributeElementController extends CellController<Attribute<?>> {
     @Override public void initialize() {
         super.initialize();
         
-        valuePaneProperty.addListener((observable, oldValue, newValue) -> {
-            ToolsFX.requireFX();
+        valuePaneProperty.addListener((observable, oldValue, newValue) -> ToolsFX.requireFX(() -> {
             if (oldValue != null)
                 valueAnchorPane.getChildren().remove(oldValue);
             if (newValue != null) {
                 ToolsFX.setAnchors(newValue);
                 valueAnchorPane.getChildren().add(newValue);
             }
-        });
+        }));
     }
     
     //</editor-fold>
@@ -63,16 +62,6 @@ public class AttributeElementController extends CellController<Attribute<?>> {
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override public Pane root() { return root; }
-    
-    //    @Override protected void onContentChange(GameObject oldCellContents, GameObject newCellContents) {
-    //
-    //        objectNameLabel.textProperty().unbind();
-    //        objectImagePane.imageProperty().unbind();
-    //        if (newCellContents != null) {
-    //            objectNameLabel.textProperty().bind(newCellContents.getModel().readOnlyImageIdProperty());
-    //            objectImagePane.imageProperty().bind(newCellContents.getModel().imageBinding());
-    //        }
-    //    }
     
     @Override protected void onContentChange(Attribute<?> oldCellContents, Attribute<?> newCellContents) {
         if (oldCellContents != null) {

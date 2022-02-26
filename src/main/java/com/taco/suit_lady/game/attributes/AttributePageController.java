@@ -31,7 +31,7 @@ public class AttributePageController extends UIPageController<AttributePage>
     @FXML private ListView<Attribute<?>> attributeListView;
     @FXML private Button testButton;
     
-//    @FXML private ListView
+    //    @FXML private ListView
     
     protected AttributePageController(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         super(weaver, ctx);
@@ -47,6 +47,7 @@ public class AttributePageController extends UIPageController<AttributePage>
                                 cellData,
                                 () -> weaver().loadController(AttributeElementController.class),
                                 listView.hashCode()))));
+        
         testButton.setOnAction(event -> ToolsFX.requireFX(() -> {
             addTestAttributes(getGame().getTestObject().attributes());
         }));
@@ -65,6 +66,7 @@ public class AttributePageController extends UIPageController<AttributePage>
     //</editor-fold>
     
     public void addTestAttributes(@NotNull AttributeManager attributeManager) {
+        attributeListView.getItems().clear();
         attributeManager.attributeList().forEach(attribute -> {
             attributeListView.getItems().add(attribute);
         });

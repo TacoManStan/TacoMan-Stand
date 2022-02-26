@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.locks.Lock;
 
-public class GameViewContentData extends ContentData<GameViewContent, GameViewContentData, GameViewContentController>
+public class GameViewContentData extends ContentData<GameViewContent, GameViewContentData, GameViewContentController, GameFooter, GameFooterController>
         implements ObservablePropertyContainable, SpringableWrapper, Lockable, UIDProcessable, GameComponent {
     
     private final GameViewContent content;

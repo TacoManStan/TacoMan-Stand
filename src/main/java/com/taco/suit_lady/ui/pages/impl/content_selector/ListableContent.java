@@ -1,5 +1,7 @@
 package com.taco.suit_lady.ui.pages.impl.content_selector;
 
+import com.taco.suit_lady.ui.Footer;
+import com.taco.suit_lady.ui.FooterController;
 import com.taco.suit_lady.ui.Content;
 import com.taco.suit_lady.ui.ContentController;
 import com.taco.suit_lady.ui.ContentData;
@@ -16,14 +18,17 @@ import java.io.Serializable;
 import java.util.concurrent.locks.Lock;
 
 public abstract class ListableContent<
-        D extends ContentData<T, D, C>,
-        C extends ContentController<T, D, C>,
-        P extends ContentSelectorPage<D, P, SC, EC, H, T>,
-        SC extends ContentSelectorPageController<D, P, SC, EC, H, T>,
-        EC extends ContentElementController<D, P, SC, EC, H, T>,
-        H extends ContentHandler<D, P, SC, EC, H, T>,
-        T extends ListableContent<D, C, P, SC, EC, H, T>>
-        extends Content<T, D, C> implements UIDProcessable, Lockable, Serializable {
+        TD extends ContentData<T, TD, TC, F, FC>,
+        TC extends ContentController<T, TD, TC, F, FC>,
+        P extends ContentSelectorPage<TD, P, SC, EC, H, T>,
+        SC extends ContentSelectorPageController<TD, P, SC, EC, H, T>,
+        EC extends ContentElementController<TD, P, SC, EC, H, T>,
+        H extends ContentHandler<TD, P, SC, EC, H, T>,
+        T extends ListableContent<TD, TC, P, SC, EC, H, T, F, FC>,
+        F extends Footer<F, FC, T, TD, TC>,
+        FC extends FooterController<F, FC, T, TD, TC>>
+        extends Content<T, TD, TC, F, FC>
+        implements UIDProcessable, Lockable, Serializable {
     
     private final H contentHandler;
     

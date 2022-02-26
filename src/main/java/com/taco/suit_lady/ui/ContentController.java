@@ -7,7 +7,6 @@ import com.taco.suit_lady.ui.ui_internal.controllers.Controller;
 import com.taco.suit_lady.util.tools.ExceptionsSL;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import com.taco.suit_lady.util.tools.TasksSL;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.geometry.Point2D;
@@ -24,17 +23,24 @@ import org.springframework.context.ConfigurableApplicationContext;
 import java.util.ArrayList;
 import java.util.concurrent.locks.ReentrantLock;
 
-public abstract class ContentController<T extends Content<T, D, C>, D extends ContentData<T, D, C>, C extends ContentController<T, D, C>> extends Controller
-        implements GFXObject<C> {
+public abstract class ContentController<T extends Content<T, TD, TC, F, FC>, TD extends ContentData<T, TD, TC, F, FC>, TC extends ContentController<T, TD, TC, F, FC>,
+        F extends Footer<F, FC, T, TD, TC>, FC extends FooterController<F, FC, T, TD, TC>>
+        extends Controller
+        implements GFXObject<TC> {
     
     private final ReentrantLock gfxLock;
-    private TaskManager<C> taskManager;
     
+    private TaskManager<TC> taskManager;
     private T content;
+    
+    //
+    
     private final StackPane overlayStackPane;
     
     private final ArrayList<Runnable> gfxOperations;
     private boolean needsUpdate;
+    
+    //
     
     private final ReadOnlyObjectWrapper<Point2D> mouseOnContentProperty;
     private final ReadOnlyObjectWrapper<Point2D> mouseOnSceneProperty;
@@ -59,15 +65,15 @@ public abstract class ContentController<T extends Content<T, D, C>, D extends Co
     
     @Override public void initialize() { }
     
-    public C init(@NotNull T content) {
+    public TC init(@NotNull T content) {
         if (this.content != null)
             throw ExceptionsSL.unsupported("Content has already been set (" + getContent() + ")");
         this.content = content;
         
-        this.taskManager = new TaskManager<>((C) this).init();
+        this.taskManager = new TaskManager<>((TC) this).init();
         initMouseEventHandling();
         
-        return (C) this;
+        return (TC) this;
     }
     
     private void initMouseEventHandling() {
@@ -75,39 +81,39 @@ public abstract class ContentController<T extends Content<T, D, C>, D extends Co
             updateMouseLocation(event);
             if (getContent().handleMousePressEvent(event, true))
                 event.consume();
-            taskManager().addTask(Galaxy.newOneTimeTask((C) this, () -> getContent().handleMousePressEvent(event, false)));
+            taskManager().addTask(Galaxy.newOneTimeTask((TC) this, () -> getContent().handleMousePressEvent(event, false)));
         });
         getContentPane().addEventFilter(MouseEvent.MOUSE_RELEASED, event -> {
             updateMouseLocation(event);
             if (getContent().handleMouseReleaseEvent(event, true))
                 event.consume();
-            taskManager().addTask(Galaxy.newOneTimeTask((C) this, () -> getContent().handleMouseReleaseEvent(event, false)));
+            taskManager().addTask(Galaxy.newOneTimeTask((TC) this, () -> getContent().handleMouseReleaseEvent(event, false)));
         });
         
         getContentPane().addEventFilter(MouseEvent.MOUSE_MOVED, event -> {
             updateMouseLocation(event);
             if (getContent().handleMouseMoveEvent(event, true))
                 event.consume();
-            taskManager().addTask(Galaxy.newOneTimeTask((C) this, () -> getContent().handleMouseMoveEvent(event, false)));
+            taskManager().addTask(Galaxy.newOneTimeTask((TC) this, () -> getContent().handleMouseMoveEvent(event, false)));
         });
         getContentPane().addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
             updateMouseLocation(event);
             if (getContent().handleMouseDragEvent(event, true))
                 event.consume();
-            taskManager().addTask(Galaxy.newOneTimeTask((C) this, () -> getContent().handleMouseDragEvent(event, false)));
+            taskManager().addTask(Galaxy.newOneTimeTask((TC) this, () -> getContent().handleMouseDragEvent(event, false)));
         });
         
         getContentPane().addEventFilter(MouseEvent.MOUSE_ENTERED, event -> {
             updateMouseLocation(event);
             if (getContent().handleMouseEnterEvent(event, true))
                 event.consume();
-            taskManager().addTask(Galaxy.newOneTimeTask((C) this, () -> getContent().handleMouseEnterEvent(event, false)));
+            taskManager().addTask(Galaxy.newOneTimeTask((TC) this, () -> getContent().handleMouseEnterEvent(event, false)));
         });
         getContentPane().addEventFilter(MouseEvent.MOUSE_EXITED, event -> {
             updateMouseLocation(event);
             if (getContent().handleMouseExitEvent(event, true))
                 event.consume();
-            taskManager().addTask(Galaxy.newOneTimeTask((C) this, () -> getContent().handleMouseExitEvent(event, false)));
+            taskManager().addTask(Galaxy.newOneTimeTask((TC) this, () -> getContent().handleMouseExitEvent(event, false)));
         });
     }
     
@@ -119,7 +125,7 @@ public abstract class ContentController<T extends Content<T, D, C>, D extends Co
     public abstract <P extends Pane> P getContentPane();
     
     public final T getContent() { return content; }
-    public final D getData() { return getContent().getData(); }
+    public final TD getData() { return getContent().getData(); }
     
     //<editor-fold desc="> Mouse Location Properties">
     
@@ -162,7 +168,7 @@ public abstract class ContentController<T extends Content<T, D, C>, D extends Co
         });
     }
     
-    @Override public @NotNull TaskManager<C> taskManager() { return taskManager; }
+    @Override public @NotNull TaskManager<TC> taskManager() { return taskManager; }
     
     //</editor-fold>
     

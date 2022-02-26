@@ -29,7 +29,7 @@ import java.util.concurrent.locks.ReentrantLock;
 @Component
 @FxmlView("/fxml/game/content/game_view_content.fxml")
 @Scope("prototype")
-public class GameViewContentController extends ContentController<GameViewContent, GameViewContentData, GameViewContentController>
+public class GameViewContentController extends ContentController<GameViewContent, GameViewContentData, GameViewContentController, GameFooter, GameFooterController>
         implements Lockable, GameComponent {
     
     //<editor-fold desc="--- FXML FIELDS ---">
