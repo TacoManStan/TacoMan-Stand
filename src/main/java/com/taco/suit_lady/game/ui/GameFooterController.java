@@ -59,7 +59,7 @@ public class GameFooterController
     
     //</editor-fold>
     
-    private ImagePane[][] commandCardMatrix;
+    private ImageButton[][] commandCardButtonMatrix;
     
     protected GameFooterController(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         super(weaver, ctx);
@@ -98,27 +98,35 @@ public class GameFooterController
         
         //</editor-fold>
         
-        this.commandCardMatrix = new ImagePane[ccWidth()][ccHeight()];
+        this.commandCardButtonMatrix = new ImageButton[ccWidth()][ccHeight()];
         
         ArraysSL.fillMatrix(dimensions -> {
-            final ImagePane ip = new ImagePane();
-            commandCardGridPane.add(ip, dimensions.width(), dimensions.height());
-            return ip;
-        }, commandCardMatrix);
-        
-        ArraysSL.iterateMatrix((d, ip) -> {
-            Print.print("Setting Image Button For...  " + d);
-            new ImageButton(
+            final ImagePane imagePane = new ImagePane();
+            commandCardGridPane.add(imagePane, dimensions.width(), dimensions.height());
+            return new ImageButton(
                     this,
-                    "Command Card Dummy Button [" + d.width() + ", " + d.height() + "]",
+                    "Command Card Dummy Button [" + dimensions.width() + ", " + dimensions.height() + "]",
                     "home",
-                    ip,
-                    () -> Print.print("CC Button Pressed: " + getCcImagePaneLocation(ip)),
+                    imagePane,
+                    () -> Print.print("CC Button Pressed: " + dimensions),
                     null,
                     false,
                     null).init();
-            return null;
-        }, commandCardMatrix);
+        }, commandCardButtonMatrix);
+        
+//        ArraysSL.iterateMatrix((d, ip) -> {
+//            Print.print("Setting Image Button For...  " + d);
+//            new ImageButton(
+//                    this,
+//                    "Command Card Dummy Button [" + d.width() + ", " + d.height() + "]",
+//                    "home",
+//                    ip,
+//                    () -> Print.print("CC Button Pressed: " + getCommandCardButtonLocation(ip)),
+//                    null,
+//                    false,
+//                    null).init();
+//            return null;
+//        }, commandCardMatrix);
         
         new ImageButton(
                 this,
@@ -139,9 +147,9 @@ public class GameFooterController
     private int ccWidth() { return commandCardGridPane.getColumnCount(); }
     private int ccHeight() { return commandCardGridPane.getRowCount(); }
     
-    public final @NotNull ImagePane[][] getCommandCardMatrix() { return commandCardMatrix; }
-    public final @Nullable ImagePane getCcImagePane(int x, int y) { return (x < ccWidth() && y < ccHeight() && x >= 0 && y >= 0) ? commandCardMatrix[x][y] : null; }
-    public final @Nullable Dimensions getCcImagePaneLocation(@Nullable ImagePane imagePane) { return imagePane != null ? ArraysSL.iterateMatrix((d, ip) -> ip.equals(imagePane) ? d : null, commandCardMatrix) : null; }
+    public final @NotNull ImageButton[][] getCommandCardButtonMatrix() { return commandCardButtonMatrix; }
+    public final @Nullable ImageButton getCommandCardButtonAt(int x, int y) { return (x < ccWidth() && y < ccHeight() && x >= 0 && y >= 0) ? commandCardButtonMatrix[x][y] : null; }
+    public final @Nullable Dimensions getCommandCardButtonLocation(@Nullable ImageButton button) { return button != null ? ArraysSL.iterateMatrix((d, ip) -> ip.equals(button) ? d : null, commandCardButtonMatrix) : null; }
     
     //</editor-fold>
     
