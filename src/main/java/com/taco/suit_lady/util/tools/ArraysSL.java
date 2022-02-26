@@ -28,6 +28,20 @@ public class ArraysSL {
         return matrix;
     }
     
+    @Contract("_, null, _ -> null")
+    public static <E, R> R iterateMatrix(@NotNull BiFunction<Dimensions, E, R> function, @Nullable E[][] matrix, boolean returnOnNonNullResult) {
+        if (matrix == null)
+            return null;
+        R r = null;
+        for (int i = 0; i < matrix.length; i++)
+            for (int j = 0; j < matrix[i].length; j++) {
+                r = function.apply(new Dimensions(i, j), matrix[i][j]);
+                if (r != null && returnOnNonNullResult)
+                    return r;
+            }
+        return r;
+    }
+    
     @Contract("_, _ -> param2")
     public static <E> E[][] iterateMatrix(@NotNull BiConsumer<Dimensions, E> function, @Nullable E[][] matrix) {
         if (matrix == null)
