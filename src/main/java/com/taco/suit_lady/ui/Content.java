@@ -25,7 +25,7 @@ public abstract class Content<T extends Content<T, TD, TC, F, FC>, TD extends Co
     
     private final TD data;
     private final TC controller;
-    private F footer;
+    private final F footer;
     
     private final OverlayHandler overlayHandler;
     
