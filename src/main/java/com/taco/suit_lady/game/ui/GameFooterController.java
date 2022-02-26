@@ -59,6 +59,7 @@ public class GameFooterController
     
     //</editor-fold>
     
+    private ImageButton selectionPreviewImageButton;
     private ImageButton[][] commandCardButtonMatrix;
     
     protected GameFooterController(FxWeaver weaver, ConfigurableApplicationContext ctx) {
@@ -74,32 +75,18 @@ public class GameFooterController
     }
     
     private void initCommandCard() {
-        //<editor-fold desc="> Fill Matrix">
-        
-        //        commandCardMatrix[0][0] = ccImagePane00;
-        //        commandCardMatrix[1][0] = ccImagePane10;
-        //        commandCardMatrix[2][0] = ccImagePane20;
-        //        commandCardMatrix[3][0] = ccImagePane30;
-        //
-        //        commandCardMatrix[0][1] = ccImagePane01;
-        //        commandCardMatrix[1][1] = ccImagePane11;
-        //        commandCardMatrix[2][1] = ccImagePane21;
-        //        commandCardMatrix[3][1] = ccImagePane31;
-        //
-        //        commandCardMatrix[0][2] = ccImagePane02;
-        //        commandCardMatrix[1][2] = ccImagePane12;
-        //        commandCardMatrix[2][2] = ccImagePane22;
-        //        commandCardMatrix[3][2] = ccImagePane32;
-        //
-        //        commandCardMatrix[0][3] = ccImagePane03;
-        //        commandCardMatrix[1][3] = ccImagePane13;
-        //        commandCardMatrix[2][3] = ccImagePane23;
-        //        commandCardMatrix[3][3] = ccImagePane33;
-        
-        //</editor-fold>
+        selectionPreviewImageButton = new ImageButton(
+                this,
+                "Selection Portrait Dummy Image",
+                "account_manager",
+                selectionPreviewImagePane,
+                () -> Print.print("Selection Portrait Dummy Preview Pressed"),
+                null,
+                false,
+                new Point2D(100, 200)
+        ).init();
         
         this.commandCardButtonMatrix = new ImageButton[ccWidth()][ccHeight()];
-        
         ArraysSL.fillMatrix(dimensions -> {
             final ImagePane imagePane = new ImagePane();
             commandCardGridPane.add(imagePane, dimensions.width(), dimensions.height());
@@ -113,31 +100,6 @@ public class GameFooterController
                     false,
                     null).init();
         }, commandCardButtonMatrix);
-        
-//        ArraysSL.iterateMatrix((d, ip) -> {
-//            Print.print("Setting Image Button For...  " + d);
-//            new ImageButton(
-//                    this,
-//                    "Command Card Dummy Button [" + d.width() + ", " + d.height() + "]",
-//                    "home",
-//                    ip,
-//                    () -> Print.print("CC Button Pressed: " + getCommandCardButtonLocation(ip)),
-//                    null,
-//                    false,
-//                    null).init();
-//            return null;
-//        }, commandCardMatrix);
-        
-        new ImageButton(
-                this,
-                "Selection Portrait Dummy Image",
-                "account_manager",
-                selectionPreviewImagePane,
-                () -> Print.print("Selection Portrait Dummy Preview Pressed"),
-                null,
-                false,
-                new Point2D(100, 200)
-        ).init();
     }
     
     //</editor-fold>
