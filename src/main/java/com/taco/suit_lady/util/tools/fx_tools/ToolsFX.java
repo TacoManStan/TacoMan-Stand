@@ -1003,6 +1003,7 @@ public class ToolsFX {
                             image.getPixelReader(),
                             0, 0);
             }
+            return null;
         }, sourceMatrix);
         
         return aggregateImage;

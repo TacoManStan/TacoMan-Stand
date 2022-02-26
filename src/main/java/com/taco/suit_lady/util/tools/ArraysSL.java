@@ -16,6 +16,8 @@ import java.util.stream.Stream;
 
 public class ArraysSL {
     
+    //<editor-fold desc="--- MATRIX METHODS ---">
+    
     @Contract("_, _ -> param2")
     public static <E> E[][] fillMatrix(@NotNull Function<Dimensions, E> elementFactory, @Nullable E[][] matrix) {
         if (matrix == null)
@@ -27,6 +29,8 @@ public class ArraysSL {
         
         return matrix;
     }
+    
+    //
     
     @Contract("_, null, _ -> null")
     public static <E, R> R iterateMatrix(@NotNull BiFunction<Dimensions, E, R> function, @Nullable E[][] matrix, boolean returnOnNonNullResult) {
@@ -41,30 +45,25 @@ public class ArraysSL {
             }
         return r;
     }
+    public static <E, R> R iterateMatrix(@NotNull BiFunction<Dimensions, E, R> function, @Nullable E[][] matrix) { return iterateMatrix(function, matrix, true); }
     
-    @Contract("_, _ -> param2")
-    public static <E> E[][] iterateMatrix(@NotNull BiConsumer<Dimensions, E> function, @Nullable E[][] matrix) {
+    public static <E, R> R iterateMatrix(@NotNull Function<E, R> function, @Nullable E[][] matrix, boolean returnOnNonNullResult) {
         if (matrix == null)
             return null;
         
+        R r = null;
         for (int i = 0; i < matrix.length; i++)
-            for (int j = 0; j < matrix[i].length; j++)
-                function.accept(new Dimensions(i, j), matrix[i][j]);
+            for (int j = 0; j < matrix[i].length; j++) {
+                r = function.apply(matrix[i][j]);
+                if (r != null && returnOnNonNullResult)
+                    return r;
+            }
         
-        return matrix;
+        return r;
     }
+    public static <E, R> R iterateMatrix(@NotNull Function<E, R> function, @Nullable E[][] matrix) { return iterateMatrix(function, matrix, true); }
     
-    @Contract("_, _ -> param2")
-    public static <E> E[][] iterateMatrix(@NotNull Consumer<E> function, @Nullable E[][] matrix) {
-        if (matrix == null)
-            return null;
-        
-        for (int i = 0; i < matrix.length; i++)
-            for (int j = 0; j < matrix[i].length; j++)
-                function.accept(matrix[i][j]);
-        
-        return matrix;
-    }
+    //</editor-fold>
     
     /**
      * <p>Sorts the specified {@link List} using the {@link Comparator#naturalOrder() Natural Order} as the {@link Comparator}.</p>

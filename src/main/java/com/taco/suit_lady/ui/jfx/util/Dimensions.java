@@ -27,4 +27,16 @@ public record Dimensions(int width, int height)
     public static @NotNull Dimensions copyFromPoint(@NotNull Point2D point) { return new Dimensions((int) point.getX(), (int) point.getY()); }
     
     //</editor-fold>
+    
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+    @Contract(pure = true)
+    @Override public @NotNull String toString() {
+        return "Dimensions{" +
+               "width=" + width +
+               ", height=" + height +
+               '}';
+    }
+    
+    //</editor-fold>
 }
