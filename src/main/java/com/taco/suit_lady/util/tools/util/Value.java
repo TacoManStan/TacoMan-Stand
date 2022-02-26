@@ -5,7 +5,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
-public record Value<A>(A a) {
+public record Value<A>(A a)
+        implements Valueable<A> {
     
     public @NotNull Supplier<A> aSupplier() { return this::a; }
     
