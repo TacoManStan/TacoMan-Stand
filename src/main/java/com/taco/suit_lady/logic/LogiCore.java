@@ -21,6 +21,7 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import net.rgielen.fxweaver.core.FxWeaver;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -81,11 +82,6 @@ public class LogiCore
         
         //
         
-        //        this.sequentialExecutor = new ThreadPoolExecutor(10, 10, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
-        //        this.scheduledExecutor = new ScheduledThreadPoolExecutor(10);
-        
-        //
-        
         this.gameLoopExecutor = new ScheduledThreadPoolExecutor(1);
         
         this.tickables = new SimpleListProperty<>(FXCollections.observableArrayList());
@@ -108,15 +104,15 @@ public class LogiCore
         gameProperty.set((GameViewContent) params[0]);
         
         Print.print("Starting Up");
-        tickables.addListener((ListChangeListener<? super Tickable<?>>)  c -> {
+        tickables.addListener((ListChangeListener<? super Tickable<?>>) c -> {
             needsCopyRefresh = true;
             Print.err("Value Changed");
         });
         needsCopyRefresh = true;
-//        ListsSL.applyListener(null, tickables, op -> {
-//            needsCopyRefresh = true;
-//            Print.err("Value Changes " + needsCopyRefresh);
-//        });
+        //        ListsSL.applyListener(null, tickables, op -> {
+        //            needsCopyRefresh = true;
+        //            Print.err("Value Changes " + needsCopyRefresh);
+        //        });
         
         initExecutors();
         initTimer();
@@ -208,6 +204,7 @@ public class LogiCore
         final ArrayList<GFXObject<?>> gfxObjects = new ArrayList<>();
         final List<Tickable<?>> tickableCopy = tickablesCopy();
         
+        ToolsFX.runFX(() -> ui().refreshMouseTracking());
         TasksSL.sync(tickableLock, () -> {
             tickablesCopy().forEach(tickable -> {
                 if (checkSpringClosure(() -> {
@@ -234,19 +231,11 @@ public class LogiCore
         
     }
     
-    private Tickable<?> shutdown(@NotNull Tickable<?> tickable) {
-        tickable.taskManager().shutdownOperations();
-        tickable.taskManager().gfxShutdownOperations();
-        
-        //        if (tickable instanceof GFXObject gfxObject)
-        //            TasksSL.sync(gfxLock, () -> gfxObjects.remove(gfxObject));
-        
-        return tickable;
-    }
-    
     //</editor-fold>
     
     //</editor-fold>
+    
+    //<editor-fold desc="--- INTERNAL ---">
     
     private boolean checkSpringClosure(@Nullable Runnable action) {
         if (!ctx().isRunning()) {
@@ -264,6 +253,14 @@ public class LogiCore
         //        sequentialExecutor.shutdown();
         //        scheduledExecutor.shutdown();
     }
+    
+    @Contract("_ -> param1") private @NotNull Tickable<?> shutdown(@NotNull Tickable<?> tickable) {
+        tickable.taskManager().shutdownOperations();
+        tickable.taskManager().gfxShutdownOperations();
+        return tickable;
+    }
+    
+    //</editor-fold>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     

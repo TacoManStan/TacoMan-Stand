@@ -2,21 +2,15 @@ package com.taco.suit_lady.ui;
 
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.logic.triggers.Galaxy;
-import com.taco.suit_lady.ui.console.ConsoleMessageable;
 import com.taco.suit_lady.ui.jfx.components.button.ImageButton;
 import com.taco.suit_lady.ui.jfx.components.ImagePane;
-import com.taco.suit_lady.ui.jfx.lists.treehandler.WrappingTreeCellData;
 import com.taco.suit_lady.ui.pages.entity_debug_page.EntityDebugPage;
 import com.taco.suit_lady.ui.pages.example_page.ExamplePage;
 import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotContentSelectorPage;
 import com.taco.suit_lady.ui.pages.tester_page.TesterPage;
-import com.taco.suit_lady.ui.ui_internal.console.ConsoleUIDataContainer;
 import com.taco.suit_lady.ui.ui_internal.controllers.SettingsController;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.BindingsSL;
-import com.taco.suit_lady.util.tools.Print;
-import com.taco.suit_lady.util.tools.ResourcesSL;
-import com.taco.suit_lady.util.tools.WebSL;
+import com.taco.suit_lady.util.tools.*;
 import com.taco.suit_lady.util.tools.fx_tools.DialogsFX;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import javafx.animation.AnimationTimer;
@@ -27,6 +21,7 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
@@ -34,12 +29,14 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
+import javafx.scene.robot.Robot;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -189,6 +186,7 @@ public class AppController
     private ObjectBinding<StackPane> selectionOverlayStackPaneBinding;
     private ReadOnlyListWrapper<Parent> globalOverlays;
     
+    private Robot robot;
     
     public AppController(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         this.weaver = weaver;
@@ -208,6 +206,7 @@ public class AppController
         debugger().enableAll();
         
         this.stage = stage;
+        this.robot = new Robot();
         //        this.contentPane = new DummyContentsInstancePane();
         
         // TODO: Synchronize with the actual title of the application.
@@ -605,6 +604,7 @@ public class AppController
         STAGE_MIN_WIDTH = stage.getWidth() - PUI_WIDTH;
         STAGE_MIN_HEIGHT = stage.getHeight();
         ToolsFX.lockSize(stage, STAGE_MIN_WIDTH + PUI_WIDTH, STAGE_MIN_HEIGHT);
+        Button b;
     }
     
     // </editor-fold>
@@ -617,6 +617,22 @@ public class AppController
     protected final AnchorPane footerPane() { return footerPane; }
     
     //</editor-fold>
+    
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+    @Override
+    public @NotNull FxWeaver weaver() {
+        return weaver;
+    }
+    
+    @Override
+    public @NotNull ConfigurableApplicationContext ctx() {
+        return ctx;
+    }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- INTERNAL ---">
     
     private void toggleSidebar() {
         Stage stage = getStage();
@@ -686,18 +702,6 @@ public class AppController
                 DialogsFX.OK,
                 true,
                 weaver.loadController(SettingsController.class));
-    }
-    
-    //<editor-fold desc="--- IMPLEMENTATIONS ---">
-    
-    @Override
-    public @NotNull FxWeaver weaver() {
-        return weaver;
-    }
-    
-    @Override
-    public @NotNull ConfigurableApplicationContext ctx() {
-        return ctx;
     }
     
     //</editor-fold>

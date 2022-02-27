@@ -106,12 +106,16 @@ public class GameFooterController
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    private int ccWidth() { return commandCardGridPane.getColumnCount(); }
-    private int ccHeight() { return commandCardGridPane.getRowCount(); }
+    //<editor-fold desc="> Command Card">
+    
+    public final int ccWidth() { return commandCardGridPane.getColumnCount(); }
+    public final int ccHeight() { return commandCardGridPane.getRowCount(); }
     
     public final @NotNull ImageButton[][] getCommandCardButtonMatrix() { return commandCardButtonMatrix; }
     public final @Nullable ImageButton getCommandCardButtonAt(int x, int y) { return (x < ccWidth() && y < ccHeight() && x >= 0 && y >= 0) ? commandCardButtonMatrix[x][y] : null; }
     public final @Nullable Dimensions getCommandCardButtonLocation(@Nullable ImageButton button) { return button != null ? ArraysSL.iterateMatrix((d, ip) -> ip.equals(button) ? d : null, commandCardButtonMatrix) : null; }
+    
+    //</editor-fold>
     
     //</editor-fold>
     

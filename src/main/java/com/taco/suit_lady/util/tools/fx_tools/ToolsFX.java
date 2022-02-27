@@ -2,6 +2,7 @@ package com.taco.suit_lady.util.tools.fx_tools;
 
 import com.sun.javafx.application.PlatformImpl;
 import com.taco.suit_lady.ui.jfx.util.Bounds;
+import com.taco.suit_lady.ui.jfx.util.Dimensions;
 import com.taco.suit_lady.util.SimplePredicate;
 import com.taco.suit_lady.util.UndefinedRuntimeException;
 import com.taco.suit_lady.util.tools.*;
@@ -9,6 +10,7 @@ import com.taco.suit_lady.ui.jfx.Colorable;
 import com.taco.suit_lady.ui.jfx.hyperlink.HyperlinkNodeFX;
 import com.taco.suit_lady.ui.jfx.lists.Listable;
 import com.taco.suit_lady.util.tools.ArraysSL;
+import com.taco.suit_lady.util.tools.util.ValuePair;
 import com.taco.tacository.quick.ConsoleBB;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -70,6 +72,9 @@ import java.util.function.Supplier;
  */
 public class ToolsFX {
     private ToolsFX() { } //No Instance
+    
+    public static @NotNull Dimensions getDimensions(@NotNull Region region) { return Dimensions.copyFromPair(getDimensionsPair(region)); }
+    public static @NotNull ValuePair<Double, Double> getDimensionsPair(@NotNull Region region) { return new ValuePair<>(region.getWidth(), region.getHeight()); }
     
     //<editor-fold desc="EDT/FX Thread">
     

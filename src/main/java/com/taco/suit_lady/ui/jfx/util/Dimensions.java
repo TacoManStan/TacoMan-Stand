@@ -25,7 +25,7 @@ public record Dimensions(int width, int height)
     
     @Contract("_ -> new") public static @NotNull Dimensions copyFrom(@NotNull Dimensions dimensions) { return dimensions.copy(); }
     
-    public static @NotNull Dimensions copyFromPair(@NotNull ValuePair<Integer, Integer> pair) { return new Dimensions(pair.a(), pair.b()); }
+    public static @NotNull Dimensions copyFromPair(@NotNull ValuePair<? extends Number, ? extends Number> pair) { return new Dimensions(pair.a().intValue(), pair.b().intValue()); }
     public static @NotNull Dimensions copyFromPoint(@NotNull Point2D point) { return new Dimensions((int) point.getX(), (int) point.getY()); }
     
     //</editor-fold>

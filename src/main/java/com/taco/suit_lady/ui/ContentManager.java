@@ -146,6 +146,7 @@ public class ContentManager
                     oldContent.getFooter().onContentChange(false);
                 }
                 
+                ui().stopTrackingRegion(oldContent.getController().root());
                 logiCore().execute(oldContent::onRemovedInternal);
             }
             if (newContent != null) {
@@ -157,6 +158,7 @@ public class ContentManager
                     newContent.getFooter().onContentChange(true);
                 }
                 
+                ui().trackRegion(newContent.getController().root());
                 logiCore().execute(newContent::onSetInternal);
             }
         }, true);
