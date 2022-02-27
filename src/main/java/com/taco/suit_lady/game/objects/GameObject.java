@@ -117,7 +117,7 @@ public class GameObject
         initTriggerEvents();
         initTaskManager();
         
-        locationBinding.addListener((observable, oldValue, newValue) -> Print.print("GameObject Location Changed:  [ " + oldValue + "  -->  " + newValue + " ]", false));
+//        locationBinding.addListener((observable, oldValue, newValue) -> Print.print("GameObject Location Changed:  [ " + oldValue + "  -->  " + newValue + " ]", false));
         
         return this;
     }

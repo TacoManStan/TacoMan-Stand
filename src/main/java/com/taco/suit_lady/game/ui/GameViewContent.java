@@ -246,8 +246,6 @@ public class GameViewContent
     }
     
     @Override protected boolean handleMouseDragEvent(@NotNull MouseEvent event, boolean fx) {
-        //        if (!fx)
-        //            sync(() -> mouseOnMapProperty.set(getCamera().viewToMap(event.getX(), event.getY())));
         if (event.getButton() == MouseButton.SECONDARY) {
             if (fx)
                 getTestObject().getCommand().moveAndBind(getController().mouseOnMapBindingSafeX(), getController().mouseOnMapBindingSafeY());
