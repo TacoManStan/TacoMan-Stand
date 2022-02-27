@@ -5,6 +5,7 @@ import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.game.objects.tiles.GameTile;
 import com.taco.suit_lady.game.ui.GameViewContent;
+import com.taco.suit_lady.ui.jfx.util.Dimensions;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
@@ -14,6 +15,7 @@ import com.taco.suit_lady.util.tools.MathSL;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import com.taco.tacository.json.*;
 import javafx.beans.binding.IntegerBinding;
+import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -50,6 +52,9 @@ public class GameMap
     private final IntegerBinding pixelWidthBinding;
     private final IntegerBinding pixelHeightBinding;
     
+    private final ObjectBinding<Dimensions> dimensionsBinding;
+    private final ObjectBinding<Dimensions> pixelDimensionsBinding;
+    
     
     private GameMapModel model;
     
@@ -68,12 +73,16 @@ public class GameMap
         
         this.tileSizeProperty = new ReadOnlyIntegerWrapper(tileSize);
         
+        //
+        
         this.widthBinding = BindingsSL.intBinding(() -> getTileMatrix().length, tileMatrixProperty);
         this.heightBinding = BindingsSL.intBinding(() -> getWidth() > 0 ? getTileMatrix()[0].length : 0, tileMatrixProperty);
         
         this.pixelWidthBinding = BindingsSL.intBinding(() -> getWidth() * getTileSize(), widthBinding, tileSizeProperty);
         this.pixelHeightBinding = BindingsSL.intBinding(() -> getHeight() * getTileSize(), heightBinding, tileSizeProperty);
         
+        this.dimensionsBinding = BindingsSL.objBinding(() -> new Dimensions(getWidth(), getHeight()), widthBinding, heightBinding);
+        this.pixelDimensionsBinding = BindingsSL.objBinding(() -> new Dimensions(getPixelWidth(), getPixelHeight()), pixelWidthBinding, pixelHeightBinding);
         
         //
         
@@ -121,6 +130,13 @@ public class GameMap
     
     public final IntegerBinding pixelHeightBinding() { return pixelHeightBinding; }
     public final int getPixelHeight() { return pixelHeightBinding.get(); }
+    
+    
+    public final ObjectBinding<Dimensions> dimensionsBinding() { return dimensionsBinding; }
+    public final Dimensions getDimensions() { return dimensionsBinding.get(); }
+    
+    public final ObjectBinding<Dimensions> pixelDimensionsBinding() { return pixelDimensionsBinding; }
+    public final Dimensions getPixelDimensions() { return pixelDimensionsBinding.get(); }
     
     //</editor-fold>
     

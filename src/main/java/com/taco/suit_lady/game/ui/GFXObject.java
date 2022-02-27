@@ -9,6 +9,7 @@ public interface GFXObject<E extends Tickable<E>> extends Tickable<E> {
     
     //
     
+    default void onGfxUpdateAlways() { }
     default void updateGfx() {
         if (needsGfxUpdate())
             onGfxUpdate();

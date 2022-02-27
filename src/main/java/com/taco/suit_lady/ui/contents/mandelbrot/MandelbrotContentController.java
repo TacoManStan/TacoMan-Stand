@@ -161,6 +161,7 @@ public class MandelbrotContentController extends ContentController<MandelbrotCon
     private Consumer<MouseDragData> getMoveConsumer() {
         return moveConsumer;
     }
+    @Override public void onGfxUpdate() { }
     
     //
     

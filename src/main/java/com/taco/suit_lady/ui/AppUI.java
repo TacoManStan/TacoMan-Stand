@@ -124,11 +124,13 @@ public class AppUI
     private MapProperty<Region, Point2D> mouseMap() { return ToolsFX.requireFX(() -> mouseMap); }
     
     public final boolean trackRegion(@NotNull Region region) {
-        Print.print("Starting Tracking for \"" + region + "\"");
+        if (printTrackingDetails)
+            Print.print("Starting Tracking for \"" + region + "\"");
         return trackedRegions().contains(region) || trackedRegions.add(region);
     }
     public final boolean stopTrackingRegion(@NotNull Region region) {
-        Print.print("Stopping Tracking for \"" + region + "\"");
+        if (printTrackingDetails)
+            Print.print("Stopping Tracking for \"" + region + "\"");
         return !trackedRegions().contains(region) || trackedRegions.remove(region);
     }
     
@@ -174,6 +176,8 @@ public class AppUI
     
     //<editor-fold desc="--- INTERNAL ---">
     
+    private static final boolean printTrackingDetails = false;
+    
     private @NotNull Point2D getMouseLocationFor(@NotNull Region region) { return region.screenToLocal(getMouseOnScreen()); }
     
     private void refreshRegionTracking(@Nullable Point2D oldMouseOnScreen, @Nullable Point2D newMouseOnScreen) {
@@ -183,13 +187,13 @@ public class AppUI
                 trackedRegions.forEach(region -> {
                     final Point2D screenToLocalOld = oldMouseOnScreen != null ? region.screenToLocal(oldMouseOnScreen) : null;
                     final Point2D screenToLocalNew = region.screenToLocal(newMouseOnScreen);
-                    Print.print("Updating Mouse Tracking for Region \"" + region + "\":  " + "["
-                                + screenToLocalOld + "::" + getSafe(screenToLocalOld, region)
-                                + " --> " +
-                                screenToLocalNew + "::" + getSafe(screenToLocalNew, region)
-                                + "]", false);
+                    if (printTrackingDetails)
+                        Print.print("Updating Mouse Tracking for Region \"" + region + "\":  " + "["
+                                    + screenToLocalOld + "::" + getSafe(screenToLocalOld, region)
+                                    + " --> " +
+                                    screenToLocalNew + "::" + getSafe(screenToLocalNew, region)
+                                    + "]", false);
                     mouseMap.put(region, region.screenToLocal(newMouseOnScreen));
-                    //                mouseMap.put(region, region.screenToLocal(getMouseOnScreen()));
                 });
             }
         });
@@ -204,16 +208,8 @@ public class AppUI
             return new Point2D(safeX, safeY);
         });
     }
-    private @Nullable Point2D getSafe(@Nullable Region region) {
-        if (region != null)
-            return getSafe(region.screenToLocal(getMouseOnScreen()), ToolsFX.getDimensions(region));
-        return null;
-    }
-    private @Nullable Point2D getSafe(@Nullable Point2D source, @Nullable Region region) {
-        if (source != null && region != null)
-            return getSafe(source, ToolsFX.getDimensions(region));
-        return null;
-    }
+    private @Nullable Point2D getSafe(@Nullable Region region) { return region != null ? getSafe(region.screenToLocal(getMouseOnScreen()), ToolsFX.getDimensions(region)) : null; }
+    private @Nullable Point2D getSafe(@Nullable Point2D source, @Nullable Region region) { return source != null && region != null ? getSafe(source, ToolsFX.getDimensions(region)) : null; }
     
     //</editor-fold>
 }

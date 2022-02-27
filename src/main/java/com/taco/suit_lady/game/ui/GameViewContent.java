@@ -126,8 +126,6 @@ public class GameViewContent
         
         setGameMap(GameMap.newTestInstance(this, lock, "test-map-jid"));
         
-        this.mouseOnMapBinding = BindingsSL.objBinding(() -> getCamera().viewToMap(getController().getMouseOnContent()), getController().readOnlyMouseOnContentProperty());
-        
         initTestObjects();
     }
     
@@ -141,7 +139,7 @@ public class GameViewContent
         testObject2.setTileLocationX(30);
         testObject2.setTileLocationY(20);
         getGameMap().gameObjects().add(testObject2);
-     
+        
         getCamera().bindViewTo(testObject);
     }
     
@@ -179,7 +177,7 @@ public class GameViewContent
                 if (keyEvent.isShiftDown())
                     getCamera().moveY(1);
                 else
-                   getCamera().moveTileY(1);
+                    getCamera().moveTileY(1);
             }, fx);
             case D -> keyInputAction(() -> {
                 if (keyEvent.isShiftDown())
@@ -225,8 +223,12 @@ public class GameViewContent
             if (fx)
                 selectTileAtMouse();
         } else if (event.getButton().equals(MouseButton.SECONDARY)) {
-            if (!fx)
-                getTestObject().getCommand().move(getController().getMouseOnMap());
+            if (fx) {
+                getTestObject().getCommand().moveAndBind(getController().mouseOnMapBindingSafeX(), getController().mouseOnMapBindingSafeY());
+                //                getTestObject().getCommand().unbindAndMove(getController().getMouseOnMap());
+                //                Print.print("Binding Target Property X: " + getController().getMouseOnMapX());
+                //                Print.print("Binding Target Property Y: " + getController().getMouseOnMapY());
+            }
         } else if (event.getButton().equals(MouseButton.MIDDLE)) {
             if (!fx)
                 abilityTest(1);
@@ -234,12 +236,21 @@ public class GameViewContent
         
         return true;
     }
+    @Override protected boolean handleMouseReleaseEvent(@NotNull MouseEvent event, boolean fx) {
+        if (event.getButton().equals(MouseButton.SECONDARY)) {
+            if (fx)
+                getTestObject().getCommand().unbindAndMove(getController().getMouseOnMapSafe());
+        }
+        
+        return true;
+    }
+    
     @Override protected boolean handleMouseDragEvent(@NotNull MouseEvent event, boolean fx) {
-//        if (!fx)
-//            sync(() -> mouseOnMapProperty.set(getCamera().viewToMap(event.getX(), event.getY())));
+        //        if (!fx)
+        //            sync(() -> mouseOnMapProperty.set(getCamera().viewToMap(event.getX(), event.getY())));
         if (event.getButton() == MouseButton.SECONDARY) {
-            if (!fx)
-                getTestObject().getCommand().move(getController().getMouseOnMap());
+            if (fx)
+                getTestObject().getCommand().moveAndBind(getController().mouseOnMapBindingSafeX(), getController().mouseOnMapBindingSafeY());
         }
         
         return true;
@@ -312,7 +323,7 @@ public class GameViewContent
     private UIDProcessor uidProcessor;
     @Override public UIDProcessor getUIDProcessor() {
         if (uidProcessor == null)
-            uidProcessor = new UIDProcessor("mandelbrot_content");
+            uidProcessor = new UIDProcessor("game");
         return uidProcessor;
     }
     

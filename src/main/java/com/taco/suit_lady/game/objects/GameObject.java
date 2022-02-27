@@ -117,11 +117,13 @@ public class GameObject
         initTriggerEvents();
         initTaskManager();
         
+        locationBinding.addListener((observable, oldValue, newValue) -> Print.print("GameObject Location Changed:  [ " + oldValue + "  -->  " + newValue + " ]", false));
+        
         return this;
     }
     
     private void initAttributes() {
-        attributes().addDoubleAttribute(MoveCommand.SPEED_ID, 5); //Measured in tiles/second
+        attributes().addDoubleAttribute(MoveCommand.SPEED_ID, 15); //Measured in tiles/second
         attributes().addDoubleAttribute(MoveCommand.MAX_SPEED_ID, 100);
         attributes().addAttribute("health", 500);
     }

@@ -186,8 +186,6 @@ public class AppController
     private ObjectBinding<StackPane> selectionOverlayStackPaneBinding;
     private ReadOnlyListWrapper<Parent> globalOverlays;
     
-    private Robot robot;
-    
     public AppController(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         this.weaver = weaver;
         this.ctx = ctx;
@@ -206,8 +204,6 @@ public class AppController
         debugger().enableAll();
         
         this.stage = stage;
-        this.robot = new Robot();
-        //        this.contentPane = new DummyContentsInstancePane();
         
         // TODO: Synchronize with the actual title of the application.
         this.stage.titleProperty().set("Suit Lady");
