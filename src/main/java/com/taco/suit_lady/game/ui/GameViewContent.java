@@ -214,7 +214,7 @@ public class GameViewContent
     private void abilityTest(int abilityNum) {
         Print.print("Ability Used: " + abilityNum);
         if (abilityNum == 1)
-            new Ability_LaunchMissile(testObject).use(new ValuePair<>("target", getController().getMouseOnMap()));
+            new Ability_LaunchMissile(testObject).use(new ValuePair<>("target", getController().getMouseOnMapSafe()));
     }
     
     @Override protected boolean handleMousePressEvent(@NotNull MouseEvent event, boolean fx) {
@@ -223,12 +223,8 @@ public class GameViewContent
             if (fx)
                 selectTileAtMouse();
         } else if (event.getButton().equals(MouseButton.SECONDARY)) {
-            if (fx) {
+            if (fx)
                 getTestObject().getCommand().moveAndBind(getController().mouseOnMapBindingSafeX(), getController().mouseOnMapBindingSafeY());
-                //                getTestObject().getCommand().unbindAndMove(getController().getMouseOnMap());
-                //                Print.print("Binding Target Property X: " + getController().getMouseOnMapX());
-                //                Print.print("Binding Target Property Y: " + getController().getMouseOnMapY());
-            }
         } else if (event.getButton().equals(MouseButton.MIDDLE)) {
             if (!fx)
                 abilityTest(1);

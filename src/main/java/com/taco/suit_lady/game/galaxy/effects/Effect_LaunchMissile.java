@@ -61,7 +61,7 @@ public class Effect_LaunchMissile extends Effect_Targeted {
         missile.setLocationY(getSource().getLocationY(false), false);
         
         missile.attributes().addDoubleAttribute(MoveCommand.ACCELERATION_ID, 1.025D);
-        missile.attributes().getDoubleAttribute(MoveCommand.SPEED_ID).setValue(1D);
+        missile.attributes().getDoubleAttribute(MoveCommand.SPEED_ID).setValue(2D);
         
         logiCore().triggers().register(Galaxy.newUnitArrivedTrigger(missile, event -> {
             Print.print("Missile Arrived [" + missile + "]  ||  [" + event.getMovedFrom() + "  -->  " + event.getMovedTo());
