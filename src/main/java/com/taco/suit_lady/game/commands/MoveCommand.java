@@ -265,10 +265,10 @@ public class MoveCommand
                 
 //                Printer.print("Checking Collisions...");
 //                debugger().printList(getOwner().collisionMap().collisionAreas(), "Owner Collision");
-                for (int i = 0; i < getGameMap().gameObjects().size(); i++) {
-                    GameObject obj = getGameMap().gameObjects().get(i);
-//                    debugger().printList(obj.collisionMap().collisionAreas(), "Collision Areas For: " + obj);
-                }
+//                for (int i = 0; i < getGameMap().gameObjects().size(); i++) {
+//                    GameObject obj = getGameMap().gameObjects().get(i);
+////                    debugger().printList(obj.collisionMap().collisionAreas(), "Collision Areas For: " + obj);
+//                }
                 if (getGameMap().gameObjects().stream().anyMatch(gameObject -> gameObject.collidesWith(this))) {
 //                    Printer.print("Collision Detected");
                     getOwner().setLocation(oldLoc, true);
