@@ -330,12 +330,19 @@ public class TasksSL {
     @Contract(pure = true) public static @NotNull Thread currentThread() { return Thread.currentThread(); }
     
     
-    public static int getCallingLine() { return currentThread().getStackTrace()[5].getLineNumber(); }
-    public static @NotNull String getCallingClass() { return currentThread().getStackTrace()[5].getClassName(); }
-    public static @NotNull String getCallingMethod() { return currentThread().getStackTrace()[5].getMethodName(); }
+    public static int getCallingLine(int stackLocation) { return currentThread().getStackTrace()[getStackLocation(stackLocation)].getLineNumber(); }
+    public static @NotNull String getCallingClass(int stackLocation) { return currentThread().getStackTrace()[getStackLocation(stackLocation)].getClassName(); }
+    public static @NotNull String getCallingMethod(int stackLocation) { return currentThread().getStackTrace()[getStackLocation(stackLocation)].getMethodName(); }
     public static @NotNull String getCallingThread() { return currentThread().toString(); }
     
-    public static @NotNull String getCallingPrefix() { return "[" + getCallingClass() + "::" + getCallingLine() + "::" + getCallingMethod() + " | " + getCallingThread() + "]"; }
+    public static @NotNull String getCallingPrefix() { return getCallingPrefix(0); }
+    public static @NotNull String getCallingPrefix(int stackLocation) {
+        return "[" + getStackLocation(stackLocation) + "::"
+               + getCallingClass(stackLocation) + "::"
+               + getCallingLine(stackLocation) + "::"
+               + getCallingMethod(stackLocation) + " | "
+               + getCallingThread() + "]";
+    }
     
     //<editor-fold desc="> Thread Printing">
     
@@ -393,4 +400,6 @@ public class TasksSL {
     //</editor-fold>
     
     //</editor-fold>
+    
+    private static int getStackLocation(int rawStackLocation) { return 5 + rawStackLocation; }
 }

@@ -84,8 +84,8 @@ public class Printer
     
     protected static void print(@Nullable Object msg, @Nullable String title, boolean printPrefix, boolean err) {
         title = title != null ? " - [" + title + "]" : "";
-        final String prefix = printPrefix ? TasksSL.getCallingPrefix() + title + ": " : "";
-        final String fullMsg = msg != null ? prefix + msg : TasksSL.getCallingPrefix();
+        final String prefix = printPrefix ? TasksSL.getCallingPrefix(1) + title + ": " : "";
+        final String fullMsg = msg != null ? prefix + msg : TasksSL.getCallingPrefix(1);
         if (err)
             System.err.println(fullMsg);
         else

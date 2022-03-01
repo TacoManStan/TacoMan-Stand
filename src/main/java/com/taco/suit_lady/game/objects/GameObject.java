@@ -26,6 +26,7 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.ObjectStreamException;
@@ -68,8 +69,9 @@ public class GameObject
     
     private final MoveCommand command;
     
-    public GameObject(@NotNull GameComponent gameComponent) {
+    public GameObject(@NotNull GameComponent gameComponent, @Nullable String objID) {
         this.content = gameComponent.getGame();
+        this.objID = objID;
         
         this.model = new GameObjectModel(this);
         this.attributes = new AttributeManager(this);
@@ -79,8 +81,8 @@ public class GameObject
         this.xLocationProperty = new SimpleDoubleProperty();
         this.yLocationProperty = new SimpleDoubleProperty();
         
-        this.widthProperty = new SimpleIntegerProperty(32);
-        this.heightProperty = new SimpleIntegerProperty(32);
+        this.widthProperty = new SimpleIntegerProperty();
+        this.heightProperty = new SimpleIntegerProperty();
         
         //
         
@@ -102,10 +104,14 @@ public class GameObject
         
         this.occupiedTilesList = new SimpleListProperty<>(FXCollections.observableArrayList());
     }
+    public GameObject(@NotNull GameComponent gameComponent) { this(gameComponent, null); }
     
     //<editor-fold desc="--- INITIALIZATION ---">
     
     public final GameObject init() {
+        setWidth(getGameMap().getTileSize());
+        setHeight(getGameMap().getTileSize());
+        
         getModel().init();
         
         this.occupiedTilesBinding = BindingsSL.objBinding(this::calculateOccupiedTiles, xLocationProperty, yLocationProperty, widthProperty, heightProperty, gameMapProperty());
@@ -154,7 +160,7 @@ public class GameObject
     
     private void initCollisionMap() {
         logiCore().execute(() -> {
-//            collisionArea = new CollisionBox(collisionMap());
+            //            collisionArea = new CollisionBox(collisionMap());
             collisionArea = new CollisionRange(collisionMap());
             
             xLocationProperty.addListener((observable, oldValue, newValue) -> refreshCollisionData());
@@ -168,13 +174,8 @@ public class GameObject
     }
     
     private void refreshCollisionData() {
-//        Print.print("Refreshing Collision Data");
-//        collisionArea.setWidth(getWidth());
-//        collisionArea.setHeight(getHeight());
-//        collisionArea.setX(getLocationX().intValue());
-//        collisionArea.setY(getLocationY().intValue());
-        
-        collisionArea.setRadius(Math.max((int) ((getWidth() / 2) * 0.7), (int) ((getHeight() / 2) * 0.7)));
+        double modifier = 1.0; //Only to test different sizes of collision ranges
+        collisionArea.setRadius(Math.max((int) ((getWidth() / 2) * modifier), (int) ((getHeight() / 2) * modifier)));
         collisionArea.setX((int) getLocationX(true));
         collisionArea.setY((int) getLocationY(true));
     }
@@ -189,6 +190,11 @@ public class GameObject
     
     public final MoveCommand getCommand() { return command; }
     public final String getObjID() { return objID; }
+    public final String setObjID(@Nullable String newValue) {
+        String oldValue = getObjID();
+        objID = newValue;
+        return oldValue;
+    }
     
     //<editor-fold desc="> Map Properties">
     
@@ -350,6 +356,14 @@ public class GameObject
         final double v2 = Math.round(getLocationY(center)) - Math.round(point.getY());
         return Math.abs(v1) == 0 && Math.abs(v2) == 0;
     }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- TESTING ---">
+    
+    public final boolean isTestObjectAny() { return isTestObject1() || isTestObject2(); }
+    public final boolean isTestObject1() { return this.equals(getGame().getTestObject()); }
+    public final boolean isTestObject2() { return this.equals(getGame().getTestObject2()); }
     
     //</editor-fold>
 }

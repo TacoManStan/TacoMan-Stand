@@ -6,7 +6,6 @@ import com.taco.suit_lady.game.ui.GFXObject;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.logic.TaskManager;
 import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.ImagePaintCommand;
-import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
@@ -17,7 +16,6 @@ import com.taco.tacository.json.JElement;
 import com.taco.tacository.json.JLoadable;
 import com.taco.tacository.json.JObject;
 import com.taco.tacository.json.JUtil;
-import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;
 import javafx.scene.image.Image;
@@ -30,6 +28,7 @@ public class GameObjectModel
         implements SpringableWrapper, Lockable, GameComponent, GFXObject<GameObjectModel>, JObject, JLoadable {
     
     private final GameObject owner;
+    private final GameObjectModelDefinition modelDefinition;
     private final TaskManager<GameObjectModel> taskManager;
     
     //
@@ -40,11 +39,6 @@ public class GameObjectModel
     
     private final ImagePaintCommand modelPaintCommand;
     
-    private IntegerBinding xPaintPositionBinding;
-    private IntegerBinding yPaintPositionBinding;
-    
-    private ObjectBinding<Bounds> paintBoundsBinding;
-    
     private boolean needsUpdate;
     
     public GameObjectModel(@NotNull GameObject owner) {
@@ -53,6 +47,7 @@ public class GameObjectModel
     
     public GameObjectModel(@NotNull GameObject owner, @Nullable String imageType, @Nullable String imageId) {
         this.owner = owner;
+        this.modelDefinition = new GameObjectModelDefinition(this);
         
         //
         
@@ -73,27 +68,11 @@ public class GameObjectModel
     }
     
     public GameObjectModel init() {
-        this.xPaintPositionBinding = BindingsSL.intBinding(() -> (-getOwner().getGameMap().getModel().getCamera().getAggregateX() + getOwner().getLocationX(false)), getOwner().getGameMap().getModel().getCamera().xAggregateBinding(), getOwner().xLocationProperty());
-        this.yPaintPositionBinding = BindingsSL.intBinding(() -> (-getOwner().getGameMap().getModel().getCamera().getAggregateY() + getOwner().getLocationY(false)), getOwner().getGameMap().getModel().getCamera().yAggregateBinding(), getOwner().yLocationProperty());
-        
-        this.paintBoundsBinding = BindingsSL.objBinding(
-                () -> new Bounds(getPaintPositionX(), getPaintPositionY(), getGameMap().getTileSize(), getGameMap().getTileSize()),
-                xPaintPositionBinding, yPaintPositionBinding);
+        this.getDefinition().init().bindToOwner();
         
         this.modelPaintCommand.init();
         
-        //        imageBinding.addListener((observable, oldValue, newValue) -> {
-        //            if (newValue != null)
-        //        });
-        //        modelPaintCommand.imageProperty().bind(imageBinding);
-        
-        modelPaintCommand.boundsBinding().widthProperty().set(getGameMap().getTileSize());
-        modelPaintCommand.boundsBinding().heightProperty().set(getGameMap().getTileSize());
-        
-        //        modelPaintCommand.boundsBinding().xProperty().bind(xPaintPositionBinding);
-        //        modelPaintCommand.boundsBinding().yProperty().bind(yPaintPositionBinding);
-        
-        paintBoundsBinding.addListener((observable, oldValue, newValue) -> needsUpdate = true);
+        getDefinition().boundsBinding().addListener((observable, oldValue, newValue) -> needsUpdate = true);
         imageBinding.addListener((observable, oldValue, newValue) -> needsUpdate = true);
         
         modelPaintCommand.setPaintPriority(1);
@@ -108,19 +87,11 @@ public class GameObjectModel
     //<editor-fold desc="--- PROPERTIES ---">
     
     public final GameObject getOwner() { return owner; }
+    public final GameObjectModelDefinition getDefinition() { return modelDefinition; }
     
     
     public final ImagePaintCommand getPaintCommand() { return modelPaintCommand; }
     
-    
-    private IntegerBinding xPaintPositionBinding() { return xPaintPositionBinding; }
-    private int getPaintPositionX() { return xPaintPositionBinding.get(); }
-    
-    private IntegerBinding yPaintPositionBinding() { return yPaintPositionBinding; }
-    private int getPaintPositionY() { return yPaintPositionBinding.get(); }
-    
-    private ObjectBinding<Bounds> paintBoundsBinding() { return paintBoundsBinding; }
-    private Bounds getPaintBounds() { return paintBoundsBinding.get(); }
     
     
     public final ObjectBinding<Image> imageBinding() { return imageBinding; }
@@ -152,7 +123,8 @@ public class GameObjectModel
     //
     
     @Override public void onGfxUpdate() {
-        modelPaintCommand.boundsBinding().setBounds(getPaintBounds());
+        printer().get(getClass()).print("Updating GameObject Gfx: " + getDefinition().getBounds());
+        modelPaintCommand.boundsBinding().setBounds(getDefinition().getBounds());
         modelPaintCommand.setImage(getImage());
         
         needsUpdate = false;

@@ -58,7 +58,7 @@ public class GameViewContent
         
         this.gameMapProperty = new SimpleObjectProperty<>();
         
-        this.testObject = new GameObject(this);
+        this.testObject = new GameObject(this, "test_obj");
         this.testObject2 = new GameObject(this);
     }
     
