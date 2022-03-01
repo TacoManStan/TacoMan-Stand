@@ -1,6 +1,8 @@
 package com.taco.suit_lady.game.objects;
 
 import com.taco.suit_lady.util.tools.*;
+import com.taco.suit_lady.util.tools.printer.PrintData;
+import com.taco.suit_lady.util.tools.printer.Printer;
 import com.taco.suit_lady.util.tools.util.CardinalDirection;
 import com.taco.suit_lady.util.tools.util.NumberValuePair;
 import javafx.beans.binding.IntegerBinding;
@@ -52,6 +54,13 @@ public class CollisionBox extends CollisionArea {
         this.locationBindingNE = BindingsSL.objBinding(() -> new NumberValuePair(getMaxX(), getY()), xMaxBinding, yProperty);
         this.locationBindingSW = BindingsSL.objBinding(() -> new NumberValuePair(getX(), getMaxY()), xProperty, yMaxBinding);
         this.locationBindingSE = BindingsSL.objBinding(() -> new NumberValuePair(getMaxX(), getMaxY()), xMaxBinding, yMaxBinding);
+        
+        this.init();
+    }
+    
+    private void init() {
+        printer().get(CollisionMap.class).setTitle("CollisionMap");
+        printer().get(CollisionMap.class).setEnabled(false);
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
@@ -144,16 +153,16 @@ public class CollisionBox extends CollisionArea {
         return sync(() -> {
             if (other != null) {
                 if (other instanceof CollisionBox otherBox) {
-                    Print.print("Checking CollisionBox...");
-                    debugger().printList(Arrays.stream(getLocations()).toList(), "HeheXD 1");
-                    debugger().printList(Arrays.stream(otherBox.getLocations()).toList(), "HeheXD 2");
-                    Print.print("X: " + getX());
-                    Print.print("Y: " + getY());
-                    Print.print("Max X: " + getMaxX());
-                    Print.print("Max Y: " + getMaxY());
+                    printer().get(CollisionMap.class).print("Checking CollisionBox...");
+//                    debugger().printList(Arrays.stream(getLocations()).toList(), "HeheXD 1");
+//                    debugger().printList(Arrays.stream(otherBox.getLocations()).toList(), "HeheXD 2");
+                    printer().get(CollisionMap.class).print("X: " + getX());
+                    printer().get(CollisionMap.class).print("Y: " + getY());
+                    printer().get(CollisionMap.class).print("Max X: " + getMaxX());
+                    printer().get(CollisionMap.class).print("Max Y: " + getMaxY());
                     for (NumberValuePair point: otherBox.getLocations())
                         if (containsPoint(point)) {
-                            Print.err("alskudfhakljsdf");
+                            printer().get(CollisionMap.class).err("alskudfhakljsdf");
                             return true;
                         }
                     return false;

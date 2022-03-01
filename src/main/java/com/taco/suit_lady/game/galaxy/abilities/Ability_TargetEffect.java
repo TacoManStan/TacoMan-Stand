@@ -1,22 +1,12 @@
 package com.taco.suit_lady.game.galaxy.abilities;
 
-import com.taco.suit_lady.game.commands.MoveCommand;
 import com.taco.suit_lady.game.galaxy.effects.Effect;
-import com.taco.suit_lady.game.galaxy.effects.Effect_LaunchMissile;
 import com.taco.suit_lady.game.objects.GameObject;
-import com.taco.suit_lady.game.objects.MapObject;
-import com.taco.suit_lady.logic.LogiCore;
-import com.taco.suit_lady.logic.triggers.Galaxy;
-import com.taco.suit_lady.util.tools.Print;
 import com.taco.suit_lady.util.tools.PropertiesSL;
-import com.taco.suit_lady.util.tools.list_tools.ListsSL;
-import com.taco.suit_lady.util.tools.util.ValuePair;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Map;
 
 public abstract class Ability_TargetEffect<E extends Effect> extends Ability {
     

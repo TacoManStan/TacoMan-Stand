@@ -8,7 +8,7 @@ import com.taco.suit_lady.logic.GameTask;
 import com.taco.suit_lady.logic.triggers.implementations.UnitArrivedEvent;
 import com.taco.suit_lady.util.tools.BindingsSL;
 import com.taco.suit_lady.util.tools.ExceptionsSL;
-import com.taco.suit_lady.util.tools.Print;
+import com.taco.suit_lady.util.tools.printer.Printer;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import com.taco.suit_lady.util.tools.util.NumberValuePair;
@@ -20,8 +20,6 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 public class MoveCommand
@@ -63,9 +61,9 @@ public class MoveCommand
         
         this.targetBinding.addListener((observable, oldValue, newValue) -> {
             if (isDebugEnabled()) {
-                Print.print("Movement Target Updated  [ " + oldValue + "  -->  " + newValue + " ]", false);
-                Print.print("Test Object Location: " + getOwner().getLocation(false), false);
-                Print.print("Test Object Location Centered: " + getOwner().getLocation(true), false);
+                Printer.print("Movement Target Updated  [ " + oldValue + "  -->  " + newValue + " ]", false);
+                Printer.print("Test Object Location: " + getOwner().getLocation(false), false);
+                Printer.print("Test Object Location Centered: " + getOwner().getLocation(true), false);
             }
         });
         
@@ -180,7 +178,7 @@ public class MoveCommand
     public final @NotNull Point2D moveAndBindLegacy(@NotNull ObservableValue<? extends Number> observableTargetX, @NotNull ObservableValue<? extends Number> observableTargetY) {
         return ToolsFX.requireFX(() -> {
             if (isDebugEnabled())
-                Print.err("Move and Bind:  [" + observableTargetX.getValue() + ", " + observableTargetY.getValue() + "]", false);
+                Printer.err("Move and Bind:  [" + observableTargetX.getValue() + ", " + observableTargetY.getValue() + "]", false);
             
             final Point2D oldValue = getTargetPoint();
             if (!xTargetProperty.isBound() && !yTargetProperty.isBound()) {
@@ -188,7 +186,7 @@ public class MoveCommand
                 yTargetProperty.bind(observableTargetY);
                 setPaused(false);
                 
-                Print.err("Move and Bind 2a:  [" + observableTargetX.getValue() + ", " + observableTargetY.getValue() + "]", false);
+                Printer.err("Move and Bind 2a:  [" + observableTargetX.getValue() + ", " + observableTargetY.getValue() + "]", false);
             }
             
             return oldValue;
@@ -198,7 +196,7 @@ public class MoveCommand
     public final @NotNull Point2D moveAndBind(@NotNull ObservableValue<? extends Number> observableTargetX, @NotNull ObservableValue<? extends Number> observableTargetY) {
         return ToolsFX.requireFX(() -> {
             if (isDebugEnabled())
-                Print.err("Move and Bind:  [" + observableTargetX.getValue() + ", " + observableTargetY.getValue() + "]", false);
+                Printer.err("Move and Bind:  [" + observableTargetX.getValue() + ", " + observableTargetY.getValue() + "]", false);
             
             final Point2D oldValue = getTargetPoint();
             setObservableTargetX(observableTargetX);
@@ -206,7 +204,7 @@ public class MoveCommand
             setPaused(false);
             
             if (isDebugEnabled())
-                Print.err("Move and Bind 2b:  [" + observableTargetX.getValue() + ", " + observableTargetY.getValue() + "]", false);
+                Printer.err("Move and Bind 2b:  [" + observableTargetX.getValue() + ", " + observableTargetY.getValue() + "]", false);
             
             return oldValue;
         });
@@ -265,14 +263,14 @@ public class MoveCommand
                 } else
                     getOwner().moveY(yMovement);
                 
-                Print.print("Checking Collisions...");
+                Printer.print("Checking Collisions...");
                 debugger().printList(getOwner().collisionMap().collisionAreas(), "Owner Collision");
                 for (int i = 0; i < getGameMap().gameObjects().size(); i++) {
                     GameObject obj = getGameMap().gameObjects().get(i);
                     debugger().printList(obj.collisionMap().collisionAreas(), "Collision Areas For: " + obj);
                 }
                 if (getGameMap().gameObjects().stream().anyMatch(gameObject -> gameObject.collidesWith(this))) {
-                    Print.print("Collision Detected");
+                    Printer.print("Collision Detected");
                     getOwner().setLocation(oldLoc, true);
                     setPaused(true);
                 }

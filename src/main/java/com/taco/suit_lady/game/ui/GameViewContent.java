@@ -17,6 +17,7 @@ import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.*;
+import com.taco.suit_lady.util.tools.printer.Printer;
 import com.taco.suit_lady.util.tools.util.ValuePair;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ObjectProperty;
@@ -212,7 +213,7 @@ public class GameViewContent
     }
     
     private void abilityTest(int abilityNum) {
-        Print.print("Ability Used: " + abilityNum);
+        Printer.print("Ability Used: " + abilityNum);
         if (abilityNum == 1)
             new Ability_LaunchMissile(testObject).use(new ValuePair<>("target", getController().getMouseOnMapSafe()));
     }
@@ -287,7 +288,7 @@ public class GameViewContent
             //            case LEFT -> shiftTile(0, -1);
             //            case RIGHT -> shiftTile(0, 1);
             
-            default -> Print.err("Unrecognized Direction :" + direction);
+            default -> Printer.err("Unrecognized Direction :" + direction);
         }
     }
     
@@ -296,7 +297,7 @@ public class GameViewContent
         if (selectedTile != null)
             getUIData().setSelectedTile(getGameMap().getTileAtTileIndex(selectedTile.getTileLocationX() + xShift, selectedTile.getTileLocationY() + yShift));
         else
-            Print.err("Selected Tile is Null.");
+            Printer.err("Selected Tile is Null.");
     }
     
     //

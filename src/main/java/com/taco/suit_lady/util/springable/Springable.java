@@ -1,14 +1,13 @@
 package com.taco.suit_lady.util.springable;
 
 import com.taco.suit_lady._to_sort._new.Debugger;
-import com.taco.suit_lady.game.interfaces.GameComponent;
-import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.logic.LogiCore;
 import com.taco.suit_lady.logic.triggers.TriggerEventManager;
 import com.taco.suit_lady.ui.ContentManager;
 import com.taco.suit_lady.ui.Sidebar;
 import com.taco.suit_lady.ui.console.Console;
 import com.taco.suit_lady.ui.AppUI;
+import com.taco.suit_lady.util.tools.printer.Printer;
 import com.taco.suit_lady.util.tools.TasksSL;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
@@ -16,8 +15,6 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
-
-import java.util.function.Supplier;
 
 /**
  * <p>Guarantees that all implementing classes will have direct access to...</p>
@@ -78,6 +75,7 @@ public interface Springable {
     
     // TO-DOC
     default @NotNull Debugger debugger() { return getSafely(Debugger.class); }
+    default @NotNull Printer printer() { return getSafely(Printer.class); }
     
     // TO-DOC
     default @NotNull LogiCore logiCore() { return getSafely(LogiCore.class); }

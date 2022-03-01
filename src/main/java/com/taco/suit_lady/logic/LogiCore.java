@@ -11,12 +11,10 @@ import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.timing.Timer;
 import com.taco.suit_lady.util.timing.Timers;
-import com.taco.suit_lady.util.tools.ArraysSL;
-import com.taco.suit_lady.util.tools.Print;
+import com.taco.suit_lady.util.tools.printer.Printer;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import com.taco.suit_lady.util.tools.TasksSL;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
-import com.taco.suit_lady.util.tools.list_tools.ListsSL;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -103,10 +101,10 @@ public class LogiCore
     private void startup(@NotNull Object @NotNull [] params) {
         gameProperty.set((GameViewContent) params[0]);
         
-        Print.print("Starting Up");
+        Printer.print("Starting Up");
         tickables.addListener((ListChangeListener<? super Tickable<?>>) c -> {
             needsCopyRefresh = true;
-            Print.err("Value Changed");
+            Printer.err("Value Changed");
         });
         needsCopyRefresh = true;
         //        ListsSL.applyListener(null, tickables, op -> {
@@ -248,7 +246,7 @@ public class LogiCore
     }
     
     private void shutdown() {
-        Print.err("Shutting Down LogiCore");
+        Printer.err("Shutting Down LogiCore");
         gameLoopExecutor.shutdown();
         //        sequentialExecutor.shutdown();
         //        scheduledExecutor.shutdown();

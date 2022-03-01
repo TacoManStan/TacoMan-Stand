@@ -8,7 +8,6 @@ import com.taco.suit_lady.logic.triggers.implementations.UnitArrivedEvent;
 import com.taco.suit_lady.logic.triggers.implementations.UnitArrivedTrigger;
 import com.taco.suit_lady.logic.triggers.implementations.UnitMovedEvent;
 import com.taco.suit_lady.logic.triggers.implementations.UnitMovedTrigger;
-import com.taco.suit_lady.util.tools.Print;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

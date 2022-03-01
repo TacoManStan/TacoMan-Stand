@@ -4,7 +4,7 @@ import com.taco.suit_lady.game.interfaces.WrappedGameComponent;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.util.tools.BindingsSL;
-import com.taco.suit_lady.util.tools.Print;
+import com.taco.suit_lady.util.tools.printer.Printer;
 import com.taco.suit_lady.util.tools.TasksSL;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.Property;
@@ -170,7 +170,7 @@ public class AttributeManager
     public static <T> @NotNull Function<Attribute<T>, Region> getValuePaneFactory() {
         return attribute -> {
             if (attribute == null)
-                Print.err("Attribute cannot be null.");
+                Printer.err("Attribute cannot be null.");
             
             final Label label = new Label();
             label.textProperty().bind(BindingsSL.stringBinding(() -> attribute.getValue() != null ? attribute.getValue().toString() : "Attribute Value is Null", attribute.valueProperty()));
