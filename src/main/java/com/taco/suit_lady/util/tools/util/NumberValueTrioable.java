@@ -4,10 +4,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 
-public interface NumberValueTrioable
-        extends ValueTrioable<Number, Number, Number>, NumberValuePairable {
+public interface NumberValueTrioable<T extends NumberValueTrioable<T>>
+        extends ValueTrioable<Number, Number, Number>, NumberValuePairable<T> {
     
-    @NotNull NumberValueTrioable modify(Function<Number, Number> aFunction, Function<Number, Number> bFunction, Function<Number, Number> cFunction);
+    @NotNull T modify(Function<Number, Number> aFunction, Function<Number, Number> bFunction, Function<Number, Number> cFunction);
     
     //<editor-fold desc="--- DEFAULT METHODS ---">
     

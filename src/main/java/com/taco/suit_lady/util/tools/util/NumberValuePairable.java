@@ -4,10 +4,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 
-public interface NumberValuePairable
-        extends ValuePairable<Number, Number>, NumberValueable {
+public interface NumberValuePairable<T extends NumberValuePairable<T>>
+        extends ValuePairable<Number, Number>, NumberValueable<T> {
     
-    @NotNull NumberValuePairable modify(Function<Number, Number> aFunction, Function<Number, Number> bFunction);
+    @NotNull T modify(Function<Number, Number> aFunction, Function<Number, Number> bFunction);
     
     //<editor-fold desc="--- DEFAULT METHODS ---">
     
@@ -19,9 +19,19 @@ public interface NumberValuePairable
     default float bFloat() { return ValueUtil.asFloat(b()); }
     default double bDouble() { return ValueUtil.asDouble(b()); }
     
-    //
     
     default NumberValuePair asNumberValuePair() { return new NumberValuePair(a(), b()); }
+    
+    //
+    
+    default T modify(@NotNull CardinalDirection direction) { return modify(direction, 1, 1); }
+    default T modify(@NotNull CardinalDirection direction, @NotNull Number magnitude) { return modify(direction, magnitude, magnitude); }
+    default T modify(@NotNull CardinalDirection direction, @NotNull NumberValuePairable<?> magnitude) { return modify(direction, magnitude.a(), magnitude.b()); }
+    default T modify(@NotNull CardinalDirection direction, @NotNull Number xMagnitude, @NotNull Number yMagnitude) {
+        return modify(
+                numA -> numA.doubleValue() + (direction.xMod() * xMagnitude.doubleValue()),
+                numB -> numB.doubleValue() + (direction.yMod() * yMagnitude.doubleValue()));
+    }
     
     //</editor-fold>
 }

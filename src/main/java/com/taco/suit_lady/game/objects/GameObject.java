@@ -12,6 +12,7 @@ import com.taco.suit_lady.logic.TaskManager;
 import com.taco.suit_lady.logic.Tickable;
 import com.taco.suit_lady.logic.triggers.Galaxy;
 import com.taco.suit_lady.logic.triggers.implementations.UnitMovedEvent;
+import com.taco.suit_lady.ui.jfx.util.Dimensions;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.tools.*;
@@ -32,12 +33,13 @@ import java.io.Serial;
 import java.util.ArrayList;
 
 public class GameObject
-        implements WrappedGameComponent, Entity, MapObject, JObject, JLoadable, UIDProcessable, Tickable<GameObject> {
+        implements WrappedGameComponent, Entity, MapObject, JObject, JLoadable, UIDProcessable, Tickable<GameObject>, Collidable {
     
     private final GameViewContent content;
     
     private final GameObjectModel model;
     private final AttributeManager attributes;
+    private final CollisionMap collisionMap;
     
     
     private final DoubleProperty xLocationProperty;
@@ -54,6 +56,8 @@ public class GameObject
     private final ObjectBinding<Point2D> locationBinding;
     private final ObjectBinding<Point2D> locationCenteredBinding;
     
+    private final ObjectBinding<Dimensions> dimensionsBinding;
+    
     private ObjectBinding<GameTile[][]> occupiedTilesBinding = null;
     private final ListProperty<GameTile> occupiedTilesList;
     
@@ -69,6 +73,7 @@ public class GameObject
         
         this.model = new GameObjectModel(this);
         this.attributes = new AttributeManager(this);
+        this.collisionMap = new CollisionMap(this);
         
         
         this.xLocationProperty = new SimpleDoubleProperty();
@@ -84,6 +89,8 @@ public class GameObject
         
         this.locationBinding = BindingsSL.objBinding(() -> new Point2D(getLocationX(false), getLocationY(false)), xLocationProperty, yLocationProperty);
         this.locationCenteredBinding = BindingsSL.objBinding(() -> new Point2D(getLocationX(true), getLocationY(true)), xLocationProperty, yLocationProperty);
+        
+        this.dimensionsBinding = BindingsSL.objBinding(() -> new Dimensions(getWidth(), getHeight()), widthProperty, heightProperty);
         
         //
         
@@ -116,8 +123,9 @@ public class GameObject
         
         initTriggerEvents();
         initTaskManager();
+        initCollisionMap();
         
-//        locationBinding.addListener((observable, oldValue, newValue) -> Print.print("GameObject Location Changed:  [ " + oldValue + "  -->  " + newValue + " ]", false));
+        //        locationBinding.addListener((observable, oldValue, newValue) -> Print.print("GameObject Location Changed:  [ " + oldValue + "  -->  " + newValue + " ]", false));
         
         return this;
     }
@@ -142,13 +150,37 @@ public class GameObject
         taskManager().addShutdownOperation(() -> ArraysSL.iterateMatrix(tile -> tile.getOccupyingObjects().remove(this), getOccupiedTiles()));
     }
     
+    private CollisionBox collisionBox = null;
+    
+    private void initCollisionMap() {
+        logiCore().execute(() -> {
+            collisionBox = new CollisionBox(collisionMap());
+            
+            xLocationProperty.addListener((observable, oldValue, newValue) -> refreshCollisionData());
+            locationBinding.addListener((observable, oldValue, newValue) -> refreshCollisionData());
+            
+            refreshCollisionData();
+            
+            collisionMap().addCollisionArea(collisionBox);
+        });
+    }
+    
+    private void refreshCollisionData() {
+//        Print.print("Refreshing Collision Data");
+        collisionBox.setWidth(getWidth());
+        collisionBox.setHeight(getHeight());
+        collisionBox.setX(getLocationX().intValue());
+        collisionBox.setY(getLocationY().intValue());
+    }
+    
     //</editor-fold>
     
     //<editor-fold desc="--- PROPERTIES ---">
     
+    public final @NotNull GameObjectModel getModel() { return model; }
     public final @NotNull AttributeManager attributes() { return attributes; }
+    @Override public final @NotNull CollisionMap collisionMap() { return collisionMap; }
     
-    public final GameObjectModel getModel() { return model; }
     public final MoveCommand getCommand() { return command; }
     public final String getObjID() { return objID; }
     
@@ -198,8 +230,6 @@ public class GameObject
     
     //</editor-fold>
     
-    public final boolean isAtPoint(@NotNull Point2D point) { return isAtPoint(point, true); }
-    public final boolean isAtPoint(@NotNull Point2D point, boolean center) { return Math.abs(Math.round((getLocationX(center))) - Math.round(point.getX())) == 0 && Math.abs(Math.round(getLocationY(center)) - Math.round(point.getY())) == 0; }
     
     public final IntegerProperty widthProperty() { return widthProperty; }
     public final int getWidth() { return widthProperty.get(); }
@@ -208,6 +238,10 @@ public class GameObject
     public final IntegerProperty heightProperty() { return heightProperty; }
     public final int getHeight() { return heightProperty.get(); }
     public final int setHeight(int newValue) { return PropertiesSL.setProperty(heightProperty, newValue); }
+    
+    
+    public final ObjectBinding<Dimensions> dimensionsBinding() { return dimensionsBinding; }
+    public final Dimensions getDimensions() { return dimensionsBinding.get(); }
     
     //</editor-fold>
     
@@ -286,6 +320,8 @@ public class GameObject
     
     //</editor-fold>
     
+    //<editor-fold desc="--- LOGIC ---">
+    
     private @NotNull GameTile[][] calculateOccupiedTiles() {
         final int adjustedMinX = (int) Math.floor(getLocationX(false) / getGameMap().getTileSize());
         final int adjustedMinY = (int) Math.floor(getLocationY(false) / getGameMap().getTileSize());
@@ -300,4 +336,14 @@ public class GameObject
         
         return occupyingGameTiles;
     }
+    
+    
+    public final boolean isAtPoint(@NotNull Point2D point) { return isAtPoint(point, true); }
+    public final boolean isAtPoint(@NotNull Point2D point, boolean center) {
+        final double v1 = Math.round((getLocationX(center))) - Math.round(point.getX());
+        final double v2 = Math.round(getLocationY(center)) - Math.round(point.getY());
+        return Math.abs(v1) == 0 && Math.abs(v2) == 0;
+    }
+    
+    //</editor-fold>
 }

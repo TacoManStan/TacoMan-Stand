@@ -1,6 +1,5 @@
 package com.taco.suit_lady.game.attributes;
 
-import com.taco.suit_lady.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.ui.ui_internal.controllers.CellController;
 import com.taco.suit_lady.util.tools.BindingsSL;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;

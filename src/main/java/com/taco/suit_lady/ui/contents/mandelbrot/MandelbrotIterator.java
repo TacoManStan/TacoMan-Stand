@@ -20,7 +20,7 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor> {
     private CanvasSurface canvas;
     
     public MandelbrotIterator(@NotNull Springable springable, @Nullable ReentrantLock lock, @NotNull MandelbrotContentData data, @NotNull CanvasSurface canvas, @NotNull ProgressIndicator... progressIndicators) {
-        super(springable, lock, ArraysSL.concat(new Object[]{data, canvas}, progressIndicators));
+        super(springable, lock, ArraysSL.concatMulti(new Object[]{data, canvas}, progressIndicators));
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">

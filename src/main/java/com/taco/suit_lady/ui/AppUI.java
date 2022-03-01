@@ -11,8 +11,6 @@ import javafx.geometry.Point2D;
 import javafx.scene.layout.Region;
 import javafx.scene.robot.Robot;
 import net.rgielen.fxweaver.core.FxWeaver;
-import org.docx4j.wml.P;
-import org.docx4j.wml.R;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;

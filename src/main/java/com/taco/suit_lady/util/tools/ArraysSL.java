@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.function.*;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class ArraysSL {
@@ -421,7 +422,7 @@ public class ArraysSL {
      * array.
      */
     @SafeVarargs
-    public static <T> T[] concat(T[]... arrs) {
+    public static <T> T[] concatMulti(T[]... arrs) {
         if (arrs != null)
             if (arrs.length > 1) {
                 int totalLength = 0;
@@ -441,8 +442,11 @@ public class ArraysSL {
     }
     
     @SafeVarargs
+    public static <T> T[] concat(T[] arr, T... toConcat) { return concat(true, arr, toConcat); }
+    
+    @SafeVarargs
     public static <T> T[] concat(boolean append, T[] arr, T... toConcat) {
-        return append ? concat(arr, toConcat) : concat(toConcat, arr);
+        return append ? concatMulti(arr, toConcat) : concatMulti(toConcat, arr);
     }
     
     /**
@@ -461,6 +465,19 @@ public class ArraysSL {
         System.arraycopy(arr2, 0, copy, arr1.length, arr2.length);
         return copy;
     }
+    
+    
+    @SafeVarargs public static <T, R> R[] convert(@NotNull Function<T, R> converter, @NotNull R[] resultArr, boolean allowMismatch, @NotNull T... inputArr) {
+        if ((!allowMismatch && inputArr.length != resultArr.length) || inputArr.length < resultArr.length)
+            throw ExceptionsSL.unsupported("Array Length Mismatch:  [" + resultArr.length + " :: " + inputArr.length + "]");
+        IntStream.range(0, inputArr.length).forEach(i -> resultArr[i] = converter.apply(inputArr[i]));
+        return resultArr;
+    }
+    
+    @SafeVarargs public static <T, R> R[] convert(@NotNull Function<T, R> converter, @NotNull R[] resultArr, @NotNull T... inputArr) {
+        return convert(converter, resultArr, false, inputArr);
+    }
+    
     
     /**
      * Calculates the median of the specified array of ints.

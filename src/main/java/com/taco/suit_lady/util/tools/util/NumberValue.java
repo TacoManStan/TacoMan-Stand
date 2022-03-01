@@ -7,8 +7,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Function;
 
 public record NumberValue(Number a)
-        implements NumberValueable {
+        implements NumberValueable<NumberValue> {
     
     @Contract("_ -> new")
-    @Override public @NotNull NumberValue modify(@NotNull Function<Number, Number> aFunction) { return new NumberValue(aFunction.apply(a())); }
+    @Override public @NotNull NumberValue modify(@NotNull Function<Number, Number> aFunction) {
+        return new NumberValue(aFunction.apply(a()));
+    }
 }

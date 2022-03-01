@@ -1,6 +1,8 @@
 package com.taco.suit_lady.game.commands;
 
 import com.taco.suit_lady.game.attributes.Attribute;
+import com.taco.suit_lady.game.objects.Collidable;
+import com.taco.suit_lady.game.objects.CollisionMap;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.logic.GameTask;
 import com.taco.suit_lady.logic.triggers.implementations.UnitArrivedEvent;
@@ -12,16 +14,19 @@ import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import com.taco.suit_lady.util.tools.util.NumberValuePair;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;
-import javafx.beans.value.ObservableObjectValue;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
-public class MoveCommand extends GameTask<GameObject> {
+public class MoveCommand
+        extends GameTask<GameObject>
+        implements Collidable {
     
     public static final String SPEED_ID = "move-speed";
     public static final String MAX_SPEED_ID = "max-speed";
@@ -259,6 +264,18 @@ public class MoveCommand extends GameTask<GameObject> {
                         getOwner().setLocationY(getTargetY(), true);
                 } else
                     getOwner().moveY(yMovement);
+                
+                Print.print("Checking Collisions...");
+                debugger().printList(getOwner().collisionMap().collisionAreas(), "Owner Collision");
+                for (int i = 0; i < getGameMap().gameObjects().size(); i++) {
+                    GameObject obj = getGameMap().gameObjects().get(i);
+                    debugger().printList(obj.collisionMap().collisionAreas(), "Collision Areas For: " + obj);
+                }
+                if (getGameMap().gameObjects().stream().anyMatch(gameObject -> gameObject.collidesWith(this))) {
+                    Print.print("Collision Detected");
+                    getOwner().setLocation(oldLoc, true);
+                    setPaused(true);
+                }
             }
             
             final Point2D newLoc = new Point2D(getOwner().getLocationX(true), getOwner().getLocationY(true));
@@ -270,8 +287,9 @@ public class MoveCommand extends GameTask<GameObject> {
         }
     }
     @Override protected void shutdown() { }
-    
     @Override protected boolean isDone() { return false; }
+    
+    @Override public @NotNull CollisionMap collisionMap() { return getOwner().collisionMap(); }
     
     //</editor-fold>
 }

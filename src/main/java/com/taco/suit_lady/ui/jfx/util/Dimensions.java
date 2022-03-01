@@ -12,7 +12,7 @@ import java.io.Serializable;
 import java.util.function.Function;
 
 public record Dimensions(int width, int height)
-        implements Serializable, NumberValuePairable {
+        implements Serializable, NumberValuePairable<Dimensions> {
     
     //<editor-fold desc="--- COPY METHODS ---">
     
@@ -37,7 +37,8 @@ public record Dimensions(int width, int height)
     @Override public @Nullable Integer a() { return width(); }
     @Override public @Nullable Integer b() { return height(); }
     
-    @Override public @NotNull NumberValueable modify(Function<Number, Number> aFunction) { return new Dimensions(aFunction.apply(a()).intValue(), b()); }
+    
+    @Override public @NotNull Dimensions modify(Function<Number, Number> aFunction) { return new Dimensions(aFunction.apply(a()).intValue(), b()); }
     @Override public @NotNull Dimensions modify(Function<Number, Number> aFunction, Function<Number, Number> bFunction) { return new Dimensions(aFunction.apply(a()).intValue(), bFunction.apply(b()).intValue()); }
     
     //

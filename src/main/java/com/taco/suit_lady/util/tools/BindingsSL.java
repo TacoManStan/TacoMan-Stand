@@ -89,42 +89,42 @@ public class BindingsSL {
      * <p><i>See {@link #objBinding(Callable, Observable...)}</i></p>
      */
     public static @NotNull BooleanBinding directBoolBinding(@NotNull ObservableValue<Boolean> observableValue, Observable... dependencies) {
-        return Bindings.createBooleanBinding(() -> observableValue.getValue(), ArraysSL.concat(new Observable[]{observableValue}, dependencies));
+        return Bindings.createBooleanBinding(() -> observableValue.getValue(), ArraysSL.concatMulti(new Observable[]{observableValue}, dependencies));
     }
     
     /**
      * <p><i>See {@link #objBinding(Callable, Observable...)}</i></p>
      */
     public static @NotNull IntegerBinding directIntBinding(@NotNull ObservableValue<? extends Number> observableValue, Observable... dependencies) {
-        return Bindings.createIntegerBinding(() -> observableValue.getValue().intValue(), ArraysSL.concat(new Observable[]{observableValue}, dependencies));
+        return Bindings.createIntegerBinding(() -> observableValue.getValue().intValue(), ArraysSL.concatMulti(new Observable[]{observableValue}, dependencies));
     }
     
     /**
      * <p><i>See {@link #objBinding(Callable, Observable...)}</i></p>
      */
     public static @NotNull LongBinding directLongBinding(@NotNull ObservableValue<? extends Number> observableValue, Observable... dependencies) {
-        return Bindings.createLongBinding(() -> observableValue.getValue().longValue(), ArraysSL.concat(new Observable[]{observableValue}, dependencies));
+        return Bindings.createLongBinding(() -> observableValue.getValue().longValue(), ArraysSL.concatMulti(new Observable[]{observableValue}, dependencies));
     }
     
     /**
      * <p><i>See {@link #objBinding(Callable, Observable...)}</i></p>
      */
     public static @NotNull FloatBinding directFloatBinding(@NotNull ObservableValue<? extends Number> observableValue, Observable... dependencies) {
-        return Bindings.createFloatBinding(() -> observableValue.getValue().floatValue(), ArraysSL.concat(new Observable[]{observableValue}, dependencies));
+        return Bindings.createFloatBinding(() -> observableValue.getValue().floatValue(), ArraysSL.concatMulti(new Observable[]{observableValue}, dependencies));
     }
     
     /**
      * <p><i>See {@link #objBinding(Callable, Observable...)}</i></p>
      */
     public static @NotNull DoubleBinding directDoubleBinding(@NotNull ObservableValue<? extends Number> observableValue, Observable... dependencies) {
-        return Bindings.createDoubleBinding(() -> observableValue.getValue().doubleValue(), ArraysSL.concat(new Observable[]{observableValue}, dependencies));
+        return Bindings.createDoubleBinding(() -> observableValue.getValue().doubleValue(), ArraysSL.concatMulti(new Observable[]{observableValue}, dependencies));
     }
     
     /**
      * <p><i>See {@link #objBinding(Callable, Observable...)}</i></p>
      */
     public static @NotNull StringBinding directStringBinding(@NotNull ObservableValue<String> observableValue, Observable... dependencies) {
-        return Bindings.createStringBinding(() -> observableValue.getValue(), ArraysSL.concat(new Observable[]{observableValue}, dependencies));
+        return Bindings.createStringBinding(() -> observableValue.getValue(), ArraysSL.concatMulti(new Observable[]{observableValue}, dependencies));
     }
     
     /**
@@ -152,7 +152,7 @@ public class BindingsSL {
      * @return A new {@link Binding} object bound to reflect the {@link ObservableValue#getValue() value} of the specified {@link ObservableValue} object.
      */
     public static <T> @NotNull ObjectBinding<T> directObjBinding(@NotNull ObservableValue<T> observableValue, Observable... dependencies) {
-        return Bindings.createObjectBinding(() -> observableValue.getValue(), ArraysSL.concat(new Observable[]{observableValue}, dependencies));
+        return Bindings.createObjectBinding(() -> observableValue.getValue(), ArraysSL.concatMulti(new Observable[]{observableValue}, dependencies));
     }
     
     //</editor-fold>
@@ -445,7 +445,7 @@ public class BindingsSL {
             updateObservable.addListener((observable, oldValue, newValue) -> update(oldValue, newValue));
             binding = Bindings.createObjectBinding(
                     backingBindingProperty::get,
-                    ArraysSL.concat(new Observable[]{backingBindingProperty}, updateBindings)
+                    ArraysSL.concatMulti(new Observable[]{backingBindingProperty}, updateBindings)
                                                   );
             binding.invalidate();
             update(updateObservable.getValue(), updateObservable.getValue());

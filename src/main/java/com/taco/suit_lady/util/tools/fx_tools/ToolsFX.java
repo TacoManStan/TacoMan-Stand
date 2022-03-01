@@ -61,6 +61,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.Callable;
+import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -204,27 +205,65 @@ public class ToolsFX {
     
     //
     
-    /**
-     * Throws a {@link RuntimeException} if the current {@link Thread} is not the FX Thread.
-     */
-    public static void requireFX() {
-        if (!isFXThread())
-            throw ExceptionsSL.ex(new IllegalStateException("Operation must be executed on the FX Thread."));
+    //<editor-fold desc="--- CHECK FX ---">
+    
+    //<editor-fold desc="> Require FX">
+    
+    public static void requireFX() { requireFX((Lock) null); }
+    public static void requireFX(@Nullable Lock lock) { checkFX(true, lock); }
+    
+    public static void requireFX(@Nullable Runnable action) { requireFX(null, action); }
+    public static void requireFX(@Nullable Lock lock, @Nullable Runnable action) { checkFX(true, lock, action); }
+    
+    public static <T> T requireFX(@Nullable Supplier<T> action) { return requireFX(null, action); }
+    public static <T> T requireFX(@Nullable Lock lock, @Nullable Supplier<T> action) { return checkFX(true, lock, action); }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="> Forbid FX">
+    
+    public static void forbidFX() { forbidFX((Lock) null); }
+    public static void forbidFX(@Nullable Lock lock) { checkFX(false, lock); }
+    
+    public static void forbidFX(@Nullable Runnable action) { forbidFX(null, action); }
+    public static void forbidFX(@Nullable Lock lock, @Nullable Runnable action) { checkFX(false, lock, action); }
+    
+    public static <T> T forbidFX(@Nullable Supplier<T> action) { return forbidFX(null, action); }
+    public static <T> T forbidFX(@Nullable Lock lock, @Nullable Supplier<T> action) { return checkFX(false, lock, action); }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="> Check FX">
+    
+    public static void checkFX(boolean require) { checkFX(require, null); }
+    public static void checkFX(boolean require, @Nullable Lock lock) {
+        TasksSL.sync(lock, () -> {
+            if (require && !isFXThread())
+                throw ExceptionsSL.ex(new IllegalStateException("Operation must be executed on the FX Thread."));
+            if (!require && isFXThread())
+                throw ExceptionsSL.ex(new IllegalStateException("Operation must NOT be executed on the FX Thread."));
+        }, true);
     }
     
-    public static void requireFX(@Nullable Runnable action) {
-        requireFX();
-        if (action != null)
-            action.run();
+    public static void checkFX(boolean require, @Nullable Lock lock, @Nullable Runnable action) {
+        checkFX(require, lock, () -> ObjectsSL.getIfNonNull(() -> action, v -> {
+            v.run();
+            return null;
+        }));
     }
     
-    public static <T> @Nullable T requireFX(@Nullable Supplier<T> action) {
-        requireFX();
-        if (action != null)
-            return action.get();
-        return null;
+    public static <T> T checkFX(boolean require, @Nullable Lock lock, @Nullable Supplier<T> action) {
+        return TasksSL.sync(lock, () -> {
+            checkFX(require);
+            return ObjectsSL.getIfNonNull(() -> action, v -> action.get());
+        }, true);
     }
     
+    //</editor-fold>
+    
+    //</editor-fold>
+    
+    //
     
     /**
      * Throws a {@link RuntimeException} if the current {@link Thread} is not the EDT.
@@ -445,10 +484,10 @@ public class ToolsFX {
                 return;
             }
             
-            Character[] _numbers = ArraysSL.concat(
+            Character[] _numbers = ArraysSL.concatMulti(
                     new Character[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', 'k', 'm', 'b'},
                     (allowDecimals ? new Character[]{'.'} : new Character[]{})
-                                                  );
+                                                       );
             int _periodCount = 0;
             
             for (char _c: _nStr.toCharArray())

@@ -4,10 +4,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 
-public interface NumberValueable
+public interface NumberValueable<T extends NumberValueable<T>>
         extends Valueable<Number> {
     
-    @NotNull NumberValueable modify(Function<Number, Number> aFunction);
+    @NotNull T modify(Function<Number, Number> aFunction);
     
     //<editor-fold desc="--- DEFAULT METHODS ---">
     
