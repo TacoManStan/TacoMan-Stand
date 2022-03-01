@@ -89,7 +89,7 @@ public class GameViewPageController extends UIPageController<GameViewPage>
             
             System.out.println("Test Object Location X: " + getGame().getTestObject().getLocationX(false));
             System.out.println("Test Object Location Y: " + getGame().getTestObject().getLocationY(false));
-    
+            
             System.out.println("Test Object Location X (Center): " + getGame().getTestObject().getLocationX(true));
             System.out.println("Test Object Location Y (Center): " + getGame().getTestObject().getLocationY(true));
         });
@@ -106,7 +106,15 @@ public class GameViewPageController extends UIPageController<GameViewPage>
         });
         testButton6.setText("Load Map");
         
-        testButton7.setOnAction(event -> { });
+        testButton7.setOnAction(event -> logiCore().execute(() -> {
+            printer().get(getClass()).print("Saving GameObject Model Definitions...");
+            getGameMap().gameObjects().forEach(gameObject -> {
+                printer().get(getClass()).print("Saving Definition: " + gameObject.getModel().getDefinition());
+                JFiles.save(gameObject.getModel().getDefinition());
+            });
+        }));
+        testButton7.setText("Model Definition Save Test");
+        
         testButton8.setOnAction(event -> { });
     }
     

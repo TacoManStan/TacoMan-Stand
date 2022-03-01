@@ -1,18 +1,24 @@
 package com.taco.suit_lady.game.objects;
 
+import com.github.cliftonlabs.json_simple.JsonObject;
 import com.taco.suit_lady.game.interfaces.WrappedGameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.ui.jfx.util.BoundsBinding;
 import com.taco.suit_lady.util.tools.BindingsSL;
 import com.taco.suit_lady.util.tools.PropertiesSL;
+import com.taco.tacository.json.*;
 import javafx.beans.binding.IntegerBinding;
+import javafx.beans.binding.StringBinding;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
+import javafx.beans.property.ReadOnlyStringProperty;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class GameObjectModelDefinition
-        implements WrappedGameComponent {
+        implements WrappedGameComponent, JObject, JLoadable {
     
     private final GameObjectModel model;
     
@@ -28,7 +34,15 @@ public class GameObjectModelDefinition
     private final BoundsBinding rawBoundsBinding;
     private BoundsBinding boundsBinding;
     
-    protected GameObjectModelDefinition(@NotNull GameObjectModel model) {
+    //
+    
+    private final ReadOnlyStringWrapper imageTypeProperty;
+    private final ReadOnlyStringWrapper imageIdProperty;
+    
+    private StringBinding jIdBinding;
+    private StringBinding jIdBindingUnsafe;
+    
+    protected GameObjectModelDefinition(@NotNull GameObjectModel model, @Nullable String imageType, @Nullable String imageId) {
         this.model = model;
         
         this.xOffsetProperty = new ReadOnlyIntegerWrapper();
@@ -38,29 +52,70 @@ public class GameObjectModelDefinition
         this.heightProperty = new ReadOnlyIntegerWrapper();
         
         this.rawBoundsBinding = new BoundsBinding(xOffsetProperty, yOffsetProperty, widthProperty, heightProperty);
+        
+        //
+        
+        this.imageTypeProperty = new ReadOnlyStringWrapper(imageType != null ? imageType : "units");
+        this.imageIdProperty = new ReadOnlyStringWrapper(imageId != null ? imageId : "taco");
     }
     
+    //<editor-fold desc="--- INITIALIZATION ---">
+    
     protected final GameObjectModelDefinition init() {
+        initBounds();
+        initJson();
+        
+        return this;
+    }
+    
+    //
+    
+    private void initBounds() {
         this.xLocationBinding = BindingsSL.intBinding(
                 () -> -getModel().getOwner().getGameMap().getModel().getCamera().getAggregateX() + getOffsetX() + getModel().getOwner().getLocationX(false),
                 xOffsetProperty, getModel().getOwner().xLocationProperty(), getModel().getOwner().getGameMap().getModel().getCamera().xAggregateBinding());
         this.yLocationBinding = BindingsSL.intBinding(
                 () -> -getModel().getOwner().getGameMap().getModel().getCamera().getAggregateY() + getOffsetY() + getModel().getOwner().getLocationY(false),
                 xOffsetProperty, getModel().getOwner().yLocationProperty(), getModel().getOwner().getGameMap().getModel().getCamera().yAggregateBinding());
-//        this.yLocationBinding = BindingsSL.intBinding(
-//                () -> getOffsetY() + getModel().getOwner().getLocationY(false),
-//                yOffsetProperty, getModel().getOwner().yLocationProperty());
+        //        this.yLocationBinding = BindingsSL.intBinding(
+        //                () -> getOffsetY() + getModel().getOwner().getLocationY(false),
+        //                yOffsetProperty, getModel().getOwner().yLocationProperty());
         
         this.boundsBinding = new BoundsBinding(xLocationBinding, yLocationBinding, widthProperty, heightProperty);
-        
-        return this;
     }
+    
+    private void initJson() {
+        printer().get(getClass()).print("Initializing JSON");
+        
+        this.jIdBinding = BindingsSL.stringBinding(() -> calcJId(true), imageTypeProperty, imageIdProperty);
+        this.jIdBindingUnsafe = BindingsSL.stringBinding(() -> calcJId(false), imageTypeProperty, imageIdProperty);
+        
+        this.jIdBinding.addListener((observable, oldValue, newValue) -> reload());
+        
+        reload();
+    }
+    
+    //</editor-fold>
     
     //<editor-fold desc="--- PROPERTIES ---">
     
     public final GameObjectModel getModel() { return model; }
     
-    //
+    
+    public final @NotNull ReadOnlyStringProperty readOnlyImageTypeProperty() { return imageTypeProperty.getReadOnlyProperty(); }
+    public final @NotNull String getImageType() { return imageTypeProperty.get(); }
+    protected final String setImageType(@NotNull String newValue) { return PropertiesSL.setProperty(imageTypeProperty, newValue); }
+    
+    public final @NotNull ReadOnlyStringProperty readOnlyImageIdProperty() { return imageIdProperty.getReadOnlyProperty(); }
+    public final @NotNull String getImageId() { return imageIdProperty.get(); }
+    protected final String setImageId(@NotNull String newValue) { return PropertiesSL.setProperty(imageIdProperty, newValue); }
+    
+    
+    public final @NotNull StringBinding jIdBinding(boolean safe) { return safe ? jIdBinding : jIdBindingUnsafe; }
+    public final @Nullable String getJId(boolean safe) { return jIdBinding(safe).get(); }
+    
+    
+    //<editor-fold desc="> Bounds">
     
     public final ReadOnlyIntegerProperty readOnlyOffsetPropertyX() { return xOffsetProperty.getReadOnlyProperty(); }
     public final int getOffsetX() { return xOffsetProperty.get(); }
@@ -95,11 +150,47 @@ public class GameObjectModelDefinition
     
     //</editor-fold>
     
+    //</editor-fold>
+    
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override public final @NotNull GameViewContent getGame() { return getModel().getGame(); }
     
+    //
+    
+    //<editor-fold desc="> JSON">
+    
+    //    @Override public String getJID() { return getImageType() + "-" + getImageId(); }
+    @Override public String getJID() { return getJId(true); }
+    
+    @Override public void load(JsonObject parent) {
+        printer().get(getClass()).print("Loading GameObjectModelDefinition");
+        
+        setImageType(JUtil.loadString(parent, "image-type"));
+        setImageId(JUtil.loadString(parent, "image-id"));
+        
+        setOffsetX(JUtil.loadInt(parent, "offset-x"));
+        setOffsetY(JUtil.loadInt(parent, "offset-y"));
+        setWidth(JUtil.loadInt(parent, "width"));
+        setHeight(JUtil.loadInt(parent, "height"));
+    }
+    
+    @Override public JElement[] jFields() {
+        return new JElement[]{
+                JUtil.create("image-type", getImageType()),
+                JUtil.create("image-id", getImageId()),
+                JUtil.create("offset-x", getOffsetX()),
+                JUtil.create("offset-y", getOffsetY()),
+                JUtil.create("width", getWidth()),
+                JUtil.create("height", getHeight())
+        };
+    }
+    
     //</editor-fold>
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- INTERNAL ---">
     
     protected final GameObjectModelDefinition bindToOwner() {
         setOffsetX(0);
@@ -107,15 +198,46 @@ public class GameObjectModelDefinition
         
         widthProperty.bind(getModel().getOwner().widthProperty());
         heightProperty.bind(getModel().getOwner().heightProperty());
-    
+        
         if (getModel().getOwner().isTestObject1()) {
-            printer().get(this).print("Setting Model Definition Values For: " + getModel().getOwner());
-            heightProperty.bind(BindingsSL.doubleBinding(() -> getModel().getOwner().getHeight() * 2, getModel().getOwner().heightProperty()));
-            yOffsetProperty.bind(BindingsSL.doubleBinding(() -> -getModel().getOwner().getHeight() / 2, getModel().getOwner().yLocationProperty()));
-//            widthProperty.bind(BindingsSL.doubleBinding(() -> getModel().getOwner().getWidth() * 1.5, getModel().getOwner().widthProperty()));
-//            heightProperty.bind(BindingsSL.doubleBinding(() -> getModel().getOwner().getHeight() * 1.5, getModel().getOwner().heightProperty()));
+//            printer().get(this).print("Setting Model Definition Values For: " + getModel().getOwner());
+//            heightProperty.bind(BindingsSL.doubleBinding(() -> getModel().getOwner().getHeight() * 2, getModel().getOwner().heightProperty()));
+//            yOffsetProperty.bind(BindingsSL.doubleBinding(() -> -getModel().getOwner().getHeight() / 2, getModel().getOwner().yLocationProperty()));
+            //            widthProperty.bind(BindingsSL.doubleBinding(() -> getModel().getOwner().getWidth() * 1.5, getModel().getOwner().widthProperty()));
+            //            heightProperty.bind(BindingsSL.doubleBinding(() -> getModel().getOwner().getHeight() * 1.5, getModel().getOwner().heightProperty()));
         }
         
         return this;
     }
+    
+    //<editor-fold desc="> JSON Internal">
+    
+    private final String jIdPrefix = "model-def_";
+    
+    private @Nullable String calcJId(boolean safe) {
+        String imageType = getImageType();
+        String imageId = getImageId();
+        if (!safe || (imageType != null && imageId != null))
+            return jIdPrefix + imageType + "-" + imageId;
+        return null;
+    }
+    
+    
+    private void reload() {
+        final String jID = getJId(false);
+        if (jID != null) {
+            printer().get(getClass()).print("Attempting GameObjectModel Load...");
+            JFiles.load(this);
+        } else {
+            printer().get(getClass()).err("Cannot Load JSON Data: Calculated JID is null [" + getJId(false) + "]");
+        }
+    }
+    
+    private void autoSave() {
+        JFiles.save(this);
+    }
+    
+    //</editor-fold>
+    
+    //</editor-fold>
 }

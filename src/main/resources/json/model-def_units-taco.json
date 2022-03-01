@@ -1,0 +1,9 @@
+{
+  "jID": "model-def_units-taco",
+  "width": 32,
+  "image-type": "units",
+  "offset-x": 0,
+  "image-id": "taco",
+  "offset-y": 0,
+  "height": 32
+}

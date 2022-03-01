@@ -33,33 +33,20 @@ public class GameObjectModel
     
     //
     
-    private final ReadOnlyStringWrapper imageTypeProperty;
-    private final ReadOnlyStringWrapper imageIdProperty;
-    private final ObjectBinding<Image> imageBinding;
-    
+    private ObjectBinding<Image> imageBinding;
     private final ImagePaintCommand modelPaintCommand;
     
     private boolean needsUpdate;
     
     public GameObjectModel(@NotNull GameObject owner) {
-        this(owner, "unit", "taco");
+        this(owner, null, null);
     }
     
     public GameObjectModel(@NotNull GameObject owner, @Nullable String imageType, @Nullable String imageId) {
         this.owner = owner;
-        this.modelDefinition = new GameObjectModelDefinition(this);
+        this.modelDefinition = new GameObjectModelDefinition(this, imageType, imageId);
         
         //
-        
-        this.imageTypeProperty = new ReadOnlyStringWrapper();
-        this.imageIdProperty = new ReadOnlyStringWrapper();
-        this.imageBinding = BindingsSL.objBinding(() -> {
-            final String imageTypeImpl = getImageType();
-            final String imageIdImpl = getImageId();
-            if (imageTypeImpl != null && imageIdImpl != null)
-                return ResourcesSL.getGameImage(getImageType() + "/", getImageId());
-            return ResourcesSL.getGameImage("units/", "taco");
-        }, imageTypeProperty, imageIdProperty);
         
         this.modelPaintCommand = new ImagePaintCommand(this, null);
         
@@ -68,7 +55,11 @@ public class GameObjectModel
     }
     
     public GameObjectModel init() {
-        this.getDefinition().init().bindToOwner();
+        this.getDefinition().init();
+        
+        this.imageBinding = BindingsSL.objBinding(
+                () -> ResourcesSL.getGameImage(getDefinition().getImageType() + "/", getDefinition().getImageId()),
+                getDefinition().readOnlyImageTypeProperty(), getDefinition().readOnlyImageIdProperty());
         
         this.modelPaintCommand.init();
         
@@ -78,8 +69,6 @@ public class GameObjectModel
         modelPaintCommand.setPaintPriority(1);
         
         getGameMap().getModel().getCanvas().addPaintable(modelPaintCommand);
-        
-        setImageData(null, null);
         
         return this;
     }
@@ -93,23 +82,8 @@ public class GameObjectModel
     public final ImagePaintCommand getPaintCommand() { return modelPaintCommand; }
     
     
-    
     public final ObjectBinding<Image> imageBinding() { return imageBinding; }
     public final Image getImage() { return imageBinding.get(); }
-    
-    
-    public final ReadOnlyStringProperty readOnlyImageIdProperty() { return imageIdProperty.getReadOnlyProperty(); }
-    public final String getImageId() { return imageIdProperty.get(); }
-    public final String setImageId(@Nullable String newValue) { return PropertiesSL.setProperty(imageIdProperty, newValue != null ? newValue : "taco"); }
-    
-    public final ReadOnlyStringProperty readOnlyImageTypeProperty() { return imageTypeProperty.getReadOnlyProperty(); }
-    public final String getImageType() { return imageTypeProperty.get(); }
-    public final String setImageType(@Nullable String newValue) { return PropertiesSL.setProperty(imageTypeProperty, newValue != null ? newValue : "units"); }
-    
-    public final void setImageData(@Nullable String imageId, @Nullable String imageType) {
-        setImageId(imageId);
-        setImageType(imageType);
-    }
     
     //</editor-fold>
     
@@ -123,7 +97,7 @@ public class GameObjectModel
     //
     
     @Override public void onGfxUpdate() {
-        printer().get(getClass()).print("Updating GameObject Gfx: " + getDefinition().getBounds());
+//        printer().get(getClass()).print("Updating GameObject Gfx: " + getDefinition().getBounds());
         modelPaintCommand.boundsBinding().setBounds(getDefinition().getBounds());
         modelPaintCommand.setImage(getImage());
         
@@ -137,13 +111,13 @@ public class GameObjectModel
         return "game-object-model";
     }
     @Override public void load(JsonObject parent) {
-        setImageId(JUtil.loadString(parent, "image-id"));
-        setImageType(JUtil.loadString(parent, "image-type"));
+//        setImageId(JUtil.loadString(parent, "image-id"));
+//        setImageType(JUtil.loadString(parent, "image-type"));
     }
     @Override public JElement[] jFields() {
         return new JElement[]{
-                JUtil.create("image-id", getImageId()),
-                JUtil.create("image-type", getImageType())
+//                JUtil.create("image-id", getImageId()),
+//                JUtil.create("image-type", getImageType())
         };
     }
     

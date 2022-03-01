@@ -47,6 +47,7 @@ public class GameViewContent
     
     private final GameObject testObject; //Move to Player class
     private final GameObject testObject2;
+    private final GameObject testObjectTree;
     
     private ObjectBinding<Point2D> mouseOnMapBinding;
     
@@ -60,6 +61,7 @@ public class GameViewContent
         
         this.testObject = new GameObject(this, "test_obj");
         this.testObject2 = new GameObject(this);
+        this.testObjectTree = new GameObject(this, "tree1_obj", "tree1");
     }
     
     public final GameObject getTestObject() { return testObject; }
@@ -140,6 +142,11 @@ public class GameViewContent
         testObject2.setTileLocationX(30);
         testObject2.setTileLocationY(20);
         getGameMap().gameObjects().add(testObject2);
+        
+        testObjectTree.init();
+        testObjectTree.setTileLocationX(40);
+        testObjectTree.setTileLocationY(10);
+        getGameMap().gameObjects().add(testObjectTree);
         
         getCamera().bindViewTo(testObject);
     }

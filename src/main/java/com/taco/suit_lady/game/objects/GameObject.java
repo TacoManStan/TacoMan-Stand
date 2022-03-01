@@ -69,11 +69,11 @@ public class GameObject
     
     private final MoveCommand command;
     
-    public GameObject(@NotNull GameComponent gameComponent, @Nullable String objID) {
+    public GameObject(@NotNull GameComponent gameComponent, @Nullable String objID, @Nullable String modelId) {
         this.content = gameComponent.getGame();
         this.objID = objID;
         
-        this.model = new GameObjectModel(this);
+        this.model = new GameObjectModel(this, "units", modelId);
         this.attributes = new AttributeManager(this);
         this.collisionMap = new CollisionMap(this);
         
@@ -104,7 +104,9 @@ public class GameObject
         
         this.occupiedTilesList = new SimpleListProperty<>(FXCollections.observableArrayList());
     }
-    public GameObject(@NotNull GameComponent gameComponent) { this(gameComponent, null); }
+    
+    public GameObject(@NotNull GameComponent gameComponent, @Nullable String objID) { this(gameComponent, objID, null); }
+    public GameObject(@NotNull GameComponent gameComponent) { this(gameComponent, null, null); }
     
     //<editor-fold desc="--- INITIALIZATION ---">
     
@@ -137,7 +139,7 @@ public class GameObject
     }
     
     private void initAttributes() {
-        attributes().addDoubleAttribute(MoveCommand.SPEED_ID, 15); //Measured in tiles/second
+        attributes().addDoubleAttribute(MoveCommand.SPEED_ID, 8); //Measured in tiles/second
         attributes().addDoubleAttribute(MoveCommand.MAX_SPEED_ID, 100);
         attributes().addAttribute("health", 500);
     }
@@ -160,6 +162,9 @@ public class GameObject
     
     private void initCollisionMap() {
         logiCore().execute(() -> {
+            printer().get(getClass()).setPrintPrefix(false);
+            printer().get(getClass()).print("Initializing Collision Map For: " + this);
+            
             //            collisionArea = new CollisionBox(collisionMap());
             collisionArea = new CollisionRange(collisionMap());
             

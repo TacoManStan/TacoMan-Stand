@@ -37,7 +37,7 @@ public class GameTileContentElementController extends CellController<GameObject>
         objectNameLabel.textProperty().unbind();
         objectImagePane.imageProperty().unbind();
         if (newCellContents != null) {
-            objectNameLabel.textProperty().bind(newCellContents.getModel().readOnlyImageIdProperty());
+            objectNameLabel.textProperty().bind(newCellContents.getModel().getDefinition().readOnlyImageIdProperty());
             objectImagePane.imageProperty().bind(newCellContents.getModel().imageBinding());
         }
     }
