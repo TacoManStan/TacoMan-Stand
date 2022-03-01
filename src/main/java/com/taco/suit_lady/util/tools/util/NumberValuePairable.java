@@ -1,5 +1,6 @@
 package com.taco.suit_lady.util.tools.util;
 
+import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
@@ -32,6 +33,10 @@ public interface NumberValuePairable<T extends NumberValuePairable<T>>
                 numA -> numA.doubleValue() + (direction.xMod() * xMagnitude.doubleValue()),
                 numB -> numB.doubleValue() + (direction.yMod() * yMagnitude.doubleValue()));
     }
+    
+    //
+    
+    default Point2D asPoint() { return new Point2D(aDouble(), bDouble()); }
     
     //</editor-fold>
 }

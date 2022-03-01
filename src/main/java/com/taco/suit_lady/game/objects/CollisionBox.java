@@ -154,18 +154,18 @@ public class CollisionBox extends CollisionArea {
             if (other != null) {
                 if (other instanceof CollisionBox otherBox) {
                     printer().get(CollisionMap.class).print("Checking CollisionBox...");
-//                    debugger().printList(Arrays.stream(getLocations()).toList(), "HeheXD 1");
-//                    debugger().printList(Arrays.stream(otherBox.getLocations()).toList(), "HeheXD 2");
+                    //                    debugger().printList(Arrays.stream(getLocations()).toList(), "HeheXD 1");
+                    //                    debugger().printList(Arrays.stream(otherBox.getLocations()).toList(), "HeheXD 2");
                     printer().get(CollisionMap.class).print("X: " + getX());
                     printer().get(CollisionMap.class).print("Y: " + getY());
                     printer().get(CollisionMap.class).print("Max X: " + getMaxX());
                     printer().get(CollisionMap.class).print("Max Y: " + getMaxY());
                     for (NumberValuePair point: otherBox.getLocations())
-                        if (containsPoint(point)) {
-                            printer().get(CollisionMap.class).err("alskudfhakljsdf");
+                        if (containsPoint(point))
                             return true;
-                        }
                     return false;
+                } else if (other instanceof CollisionRange otherRange) {
+                    return otherRange.collidesWith(this);
                 }
                 throw ExceptionsSL.unsupported("Unknown CollisionArea Implementation: " + other);
             }
@@ -177,9 +177,9 @@ public class CollisionBox extends CollisionArea {
         return sync(() -> {
             if (point != null)
                 return (point.aDouble() > getX() && point.aDouble() < getMaxX())
-                && (point.bDouble() > getY() && point.bDouble() < getMaxY());
-//                return (getX() > point.aDouble() && getMaxX() < point.aDouble())
-//                       && (getY() > point.bDouble() && getMaxY() < point.bDouble());
+                       && (point.bDouble() > getY() && point.bDouble() < getMaxY());
+            //                return (getX() > point.aDouble() && getMaxX() < point.aDouble())
+            //                       && (getY() > point.bDouble() && getMaxY() < point.bDouble());
             return false;
         });
     }

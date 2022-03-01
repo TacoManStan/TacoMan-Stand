@@ -150,27 +150,33 @@ public class GameObject
         taskManager().addShutdownOperation(() -> ArraysSL.iterateMatrix(tile -> tile.getOccupyingObjects().remove(this), getOccupiedTiles()));
     }
     
-    private CollisionBox collisionBox = null;
+    private CollisionRange collisionArea = null;
     
     private void initCollisionMap() {
         logiCore().execute(() -> {
-            collisionBox = new CollisionBox(collisionMap());
+//            collisionArea = new CollisionBox(collisionMap());
+            collisionArea = new CollisionRange(collisionMap());
             
             xLocationProperty.addListener((observable, oldValue, newValue) -> refreshCollisionData());
             locationBinding.addListener((observable, oldValue, newValue) -> refreshCollisionData());
+            dimensionsBinding.addListener((observable, oldValue, newValue) -> refreshCollisionData());
             
             refreshCollisionData();
             
-            collisionMap().addCollisionArea(collisionBox);
+            collisionMap().addCollisionArea(collisionArea);
         });
     }
     
     private void refreshCollisionData() {
 //        Print.print("Refreshing Collision Data");
-        collisionBox.setWidth(getWidth());
-        collisionBox.setHeight(getHeight());
-        collisionBox.setX(getLocationX().intValue());
-        collisionBox.setY(getLocationY().intValue());
+//        collisionArea.setWidth(getWidth());
+//        collisionArea.setHeight(getHeight());
+//        collisionArea.setX(getLocationX().intValue());
+//        collisionArea.setY(getLocationY().intValue());
+        
+        collisionArea.setRadius(Math.max((int) ((getWidth() / 2) * 0.7), (int) ((getHeight() / 2) * 0.7)));
+        collisionArea.setX((int) getLocationX(true));
+        collisionArea.setY((int) getLocationY(true));
     }
     
     //</editor-fold>

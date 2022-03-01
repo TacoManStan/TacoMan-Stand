@@ -1,5 +1,6 @@
 package com.taco.suit_lady.util.tools.util;
 
+import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
