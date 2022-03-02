@@ -56,7 +56,7 @@ public abstract class Shape
     }
     
     public Shape init() {
-        imageBinding = BindingsSL.objBinding(() -> , locationBinding, dimensionsBinding);
+        imageBinding = BindingsSL.objBinding(this::regenerateImage, locationBinding, dimensionsBinding);
         
         return this;
     }
@@ -122,7 +122,7 @@ public abstract class Shape
     
     private @NotNull Image regenerateImage() {
         return sync(() -> {
-        
+            TasksS
         });
     }
     

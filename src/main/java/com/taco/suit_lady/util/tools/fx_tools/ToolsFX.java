@@ -1039,12 +1039,12 @@ public class ToolsFX {
         final WritableImage aggregateImage = new WritableImage(tileSize * sourceMatrix.length, tileSize * sourceMatrix[0].length);
         
         ArraysSL.iterateMatrix((dimensions, tile) -> {
-            final T t = sourceMatrix[dimensions.width()][dimensions.height()];
+            final T t = sourceMatrix[dimensions.aInt()][dimensions.bInt()];
             if (t != null) {
                 final Image image = factory.apply(t);
                 if (image != null)
                     aggregateImage.getPixelWriter().setPixels(
-                            tileSize * dimensions.width(), tileSize * dimensions.height(),
+                            tileSize * dimensions.aInt(), tileSize * dimensions.bInt(),
                             tileSize, tileSize,
                             image.getPixelReader(),
                             0, 0);
@@ -1073,7 +1073,7 @@ public class ToolsFX {
             final WritableImage image = new WritableImage(width, height);
             
             ArraysSL.iterateMatrix((matrixCoordinates, color) -> {
-                image.getPixelWriter().setColor(matrixCoordinates.width(), matrixCoordinates.height(), color);
+                image.getPixelWriter().setColor(matrixCoordinates.aInt(), matrixCoordinates.bInt(), color);
                 return null;
             }, pixelDefinitionMatrix);
             
