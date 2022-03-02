@@ -1,16 +1,12 @@
 package com.taco.suit_lady.game.objects;
 
-import com.taco.suit_lady.util.tools.ArraysSL;
 import com.taco.suit_lady.util.tools.BindingsSL;
 import com.taco.suit_lady.util.tools.ExceptionsSL;
 import com.taco.suit_lady.util.tools.PropertiesSL;
-import com.taco.suit_lady.util.tools.util.CardinalDirection;
-import com.taco.suit_lady.util.tools.util.NumberValuePair;
-import javafx.beans.binding.IntegerBinding;
+import com.taco.suit_lady.util.tools.util.values.NumberValuePair;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 

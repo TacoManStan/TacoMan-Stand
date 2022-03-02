@@ -2,6 +2,7 @@ package com.taco.suit_lady.util.tools;
 
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.tools.list_tools.ListsSL;
+import com.taco.suit_lady.util.tools.util.values.NumberValuePair;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.binding.*;
@@ -497,6 +498,10 @@ public class BindingsSL {
     public static @NotNull IntegerBinding incrementingBinding(Observable... obs) {
         AtomicInteger _int = new AtomicInteger(0);
         return Bindings.createIntegerBinding(_int::incrementAndGet, obs);
+    }
+    
+    public static @NotNull ObjectBinding<NumberValuePair> numPairBinding(@NotNull ObservableValue<? extends Number> obs1, @NotNull ObservableValue<? extends Number> obs2) {
+        return BindingsSL.objBinding(() -> new NumberValuePair(obs1.getValue(), obs2.getValue()), obs1, obs2);
     }
     
     //</editor-fold>

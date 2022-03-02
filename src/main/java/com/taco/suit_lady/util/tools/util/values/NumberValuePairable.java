@@ -1,4 +1,4 @@
-package com.taco.suit_lady.util.tools.util;
+package com.taco.suit_lady.util.tools.util.values;
 
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
@@ -37,6 +37,10 @@ public interface NumberValuePairable<T extends NumberValuePairable<T>>
     //
     
     default Point2D asPoint() { return new Point2D(aDouble(), bDouble()); }
+    
+    default T add(@NotNull Number aMod, @NotNull Number bMod) {
+    
+    }
     
     //</editor-fold>
 }

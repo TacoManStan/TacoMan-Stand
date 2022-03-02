@@ -4,10 +4,9 @@ import com.taco.suit_lady.game.interfaces.WrappedGameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.util.tools.ExceptionsSL;
 import com.taco.suit_lady.util.tools.PropertiesSL;
-import com.taco.suit_lady.util.tools.util.NumberValuePair;
+import com.taco.suit_lady.util.tools.util.values.NumberValuePair;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.scene.shape.Shape;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class CollisionArea

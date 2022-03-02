@@ -18,21 +18,27 @@ public class PropertiesSL {
         return oldValue;
     }
     
-    public static int setProperty(@NotNull IntegerProperty property, int newValue) {
+    public static int setProperty(@NotNull IntegerProperty property, @NotNull Number newValue) {
         int oldValue = property.get();
-        property.set(newValue);
+        property.set(newValue.intValue());
         return oldValue;
     }
     
-    public static long setProperty(@NotNull LongProperty property, long newValue) {
+    public static long setProperty(@NotNull LongProperty property, @NotNull Number newValue) {
         long oldValue = property.get();
-        property.set(newValue);
+        property.set(newValue.longValue());
         return oldValue;
     }
     
-    public static double setProperty(@NotNull DoubleProperty property, double newValue) {
+    public static float setProperty(@NotNull FloatProperty property, @NotNull Number newValue) {
+        float oldValue = property.get();
+        property.set(newValue.floatValue());
+        return oldValue;
+    }
+    
+    public static double setProperty(@NotNull DoubleProperty property, @NotNull Number newValue) {
         double oldValue = property.get();
-        property.set(newValue);
+        property.set(newValue.doubleValue());
         return oldValue;
     }
     

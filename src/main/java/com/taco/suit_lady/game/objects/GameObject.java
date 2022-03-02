@@ -162,13 +162,12 @@ public class GameObject
     
     private void initCollisionMap() {
         logiCore().execute(() -> {
+            printer().get(getClass()).setEnabled(false);
             printer().get(getClass()).setPrintPrefix(false);
             printer().get(getClass()).print("Initializing Collision Map For: " + this);
             
-            //            collisionArea = new CollisionBox(collisionMap());
             collisionArea = new CollisionRange(collisionMap());
             
-            xLocationProperty.addListener((observable, oldValue, newValue) -> refreshCollisionData());
             locationBinding.addListener((observable, oldValue, newValue) -> refreshCollisionData());
             dimensionsBinding.addListener((observable, oldValue, newValue) -> refreshCollisionData());
             

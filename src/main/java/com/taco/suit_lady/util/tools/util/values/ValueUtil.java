@@ -1,4 +1,4 @@
-package com.taco.suit_lady.util.tools.util;
+package com.taco.suit_lady.util.tools.util.values;
 
 import com.taco.suit_lady.util.tools.ExceptionsSL;
 import org.jetbrains.annotations.NotNull;

@@ -1,4 +1,4 @@
-package com.taco.suit_lady.util.tools.util;
+package com.taco.suit_lady.util.tools.util.values;
 
 import org.jetbrains.annotations.NotNull;
 

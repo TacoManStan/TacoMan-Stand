@@ -2,8 +2,6 @@ package com.taco.suit_lady.game.objects;
 
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.springable.SpringableWrapper;
-import com.taco.suit_lady.util.tools.util.ValuePair;
 import com.taco.tacository.json.JElement;
 import com.taco.tacository.json.JLoadableObject;
 import com.taco.tacository.json.JObject;
@@ -14,8 +12,6 @@ import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
-
-import java.util.Arrays;
 
 @Component
 public class GameObjectModelDefinitions

@@ -62,6 +62,8 @@ public class GameObjectModelDefinition
     //<editor-fold desc="--- INITIALIZATION ---">
     
     protected final GameObjectModelDefinition init() {
+        printer().get(getClass()).setEnabled(false);
+        
         initBounds();
         initJson();
         

@@ -1,8 +1,7 @@
 package com.taco.suit_lady.ui.jfx.util;
 
-import com.taco.suit_lady.util.tools.util.NumberValueable;
-import com.taco.suit_lady.util.tools.util.ValuePair;
-import com.taco.suit_lady.util.tools.util.NumberValuePairable;
+import com.taco.suit_lady.util.tools.util.values.ValuePair;
+import com.taco.suit_lady.util.tools.util.values.NumberValuePairable;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +38,9 @@ public record Dimensions(int width, int height)
     
     
     @Override public @NotNull Dimensions modify(Function<Number, Number> aFunction) { return new Dimensions(aFunction.apply(a()).intValue(), b()); }
-    @Override public @NotNull Dimensions modify(Function<Number, Number> aFunction, Function<Number, Number> bFunction) { return new Dimensions(aFunction.apply(a()).intValue(), bFunction.apply(b()).intValue()); }
+    @Override public @NotNull Dimensions modify(Function<Number, Number> aFunction, Function<Number, Number> bFunction) {
+        return new Dimensions(aFunction.apply(a()).intValue(), bFunction.apply(b()).intValue());
+    }
     
     //
     

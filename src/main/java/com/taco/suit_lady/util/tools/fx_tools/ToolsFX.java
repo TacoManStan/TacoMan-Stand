@@ -10,7 +10,9 @@ import com.taco.suit_lady.ui.jfx.Colorable;
 import com.taco.suit_lady.ui.jfx.hyperlink.HyperlinkNodeFX;
 import com.taco.suit_lady.ui.jfx.lists.Listable;
 import com.taco.suit_lady.util.tools.ArraysSL;
-import com.taco.suit_lady.util.tools.util.ValuePair;
+import com.taco.suit_lady.util.tools.util.values.NumberValuePair;
+import com.taco.suit_lady.util.tools.util.values.NumberValuePairable;
+import com.taco.suit_lady.util.tools.util.values.ValuePair;
 import com.taco.tacository.quick.ConsoleBB;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -1051,6 +1053,32 @@ public class ToolsFX {
         }, sourceMatrix);
         
         return aggregateImage;
+    }
+    
+    public static @NotNull Image generateImage(@Nullable Lock lock,
+                                               @NotNull Number locationX, @NotNull Number locationY,
+                                               @NotNull Number width, @NotNull Number height,
+                                               @NotNull Function<NumberValuePairable<?>, Color> pixelGenerator) {
+        return TasksSL.sync(lock, () -> {
+            return generateImage(null, ArraysSL.fillMatrix(
+                    t -> pixelGenerator.apply(t),
+                    new Color[width.intValue()][height.intValue()]));
+        }, true);
+    }
+    
+    public static @NotNull Image generateImage(@Nullable Lock lock, @NotNull Color[][] pixelDefinitionMatrix) {
+        return TasksSL.sync(lock, () -> {
+            final int width = pixelDefinitionMatrix.length;
+            final int height = pixelDefinitionMatrix[0].length;
+            final WritableImage image = new WritableImage(width, height);
+            
+            ArraysSL.iterateMatrix((matrixCoordinates, color) -> {
+                image.getPixelWriter().setColor(matrixCoordinates.width(), matrixCoordinates.height(), color);
+                return null;
+            }, pixelDefinitionMatrix);
+            
+            return image;
+        }, true);
     }
     
     public static @NotNull Image generateCompositeImage(int width, int height, @NotNull Image... images) {

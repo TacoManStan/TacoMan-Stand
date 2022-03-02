@@ -1,10 +1,9 @@
 package com.taco.suit_lady.util.tools;
 
 import com.taco.suit_lady.util.timing.Timing;
-import com.taco.suit_lady.util.tools.util.ValuePair;
-import com.taco.suit_lady.util.tools.util.ValuePairable;
+import com.taco.suit_lady.util.tools.util.values.ValuePair;
+import com.taco.suit_lady.util.tools.util.values.ValuePairable;
 import javafx.beans.binding.ObjectBinding;
-import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;

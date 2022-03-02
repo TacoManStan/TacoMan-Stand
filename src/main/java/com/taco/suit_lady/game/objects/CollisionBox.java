@@ -1,17 +1,14 @@
 package com.taco.suit_lady.game.objects;
 
 import com.taco.suit_lady.util.tools.*;
-import com.taco.suit_lady.util.tools.printer.PrintData;
-import com.taco.suit_lady.util.tools.printer.Printer;
-import com.taco.suit_lady.util.tools.util.CardinalDirection;
-import com.taco.suit_lady.util.tools.util.NumberValuePair;
+import com.taco.suit_lady.util.tools.util.values.CardinalDirection;
+import com.taco.suit_lady.util.tools.util.values.NumberValuePair;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 public class CollisionBox extends CollisionArea {
