@@ -1,12 +1,16 @@
 package com.taco.suit_lady.util.tools.printer;
 
-import org.jetbrains.annotations.Nullable;
+import com.taco.suit_lady.util.enums.DefaultableEnum;
+import org.jetbrains.annotations.NotNull;
 
-public enum OnAbsentDefinition {
+public enum OnAbsentDefinition
+        implements DefaultableEnum<OnAbsentDefinition> {
     
     DO_NOTHING, CREATE_NEW, USE_GLOBAL, THROW_EXCEPTION;
     
-    public static OnAbsentDefinition get(@Nullable OnAbsentDefinition def) {
-        return def != null ? def : OnAbsentDefinition.DO_NOTHING;
-    }
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+    @Override public @NotNull OnAbsentDefinition defaultValue() { return OnAbsentDefinition.DO_NOTHING; }
+    
+    //</editor-fold>
 }

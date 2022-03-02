@@ -1,8 +1,12 @@
-package com.taco.suit_lady.util.tools.util.values;
+package com.taco.suit_lady.util.values;
 
+import com.taco.suit_lady.util.enums.DefaultableEnum;
 import org.jetbrains.annotations.NotNull;
 
-public enum OpResultType {
+public enum OpResultType
+        implements DefaultableEnum<OpResultType> {
+    
+    //<editor-fold desc="--- ENUM VALUE DEFINITIONS ---">
     
     EXACT() {
         @Override public @NotNull Number apply(@NotNull Number num) {
@@ -25,7 +29,17 @@ public enum OpResultType {
         }
     };
     
-    OpResultType() { }
+    //</editor-fold>
+    
+    //<editor-fold desc="--- ABSTRACT ---">
     
     public abstract @NotNull Number apply(@NotNull Number num);
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+    @Override public @NotNull OpResultType defaultValue() { return OpResultType.EXACT; }
+    
+    //</editor-fold>
 }

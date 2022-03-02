@@ -1,8 +1,8 @@
 package com.taco.suit_lady.game.objects;
 
 import com.taco.suit_lady.util.tools.*;
-import com.taco.suit_lady.util.tools.util.values.CardinalDirection;
-import com.taco.suit_lady.util.tools.util.values.NumberValuePair;
+import com.taco.suit_lady.util.values.CardinalDirection;
+import com.taco.suit_lady.util.values.NumberValuePair;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ReadOnlyIntegerProperty;
@@ -116,7 +116,7 @@ public class CollisionBox extends CollisionArea {
             case SOUTH_EAST -> locationBindingSE;
             case SOUTH_WEST -> locationBindingSW;
             
-            default -> throw ExceptionsSL.unsupported("Cardinal Direction is Not Supported  (" + direction + ")");
+            default -> throw Exceptions.unsupported("Cardinal Direction is Not Supported  (" + direction + ")");
         };
     }
     public final NumberValuePair getLocation(@NotNull CardinalDirection direction) { return locationBinding(direction).get(); }
@@ -164,7 +164,7 @@ public class CollisionBox extends CollisionArea {
                 } else if (other instanceof CollisionRange otherRange) {
                     return otherRange.collidesWith(this);
                 }
-                throw ExceptionsSL.unsupported("Unknown CollisionArea Implementation: " + other);
+                throw Exceptions.unsupported("Unknown CollisionArea Implementation: " + other);
             }
             return false;
         });

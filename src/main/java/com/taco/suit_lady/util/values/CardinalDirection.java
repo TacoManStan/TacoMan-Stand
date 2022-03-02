@@ -1,7 +1,7 @@
-package com.taco.suit_lady.util.tools.util.values;
+package com.taco.suit_lady.util.values;
 
 import com.taco.suit_lady.util.tools.ArraysSL;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Exceptions;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -41,7 +41,7 @@ public enum CardinalDirection {
     
     public static CardinalDirection getMatching(@NotNull NumberValuePairable<?> input) {
         if (input.aInt() < -1 || input.aInt() > 1 || input.bInt() < -1 || input.bInt() > 1)
-            throw ExceptionsSL.unsupported("Input Values Must be in Range [-1,1]:  " + input);
+            throw Exceptions.unsupported("Input Values Must be in Range [-1,1]:  " + input);
         return Arrays.stream(values()).filter(direction -> direction.xMod() == input.aInt() && direction.yMod() == input.bInt()).findFirst().orElse(null);
     }
     

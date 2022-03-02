@@ -1,9 +1,9 @@
 package com.taco.suit_lady.game.objects;
 
 import com.taco.suit_lady.util.tools.BindingsSL;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Exceptions;
 import com.taco.suit_lady.util.tools.PropertiesSL;
-import com.taco.suit_lady.util.tools.util.values.NumberValuePair;
+import com.taco.suit_lady.util.values.NumberValuePair;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
@@ -79,7 +79,7 @@ public class CollisionRange extends CollisionArea {
                     return otherRange.getLocation().asPoint().distance(getLocation().asPoint()) < otherRange.getRadius() + getRadius();
                 }
                 
-                throw ExceptionsSL.unsupported("Unknown CollisionArea Implementation: " + other);
+                throw Exceptions.unsupported("Unknown CollisionArea Implementation: " + other);
             }
             return false;
         });

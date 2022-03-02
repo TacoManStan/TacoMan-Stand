@@ -2,7 +2,7 @@ package com.taco.suit_lady.util.tools;
 
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.tools.list_tools.ListsSL;
-import com.taco.suit_lady.util.tools.util.values.NumberValuePair;
+import com.taco.suit_lady.util.values.NumberValuePair;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.binding.*;
@@ -460,7 +460,7 @@ public class BindingsSL {
          */
         private void update(U oldValue, U newValue) {
             Function<U, ObservableValue<V>> function = getFunction();
-            ExceptionsSL.nullCheck(function, "Function");
+            Exceptions.nullCheck(function, "Function");
             ObservableValue<V> observableValue = function.apply(newValue);
             if (observableValue != null)
                 backingBindingProperty.bind(observableValue);
@@ -484,7 +484,7 @@ public class BindingsSL {
      * @return The newly created {@code BooleanBinding} bound to the null status of the specified {@code Binding}.
      */
     public static @NotNull BooleanBinding nullCheckBinding(Binding<?> binding) {
-        ExceptionsSL.nullCheck(binding, "Binding");
+        Exceptions.nullCheck(binding, "Binding");
         return Bindings.createBooleanBinding(() -> binding.getValue() != null, binding);
     }
     

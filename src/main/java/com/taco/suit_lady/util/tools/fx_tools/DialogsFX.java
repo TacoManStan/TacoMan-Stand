@@ -1,6 +1,6 @@
 package com.taco.suit_lady.util.tools.fx_tools;
 
-import com.taco.suit_lady.util.tools.EnumsSL;
+import com.taco.suit_lady.util.tools.Enums;
 import com.taco.suit_lady.util.tools.ResourcesSL;
 import com.taco.suit_lady.util.tools.StringsSL;
 import com.taco.suit_lady.util.tools.ToolsSL;
@@ -244,7 +244,7 @@ public class DialogsFX {
      */
     public static <T extends Enum> T showChooseEnumDialog(String title, String message, ToolsFX.AutoCompleteMode autoCompleteMode, T defaultOption, String promptText, boolean selectFirst) {
         if (promptText != null && promptText.isEmpty()) promptText = "Start typing " + StringsSL.classToString(defaultOption.getClass());
-        return showChooseOptionDialog(title, message, autoCompleteMode, defaultOption, selectFirst, promptText, (T[]) EnumsSL.list(defaultOption));
+        return showChooseOptionDialog(title, message, autoCompleteMode, defaultOption, selectFirst, promptText, (T[]) Enums.list(defaultOption));
     }
     
     /**

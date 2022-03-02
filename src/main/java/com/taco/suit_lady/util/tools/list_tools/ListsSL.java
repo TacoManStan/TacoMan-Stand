@@ -2,7 +2,7 @@ package com.taco.suit_lady.util.tools.list_tools;
 
 import com.taco.suit_lady.util.tools.list_tools.Operation.OperationType;
 import com.taco.suit_lady.util.tools.list_tools.Operation.TriggerType;
-import com.taco.suit_lady.util.tools.util.values.ValuePair;
+import com.taco.suit_lady.util.values.ValuePair;
 import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import org.jetbrains.annotations.Contract;

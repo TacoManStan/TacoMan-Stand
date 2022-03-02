@@ -10,9 +10,7 @@ import com.taco.suit_lady.ui.jfx.Colorable;
 import com.taco.suit_lady.ui.jfx.hyperlink.HyperlinkNodeFX;
 import com.taco.suit_lady.ui.jfx.lists.Listable;
 import com.taco.suit_lady.util.tools.ArraysSL;
-import com.taco.suit_lady.util.tools.util.values.NumberValuePair;
-import com.taco.suit_lady.util.tools.util.values.NumberValuePairable;
-import com.taco.suit_lady.util.tools.util.values.ValuePair;
+import com.taco.suit_lady.util.values.*;
 import com.taco.tacository.quick.ConsoleBB;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -113,7 +111,7 @@ public class ToolsFX {
      *                 //
      */
     public static void runFX(Runnable runnable, boolean wait) {
-        ExceptionsSL.nullCheck(runnable, "Runnable cannot be null");
+        Exceptions.nullCheck(runnable, "Runnable cannot be null");
         try {
             if (isFXThread())
                 runnable.run();
@@ -123,7 +121,7 @@ public class ToolsFX {
                 Platform.runLater(runnable);
         } catch (Exception e) {
             if (!e.getMessage().equalsIgnoreCase("toolkit has exited"))
-                throw ExceptionsSL.ex(e);
+                throw Exceptions.ex(e);
         }
     }
     public static void runFX(Runnable runnable) { runFX(runnable, true); }
@@ -134,7 +132,7 @@ public class ToolsFX {
      * @param callable The Callable to be executed.
      */
     public static <V> V callFX(Callable<V> callable) {
-        ExceptionsSL.nullCheck(callable, "Callable cannot be null");
+        Exceptions.nullCheck(callable, "Callable cannot be null");
         try {
             if (isFXThread())
                 return callable.call();
@@ -145,13 +143,13 @@ public class ToolsFX {
                         _objProperty.set(callable.call());
                     } catch (Exception e) {
                         if (!e.getMessage().equalsIgnoreCase("toolkit has exited"))
-                            throw ExceptionsSL.ex(e);
+                            throw Exceptions.ex(e);
                     }
                 });
                 return _objProperty.get();
             }
         } catch (Exception e) {
-            throw ExceptionsSL.ex(e);
+            throw Exceptions.ex(e);
         }
     }
     
@@ -166,7 +164,7 @@ public class ToolsFX {
      * @param wait     True if this method should block until the Runnable is finished execution, false if this method should return as soon as the Runnable has been published.
      */
     public static void runEDT(Runnable runnable, boolean wait) {
-        ExceptionsSL.nullCheck(runnable, "Runnable cannot be null");
+        Exceptions.nullCheck(runnable, "Runnable cannot be null");
         try {
             if (EventQueue.isDispatchThread())
                 runnable.run();
@@ -175,7 +173,7 @@ public class ToolsFX {
             else
                 EventQueue.invokeLater(runnable);
         } catch (Exception e) {
-            throw ExceptionsSL.ex(e);
+            throw Exceptions.ex(e);
         }
     }
     
@@ -185,7 +183,7 @@ public class ToolsFX {
      * @param callable The Callable to be executed.
      */
     public static <V> V runEDT(Callable<V> callable) {
-        ExceptionsSL.nullCheck(callable, "Callable cannot be null");
+        Exceptions.nullCheck(callable, "Callable cannot be null");
         try {
             if (isFXThread())
                 return callable.call();
@@ -195,13 +193,13 @@ public class ToolsFX {
                     try {
                         _objProperty.set(callable.call());
                     } catch (Exception e) {
-                        throw ExceptionsSL.ex(e);
+                        throw Exceptions.ex(e);
                     }
                 });
                 return _objProperty.get();
             }
         } catch (Exception e) {
-            throw ExceptionsSL.ex(e);
+            throw Exceptions.ex(e);
         }
     }
     
@@ -241,9 +239,9 @@ public class ToolsFX {
     public static void checkFX(boolean require, @Nullable Lock lock) {
         TasksSL.sync(lock, () -> {
             if (require && !isFXThread())
-                throw ExceptionsSL.ex(new IllegalStateException("Operation must be executed on the FX Thread."));
+                throw Exceptions.ex(new IllegalStateException("Operation must be executed on the FX Thread."));
             if (!require && isFXThread())
-                throw ExceptionsSL.ex(new IllegalStateException("Operation must NOT be executed on the FX Thread."));
+                throw Exceptions.ex(new IllegalStateException("Operation must NOT be executed on the FX Thread."));
         }, true);
     }
     
@@ -272,7 +270,7 @@ public class ToolsFX {
      */
     public static void requireEDT() {
         if (!isEDT())
-            throw ExceptionsSL.ex(new IllegalStateException("Operation must be executed on the EDT."));
+            throw Exceptions.ex(new IllegalStateException("Operation must be executed on the EDT."));
     }
     
     //</editor-fold>
@@ -285,7 +283,7 @@ public class ToolsFX {
      * @return The {@code key code} for the specified {@link KeyCode}.
      */
     public static int getKeyCode(KeyCode keyCode) {
-        return ExceptionsSL.nullCheck(keyCode, "JFX KeyCode").getCode();
+        return Exceptions.nullCheck(keyCode, "JFX KeyCode").getCode();
     }
     
     /**
@@ -296,7 +294,7 @@ public class ToolsFX {
      * @return The {@code key char} for the specified {@link KeyCode}.
      */
     public static String getKeyChar(KeyCode keyCode) {
-        return ExceptionsSL.nullCheck(keyCode, "JFX KeyCode").getChar();
+        return Exceptions.nullCheck(keyCode, "JFX KeyCode").getChar();
     }
     
     
@@ -474,7 +472,7 @@ public class ToolsFX {
      */
     @Contract("_, _, _ -> param1")
     public static @NotNull TextField numberTextField(TextField textField, boolean allowDecimals, double initialValue) {
-        ExceptionsSL.nullCheck(textField, "TextField cannot be null.");
+        Exceptions.nullCheck(textField, "TextField cannot be null.");
         
         textField.addEventFilter(KeyEvent.KEY_TYPED, _keyEvent -> {
             String _str = _keyEvent.getCharacter().toLowerCase();
@@ -906,7 +904,7 @@ public class ToolsFX {
     
     
     public static <T extends Node> T setAnchors(T node, double left, double right, double top, double bottom) {
-        ExceptionsSL.nullCheck(node, "Input Node");
+        Exceptions.nullCheck(node, "Input Node");
         
         AnchorPane.setLeftAnchor(node, left);
         AnchorPane.setRightAnchor(node, right);
@@ -1030,11 +1028,59 @@ public class ToolsFX {
         }, true);
     }
     
+    //<editor-fold desc="--- IMAGE GENERATION ---">
+    
+    public static @NotNull Image generateImage(@Nullable Lock lock,
+                                               @NotNull Number locationX, @NotNull Number locationY,
+                                               @NotNull Number width, @NotNull Number height,
+                                               @NotNull BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> pixelGenerator) {
+        return TasksSL.sync(
+                lock, () -> generateImage(
+                        null, ArraysSL.fillMatrix(
+                                t -> pixelGenerator.apply(t, t.applyEach(
+                                        locationX, locationY, ValueOpType.ADD, ValueOpType.ADD, OpResultType.EXACT)),
+                                new Color[width.intValue()][height.intValue()])), true);
+    }
+    public static @NotNull Image generateImage(@Nullable Lock lock,
+                                               @NotNull NumberValuePairable<?> location,
+                                               @NotNull NumberValuePairable<?> dimensions,
+                                               @NotNull BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> pixelGenerator) {
+        return generateImage(lock, location.a(), location.b(), dimensions.a(), dimensions.b(), pixelGenerator);
+    }
+    public static @NotNull Image generateImage(@Nullable Lock lock,
+                                               @NotNull Number width, @NotNull Number height,
+                                               @NotNull Function<NumberValuePairable<?>, Color> pixelGenerator) {
+        return generateImage(lock, 0, 0, width, height, (loc, dim) -> pixelGenerator.apply(dim));
+    }
+    public static @NotNull Image generateImage(@Nullable Lock lock,
+                                               @NotNull NumberValuePairable<?> dimensions,
+                                               @NotNull Function<NumberValuePairable<?>, Color> pixelGenerator) {
+        return generateImage(lock, dimensions.a(), dimensions.b(), pixelGenerator);
+    }
+    
+    
+    public static @NotNull Image generateImage(@Nullable Lock lock, @NotNull Color[][] pixelDefinitionMatrix) {
+        return TasksSL.sync(lock, () -> {
+            final int width = pixelDefinitionMatrix.length;
+            final int height = pixelDefinitionMatrix[0].length;
+            final WritableImage image = new WritableImage(width, height);
+            
+            ArraysSL.iterateMatrix((matrixCoordinates, color) -> {
+                image.getPixelWriter().setColor(matrixCoordinates.aInt(), matrixCoordinates.bInt(), color);
+                return null;
+            }, pixelDefinitionMatrix);
+            
+            return image;
+        }, true);
+    }
+    
+    //
+    
     public static <T> @NotNull Image generateTiledImage(int tileSize, @NotNull T[][] sourceMatrix, @NotNull Function<T, Image> factory) {
         if (sourceMatrix.length == 0)
-            throw ExceptionsSL.ex("Source matrix width must be greater than 0.");
+            throw Exceptions.ex("Source matrix width must be greater than 0.");
         else if (sourceMatrix[0].length == 0)
-            throw ExceptionsSL.ex("Source matrix height must be greater than 0.");
+            throw Exceptions.ex("Source matrix height must be greater than 0.");
         
         final WritableImage aggregateImage = new WritableImage(tileSize * sourceMatrix.length, tileSize * sourceMatrix[0].length);
         
@@ -1055,32 +1101,6 @@ public class ToolsFX {
         return aggregateImage;
     }
     
-    public static @NotNull Image generateImage(@Nullable Lock lock,
-                                               @NotNull Number locationX, @NotNull Number locationY,
-                                               @NotNull Number width, @NotNull Number height,
-                                               @NotNull Function<NumberValuePairable<?>, Color> pixelGenerator) {
-        return TasksSL.sync(lock, () -> {
-            return generateImage(null, ArraysSL.fillMatrix(
-                    t -> pixelGenerator.apply(t),
-                    new Color[width.intValue()][height.intValue()]));
-        }, true);
-    }
-    
-    public static @NotNull Image generateImage(@Nullable Lock lock, @NotNull Color[][] pixelDefinitionMatrix) {
-        return TasksSL.sync(lock, () -> {
-            final int width = pixelDefinitionMatrix.length;
-            final int height = pixelDefinitionMatrix[0].length;
-            final WritableImage image = new WritableImage(width, height);
-            
-            ArraysSL.iterateMatrix((matrixCoordinates, color) -> {
-                image.getPixelWriter().setColor(matrixCoordinates.aInt(), matrixCoordinates.bInt(), color);
-                return null;
-            }, pixelDefinitionMatrix);
-            
-            return image;
-        }, true);
-    }
-    
     public static @NotNull Image generateCompositeImage(int width, int height, @NotNull Image... images) {
         final WritableImage compositeImage = new WritableImage(width, height);
         for (int i = 0; i < width; i++) {
@@ -1097,7 +1117,7 @@ public class ToolsFX {
     
     private static Color blendPixels(Color pixelB, Color pixelA) {
         if (pixelA == null && pixelB == null)
-            throw ExceptionsSL.ex("PixelA & PixelB cannot both be null.");
+            throw Exceptions.ex("PixelA & PixelB cannot both be null.");
         else if (pixelA == null && pixelB != null)
             return pixelB;
         else if (pixelB == null && pixelA != null)
@@ -1117,20 +1137,6 @@ public class ToolsFX {
             int rOut = ((rA * aA) + (rB * aB) * ((255 - aA) / 255)) / aOut;
             int gOut = ((gA * aA) + (gB * aB) * ((255 - aA) / 255)) / aOut;
             int bOut = ((bA * aA) + (bB * aB) * ((255 - aA) / 255)) / aOut;
-            
-            //            System.out.println(
-            //                    "aA: " + aA + " | "
-            //                    + "rA: " + rA + " | "
-            //                    + "gA: " + gA + " | "
-            //                    + "bA: " + bA + " | "
-            //                    + "aB: " + aB + " | "
-            //                    + "rB: " + rB + " | "
-            //                    + "gB: " + gB + " | "
-            //                    + "bB: " + bB + " | "
-            //                    + "aOut: " + aOut + " | "
-            //                    + "rOut: " + rOut + " | "
-            //                    + "gOut: " + gOut + " | "
-            //                    + "bOut: " + bOut);
             
             return new Color(rOut / 255D, gOut / 255D, bOut / 255D, aOut / 255D);
         }
@@ -1153,6 +1159,7 @@ public class ToolsFX {
         }
         return borderImage;
     }
+    //</editor-fold>
     
     
     public static Canvas clearCanvasUnsafe(Canvas canvas) {
@@ -1164,7 +1171,7 @@ public class ToolsFX {
     }
     
     public static Canvas clearCanvas(Canvas canvas, ReentrantLock lock) {
-        ExceptionsSL.nullCheck(canvas, "Canvas Input");
+        Exceptions.nullCheck(canvas, "Canvas Input");
         
         if (lock != null)
             try {
@@ -1184,7 +1191,7 @@ public class ToolsFX {
     
     
     public static <T extends Node> T togglePickOnBounds(T node, boolean pickOnBounds) {
-        ExceptionsSL.nullCheck(node, "Input Node").setPickOnBounds(pickOnBounds);
+        Exceptions.nullCheck(node, "Input Node").setPickOnBounds(pickOnBounds);
         if (node instanceof Canvas)
             node.setMouseTransparent(!pickOnBounds);
         if (node instanceof Region)
@@ -1408,8 +1415,8 @@ public class ToolsFX {
     
     
     public static void passdownOrder(Node root, Consumer<Node> action) {
-        ExceptionsSL.nullCheck(root, "Root node cannot be null");
-        ExceptionsSL.nullCheck(action, "Task cannot be null");
+        Exceptions.nullCheck(root, "Root node cannot be null");
+        Exceptions.nullCheck(action, "Task cannot be null");
         if (root instanceof Parent)
             ((Parent) root).getChildrenUnmodifiable().forEach(child -> passdownOrder(child, action));
     }
@@ -1490,10 +1497,10 @@ public class ToolsFX {
             @NotNull BindOrientation bindOrientation,
             @NotNull BindType bindType,
             boolean addTo) {
-        ExceptionsSL.nullCheck(child, "Region");
-        ExceptionsSL.nullCheck(parent, "Parent Region");
-        ExceptionsSL.nullCheck(bindOrientation, "Bind Orientation");
-        ExceptionsSL.nullCheck(bindType, "Bind Type");
+        Exceptions.nullCheck(child, "Region");
+        Exceptions.nullCheck(parent, "Parent Region");
+        Exceptions.nullCheck(bindOrientation, "Bind Orientation");
+        Exceptions.nullCheck(bindType, "Bind Type");
         
         final ObservableDoubleValue observableOffsetImpl = observableOffset == null ? new SimpleDoubleProperty(0.0) : observableOffset;
         final DoubleProperty widthProperty;
@@ -1501,7 +1508,7 @@ public class ToolsFX {
         
         if (addTo)
             if (parent instanceof Pane) ((Pane) parent).getChildren().add(child);
-            else throw ExceptionsSL.ex("Parent must be an implementation of Pane!  (" + parent.getClass() + ")");
+            else throw Exceptions.ex("Parent must be an implementation of Pane!  (" + parent.getClass() + ")");
         
         if (bindType == BindType.PREF || bindType == BindType.BOTH) {
             widthProperty = child.prefWidthProperty();
@@ -1510,7 +1517,7 @@ public class ToolsFX {
             widthProperty = child.maxWidthProperty();
             heightProperty = child.maxHeightProperty();
         } else
-            throw ExceptionsSL.unsupported("Unknown BindType: " + bindType);
+            throw Exceptions.unsupported("Unknown BindType: " + bindType);
         
         if (bindOrientation == BindOrientation.WIDTH || bindOrientation == BindOrientation.BOTH) {
             widthProperty.bind(Bindings.createDoubleBinding(
@@ -1544,8 +1551,8 @@ public class ToolsFX {
     }
     
     public static double getNodeSize(Region region, boolean includePadding, boolean includeInsets, double offset, BindOrientation bindOrientation) {
-        ExceptionsSL.nullCheck(region, "Region");
-        ExceptionsSL.nullCheck(bindOrientation, "BindOrientation");
+        Exceptions.nullCheck(region, "Region");
+        Exceptions.nullCheck(bindOrientation, "BindOrientation");
         
         Insets _insets = region.getInsets();
         Insets _padding = region.getPadding();
@@ -1554,7 +1561,7 @@ public class ToolsFX {
         else if (bindOrientation == BindOrientation.HEIGHT)
             return region.getHeight() + offset - (includePadding ? _padding.getTop() + _padding.getBottom() : 0) + (includeInsets ? _insets.getTop() + _insets.getBottom() : 0);
         else
-            throw ExceptionsSL.unsupported("BindOrientation \"" + bindOrientation + "\" is not supported.");
+            throw Exceptions.unsupported("BindOrientation \"" + bindOrientation + "\" is not supported.");
     }
     
     public enum BindOrientation {
@@ -1930,7 +1937,7 @@ public class ToolsFX {
         if (comboBox != null) {
             applyCellFactory(comboBox);
             if (t != null) {
-                final Enum[] e_list = EnumsSL.list(t);
+                final Enum[] e_list = Enums.list(t);
                 for (Enum e: e_list)
                     if (!ArraysSL.contains(e, excludeValues))
                         comboBox.getItems().add((T) e);

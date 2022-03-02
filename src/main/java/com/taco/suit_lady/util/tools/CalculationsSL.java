@@ -1,8 +1,8 @@
 package com.taco.suit_lady.util.tools;
 
 import com.taco.suit_lady.util.timing.Timing;
-import com.taco.suit_lady.util.tools.util.values.ValuePair;
-import com.taco.suit_lady.util.tools.util.values.ValuePairable;
+import com.taco.suit_lady.util.values.ValuePair;
+import com.taco.suit_lady.util.values.ValuePairable;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Point2D;
@@ -33,8 +33,8 @@ public class CalculationsSL {
      * @return The absolute value.
      */
     public static int getAbsoluteDifferent(Number number1, Number number2) {
-        ExceptionsSL.nullCheck(number1);
-        ExceptionsSL.nullCheck(number2);
+        Exceptions.nullCheck(number1);
+        Exceptions.nullCheck(number2);
         return (Math.abs(number1.intValue() - number2.intValue()));
     }
     
@@ -49,8 +49,8 @@ public class CalculationsSL {
      * @return The absolute value.
      */
     public static double getAbsoluteDoubleDifferent(Number number1, Number number2) {
-        ExceptionsSL.nullCheck(number1);
-        ExceptionsSL.nullCheck(number2);
+        Exceptions.nullCheck(number1);
+        Exceptions.nullCheck(number2);
         return (Math.abs(number1.doubleValue() - number2.doubleValue()));
     }
     
@@ -164,7 +164,7 @@ public class CalculationsSL {
      * Point(x2, y2).
      */
     public static double distanceTo(int x1, int y1, int x2, int y2) {
-        throw ExceptionsSL.nyi();
+        throw Exceptions.nyi();
     } // TODO - TRiLeZ - Have I already created a method for this yet?
     
     /**
@@ -288,8 +288,8 @@ public class CalculationsSL {
      * @return A value that is greater than or equal to the specified min value.
      */
     public static <T extends Number> T clampMin(T value, T min) {
-        ExceptionsSL.nullCheck(value);
-        ExceptionsSL.nullCheck(min);
+        Exceptions.nullCheck(value);
+        Exceptions.nullCheck(min);
         
         if (value.doubleValue() < min.doubleValue())
             return min;
@@ -311,8 +311,8 @@ public class CalculationsSL {
      * @return A value that is less than or equal to the specified max value.
      */
     public static <T extends Number> T clampMax(T value, T max) {
-        ExceptionsSL.nullCheck(value);
-        ExceptionsSL.nullCheck(max);
+        Exceptions.nullCheck(value);
+        Exceptions.nullCheck(max);
         
         if (value.doubleValue() > max.doubleValue())
             return max;
@@ -337,9 +337,9 @@ public class CalculationsSL {
      * @return A value that is between the specified min and max values.
      */
     public static <T extends Number> T clamp(T value, T min, T max) {
-        ExceptionsSL.nullCheck(value);
-        ExceptionsSL.nullCheck(min);
-        ExceptionsSL.nullCheck(max);
+        Exceptions.nullCheck(value);
+        Exceptions.nullCheck(min);
+        Exceptions.nullCheck(max);
         
         if (value.doubleValue() < min.doubleValue())
             value = min;
@@ -608,9 +608,9 @@ public class CalculationsSL {
         minBounds = minBounds != null ? minBounds : new ValuePair<>(0, 0);
         
         if (minBounds.a().doubleValue() >= maxBounds.a().doubleValue())
-            throw ExceptionsSL.unsupported("Min X Bounds (" + minBounds.a().doubleValue() + ") must be less than Max X Bounds (" + maxBounds.a().doubleValue());
+            throw Exceptions.unsupported("Min X Bounds (" + minBounds.a().doubleValue() + ") must be less than Max X Bounds (" + maxBounds.a().doubleValue());
         if (minBounds.b().doubleValue() >= maxBounds.b().doubleValue())
-            throw ExceptionsSL.unsupported("Min Y Bounds (" + minBounds.b().doubleValue() + ") must be less than Max Y Bounds (" + maxBounds.b().doubleValue());
+            throw Exceptions.unsupported("Min Y Bounds (" + minBounds.b().doubleValue() + ") must be less than Max Y Bounds (" + maxBounds.b().doubleValue());
         
         double x = origin.getX();
         double y = origin.getY();

@@ -1,7 +1,7 @@
 package com.taco.suit_lady.ui.ui_internal.settings;
 
 import com.taco.suit_lady.ui.jfx.lists.Listable;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Exceptions;
 import com.taco.suit_lady.util.settings.SavableSetting;
 import com.taco.suit_lady.ui.ui_internal.controllers.SettingGroupController;
 import com.taco.tacository.obj_traits.common.Nameable;
@@ -21,7 +21,7 @@ public class SettingGroup<C extends SettingGroupController>
 
 	public SettingGroup(Supplier<C> controllerSupplier) {
 		this.settings = FXCollections.observableArrayList();
-		this.controller = ExceptionsSL.nullCheck(controllerSupplier.get(), "SettingGroup Controller");
+		this.controller = Exceptions.nullCheck(controllerSupplier.get(), "SettingGroup Controller");
 		this.name = controller.getName();
 
 		// CHANGE-HERE

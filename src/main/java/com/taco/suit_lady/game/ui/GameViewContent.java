@@ -18,7 +18,7 @@ import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.*;
 import com.taco.suit_lady.util.tools.printer.Printer;
-import com.taco.suit_lady.util.tools.util.values.ValuePair;
+import com.taco.suit_lady.util.values.ValuePair;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;

@@ -1,6 +1,6 @@
-package com.taco.suit_lady.util.tools.util.values;
+package com.taco.suit_lady.util.values;
 
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Exceptions;
 import org.jetbrains.annotations.NotNull;
 
 class ValueUtil {
@@ -12,7 +12,7 @@ class ValueUtil {
         else if (asInt(num) == 1)
             return true;
         else
-            throw ExceptionsSL.unsupported("Input for boolean num conversion must be valid binary (0 or 1): " + num);
+            throw Exceptions.unsupported("Input for boolean num conversion must be valid binary (0 or 1): " + num);
     }
     
     public static int asInt(@NotNull Number num) { return num.intValue(); }

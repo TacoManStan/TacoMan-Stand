@@ -1,7 +1,8 @@
 package com.taco.suit_lady.util.tools.printer;
 
 import com.taco.suit_lady.util.Lockable;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Enums;
+import com.taco.suit_lady.util.tools.Exceptions;
 import com.taco.suit_lady.util.tools.TasksSL;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.SimpleMapProperty;
@@ -42,11 +43,11 @@ public class Printer
             PrintData data = getDataFor(objKey);
             
             if (data == null) {
-                switch (OnAbsentDefinition.get(onAbsent)) {
+                switch (Enums.get(OnAbsentDefinition.class)) {
                     case DO_NOTHING -> { }
                     case CREATE_NEW -> getDataMapFor(objKey).put(objKey, data = new PrintData());
                     case USE_GLOBAL -> data = get();
-                    case THROW_EXCEPTION -> throw ExceptionsSL.ex("PrintData for Key [" + objKey + "] cannot be null.");
+                    case THROW_EXCEPTION -> throw Exceptions.ex("PrintData for Key [" + objKey + "] cannot be null.");
                 }
             }
             
@@ -65,7 +66,6 @@ public class Printer
     
     //<editor-fold desc="--- LOGIC ---">
     
-
     
     //</editor-fold>
     

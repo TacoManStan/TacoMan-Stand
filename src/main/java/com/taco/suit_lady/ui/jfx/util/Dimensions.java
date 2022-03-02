@@ -1,8 +1,8 @@
 package com.taco.suit_lady.ui.jfx.util;
 
-import com.taco.suit_lady.util.tools.util.values.OpResultType;
-import com.taco.suit_lady.util.tools.util.values.ValuePair;
-import com.taco.suit_lady.util.tools.util.values.NumberValuePairable;
+import com.taco.suit_lady.util.values.OpResultType;
+import com.taco.suit_lady.util.values.ValuePair;
+import com.taco.suit_lady.util.values.NumberValuePairable;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -13,6 +13,8 @@ import java.util.function.Function;
 
 public record Dimensions(@NotNull Number width, @NotNull Number height, @NotNull OpResultType resultType)
         implements Serializable, NumberValuePairable<Dimensions> {
+    
+    public Dimensions(@NotNull Number width, @NotNull Number height) { this(width, height, OpResultType.EXACT); }
     
     //<editor-fold desc="--- COPY METHODS ---">
     

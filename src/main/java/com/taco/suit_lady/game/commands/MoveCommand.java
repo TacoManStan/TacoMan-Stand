@@ -7,11 +7,11 @@ import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.logic.GameTask;
 import com.taco.suit_lady.logic.triggers.implementations.UnitArrivedEvent;
 import com.taco.suit_lady.util.tools.BindingsSL;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Exceptions;
 import com.taco.suit_lady.util.tools.printer.Printer;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
-import com.taco.suit_lady.util.tools.util.values.NumberValuePair;
+import com.taco.suit_lady.util.values.NumberValuePair;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
@@ -69,7 +69,7 @@ public class MoveCommand
         
         this.observableTargetXProperty.addListener((observable, oldValue, newValue) -> {
             if (Objects.equals(oldValue, newValue))
-                throw ExceptionsSL.unsupported("This shouldn't ever be possible X:  [" + oldValue + "  -->  " + newValue + "]");
+                throw Exceptions.unsupported("This shouldn't ever be possible X:  [" + oldValue + "  -->  " + newValue + "]");
             
             if (newValue != null)
                 xTargetProperty.bind(newValue);
@@ -78,7 +78,7 @@ public class MoveCommand
         });
         this.observableTargetYProperty.addListener((observable, oldValue, newValue) -> {
             if (Objects.equals(oldValue, newValue))
-                throw ExceptionsSL.unsupported("This shouldn't ever be possible Y:  [" + oldValue + "  -->  " + newValue + "]");
+                throw Exceptions.unsupported("This shouldn't ever be possible Y:  [" + oldValue + "  -->  " + newValue + "]");
             
             if (newValue != null)
                 yTargetProperty.bind(newValue);

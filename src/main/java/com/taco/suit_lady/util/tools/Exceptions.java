@@ -3,13 +3,17 @@ package com.taco.suit_lady.util.tools;
 import com.taco.suit_lady.util.InternalException;
 import com.taco.suit_lady.util.exceptions.NYIException;
 import com.taco.suit_lady.util.exceptions.ReadOnlyViolationException;
+import com.taco.suit_lady.util.tools.printer.Printer;
 import com.taco.tacository.quick.ConsoleBB;
+import org.hibernate.TypeMismatchException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.InputMismatchException;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public class ExceptionsSL
-{
+public class Exceptions {
     
     /* *************************************************************************** *
      *                                                                             *
@@ -31,25 +35,22 @@ public class ExceptionsSL
      *                                                                             *
      * *************************************************************************** */
     
-    public static <T> T check(T obj, Predicate<T> condition)
-    {
-        ExceptionsSL.nullCheck(condition, "Condition");
+    public static <T> T check(T obj, Predicate<T> condition) {
+        Exceptions.nullCheck(condition, "Condition");
         return check(obj, condition, RuntimeException::new);
     }
     
-    public static <T> T check(T obj, Predicate<T> condition, String message)
-    {
-        ExceptionsSL.nullCheck(condition, "Condition");
-        ExceptionsSL.nullCheck(message, "Message");
+    public static <T> T check(T obj, Predicate<T> condition, String message) {
+        Exceptions.nullCheck(condition, "Condition");
+        Exceptions.nullCheck(message, "Message");
         return check(obj, condition, () -> new RuntimeException(message));
     }
     
-    public static <T> T check(T obj, Predicate<T> condition, Supplier<RuntimeException> exceptionSupplier)
-    {
-        ExceptionsSL.nullCheck(condition, "Condition");
-        ExceptionsSL.nullCheck(exceptionSupplier, "Exception Supplier");
+    public static <T> T check(T obj, Predicate<T> condition, Supplier<RuntimeException> exceptionSupplier) {
+        Exceptions.nullCheck(condition, "Condition");
+        Exceptions.nullCheck(exceptionSupplier, "Exception Supplier");
         if (condition.test(obj))
-            throw ExceptionsSL.ex(exceptionSupplier.get());
+            throw Exceptions.ex(exceptionSupplier.get());
         return obj;
     }
     
@@ -72,8 +73,7 @@ public class ExceptionsSL
      *
      * @see #nullCheck(Object, String)
      */
-    public static <T> T nullCheck(T obj, String name)
-    {
+    public static <T> T nullCheck(T obj, String name) {
         return nullCheck(obj, name, null);
     }
     
@@ -97,8 +97,7 @@ public class ExceptionsSL
      *
      * @see #nullCheckMessage(Object, String)
      */
-    public static <T> T nullCheck(T obj, String name, String info)
-    {
+    public static <T> T nullCheck(T obj, String name, String info) {
         // TODO [S]: Move info to custom ConsoleErrorMessage parameter, and then only show when expanded.
         return nullCheckMessage(obj, "'" + name + "' cannot be null!" + (info == null ? "" : " (" + info + ")"));
     }
@@ -116,8 +115,7 @@ public class ExceptionsSL
      *
      * @see #nullCheck(Object, String)
      */
-    public static <T> T nullCheckMessage(T obj, String errorMessage)
-    {
+    public static <T> T nullCheckMessage(T obj, String errorMessage) {
         if (obj == null)
             if (errorMessage == null)
                 throw ex(new NullPointerException());
@@ -142,8 +140,7 @@ public class ExceptionsSL
      * @see #nullCheck(Object, String)
      * @see #nullCheck(Boolean, String)
      */
-    public static boolean nullCheck(Boolean value)
-    {
+    public static boolean nullCheck(Boolean value) {
         return nullCheck(value, null);
     }
     
@@ -161,8 +158,7 @@ public class ExceptionsSL
      *
      * @see #nullCheck(Object, String)
      */
-    public static boolean nullCheck(Boolean value, String name)
-    {
+    public static boolean nullCheck(Boolean value, String name) {
         return nullCheckPrimitiveWrapper(value, name);
     }
     
@@ -180,8 +176,7 @@ public class ExceptionsSL
      * @see #nullCheck(Object, String)
      * @see #nullCheck(Character, String)
      */
-    public static char nullCheck(Character value)
-    {
+    public static char nullCheck(Character value) {
         return nullCheck(value, null);
     }
     
@@ -199,8 +194,7 @@ public class ExceptionsSL
      *
      * @see #nullCheck(Object, String)
      */
-    public static char nullCheck(Character value, String name)
-    {
+    public static char nullCheck(Character value, String name) {
         return nullCheckPrimitiveWrapper(value, name);
     }
     
@@ -218,8 +212,7 @@ public class ExceptionsSL
      * @see #nullCheck(Object, String)
      * @see #nullCheck(Number, String)
      */
-    public static <T extends Number> T nullCheck(T value)
-    {
+    public static <T extends Number> T nullCheck(T value) {
         return nullCheck(value, null);
     }
     
@@ -237,8 +230,7 @@ public class ExceptionsSL
      *
      * @see #nullCheck(Object, String)
      */
-    public static <T extends Number> T nullCheck(T value, String name)
-    {
+    public static <T extends Number> T nullCheck(T value, String name) {
         return nullCheckPrimitiveWrapper(value, name);
     }
     
@@ -247,8 +239,7 @@ public class ExceptionsSL
     /**
      * Helper method to assist primitive wrapper null-checks.
      */
-    private static <T> T nullCheckPrimitiveWrapper(T value, String name)
-    {
+    private static <T> T nullCheckPrimitiveWrapper(T value, String name) {
         return nullCheck(value, "Primitive wrappers cannot be null!", name);
     }
     
@@ -263,8 +254,7 @@ public class ExceptionsSL
     
     // NOTE TO DEV: Bounds checks are always INCLUSIVE by default.
     
-    public static <T extends Number> T boundsCheck(T value, double floor, double ceiling, String valueName)
-    {
+    public static <T extends Number> T boundsCheck(T value, double floor, double ceiling, String valueName) {
         return boundsCheck(value, floor, ceiling, true, true, valueName);
     }
     
@@ -282,7 +272,7 @@ public class ExceptionsSL
      * The example above does the following:
      * <ol>
      * <li>Creates a variable of type {@code long} equal to {@code 1000} called {@code myVariable}.</li>
-     * <li>Uses the {@link ExceptionsSL#boundsCheck(Number, double, double, String) check} method to check if the bounds of {@code myVariable} are between -50 and 750.</li>
+     * <li>Uses the {@link Exceptions#boundsCheck(Number, double, double, String) check} method to check if the bounds of {@code myVariable} are between -50 and 750.</li>
      * <li>Determines that {@code myVariable} is not within the specified bounds ({@code 750 is less than 1000}</li>
      * <li>Throws a {@code IndexOutOfBoundsException}</li>
      * </ol>
@@ -294,9 +284,8 @@ public class ExceptionsSL
      *
      * @return The specified {@code value} (if the bounds-check is successful).
      */
-    public static <T extends Number> T boundsCheck(T value, double floor, double ceiling, boolean isFloorInclusive, boolean isCeilingInclusive, String valueName)
-    {
-        ExceptionsSL.nullCheck(value, "Value");
+    public static <T extends Number> T boundsCheck(T value, double floor, double ceiling, boolean isFloorInclusive, boolean isCeilingInclusive, String valueName) {
+        Exceptions.nullCheck(value, "Value");
         final String _valueString = valueName != null ? valueName + " (" + value + ")" : "" + value;
         if (isFloorInclusive && value.doubleValue() < floor)
             throw ex(new IndexOutOfBoundsException(_valueString + " must be greater than or equal to " + floor + "."));
@@ -311,18 +300,15 @@ public class ExceptionsSL
     
     // Bounds Check - Zero
     
-    public static <T extends Number> T boundsCheckZero(T value, String valueName)
-    {
+    public static <T extends Number> T boundsCheckZero(T value, String valueName) {
         return boundsCheckZero(value, Double.MAX_VALUE, true, true, valueName);
     }
     
-    public static <T extends Number> T boundsCheckZero(T value, double ceiling, String valueName)
-    {
+    public static <T extends Number> T boundsCheckZero(T value, double ceiling, String valueName) {
         return boundsCheckZero(value, ceiling, true, true, valueName);
     }
     
-    public static <T extends Number> T boundsCheckZero(T value, double ceiling, boolean isFloorInclusive, boolean isCeilingInclusive, String valueName)
-    {
+    public static <T extends Number> T boundsCheckZero(T value, double ceiling, boolean isFloorInclusive, boolean isCeilingInclusive, String valueName) {
         return boundsCheck(value, 0, ceiling, isFloorInclusive, isCeilingInclusive, valueName);
     }
     
@@ -333,49 +319,68 @@ public class ExceptionsSL
      *                                                                             *
      * *************************************************************************** */
     
-    // Unsupported & NYI
+    //<editor-fold desc="--- MISMATCHED ---">
     
-    public static RuntimeException unsupported()
-    {
-        return unsupported("Unsupported operation. See stack trace for details.");
+    public static @NotNull RuntimeException inputMismatch() { return inputMismatch(null, null); }
+    public static @NotNull RuntimeException inputMismatch(@Nullable String msg) { return inputMismatch("Input Mismatch", msg); }
+    public static @NotNull RuntimeException inputMismatch(@Nullable String prefixMsg, @Nullable String msg) {
+        return ex(new InputMismatchException(), refine(prefixMsg, msg));
     }
     
-    public static RuntimeException unsupported(String message)
-    {
-        return ex(new UnsupportedOperationException(), message);
+    public static @NotNull RuntimeException typeMismatch() { return typeMismatch(null, null); }
+    public static @NotNull RuntimeException typeMismatch(@Nullable Object msg) { return typeMismatch("Type Mismatch", msg); }
+    public static @NotNull RuntimeException typeMismatch(@Nullable String prefixMsg, @Nullable Object msg) {
+        return ex(new TypeMismatchException("Type Mismatch - See Below"), refine(prefixMsg, msg));
     }
     
-    public static RuntimeException nyi()
-    {
-        return nyi(null, null);
-    }
+    //</editor-fold>
     
-    public static RuntimeException nyi(String message, Throwable cause)
-    {
-        if (message != null && cause != null)
-            return ex(new NYIException(message, cause));
-        else if (message != null && cause == null)
-            return ex(new NYIException(message));
-        else if (message == null && cause != null)
+    //<editor-fold desc="--- UNSUPPORTED / NYI ---">
+    
+    //<editor-fold desc="> Unsupported">
+    
+    public static @NotNull RuntimeException unsupported(@Nullable String prefixMsg, @Nullable Object msg) {
+        return ex(new UnsupportedOperationException(), refine(prefixMsg, msg));
+    }
+    public static @NotNull RuntimeException unsupported() { return unsupported("Unsupported operation. See stack trace for details."); }
+    public static @NotNull RuntimeException unsupported(String msg) { return ex(new UnsupportedOperationException(), msg); }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="> NYI">
+    
+    public static @NotNull RuntimeException nyi(@Nullable String prefixMsg, @Nullable Object msg, @Nullable Throwable cause) {
+        final String refined = refine(prefixMsg, msg);
+        
+        if (msg != null && cause != null)
+            return ex(new NYIException(refined, cause));
+        else if (msg != null && cause == null)
+            return ex(new NYIException(refined));
+        else if (msg == null && cause != null)
             return ex(new NYIException(cause));
         else
             return ex(new NYIException());
     }
     
-    public static void throwNYI()
-    {
-        throw nyi();
-    }
+    public static @NotNull RuntimeException nyi(@Nullable String prefixMsg, @Nullable Object msg) { return nyi(prefixMsg, msg, null); }
+    public static @NotNull RuntimeException nyi(@Nullable String msg, @Nullable Throwable cause) { return nyi(null, msg, cause); }
+    public static @NotNull RuntimeException nyi(@Nullable String msg) { return nyi(null, msg, null); }
+    public static @NotNull RuntimeException nyi(@Nullable Throwable cause) { return nyi(null, null, cause); }
+    public static @NotNull RuntimeException nyi() { return nyi(null, null, null); }
+    
+    public static void throwNYI() { throw nyi(); }
+    
+    //</editor-fold>
+    
+    //</editor-fold>
     
     // Read-Only
     
-    public static RuntimeException readOnly()
-    {
+    public static RuntimeException readOnly() {
         return readOnly(null, null);
     }
     
-    public static RuntimeException readOnly(String message, Throwable cause)
-    {
+    public static RuntimeException readOnly(String message, Throwable cause) {
         if (message != null && cause != null)
             return ex(new ReadOnlyViolationException(message, cause));
         else if (message != null && cause == null)
@@ -388,9 +393,23 @@ public class ExceptionsSL
     
     // Abstract Method Error
     
-    public static RuntimeException abstractMethodError(String methodName, String message)
-    {
+    public static RuntimeException abstractMethodError(String methodName, String message) {
         return ex(new AbstractMethodError("Abstract method \"" + methodName + "\" requires implementation."), message);
+    }
+    
+    private static String refine(@Nullable String prefixMsg, @Nullable Object msg) {
+        final String suffix = ". See Stack Trace for details.";
+        final String message = msg != null ? msg.toString() : null;
+        
+        if (prefixMsg != null && message == null) {
+            return prefixMsg + suffix;
+        } else if (prefixMsg == null && message != null) {
+            return message;
+        } else if (prefixMsg != null && message != null) {
+            return refine(prefixMsg + ". [" + message + "]", null);
+        } else {
+            return refine("Undefined Exception thrown", null);
+        }
     }
     
     
@@ -400,45 +419,37 @@ public class ExceptionsSL
      *                                                                             *
      * *************************************************************************** */
     
-    public static RuntimeException ex()
-    {
+    public static RuntimeException ex() {
         return ex(null, null);
     }
     
-    public static RuntimeException ex(String message)
-    {
+    public static RuntimeException ex(String message) {
         return ex(null, message);
     }
     
-    public static RuntimeException ex(Throwable cause)
-    {
+    public static RuntimeException ex(Throwable cause) {
         return ex(cause, null);
     }
     
-    public static RuntimeException ex(Throwable cause, String message)
-    {
+    public static RuntimeException ex(Throwable cause, String message) {
         return hlp_getException(cause, message, ExceptionType.RUNTIME);
     }
     
     //
     
-    public static InternalException internal()
-    {
+    public static InternalException internal() {
         return internal(null, null);
     }
     
-    public static InternalException internal(String message)
-    {
+    public static InternalException internal(String message) {
         return internal(null, message);
     }
     
-    public static InternalException internal(Throwable cause)
-    {
+    public static InternalException internal(Throwable cause) {
         return internal(cause, null);
     }
     
-    public static InternalException internal(Throwable cause, String message)
-    {
+    public static InternalException internal(Throwable cause, String message) {
         return (InternalException) hlp_getException(cause, message, ExceptionType.INTERNAL);
     }
     
@@ -449,13 +460,11 @@ public class ExceptionsSL
      *                                                                             *
      * *************************************************************************** */
     
-    public static void print(Object message)
-    {
+    public static void print(Object message) {
         ConsoleBB.CONSOLE.print(message.toString());
     } //TODO
     
-    public static void print(Object message, Exception exception)
-    {
+    public static void print(Object message, Exception exception) {
         ConsoleBB.CONSOLE.print(message + " [ExceptionTools]");
         exception.printStackTrace();
     } //TODO
@@ -464,8 +473,7 @@ public class ExceptionsSL
     
     //<editor-fold desc="Helpers">
     
-    private static RuntimeException hlp_getException(Throwable cause, String message, ExceptionType type)
-    {
+    private static RuntimeException hlp_getException(Throwable cause, String message, ExceptionType type) {
         if (type == null)
             type = ExceptionType.RUNTIME;
         
@@ -482,27 +490,24 @@ public class ExceptionsSL
         else
             _exception = type.get(new RuntimeException(message, cause));
         
-        ConsoleBB.CONSOLE.print("ExceptionTools Stack Trace " +
-                                "[Thread | " + Thread.currentThread() + "] " +
-                                "[Exception | " + _exception + "]");
+        Printer.err("ExceptionTools Stack Trace " +
+                    "[Thread | " + Thread.currentThread() + "] " +
+                    "[Exception | " + _exception + "]");
         //		FXDialogTools.showInfoDialog("Exception Thrown", _exception.toString());
         _exception.printStackTrace();
         
         return _exception;
     }
     
-    private enum ExceptionType
-    {
+    private enum ExceptionType {
         
         RUNTIME() {
-            @Override protected RuntimeException get(RuntimeException base)
-            {
+            @Override protected RuntimeException get(RuntimeException base) {
                 return base != null ? base : new RuntimeException();
             }
         },
         INTERNAL() {
-            @Override protected RuntimeException get(RuntimeException base)
-            {
+            @Override protected RuntimeException get(RuntimeException base) {
                 return new InternalException(base);
             }
         };

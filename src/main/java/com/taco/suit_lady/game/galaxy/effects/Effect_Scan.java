@@ -3,7 +3,7 @@ package com.taco.suit_lady.game.galaxy.effects;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import com.taco.suit_lady.util.tools.list_tools.ListsSL;
-import com.taco.suit_lady.util.tools.util.values.ValuePair;
+import com.taco.suit_lady.util.values.ValuePair;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import org.jetbrains.annotations.Contract;

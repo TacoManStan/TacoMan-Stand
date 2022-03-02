@@ -29,7 +29,7 @@ public class TasksSL {
     }
     
     public static Thread start(Thread thread, Lock lock) {
-        throw new UndefinedRuntimeException(ExceptionsSL.nyi());
+        throw new UndefinedRuntimeException(Exceptions.nyi());
     }
     
     /**
@@ -44,7 +44,7 @@ public class TasksSL {
      * @throws NullPointerException if the specified {@code Supplier} is null.
      */
     public static Thread start(Supplier<Runnable> threadSupplier) {
-        Runnable runnable = ExceptionsSL.nullCheck(threadSupplier, "Thread Supplier").get();
+        Runnable runnable = Exceptions.nullCheck(threadSupplier, "Thread Supplier").get();
         return start(runnable instanceof Thread ? (Thread) runnable : new Thread(runnable));
     }
     
@@ -74,8 +74,8 @@ public class TasksSL {
      */
     @SafeVarargs
     public static void sync(Lock lock, Runnable runnable, Consumer<Throwable>... onFinallyActions) {
-        ExceptionsSL.nullCheck(runnable, "Runnable");
-        ExceptionsSL.nullCheck(onFinallyActions, "On-Finally Actions", "leave empty for no actions");
+        Exceptions.nullCheck(runnable, "Runnable");
+        Exceptions.nullCheck(onFinallyActions, "On-Finally Actions", "leave empty for no actions");
         
         TasksSL.sync(lock, runnable, false, onFinallyActions);
     }
@@ -107,8 +107,8 @@ public class TasksSL {
      */
     @SafeVarargs
     public static void sync(Lock lock, Runnable runnable, boolean allowNull, Consumer<Throwable>... onFinallyActions) {
-        ExceptionsSL.nullCheck(runnable, "Runnable");
-        ExceptionsSL.nullCheck(onFinallyActions, "On-Finally Actions", "leave empty for no actions");
+        Exceptions.nullCheck(runnable, "Runnable");
+        Exceptions.nullCheck(onFinallyActions, "On-Finally Actions", "leave empty for no actions");
         
         TasksSL.sync(lock, ignored -> {
             runnable.run();
@@ -141,8 +141,8 @@ public class TasksSL {
      */
     @SafeVarargs
     public static <R> R sync(Lock lock, Supplier<R> runnableSupplier, Consumer<Throwable>... onFinallyActions) {
-        ExceptionsSL.nullCheck(runnableSupplier, "Runnable Supplier");
-        ExceptionsSL.nullCheck(onFinallyActions, "On-Finally Actions", "leave empty for no actions");
+        Exceptions.nullCheck(runnableSupplier, "Runnable Supplier");
+        Exceptions.nullCheck(onFinallyActions, "On-Finally Actions", "leave empty for no actions");
         
         return TasksSL.sync(lock, runnableSupplier, false, onFinallyActions);
     }
@@ -177,8 +177,8 @@ public class TasksSL {
      */
     @SafeVarargs
     public static <R> R sync(Lock lock, Supplier<R> runnableSupplier, boolean allowNull, Consumer<Throwable>... onFinallyActions) {
-        ExceptionsSL.nullCheck(runnableSupplier, "Runnable Supplier");
-        ExceptionsSL.nullCheck(onFinallyActions, "On-Finally Actions", "leave empty for no actions");
+        Exceptions.nullCheck(runnableSupplier, "Runnable Supplier");
+        Exceptions.nullCheck(onFinallyActions, "On-Finally Actions", "leave empty for no actions");
         
         return TasksSL.sync(lock, ignored -> runnableSupplier.get(), () -> null, allowNull, onFinallyActions);
     }
@@ -197,7 +197,7 @@ public class TasksSL {
      * <b>Example Usage</b>
      * <blockquote><pre>
      * <code>public static double distanceToCursor(Point2D point) {
-     *      {@link ExceptionsSL#nullCheck(Object, String) ExceptionTools.check}(point, "Point cannot be null.");
+     *      {@link Exceptions#nullCheck(Object, String) ExceptionTools.check}(point, "Point cannot be null.");
      *      return ThreadTools.run(new ReentrantLock(), paramPoint{@code ->} point.distanceTo(paramPoint), (){@code ->} Mouse.getLocation(), true);
      * }</code></pre></blockquote>
      *
@@ -234,12 +234,12 @@ public class TasksSL {
      */
     @SafeVarargs
     public static <T, R> R sync(Lock lock, Function<T, R> runnableFunction, Supplier<T> functionInputSupplier, boolean allowNullLock, Consumer<Throwable>... onFinally) {
-        ExceptionsSL.nullCheck(runnableFunction, "Runnable Function");
-        ExceptionsSL.nullCheck(functionInputSupplier, "Return Value Supplier");
-        ExceptionsSL.nullCheck(onFinally, "On-Finally Actions", "leave empty for no actions, not null");
+        Exceptions.nullCheck(runnableFunction, "Runnable Function");
+        Exceptions.nullCheck(functionInputSupplier, "Return Value Supplier");
+        Exceptions.nullCheck(onFinally, "On-Finally Actions", "leave empty for no actions, not null");
         
         if (ArraysSL.containsNull(onFinally))
-            throw ExceptionsSL.ex(new NullPointerException("On-Finally Actions array cannot contain null elements."));
+            throw Exceptions.ex(new NullPointerException("On-Finally Actions array cannot contain null elements."));
         
         final boolean locked = lock(lock, allowNullLock);
         Throwable thrown = null;
@@ -249,11 +249,11 @@ public class TasksSL {
         } catch (Throwable t) {
             thrown = t;
             if (ArraysSL.isEmpty(onFinally))
-                throw ExceptionsSL.ex(t, "");
+                throw Exceptions.ex(t, "");
         } finally {
             try {
                 for (Consumer<Throwable> onFinallyAction: onFinally)
-                    ExceptionsSL.nullCheck(onFinallyAction, "On-Finally Action").accept(thrown);
+                    Exceptions.nullCheck(onFinallyAction, "On-Finally Action").accept(thrown);
             } finally {
                 if (locked)
                     lock.unlock();
@@ -315,7 +315,7 @@ public class TasksSL {
      */
     public static boolean lock(Lock lock, boolean allowNull) {
         if (!allowNull)
-            ExceptionsSL.nullCheckMessage(lock, "Lock cannot be null if allowNull is false");
+            Exceptions.nullCheckMessage(lock, "Lock cannot be null if allowNull is false");
         if (lock != null) {
             lock.lock();
             return true;
@@ -376,7 +376,7 @@ public class TasksSL {
     
     //TO-DOC
     public static void printThread(@Nullable Supplier<Thread> threadSupplier, @Nullable Predicate<Thread> printCondition, @Nullable TriFunction<Integer, Thread, StackTraceElement, String> textSupplier) {
-        final Thread thread = ExceptionsSL.nullCheck(threadSupplier != null ? threadSupplier.get() : Thread.currentThread(), "Supplied Thread");
+        final Thread thread = Exceptions.nullCheck(threadSupplier != null ? threadSupplier.get() : Thread.currentThread(), "Supplied Thread");
         printCondition = printCondition != null ? printCondition : t -> true;
         textSupplier = textSupplier != null ? textSupplier : (i, t, ste) -> i + ". [" + ste.getLineNumber() + "]: " + ste;
         

@@ -1,7 +1,5 @@
 package com.taco.suit_lady._to_sort._new.initialization;
 
-import com.taco.suit_lady.util.Lockable;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
 import org.jetbrains.annotations.NotNull;
 
 public interface Initializable<T extends Initializable<T>> {

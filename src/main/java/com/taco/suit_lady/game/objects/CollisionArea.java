@@ -2,9 +2,9 @@ package com.taco.suit_lady.game.objects;
 
 import com.taco.suit_lady.game.interfaces.WrappedGameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Exceptions;
 import com.taco.suit_lady.util.tools.PropertiesSL;
-import com.taco.suit_lady.util.tools.util.values.NumberValuePair;
+import com.taco.suit_lady.util.values.NumberValuePair;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +34,7 @@ public abstract class CollisionArea
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull GameViewContent getGame() { return ExceptionsSL.nullCheck(getOwner(), "CollisionMap Owner").getGame(); }
+    @Override public @NotNull GameViewContent getGame() { return Exceptions.nullCheck(getOwner(), "CollisionMap Owner").getGame(); }
     
     //</editor-fold>
     

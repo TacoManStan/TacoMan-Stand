@@ -1,4 +1,4 @@
-package com.taco.suit_lady.util.tools.util.values;
+package com.taco.suit_lady.util.values;
 
 
 import org.jetbrains.annotations.Contract;
