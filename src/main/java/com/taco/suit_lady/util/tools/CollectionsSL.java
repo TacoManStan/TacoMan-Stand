@@ -28,7 +28,7 @@ public class CollectionsSL
     
     public <E> ReadOnlyListWrapper<E> boundList(ObservableMap<?, E> map, Lock lock)
     {
-        ExceptionsSL.nullCheck(map, "Map");
+        Exceptions.nullCheck(map, "Map");
         
         ReadOnlyListWrapper<E> bound_list = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
         if (lock != null)

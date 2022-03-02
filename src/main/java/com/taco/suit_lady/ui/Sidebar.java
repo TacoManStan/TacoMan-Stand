@@ -4,7 +4,7 @@ import com.taco.suit_lady.ui.jfx.components.button.ImageButtonGroup;
 import com.taco.suit_lady.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.BindingsSL;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Exceptions;
 import com.taco.suit_lady.util.tools.ObjectsSL;
 import com.taco.suit_lady.ui.jfx.components.button.ImageButton;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
@@ -105,13 +105,13 @@ public class Sidebar
             @Nullable ImagePane backImagePane,
             @NotNull ToolBar toolBar)
     {
-        this.weaver = ExceptionsSL.nullCheck(weaver, "FxWeaver");
-        this.ctx = ExceptionsSL.nullCheck(ctx, "Application Context");
+        this.weaver = Exceptions.nullCheck(weaver, "FxWeaver");
+        this.ctx = Exceptions.nullCheck(ctx, "Application Context");
         
         this.lock = new ReentrantLock();
         
-        ExceptionsSL.nullCheck(childButtonPane, "Sidebar Child Button Pane");
-        ExceptionsSL.nullCheck(contentPane, "Sidebar Content Pane");
+        Exceptions.nullCheck(childButtonPane, "Sidebar Child Button Pane");
+        Exceptions.nullCheck(contentPane, "Sidebar Content Pane");
         
         this.childButtonPane = childButtonPane;
         this.contentPane = contentPane;

@@ -4,7 +4,7 @@ import com.taco.suit_lady.game.ui.GFXObject;
 import com.taco.suit_lady.logic.TaskManager;
 import com.taco.suit_lady.logic.triggers.Galaxy;
 import com.taco.suit_lady.ui.ui_internal.controllers.Controller;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Exceptions;
 import com.taco.suit_lady.util.tools.TasksSL;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
@@ -51,7 +51,7 @@ public abstract class ContentController<T extends Content<T, TD, TC, F, FC>, TD 
     
     public TC init(@NotNull T content) {
         if (this.content != null)
-            throw ExceptionsSL.unsupported("Content has already been set (" + getContent() + ")");
+            throw Exceptions.unsupported("Content has already been set (" + getContent() + ")");
         this.content = content;
         
         this.taskManager = new TaskManager<>((TC) this).init();

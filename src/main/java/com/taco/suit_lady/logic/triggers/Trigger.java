@@ -3,7 +3,7 @@ package com.taco.suit_lady.logic.triggers;
 import com.taco.suit_lady.game.Entity;
 import com.taco.suit_lady.game.interfaces.WrappedGameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Exceptions;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -23,7 +23,7 @@ public abstract class Trigger<T extends TriggerEvent<T>>
     
     //<editor-fold desc="--- LOGIC ---">
     
-    final boolean test(@NotNull T event) { return ExceptionsSL.nullCheck(getCondition(), "Trigger Condition").test(event); }
+    final boolean test(@NotNull T event) { return Exceptions.nullCheck(getCondition(), "Trigger Condition").test(event); }
     
     //</editor-fold>
     

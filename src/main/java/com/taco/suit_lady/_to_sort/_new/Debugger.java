@@ -1,7 +1,7 @@
 package com.taco.suit_lady._to_sort._new;
 
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Exceptions;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import org.jetbrains.annotations.NotNull;
@@ -228,7 +228,7 @@ public final class Debugger {
     
     
     public boolean isTypeEnabled(@NotNull String printType) {
-        ExceptionsSL.nullCheck(printType, "Print Type");
+        Exceptions.nullCheck(printType, "Print Type");
         if (printType.equalsIgnoreCase(STATUS))
             return isStatusEnabled();
         else if (printType.equalsIgnoreCase(DEBUG))
@@ -237,7 +237,7 @@ public final class Debugger {
             return isWarnEnabled();
         else if (printType.equalsIgnoreCase(ERROR))
             return isErrorEnabled();
-        throw ExceptionsSL.unsupported("Unrecognized Print Type: " + printType);
+        throw Exceptions.unsupported("Unrecognized Print Type: " + printType);
     }
     
     

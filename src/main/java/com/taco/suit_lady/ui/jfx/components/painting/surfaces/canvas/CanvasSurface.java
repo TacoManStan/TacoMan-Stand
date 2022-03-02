@@ -1,16 +1,14 @@
 package com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas;
 
-import com.taco.suit_lady.game.Entity;
 import com.taco.suit_lady.game.ui.GFXObject;
 import com.taco.suit_lady.logic.TaskManager;
-import com.taco.suit_lady.logic.Tickable;
 import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.PaintCommand;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.Surface;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.SurfaceData;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.timing.Timer;
 import com.taco.suit_lady.util.timing.Timers;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Exceptions;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import javafx.beans.property.*;
@@ -79,7 +77,7 @@ public class CanvasSurface extends Canvas
             if (newValue.longValue() == -1)
                 snapshotTimer.stop();
             else if (newValue.longValue() <= 0)
-                throw ExceptionsSL.unsupported("Snapshot Frequency must be either -1 (disabled) or greater than 0 [" + getSnapshotFrequency() + "]");
+                throw Exceptions.unsupported("Snapshot Frequency must be either -1 (disabled) or greater than 0 [" + getSnapshotFrequency() + "]");
             else
                 snapshotTimer.reset(newValue);
         });

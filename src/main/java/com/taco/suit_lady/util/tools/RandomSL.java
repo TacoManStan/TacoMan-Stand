@@ -303,7 +303,7 @@ public final class RandomSL {
      * @throws NullPointerException If the specified array is {@code null}.
      */
     public static <T> @Nullable T getRandomElement(@NotNull T[] arr) {
-        if (ExceptionsSL.nullCheck(arr, "Input Array").length == 0)
+        if (Exceptions.nullCheck(arr, "Input Array").length == 0)
             return null;
         return arr[nextInt(arr.length - 1)];
     }

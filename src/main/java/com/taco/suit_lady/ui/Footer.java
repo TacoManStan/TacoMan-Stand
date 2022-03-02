@@ -1,7 +1,7 @@
 package com.taco.suit_lady.ui;
 
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Exceptions;
 import com.taco.suit_lady.util.tools.printer.Printer;
 import javafx.scene.layout.Pane;
 import net.rgielen.fxweaver.core.FxWeaver;
@@ -21,14 +21,14 @@ public abstract class Footer<F extends Footer<F, FC, T, TD, TC>, FC extends Foot
     private final FC controller;
     
     public Footer(@NotNull T content, Object... constructorParams) {
-        this.weaver = ExceptionsSL.nullCheck(content.weaver(), "FxWeaver");
-        this.ctx = ExceptionsSL.nullCheck(content.ctx(), "ApplicationContext");
+        this.weaver = Exceptions.nullCheck(content.weaver(), "FxWeaver");
+        this.ctx = Exceptions.nullCheck(content.ctx(), "ApplicationContext");
         
         this.content = content;
         
         // Compound expression containing null checks for both the controller definition and the resulting constructor instance itself
-        this.controller = ExceptionsSL.nullCheckMessage(
-                weaver().loadController(ExceptionsSL.nullCheck(controllerDefinition(), "Controller Definition Class")),
+        this.controller = Exceptions.nullCheckMessage(
+                weaver().loadController(Exceptions.nullCheck(controllerDefinition(), "Controller Definition Class")),
                 "Error Loading Controller of Type [" + controllerDefinition() + "] — Ensure controller class is defined in FXML file.");
         
         this.controller.setFooter(this);

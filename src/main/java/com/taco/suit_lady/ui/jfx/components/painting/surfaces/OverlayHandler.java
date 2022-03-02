@@ -4,7 +4,7 @@ import com.taco.suit_lady._to_sort._new.ReadOnlyObservableList;
 import com.taco.suit_lady._to_sort._new.ReadOnlyObservableListWrapper;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Exceptions;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -41,7 +41,7 @@ public class OverlayHandler
      * @param initialOverlays The vararg {@code array} of {@link OverlaySurface Overlays} to be added to this {@link OverlayHandler} upon its construction.
      */
     public OverlayHandler(@NotNull Springable springable, @Nullable ReentrantLock lock, @Nullable OverlaySurface... initialOverlays) {
-        this.springable = ExceptionsSL.nullCheck(springable, "Springable Input");
+        this.springable = Exceptions.nullCheck(springable, "Springable Input");
         this.lock = lock;
         
         
@@ -201,11 +201,11 @@ public class OverlayHandler
             if (overlaySurface != null)
                 return overlaySurface;
             
-            final OverlaySurface newSurface = ExceptionsSL.nullCheck(factory.get(), "Factory Result");
+            final OverlaySurface newSurface = Exceptions.nullCheck(factory.get(), "Factory Result");
             if (!addOverlay(newSurface))
-                throw ExceptionsSL.ex("Could not add Overlay — " + newSurface);
+                throw Exceptions.ex("Could not add Overlay — " + newSurface);
             else if (!newSurface.getName().equals(name))
-                throw ExceptionsSL.unsupported("Specified name (" + name + ") does not match factory name (" + newSurface.getName() + ")");
+                throw Exceptions.unsupported("Specified name (" + name + ") does not match factory name (" + newSurface.getName() + ")");
             
             return newSurface;
         });

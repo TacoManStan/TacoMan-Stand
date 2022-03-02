@@ -1,13 +1,12 @@
 package com.taco.suit_lady.ui.contents.mandelbrot;
 
-import com.taco.suit_lady.game.ui.GameViewContentController;
 import com.taco.suit_lady.logic.TaskManager;
 import com.taco.suit_lady.ui.ContentController;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasSurface;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasPane;
 import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.util.Lockable;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Exceptions;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
@@ -139,7 +138,7 @@ public class MandelbrotContentController extends ContentController<MandelbrotCon
     }
     
     public final void setDragConsumer(Consumer<MouseDragData> dragConsumer) {
-        this.dragConsumer = ExceptionsSL.nullCheck(dragConsumer, "Mouse DRAG Consumer");
+        this.dragConsumer = Exceptions.nullCheck(dragConsumer, "Mouse DRAG Consumer");
     }
     
     public final void resetDragConsumer() {
@@ -151,7 +150,7 @@ public class MandelbrotContentController extends ContentController<MandelbrotCon
     }
     
     public final void setMoveConsumer(Consumer<MouseDragData> moveConsumer) {
-        this.moveConsumer = ExceptionsSL.nullCheck(moveConsumer, "Mouse MOVE Consumer");
+        this.moveConsumer = Exceptions.nullCheck(moveConsumer, "Mouse MOVE Consumer");
     }
     
     public final void resetMoveConsumer() {

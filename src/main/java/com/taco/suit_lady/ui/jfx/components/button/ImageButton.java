@@ -1,11 +1,10 @@
 package com.taco.suit_lady.ui.jfx.components.button;
 
-import com.taco.suit_lady.logic.LogiCore;
 import com.taco.suit_lady.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.BindingsSL;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Exceptions;
 import com.taco.suit_lady.util.tools.ResourcesSL;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import com.taco.tacository.obj_traits.common.Nameable;
@@ -303,7 +302,7 @@ public class ImageButton
     private void initPropertyListeners() {
         selectedProperty.addListener((observable, oldValue, newValue) -> {
             if (newValue && !isToggleable())
-                throw ExceptionsSL.unsupported("Image Button \"" + getName() + "\" is not toggleable and can therefore not be selected.");
+                throw Exceptions.unsupported("Image Button \"" + getName() + "\" is not toggleable and can therefore not be selected.");
         });
         
         showTooltipProperty.addListener((observable, oldValue, newValue) -> updateTooltip());
@@ -427,7 +426,7 @@ public class ImageButton
             case SUFFIX_SELECTED_HOVERED -> selectedHoveredPaintData;
             case SUFFIX_SELECTED_PRESSED -> selectedPressedPaintData;
             
-            default -> throw ExceptionsSL.unsupported("Suffix \"" + suffix + "\" is not supported.");
+            default -> throw Exceptions.unsupported("Suffix \"" + suffix + "\" is not supported.");
         };
     }
     
@@ -997,7 +996,7 @@ public class ImageButton
      * @see #getSize()
      */
     public String getSizeID() {
-        throw ExceptionsSL.nyi();
+        throw Exceptions.nyi();
         //        // TODO - Eventually, different size parameters of the same image will be created, and this will allow access to the correct image.
         //        // The purpose of multiple identical image files of different sizes will provide additional size options that are guaranteed to provide a non-warped image.
         //        // This is because images can (and usually do) become warped/fuzzy when they are automatically resized.

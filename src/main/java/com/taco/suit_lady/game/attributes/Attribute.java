@@ -4,15 +4,13 @@ import com.taco.suit_lady.game.interfaces.WrappedGameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Exceptions;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import javafx.beans.property.*;
-import javafx.scene.Parent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
-import java.util.function.Function;
 
 public class Attribute<T>
         implements WrappedGameComponent, Serializable, UIDProcessable {
@@ -36,7 +34,7 @@ public class Attribute<T>
     
     public Attribute(@NotNull AttributeManager owner, @Nullable String id, @Nullable T value, @Nullable Class<T> attributeType) {
         if (value == null && attributeType == null)
-            throw ExceptionsSL.unsupported("Value and Attribute Type parameters must not both be null.");
+            throw Exceptions.unsupported("Value and Attribute Type parameters must not both be null.");
         
         this.owner = owner;
         

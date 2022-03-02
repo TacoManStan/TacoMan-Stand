@@ -1,7 +1,7 @@
 package com.taco.suit_lady._to_sort._new.initialization;
 
 import com.taco.suit_lady.util.Lockable;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Exceptions;
 import com.taco.suit_lady.util.tools.TasksSL;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
@@ -41,20 +41,20 @@ public final class Initializer<T extends Initializable<T>> {
     
     T init(@NotNull Object... params) {
         if (isInitialized())
-            throw ExceptionsSL.ex("Initializer (" + this + ") has already been initialized.");
+            throw Exceptions.ex("Initializer (" + this + ") has already been initialized.");
         operation(true, params);
         return owner;
     }
     
     T shutdown(@NotNull Object... params) {
         if (!isInitialized())
-            throw ExceptionsSL.ex("Cannot shutdown Initializer that has not been initialized — [ " + getOwner() + " ]");
+            throw Exceptions.ex("Cannot shutdown Initializer that has not been initialized — [ " + getOwner() + " ]");
         operation(false, params);
         return owner;
     }
     
     
-    void throwInitException() { throw ExceptionsSL.ex("Initializer has not been initialized — [ " + owner + " ]"); }
+    void throwInitException() { throw Exceptions.ex("Initializer has not been initialized — [ " + owner + " ]"); }
     
     //<editor-fold desc="--- PROPERTIES ---">
     

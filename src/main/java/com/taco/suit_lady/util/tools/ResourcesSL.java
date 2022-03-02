@@ -49,7 +49,7 @@ public class ResourcesSL {
     public static <V> V get(String groupKey, String lookupKey) {
         return get(groupKey, lookupKey, () ->
         {
-            throw ExceptionsSL.unsupported("Value \"" + groupKey + " -> " + lookupKey + "\" has not yet been defined");
+            throw Exceptions.unsupported("Value \"" + groupKey + " -> " + lookupKey + "\" has not yet been defined");
         });
     }
     
@@ -71,13 +71,13 @@ public class ResourcesSL {
     public static <V> V get(String groupKey, String lookupKey, Supplier<V> defaultValueSupplier) {
         groupKey = groupKey != null ? groupKey : "default";
         
-        ExceptionsSL.nullCheck(lookupKey, "UID Lookup Key");
-        ExceptionsSL.nullCheckMessage(defaultValueSupplier, "Default value returner is null for type \" + groupKey + \" using lookup key \" + lookupKey + \"");
+        Exceptions.nullCheck(lookupKey, "UID Lookup Key");
+        Exceptions.nullCheckMessage(defaultValueSupplier, "Default value returner is null for type \" + groupKey + \" using lookup key \" + lookupKey + \"");
         
         final String tempTypeKey = groupKey.toLowerCase();
         final String tempLookupKey = lookupKey.toLowerCase();
         
-        HashMap<String, V> map = ExceptionsSL.nullCheck(getMap(tempTypeKey), debugMessage(tempTypeKey, tempLookupKey, "Map"));
+        HashMap<String, V> map = Exceptions.nullCheck(getMap(tempTypeKey), debugMessage(tempTypeKey, tempLookupKey, "Map"));
         
         V value;// A Supplier is used so resources are only used getting the new value if necessary.
         if (map.containsKey(tempLookupKey))
@@ -94,8 +94,8 @@ public class ResourcesSL {
     }
     
     public static <V> V get(UID uID, Supplier<V> defaultValueSupplier, Object... params) {
-        ExceptionsSL.nullCheck(uID, "UID");
-        ExceptionsSL.nullCheck(defaultValueSupplier, "Default Value Supplier");
+        Exceptions.nullCheck(uID, "UID");
+        Exceptions.nullCheck(defaultValueSupplier, "Default Value Supplier");
         
         return get(uID.getGroupID(), uID.getUID(params), defaultValueSupplier);
     }
@@ -107,9 +107,9 @@ public class ResourcesSL {
     }
     
     public static <V> List<Object> getAll(String groupKey, Class<V> typeReq) {
-        ExceptionsSL.nullCheck(groupKey, "Lookup Key");
+        Exceptions.nullCheck(groupKey, "Lookup Key");
         ArrayList<Object> returnList = new ArrayList<>();
-        List<HashMap<String, Object>> maps = ExceptionsSL.nullCheck(ArraysSL.getMapValues(resources), debugMessage(groupKey, "N/A", "Map Values"));
+        List<HashMap<String, Object>> maps = Exceptions.nullCheck(ArraysSL.getMapValues(resources), debugMessage(groupKey, "N/A", "Map Values"));
         maps.stream().filter(Objects::nonNull).forEach(map -> {
             Object element = map.get(groupKey);
             if (element != null && (typeReq == null || ToolsSL.instanceOf(element, typeReq)))
@@ -131,7 +131,7 @@ public class ResourcesSL {
     }
     
     public static Image getImage(String pathID, String imageID, String extension) {
-        ExceptionsSL.nullCheck(extension, "File Extension");
+        Exceptions.nullCheck(extension, "File Extension");
         
         String hashID = StringsSL.replaceSeparator((pathID != null ? pathID : "") + imageID);
         String filePath = StringsSL.replaceSeparator("images/" + hashID + "." + extension);
@@ -168,7 +168,7 @@ public class ResourcesSL {
                 yield getImage("game/" + sizeID + "/" + pathID, name, extension);
             }
             
-            default -> throw ExceptionsSL.unsupported("Unsupported Size ID: " + sizeID);
+            default -> throw Exceptions.unsupported("Unsupported Size ID: " + sizeID);
         };
     }
     
@@ -178,7 +178,7 @@ public class ResourcesSL {
      */
     @Deprecated
     public static Image getImage(String pathID, String imageID, String extension, boolean isTheme) {
-        ExceptionsSL.nullCheck(extension, "File Extension");
+        Exceptions.nullCheck(extension, "File Extension");
         
         String theme = isTheme ? "themes/dark/" : ""; // TODO [S]: Load the theme from settings.
         String hashID = StringsSL.replaceSeparator((pathID != null ? pathID : "") + imageID);
@@ -210,30 +210,30 @@ public class ResourcesSL {
     // Update
     
     public static <V> V update(String groupKey, String lookupKey, V newValue) {
-        ExceptionsSL.nullCheck(groupKey, "Group Key");
-        ExceptionsSL.nullCheck(lookupKey, "Lookup Key");
-        ExceptionsSL.nullCheckMessage(newValue, debugMessage(groupKey, lookupKey, "New Value is null"));
+        Exceptions.nullCheck(groupKey, "Group Key");
+        Exceptions.nullCheck(lookupKey, "Lookup Key");
+        Exceptions.nullCheckMessage(newValue, debugMessage(groupKey, lookupKey, "New Value is null"));
         
-        HashMap<String, V> map = ExceptionsSL.nullCheck(getMap(groupKey), debugMessage(groupKey, lookupKey, "Map is null"));
+        HashMap<String, V> map = Exceptions.nullCheck(getMap(groupKey), debugMessage(groupKey, lookupKey, "Map is null"));
         return map.put(lookupKey, newValue);
     }
     
     public static <V> V update(UID uID, String lookupKey, V newValue, Object... params) {
-        ExceptionsSL.nullCheck(uID, "UID Type Key");
-        ExceptionsSL.nullCheck(lookupKey, "Lookup Key");
-        ExceptionsSL.nullCheckMessage(newValue, debugMessage(uID.getUID(params), lookupKey, "New Value is null"));
+        Exceptions.nullCheck(uID, "UID Type Key");
+        Exceptions.nullCheck(lookupKey, "Lookup Key");
+        Exceptions.nullCheckMessage(newValue, debugMessage(uID.getUID(params), lookupKey, "New Value is null"));
         
         return update(uID.getUID(params), lookupKey, newValue);
     }
     
     public static <V> V updateLater(UID uID, String lookupKey, Supplier<V> valueSupplier, Object... params) {
-        throw ExceptionsSL.nyi();
+        throw Exceptions.nyi();
     } // TODO
     
     // Get Map
     
     protected static <V> HashMap<String, V> getMap(String typeKey) {
-        ExceptionsSL.nullCheck(typeKey, "Type Key");
+        Exceptions.nullCheck(typeKey, "Type Key");
         if (!resources.containsKey(typeKey))
             resources.put(typeKey, new HashMap<>());
         return (HashMap<String, V>) resources.get(typeKey);
@@ -241,12 +241,12 @@ public class ResourcesSL {
     
     
     public static InputStream getResourceStream(String resource) throws IOException {
-        ExceptionsSL.nullCheck(resource, "Resource");
+        Exceptions.nullCheck(resource, "Resource");
         return ResourcesSL.class.getResourceAsStream(StringsSL.replaceSeparator("/" + resource));
     } // TODO: Load from resource jar file
     
     public static URL getResourceURL(String resource) {
-        ExceptionsSL.nullCheck(resource, "Resource");
+        Exceptions.nullCheck(resource, "Resource");
         return ResourcesSL.class.getResource(StringsSL.replaceSeparator("/" + resource));
     } // TODO: Load from resource jar file
     
@@ -254,7 +254,7 @@ public class ResourcesSL {
         try {
             return getResourceURL(resource).toURI();
         } catch (URISyntaxException e) {
-            throw ExceptionsSL.ex(e);
+            throw Exceptions.ex(e);
         }
     }
     

@@ -188,7 +188,7 @@ public class ArraysSL {
      * @throws NullPointerException      If the {@link T element} at the specified {@code movedToIndex} is {@code null} and the {@link Supplier ifNullFallbackSupplier} was not specified.
      */
     public static <T> T getAt(@NonNegative int index, @NotNull List<T> list, @Nullable Supplier<T> ifInvalidIndexFallbackSupplier, @Nullable Supplier<T> ifNullFallbackSupplier) {
-        ExceptionsSL.nullCheck(list, "List cannot be null.");
+        Exceptions.nullCheck(list, "List cannot be null.");
         
         T value;
         
@@ -198,11 +198,11 @@ public class ArraysSL {
                 if (ifNullFallbackSupplier != null)
                     value = ifNullFallbackSupplier.get();
                 else
-                    throw ExceptionsSL.ex(new NullPointerException(), "Value at movedToIndex [" + index + "] is null, but ifNull fallback Supplier was not provided.");
+                    throw Exceptions.ex(new NullPointerException(), "Value at movedToIndex [" + index + "] is null, but ifNull fallback Supplier was not provided.");
         } else if (ifInvalidIndexFallbackSupplier != null)
             value = ifInvalidIndexFallbackSupplier.get();
         else
-            throw ExceptionsSL.ex(new IndexOutOfBoundsException(), "Index value [" + index + "] is not valid for List:  " + list);
+            throw Exceptions.ex(new IndexOutOfBoundsException(), "Index value [" + index + "] is not valid for List:  " + list);
         
         return value;
     }
@@ -469,7 +469,7 @@ public class ArraysSL {
     
     @SafeVarargs public static <T, R> R[] convert(@NotNull Function<T, R> converter, @NotNull R[] resultArr, boolean allowMismatch, @NotNull T... inputArr) {
         if ((!allowMismatch && inputArr.length != resultArr.length) || inputArr.length < resultArr.length)
-            throw ExceptionsSL.unsupported("Array Length Mismatch:  [" + resultArr.length + " :: " + inputArr.length + "]");
+            throw Exceptions.unsupported("Array Length Mismatch:  [" + resultArr.length + " :: " + inputArr.length + "]");
         IntStream.range(0, inputArr.length).forEach(i -> resultArr[i] = converter.apply(inputArr[i]));
         return resultArr;
     }
@@ -624,7 +624,7 @@ public class ArraysSL {
      * @see #getMapValues(Map, List)
      */
     public static <V> ArrayList<V> getMapValues(Map<?, V> map) {
-        return (ArrayList<V>) getMapValues(ExceptionsSL.nullCheck(map, "Map"), null);
+        return (ArrayList<V>) getMapValues(Exceptions.nullCheck(map, "Map"), null);
     }
     
     /**
@@ -643,13 +643,13 @@ public class ArraysSL {
      * @see #getMapValues(Map)
      */
     public static <V> List<V> getMapValues(Map<?, V> map, List<V> targetList) {
-        Collection<V> _mapContents = ExceptionsSL.nullCheck(map, "Map").values();
+        Collection<V> _mapContents = Exceptions.nullCheck(map, "Map").values();
         
         if (targetList == null)
             return new ArrayList<>(_mapContents);
         
         if (!targetList.addAll(_mapContents))
-            throw ExceptionsSL.ex("Failed to add contents of map (" + map + ")" + " to target list (" + targetList + ")");
+            throw Exceptions.ex("Failed to add contents of map (" + map + ")" + " to target list (" + targetList + ")");
         
         return targetList;
     }
@@ -730,7 +730,7 @@ public class ArraysSL {
      * @param <T>  The type of {@link T element} being added.
      */
     public static <T> void addToFront(List<T> list, T obj) {
-        ExceptionsSL.nullCheck(list, "List").add(0, ExceptionsSL.nullCheck(obj, "Object Param"));
+        Exceptions.nullCheck(list, "List").add(0, Exceptions.nullCheck(obj, "Object Param"));
     }
     
     // </editor-fold>
@@ -760,7 +760,7 @@ public class ArraysSL {
      * @throws NullPointerException If the specified {@code List} is {@code null}.
      */
     public static <T> boolean insertAfter(List<T> list, T searchElement, T objToInsert) {
-        throw ExceptionsSL.nyi();
+        throw Exceptions.nyi();
     } // TODO
     
     /**
@@ -786,7 +786,7 @@ public class ArraysSL {
      * @throws NullPointerException If the specified {@code List} is {@code null}.
      */
     public static <T> boolean insertBefore(List<T> list, T searchElement, T objToInsert) {
-        throw ExceptionsSL.nyi();
+        throw Exceptions.nyi();
     } // TODO
     
     //
@@ -842,8 +842,8 @@ public class ArraysSL {
     //
     
     public static <V> boolean remove(Map<?, V> map, V obj) {
-        ExceptionsSL.nullCheck(map, "Map");
-        ExceptionsSL.nullCheck(obj, "Object to Remove");
+        Exceptions.nullCheck(map, "Map");
+        Exceptions.nullCheck(obj, "Object to Remove");
         //        ConsoleBB.CONSOLE.dev("Removing \"" + obj + "\" from \"" + map + "\"");
         
         // DO NOT SIMPLIFY: removeAll(obj) would only remove the first instance.
@@ -851,8 +851,8 @@ public class ArraysSL {
     }
     
     public static <V> boolean removeFirst(Map<?, V> map, V obj) {
-        ExceptionsSL.nullCheck(map, "Map");
-        ExceptionsSL.nullCheck(obj, "Object to Remove");
+        Exceptions.nullCheck(map, "Map");
+        Exceptions.nullCheck(obj, "Object to Remove");
         
         return map.values().remove(obj);
     }
@@ -1194,7 +1194,7 @@ public class ArraysSL {
      */
     // TO-DOC
     public static <T> List<Object> purge(@NotNull Collection<Object> collection, @NotNull Class<T> clazz) {
-        throw ExceptionsSL.nyi();
+        throw Exceptions.nyi();
     }
     
     /**
@@ -1240,7 +1240,7 @@ public class ArraysSL {
     public static boolean containsType(@NotNull Collection<?> collection, @NotNull Class<?> clazz, boolean allowNullElements, boolean allowEmpty, boolean requireAll) {
         // If the collection instance is null, throw a NPE.
         // If the collection is empty, return the value of the specified allowEmpty boolean.
-        if (ExceptionsSL.nullCheck(collection, "Collection Parameter").isEmpty())
+        if (Exceptions.nullCheck(collection, "Collection Parameter").isEmpty())
             return allowEmpty;
         
         // Keeps track of whether a valid element has been found or not.
@@ -1286,7 +1286,7 @@ public class ArraysSL {
      * @throws NullPointerException If the specified {@code Collection} is null.
      */
     public static <V> ArrayList<V> copy(Collection<V> collection) {
-        return new ArrayList<>(ExceptionsSL.nullCheck(collection, "Collection"));
+        return new ArrayList<>(Exceptions.nullCheck(collection, "Collection"));
     }
     
     /**
@@ -1302,7 +1302,7 @@ public class ArraysSL {
      * @throws NullPointerException If the specified {@code Map} is null.
      */
     public static <K, V> Map<K, V> copy(Map<K, V> map) {
-        HashMap<K, V> _map = new HashMap<>(ExceptionsSL.nullCheck(map, "Map").size());
+        HashMap<K, V> _map = new HashMap<>(Exceptions.nullCheck(map, "Map").size());
         _map.putAll(map);
         return _map;
     }
@@ -1961,13 +1961,13 @@ public class ArraysSL {
                 T[] sourceArr, Z[] targetArr, ElementCopier<T, Z> copier,
                 Supplier<Z> onNull) {
             if (sourceArr == null)
-                throw ExceptionsSL.ex(new NullPointerException("Source array cannot be null"));
+                throw Exceptions.ex(new NullPointerException("Source array cannot be null"));
             else if (targetArr == null)
-                throw ExceptionsSL.ex(new NullPointerException("Target array cannot be null"));
+                throw Exceptions.ex(new NullPointerException("Target array cannot be null"));
             else if (copier == null)
-                throw ExceptionsSL.ex(new NullPointerException("ElementCopier cannot be null"));
+                throw Exceptions.ex(new NullPointerException("ElementCopier cannot be null"));
             else if (sourceArr.length != targetArr.length)
-                throw ExceptionsSL
+                throw Exceptions
                         .ex(new IndexOutOfBoundsException("Source array length must equal target array length"));
             for (int i = 0; i < sourceArr.length; i++) {
                 if (sourceArr[i] != null)

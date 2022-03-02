@@ -4,7 +4,7 @@ import com.taco.suit_lady.ui.ContentData;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Exceptions;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import com.taco.suit_lady.util.tools.TasksSL;
 import javafx.beans.property.ObjectProperty;
@@ -98,7 +98,7 @@ public abstract class ContentHandler<
         logiCore().execute(() -> {
             TasksSL.sync(lock, () -> contentList.forEach(client -> onShutdown(client)));
             if (!contentList.isEmpty())
-                throw ExceptionsSL.ex("Mandelbrot Content List should be empty! (" + contentList + ")");
+                throw Exceptions.ex("Mandelbrot Content List should be empty! (" + contentList + ")");
         });
     }
     

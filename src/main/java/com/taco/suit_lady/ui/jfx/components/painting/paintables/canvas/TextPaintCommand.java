@@ -2,7 +2,7 @@ package com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas;
 
 import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Exceptions;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -59,7 +59,7 @@ public class TextPaintCommand extends ShapePaintCommand {
     @Override public @NotNull TextPaintCommand init() {
         maxWidthProperty.addListener((observable, oldValue, newValue) -> {
             if (newValue.intValue() < 0)
-                throw ExceptionsSL.unsupported("Max Width must be non-negative (" + newValue.intValue() + ")");
+                throw Exceptions.unsupported("Max Width must be non-negative (" + newValue.intValue() + ")");
         });
         
         return (TextPaintCommand) super.init();

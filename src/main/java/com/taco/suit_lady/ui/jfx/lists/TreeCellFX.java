@@ -4,7 +4,7 @@ import com.taco.suit_lady.ui.jfx.lists.treehandler.IndexedCellFXable;
 import com.taco.suit_lady.ui.jfx.lists.treehandler.TreeItemFX;
 import com.taco.suit_lady.ui.ui_internal.controllers.CellController;
 import com.taco.suit_lady.util.tools.BindingsSL;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Exceptions;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.ObjectBinding;
@@ -42,7 +42,7 @@ public class TreeCellFX<T extends Serializable, C extends CellController<T>> ext
      * @throws NullPointerException If the specified {@link Function cellControlManagerFactory} is {@code null}.
      */
     public TreeCellFX(@NotNull Function<TreeCellFX<T, C>, CellControlManager<T, C>> cellControlManagerFactory) {
-        ExceptionsSL.nullCheck(cellControlManagerFactory, "Cell Control Manager Factory Function");
+        Exceptions.nullCheck(cellControlManagerFactory, "Cell Control Manager Factory Function");
         
         this.cellControlManager = cellControlManagerFactory.apply(this);
         this.lock = this.cellControlManager.getLock();
@@ -53,7 +53,7 @@ public class TreeCellFX<T extends Serializable, C extends CellController<T>> ext
                 if (treeItem instanceof TreeItemFX)
                     return (TreeItemFX<T>) treeItem;
                 else
-                    throw ExceptionsSL.ex(new ClassCastException(), "TreeCellFX objects must only contain TreeItemFX items.`");
+                    throw Exceptions.ex(new ClassCastException(), "TreeCellFX objects must only contain TreeItemFX items.`");
             return null;
         }, treeItemProperty());
         

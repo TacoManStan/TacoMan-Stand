@@ -9,7 +9,7 @@ import com.taco.suit_lady.ui.ui_internal.console.ConsoleUIDataContainer;
 import com.taco.suit_lady.ui.ui_internal.controllers.ConsoleElementController;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.BindingsSL;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Exceptions;
 import com.taco.suit_lady.util.tools.ResourcesSL;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import javafx.beans.binding.IntegerBinding;
@@ -85,7 +85,7 @@ public class Console
      * <p><b>Initialization Process</b></p>
      * <ol>
      *     <li>Locks the synchronization {@link ReentrantLock lock}.</li>
-     *     <li>Throws an {@link ExceptionsSL#ex(String) exception} if this {@link Console} has already been {@link #isInitialized() initialized}.</li>
+     *     <li>Throws an {@link Exceptions#ex(String) exception} if this {@link Console} has already been {@link #isInitialized() initialized}.</li>
      *     <li>Calls the <code><i>{@link #initStreams()}</i></code> method.</li>
      *     <li>
      *         Adds a {@link ListChangeListener} to the {@link #getMessages() Message List}:
@@ -102,7 +102,7 @@ public class Console
         lock.lock();
         try {
             if (initialized)
-                throw ExceptionsSL.ex("Console has already been created.");
+                throw Exceptions.ex("Console has already been created.");
             initialized = true;
             
             initStreams();
@@ -203,7 +203,7 @@ public class Console
     
     public void consolify(ConsoleUIDataContainer consoleContainer)
     {
-        ExceptionsSL.nullCheck(consoleContainer, "Console UI Data Container");
+        Exceptions.nullCheck(consoleContainer, "Console UI Data Container");
     
         ToolsFX.runFX(() -> {
             // treeView.setShowRoot(false); // Disabled temporarily because for some reason hiding the root causes messages to be truncated.

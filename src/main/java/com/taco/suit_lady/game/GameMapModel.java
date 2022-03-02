@@ -49,7 +49,7 @@ public class GameMapModel
     private final CroppedImagePaintCommand mapImagePaintCommand;
     
     public GameMapModel(@NotNull GameViewContent content, @NotNull ReentrantLock lock) {
-        this.lock = ExceptionsSL.nullCheck(lock, "Lock");
+        this.lock = Exceptions.nullCheck(lock, "Lock");
         this.content = content;
         
         //

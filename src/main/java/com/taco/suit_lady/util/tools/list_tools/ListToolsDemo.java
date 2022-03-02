@@ -2,7 +2,7 @@ package com.taco.suit_lady.util.tools.list_tools;
 
 import com.taco.suit_lady._to_sort._new.Debugger;
 import com.taco.suit_lady.util.tools.ArraysSL;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Exceptions;
 import com.taco.suit_lady.util.tools.list_tools.Operation.OperationType;
 import com.taco.suit_lady.util.tools.list_tools.Operation.TriggerType;
 import javafx.collections.FXCollections;
@@ -163,7 +163,7 @@ public class ListToolsDemo {
             footerI = null;
             boxI = false;
         } else
-            throw ExceptionsSL.ex("BLAH BLAH BLAH");
+            throw Exceptions.ex("BLAH BLAH BLAH");
         
         debugger.printBlock(printsI, titleI, footerI, boxI);
     }

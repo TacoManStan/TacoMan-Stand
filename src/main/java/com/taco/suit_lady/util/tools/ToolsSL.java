@@ -24,7 +24,7 @@ public final class ToolsSL {
      * @throws NullPointerException if the specified {@code Object} is null.
      */
     public static <T> boolean test(T obj, Predicate<T> predicate) {
-        ExceptionsSL.nullCheck(predicate, "Predicate");
+        Exceptions.nullCheck(predicate, "Predicate");
         return obj != null && predicate.test(obj);
     }
     
@@ -83,7 +83,7 @@ public final class ToolsSL {
      * @return The component type {@link Class} for the specified value.
      */
     public static <T> Class<? extends T> getClass(T[] param) {
-        ExceptionsSL.nullCheck(param, "Param Array");
+        Exceptions.nullCheck(param, "Param Array");
         return (Class<T>) param.getClass().getComponentType();
     }
     
@@ -110,7 +110,7 @@ public final class ToolsSL {
                     try {
                         return Class.forName("[L" + c.getName() + ";");
                     } catch (ClassNotFoundException e) {
-                        throw ExceptionsSL.ex(e);
+                        throw Exceptions.ex(e);
                     }
             }
             return param.getClass();

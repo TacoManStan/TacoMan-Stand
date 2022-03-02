@@ -4,7 +4,7 @@ import com.taco.suit_lady._to_sort._new.MatrixIterator;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasSurface;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.ArraysSL;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Exceptions;
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotIterator.MandelbrotColor;
 import javafx.geometry.Point2D;
 import javafx.scene.control.ProgressIndicator;
@@ -118,7 +118,7 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor> {
     protected void onConstruct(Object @NotNull ... params) {
         this.data = (MandelbrotContentData) params[0];
         if (data.getCanvasWidth() != getWidth() || data.getCanvasHeight() != getHeight())
-            throw ExceptionsSL.ex(
+            throw Exceptions.ex(
                     "Dimension Mismatch:  " +
                     "Dimensions Data [" + data.getCanvasWidth() + ", " + data.getCanvasHeight() + "  " +
                     "Iterator Data [" + getWidth() + ", " + getHeight());

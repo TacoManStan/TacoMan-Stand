@@ -6,7 +6,7 @@ import com.taco.suit_lady.ui.ui_internal.settings.SettingContainer;
 import com.taco.suit_lady.ui.ui_internal.settings.SettingGroup;
 import com.taco.suit_lady.ui.ui_internal.settings.SettingsTitledPane;
 import com.taco.suit_lady.util.tools.BindingsSL;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Exceptions;
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -162,7 +162,7 @@ public class SettingsController extends DialogController<Void>
     
     private void addSettingContainer(SettingContainer settingContainer)
     {
-        ExceptionsSL.nullCheck(settingContainer, "Setting Container");
+        Exceptions.nullCheck(settingContainer, "Setting Container");
         SettingsTitledPane _pane = new SettingsTitledPane(settingContainer);
         //		_pane.setAnimated(false);
         categoryAccordion.getPanes().add(_pane);

@@ -1,6 +1,6 @@
 package com.taco.suit_lady.data.dummy_data.calendar;
 
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Exceptions;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -75,6 +75,6 @@ public class DefaultCalendarDisplayer
     @Override
     public ReadOnlyListProperty<CalendarObject> activeObjectsProperty()
     {
-        throw ExceptionsSL.nyi();
+        throw Exceptions.nyi();
     }
 }

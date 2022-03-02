@@ -8,7 +8,7 @@ import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.BindingsSL;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Exceptions;
 import com.taco.suit_lady.util.tools.printer.Printer;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import javafx.beans.binding.DoubleBinding;
@@ -314,7 +314,7 @@ public class Camera
     
     private void validateLocationBindings() {
         if (xLocationProperty.isBound() != yLocationProperty.isBound())
-            throw ExceptionsSL.ex("ERROR: X and Y Camera Location Property Binding Statuses Do Not Match  [X: " + xLocationProperty.isBound() + "  Y: " + yLocationProperty.isBound() + "]");
+            throw Exceptions.ex("ERROR: X and Y Camera Location Property Binding Statuses Do Not Match  [X: " + xLocationProperty.isBound() + "  Y: " + yLocationProperty.isBound() + "]");
     }
     
     //</editor-fold>

@@ -11,7 +11,7 @@ public final class WebSL {
         try {
             Desktop.getDesktop().browse(URI.create(rawUrl));
         } catch (IOException e) {
-            throw ExceptionsSL.ex(e);
+            throw Exceptions.ex(e);
         }
     }
     

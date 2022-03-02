@@ -5,7 +5,7 @@ import com.taco.suit_lady.ui.jfx.lists.TreeCellFX;
 import com.taco.suit_lady.ui.ui_internal.controllers.CellController;
 import com.taco.suit_lady.util.Validatable;
 import com.taco.suit_lady.util.tools.ArraysSL;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Exceptions;
 import com.taco.suit_lady.util.tools.ResourcesSL;
 import com.taco.suit_lady.util.tools.ToolsSL;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
@@ -476,7 +476,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
         // TODO [S]: Add synchronization here?
         if (!isFolder) {
             // If isFolder is false, ensure that there is a non-null TreeItemValueProvider specified.
-            ExceptionsSL.nullCheck(provider, "Provider", "Provider cannot be null when isFolder is false");
+            Exceptions.nullCheck(provider, "Provider", "Provider cannot be null when isFolder is false");
             //			Validatable<T> _validator = getValidator(); // Create temp variable in case the validator is ever turned into a property.
             //			if (_validator != null) {
             //				// If the TreeItemValidator is non-null, validate an instance returned by the specified TreeItemValueProvider.
@@ -512,7 +512,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
                 items.add(revalidate(treeItem));
                 return added;
             } catch (Exception e) {
-                throw ExceptionsSL.ex(e, cellData.getParentName() + " has not yet been added as a parent.");
+                throw Exceptions.ex(e, cellData.getParentName() + " has not yet been added as a parent.");
             }
         }
         return false;
@@ -524,7 +524,7 @@ public abstract class TreeLoader<E extends TreeCellData<T>, T, C extends CellCon
     
     //TO-DOC
     public TreeItemFX<E> getFolderFor(E element) {
-        final String parentName = ExceptionsSL.nullCheck(ExceptionsSL.nullCheck(element, "Element").getParentName(), "Parent Name");
+        final String parentName = Exceptions.nullCheck(Exceptions.nullCheck(element, "Element").getParentName(), "Parent Name");
         return parentName.equalsIgnoreCase(rootName) ? rootItem : folders.get(element.getParentName());
     }
     

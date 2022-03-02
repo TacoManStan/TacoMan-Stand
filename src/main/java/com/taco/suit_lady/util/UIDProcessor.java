@@ -1,6 +1,6 @@
 package com.taco.suit_lady.util;
 
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Exceptions;
 import com.taco.suit_lady.util.tools.ToolsSL;
 
 /**
@@ -23,7 +23,7 @@ public class UIDProcessor
 	 * @param groupID A String that defines what type of object this {@code UIDProcessor} is identifying.
 	 */
 	public UIDProcessor(String groupID) {
-		this.globalUID = ExceptionsSL.nullCheck(groupID, "Global UID");
+		this.globalUID = Exceptions.nullCheck(groupID, "Global UID");
 		this.hashID = "" + ToolsSL.generateHashID();
 	}
 
@@ -51,7 +51,7 @@ public class UIDProcessor
 
 		if (params != null && params.length > 0)
 			for (Object param : params) {
-				ExceptionsSL.nullCheck(param, "UID Parameter");
+				Exceptions.nullCheck(param, "UID Parameter");
 				string_builder.append('-');
 				if (param instanceof UID)
 					string_builder.append(((UID) param).getUID());

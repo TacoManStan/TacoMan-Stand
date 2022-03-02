@@ -1,7 +1,7 @@
 package com.taco.suit_lady.util.timing;
 
 import com.taco.suit_lady.util.SimplePredicate;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Exceptions;
 import com.taco.suit_lady.util.tools.ToolsSL;
 
 import java.time.LocalDateTime;
@@ -38,7 +38,7 @@ public final class Timing {
      * @see System#currentTimeMillis()
      */
     public static long currentTime(TimeUnit timeUnit) {
-        return ExceptionsSL.nullCheck(timeUnit, "Time Unit").convert(currentTimeMillis(), TimeUnit.MILLISECONDS);
+        return Exceptions.nullCheck(timeUnit, "Time Unit").convert(currentTimeMillis(), TimeUnit.MILLISECONDS);
     }
     
     //
@@ -85,7 +85,7 @@ public final class Timing {
     //
     
     public static Duration createDurationMillis(Number duration) {
-        ExceptionsSL.nullCheck(duration, "Duration");
+        Exceptions.nullCheck(duration, "Duration");
         return new Duration();
     }
     

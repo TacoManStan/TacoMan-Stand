@@ -2,7 +2,7 @@ package com.taco.suit_lady.game.objects;
 
 import com.taco.suit_lady.game.interfaces.WrappedGameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Exceptions;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
@@ -50,7 +50,7 @@ public class CollisionMap
     public final boolean addCollisionArea(@NotNull CollisionArea area) {
         return ToolsFX.forbidFX(getLock(), () -> {
             if (collisionAreas.contains(area))
-                throw ExceptionsSL.ex("Collision Area is already contained in this Collision Map:  [" + area + "]");
+                throw Exceptions.ex("Collision Area is already contained in this Collision Map:  [" + area + "]");
             return collisionAreas.add(area);
         });
     }

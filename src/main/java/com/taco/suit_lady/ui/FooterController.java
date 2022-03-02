@@ -1,7 +1,7 @@
 package com.taco.suit_lady.ui;
 
 import com.taco.suit_lady.ui.ui_internal.controllers.Controller;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Exceptions;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
@@ -31,9 +31,9 @@ public abstract class FooterController<F extends Footer<F, FC, T, TD, TC>, FC ex
     
     protected void setFooter(@NotNull Footer<F, FC, T, TD, TC> footer) {
         try {
-            this.footer = (F) ExceptionsSL.nullCheck(footer, "UIPage");
+            this.footer = (F) Exceptions.nullCheck(footer, "UIPage");
         } catch (Exception e) {
-            throw ExceptionsSL.ex(e, "UIPage must be of type T [" + footer.getClass() + "]");
+            throw Exceptions.ex(e, "UIPage must be of type T [" + footer.getClass() + "]");
         }
         onPageBindingComplete();
     }

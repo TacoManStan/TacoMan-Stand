@@ -1,10 +1,9 @@
 package com.taco.suit_lady.logic;
 
-import com.taco.suit_lady.game.Entity;
 import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.interfaces.WrappedGameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Exceptions;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
@@ -28,7 +27,7 @@ public abstract class GameTask<E extends Tickable<E>>
         else if (owner instanceof GameComponent gameComponentOwner)
             this.game = gameComponentOwner.getGame();
         else
-            throw ExceptionsSL.ex("GameComponent param is null and owner is not implementation of GameComponent (" + owner + ")");
+            throw Exceptions.ex("GameComponent param is null and owner is not implementation of GameComponent (" + owner + ")");
         this.owner = owner;
         
         this.tickCountProperty = new ReadOnlyLongWrapper(0);

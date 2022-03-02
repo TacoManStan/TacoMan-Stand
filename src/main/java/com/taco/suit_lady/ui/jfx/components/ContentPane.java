@@ -1,7 +1,7 @@
 package com.taco.suit_lady.ui.jfx.components;
 
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Exceptions;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import javafx.scene.layout.StackPane;
 import net.rgielen.fxweaver.core.FxWeaver;
@@ -18,7 +18,7 @@ public class ContentPane extends StackPane
     private final StackPane backgroundPane;
     
     public ContentPane(@NotNull Springable springable) {
-        this.springable = ExceptionsSL.nullCheck(springable, "Springable Input").asStrict();
+        this.springable = Exceptions.nullCheck(springable, "Springable Input").asStrict();
         
         this.foregroundPane = loadForegroundPane();
         this.contentPane = loadContentPane();

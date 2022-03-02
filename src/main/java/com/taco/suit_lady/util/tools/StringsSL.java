@@ -379,9 +379,9 @@ public class StringsSL {
      * @return The specified {@code host String} with the specified values replaced.
      */
     public static String replace(String host, String replaceWith, boolean useRegex, String... toReplaceValues) {
-        ExceptionsSL.nullCheck(host, "Host string cannot be null.");
-        ExceptionsSL.nullCheck(replaceWith, "To-Replace string cannot be null.");
-        ExceptionsSL.nullCheck(toReplaceValues, "Replace with array cannot be null.");
+        Exceptions.nullCheck(host, "Host string cannot be null.");
+        Exceptions.nullCheck(replaceWith, "To-Replace string cannot be null.");
+        Exceptions.nullCheck(toReplaceValues, "Replace with array cannot be null.");
         for (String toReplace: toReplaceValues)
             if (toReplace != null)
                 if (useRegex)

@@ -4,7 +4,7 @@ import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.tools.ArraysSL;
-import com.taco.suit_lady.util.tools.ExceptionsSL;
+import com.taco.suit_lady.util.tools.Exceptions;
 import com.taco.suit_lady.util.tools.TasksSL;
 import com.taco.suit_lady.util.tools.list_tools.Operation.OperationType;
 import com.taco.tacository.obj_traits.common.Nameable;
@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -316,7 +315,7 @@ public abstract class OperationHandler<E>
      */
     public final OperationHandler<E> apply() {
         refresh();
-        ExceptionsSL.nullCheck(list, "Observable List").addListener(ExceptionsSL.nullCheck(this, "List Listener"));
+        Exceptions.nullCheck(list, "Observable List").addListener(Exceptions.nullCheck(this, "List Listener"));
         return this;
     }
 }
