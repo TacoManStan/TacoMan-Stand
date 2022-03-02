@@ -26,6 +26,11 @@ public enum ValueOpType {
             return opResultType.apply(num1.doubleValue() / num2.doubleValue());
         }
     },
+    MOD() {
+        @Override public @NotNull Number apply(@NotNull Number num1, @NotNull Number num2, @NotNull OpResultType opResultType) {
+            return opResultType.apply(num1.doubleValue() % num2.doubleValue());
+        }
+    },
     
     EXPO() {
         @Override public @NotNull Number apply(@NotNull Number num1, @NotNull Number num2, @NotNull OpResultType opResultType) {
@@ -66,4 +71,8 @@ public enum ValueOpType {
     ValueOpType() { }
     
     public abstract @NotNull Number apply(@NotNull Number num1, @NotNull Number num2, @NotNull OpResultType opResultType);
+    
+    public final @NotNull Number apply(@NotNull NumberValuePairable<?> numPair, @NotNull OpResultType opResultType) {
+        return apply(numPair.a(), numPair.b(), opResultType);
+    }
 }

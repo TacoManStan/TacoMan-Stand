@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 public enum OpResultType {
     
-    DO_NOT_ROUND() {
+    EXACT() {
         @Override public @NotNull Number apply(@NotNull Number num) {
             return num;
         }

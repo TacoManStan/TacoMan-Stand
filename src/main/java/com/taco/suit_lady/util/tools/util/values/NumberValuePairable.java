@@ -38,7 +38,8 @@ public interface NumberValuePairable<T extends NumberValuePairable<T>>
     
     default Point2D asPoint() { return new Point2D(aDouble(), bDouble()); }
     
-    default
+    default @NotNull Number apply(@NotNull ValueOpType opType, @NotNull OpResultType resultType) { return opType.apply(this, resultType); }
+    default @NotNull Number apply(@NotNull ValueOpType opType) { return apply(opType, OpResultType.EXACT); }
     
     //</editor-fold>
 }
