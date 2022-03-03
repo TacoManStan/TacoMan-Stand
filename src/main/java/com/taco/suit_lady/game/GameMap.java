@@ -11,7 +11,7 @@ import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.ArraysSL;
 import com.taco.suit_lady.util.tools.BindingsSL;
-import com.taco.suit_lady.util.tools.MathSL;
+import com.taco.suit_lady.util.tools.Maths;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import com.taco.tacository.json.*;
 import javafx.beans.binding.IntegerBinding;
@@ -198,8 +198,8 @@ public class GameMap
         
         int tileMinX = Math.floorDiv(xLoc, getTileSize());
         int tileMinY = Math.floorDiv(yLoc, getTileSize());
-        int tileMaxX = MathSL.ceil(xLoc + pxMapWidth, getTileSize());
-        int tileMaxY = MathSL.ceil(yLoc + pxMapHeight, getTileSize());
+        int tileMaxX = Maths.ceil(xLoc + pxMapWidth, getTileSize());
+        int tileMaxY = Maths.ceil(yLoc + pxMapHeight, getTileSize());
         
         ArrayList<GameTile> returnTiles = new ArrayList<>();
         for (int i = tileMinX; i <= tileMaxX; i++)

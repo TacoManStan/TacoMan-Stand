@@ -199,10 +199,8 @@ public class AppUI
     
     private @NotNull Point2D getSafe(@NotNull Point2D source, @NotNull Dimensions dimensions) {
         return ToolsFX.requireFX(() -> {
-            double safeX = source.getX() >= 0 ? source.getX() : 0;
-            double safeY = source.getY() >= 0 ? source.getY() : 0;
-            safeX = safeX <= dimensions.width() ? safeX : dimensions.width();
-            safeY = safeY <= dimensions.height() ? safeY : dimensions.height();
+            double safeX = Math.min(Math.max(0, source.getX()), dimensions.width().doubleValue());
+            double safeY = Math.min(Math.max(0, source.getY()), dimensions.height().doubleValue());
             return new Point2D(safeX, safeY);
         });
     }

@@ -15,7 +15,9 @@ import com.taco.suit_lady.logic.triggers.implementations.UnitMovedEvent;
 import com.taco.suit_lady.ui.jfx.util.Dimensions;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
+import com.taco.suit_lady.util.shapes.Circle;
 import com.taco.suit_lady.util.tools.*;
+import com.taco.suit_lady.util.values.NumberValuePair;
 import com.taco.tacository.json.JElement;
 import com.taco.tacository.json.JLoadable;
 import com.taco.tacository.json.JObject;
@@ -158,15 +160,17 @@ public class GameObject
         taskManager().addShutdownOperation(() -> ArraysSL.iterateMatrix(tile -> tile.getOccupyingObjects().remove(this), getOccupiedTiles()));
     }
     
-    private CollisionRange collisionArea = null;
+    private CollisionArea collisionArea = null;
+    private Circle circle;
     
     private void initCollisionMap() {
         logiCore().execute(() -> {
-            printer().get(getClass()).setEnabled(false);
+            printer().get(getClass()).setEnabled(true);
             printer().get(getClass()).setPrintPrefix(false);
             printer().get(getClass()).print("Initializing Collision Map For: " + this);
             
-            collisionArea = new CollisionRange(collisionMap());
+            collisionArea = new CollisionArea(collisionMap());
+            collisionArea.includedShapes().add(circle = new Circle(this).init());
             
             locationBinding.addListener((observable, oldValue, newValue) -> refreshCollisionData());
             dimensionsBinding.addListener((observable, oldValue, newValue) -> refreshCollisionData());
@@ -179,9 +183,9 @@ public class GameObject
     
     private void refreshCollisionData() {
         double modifier = 1.0; //Only to test different sizes of collision ranges
-        collisionArea.setRadius(Math.max((int) ((getWidth() / 2) * modifier), (int) ((getHeight() / 2) * modifier)));
-        collisionArea.setX((int) getLocationX(true));
-        collisionArea.setY((int) getLocationY(true));
+//        circle.setRadius(Math.max((int) ((getWidth() / 2) * modifier), (int) ((getHeight() / 2) * modifier)));
+        circle.setDiameter(Math.max(getWidth(), getHeight()));
+        circle.setLocation(getLocation(true));
     }
     
     //</editor-fold>
@@ -209,7 +213,7 @@ public class GameObject
     
     @Override public @NotNull Double getLocationX() { return MapObject.super.getLocationX().doubleValue(); }
     public final double getLocationX(boolean center) { return center ? xLocationCenteredBinding.get() : xLocationProperty.get(); }
-    public final double setLocationX(@NotNull Number newValue, boolean center) { return PropertiesSL.setProperty(xLocationProperty, center ? newValue.doubleValue() + (getLocationX(false) - getLocationX(true)) : newValue.doubleValue()); }
+    public final double setLocationX(@NotNull Number newValue, boolean center) { return PropertiesSL.setProperty(xLocationProperty, center ? newValue.doubleValue() - (getWidth() / 2D) : newValue.doubleValue()); }
     
     public final double setTileLocationX(@NotNull Number newValue) { return PropertiesSL.setProperty(xLocationProperty, newValue.doubleValue() * getGameMap().getTileSize()); }
     public final double moveX(@NotNull Number amount) { return setLocationX(getLocationX(false) + amount.doubleValue(), false); }
@@ -221,7 +225,7 @@ public class GameObject
     
     @Override public @NotNull Double getLocationY() { return MapObject.super.getLocationY().doubleValue(); }
     public final double getLocationY(boolean center) { return center ? yLocationCenteredBinding.get() : yLocationProperty.get(); }
-    public final double setLocationY(@NotNull Number newValue, boolean center) { return PropertiesSL.setProperty(yLocationProperty, center ? newValue.doubleValue() + (getLocationY(false) - getLocationY(true)) : newValue.doubleValue()); }
+    public final double setLocationY(@NotNull Number newValue, boolean center) { return PropertiesSL.setProperty(yLocationProperty, center ? newValue.doubleValue() - (getHeight() / 2D) : newValue.doubleValue()); }
     
     public final double setTileLocationY(@NotNull Number newValue) { return PropertiesSL.setProperty(yLocationProperty, newValue.doubleValue() * getGameMap().getTileSize()); }
     public final double moveY(@NotNull Number amount) { return setLocationY(getLocationY(false) + amount.doubleValue(), false); }

@@ -10,7 +10,7 @@ public enum OnAbsentDefinition
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull OnAbsentDefinition defaultValue() { return OnAbsentDefinition.DO_NOTHING; }
+    @Override public @NotNull OnAbsentDefinition defaultValue() { return OnAbsentDefinition.CREATE_NEW; }
     
     //</editor-fold>
 }

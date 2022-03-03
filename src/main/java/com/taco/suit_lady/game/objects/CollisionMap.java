@@ -65,8 +65,18 @@ public class CollisionMap
     
     //<editor-fold desc="--- LOGIC ---">
     
-    public final boolean collidesWith(@NotNull CollisionMap other) { return ToolsFX.forbidFX(getLock(), () -> collisionAreas.stream().anyMatch(other::collidesWith)); }
-    public final boolean collidesWith(@NotNull CollisionArea other) { return ToolsFX.forbidFX(getLock(), () -> collisionAreas.stream().anyMatch(area -> area.collidesWith(other))); }
+    public final boolean collidesWith(@NotNull CollisionMap other) {
+        return ToolsFX.forbidFX(getLock(), () -> {
+            return collisionAreas.stream().anyMatch(area -> {
+                return !this.equals(other) && other.collidesWith(area);
+            });
+        });
+    }
+    public final boolean collidesWith(@NotNull CollisionArea other) {
+        return !this.equals(other.getOwner()) && ToolsFX.forbidFX(getLock(), () -> collisionAreas.stream().anyMatch(area -> {
+            return other.intersects(area);
+        }));
+    }
     
     //</editor-fold>
 }

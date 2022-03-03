@@ -17,4 +17,8 @@ public record NumberValuePair(Number a, Number b)
     @Override public @NotNull NumberValuePair modify(@NotNull Function<Number, Number> aFunction, @NotNull Function<Number, Number> bFunction) {
         return new NumberValuePair(aFunction.apply(a()), bFunction.apply(b()));
     }
+    
+    @Override public String toString() {
+        return getString(true);
+    }
 }

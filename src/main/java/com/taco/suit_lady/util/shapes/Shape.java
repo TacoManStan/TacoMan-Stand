@@ -1,6 +1,7 @@
 package com.taco.suit_lady.util.shapes;
 
 import com.taco.suit_lady.game.ui.GFXObject;
+import com.taco.suit_lady.logic.TaskManager;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
@@ -19,9 +20,13 @@ import javafx.collections.FXCollections;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -32,6 +37,8 @@ public abstract class Shape
     
     private final StrictSpringable springable;
     private final Lock lock;
+    
+    private final TaskManager<Shape> taskManager;
     
     //
     
@@ -53,6 +60,7 @@ public abstract class Shape
     
     
     private final MapProperty<String, DoubleBinding> locationMap;
+    private final ObjectBinding<List<NumberValuePair>> borderPointsBinding;
     
     //
     
@@ -62,6 +70,8 @@ public abstract class Shape
     public Shape(@NotNull Springable springable, @Nullable Lock lock, @Nullable LocType locType, @Nullable BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> pixelGenerator) {
         this.lock = lock != null ? lock : new ReentrantLock();
         this.springable = springable.asStrict();
+        
+        this.taskManager = new TaskManager<>(this);
         
         //
         
@@ -82,6 +92,7 @@ public abstract class Shape
         this.dimensionsBinding = BindingsSL.numPairBinding(widthProperty, heightProperty);
         
         this.locationMap = new SimpleMapProperty<>(FXCollections.observableHashMap());
+        this.borderPointsBinding = BindingsSL.objBinding(this::generateBorderPoints, getObservables());
         
         //
         
@@ -104,26 +115,28 @@ public abstract class Shape
     
     public final ReadOnlyDoubleProperty readOnlyXProperty() { return xProperty.getReadOnlyProperty(); }
     public final double getX() { return xProperty.get(); }
-    protected final double setX(@NotNull Number newValue) { return PropertiesSL.setProperty(xProperty, newValue); }
+    public final double setX(@NotNull Number newValue) { return PropertiesSL.setProperty(xProperty, newValue); }
     
     public final ReadOnlyDoubleProperty readOnlyYProperty() { return yProperty.getReadOnlyProperty(); }
     public final double getY() { return yProperty.get(); }
-    protected final double setY(@NotNull Number newValue) { return PropertiesSL.setProperty(yProperty, newValue); }
+    public final double setY(@NotNull Number newValue) { return PropertiesSL.setProperty(yProperty, newValue); }
     
     
+    protected final ReadOnlyDoubleWrapper widthProperty() { return widthProperty; }
     public final ReadOnlyDoubleProperty readOnlyWidthProperty() { return widthProperty.getReadOnlyProperty(); }
     public final double getWidth() { return widthProperty.get(); }
-    protected final double setWidth(@NotNull Number newValue) { return PropertiesSL.setProperty(widthProperty, newValue); }
+    public final double setWidth(@NotNull Number newValue) { return PropertiesSL.setProperty(widthProperty, newValue); }
     
+    protected final ReadOnlyDoubleWrapper heightProperty() { return heightProperty; }
     public final ReadOnlyDoubleProperty readOnlyHeightProperty() { return heightProperty.getReadOnlyProperty(); }
     public final double getHeight() { return heightProperty.get(); }
-    protected final double setHeight(@NotNull Number newValue) { return PropertiesSL.setProperty(heightProperty, newValue); }
+    public final double setHeight(@NotNull Number newValue) { return PropertiesSL.setProperty(heightProperty, newValue); }
     
     //
     
     public final ReadOnlyObjectProperty<LocType> readOnlyLocTypeProperty() { return locTypeProperty.getReadOnlyProperty(); }
     public final LocType getLocType() { return locTypeProperty.get(); }
-    protected final LocType setLocType(@NotNull LocType newValue) { return PropertiesSL.setProperty(locTypeProperty, newValue); }
+    public final LocType setLocType(@NotNull LocType newValue) { return PropertiesSL.setProperty(locTypeProperty, newValue); }
     
     
     protected ReadOnlyDoubleWrapper locationProperty(@NotNull Axis axis) {
@@ -134,9 +147,9 @@ public abstract class Shape
             default -> throw Exceptions.unsupported("Cannot find location property matching axis: " + axis);
         };
     }
-    protected ReadOnlyDoubleProperty readOnlyLocationProperty(@NotNull Axis axis) { return locationProperty(axis).getReadOnlyProperty(); }
-    protected double getLocation(@NotNull Axis axis) { return locationProperty(axis).get(); }
-    protected double setLocation(@NotNull Number newValue, @NotNull Axis axis) { return PropertiesSL.setProperty(locationProperty(axis), newValue); }
+    public ReadOnlyDoubleProperty readOnlyLocationProperty(@NotNull Axis axis) { return locationProperty(axis).getReadOnlyProperty(); }
+    public double getLocation(@NotNull Axis axis) { return locationProperty(axis).get(); }
+    public double setLocation(@NotNull Number newValue, @NotNull Axis axis) { return PropertiesSL.setProperty(locationProperty(axis), newValue); }
     
     protected ReadOnlyDoubleWrapper dimensionProperty(@NotNull Axis axis) {
         return sync(() -> switch (axis) {
@@ -146,9 +159,9 @@ public abstract class Shape
             default -> throw Exceptions.unsupported("Cannot find dimension property matching axis: " + axis);
         });
     }
-    protected ReadOnlyDoubleProperty readOnlyDimensionProperty(@NotNull Axis axis) { return dimensionProperty(axis).getReadOnlyProperty(); }
-    protected double getDimension(@NotNull Axis axis) { return dimensionProperty(axis).get(); }
-    protected double setDimension(@NotNull Number newValue, @NotNull Axis axis) { return PropertiesSL.setProperty(dimensionProperty(axis), newValue); }
+    public ReadOnlyDoubleProperty readOnlyDimensionProperty(@NotNull Axis axis) { return dimensionProperty(axis).getReadOnlyProperty(); }
+    public double getDimension(@NotNull Axis axis) { return dimensionProperty(axis).get(); }
+    public double setDimension(@NotNull Number newValue, @NotNull Axis axis) { return PropertiesSL.setProperty(dimensionProperty(axis), newValue); }
     
     //<editor-fold desc="> Bindings">
     
@@ -209,8 +222,9 @@ public abstract class Shape
     
     public final ObjectBinding<NumberValuePair> locationBinding() { return locationBinding; }
     public final NumberValuePair getLocation() { return locationBinding.get(); }
-    protected final NumberValuePair setLocation(@NotNull NumberValuePairable<?> newValue) { return setLocation(newValue.a(), newValue.b()); }
-    protected final NumberValuePair setLocation(@NotNull Number newX, @NotNull Number newY) {
+    public final NumberValuePair setLocation(@NotNull NumberValuePairable<?> newValue) { return setLocation(newValue.a(), newValue.b()); }
+    public final Point2D setLocation(@NotNull Point2D newValue) { return setLocation(newValue.getX(), newValue.getY()).asPoint(); }
+    public final NumberValuePair setLocation(@NotNull Number newX, @NotNull Number newY) {
         final NumberValuePair oldValue = getLocation();
         setX(newX);
         setY(newY);
@@ -219,13 +233,20 @@ public abstract class Shape
     
     public final ObjectBinding<NumberValuePair> dimensionsBinding() { return dimensionsBinding; }
     public final NumberValuePair getDimensions() { return dimensionsBinding.get(); }
-    protected final NumberValuePair setDimensions(@NotNull NumberValuePair newValue) { return setDimensions(newValue.a(), newValue.b()); }
-    protected final NumberValuePair setDimensions(@NotNull Number newWidth, @NotNull Number newHeight) {
+    public final NumberValuePair setDimensions(@NotNull NumberValuePair newValue) { return setDimensions(newValue.a(), newValue.b()); }
+    public final Point2D setDimensions(@NotNull Point2D newValue) { return setDimensions(newValue.getX(), newValue.getY()).asPoint(); }
+    public final NumberValuePair setDimensions(@NotNull Number newWidth, @NotNull Number newHeight) {
         final NumberValuePair oldValue = getDimensions();
         setWidth(newWidth);
         setHeight(newHeight);
         return oldValue;
     }
+    
+    //
+    
+    public final ObjectBinding<List<NumberValuePair>> borderPointsBinding() { return borderPointsBinding; }
+    public final List<NumberValuePair> getBorderPoints() { return borderPointsBinding.get(); }
+    @Contract(" -> new") public final @NotNull List<NumberValuePair> getBorderPointsCopy() { return new ArrayList<>(getBorderPoints()); }
     
     //</editor-fold>
     
@@ -246,12 +267,25 @@ public abstract class Shape
     
     //<editor-fold desc="--- LOGIC ---">
     
-    protected final boolean contains(@NotNull Point2D point) { return contains(point.getX(), point.getY()); }
-    protected final boolean contains(@NotNull NumberValuePairable<?> point) { return contains(point.asPoint()); }
+    public final boolean contains(@NotNull Point2D point) { return contains(point.getX(), point.getY()); }
+    public final boolean contains(@NotNull NumberValuePairable<?> point) { return contains(point.asPoint()); }
+    
+    public boolean intersects(@NotNull Shape other) {
+        return sync(() -> {
+            for (NumberValuePair numPair: other.getBorderPointsCopy())
+                if (contains(numPair))
+                    return true;
+            for (NumberValuePair numPair: getBorderPointsCopy())
+                if (other.contains(numPair))
+                    return true;
+            return false;
+        });
+    }
     
     //</editor-fold>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
     @Override public boolean needsGfxUpdate() {
         return needsUpdate;
     }
@@ -262,20 +296,22 @@ public abstract class Shape
         needsUpdate = false;
     }
     
-    
     //
     
     @Override public @NotNull Springable springable() { return springable; }
     @Override public @Nullable Lock getLock() { return lock; }
     
+    @Override public @NotNull TaskManager<Shape> taskManager() { return taskManager; }
+    
     //</editor-fold>
     
     //<editor-fold desc="--- ABSTRACT ---">
     
-    protected abstract boolean contains(@NotNull Number x, @NotNull Number y);
-    protected abstract boolean intersects(@NotNull Shape other);
+    public abstract boolean contains(@NotNull Number x, @NotNull Number y);
+    protected abstract @NotNull List<NumberValuePair> generateBorderPoints();
+    //    protected abstract boolean intersects(@NotNull Shape other);
     
-    protected abstract @NotNull List<Observable> observables();
+    protected @NotNull List<Observable> observables() { return Collections.emptyList(); }
     
     //</editor-fold>
     
@@ -302,6 +338,17 @@ public abstract class Shape
     }
     
     private @NotNull BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> defaultPixelGenerator() { return (imgLoc, loc) -> contains(loc) ? Color.BLACK : Color.TRANSPARENT; }
+    
+    private @NotNull Observable @NotNull [] getObservables(@NotNull Observable... excluded) {
+        return sync(() -> {
+            final ArrayList<Observable> observables = new ArrayList<>(observables());
+            
+            observables.addAll(Arrays.asList(locationBinding(), dimensionsBinding()));
+            observables.removeAll(Arrays.asList(excluded));
+            
+            return observables.toArray(new Observable[0]);
+        });
+    }
     
     //</editor-fold>
 }

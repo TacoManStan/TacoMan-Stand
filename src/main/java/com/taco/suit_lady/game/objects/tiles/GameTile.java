@@ -40,7 +40,7 @@ public class GameTile
     }
     
     public GameTile(@NotNull GameMap owner, @NotNull Dimensions dimensions) {
-        this(owner, dimensions.width(), dimensions.height());
+        this(owner, dimensions.width().intValue(), dimensions.height().intValue());
     }
     
     public GameTile(@NotNull GameMap owner, int xLoc, int yLoc) {

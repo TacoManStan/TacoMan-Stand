@@ -263,15 +263,25 @@ public class MoveCommand
                 } else
                     getOwner().moveY(yMovement);
                 
-//                Printer.print("Checking Collisions...");
-//                debugger().printList(getOwner().collisionMap().collisionAreas(), "Owner Collision");
-//                for (int i = 0; i < getGameMap().gameObjects().size(); i++) {
-//                    GameObject obj = getGameMap().gameObjects().get(i);
-////                    debugger().printList(obj.collisionMap().collisionAreas(), "Collision Areas For: " + obj);
-//                }
-                if (getGameMap().gameObjects().stream().anyMatch(gameObject -> gameObject.collidesWith(this))) {
-//                    Printer.print("Collision Detected");
+                //                Printer.print("Checking Collisions...");
+                //                debugger().printList(getOwner().collisionMap().collisionAreas(), "Owner Collision");
+                //                for (int i = 0; i < getGameMap().gameObjects().size(); i++) {
+                //                    GameObject obj = getGameMap().gameObjects().get(i);
+                ////                    debugger().printList(obj.collisionMap().collisionAreas(), "Collision Areas For: " + obj);
+                //                }
+                final Point2D newLoc2 = new Point2D(getOwner().getLocationX(true), getOwner().getLocationY(true));
+                if (getGameMap().gameObjects().stream().anyMatch(gameObject -> {
+                    return !gameObject.equals(getOwner()) && gameObject.collidesWith(this);
+                })) {
                     getOwner().setLocation(oldLoc, true);
+                    int count = 0;
+                    if (getGameMap().gameObjects().stream().anyMatch(gameObject -> {
+                        return !gameObject.equals(getOwner()) && gameObject.collidesWith(this);
+                    })) {
+                        count++;
+                        String isTestObj = "" + getOwner().isTestObject1();
+                        Printer.err("[" + isTestObj + "]: Collision Still Detected (" + count + "): " + oldLoc + "  -->  " + newLoc2 + "  -->  " + getOwner().getLocation(true), false);
+                    }
                     setPaused(true);
                 }
             }

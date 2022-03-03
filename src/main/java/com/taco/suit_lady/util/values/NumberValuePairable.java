@@ -68,4 +68,12 @@ public interface NumberValuePairable<T extends NumberValuePairable<T>>
     //</editor-fold>
     
     //</editor-fold>
+    
+    default String getString(boolean asInt) {
+        if (asInt)
+            return "[" + aInt() + ", " + bInt() + "]";
+        else
+            return "[" + a() + ", " + b() + "]";
+    }
+    default String getString() { return getString(false); }
 }
