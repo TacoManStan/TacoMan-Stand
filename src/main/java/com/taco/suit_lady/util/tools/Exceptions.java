@@ -6,14 +6,34 @@ import com.taco.suit_lady.util.exceptions.ReadOnlyViolationException;
 import com.taco.suit_lady.util.tools.printer.Printer;
 import com.taco.tacository.quick.ConsoleBB;
 import org.hibernate.TypeMismatchException;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.InputMismatchException;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class Exceptions {
+    
+    //<editor-fold desc="--- STACK TRACE METHODS ---">
+    
+    @Contract("_ -> param1")
+    public static <T extends Throwable> @NotNull T printStackTrace(@NotNull T throwable) {
+        throwable.printStackTrace();
+        return throwable;
+    }
+    
+    public static <V, T extends Throwable> @Nullable V printStackTrace(@NotNull T throwable, @NotNull Function<T, V> valueSupplier) { return valueSupplier.apply(printStackTrace(throwable)); }
+    public static <V, T extends Throwable> @Nullable V printStackTrace(@NotNull T throwable, @NotNull Supplier<V> valueSupplier) { return printStackTrace(throwable, t -> valueSupplier.get()); }
+    public static <V, T extends Throwable> @Nullable V printStackTrace(@NotNull T throwable, @Nullable V value) { return printStackTrace(throwable, t -> value); }
+    
+    //</editor-fold>
+    
+    //
+    
+    //<editor-fold desc="--- LEGACY ---">
     
     /* *************************************************************************** *
      *                                                                             *
@@ -518,11 +538,6 @@ public class Exceptions {
     }
     
     //</editor-fold>
+    
+    //</editor-fold>
 }
-
-/*
- * TODO LIST:
- * [S] Add a 2nd message parameter to applicable methods for setting the wrapped Exception's message.
- * [S] Make methods for silently reporting exceptions to the scripter (or devs for internal exceptions).
- *     [S] An example would be when an image icon isn't loaded correctly, but instead Missingno is displayed.
- */
