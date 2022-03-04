@@ -220,7 +220,14 @@ public class MoveCommand
     
     @Override protected void tick() {
         sync(() -> {
-            syncTarget();
+            final Point2D target = syncTarget().asPoint();
+            final double targetX = target.getX();
+            final double targetY = target.getY();
+            
+            final Point2D loc = getOwner().getLocation(true);
+            final double locX = loc.getX();
+            final double locY = loc.getY();
+            
             if (!isPaused()) {
                 //            final double speed = ((getOwner().attributes().getDoubleValue(MoveCommand.ATTRIBUTE_ID) * logiCore.getUPSMultiplier()) * logiCore.getGameMap().getTileSize()) / 100D;
                 //            System.out.println("Pre-Speed: " + logiCore().secondsToTicks(getOwner().attributes().getDoubleValue(MoveCommand.ATTRIBUTE_ID)));
@@ -230,13 +237,11 @@ public class MoveCommand
                 final double speed = logiCore().secondsToTicks(getOwner().attributes().getDoubleValue(MoveCommand.SPEED_ID) * getGameMap().getTileSize());
                 //            System.out.println("Speed: " + speed);
                 
-                final double xDistance = getTargetX() - getOwner().getLocationX(true);
-                final double yDistance = getTargetY() - getOwner().getLocationY(true);
+                final double xDistance = targetX - locX;
+                final double yDistance = targetY - locY;
                 
                 final double multiplierNumerator = Math.pow(speed, 2);
                 final double multiplierDenominator = Math.pow(xDistance, 2) + Math.pow(yDistance, 2);
-                
-                final Point2D oldLoc = getOwner().getLocation(true);
                 
                 if (multiplierDenominator != 0) {
                     final double multiplier = Math.sqrt(multiplierNumerator / multiplierDenominator);
@@ -244,29 +249,26 @@ public class MoveCommand
                     double xMovement = (multiplier * xDistance);
                     double yMovement = (multiplier * yDistance);
                     
-                    
                     //            ToolsFX.runFX(() -> {
-                    final double oldLocX = oldLoc.getX();
-                    final double oldLocY = oldLoc.getY();
                     
-                    if (xMovement > 0 && getTargetX() < oldLocX + xMovement) {
-                        if (getTargetX() != oldLocX)
-                            xMovement = getOwner().getLocationX(true) - oldLocX;
+                    if (xMovement > 0 && targetX < locX + xMovement) {
+                        if (targetX != locX)
+                            xMovement = targetX - locX; //Might need to be swapped
                         //                        getOwner().setLocationX(getTargetX(), true);
-                    } else if (xMovement < 0 && getTargetX() >= oldLocX + xMovement) {
-                        if (getTargetX() != oldLocX)
-                            xMovement = getOwner().getLocationX(true) - oldLocX;
+                    } else if (xMovement < 0 &&targetX >= locX + xMovement) {
+                        if (targetX != locX)
+                            xMovement = targetX - locX;
                         //                        getOwner().setLocationX(getTargetX(), true);
                     }
                     //                else
                     //                    getOwner().moveX(xMovement);
                     
-                    if (yMovement > 0 && getTargetY() < oldLocY + yMovement) {
-                        if (getTargetY() != oldLocY)
-                            yMovement = getOwner().getLocationY(true) - oldLocY;
-                    } else if (yMovement < 0 && getTargetY() > oldLocY + yMovement) {
-                        if (getTargetY() != oldLocY)
-                            yMovement = getOwner().getLocationY(true) - oldLocY;
+                    if (yMovement > 0 && targetY < locY + yMovement) {
+                        if (targetY  != locY)
+                            yMovement = targetY - locY;
+                    } else if (yMovement < 0 && targetY > locY + yMovement) {
+                        if (targetY != locY)
+                            yMovement = targetY - locY;
                     }
                     
                     //                final Point2D newLoc2 = new Point2D(getOwner().getLocationX(true), getOwner().getLocationY(true));
@@ -306,7 +308,7 @@ public class MoveCommand
                 
                 final Point2D newLoc = new Point2D(getOwner().getLocationX(true), getOwner().getLocationY(true));
                 if (getOwner().isAtPoint(getTarget(), true)) {
-                    logiCore().triggers().submit(new UnitArrivedEvent(getOwner(), oldLoc, newLoc));
+                    logiCore().triggers().submit(new UnitArrivedEvent(getOwner(), loc, newLoc));
                     setPaused(true);
                 }
                 //            }, true);
@@ -325,12 +327,12 @@ public class MoveCommand
     
     //</editor-fold>
     
-    private void syncTarget() {
+    private NumberValuePair syncTarget() {
         ObservableValue<? extends Number> obsX = getObservableTargetX();
         ObservableValue<? extends Number> obsY = getObservableTargetY();
-        if (obsX != null)
-            setTargetX(obsX.getValue());
-        if (obsY != null)
-            setTargetY(obsY.getValue());
+        Number x = obsX != null ? obsX.getValue() : getTargetX();
+        Number y = obsY != null ? obsY.getValue() : getTargetY();
+        setTarget(new Point2D(x.doubleValue(), y.doubleValue()));
+        return new NumberValuePair(x, y);
     }
 }

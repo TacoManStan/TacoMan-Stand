@@ -69,13 +69,15 @@ public class Circle extends Shape {
     
     //TODO: Note that collision checks should still work with this overwritten method removed, but, well... it doesn't. So, fix that, because it'll definitely crop up as an issue later on.
     @Override public boolean intersects(@NotNull Shape other, @NotNull Number xMod, @NotNull Number yMod) {
-        final Point2D center = getLocation(LocType.CENTER).applyEach(xMod, yMod).asPoint();
-        if (other instanceof Circle otherCircle)
-            return sync(() -> center.distance(other.getLocation(LocType.CENTER).asPoint()) < getRadius() + otherCircle.getRadius());
-        else if (other instanceof Box otherBox)
-            return other.getBorderPoints().stream().anyMatch(otherBorderPoint -> center.distance(otherBorderPoint.asPoint()) < getRadius());
-        else
-            return super.intersects(other, xMod, yMod);
+        return sync(() -> {
+            final Point2D center = getLocation(LocType.CENTER).applyEach(xMod, yMod).asPoint();
+            if (other instanceof Circle otherCircle)
+                return center.distance(other.getLocation(LocType.CENTER).asPoint()) < getRadius() + otherCircle.getRadius();
+            else if (other instanceof Box otherBox)
+                return other.getBorderPoints().stream().anyMatch(otherBorderPoint -> center.distance(otherBorderPoint.asPoint()) < getRadius());
+            else
+                return super.intersects(other, xMod, yMod);
+        });
     }
     @Override public boolean contains(@NotNull Number x, @NotNull Number y) {
         return getLocation(LocType.CENTER).asPoint().distance(x.doubleValue(), y.doubleValue()) < getRadius();
