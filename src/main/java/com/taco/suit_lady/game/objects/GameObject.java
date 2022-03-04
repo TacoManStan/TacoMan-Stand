@@ -41,6 +41,7 @@ public class GameObject
         implements WrappedGameComponent, Entity, MapObject, JObject, JLoadable, UIDProcessable, Tickable<GameObject>, Collidable {
     
     private final GameViewContent content;
+    private final TaskManager<GameObject> taskManager;
     
     private final GameObjectModel model;
     private final AttributeManager attributes;
@@ -75,6 +76,8 @@ public class GameObject
     
     public GameObject(@NotNull GameComponent gameComponent, @Nullable String objID, @Nullable String modelId) {
         this.content = gameComponent.getGame();
+        this.taskManager = new TaskManager<>(this);
+        
         this.objID = objID;
         
         this.model = new GameObjectModel(this, "units", modelId);
@@ -118,6 +121,7 @@ public class GameObject
         setWidth(getGameMap().getTileSize());
         setHeight(getGameMap().getTileSize());
         
+        taskManager().init();
         getModel().init();
         
         this.occupiedTilesBinding = Bind.objBinding(this::calculateOccupiedTiles, xLocationProperty, yLocationProperty, widthProperty, heightProperty, gameMapProperty());
@@ -166,7 +170,7 @@ public class GameObject
     private Circle circle;
     
     private void initCollisionMap() {
-        logiCore().execute(() -> {
+        executeOnce(() -> {
             printer().get(getClass()).setEnabled(true);
             printer().get(getClass()).setPrintPrefix(false);
             printer().get(getClass()).print("Initializing Collision Map For: " + this);
@@ -174,20 +178,18 @@ public class GameObject
             collisionArea = new CollisionArea(collisionMap());
             collisionArea.includedShapes().add(circle = new Circle(this).init());
             
-            locationBinding.addListener((observable, oldValue, newValue) -> refreshCollisionData());
-            dimensionsBinding.addListener((observable, oldValue, newValue) -> refreshCollisionData());
-            
-            refreshCollisionData();
-            
             collisionMap().addCollisionArea(collisionArea);
         });
+        refreshCollisionData();
     }
     
     private void refreshCollisionData() {
-        double modifier = 1.0; //Only to test different sizes of collision ranges
-        //        circle.setRadius(Math.max((int) ((getWidth() / 2) * modifier), (int) ((getHeight() / 2) * modifier)));
-        circle.setDiameter(Math.max(getWidth(), getHeight()));
-        circle.setLocation(getLocation(true));
+        execute(() -> {
+            double modifier = 1.0; //Only to test different sizes of collision ranges
+            //        circle.setRadius(Math.max((int) ((getWidth() / 2) * modifier), (int) ((getHeight() / 2) * modifier)));
+            circle.setDiameter(Math.max(getWidth(), getHeight()));
+            circle.setLocation(getLocation(true));
+        });
     }
     
     //</editor-fold>
@@ -349,12 +351,7 @@ public class GameObject
     
     //<editor-fold desc="> Tickable">
     
-    private TaskManager<GameObject> taskManager;
-    @Override public final @NotNull TaskManager<GameObject> taskManager() {
-        if (taskManager == null)
-            taskManager = new TaskManager<>(this).init();
-        return taskManager;
-    }
+    @Override public final @NotNull TaskManager<GameObject> taskManager() { return taskManager; }
     
     //</editor-fold>
     
