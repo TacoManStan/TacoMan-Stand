@@ -65,34 +65,34 @@ public abstract class ContentController<T extends Content<T, TD, TC, F, FC>, TD 
         getContentPane().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
             if (getContent().handleMousePressEvent(event, true))
                 event.consume();
-            taskManager().addTask(Galaxy.newOneTimeTask((TC) this, () -> getContent().handleMousePressEvent(event, false)));
+            taskManager().add(Galaxy.newOneTimeTask((TC) this, () -> getContent().handleMousePressEvent(event, false)));
         });
         getContentPane().addEventFilter(MouseEvent.MOUSE_RELEASED, event -> {
             if (getContent().handleMouseReleaseEvent(event, true))
                 event.consume();
-            taskManager().addTask(Galaxy.newOneTimeTask((TC) this, () -> getContent().handleMouseReleaseEvent(event, false)));
+            taskManager().add(Galaxy.newOneTimeTask((TC) this, () -> getContent().handleMouseReleaseEvent(event, false)));
         });
         
         getContentPane().addEventFilter(MouseEvent.MOUSE_MOVED, event -> {
             if (getContent().handleMouseMoveEvent(event, true))
                 event.consume();
-            taskManager().addTask(Galaxy.newOneTimeTask((TC) this, () -> getContent().handleMouseMoveEvent(event, false)));
+            taskManager().add(Galaxy.newOneTimeTask((TC) this, () -> getContent().handleMouseMoveEvent(event, false)));
         });
         getContentPane().addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
             if (getContent().handleMouseDragEvent(event, true))
                 event.consume();
-            taskManager().addTask(Galaxy.newOneTimeTask((TC) this, () -> getContent().handleMouseDragEvent(event, false)));
+            taskManager().add(Galaxy.newOneTimeTask((TC) this, () -> getContent().handleMouseDragEvent(event, false)));
         });
         
         getContentPane().addEventFilter(MouseEvent.MOUSE_ENTERED, event -> {
             if (getContent().handleMouseEnterEvent(event, true))
                 event.consume();
-            taskManager().addTask(Galaxy.newOneTimeTask((TC) this, () -> getContent().handleMouseEnterEvent(event, false)));
+            taskManager().add(Galaxy.newOneTimeTask((TC) this, () -> getContent().handleMouseEnterEvent(event, false)));
         });
         getContentPane().addEventFilter(MouseEvent.MOUSE_EXITED, event -> {
             if (getContent().handleMouseExitEvent(event, true))
                 event.consume();
-            taskManager().addTask(Galaxy.newOneTimeTask((TC) this, () -> getContent().handleMouseExitEvent(event, false)));
+            taskManager().add(Galaxy.newOneTimeTask((TC) this, () -> getContent().handleMouseExitEvent(event, false)));
         });
     }
     

@@ -4,7 +4,6 @@ import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.logic.GameTask;
 import com.taco.suit_lady.logic.Tickable;
-import com.taco.suit_lady.logic.triggers.Galaxy;
 import com.taco.suit_lady.ui.ContentController;
 import com.taco.suit_lady.ui.jfx.util.Dimensions;
 import com.taco.suit_lady.ui.ui_internal.controllers.CellController;
@@ -12,7 +11,6 @@ import com.taco.suit_lady.ui.ui_internal.drag_and_drop.DragAndDropHandler;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.tools.BindingsSL;
 import com.taco.suit_lady.util.tools.Calc;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -112,7 +110,7 @@ public class GameViewContentController
             @Override protected void shutdown() { }
             @Override protected boolean isDone() { return false; }
         };
-        taskManager().addTask(updateTask);
+        taskManager().add(updateTask);
     }
     
     @Override public void initialize() {

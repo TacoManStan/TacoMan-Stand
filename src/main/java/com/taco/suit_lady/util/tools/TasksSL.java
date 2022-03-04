@@ -316,6 +316,7 @@ public class TasksSL {
     public static boolean lock(Lock lock, boolean allowNull) {
         if (!allowNull)
             Exceptions.nullCheckMessage(lock, "Lock cannot be null if allowNull is false");
+        
         if (lock != null) {
             lock.lock();
             return true;
