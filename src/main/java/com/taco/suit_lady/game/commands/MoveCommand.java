@@ -25,7 +25,7 @@ import java.util.concurrent.locks.Lock;
 
 public class MoveCommand
         extends GameTask<GameObject>
-        implements Collidable {
+        implements Collidable<GameObject> {
     
     public static final String SPEED_ID = "move-speed";
     public static final String MAX_SPEED_ID = "max-speed";
@@ -317,7 +317,7 @@ public class MoveCommand
     @Override protected void shutdown() { }
     @Override protected boolean isDone() { return false; }
     
-    @Override public @NotNull CollisionMap collisionMap() { return getOwner().collisionMap(); }
+    @Override public @NotNull CollisionMap<GameObject> collisionMap() { return getOwner().collisionMap(); }
     
     //
     

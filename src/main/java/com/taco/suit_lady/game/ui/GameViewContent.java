@@ -58,8 +58,8 @@ public class GameViewContent
         
         this.gameMapProperty = new SimpleObjectProperty<>();
         
-        this.testObject = new GameObject(this, "test_obj");
-        this.testObject2 = new GameObject(this);
+        this.testObject = new GameObject(this, "test_obj1");
+        this.testObject2 = new GameObject(this, "test_obj2");
         this.testObjectTree = new GameObject(this, "tree1_obj", "tree1");
     }
     
@@ -69,6 +69,15 @@ public class GameViewContent
     //<editor-fold desc="--- INITIALIZATION ---">
     
     @Override public GameViewContent init() {
+        initUIPage();
+        initGame();
+        
+        ui().getContentManager().setContent(this);
+        
+        return super.init();
+    }
+    
+    private void initUIPage() {
         bookshelf = injectBookshelf("Game View",
                                     new UIBook(
                                             this,
@@ -97,17 +106,7 @@ public class GameViewContent
                                                     uiBook.getUID(uiBook.getButtonID()),
                                                     () -> coverPage = new GameViewPage(uiBook, this)),
                                             null)).select();
-        
-        initUIPage();
-        initGame();
-        
-        
-        ui().getContentManager().setContent(this);
-        
-        return super.init();
     }
-    
-    private void initUIPage() { }
     
     private void initGame() {
         gameMapProperty.addListener((observable, oldValue, newValue) -> {

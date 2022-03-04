@@ -1,9 +1,9 @@
 package com.taco.suit_lady.game.objects;
 
-import com.taco.suit_lady.game.interfaces.WrappedGameComponent;
-import com.taco.suit_lady.game.ui.GameViewContent;
+import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.shapes.Shape;
-import com.taco.suit_lady.util.tools.Exc;
+import com.taco.suit_lady.util.springable.Springable;
+import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.Props;
 import com.taco.suit_lady.util.values.NumberValuePair;
 import javafx.beans.property.ListProperty;
@@ -17,16 +17,16 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class CollisionArea
-        implements WrappedGameComponent {
+public class CollisionArea<T extends Collidable<T>>
+        implements SpringableWrapper, Lockable {
     
     private final ReentrantLock lock;
-    private final ReadOnlyObjectWrapper<CollisionMap> ownerProperty;
+    private final ReadOnlyObjectWrapper<CollisionMap<T>> ownerProperty;
     
     private final ListProperty<Shape> includedShapes;
     private final ListProperty<Shape> excludedShapes;
     
-    protected CollisionArea(CollisionMap owner) {
+    public CollisionArea(CollisionMap<T> owner) {
         this.lock = new ReentrantLock();
         this.ownerProperty = new ReadOnlyObjectWrapper<>(owner);
         
@@ -36,10 +36,10 @@ public class CollisionArea
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    protected final ReadOnlyObjectWrapper<CollisionMap> ownerProperty() { return ownerProperty; }
-    public final ReadOnlyObjectProperty<CollisionMap> readOnlyOwnerProperty() { return ownerProperty.getReadOnlyProperty(); }
-    public final CollisionMap getOwner() { return ownerProperty.get(); }
-    protected final CollisionMap setOwner(CollisionMap newValue) { return Props.setProperty(ownerProperty, newValue); }
+    protected final ReadOnlyObjectWrapper<CollisionMap<T>> ownerProperty() { return ownerProperty; }
+    public final ReadOnlyObjectProperty<CollisionMap<T>> readOnlyOwnerProperty() { return ownerProperty.getReadOnlyProperty(); }
+    public final CollisionMap<T> getOwner() { return ownerProperty.get(); }
+    protected final CollisionMap<T> setOwner(CollisionMap<T> newValue) { return Props.setProperty(ownerProperty, newValue); }
     
     protected final ListProperty<Shape> includedShapes() { return includedShapes; }
     protected final ListProperty<Shape> excludedShapes() { return excludedShapes; }
@@ -58,8 +58,8 @@ public class CollisionArea
         });
     }
     
-    public final boolean intersects(@NotNull CollisionArea other) { return intersects(other, 0, 0); }
-    public final boolean intersects(@NotNull CollisionArea other, @NotNull Number xMod, @NotNull Number yMod) {
+    public final boolean intersects(@NotNull CollisionArea<?> other) { return intersects(other, 0, 0); }
+    public final boolean intersects(@NotNull CollisionArea<?> other, @NotNull Number xMod, @NotNull Number yMod) {
         return sync(() -> {
             for (Shape included: includedShapes())
                 for (NumberValuePair borderPoint: included.getBorderPoints(xMod, yMod))
@@ -73,7 +73,7 @@ public class CollisionArea
         });
     }
     
-    public final boolean intersectsLegacy(@NotNull CollisionArea other) {
+    public final boolean intersectsLegacy(@NotNull CollisionArea<?> other) {
         return sync(() -> {
             printer().get().setPrintPrefix(false);
 //            printer().get().print("Checking Intersection...");
@@ -94,7 +94,8 @@ public class CollisionArea
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
+    @Override public @NotNull Springable springable() { return getOwner(); }
     @Override public @Nullable Lock getLock() { return lock; }
-    @Override public @NotNull GameViewContent getGame() { return Exc.nullCheck(getOwner(), "CollisionMap Owner").getGame(); }
+    
     //</editor-fold>
 }

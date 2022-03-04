@@ -3,11 +3,11 @@ package com.taco.suit_lady.game.objects.tiles;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.taco.suit_lady.game.GameMap;
 import com.taco.suit_lady.game.interfaces.GameComponent;
-import com.taco.suit_lady.game.objects.GameObject;
-import com.taco.suit_lady.game.objects.MapObject;
+import com.taco.suit_lady.game.objects.*;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.ui.jfx.util.Dimensions;
 import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.shapes.Box;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.Bind;
@@ -21,7 +21,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.locks.Lock;
 
 public class GameTile
-        implements SpringableWrapper, Lockable, GameComponent, MapObject, JObject, JLoadable {
+        implements SpringableWrapper, Lockable, GameComponent, MapObject, JObject, JLoadable, Collidable<GameTile> {
+    
+    private final GameMap owner;
+    private TileModel model;
+    private final CollisionMap<GameTile> collisionMap;
     
     private final ReadOnlyIntegerWrapper xTileLocationProperty;
     private final ReadOnlyIntegerWrapper yTileLocationProperty;
@@ -29,11 +33,7 @@ public class GameTile
     private final IntegerBinding xPixelLocationBinding;
     private final IntegerBinding yPixelLocationBinding;
     
-    private final GameMap owner;
     private final ListProperty<GameObject> occupyingObjects;
-    
-    
-    private TileModel model;
     
     public GameTile(@NotNull GameMap owner) {
         this(owner, 0, 0);
@@ -45,6 +45,7 @@ public class GameTile
     
     public GameTile(@NotNull GameMap owner, int xLoc, int yLoc) {
         this.owner = owner;
+        this.collisionMap = new CollisionMap<>(this);
         
         this.xTileLocationProperty = new ReadOnlyIntegerWrapper(xLoc);
         this.yTileLocationProperty = new ReadOnlyIntegerWrapper(yLoc);
@@ -56,6 +57,15 @@ public class GameTile
         
         
         this.model = new TileModel(this);
+//        this.initCollisionMap();
+    }
+    
+    private Box collisionBox;
+    private CollisionArea<GameTile> collisionArea;
+    
+    private void initCollisionMap() {
+        this.collisionArea = new CollisionArea<>(collisionMap());
+        this.collisionBox = new Box(this);
     }
     
     public final GameTile getNeighbor(int x, int y) { return owner.getNeighbor(this, x, y); }
@@ -92,7 +102,10 @@ public class GameTile
     @Override public @NotNull Springable springable() { return getOwner(); }
     @Override public @NotNull Lock getLock() { return getOwner().getLock(); }
     
+    //
+    
     @Override public @NotNull GameViewContent getGame() { return getOwner().getGame(); }
+    @Override public @NotNull CollisionMap<GameTile> collisionMap() { return collisionMap; }
     
     //
     

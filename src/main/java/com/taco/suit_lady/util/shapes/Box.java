@@ -20,6 +20,10 @@ public class Box extends Shape {
                @Nullable BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> pixelGenerator) {
         super(springable, lock, locType, pixelGenerator);
     }
+    public Box(@NotNull Springable springable, @Nullable Lock lock, @Nullable LocType locType) { this(springable, lock, locType, null); }
+    public Box(@NotNull Springable springable, @Nullable Lock lock, @Nullable BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> pixelGenerator) { this(springable, lock, null, pixelGenerator); }
+    public Box(@NotNull Springable springable, @Nullable Lock lock) { this(springable, lock, null, null); }
+    public Box(@NotNull Springable springable) { this(springable, null, null, null); }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     

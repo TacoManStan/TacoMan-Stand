@@ -38,14 +38,14 @@ import java.io.Serial;
 import java.util.ArrayList;
 
 public class GameObject
-        implements WrappedGameComponent, Entity, MapObject, JObject, JLoadable, UIDProcessable, Tickable<GameObject>, Collidable {
+        implements WrappedGameComponent, Entity, MapObject, JObject, JLoadable, UIDProcessable, Tickable<GameObject>, Collidable<GameObject> {
     
     private final GameViewContent content;
     private final TaskManager<GameObject> taskManager;
     
     private final GameObjectModel model;
     private final AttributeManager attributes;
-    private final CollisionMap collisionMap;
+    private final CollisionMap<GameObject> collisionMap;
     
     
     private final DoubleProperty xLocationProperty;
@@ -82,7 +82,7 @@ public class GameObject
         
         this.model = new GameObjectModel(this, "units", modelId);
         this.attributes = new AttributeManager(this);
-        this.collisionMap = new CollisionMap(this);
+        this.collisionMap = new CollisionMap<>(this);
         
         
         this.xLocationProperty = new SimpleDoubleProperty();
@@ -166,7 +166,7 @@ public class GameObject
         taskManager().addShutdownOperation(() -> A.iterateMatrix(tile -> tile.getOccupyingObjects().remove(this), getOccupiedTiles()));
     }
     
-    private CollisionArea collisionArea = null;
+    private CollisionArea<GameObject> collisionArea = null;
     private Circle circle;
     
     private void initCollisionMap() {
@@ -175,7 +175,7 @@ public class GameObject
             printer().get(getClass()).setPrintPrefix(false);
             printer().get(getClass()).print("Initializing Collision Map For: " + this);
             
-            collisionArea = new CollisionArea(collisionMap());
+            collisionArea = new CollisionArea<>(collisionMap());
             collisionArea.includedShapes().add(circle = new Circle(this).init());
             
             collisionMap().addCollisionArea(collisionArea);
@@ -198,7 +198,7 @@ public class GameObject
     
     public final @NotNull GameObjectModel getModel() { return model; }
     public final @NotNull AttributeManager attributes() { return attributes; }
-    @Override public final @NotNull CollisionMap collisionMap() { return collisionMap; }
+    @Override public final @NotNull CollisionMap<GameObject> collisionMap() { return collisionMap; }
     
     public final MoveCommand getCommand() { return command; }
     public final String getObjID() { return objID; }
