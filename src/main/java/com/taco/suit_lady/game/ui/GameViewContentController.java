@@ -2,6 +2,9 @@ package com.taco.suit_lady.game.ui;
 
 import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.objects.GameObject;
+import com.taco.suit_lady.logic.GameTask;
+import com.taco.suit_lady.logic.Tickable;
+import com.taco.suit_lady.logic.triggers.Galaxy;
 import com.taco.suit_lady.ui.ContentController;
 import com.taco.suit_lady.ui.jfx.util.Dimensions;
 import com.taco.suit_lady.ui.ui_internal.controllers.CellController;
@@ -35,7 +38,7 @@ import java.util.concurrent.locks.ReentrantLock;
 @Scope("prototype")
 public class GameViewContentController
         extends ContentController<GameViewContent, GameViewContentData, GameViewContentController, GameFooter, GameFooterController>
-        implements Lockable, GameComponent {
+        implements Lockable, GameComponent, Tickable<GameViewContentController> {
     
     //<editor-fold desc="--- FXML FIELDS ---">
     
@@ -47,6 +50,8 @@ public class GameViewContentController
     
     private GameViewContent content;
     private final ReentrantLock lock;
+    
+    private GameTask<GameViewContentController> updateTask;
     
     //
     
@@ -73,8 +78,12 @@ public class GameViewContentController
     
     @Override public GameViewContentController init(@NotNull GameViewContent content) {
         super.init(content);
-        this.setGame(content);
+        
+        setGame(content);
+        
         initMouseTracking();
+        initUpdateTask();
+        
         return this;
     }
     
@@ -84,6 +93,26 @@ public class GameViewContentController
         
         this.mouseOnMapBindingSafeX = BindingsSL.doubleBinding(() -> getMouseOnMapSafe().getX(), mouseOnMapPropertySafe());
         this.mouseOnMapBindingSafeY = BindingsSL.doubleBinding(() -> getMouseOnMapSafe().getY(), mouseOnMapPropertySafe());
+    }
+    
+    private void initUpdateTask() {
+        this.updateTask = new GameTask<>(this) {
+            @Override protected void tick() {
+                final Point2D mouseOnContent = getMouseOnContent();
+                final Point2D viewToMap = getContent().getCamera().viewToMap(mouseOnContent);
+                final int xOffset = (int) Math.ceil(getContent().getTestObject().getWidth() / 2D);
+                final int yOffset = (int) Math.ceil(getContent().getTestObject().getHeight() / 2D);
+                final Dimensions minBounds = new Dimensions(xOffset, yOffset);
+                final Dimensions maxBounds = new Dimensions(getGameMap().getPixelWidth() - xOffset, getGameMap().getPixelHeight() - yOffset);
+            
+                mouseOnMapProperty.set(viewToMap);
+                mouseOnMapPropertySafe.set(Calc.getPointInBounds(viewToMap, minBounds, maxBounds));
+            }
+        
+            @Override protected void shutdown() { }
+            @Override protected boolean isDone() { return false; }
+        };
+        taskManager().addTask(updateTask);
     }
     
     @Override public void initialize() {
@@ -145,22 +174,26 @@ public class GameViewContentController
     
     @Override public void onGfxUpdate() { }
     @Override public void onGfxUpdateAlways() {
-        ToolsFX.requireFX(() -> {
-            //            Print.err("Mouse On Content Location Safe: " + getMouseOnContentSafe());
-            final Point2D mouseOnContent = getMouseOnContent();
-            final Point2D viewToMap = getContent().getCamera().viewToMap(mouseOnContent);
-            final int xOffset = (int) Math.ceil(getContent().getTestObject().getWidth() / 2D);
-            final int yOffset = (int) Math.ceil(getContent().getTestObject().getHeight() / 2D);
-            final Dimensions minBounds = new Dimensions(xOffset, yOffset);
-            final Dimensions maxBounds = new Dimensions(getGameMap().getPixelWidth() - xOffset, getGameMap().getPixelHeight() - yOffset);
-            mouseOnMapProperty.set(viewToMap);
-            mouseOnMapPropertySafe.set(Calc.getPointInBounds(viewToMap, minBounds, maxBounds));
-//            Print.err("Mouse on Map Safe: " + getMouseOnMapSafe() + "  |  " + getGameMap().getPixelDimensions(), false);
-            //            Print.err("Mouse On Map Location Safe: " + getMouseOnMapSafe());
-        });
+        //        ToolsFX.requireFX(() -> {
+        //            Print.err("Mouse On Content Location Safe: " + getMouseOnContentSafe());
+//        taskManager().addTask(Galaxy.newOneTimeTask(this, () -> {
+//            final Point2D mouseOnContent = getMouseOnContent();
+//            final Point2D viewToMap = getContent().getCamera().viewToMap(mouseOnContent);
+//            final int xOffset = (int) Math.ceil(getContent().getTestObject().getWidth() / 2D);
+//            final int yOffset = (int) Math.ceil(getContent().getTestObject().getHeight() / 2D);
+//            final Dimensions minBounds = new Dimensions(xOffset, yOffset);
+//            final Dimensions maxBounds = new Dimensions(getGameMap().getPixelWidth() - xOffset, getGameMap().getPixelHeight() - yOffset);
+//
+//            mouseOnMapProperty.set(viewToMap);
+//            mouseOnMapPropertySafe.set(Calc.getPointInBounds(viewToMap, minBounds, maxBounds));
+//        }));
+        //            Print.err("Mouse on Map Safe: " + getMouseOnMapSafe() + "  |  " + getGameMap().getPixelDimensions(), false);
+        //            Print.err("Mouse On Map Location Safe: " + getMouseOnMapSafe());
+        //        });
     }
     
     @Override protected boolean hasFooter() { return true; }
+    
     //
     
     @Override public @NotNull Lock getLock() { return lock; }

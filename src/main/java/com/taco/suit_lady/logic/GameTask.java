@@ -21,6 +21,8 @@ public abstract class GameTask<E extends Tickable<E>>
     private final ReadOnlyLongWrapper tickCountProperty;
     private final ReadOnlyBooleanWrapper synchronizationEnabledProperty;
     
+    public GameTask(@NotNull E owner) { this(null, owner); }
+    
     public GameTask(@Nullable GameComponent gameComponent, @NotNull E owner) {
         if (gameComponent != null)
             this.game = gameComponent.getGame();

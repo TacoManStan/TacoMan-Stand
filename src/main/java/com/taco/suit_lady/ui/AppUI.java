@@ -1,6 +1,7 @@
 package com.taco.suit_lady.ui;
 
 import com.taco.suit_lady.ui.jfx.util.Dimensions;
+import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.printer.Printer;
 import com.taco.suit_lady.util.tools.PropertiesSL;
@@ -18,14 +19,20 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Component
 // TO-DOC
 public class AppUI
-        implements Springable {
+        implements Springable, Lockable {
     
     private final FxWeaver weaver;
     private final ConfigurableApplicationContext ctx;
+    
+    private final ReentrantLock lock;
+    
+    //
     
     private final ReadOnlyObjectWrapper<AppController> controllerProperty;
     private final ReadOnlyObjectWrapper<Sidebar> sidebarProperty;
@@ -55,6 +62,10 @@ public class AppUI
         this.weaver = weaver;
         this.ctx = ctx;
         
+        this.lock = new ReentrantLock();
+        
+        //
+        
         this.controllerProperty = new ReadOnlyObjectWrapper<>();
         this.sidebarProperty = new ReadOnlyObjectWrapper<>();
         
@@ -75,7 +86,7 @@ public class AppUI
     
     private void initMouseTracking() {
         robot = new Robot();
-        mouseOnScreenProperty.addListener((observable, oldValue, newValue) -> ToolsFX.requireFX(() -> refreshRegionTracking(oldValue, newValue)));
+        mouseOnScreenProperty.addListener((observable, oldValue, newValue) -> sync(() -> refreshRegionTracking(oldValue, newValue)));
     }
     
     //</editor-fold>
@@ -113,13 +124,13 @@ public class AppUI
     
     private Robot robot() { return ToolsFX.requireFX(() -> robot); }
     
-    private ReadOnlyObjectWrapper<Point2D> mouseOnScreenProperty() { return ToolsFX.requireFX(() -> mouseOnScreenProperty); }
+    private ReadOnlyObjectWrapper<Point2D> mouseOnScreenProperty() { return sync(() -> mouseOnScreenProperty); }
     public final ReadOnlyObjectProperty<Point2D> readOnlyMouseOnScreenProperty() { return mouseOnScreenProperty().getReadOnlyProperty(); }
     public final Point2D getMouseOnScreen() { return mouseOnScreenProperty().get(); }
     private Point2D setMouseOnScreen(@NotNull Point2D newValue) { return PropertiesSL.setProperty(mouseOnScreenProperty(), newValue); }
     
-    private ListProperty<Region> trackedRegions() { return ToolsFX.requireFX(() -> trackedRegions); }
-    private MapProperty<Region, Point2D> mouseMap() { return ToolsFX.requireFX(() -> mouseMap); }
+    private ListProperty<Region> trackedRegions() { return sync(() -> trackedRegions); }
+    private MapProperty<Region, Point2D> mouseMap() { return sync(() -> mouseMap); }
     
     public final boolean trackRegion(@NotNull Region region) {
         if (printTrackingDetails)
@@ -150,25 +161,14 @@ public class AppUI
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override
-    public @NotNull FxWeaver weaver() {
-        return weaver;
-    }
+    @Override public @NotNull FxWeaver weaver() { return weaver; }
+    @Override public @NotNull ConfigurableApplicationContext ctx() { return ctx; }
     
-    @Override
-    public @NotNull ConfigurableApplicationContext ctx() {
-        return ctx;
-    }
+    @Override public @Nullable Lock getLock() { return lock; }
     
-    @Override
-    public final @NotNull AppUI ui() {
-        return this;
-    }
     
-    @Override
-    public final @NotNull Sidebar sidebar() {
-        return getSidebar();
-    }
+    @Override public final @NotNull AppUI ui() { return this; }
+    @Override public final @NotNull Sidebar sidebar() { return getSidebar(); }
     
     //</editor-fold>
     
@@ -179,7 +179,7 @@ public class AppUI
     private @NotNull Point2D getMouseLocationFor(@NotNull Region region) { return region.screenToLocal(getMouseOnScreen()); }
     
     private void refreshRegionTracking(@Nullable Point2D oldMouseOnScreen, @Nullable Point2D newMouseOnScreen) {
-        ToolsFX.requireFX(() -> {
+        sync(() -> {
             if (newMouseOnScreen == null || (newMouseOnScreen != null && !Objects.equals(oldMouseOnScreen, newMouseOnScreen))) {
                 mouseMap.clear();
                 trackedRegions.forEach(region -> {
@@ -198,7 +198,7 @@ public class AppUI
     }
     
     private @NotNull Point2D getSafe(@NotNull Point2D source, @NotNull Dimensions dimensions) {
-        return ToolsFX.requireFX(() -> {
+        return sync(() -> {
             double safeX = Math.min(Math.max(0, source.getX()), dimensions.width().doubleValue());
             double safeY = Math.min(Math.max(0, source.getY()), dimensions.height().doubleValue());
             return new Point2D(safeX, safeY);
