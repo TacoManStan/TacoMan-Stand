@@ -56,61 +56,31 @@ public class TaskManager<E extends Tickable<E>>
     
     //</editor-fold>
     
-    //<editor-fold desc="--- LOGIC ---">
+    //<editor-fold desc="--- PROPERTIES ---">
     
-    //<editor-fold desc="> Internal">
+    public final E getOwner() { return owner; }
+    @Contract(pure = true) public final @Nullable GFXObject<E> getGfxOwner() { return (owner instanceof GFXObject<?>) ? (GFXObject<E>) owner : null; }
+    public final boolean isGfxOwner() { return getGfxOwner() != null; }
     
-    void executeAndGet() {
-        if (!isShutdown()) {
-            final ArrayList<GameTask<E>> toRemove = new ArrayList<>();
-            syncIf(() -> {
-                tasks.forEach(task -> {
-                    if (task.isDone())
-                        toRemove.add(task);
-                    else
-                        task.execute();
-                });
-                for (GameTask<E> eGameTask: toRemove) {
-                    tasks.remove(eGameTask);
-                    eGameTask.shutdown();
-                }
-                tickCountProperty.set(getTickCount() + 1);
-            }, this::isSynchronizationEnabled);
-        }
-    }
     
-    void executeGfx() {
-        if (!isShutdown() && isGfxOwner()) {
-            final GFXObject<E> gfxObject = getGfxOwner();
-            if (gfxObject != null) {
-                gfxObject.updateGfx();
-                //                    Print.print("Updating Gfx");
-            } else
-                Printer.err("GFXObject is null  [" + getOwner() + "]");
-        }
-    }
+    protected final @NotNull ListProperty<GameTask<E>> tasks() { return tasks; }
     
-    void shutdownOperations() {
-        if (isShutdown())
-            sync(() -> {
-                //                if (getOwner() instanceof Tickable<?> tickableOwner && !tickableOwner.shutdown())
-                //                        throw ExceptionsSL.ex("Shutdown operation failed for Tickable  [" + tickableOwner + "]");
-                Printer.print("Running shutdown operation");
-                logiCore().removeGfxObject(getGfxOwner());
-                for (Runnable shutdownOperation: shutdownOperations)
-                    shutdownOperation.run();
-            });
-    }
     
-    void gfxShutdownOperations() {
-        if (isShutdown())
-            syncFX(() -> {
-                for (Runnable gfxShutdownOperation: gfxShutdownOperations)
-                    gfxShutdownOperation.run();
-            });
-    }
+    public final ReadOnlyBooleanProperty readOnlyEnableSynchronizationProperty() { return enableSynchronizationProperty.getReadOnlyProperty(); }
+    public final boolean isSynchronizationEnabled() { return enableSynchronizationProperty.get(); }
+    public final boolean setSynchronizationEnabled(boolean newValue) { return PropertiesSL.setProperty(enableSynchronizationProperty, newValue); }
+    
+    public final ReadOnlyLongProperty readOnlyTickCountProperty() { return tickCountProperty.getReadOnlyProperty(); }
+    public final long getTickCount() { return tickCountProperty.get(); }
+    
+    
+    public final ReadOnlyBooleanProperty readOnlyShutdownProperty() { return shutdownProperty.getReadOnlyProperty(); }
+    public final boolean isShutdown() { return shutdownProperty.get(); }
+    public final void shutdown() { shutdownProperty.set(true); }
     
     //</editor-fold>
+    
+    //<editor-fold desc="--- LOGIC ---">
     
     //<editor-fold desc="> Add/Remove Methods">
     
@@ -186,29 +156,59 @@ public class TaskManager<E extends Tickable<E>>
     
     //</editor-fold>
     
+    //<editor-fold desc="> Internal">
+    
+    void executeAndGet() {
+        if (!isShutdown()) {
+            final ArrayList<GameTask<E>> toRemove = new ArrayList<>();
+            syncIf(() -> {
+                tasks.forEach(task -> {
+                    if (task.isDone())
+                        toRemove.add(task);
+                    else
+                        task.execute();
+                });
+                for (GameTask<E> eGameTask: toRemove) {
+                    tasks.remove(eGameTask);
+                    eGameTask.shutdown();
+                }
+                tickCountProperty.set(getTickCount() + 1);
+            }, this::isSynchronizationEnabled);
+        }
+    }
+    
+    void executeGfx() {
+        if (!isShutdown() && isGfxOwner()) {
+            final GFXObject<E> gfxObject = getGfxOwner();
+            if (gfxObject != null) {
+                gfxObject.updateGfx();
+                //                    Print.print("Updating Gfx");
+            } else
+                Printer.err("GFXObject is null  [" + getOwner() + "]");
+        }
+    }
+    
+    void shutdownOperations() {
+        if (isShutdown())
+            sync(() -> {
+                //                if (getOwner() instanceof Tickable<?> tickableOwner && !tickableOwner.shutdown())
+                //                        throw ExceptionsSL.ex("Shutdown operation failed for Tickable  [" + tickableOwner + "]");
+                Printer.print("Running shutdown operation");
+                logiCore().removeGfxObject(getGfxOwner());
+                for (Runnable shutdownOperation: shutdownOperations)
+                    Objs.run(shutdownOperation);
+            });
+    }
+    
+    void gfxShutdownOperations() {
+        if (isShutdown())
+            syncFX(() -> {
+                for (Runnable gfxShutdownOperation: gfxShutdownOperations)
+                    Objs.run(gfxShutdownOperation);
+            });
+    }
+    
     //</editor-fold>
-    
-    //<editor-fold desc="--- PROPERTIES ---">
-    
-    public final E getOwner() { return owner; }
-    @Contract(pure = true) public final @Nullable GFXObject<E> getGfxOwner() { return (owner instanceof GFXObject<?>) ? (GFXObject<E>) owner : null; }
-    public final boolean isGfxOwner() { return getGfxOwner() != null; }
-    
-    
-    protected final @NotNull ListProperty<GameTask<E>> tasks() { return tasks; }
-    
-    
-    public final ReadOnlyBooleanProperty readOnlyEnableSynchronizationProperty() { return enableSynchronizationProperty.getReadOnlyProperty(); }
-    public final boolean isSynchronizationEnabled() { return enableSynchronizationProperty.get(); }
-    public final boolean setSynchronizationEnabled(boolean newValue) { return PropertiesSL.setProperty(enableSynchronizationProperty, newValue); }
-    
-    public final ReadOnlyLongProperty readOnlyTickCountProperty() { return tickCountProperty.getReadOnlyProperty(); }
-    public final long getTickCount() { return tickCountProperty.get(); }
-    
-    
-    public final ReadOnlyBooleanProperty readOnlyShutdownProperty() { return shutdownProperty.getReadOnlyProperty(); }
-    public final boolean isShutdown() { return shutdownProperty.get(); }
-    public final void shutdown() { shutdownProperty.set(true); }
     
     //</editor-fold>
     
