@@ -1028,7 +1028,23 @@ public class FX {
         }, true);
     }
     
-    //<editor-fold desc="--- IMAGE GENERATION ---">
+    //<editor-fold desc="--- IMAGE OPERATIONS ---">
+    
+    //<editor-fold desc="> Empty Image Construction">
+    
+    public static @NotNull WritableImage emptyImage(@NotNull NumberValuePairable<?> dimensions) { return emptyImage(dimensions.a(), dimensions.b()); }
+    public static @NotNull WritableImage emptyImage(@NotNull Point2D dimensions) { return emptyImage(dimensions.getX(), dimensions.getY()); }
+    
+    public static @NotNull WritableImage emptyImage(@NotNull NumberValueable<?> dimension) { return emptyImage(dimension.a()); }
+    public static @NotNull WritableImage emptyImage(@NotNull Number dimension) { return emptyImage(dimension, dimension); }
+    
+    public static @NotNull WritableImage emptyImage(@NotNull Number width, @NotNull Number height) { return new WritableImage(width.intValue(), height.intValue()); }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="> Image Generation">
+    
+    //<editor-fold desc=">> Standard Image Generation">
     
     public static @NotNull Image generateImage(@Nullable Lock lock,
                                                @NotNull Number locationX, @NotNull Number locationY,
@@ -1074,9 +1090,11 @@ public class FX {
         }, true);
     }
     
-    //
+    //</editor-fold>
     
-    public static <T> @NotNull Image generateTiledImage(int tileSize, @NotNull T[][] sourceMatrix, @NotNull Function<T, Image> factory) {
+    //<editor-fold desc=">> Speciality Image Generation">
+    
+    public static <T> @NotNull Image generateTiledImage(int tileSize, @NotNull T[] @NotNull [] sourceMatrix, @NotNull Function<T, Image> factory) {
         if (sourceMatrix.length == 0)
             throw Exc.ex("Source matrix width must be greater than 0.");
         else if (sourceMatrix[0].length == 0)
@@ -1115,6 +1133,28 @@ public class FX {
         return compositeImage;
     }
     
+    public static @NotNull Image generateSelectionBorder(int width, int height, int thickness, @Nullable BiFunction<Integer, Integer, Color> pixelColorFactory) {
+        pixelColorFactory = pixelColorFactory != null ? pixelColorFactory : (integer, integer2) -> Color.DIMGRAY;
+        final WritableImage borderImage = new WritableImage(width, height);
+        for (int x = 0; x < width; x++) {
+            for (int t = 0; t < thickness; t++) {
+                borderImage.getPixelWriter().setColor(x, t, pixelColorFactory.apply(x, 0));
+                borderImage.getPixelWriter().setColor(x, height - (t + 1), pixelColorFactory.apply(x, height - 1));
+            }
+        }
+        for (int y = 0; y < height; y++) {
+            for (int t = 0; t < thickness; t++) {
+                borderImage.getPixelWriter().setColor(t, y, pixelColorFactory.apply(0, y));
+                borderImage.getPixelWriter().setColor(width - (t + 1), y, pixelColorFactory.apply(width - 1, y));
+            }
+        }
+        return borderImage;
+    }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc=">> Internal: Image Generation">
+    
     private static Color blendPixels(Color pixelB, Color pixelA) {
         if (pixelA == null && pixelB == null)
             throw Exc.ex("PixelA & PixelB cannot both be null.");
@@ -1142,23 +1182,10 @@ public class FX {
         }
     }
     
-    public static @NotNull Image generateSelectionBorder(int width, int height, int thickness, @Nullable BiFunction<Integer, Integer, Color> pixelColorFactory) {
-        pixelColorFactory = pixelColorFactory != null ? pixelColorFactory : (integer, integer2) -> Color.DIMGRAY;
-        final WritableImage borderImage = new WritableImage(width, height);
-        for (int x = 0; x < width; x++) {
-            for (int t = 0; t < thickness; t++) {
-                borderImage.getPixelWriter().setColor(x, t, pixelColorFactory.apply(x, 0));
-                borderImage.getPixelWriter().setColor(x, height - (t + 1), pixelColorFactory.apply(x, height - 1));
-            }
-        }
-        for (int y = 0; y < height; y++) {
-            for (int t = 0; t < thickness; t++) {
-                borderImage.getPixelWriter().setColor(t, y, pixelColorFactory.apply(0, y));
-                borderImage.getPixelWriter().setColor(width - (t + 1), y, pixelColorFactory.apply(width - 1, y));
-            }
-        }
-        return borderImage;
-    }
+    //</editor-fold>
+    
+    //</editor-fold>
+    
     //</editor-fold>
     
     
