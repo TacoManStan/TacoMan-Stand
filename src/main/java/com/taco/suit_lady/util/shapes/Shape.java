@@ -53,7 +53,7 @@ public abstract class Shape
     
     
     private final ReadOnlyObjectWrapper<BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color>> pixelGeneratorProperty;
-    private final ReadOnlyBooleanWrapper collisionImageEnabledProperty;
+    private final ReadOnlyBooleanWrapper imageEnabledProperty;
     
     //
     
@@ -86,7 +86,7 @@ public abstract class Shape
         
         
         this.pixelGeneratorProperty = new ReadOnlyObjectWrapper<>(pixelGenerator);
-        this.collisionImageEnabledProperty = new ReadOnlyBooleanWrapper(false);
+        this.imageEnabledProperty = new ReadOnlyBooleanWrapper(false);
         
         //
         
@@ -106,7 +106,7 @@ public abstract class Shape
         
         for (ObjectBinding<NumberValuePair> binding: Arrays.asList(locationBinding, dimensionsBinding))
             binding.addListener((observable, oldValue, newValue) -> {
-                if (isCollisionImageEnabled())
+                if (isImageEnabled())
                     needsUpdate = true;
             });
         
@@ -266,9 +266,9 @@ public abstract class Shape
         return Props.setProperty(pixelGeneratorProperty, newValue);
     }
     
-    public final @NotNull ReadOnlyBooleanProperty readOnlyCollisionImageEnabledProperty() { return collisionImageEnabledProperty.getReadOnlyProperty(); }
-    public final boolean isCollisionImageEnabled() { return collisionImageEnabledProperty.get(); }
-    public final boolean setCollisionImageEnabled(boolean newValue) { return Props.setProperty(collisionImageEnabledProperty, newValue); }
+    public final @NotNull ReadOnlyBooleanProperty readOnlyImageEnabledProperty() { return imageEnabledProperty.getReadOnlyProperty(); }
+    public final boolean isImageEnabled() { return imageEnabledProperty.get(); }
+    public final boolean setImageEnabled(boolean newValue) { return Props.setProperty(imageEnabledProperty, newValue); }
     
     
     public final @NotNull ReadOnlyObjectProperty<Image> readOnlyImageProperty() { return imageProperty.getReadOnlyProperty(); }
