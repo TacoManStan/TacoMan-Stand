@@ -1,7 +1,7 @@
 package com.taco.suit_lady.util;
 
-import com.taco.suit_lady.util.tools.Exceptions;
-import com.taco.suit_lady.util.tools.ToolsSL;
+import com.taco.suit_lady.util.tools.Exc;
+import com.taco.suit_lady.util.tools.TB;
 
 /**
  * A utility class designed to wrap the functionality of the {@link UID} interface into its most common form, so that...
@@ -23,8 +23,8 @@ public class UIDProcessor
 	 * @param groupID A String that defines what type of object this {@code UIDProcessor} is identifying.
 	 */
 	public UIDProcessor(String groupID) {
-		this.globalUID = Exceptions.nullCheck(groupID, "Global UID");
-		this.hashID = "" + ToolsSL.generateHashID();
+		this.globalUID = Exc.nullCheck(groupID, "Global UID");
+		this.hashID = "" + TB.generateHashID();
 	}
 
 	/**
@@ -51,7 +51,7 @@ public class UIDProcessor
 
 		if (params != null && params.length > 0)
 			for (Object param : params) {
-				Exceptions.nullCheck(param, "UID Parameter");
+				Exc.nullCheck(param, "UID Parameter");
 				string_builder.append('-');
 				if (param instanceof UID)
 					string_builder.append(((UID) param).getUID());

@@ -1,9 +1,9 @@
 package com.taco.suit_lady.ui;
 
 import com.taco.suit_lady.util.Lockable;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import com.taco.tacository.collections.ObservableLinkedList;
-import com.taco.suit_lady.util.tools.Exceptions;
+import com.taco.suit_lady.util.tools.Exc;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.ObjectBinding;
@@ -250,7 +250,7 @@ public class UIPageHandler
                     if (getVisiblePage().equals(page))
                         return true;
                     else
-                        throw Exceptions.ex("Visible page should equal the specified page given prior loop, but it does not. This should not be possible; extensive debugging is necessary.");
+                        throw Exc.ex("Visible page should equal the specified page given prior loop, but it does not. This should not be possible; extensive debugging is necessary.");
                 }
             }
         } finally {
@@ -275,11 +275,11 @@ public class UIPageHandler
     public void turnToNew(@NotNull UIPage<?> page) {
         lock.lock();
         try {
-            Exceptions.nullCheck(page, "Page cannot be null");
+            Exc.nullCheck(page, "Page cannot be null");
             if (Objects.equals(page, getCoverPage()))
-                throw Exceptions.unsupported("Cannot add the cover page to the page list.");
+                throw Exc.unsupported("Cannot add the cover page to the page list.");
             else if (pages.contains(page))
-                throw Exceptions.unsupported("Page has already been added to this PageHandler.");
+                throw Exc.unsupported("Page has already been added to this PageHandler.");
             pages.addLast(page);
         } finally {
             lock.unlock();
@@ -295,7 +295,7 @@ public class UIPageHandler
      *
      * @see #backUnchecked()
      */
-    public UIPage<?> back() { return ToolsFX.callFX(() -> getPages().pollLast()); }
+    public UIPage<?> back() { return FX.callFX(() -> getPages().pollLast()); }
     
     /**
      * <p>Identical to <code><i>{@link #back()}</i></code>, except an {@link RuntimeException exception} is thrown if the {@link #getPages() Page List} is {@link #isEmpty() empty}.</p>

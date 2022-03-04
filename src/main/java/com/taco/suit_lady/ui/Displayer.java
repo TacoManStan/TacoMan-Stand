@@ -1,7 +1,7 @@
 package com.taco.suit_lady.ui;
 
-import com.taco.suit_lady.util.tools.Exceptions;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
+import com.taco.suit_lady.util.tools.Exc;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
@@ -245,7 +245,7 @@ public class Displayer<T extends Displayable>
      */
     public void bind(ObservableValue<T> observable)
     {
-        Exceptions.nullCheck(observable, "Observable cannot be null");
+        Exc.nullCheck(observable, "Observable cannot be null");
         lock.lock();
         try {
             displayProperty.bind(observable);
@@ -293,10 +293,10 @@ public class Displayer<T extends Displayable>
      * <p><b>Functionality Details</b></p>
      * <ol>
      *     <li>
-     *         If non-null, the {@link T new displayable} parameter is automatically {@link ToolsFX#bindToParent(Region, Region, boolean, boolean, ObservableDoubleValue, ToolsFX.BindOrientation, ToolsFX.BindType) bound} to the {@link #getDisplayContainer() display container}.
+     *         If non-null, the {@link T new displayable} parameter is automatically {@link FX#bindToParent(Region, Region, boolean, boolean, ObservableDoubleValue, FX.BindOrientation, FX.BindType) bound} to the {@link #getDisplayContainer() display container}.
      *         <ol>
-     *             <li>The binding {@link ToolsFX.BindOrientation orientation} is set to {@link ToolsFX.BindOrientation#BOTH BOTH}.</li>
-     *             <li>The binding {@link ToolsFX.BindType type} is set to {@link ToolsFX.BindType#BOTH BOTH}.</li>
+     *             <li>The binding {@link FX.BindOrientation orientation} is set to {@link FX.BindOrientation#BOTH BOTH}.</li>
+     *             <li>The binding {@link FX.BindType type} is set to {@link FX.BindType#BOTH BOTH}.</li>
      *         </ol>
      *     </li>
      *     <li>If the {@link Displayable oldDisplayable} parameter is non-null but contains null {@link Displayable#getContentPane() contents}, a {@link NullPointerException} is thrown.</li>
@@ -332,7 +332,7 @@ public class Displayer<T extends Displayable>
             if (newDisplayable != null) {
                 final Pane newContent = newDisplayable.getContentPane();
                 if (newContent != null) {
-                    ToolsFX.bindToParent(newContent, displayContainer, ToolsFX.BindOrientation.BOTH, ToolsFX.BindType.BOTH, true);
+                    FX.bindToParent(newContent, displayContainer, FX.BindOrientation.BOTH, FX.BindType.BOTH, true);
                 }
             }
         } finally {

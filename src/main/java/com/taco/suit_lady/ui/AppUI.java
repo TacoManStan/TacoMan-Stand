@@ -3,9 +3,9 @@ package com.taco.suit_lady.ui;
 import com.taco.suit_lady.ui.jfx.util.Dimensions;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.printer.Printer;
-import com.taco.suit_lady.util.tools.PropertiesSL;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
+import com.taco.suit_lady.util.tools.printer.Print;
+import com.taco.suit_lady.util.tools.Props;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.geometry.Point2D;
@@ -100,7 +100,7 @@ public class AppUI
      */
     public final ReadOnlyObjectProperty<AppController> controllerProperty() { return controllerProperty.getReadOnlyProperty(); }
     public final AppController getController() { return controllerProperty.get(); }
-    protected final AppController setController(AppController newValue) { return PropertiesSL.setProperty(controllerProperty, newValue); }
+    protected final AppController setController(AppController newValue) { return Props.setProperty(controllerProperty, newValue); }
     
     /**
      * <p>Returns the {@link ReadOnlyObjectProperty} containing the {@link Sidebar} of this {@link AppUI}.</p>
@@ -110,7 +110,7 @@ public class AppUI
     // TO-EXPAND
     public final ReadOnlyObjectProperty<Sidebar> sidebarProperty() { return sidebarProperty.getReadOnlyProperty(); }
     public final @NotNull Sidebar getSidebar() { return sidebarProperty.get(); }
-    protected final Sidebar setSidebar(Sidebar newValue) { return PropertiesSL.setProperty(sidebarProperty, newValue); }
+    protected final Sidebar setSidebar(Sidebar newValue) { return Props.setProperty(sidebarProperty, newValue); }
     
     /**
      * <p>Returns the {@link ContentManager Content Manager} in charge of managing the {@link Content} of this {@link AppUI} instance.</p>
@@ -122,35 +122,35 @@ public class AppUI
     
     //<editor-fold desc="> Mouse Tracking">
     
-    private Robot robot() { return ToolsFX.requireFX(() -> robot); }
+    private Robot robot() { return FX.requireFX(() -> robot); }
     
     private ReadOnlyObjectWrapper<Point2D> mouseOnScreenProperty() { return sync(() -> mouseOnScreenProperty); }
     public final ReadOnlyObjectProperty<Point2D> readOnlyMouseOnScreenProperty() { return mouseOnScreenProperty().getReadOnlyProperty(); }
     public final Point2D getMouseOnScreen() { return mouseOnScreenProperty().get(); }
-    private Point2D setMouseOnScreen(@NotNull Point2D newValue) { return PropertiesSL.setProperty(mouseOnScreenProperty(), newValue); }
+    private Point2D setMouseOnScreen(@NotNull Point2D newValue) { return Props.setProperty(mouseOnScreenProperty(), newValue); }
     
     private ListProperty<Region> trackedRegions() { return sync(() -> trackedRegions); }
     private MapProperty<Region, Point2D> mouseMap() { return sync(() -> mouseMap); }
     
     public final boolean trackRegion(@NotNull Region region) {
         if (printTrackingDetails)
-            Printer.print("Starting Tracking for \"" + region + "\"");
+            Print.print("Starting Tracking for \"" + region + "\"");
         return trackedRegions().contains(region) || trackedRegions.add(region);
     }
     public final boolean stopTrackingRegion(@NotNull Region region) {
         if (printTrackingDetails)
-            Printer.print("Stopping Tracking for \"" + region + "\"");
+            Print.print("Stopping Tracking for \"" + region + "\"");
         return !trackedRegions().contains(region) || trackedRegions.remove(region);
     }
     
     public final void refreshMouseTracking() {
-        ToolsFX.requireFX(() -> { setMouseOnScreen(robot.getMousePosition()); });
+        FX.requireFX(() -> { setMouseOnScreen(robot.getMousePosition()); });
     }
     
     public final @NotNull Point2D getMouseOnRegion(@NotNull Region region) {
         final Point2D regionLocation = mouseMap().get(region);
         if (regionLocation == null)
-            Printer.err("WARNING: Attempting to retrieve mouse location for untracked Region [" + region + "]");
+            Print.err("WARNING: Attempting to retrieve mouse location for untracked Region [" + region + "]");
         return regionLocation;
     }
     public final @NotNull Point2D getMouseOnRegionSafe(@NotNull Region region) { return getSafe(getMouseOnRegion(region), region); }
@@ -186,11 +186,11 @@ public class AppUI
                     final Point2D screenToLocalOld = oldMouseOnScreen != null ? region.screenToLocal(oldMouseOnScreen) : null;
                     final Point2D screenToLocalNew = region.screenToLocal(newMouseOnScreen);
                     if (printTrackingDetails)
-                        Printer.print("Updating Mouse Tracking for Region \"" + region + "\":  " + "["
-                                      + screenToLocalOld + "::" + getSafe(screenToLocalOld, region)
-                                      + " --> " +
-                                      screenToLocalNew + "::" + getSafe(screenToLocalNew, region)
-                                      + "]", false);
+                        Print.print("Updating Mouse Tracking for Region \"" + region + "\":  " + "["
+                                    + screenToLocalOld + "::" + getSafe(screenToLocalOld, region)
+                                    + " --> " +
+                                    screenToLocalNew + "::" + getSafe(screenToLocalNew, region)
+                                    + "]", false);
                     mouseMap.put(region, region.screenToLocal(newMouseOnScreen));
                 });
             }
@@ -204,8 +204,8 @@ public class AppUI
             return new Point2D(safeX, safeY);
         });
     }
-    private @Nullable Point2D getSafe(@Nullable Region region) { return region != null ? getSafe(region.screenToLocal(getMouseOnScreen()), ToolsFX.getDimensions(region)) : null; }
-    private @Nullable Point2D getSafe(@Nullable Point2D source, @Nullable Region region) { return source != null && region != null ? getSafe(source, ToolsFX.getDimensions(region)) : null; }
+    private @Nullable Point2D getSafe(@Nullable Region region) { return region != null ? getSafe(region.screenToLocal(getMouseOnScreen()), FX.getDimensions(region)) : null; }
+    private @Nullable Point2D getSafe(@Nullable Point2D source, @Nullable Region region) { return source != null && region != null ? getSafe(source, FX.getDimensions(region)) : null; }
     
     //</editor-fold>
 }

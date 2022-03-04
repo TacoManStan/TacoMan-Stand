@@ -2,10 +2,9 @@ package com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas;
 
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasSurface;
 import com.taco.suit_lady.ui.jfx.util.Bounds;
-import com.taco.suit_lady.ui.jfx.util.BoundsBinding;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.PropertiesSL;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
+import com.taco.suit_lady.util.tools.Props;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.image.Image;
@@ -34,11 +33,11 @@ public class CroppedImagePaintCommand extends ImagePaintCommandBase {
     
     public final DoubleProperty xScaleProperty() { return xScaleProperty; }
     public final double getScaleX() { return xScaleProperty.get(); }
-    public final double setScaleX(double newValue) { return PropertiesSL.setProperty(xScaleProperty, newValue); }
+    public final double setScaleX(double newValue) { return Props.setProperty(xScaleProperty, newValue); }
     
     public final DoubleProperty yScaleProperty() { return yScaleProperty; }
     public final double getScaleY() { return yScaleProperty.get(); }
-    public final double setScaleY(double newValue) { return PropertiesSL.setProperty(yScaleProperty, newValue); }
+    public final double setScaleY(double newValue) { return Props.setProperty(yScaleProperty, newValue); }
     
     //</editor-fold>
     
@@ -49,7 +48,7 @@ public class CroppedImagePaintCommand extends ImagePaintCommandBase {
     }
     
     @Override protected void drawImage(@NotNull Image image, @NotNull CanvasSurface surface, @NotNull Bounds bounds) {
-        ToolsFX.drawImageScaled(surface, image, bounds, getScaleX(), getScaleY(), false);
+        FX.drawImageScaled(surface, image, bounds, getScaleX(), getScaleY(), false);
     }
     
     //</editor-fold>

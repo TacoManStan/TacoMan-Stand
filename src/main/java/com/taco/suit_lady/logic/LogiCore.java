@@ -11,12 +11,12 @@ import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.timing.Timer;
 import com.taco.suit_lady.util.timing.Timers;
-import com.taco.suit_lady.util.tools.Exceptions;
-import com.taco.suit_lady.util.tools.Objs;
-import com.taco.suit_lady.util.tools.printer.Printer;
-import com.taco.suit_lady.util.tools.PropertiesSL;
-import com.taco.suit_lady.util.tools.TasksSL;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
+import com.taco.suit_lady.util.tools.Exc;
+import com.taco.suit_lady.util.tools.Obj;
+import com.taco.suit_lady.util.tools.printer.Print;
+import com.taco.suit_lady.util.tools.Props;
+import com.taco.suit_lady.util.tools.Exe;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -103,10 +103,10 @@ public class LogiCore
     private void startup(@NotNull Object @NotNull [] params) {
         gameProperty.set((GameViewContent) params[0]);
         
-        Printer.print("Starting Up");
+        Print.print("Starting Up");
         tickables.addListener((ListChangeListener<? super Tickable<?>>) c -> {
             needsCopyRefresh = true;
-            Printer.err("Value Changed");
+            Print.err("Value Changed");
         });
         needsCopyRefresh = true;
         //        ListsSL.applyListener(null, tickables, op -> {
@@ -148,7 +148,7 @@ public class LogiCore
     public final @NotNull ReadOnlyIntegerProperty readOnlyUpsProperty() { return upsProperty.getReadOnlyProperty(); }
     protected final @NotNull ReadOnlyIntegerWrapper upsProperty() { return upsProperty; }
     public final int getUps() { return upsProperty.get(); }
-    protected final int setUps(int newValue) { return ToolsFX.callFX(() -> PropertiesSL.setProperty(upsProperty, newValue)); }
+    protected final int setUps(int newValue) { return FX.callFX(() -> Props.setProperty(upsProperty, newValue)); }
     
     //</editor-fold>
     
@@ -157,7 +157,7 @@ public class LogiCore
     //<editor-fold desc="> Execution">
     
     public final <V> @Nullable ScheduledFuture<V> execute(@NotNull Callable<V> action) { return gameLoopExecutor.schedule(action, 0L, TimeUnit.MILLISECONDS); }
-    public final void execute(@NotNull Runnable action) { execute(Objs.asCallable(action)); }
+    public final void execute(@NotNull Runnable action) { execute(Obj.asCallable(action)); }
     
     public final <V> V executeAndGet(@NotNull Callable<V> action, @Nullable Consumer<Throwable> exceptionHandler) {
         exceptionHandler = exceptionHandler != null ? exceptionHandler : Throwable::printStackTrace;
@@ -165,25 +165,25 @@ public class LogiCore
             return execute(action).get();
         } catch (Exception e) {
             exceptionHandler.accept(e);
-            throw Exceptions.ex(e);
+            throw Exc.ex(e);
         }
     }
     public final <V> V executeAndGet(@NotNull Callable<V> action) { return executeAndGet(action, null); }
     
     //
     
-    public final boolean submit(@NotNull Tickable<?> tickable) { return TasksSL.sync(tickableLock, () -> tickables.add(tickable)); }
+    public final boolean submit(@NotNull Tickable<?> tickable) { return Exe.sync(tickableLock, () -> tickables.add(tickable)); }
     
     
     private List<Tickable<?>> tickablesCopy() {
         if (needsCopyRefresh)
-            tickablesCopy = TasksSL.sync(tickableLock, () -> new ArrayList<>(tickables));
+            tickablesCopy = Exe.sync(tickableLock, () -> new ArrayList<>(tickables));
         needsCopyRefresh = false;
         return tickablesCopy;
     }
     
-    public final boolean addGfxObject(@Nullable GFXObject<?> gfxObject) { return gfxObject != null & TasksSL.sync(gfxLock, () -> gfxObjects.add(gfxObject)); }
-    public final boolean removeGfxObject(@Nullable GFXObject<?> gfxObject) { return gfxObject != null & TasksSL.sync(gfxLock, () -> gfxObjects.remove(gfxObject)); }
+    public final boolean addGfxObject(@Nullable GFXObject<?> gfxObject) { return gfxObject != null & Exe.sync(gfxLock, () -> gfxObjects.add(gfxObject)); }
+    public final boolean removeGfxObject(@Nullable GFXObject<?> gfxObject) { return gfxObject != null & Exe.sync(gfxLock, () -> gfxObjects.remove(gfxObject)); }
     
     //</editor-fold>
     
@@ -204,15 +204,15 @@ public class LogiCore
         final ArrayList<GFXObject<?>> gfxObjects = new ArrayList<>();
         final List<Tickable<?>> tickableCopy = tickablesCopy();
         
-        ToolsFX.runFX(() -> ui().refreshMouseTracking());
-        TasksSL.sync(tickableLock, () -> {
+        FX.runFX(() -> ui().refreshMouseTracking());
+        Exe.sync(tickableLock, () -> {
             tickablesCopy().forEach(tickable -> {
                 if (checkSpringClosure(() -> {
                     if (tickable.taskManager().isShutdown())
                         toRemove.add(tickable);
                     else {
                         tickable.taskManager().executeAndGet();
-                        ToolsFX.runFX(() -> tickable.taskManager().executeGfx());
+                        FX.runFX(() -> tickable.taskManager().executeGfx());
                         //                        if (tickable instanceof GFXObject gfxObject)
                         //                            gfxObjects.add(gfxObject);
                     }
@@ -248,7 +248,7 @@ public class LogiCore
     }
     
     private void shutdown() {
-        Printer.err("Shutting Down LogiCore");
+        Print.err("Shutting Down LogiCore");
         gameLoopExecutor.shutdown();
         //        sequentialExecutor.shutdown();
         //        scheduledExecutor.shutdown();

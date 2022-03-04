@@ -3,8 +3,8 @@ package com.taco.suit_lady.ui.contents.mandelbrot;
 import com.taco.suit_lady._to_sort._new.MatrixIterator;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasSurface;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.ArraysSL;
-import com.taco.suit_lady.util.tools.Exceptions;
+import com.taco.suit_lady.util.tools.list_tools.A;
+import com.taco.suit_lady.util.tools.Exc;
 import com.taco.suit_lady.ui.contents.mandelbrot.MandelbrotIterator.MandelbrotColor;
 import javafx.geometry.Point2D;
 import javafx.scene.control.ProgressIndicator;
@@ -20,7 +20,7 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor> {
     private CanvasSurface canvas;
     
     public MandelbrotIterator(@NotNull Springable springable, @Nullable ReentrantLock lock, @NotNull MandelbrotContentData data, @NotNull CanvasSurface canvas, @NotNull ProgressIndicator... progressIndicators) {
-        super(springable, lock, ArraysSL.concatMulti(new Object[]{data, canvas}, progressIndicators));
+        super(springable, lock, A.concatMulti(new Object[]{data, canvas}, progressIndicators));
     }
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
@@ -118,7 +118,7 @@ public class MandelbrotIterator extends MatrixIterator<MandelbrotColor> {
     protected void onConstruct(Object @NotNull ... params) {
         this.data = (MandelbrotContentData) params[0];
         if (data.getCanvasWidth() != getWidth() || data.getCanvasHeight() != getHeight())
-            throw Exceptions.ex(
+            throw Exc.ex(
                     "Dimension Mismatch:  " +
                     "Dimensions Data [" + data.getCanvasWidth() + ", " + data.getCanvasHeight() + "  " +
                     "Iterator Data [" + getWidth() + ", " + getHeight());

@@ -9,7 +9,7 @@ import com.taco.suit_lady.ui.jfx.util.Dimensions;
 import com.taco.suit_lady.ui.ui_internal.controllers.CellController;
 import com.taco.suit_lady.ui.ui_internal.drag_and_drop.DragAndDropHandler;
 import com.taco.suit_lady.util.Lockable;
-import com.taco.suit_lady.util.tools.BindingsSL;
+import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Calc;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -86,11 +86,11 @@ public class GameViewContentController
     }
     
     private void initMouseTracking() {
-        this.mouseOnMapBindingX = BindingsSL.doubleBinding(() -> getMouseOnMap().getX(), mouseOnMapProperty());
-        this.mouseOnMapBindingY = BindingsSL.doubleBinding(() -> getMouseOnMap().getY(), mouseOnMapProperty());
+        this.mouseOnMapBindingX = Bind.doubleBinding(() -> getMouseOnMap().getX(), mouseOnMapProperty());
+        this.mouseOnMapBindingY = Bind.doubleBinding(() -> getMouseOnMap().getY(), mouseOnMapProperty());
         
-        this.mouseOnMapBindingSafeX = BindingsSL.doubleBinding(() -> getMouseOnMapSafe().getX(), mouseOnMapPropertySafe());
-        this.mouseOnMapBindingSafeY = BindingsSL.doubleBinding(() -> getMouseOnMapSafe().getY(), mouseOnMapPropertySafe());
+        this.mouseOnMapBindingSafeX = Bind.doubleBinding(() -> getMouseOnMapSafe().getX(), mouseOnMapPropertySafe());
+        this.mouseOnMapBindingSafeY = Bind.doubleBinding(() -> getMouseOnMapSafe().getY(), mouseOnMapPropertySafe());
     }
     
     private void initUpdateTask() {

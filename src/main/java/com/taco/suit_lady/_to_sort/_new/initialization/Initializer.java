@@ -1,8 +1,8 @@
 package com.taco.suit_lady._to_sort._new.initialization;
 
 import com.taco.suit_lady.util.Lockable;
-import com.taco.suit_lady.util.tools.Exceptions;
-import com.taco.suit_lady.util.tools.TasksSL;
+import com.taco.suit_lady.util.tools.Exc;
+import com.taco.suit_lady.util.tools.Exe;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import org.jetbrains.annotations.NotNull;
@@ -41,20 +41,20 @@ public final class Initializer<T extends Initializable<T>> {
     
     T init(@NotNull Object... params) {
         if (isInitialized())
-            throw Exceptions.ex("Initializer (" + this + ") has already been initialized.");
+            throw Exc.ex("Initializer (" + this + ") has already been initialized.");
         operation(true, params);
         return owner;
     }
     
     T shutdown(@NotNull Object... params) {
         if (!isInitialized())
-            throw Exceptions.ex("Cannot shutdown Initializer that has not been initialized — [ " + getOwner() + " ]");
+            throw Exc.ex("Cannot shutdown Initializer that has not been initialized — [ " + getOwner() + " ]");
         operation(false, params);
         return owner;
     }
     
     
-    void throwInitException() { throw Exceptions.ex("Initializer has not been initialized — [ " + owner + " ]"); }
+    void throwInitException() { throw Exc.ex("Initializer has not been initialized — [ " + owner + " ]"); }
     
     //<editor-fold desc="--- PROPERTIES ---">
     
@@ -89,7 +89,7 @@ public final class Initializer<T extends Initializable<T>> {
             
             case NEW_LOCK_ONLY -> {
                 if (getLock() != null)
-                    TasksSL.sync(getLock(), () -> doOperation(init, params));
+                    Exe.sync(getLock(), () -> doOperation(init, params));
                 else
                     doOperation(init, params);
             }
@@ -98,7 +98,7 @@ public final class Initializer<T extends Initializable<T>> {
                 if (getOwner() instanceof Lockable lockableOwner && (lockableOwner.isNullableLock() || lockableOwner.getLock() != null))
                     lockableOwner.sync(() -> doOperation(init, params));
                 else if (getLock() != null)
-                    TasksSL.sync(getLock(), () -> doOperation(init, params));
+                    Exe.sync(getLock(), () -> doOperation(init, params));
                 else
                     doOperation(init, params);
             }

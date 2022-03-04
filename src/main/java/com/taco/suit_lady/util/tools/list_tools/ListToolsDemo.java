@@ -1,10 +1,9 @@
 package com.taco.suit_lady.util.tools.list_tools;
 
 import com.taco.suit_lady._to_sort._new.Debugger;
-import com.taco.suit_lady.util.tools.ArraysSL;
-import com.taco.suit_lady.util.tools.Exceptions;
-import com.taco.suit_lady.util.tools.list_tools.Operation.OperationType;
-import com.taco.suit_lady.util.tools.list_tools.Operation.TriggerType;
+import com.taco.suit_lady.util.tools.Exc;
+import com.taco.suit_lady.util.tools.list_tools.Op.OperationType;
+import com.taco.suit_lady.util.tools.list_tools.Op.TriggerType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +22,7 @@ public class ListToolsDemo {
         
         //        ListTools.applyListener(lock, list, op -> Demo.doPrint(() -> System.out.println("GENERIC OPERATION:  " + op), "Listener 1", null, false));
         //        ListTools.applyListener(lock, list, (op, opType, triggerType) -> Demo.printListEvent(op, null, opType, triggerType, "Listener 2", false));
-        ListsSL.applyListener(lock, list, (op1, op2, opType, triggerType)
+        L.applyListener(lock, list, (op1, op2, opType, triggerType)
                 -> ListToolsDemo.printListEvent(debugger, op1, op2, opType, triggerType, null, false));
         ListToolsDemo.testPrints(debugger, list, null);
     }
@@ -36,7 +35,7 @@ public class ListToolsDemo {
         
         System.out.println("Sorting...");
         
-        ArraysSL.sort(list);
+        A.sort(list);
         
         debugger.printList(list, footer);
         
@@ -64,7 +63,7 @@ public class ListToolsDemo {
         
         System.out.println("Resorting...");
         
-        ArraysSL.sort(list);
+        A.sort(list);
         
         debugger.printList(list, footer);
         
@@ -109,7 +108,7 @@ public class ListToolsDemo {
     @SuppressWarnings("DuplicatedCode")
     private static <E> void printListEvent(
             Debugger debugger,
-            Operation<E> p1, Operation<E> p2,
+            Op<E> p1, Op<E> p2,
             OperationType operationType, TriggerType triggerType,
             String message, boolean box) {
         
@@ -163,7 +162,7 @@ public class ListToolsDemo {
             footerI = null;
             boxI = false;
         } else
-            throw Exceptions.ex("BLAH BLAH BLAH");
+            throw Exc.ex("BLAH BLAH BLAH");
         
         debugger.printBlock(printsI, titleI, footerI, boxI);
     }

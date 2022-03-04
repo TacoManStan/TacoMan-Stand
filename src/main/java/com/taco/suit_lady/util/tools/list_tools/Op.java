@@ -1,10 +1,9 @@
 package com.taco.suit_lady.util.tools.list_tools;
 
-import com.taco.suit_lady.util.tools.ArraysSL;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-public record Operation<E>(int movedFromIndex, int movedToIndex, E contents) {
+public record Op<E>(int movedFromIndex, int movedToIndex, E contents) {
     
     public InferredType infer() {
         if (movedFromIndex == -1 && movedToIndex == -1 && contents == null)
@@ -40,7 +39,7 @@ public record Operation<E>(int movedFromIndex, int movedToIndex, E contents) {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Operation<?> that)) return false;
+        if (!(o instanceof Op<?> that)) return false;
         
         if (movedFromIndex != that.movedFromIndex) return false;
         if (movedToIndex != that.movedToIndex) return false;
@@ -60,21 +59,21 @@ public record Operation<E>(int movedFromIndex, int movedToIndex, E contents) {
     //<editor-fold desc="--- STATIC FACTORIES ---">
     
     @Contract("_, _ -> new")
-    public static <E> @NotNull Operation<E> empty(int from, int to) {
-        return new Operation<>(from, to, null);
+    public static <E> @NotNull Op<E> empty(int from, int to) {
+        return new Op<>(from, to, null);
     }
     
     @Contract(" -> new")
-    public static <E> @NotNull Operation<E> empty() {
-        return new Operation<>(-1, -1, null);
+    public static <E> @NotNull Op<E> empty() {
+        return new Op<>(-1, -1, null);
     }
     
-    public static <E> @NotNull Operation<E> indexOnly(int to, int from) {
-        return new Operation<>(to, from, null);
+    public static <E> @NotNull Op<E> indexOnly(int to, int from) {
+        return new Op<>(to, from, null);
     }
     
-    public static <E> @NotNull Operation<E> valueOnly(E value) {
-        return new Operation<>(-1, -1, value);
+    public static <E> @NotNull Op<E> valueOnly(E value) {
+        return new Op<>(-1, -1, value);
     }
     
     //</editor-fold>
@@ -125,7 +124,7 @@ public record Operation<E>(int movedFromIndex, int movedToIndex, E contents) {
         }
         
         public boolean isOpValid(OperationType opType) {
-            return ArraysSL.contains(opType, validOperations);
+            return A.contains(opType, validOperations);
         }
     }
 }

@@ -1,7 +1,8 @@
 package com.taco.suit_lady.util.tools;
 
 import com.taco.suit_lady.util.Lockable;
-import com.taco.suit_lady.util.tools.list_tools.ListsSL;
+import com.taco.suit_lady.util.tools.list_tools.A;
+import com.taco.suit_lady.util.tools.list_tools.L;
 import com.taco.suit_lady.util.values.NumberValuePair;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -24,12 +25,12 @@ import java.util.function.Function;
  * Utility methods providing various {@link Binding} manipulations & operations, some of which are {@code passthrough methods} to functions located in the default JavaFX API {@link Bindings} class.
  * <p><b>Details</b></p>
  * <ol>
- *     <li>For functions pertaining to {@link Property Properties} and other {@link Observable Observables}, refer to {@link PropertiesSL}.</li>
- *     <li>For functions pertaining to {@link ObservableList Observable Lists} as well as {@link Collection Standard Collections}, refer to {@link ListsSL}.</li>
+ *     <li>For functions pertaining to {@link Property Properties} and other {@link Observable Observables}, refer to {@link Props}.</li>
+ *     <li>For functions pertaining to {@link ObservableList Observable Lists} as well as {@link Collection Standard Collections}, refer to {@link L}.</li>
  * </ol>
  */
 //TO-EXPAND
-public class BindingsSL {
+public class Bind {
     
     //<editor-fold desc="--- CONSTANT BINDINGS ---">
     
@@ -90,42 +91,42 @@ public class BindingsSL {
      * <p><i>See {@link #objBinding(Callable, Observable...)}</i></p>
      */
     public static @NotNull BooleanBinding directBoolBinding(@NotNull ObservableValue<Boolean> observableValue, Observable... dependencies) {
-        return Bindings.createBooleanBinding(() -> observableValue.getValue(), ArraysSL.concatMulti(new Observable[]{observableValue}, dependencies));
+        return Bindings.createBooleanBinding(() -> observableValue.getValue(), A.concatMulti(new Observable[]{observableValue}, dependencies));
     }
     
     /**
      * <p><i>See {@link #objBinding(Callable, Observable...)}</i></p>
      */
     public static @NotNull IntegerBinding directIntBinding(@NotNull ObservableValue<? extends Number> observableValue, Observable... dependencies) {
-        return Bindings.createIntegerBinding(() -> observableValue.getValue().intValue(), ArraysSL.concatMulti(new Observable[]{observableValue}, dependencies));
+        return Bindings.createIntegerBinding(() -> observableValue.getValue().intValue(), A.concatMulti(new Observable[]{observableValue}, dependencies));
     }
     
     /**
      * <p><i>See {@link #objBinding(Callable, Observable...)}</i></p>
      */
     public static @NotNull LongBinding directLongBinding(@NotNull ObservableValue<? extends Number> observableValue, Observable... dependencies) {
-        return Bindings.createLongBinding(() -> observableValue.getValue().longValue(), ArraysSL.concatMulti(new Observable[]{observableValue}, dependencies));
+        return Bindings.createLongBinding(() -> observableValue.getValue().longValue(), A.concatMulti(new Observable[]{observableValue}, dependencies));
     }
     
     /**
      * <p><i>See {@link #objBinding(Callable, Observable...)}</i></p>
      */
     public static @NotNull FloatBinding directFloatBinding(@NotNull ObservableValue<? extends Number> observableValue, Observable... dependencies) {
-        return Bindings.createFloatBinding(() -> observableValue.getValue().floatValue(), ArraysSL.concatMulti(new Observable[]{observableValue}, dependencies));
+        return Bindings.createFloatBinding(() -> observableValue.getValue().floatValue(), A.concatMulti(new Observable[]{observableValue}, dependencies));
     }
     
     /**
      * <p><i>See {@link #objBinding(Callable, Observable...)}</i></p>
      */
     public static @NotNull DoubleBinding directDoubleBinding(@NotNull ObservableValue<? extends Number> observableValue, Observable... dependencies) {
-        return Bindings.createDoubleBinding(() -> observableValue.getValue().doubleValue(), ArraysSL.concatMulti(new Observable[]{observableValue}, dependencies));
+        return Bindings.createDoubleBinding(() -> observableValue.getValue().doubleValue(), A.concatMulti(new Observable[]{observableValue}, dependencies));
     }
     
     /**
      * <p><i>See {@link #objBinding(Callable, Observable...)}</i></p>
      */
     public static @NotNull StringBinding directStringBinding(@NotNull ObservableValue<String> observableValue, Observable... dependencies) {
-        return Bindings.createStringBinding(() -> observableValue.getValue(), ArraysSL.concatMulti(new Observable[]{observableValue}, dependencies));
+        return Bindings.createStringBinding(() -> observableValue.getValue(), A.concatMulti(new Observable[]{observableValue}, dependencies));
     }
     
     /**
@@ -153,7 +154,7 @@ public class BindingsSL {
      * @return A new {@link Binding} object bound to reflect the {@link ObservableValue#getValue() value} of the specified {@link ObservableValue} object.
      */
     public static <T> @NotNull ObjectBinding<T> directObjBinding(@NotNull ObservableValue<T> observableValue, Observable... dependencies) {
-        return Bindings.createObjectBinding(() -> observableValue.getValue(), ArraysSL.concatMulti(new Observable[]{observableValue}, dependencies));
+        return Bindings.createObjectBinding(() -> observableValue.getValue(), A.concatMulti(new Observable[]{observableValue}, dependencies));
     }
     
     //</editor-fold>
@@ -373,8 +374,8 @@ public class BindingsSL {
          * @param dependencies     Any additional {@code Observables} that should trigger an update (call to the {@code Function}) upon changing.
          *                         <i>Optional</i>.
          *
-         * @see BindingsSL#recursiveBinding(Function, ObservableValue, Observable...)
-         * @see BindingsSL#recursiveBinding(Lock, Function, ObservableValue, Observable...)
+         * @see Bind#recursiveBinding(Function, ObservableValue, Observable...)
+         * @see Bind#recursiveBinding(Lock, Function, ObservableValue, Observable...)
          */
         protected RecursiveBinding(Lock lock, Function<U, ObservableValue<V>> function, ObservableValue<U> updateObservable, Observable[] dependencies) {
             this.lock = lock;
@@ -397,7 +398,7 @@ public class BindingsSL {
          */
         public ObjectProperty<Function<U, ObservableValue<V>>> functionProperty() { return functionProperty; }
         public Function<U, ObservableValue<V>> getFunction() { return functionProperty.get(); }
-        public Function<U, ObservableValue<V>> setFunction(Function<U, ObservableValue<V>> newValue) { return PropertiesSL.setProperty(functionProperty, newValue); }
+        public Function<U, ObservableValue<V>> setFunction(Function<U, ObservableValue<V>> newValue) { return Props.setProperty(functionProperty, newValue); }
         
         /**
          * <p>Returns the backing {@link Binding} attached to this {@code RecursiveBinding}.</p>
@@ -446,7 +447,7 @@ public class BindingsSL {
             updateObservable.addListener((observable, oldValue, newValue) -> update(oldValue, newValue));
             binding = Bindings.createObjectBinding(
                     backingBindingProperty::get,
-                    ArraysSL.concatMulti(new Observable[]{backingBindingProperty}, updateBindings)
+                    A.concatMulti(new Observable[]{backingBindingProperty}, updateBindings)
                                                   );
             binding.invalidate();
             update(updateObservable.getValue(), updateObservable.getValue());
@@ -460,7 +461,7 @@ public class BindingsSL {
          */
         private void update(U oldValue, U newValue) {
             Function<U, ObservableValue<V>> function = getFunction();
-            Exceptions.nullCheck(function, "Function");
+            Exc.nullCheck(function, "Function");
             ObservableValue<V> observableValue = function.apply(newValue);
             if (observableValue != null)
                 backingBindingProperty.bind(observableValue);
@@ -484,7 +485,7 @@ public class BindingsSL {
      * @return The newly created {@code BooleanBinding} bound to the null status of the specified {@code Binding}.
      */
     public static @NotNull BooleanBinding nullCheckBinding(Binding<?> binding) {
-        Exceptions.nullCheck(binding, "Binding");
+        Exc.nullCheck(binding, "Binding");
         return Bindings.createBooleanBinding(() -> binding.getValue() != null, binding);
     }
     
@@ -501,7 +502,7 @@ public class BindingsSL {
     }
     
     public static @NotNull ObjectBinding<NumberValuePair> numPairBinding(@NotNull ObservableValue<? extends Number> obs1, @NotNull ObservableValue<? extends Number> obs2) {
-        return BindingsSL.objBinding(() -> new NumberValuePair(obs1.getValue(), obs2.getValue()), obs1, obs2);
+        return Bind.objBinding(() -> new NumberValuePair(obs1.getValue(), obs2.getValue()), obs1, obs2);
     }
     
     //</editor-fold>

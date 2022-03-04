@@ -1,6 +1,5 @@
 package com.taco.suit_lady.util.tools;
 
-import org.docx4j.wml.R;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,8 +11,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public class Objs {
-    private Objs() { } //No Instance
+public class Obj {
+    private Obj() { } //No Instance
     
     //<editor-fold desc="--- EQUALITY CHECKS ---">
     
@@ -211,7 +210,7 @@ public class Objs {
     
     public static <V> @Nullable V call(@Nullable Callable<V> callable, @NotNull Predicate<Callable<V>> filter, @NotNull Function<Throwable, V> exceptionHandler) { return call(callable, filter, () -> null, exceptionHandler); }
     public static <V> @Nullable V call(@Nullable Callable<V> callable, @NotNull Supplier<V> fallbackSupplier, @NotNull Function<Throwable, V> exceptionHandler) { return call(callable, o -> true, fallbackSupplier, exceptionHandler); }
-    public static <V> @Nullable V call(@Nullable Callable<V> callable, @NotNull Predicate<Callable<V>> filter, @NotNull Supplier<V> fallbackSupplier) { return call(callable, filter, fallbackSupplier, t -> Exceptions.printStackTrace(t, () -> null)); }
+    public static <V> @Nullable V call(@Nullable Callable<V> callable, @NotNull Predicate<Callable<V>> filter, @NotNull Supplier<V> fallbackSupplier) { return call(callable, filter, fallbackSupplier, t -> Exc.printStackTrace(t, () -> null)); }
     
     //</editor-fold>
     

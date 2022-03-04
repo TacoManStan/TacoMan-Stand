@@ -1,7 +1,7 @@
 package com.taco.suit_lady.util.shapes;
 
 import com.taco.suit_lady.util.enums.Enumable;
-import com.taco.suit_lady.util.tools.Exceptions;
+import com.taco.suit_lady.util.tools.Exc;
 import org.jetbrains.annotations.NotNull;
 
 public enum Axis
@@ -24,5 +24,5 @@ public enum Axis
     
     Axis() { }
     
-    public <T> T getFor(@NotNull T v1, @NotNull T v2) { throw Exceptions.unsupported("\"getFor(...)\" operations are unsupported for Axis [" + name() + "]"); }
+    public <T> T getFor(@NotNull T v1, @NotNull T v2) { throw Exc.unsupported("\"getFor(...)\" operations are unsupported for Axis [" + name() + "]"); }
 }

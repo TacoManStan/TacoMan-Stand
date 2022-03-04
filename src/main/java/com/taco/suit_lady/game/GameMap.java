@@ -9,13 +9,10 @@ import com.taco.suit_lady.ui.jfx.util.Dimensions;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
-import com.taco.suit_lady.util.tools.ArraysSL;
-import com.taco.suit_lady.util.tools.BindingsSL;
-import com.taco.suit_lady.util.tools.Maths;
-import com.taco.suit_lady.util.tools.PropertiesSL;
-import com.taco.suit_lady.util.values.NumberValue;
-import com.taco.suit_lady.util.values.NumberValuePair;
-import com.taco.suit_lady.util.values.NumberValuePairable;
+import com.taco.suit_lady.util.tools.list_tools.A;
+import com.taco.suit_lady.util.tools.Bind;
+import com.taco.suit_lady.util.tools.Calc;
+import com.taco.suit_lady.util.tools.Props;
 import com.taco.tacository.json.*;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.ObjectBinding;
@@ -78,14 +75,14 @@ public class GameMap
         
         //
         
-        this.widthBinding = BindingsSL.intBinding(() -> getTileMatrix().length, tileMatrixProperty);
-        this.heightBinding = BindingsSL.intBinding(() -> getWidth() > 0 ? getTileMatrix()[0].length : 0, tileMatrixProperty);
+        this.widthBinding = Bind.intBinding(() -> getTileMatrix().length, tileMatrixProperty);
+        this.heightBinding = Bind.intBinding(() -> getWidth() > 0 ? getTileMatrix()[0].length : 0, tileMatrixProperty);
         
-        this.pixelWidthBinding = BindingsSL.intBinding(() -> getWidth() * getTileSize(), widthBinding, tileSizeProperty);
-        this.pixelHeightBinding = BindingsSL.intBinding(() -> getHeight() * getTileSize(), heightBinding, tileSizeProperty);
+        this.pixelWidthBinding = Bind.intBinding(() -> getWidth() * getTileSize(), widthBinding, tileSizeProperty);
+        this.pixelHeightBinding = Bind.intBinding(() -> getHeight() * getTileSize(), heightBinding, tileSizeProperty);
         
-        this.dimensionsBinding = BindingsSL.objBinding(() -> new Dimensions(getWidth(), getHeight()), widthBinding, heightBinding);
-        this.pixelDimensionsBinding = BindingsSL.objBinding(() -> new Dimensions(getPixelWidth(), getPixelHeight()), pixelWidthBinding, pixelHeightBinding);
+        this.dimensionsBinding = Bind.objBinding(() -> new Dimensions(getWidth(), getHeight()), widthBinding, heightBinding);
+        this.pixelDimensionsBinding = Bind.objBinding(() -> new Dimensions(getPixelWidth(), getPixelHeight()), pixelWidthBinding, pixelHeightBinding);
         
         //
         
@@ -117,7 +114,7 @@ public class GameMap
     protected final ReadOnlyIntegerWrapper tileSizeProperty() { return tileSizeProperty; }
     public final ReadOnlyIntegerProperty readOnlyTileSizeProperty() { return tileSizeProperty.getReadOnlyProperty(); }
     public final int getTileSize() { return tileSizeProperty.get(); }
-    public final int setTileSize(@NotNull Number newValue) { return PropertiesSL.setProperty(tileSizeProperty, newValue.intValue()); }
+    public final int setTileSize(@NotNull Number newValue) { return Props.setProperty(tileSizeProperty, newValue.intValue()); }
     
     //
     
@@ -145,7 +142,7 @@ public class GameMap
     
     public final ReadOnlyObjectProperty<GameTile[][]> readOnlyTileMatrixProperty() { return tileMatrixProperty.getReadOnlyProperty(); }
     public final GameTile[][] getTileMatrix() { return tileMatrixProperty.get(); }
-    private GameTile[][] setTileMatrix(GameTile[][] newValue) { return PropertiesSL.setProperty(tileMatrixProperty, newValue); }
+    private GameTile[][] setTileMatrix(GameTile[][] newValue) { return Props.setProperty(tileMatrixProperty, newValue); }
     
     public final ArrayList<GameObject> gameObjects() { return gameObjects; }
     public final GameMapModel getModel() { return model; }
@@ -178,7 +175,7 @@ public class GameMap
             for (int j = -yReach; j < yReach; j++) {
                 int xLoc = gameTile.getLocationX() + i;
                 int yLoc = gameTile.getLocationY() + j;
-                if (ArraysSL.isInMatrixBounds(getTileMatrix(), xLoc, yLoc))
+                if (A.isInMatrixBounds(getTileMatrix(), xLoc, yLoc))
                     neighbors[i][j] = getTileMatrix()[gameTile.getLocationX() + i][gameTile.getLocationY() + j];
             }
         
@@ -201,13 +198,13 @@ public class GameMap
         
         int tileMinX = Math.floorDiv(xLoc, getTileSize());
         int tileMinY = Math.floorDiv(yLoc, getTileSize());
-        int tileMaxX = Maths.ceil(xLoc + pxMapWidth, getTileSize());
-        int tileMaxY = Maths.ceil(yLoc + pxMapHeight, getTileSize());
+        int tileMaxX = Calc.ceil(xLoc + pxMapWidth, getTileSize());
+        int tileMaxY = Calc.ceil(yLoc + pxMapHeight, getTileSize());
         
         ArrayList<GameTile> returnTiles = new ArrayList<>();
         for (int i = tileMinX; i <= tileMaxX; i++)
             for (int j = tileMinY; j <= tileMaxY; j++)
-                if (ArraysSL.isInMatrixBounds(getTileMatrix(), i, j))
+                if (A.isInMatrixBounds(getTileMatrix(), i, j))
                     returnTiles.add(getTileMatrix()[i][j]);
         return returnTiles;
     }

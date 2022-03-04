@@ -1,7 +1,7 @@
 package com.taco.suit_lady.ui.jfx.components.button;
 
-import com.taco.suit_lady.util.tools.PropertiesSL;
-import com.taco.suit_lady.util.tools.ToolsSL;
+import com.taco.suit_lady.util.tools.Props;
+import com.taco.suit_lady.util.tools.TB;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -142,7 +142,7 @@ public class ImageButtonGroup {
      * @see #isButtonSelected(ImageButton)
      */
     public ImageButton setSelectedButton(ImageButton button) {
-        return PropertiesSL.setProperty(selectedButtonProperty, button);
+        return Props.setProperty(selectedButtonProperty, button);
     }
     
     /**
@@ -172,7 +172,7 @@ public class ImageButtonGroup {
         if (buttons.length == 0)
             setSelectedButton(null);
         
-        if (ToolsSL.equalsAny(getSelectedButton(), (Object[]) buttons)) {
+        if (TB.equalsAny(getSelectedButton(), (Object[]) buttons)) {
             setSelectedButton(null);
             return true;
         } else

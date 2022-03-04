@@ -3,10 +3,9 @@ package com.taco.suit_lady.util.tools.list_tools;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
-import com.taco.suit_lady.util.tools.ArraysSL;
-import com.taco.suit_lady.util.tools.Exceptions;
-import com.taco.suit_lady.util.tools.TasksSL;
-import com.taco.suit_lady.util.tools.list_tools.Operation.OperationType;
+import com.taco.suit_lady.util.tools.Exc;
+import com.taco.suit_lady.util.tools.Exe;
+import com.taco.suit_lady.util.tools.list_tools.Op.OperationType;
 import com.taco.tacository.obj_traits.common.Nameable;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -25,26 +24,26 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- * <p>An abstract implementation of both {@link ListChangeListener} and {@link OperationListener}.</p>
+ * <p>An abstract implementation of both {@link ListChangeListener} and {@link OpListener}.</p>
  * <h2>Details</h2>
  * <ol>
  *     <li>
- *         {@link OperationHandler} objects are constructed by <i>{@link ListsSL}<b>.</b>{@link ListsSL#wrap(Lock, String, ObservableList, OperationListener) wrap(...)}</i> and other factory methods in the {@link ListsSL} utility class.
+ *         {@link OpHandler} objects are constructed by <i>{@link L}<b>.</b>{@link L#wrap(Lock, String, ObservableList, OpListener) wrap(...)}</i> and other factory methods in the {@link L} utility class.
  *         <ul>
- *             <li>Most factory methods return a {@link OperationHandler} that was constructed using <i>{@link ListsSL}<b>.</b>{@link ListsSL#wrap(Lock, String, ObservableList, OperationListener) wrap(...)}</i>.</li>
+ *             <li>Most factory methods return a {@link OpHandler} that was constructed using <i>{@link L}<b>.</b>{@link L#wrap(Lock, String, ObservableList, OpListener) wrap(...)}</i>.</li>
  *         </ul>
  *     </li>
- *     <li>The primary function of {@link OperationHandler} is to streamline the event data provided by <i>{@link ListChangeListener#onChanged(Change) ListChangeListener#onChanged(Change)}</i>.</li>
- *     <li>{@link OperationHandler} uses {@link Operation} records to communicate a {@link Change Change Event}.</li>
+ *     <li>The primary function of {@link OpHandler} is to streamline the event data provided by <i>{@link ListChangeListener#onChanged(Change) ListChangeListener#onChanged(Change)}</i>.</li>
+ *     <li>{@link OpHandler} uses {@link Op} records to communicate a {@link Change Change Event}.</li>
  * </ol>
  * <hr>
  * <h2>Auto Conversion</h2>
  * <p>
- *     By default, an {@link OperationHandler} will attempt to detect {@link ObservableList} {@link #onAdd(Operation) add} and {@link #onRemove(Operation) remove} operations that are functionally {@link OperationType#PERMUTATION permutations}
+ *     By default, an {@link OpHandler} will attempt to detect {@link ObservableList} {@link #onAdd(Op) add} and {@link #onRemove(Op) remove} operations that are functionally {@link OperationType#PERMUTATION permutations}
  *     — e.g. <i>{@link Collections}<b>.</b>{@link Collections#shuffle(List) shuffle}<b>(</b>{@link List}<b>)</b></i>.
  * </p>
  * <ol>
- *     <li>If such an {@link Operation} exists, the {@link OperationType#ADDITION add} and {@link OperationType#REMOVAL remove} operations that comprise the inferred {@link OperationType#PERMUTATION permutation} are no longer triggered as {@link OperationType#ADDITION add} or {@link OperationType#REMOVAL remove} events, but rather converted and submitted as a single {@link OperationType#PERMUTATION permutation} event.</li>
+ *     <li>If such an {@link Op} exists, the {@link OperationType#ADDITION add} and {@link OperationType#REMOVAL remove} operations that comprise the inferred {@link OperationType#PERMUTATION permutation} are no longer triggered as {@link OperationType#ADDITION add} or {@link OperationType#REMOVAL remove} events, but rather converted and submitted as a single {@link OperationType#PERMUTATION permutation} event.</li>
  *     <li>To disable automatic {@link OperationType#PERMUTATION permutation} conversions, set <i>{@link #isSmartConvertProperty() Smart Convert}</i> to {@code false}.</li>
  * </ol>
  * <h3>Known Functions Behavior</h3>
@@ -59,16 +58,16 @@ import java.util.stream.IntStream;
  * </ol>
  * <h4>With <u>Native</u> Permutation Event Support</h4>
  * <ol>
- *     <li>{@link ArraysSL#sort(List)}</li>
+ *     <li>{@link A#sort(List)}</li>
  * </ol>
  * <h3>Example Output</h3>
  * <p>Refer to {@link ListToolsDemo}.</p>
  *
- * @param <E> The type of element contained within the {@link ObservableList list} that has been assigned to this {@link OperationHandler}.
+ * @param <E> The type of element contained within the {@link ObservableList list} that has been assigned to this {@link OpHandler}.
  */
 // TO-EXPAND
-public abstract class OperationHandler<E>
-        implements OperationListener<E>, ListChangeListener<E>, Lockable, Nameable, UIDProcessable {
+public abstract class OpHandler<E>
+        implements OpListener<E>, ListChangeListener<E>, Lockable, Nameable, UIDProcessable {
     
     private final Lock lock;
     private final String name;
@@ -78,7 +77,7 @@ public abstract class OperationHandler<E>
     
     private final BooleanProperty smartConvertProperty;
     
-    protected OperationHandler(@Nullable Lock lock, @Nullable String name, @NotNull ObservableList<E> list) {
+    protected OpHandler(@Nullable Lock lock, @Nullable String name, @NotNull ObservableList<E> list) {
         this.lock = lock;
         this.name = name;
         
@@ -118,7 +117,7 @@ public abstract class OperationHandler<E>
     
     @Override
     public final void onChanged(Change<? extends E> change) {
-        TasksSL.sync(lock, () -> {
+        Exe.sync(lock, () -> {
             while (change.next())
                 if (change.wasPermutated()) {
                     onPermutateOperationInternal(true);
@@ -133,56 +132,56 @@ public abstract class OperationHandler<E>
                         final int oldElementNewIndex = change.getPermutation(newIndex);
                         
                         onPermutateInternal(
-                                new Operation<>(oldIndex, newIndex, newElement),
-                                new Operation<>(oldElementOldIndex, oldElementNewIndex, oldElement));
+                                new Op<>(oldIndex, newIndex, newElement),
+                                new Op<>(oldElementOldIndex, oldElementNewIndex, oldElement));
                     });
                     
                     onPermutateOperationInternal(false);
                 } else if (change.wasUpdated())
                     onUpdateInternal(change.getFrom(), change.getTo());
                 else {
-                    ArrayList<Operation<E>> allOperations = list.stream().map(element -> new Operation<>(
+                    ArrayList<Op<E>> allOps = list.stream().map(element -> new Op<>(
                             backingListProperty.get().indexOf(element),
                             list.indexOf(element),
                             element)).collect(Collectors.toCollection(ArrayList::new));
                     
-                    ArrayList<Operation<E>> removedOperations = change.getRemoved().stream().<Operation<E>>map(element -> new Operation<>(
+                    ArrayList<Op<E>> removedOps = change.getRemoved().stream().<Op<E>>map(element -> new Op<>(
                             backingListProperty.get().indexOf(element),
                             list.indexOf(element),
                             element)).collect(Collectors.toCollection(ArrayList::new));
-                    ArrayList<Operation<E>> addedOperations = change.getAddedSubList().stream().<Operation<E>>map(element -> new Operation<>(
+                    ArrayList<Op<E>> addedOps = change.getAddedSubList().stream().<Op<E>>map(element -> new Op<>(
                             backingListProperty.get().indexOf(element),
                             list.indexOf(element),
                             element)).collect(Collectors.toCollection(ArrayList::new));
                     
                     if (isSmartConvert()) {
-                        ArrayList<Operation<E>> operations = allOperations.stream().filter(
-                                o -> addedOperations.contains(o) && removedOperations.contains(o)).collect(
+                        ArrayList<Op<E>> ops = allOps.stream().filter(
+                                o -> addedOps.contains(o) && removedOps.contains(o)).collect(
                                 Collectors.toCollection(ArrayList::new));
                         
-                        operations.forEach(p -> {
-                            removedOperations.remove(p);
-                            addedOperations.remove(p);
+                        ops.forEach(p -> {
+                            removedOps.remove(p);
+                            addedOps.remove(p);
                         });
                         
                         
-                        if (!operations.isEmpty()) {
+                        if (!ops.isEmpty()) {
                             onPermutateOperationInternal(true);
-                            operations.forEach(operation -> onPermutateInternal(operation, getByIndex(operation.movedToIndex(), false, allOperations)));
+                            ops.forEach(operation -> onPermutateInternal(operation, getByIndex(operation.movedToIndex(), false, allOps)));
                             onPermutateOperationInternal(false);
                         }
                     }
                     
                     
-                    if (!removedOperations.isEmpty()) {
+                    if (!removedOps.isEmpty()) {
                         onAddOrRemoveOperationInternal(true, false);
-                        removedOperations.forEach(operation -> onRemoveInternal(operation));
+                        removedOps.forEach(operation -> onRemoveInternal(operation));
                         onAddOrRemoveOperationInternal(false, false);
                     }
                     
-                    if (!addedOperations.isEmpty()) {
+                    if (!addedOps.isEmpty()) {
                         onAddOrRemoveOperationInternal(true, true);
-                        addedOperations.forEach(operation -> onAddInternal(operation));
+                        addedOps.forEach(operation -> onAddInternal(operation));
                         onAddOrRemoveOperationInternal(false, true);
                     }
                 }
@@ -240,33 +239,33 @@ public abstract class OperationHandler<E>
     
     //<editor-fold desc="--- INTERNAL ---">
     
-    private void onPermutateInternal(Operation<E> op1, Operation<E> op2) {
-        TasksSL.sync(lock, () -> onPermutate(op1, op2), true);
+    private void onPermutateInternal(Op<E> op1, Op<E> op2) {
+        Exe.sync(lock, () -> onPermutate(op1, op2), true);
     }
     
     private void onUpdateInternal(int from, int to) {
-        TasksSL.sync(lock, () -> onUpdate(from, to), true);
+        Exe.sync(lock, () -> onUpdate(from, to), true);
     }
     
-    private void onAddInternal(Operation<E> op) {
-        TasksSL.sync(lock, () -> onAdd(op), true);
+    private void onAddInternal(Op<E> op) {
+        Exe.sync(lock, () -> onAdd(op), true);
     }
     
-    private void onRemoveInternal(Operation<E> op) {
-        TasksSL.sync(lock, () -> onRemove(op), true);
+    private void onRemoveInternal(Op<E> op) {
+        Exe.sync(lock, () -> onRemove(op), true);
     }
     
     //
     
     private void onPermutateOperationInternal(boolean before) {
-        TasksSL.sync(lock, () -> {
+        Exe.sync(lock, () -> {
             if (before) onPrePermutate();
             else onPostPermutate();
         }, true);
     }
     
     private void onAddOrRemoveOperationInternal(boolean before, boolean add) {
-        TasksSL.sync(lock, () -> {
+        Exe.sync(lock, () -> {
             if (add)
                 if (before)
                     onPreAdd();
@@ -283,24 +282,24 @@ public abstract class OperationHandler<E>
     //
     
     private void refresh() {
-        TasksSL.sync(lock, () -> backingListProperty.set(ArraysSL.copy(list)), true);
+        Exe.sync(lock, () -> backingListProperty.set(A.copy(list)), true);
     }
     
     //</editor-fold>
     
     /**
-     * <p>Returns the first {@link Operation} matching the specified {@code index} of the specified {@link Boolean index type} located in any of the specified {@link List lists}.</p>
+     * <p>Returns the first {@link Op} matching the specified {@code index} of the specified {@link Boolean index type} located in any of the specified {@link List lists}.</p>
      *
      * @param index The {@code index} being searched for.
-     * @param to    True if the {@link Operation#movedToIndex() moved to} {@code index} should be searched for, false if the {@link Operation#movedFromIndex() moved from} index should be searched for instead.
-     * @param lists The array of {@link List lists} to be scanned for an {@link Operation} that matches the specified {@code index}.
+     * @param to    True if the {@link Op#movedToIndex() moved to} {@code index} should be searched for, false if the {@link Op#movedFromIndex() moved from} index should be searched for instead.
+     * @param lists The array of {@link List lists} to be scanned for an {@link Op} that matches the specified {@code index}.
      *
-     * @return The first {@link Operation} matching the specified {@code index} of the specified {@link Boolean index type} located in any of the specified {@link List lists}.
+     * @return The first {@link Op} matching the specified {@code index} of the specified {@link Boolean index type} located in any of the specified {@link List lists}.
      */
     @SafeVarargs
-    public final @Nullable Operation<E> getByIndex(int index, boolean to, List<Operation<E>> @NotNull ... lists) {
-        for (List<Operation<E>> list: lists) {
-            Operation<E> p = list.stream().filter(
+    public final @Nullable Op<E> getByIndex(int index, boolean to, List<Op<E>> @NotNull ... lists) {
+        for (List<Op<E>> list: lists) {
+            Op<E> p = list.stream().filter(
                     operation -> (!to && operation.movedFromIndex() == index) || (to && operation.movedToIndex() == index)).findFirst().orElse(null);
             if (p != null)
                 return p;
@@ -309,13 +308,13 @@ public abstract class OperationHandler<E>
     }
     
     /**
-     * <p>Applies this {@link OperationHandler} as a {@link ListChangeListener} to the {@link ObservableList} assigned to this {@link OperationHandler} object.</p>
+     * <p>Applies this {@link OpHandler} as a {@link ListChangeListener} to the {@link ObservableList} assigned to this {@link OpHandler} object.</p>
      *
-     * @return This {@link OperationHandler}. Functionally void.
+     * @return This {@link OpHandler}. Functionally void.
      */
-    public final OperationHandler<E> apply() {
+    public final OpHandler<E> apply() {
         refresh();
-        Exceptions.nullCheck(list, "Observable List").addListener(Exceptions.nullCheck(this, "List Listener"));
+        Exc.nullCheck(list, "Observable List").addListener(Exc.nullCheck(this, "List Listener"));
         return this;
     }
 }

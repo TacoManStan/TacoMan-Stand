@@ -8,9 +8,9 @@ import com.taco.suit_lady.ui.jfx.components.painting.surfaces.SurfaceData;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.timing.Timer;
 import com.taco.suit_lady.util.timing.Timers;
-import com.taco.suit_lady.util.tools.Exceptions;
-import com.taco.suit_lady.util.tools.PropertiesSL;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
+import com.taco.suit_lady.util.tools.Exc;
+import com.taco.suit_lady.util.tools.Props;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import javafx.beans.property.*;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
@@ -77,7 +77,7 @@ public class CanvasSurface extends Canvas
             if (newValue.longValue() == -1)
                 snapshotTimer.stop();
             else if (newValue.longValue() <= 0)
-                throw Exceptions.unsupported("Snapshot Frequency must be either -1 (disabled) or greater than 0 [" + getSnapshotFrequency() + "]");
+                throw Exc.unsupported("Snapshot Frequency must be either -1 (disabled) or greater than 0 [" + getSnapshotFrequency() + "]");
             else
                 snapshotTimer.reset(newValue);
         });
@@ -118,10 +118,10 @@ public class CanvasSurface extends Canvas
     
     public final LongProperty snapshotFrequencyProperty() { return snapshotFrequencyProperty; }
     public final long getSnapshotFrequency() { return snapshotFrequencyProperty.get(); }
-    public final long setSnapshotFrequency(@NotNull Number newValue) { return PropertiesSL.setProperty(snapshotFrequencyProperty, newValue.longValue()); }
+    public final long setSnapshotFrequency(@NotNull Number newValue) { return Props.setProperty(snapshotFrequencyProperty, newValue.longValue()); }
     
     public void updateSnapshot() {
-        ToolsFX.runFX(() -> snapshotProperty.set(snapshot(new SnapshotParameters(), null)), true);
+        FX.runFX(() -> snapshotProperty.set(snapshot(new SnapshotParameters(), null)), true);
     }
     
     //</editor-fold>
@@ -189,7 +189,7 @@ public class CanvasSurface extends Canvas
     }
     
     @Override public void onGfxUpdate() {
-        ToolsFX.clearCanvasUnsafe(this);
+        FX.clearCanvasUnsafe(this);
         
         paintables().forEach(PaintCommand::paint);
         

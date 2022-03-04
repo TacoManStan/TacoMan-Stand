@@ -3,8 +3,8 @@ package com.taco.suit_lady.logic.triggers;
 import com.taco.suit_lady.game.Entity;
 import com.taco.suit_lady.game.interfaces.WrappedGameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
-import com.taco.suit_lady.util.tools.Exceptions;
-import com.taco.suit_lady.util.tools.PropertiesSL;
+import com.taco.suit_lady.util.tools.Exc;
+import com.taco.suit_lady.util.tools.Props;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +23,7 @@ public abstract class Trigger<T extends TriggerEvent<T>>
     
     //<editor-fold desc="--- LOGIC ---">
     
-    final boolean test(@NotNull T event) { return Exceptions.nullCheck(getCondition(), "Trigger Condition").test(event); }
+    final boolean test(@NotNull T event) { return Exc.nullCheck(getCondition(), "Trigger Condition").test(event); }
     
     //</editor-fold>
     
@@ -33,7 +33,7 @@ public abstract class Trigger<T extends TriggerEvent<T>>
     
     public ReadOnlyObjectProperty<TriggerCondition<T>> readOnlyConditionProperty() { return conditionProperty.getReadOnlyProperty(); }
     public TriggerCondition<T> getCondition() { return conditionProperty.get(); }
-    public TriggerCondition<T> setCondition(TriggerCondition<T> newValue) { return PropertiesSL.setProperty(conditionProperty, newValue); }
+    public TriggerCondition<T> setCondition(TriggerCondition<T> newValue) { return Props.setProperty(conditionProperty, newValue); }
     
     //</editor-fold>
     

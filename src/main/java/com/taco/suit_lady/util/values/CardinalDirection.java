@@ -1,7 +1,7 @@
 package com.taco.suit_lady.util.values;
 
-import com.taco.suit_lady.util.tools.ArraysSL;
-import com.taco.suit_lady.util.tools.Exceptions;
+import com.taco.suit_lady.util.tools.list_tools.A;
+import com.taco.suit_lady.util.tools.Exc;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -30,18 +30,18 @@ public enum CardinalDirection {
     //<editor-fold desc="--- STATIC ---">
     
     public static CardinalDirection[] valuesUnidirectional() { return new CardinalDirection[]{NORTH, SOUTH, EAST, WEST}; }
-    public static CardinalDirection[] valuesUnidirectionalC() { return ArraysSL.concat(valuesUnidirectional(), CENTER); }
+    public static CardinalDirection[] valuesUnidirectionalC() { return A.concat(valuesUnidirectional(), CENTER); }
     
     public static CardinalDirection[] valuesMultiDirectional() { return new CardinalDirection[]{NORTH_EAST, NORTH_WEST, SOUTH_EAST, SOUTH_WEST}; }
-    public static CardinalDirection[] valuesMultiDirectionalC() { return ArraysSL.concat(valuesMultiDirectional(), CENTER); }
+    public static CardinalDirection[] valuesMultiDirectionalC() { return A.concat(valuesMultiDirectional(), CENTER); }
     
-    public static CardinalDirection[] valuesNoC() { return ArraysSL.concatMulti(valuesUnidirectional(), valuesMultiDirectional()); }
+    public static CardinalDirection[] valuesNoC() { return A.concatMulti(valuesUnidirectional(), valuesMultiDirectional()); }
     
     //
     
     public static CardinalDirection getMatching(@NotNull NumberValuePairable<?> input) {
         if (input.aInt() < -1 || input.aInt() > 1 || input.bInt() < -1 || input.bInt() > 1)
-            throw Exceptions.unsupported("Input Values Must be in Range [-1,1]:  " + input);
+            throw Exc.unsupported("Input Values Must be in Range [-1,1]:  " + input);
         return Arrays.stream(values()).filter(direction -> direction.xMod() == input.aInt() && direction.yMod() == input.bInt()).findFirst().orElse(null);
     }
     

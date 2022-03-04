@@ -1,6 +1,7 @@
 package com.taco.suit_lady.util.tools;
 
 import com.taco.suit_lady.util.UID;
+import com.taco.suit_lady.util.tools.list_tools.A;
 import com.taco.tacository.quick.ConsoleBB;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +21,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
 
 @Component
-public class ResourcesSL {
+public class Stuff {
     
     private static final ReentrantLock lock;
     private static final HashMap<String, HashMap<String, Object>> resources;
@@ -49,7 +50,7 @@ public class ResourcesSL {
     public static <V> V get(String groupKey, String lookupKey) {
         return get(groupKey, lookupKey, () ->
         {
-            throw Exceptions.unsupported("Value \"" + groupKey + " -> " + lookupKey + "\" has not yet been defined");
+            throw Exc.unsupported("Value \"" + groupKey + " -> " + lookupKey + "\" has not yet been defined");
         });
     }
     
@@ -71,13 +72,13 @@ public class ResourcesSL {
     public static <V> V get(String groupKey, String lookupKey, Supplier<V> defaultValueSupplier) {
         groupKey = groupKey != null ? groupKey : "default";
         
-        Exceptions.nullCheck(lookupKey, "UID Lookup Key");
-        Exceptions.nullCheckMessage(defaultValueSupplier, "Default value returner is null for type \" + groupKey + \" using lookup key \" + lookupKey + \"");
+        Exc.nullCheck(lookupKey, "UID Lookup Key");
+        Exc.nullCheckMessage(defaultValueSupplier, "Default value returner is null for type \" + groupKey + \" using lookup key \" + lookupKey + \"");
         
         final String tempTypeKey = groupKey.toLowerCase();
         final String tempLookupKey = lookupKey.toLowerCase();
         
-        HashMap<String, V> map = Exceptions.nullCheck(getMap(tempTypeKey), debugMessage(tempTypeKey, tempLookupKey, "Map"));
+        HashMap<String, V> map = Exc.nullCheck(getMap(tempTypeKey), debugMessage(tempTypeKey, tempLookupKey, "Map"));
         
         V value;// A Supplier is used so resources are only used getting the new value if necessary.
         if (map.containsKey(tempLookupKey))
@@ -94,8 +95,8 @@ public class ResourcesSL {
     }
     
     public static <V> V get(UID uID, Supplier<V> defaultValueSupplier, Object... params) {
-        Exceptions.nullCheck(uID, "UID");
-        Exceptions.nullCheck(defaultValueSupplier, "Default Value Supplier");
+        Exc.nullCheck(uID, "UID");
+        Exc.nullCheck(defaultValueSupplier, "Default Value Supplier");
         
         return get(uID.getGroupID(), uID.getUID(params), defaultValueSupplier);
     }
@@ -107,12 +108,12 @@ public class ResourcesSL {
     }
     
     public static <V> List<Object> getAll(String groupKey, Class<V> typeReq) {
-        Exceptions.nullCheck(groupKey, "Lookup Key");
+        Exc.nullCheck(groupKey, "Lookup Key");
         ArrayList<Object> returnList = new ArrayList<>();
-        List<HashMap<String, Object>> maps = Exceptions.nullCheck(ArraysSL.getMapValues(resources), debugMessage(groupKey, "N/A", "Map Values"));
+        List<HashMap<String, Object>> maps = Exc.nullCheck(A.getMapValues(resources), debugMessage(groupKey, "N/A", "Map Values"));
         maps.stream().filter(Objects::nonNull).forEach(map -> {
             Object element = map.get(groupKey);
-            if (element != null && (typeReq == null || ToolsSL.instanceOf(element, typeReq)))
+            if (element != null && (typeReq == null || TB.instanceOf(element, typeReq)))
                 returnList.add(element);
         });
         return returnList;
@@ -131,10 +132,10 @@ public class ResourcesSL {
     }
     
     public static Image getImage(String pathID, String imageID, String extension) {
-        Exceptions.nullCheck(extension, "File Extension");
+        Exc.nullCheck(extension, "File Extension");
         
-        String hashID = StringsSL.replaceSeparator((pathID != null ? pathID : "") + imageID);
-        String filePath = StringsSL.replaceSeparator("images/" + hashID + "." + extension);
+        String hashID = Str.replaceSeparator((pathID != null ? pathID : "") + imageID);
+        String filePath = Str.replaceSeparator("images/" + hashID + "." + extension);
         
         //noinspection Duplicates
         return get(image_type_key, hashID, () ->
@@ -168,7 +169,7 @@ public class ResourcesSL {
                 yield getImage("game/" + sizeID + "/" + pathID, name, extension);
             }
             
-            default -> throw Exceptions.unsupported("Unsupported Size ID: " + sizeID);
+            default -> throw Exc.unsupported("Unsupported Size ID: " + sizeID);
         };
     }
     
@@ -178,11 +179,11 @@ public class ResourcesSL {
      */
     @Deprecated
     public static Image getImage(String pathID, String imageID, String extension, boolean isTheme) {
-        Exceptions.nullCheck(extension, "File Extension");
+        Exc.nullCheck(extension, "File Extension");
         
         String theme = isTheme ? "themes/dark/" : ""; // TODO [S]: Load the theme from settings.
-        String hashID = StringsSL.replaceSeparator((pathID != null ? pathID : "") + imageID);
-        String filePath = StringsSL.replaceSeparator("images/" + theme + hashID + "." + extension);
+        String hashID = Str.replaceSeparator((pathID != null ? pathID : "") + imageID);
+        String filePath = Str.replaceSeparator("images/" + theme + hashID + "." + extension);
         
         //noinspection Duplicates
         return get(image_type_key, hashID, () ->
@@ -210,30 +211,30 @@ public class ResourcesSL {
     // Update
     
     public static <V> V update(String groupKey, String lookupKey, V newValue) {
-        Exceptions.nullCheck(groupKey, "Group Key");
-        Exceptions.nullCheck(lookupKey, "Lookup Key");
-        Exceptions.nullCheckMessage(newValue, debugMessage(groupKey, lookupKey, "New Value is null"));
+        Exc.nullCheck(groupKey, "Group Key");
+        Exc.nullCheck(lookupKey, "Lookup Key");
+        Exc.nullCheckMessage(newValue, debugMessage(groupKey, lookupKey, "New Value is null"));
         
-        HashMap<String, V> map = Exceptions.nullCheck(getMap(groupKey), debugMessage(groupKey, lookupKey, "Map is null"));
+        HashMap<String, V> map = Exc.nullCheck(getMap(groupKey), debugMessage(groupKey, lookupKey, "Map is null"));
         return map.put(lookupKey, newValue);
     }
     
     public static <V> V update(UID uID, String lookupKey, V newValue, Object... params) {
-        Exceptions.nullCheck(uID, "UID Type Key");
-        Exceptions.nullCheck(lookupKey, "Lookup Key");
-        Exceptions.nullCheckMessage(newValue, debugMessage(uID.getUID(params), lookupKey, "New Value is null"));
+        Exc.nullCheck(uID, "UID Type Key");
+        Exc.nullCheck(lookupKey, "Lookup Key");
+        Exc.nullCheckMessage(newValue, debugMessage(uID.getUID(params), lookupKey, "New Value is null"));
         
         return update(uID.getUID(params), lookupKey, newValue);
     }
     
     public static <V> V updateLater(UID uID, String lookupKey, Supplier<V> valueSupplier, Object... params) {
-        throw Exceptions.nyi();
+        throw Exc.nyi();
     } // TODO
     
     // Get Map
     
     protected static <V> HashMap<String, V> getMap(String typeKey) {
-        Exceptions.nullCheck(typeKey, "Type Key");
+        Exc.nullCheck(typeKey, "Type Key");
         if (!resources.containsKey(typeKey))
             resources.put(typeKey, new HashMap<>());
         return (HashMap<String, V>) resources.get(typeKey);
@@ -241,20 +242,20 @@ public class ResourcesSL {
     
     
     public static InputStream getResourceStream(String resource) throws IOException {
-        Exceptions.nullCheck(resource, "Resource");
-        return ResourcesSL.class.getResourceAsStream(StringsSL.replaceSeparator("/" + resource));
+        Exc.nullCheck(resource, "Resource");
+        return Stuff.class.getResourceAsStream(Str.replaceSeparator("/" + resource));
     } // TODO: Load from resource jar file
     
     public static URL getResourceURL(String resource) {
-        Exceptions.nullCheck(resource, "Resource");
-        return ResourcesSL.class.getResource(StringsSL.replaceSeparator("/" + resource));
+        Exc.nullCheck(resource, "Resource");
+        return Stuff.class.getResource(Str.replaceSeparator("/" + resource));
     } // TODO: Load from resource jar file
     
     public static URI getResourceURI(String resource) {
         try {
             return getResourceURL(resource).toURI();
         } catch (URISyntaxException e) {
-            throw Exceptions.ex(e);
+            throw Exc.ex(e);
         }
     }
     

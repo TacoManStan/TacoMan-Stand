@@ -2,8 +2,8 @@ package com.taco.suit_lady.game.objects;
 
 import com.taco.suit_lady.game.interfaces.WrappedGameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
-import com.taco.suit_lady.util.tools.Exceptions;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
+import com.taco.suit_lady.util.tools.Exc;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import com.taco.suit_lady.util.values.NumberValuePairable;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
@@ -50,9 +50,9 @@ public class CollisionMap
     
     public final List<CollisionArea> collisionAreas() { return new ArrayList<>(collisionAreas); }
     public final boolean addCollisionArea(@NotNull CollisionArea area) {
-        return ToolsFX.forbidFX(getLock(), () -> {
+        return FX.forbidFX(getLock(), () -> {
             if (collisionAreas.contains(area))
-                throw Exceptions.ex("Collision Area is already contained in this Collision Map:  [" + area + "]");
+                throw Exc.ex("Collision Area is already contained in this Collision Map:  [" + area + "]");
             return collisionAreas.add(area);
         });
     }
@@ -70,7 +70,7 @@ public class CollisionMap
     //<editor-fold desc="> Collision Checks">
     
     public final boolean collidesWith(@NotNull CollisionMap other, @NotNull Number xMod, @NotNull Number yMod) {
-        return !this.equals(other) && ToolsFX.forbidFX(
+        return !this.equals(other) && FX.forbidFX(
                 getLock(), () -> other.collisionAreas().stream().anyMatch(
                         otherArea -> this.collidesWith(otherArea, xMod, yMod)));
     }
@@ -84,7 +84,7 @@ public class CollisionMap
     //
     
     public final boolean collidesWith(@NotNull CollisionArea other, @NotNull Number xMod, @NotNull Number yMod) {
-        return !this.equals(other.getOwner()) && ToolsFX.forbidFX(
+        return !this.equals(other.getOwner()) && FX.forbidFX(
                 getLock(), () -> collisionAreas.stream().anyMatch(
                         area -> area.intersects(other, xMod, yMod)));
     }

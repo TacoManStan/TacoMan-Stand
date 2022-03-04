@@ -1,12 +1,9 @@
 package com.taco.suit_lady.util.shapes;
 
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.Exceptions;
 import com.taco.suit_lady.util.values.NumberValuePair;
 import com.taco.suit_lady.util.values.NumberValuePairable;
-import javafx.beans.Observable;
 import javafx.scene.paint.Color;
-import org.docx4j.wml.Numbering;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

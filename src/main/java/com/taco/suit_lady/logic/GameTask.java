@@ -3,8 +3,8 @@ package com.taco.suit_lady.logic;
 import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.interfaces.WrappedGameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
-import com.taco.suit_lady.util.tools.Exceptions;
-import com.taco.suit_lady.util.tools.PropertiesSL;
+import com.taco.suit_lady.util.tools.Exc;
+import com.taco.suit_lady.util.tools.Props;
 import javafx.beans.property.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,7 +28,7 @@ public abstract class GameTask<E extends Tickable<E>>
         else if (owner instanceof GameComponent gameComponentOwner)
             this.game = gameComponentOwner.getGame();
         else
-            throw Exceptions.ex("GameComponent param is null and owner is not implementation of GameComponent (" + owner + ")");
+            throw Exc.ex("GameComponent param is null and owner is not implementation of GameComponent (" + owner + ")");
         this.owner = owner;
         
         this.tickCountProperty = new ReadOnlyLongWrapper(0);
@@ -47,11 +47,11 @@ public abstract class GameTask<E extends Tickable<E>>
     
     public final ReadOnlyBooleanProperty readOnlySynchronizationEnabledProperty() { return synchronizationEnabledProperty.getReadOnlyProperty(); }
     public final boolean isSynchronizationEnabled() { return synchronizationEnabledProperty.get(); }
-    protected final boolean setSynchronizationEnabled(boolean newValue) { return PropertiesSL.setProperty(synchronizationEnabledProperty, newValue); }
+    protected final boolean setSynchronizationEnabled(boolean newValue) { return Props.setProperty(synchronizationEnabledProperty, newValue); }
     
     public final @NotNull ReadOnlyObjectProperty<TaskState> readOnlyStateProperty() { return stateProperty.getReadOnlyProperty(); }
     public final @NotNull TaskState getState() { return stateProperty.get(); }
-    protected final @NotNull TaskState setState(@NotNull TaskState newValue) { return PropertiesSL.setProperty(stateProperty, newValue); }
+    protected final @NotNull TaskState setState(@NotNull TaskState newValue) { return Props.setProperty(stateProperty, newValue); }
     
     //</editor-fold>
     

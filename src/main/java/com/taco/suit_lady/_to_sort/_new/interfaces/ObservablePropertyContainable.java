@@ -1,6 +1,6 @@
 package com.taco.suit_lady._to_sort._new.interfaces;
 
-import com.taco.suit_lady.util.tools.Exceptions;
+import com.taco.suit_lady.util.tools.Exc;
 import javafx.beans.Observable;
 import javafx.beans.binding.*;
 import org.jetbrains.annotations.NotNull;
@@ -16,32 +16,32 @@ public interface ObservablePropertyContainable
     
     default @NotNull BooleanBinding createBooleanBinding(@NotNull Callable<Boolean> func)
     {
-        return Bindings.createBooleanBinding(Exceptions.nullCheck(func, "Callable Function"), properties());
+        return Bindings.createBooleanBinding(Exc.nullCheck(func, "Callable Function"), properties());
     }
     
     default @NotNull DoubleBinding createDoubleBinding(@NotNull Callable<Double> func)
     {
-        return Bindings.createDoubleBinding(Exceptions.nullCheck(func, "Callable Function"), properties());
+        return Bindings.createDoubleBinding(Exc.nullCheck(func, "Callable Function"), properties());
     }
     
     default @NotNull FloatBinding createFloatBinding(@NotNull Callable<Float> func)
     {
-        return Bindings.createFloatBinding(Exceptions.nullCheck(func, "Callable Function"), properties());
+        return Bindings.createFloatBinding(Exc.nullCheck(func, "Callable Function"), properties());
     }
     
     default @NotNull IntegerBinding createIntegerBinding(@NotNull Callable<Integer> func)
     {
-        return Bindings.createIntegerBinding(Exceptions.nullCheck(func, "Callable Function"), properties());
+        return Bindings.createIntegerBinding(Exc.nullCheck(func, "Callable Function"), properties());
     }
     
     default @NotNull LongBinding createLongBinding(@NotNull Callable<Long> func)
     {
-        return Bindings.createLongBinding(Exceptions.nullCheck(func, "Callable Function"), properties());
+        return Bindings.createLongBinding(Exc.nullCheck(func, "Callable Function"), properties());
     }
     
     default @NotNull <T> ObjectBinding<T> createObjectBinding(@NotNull Callable<T> func)
     {
-        return Bindings.createObjectBinding(Exceptions.nullCheck(func, "Callable Function"), properties());
+        return Bindings.createObjectBinding(Exc.nullCheck(func, "Callable Function"), properties());
     }
     
     //</editor-fold>

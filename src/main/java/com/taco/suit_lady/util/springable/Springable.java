@@ -7,8 +7,8 @@ import com.taco.suit_lady.ui.ContentManager;
 import com.taco.suit_lady.ui.Sidebar;
 import com.taco.suit_lady.ui.console.Console;
 import com.taco.suit_lady.ui.AppUI;
-import com.taco.suit_lady.util.tools.printer.Printer;
-import com.taco.suit_lady.util.tools.TasksSL;
+import com.taco.suit_lady.util.tools.printer.Print;
+import com.taco.suit_lady.util.tools.Exe;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -75,7 +75,7 @@ public interface Springable {
     
     // TO-DOC
     default @NotNull Debugger debugger() { return getSafely(Debugger.class); }
-    default @NotNull Printer printer() { return getSafely(Printer.class); }
+    default @NotNull Print printer() { return getSafely(Print.class); }
     
     // TO-DOC
     default @NotNull LogiCore logiCore() { return getSafely(LogiCore.class); }
@@ -119,7 +119,7 @@ public interface Springable {
             return ctx().getBean(c);
         } else {
             System.err.println("Cannot retrieve Spring element as context is not active [" + c.getName() + "]");
-            TasksSL.printThread();
+            Exe.printThread();
             return null;
         }
     }

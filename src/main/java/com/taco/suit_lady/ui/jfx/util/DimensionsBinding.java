@@ -1,6 +1,6 @@
 package com.taco.suit_lady.ui.jfx.util;
 
-import com.taco.suit_lady.util.tools.PropertiesSL;
+import com.taco.suit_lady.util.tools.Props;
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
@@ -30,11 +30,11 @@ public class DimensionsBinding
     //<editor-fold desc="--- PROPERTIES ---">
     
     public final IntegerProperty widthProperty() { return widthProperty; }
-    public final int setWidth(int newValue) { return PropertiesSL.setProperty(widthProperty, newValue); }
+    public final int setWidth(int newValue) { return Props.setProperty(widthProperty, newValue); }
     @Override public int getWidth() { return widthProperty.get(); }
     
     public final IntegerProperty heightProperty() { return heightProperty; }
-    public final int setHeight(int newValue) { return PropertiesSL.setProperty(heightProperty, newValue); }
+    public final int setHeight(int newValue) { return Props.setProperty(heightProperty, newValue); }
     @Override public int getHeight() { return heightProperty.get(); }
     
     //</editor-fold>

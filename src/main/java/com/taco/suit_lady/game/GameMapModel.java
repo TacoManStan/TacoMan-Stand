@@ -10,7 +10,7 @@ import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.*;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.image.Image;
@@ -49,7 +49,7 @@ public class GameMapModel
     private final CroppedImagePaintCommand mapImagePaintCommand;
     
     public GameMapModel(@NotNull GameViewContent content, @NotNull ReentrantLock lock) {
-        this.lock = Exceptions.nullCheck(lock, "Lock");
+        this.lock = Exc.nullCheck(lock, "Lock");
         this.content = content;
         
         //
@@ -61,7 +61,7 @@ public class GameMapModel
         this.parentPaneProperty = new SimpleObjectProperty<>();
         this.canvasPane = new CanvasPane(this);
         
-        this.mapImageProperty = new SimpleObjectProperty<>(ResourcesSL.getGameImage("map"));
+        this.mapImageProperty = new SimpleObjectProperty<>(Stuff.getGameImage("map"));
         this.mapImagePaintCommand = new CroppedImagePaintCommand(this, lock);
         this.mapImagePaintCommand.setPaintPriority(5);
     }
@@ -76,9 +76,9 @@ public class GameMapModel
     }
     
     private void initPane() {
-        parentPaneProperty.addListener((observable, oldValue, newValue) -> Objs.doIfNonNull(
+        parentPaneProperty.addListener((observable, oldValue, newValue) -> Obj.doIfNonNull(
                 () -> newValue, value -> {
-                    ToolsFX.setAnchors(value);
+                    FX.setAnchors(value);
                     refreshCanvas();
                 }));
     
@@ -88,8 +88,8 @@ public class GameMapModel
     private void initPaintCommand() {
         mapImagePaintCommand.init();
         
-        camera.xOffsetProperty().bind(BindingsSL.intBinding(() -> -Math.round(camera.getViewportWidth() / 2d), camera.viewportWidthBinding()));
-        camera.yOffsetProperty().bind(BindingsSL.intBinding(() -> -Math.round(camera.getViewportHeight() / 2d), camera.viewportHeightBinding()));
+        camera.xOffsetProperty().bind(Bind.intBinding(() -> -Math.round(camera.getViewportWidth() / 2d), camera.viewportWidthBinding()));
+        camera.yOffsetProperty().bind(Bind.intBinding(() -> -Math.round(camera.getViewportHeight() / 2d), camera.viewportHeightBinding()));
         
         mapImagePaintCommand.imageProperty().bind(getGameMap().getModel().mapImageProperty());
         
@@ -117,7 +117,7 @@ public class GameMapModel
     
     public final ObjectProperty<StackPane> parentPaneProperty() { return parentPaneProperty; }
     public final StackPane getParentPane() { return parentPaneProperty.get(); }
-    public final StackPane setParentPane(StackPane newValue) { return PropertiesSL.setProperty(parentPaneProperty, newValue); }
+    public final StackPane setParentPane(StackPane newValue) { return Props.setProperty(parentPaneProperty, newValue); }
     
     protected final CanvasPane getCanvasPane() { return canvasPane; }
     @Contract(pure = true) public final @Nullable CanvasSurface getCanvas() { return canvasPane != null ? canvasPane.canvas() : null; }
@@ -144,7 +144,7 @@ public class GameMapModel
      * <p>A helper method that fully resets the JFX UI elements comprising the map image and parent pane.</p>
      */
     private void refreshCanvas() {
-        ToolsFX.runFX(() -> {
+        FX.runFX(() -> {
             StackPane parent = getParentPane();
             if (parent != null) {
                 parent.getChildren().retainAll();
@@ -160,7 +160,7 @@ public class GameMapModel
     }
     
     public final @NotNull Image generateMapImage() {
-        return ToolsFX.generateTiledImage(32, getGameMap().getTileMatrix(), gameTile -> {
+        return FX.generateTiledImage(32, getGameMap().getTileMatrix(), gameTile -> {
             if (gameTile != null) {
                 TileModel tileModel = gameTile.getModel();
                 if (tileModel != null)
@@ -171,8 +171,8 @@ public class GameMapModel
     }
     
     public final @NotNull Image generateDemoImage() {
-        return ToolsFX.generateTiledImage(32, getGameMap().getTileMatrix(), gameTile -> {
-            return ResourcesSL.getGameImage("tiles/", "grass");
+        return FX.generateTiledImage(32, getGameMap().getTileMatrix(), gameTile -> {
+            return Stuff.getGameImage("tiles/", "grass");
         });
     }
 }

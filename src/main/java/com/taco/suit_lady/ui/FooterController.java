@@ -1,8 +1,8 @@
 package com.taco.suit_lady.ui;
 
 import com.taco.suit_lady.ui.ui_internal.controllers.Controller;
-import com.taco.suit_lady.util.tools.Exceptions;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
+import com.taco.suit_lady.util.tools.Exc;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -23,7 +23,7 @@ public abstract class FooterController<F extends Footer<F, FC, T, TD, TC>, FC ex
     
     //</editor-fold>
     @Override public void initialize() {
-        ToolsFX.setAnchors(root());
+        FX.setAnchors(root());
     }
     
     
@@ -31,9 +31,9 @@ public abstract class FooterController<F extends Footer<F, FC, T, TD, TC>, FC ex
     
     protected void setFooter(@NotNull Footer<F, FC, T, TD, TC> footer) {
         try {
-            this.footer = (F) Exceptions.nullCheck(footer, "UIPage");
+            this.footer = (F) Exc.nullCheck(footer, "UIPage");
         } catch (Exception e) {
-            throw Exceptions.ex(e, "UIPage must be of type T [" + footer.getClass() + "]");
+            throw Exc.ex(e, "UIPage must be of type T [" + footer.getClass() + "]");
         }
         onPageBindingComplete();
     }

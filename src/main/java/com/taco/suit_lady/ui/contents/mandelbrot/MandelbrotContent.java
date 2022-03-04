@@ -16,9 +16,9 @@ import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_pag
 import com.taco.suit_lady.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotElementController;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
-import com.taco.suit_lady.util.tools.Exceptions;
-import com.taco.suit_lady.util.tools.ResourcesSL;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
+import com.taco.suit_lady.util.tools.Exc;
+import com.taco.suit_lady.util.tools.Stuff;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import com.taco.tacository.json.JFiles;
 import javafx.beans.binding.Bindings;
 import javafx.scene.paint.Color;
@@ -66,7 +66,7 @@ public class MandelbrotContent extends ListableContent<
                 this,
                 "Mandelbrot Demo",
                 "mandelbrot2",
-                uiBook -> ResourcesSL.get(
+                uiBook -> Stuff.get(
                         "pages",
                         uiBook.getUID(uiBook.getButtonID()),
                         () -> coverPage = new MandelbrotPage(uiBook, this)),
@@ -229,7 +229,7 @@ public class MandelbrotContent extends ListableContent<
             final double newWidth = getController().canvas().getWidth();
             final double newHeight = getController().canvas().getHeight();
             
-            ToolsFX.clearCanvasUnsafe(ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas());
+            FX.clearCanvasUnsafe(ctx().getBean(AppUI.class).getContentManager().getContentOverlayCanvas());
             
             getData().resizeTo(newWidth, newHeight);
             
@@ -251,7 +251,7 @@ public class MandelbrotContent extends ListableContent<
     
     private void zoom(@NotNull MouseDragData dragData) {
         if (!dragData.isValid())
-            throw Exceptions.ex("Drag Data is Invalid!");
+            throw Exc.ex("Drag Data is Invalid!");
         
         Arrays.stream(paintables).forEach(paintable -> paintable.setPaused(true));
         getData().zoomTo(dragData.getStartX(), dragData.getStartY(), dragData.getEndX(), dragData.getEndY());

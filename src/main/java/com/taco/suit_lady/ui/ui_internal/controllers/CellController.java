@@ -1,8 +1,8 @@
 package com.taco.suit_lady.ui.ui_internal.controllers;
 
 import com.taco.suit_lady.ui.ui_internal.drag_and_drop.DragAndDropHandler;
-import com.taco.suit_lady.util.tools.Objs;
-import com.taco.suit_lady.util.tools.PropertiesSL;
+import com.taco.suit_lady.util.tools.Obj;
+import com.taco.suit_lady.util.tools.Props;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.input.DataFormat;
@@ -26,7 +26,7 @@ public abstract class CellController<T extends Serializable> extends Controller 
         this.contentsProperty = new ReadOnlyObjectWrapper<>();
         this.contentsProperty.addListener((observable, oldInstance, newInstance) -> {
             if (!Objects.equals(oldInstance, newInstance)) {
-                Objs.doIfNonNull(() -> newInstance, t -> ddHandler.setValue(t));
+                Obj.doIfNonNull(() -> newInstance, t -> ddHandler.setValue(t));
                 onContentChange(oldInstance, newInstance);
             }
         });
@@ -36,7 +36,7 @@ public abstract class CellController<T extends Serializable> extends Controller 
     
     public final ReadOnlyObjectProperty<T> contentsProperty() { return contentsProperty.getReadOnlyProperty(); }
     public final T getContents() { return contentsProperty.get(); }
-    public final T setContents(T newValue) { return PropertiesSL.setProperty(contentsProperty, newValue); }
+    public final T setContents(T newValue) { return Props.setProperty(contentsProperty, newValue); }
     
     //</editor-fold>
     

@@ -15,11 +15,11 @@ import com.taco.suit_lady.ui.jfx.lists.ListCellFX;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
-import com.taco.suit_lady.util.tools.BindingsSL;
-import com.taco.suit_lady.util.tools.ResourcesSL;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
-import com.taco.suit_lady.util.tools.list_tools.ListsSL;
-import com.taco.suit_lady.util.tools.list_tools.Operation;
+import com.taco.suit_lady.util.tools.Bind;
+import com.taco.suit_lady.util.tools.Stuff;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
+import com.taco.suit_lady.util.tools.list_tools.L;
+import com.taco.suit_lady.util.tools.list_tools.Op;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
@@ -94,7 +94,7 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
     }
     
     public GameTileEditorPageController init() {
-        titleLabel.textProperty().bind(BindingsSL.stringBinding(() -> {
+        titleLabel.textProperty().bind(Bind.stringBinding(() -> {
             final GameTile tile = getUIData().getSelectedTile();
             if (tile != null)
                 return "Tile [" + tile.getLocationX() + ", " + tile.getLocationY() + "]";
@@ -103,16 +103,16 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
         }, getUIData().readOnlySelectedTileProperty()));
         
         
-        ListsSL.applyListener(selectedTileContents, (op1, op2, opType, triggerType) -> {
-            if (triggerType == Operation.TriggerType.CHANGE) switch (opType) {
+        L.applyListener(selectedTileContents, (op1, op2, opType, triggerType) -> {
+            if (triggerType == Op.TriggerType.CHANGE) switch (opType) {
                 case ADDITION -> onObjAdded(op1.contents());
                 case REMOVAL -> onObjRemoved(op1.contents());
                 case PERMUTATION -> System.out.println("Occupying Game Obj Permutation");
             }
         });
         
-        ListsSL.applyListener(selectedTileTerrainObjsProperty, (op1, op2, opType, triggerType) -> {
-            if (triggerType == Operation.TriggerType.CHANGE) switch (opType) {
+        L.applyListener(selectedTileTerrainObjsProperty, (op1, op2, opType, triggerType) -> {
+            if (triggerType == Op.TriggerType.CHANGE) switch (opType) {
                 case ADDITION -> onTerrainObjAdded(op1.contents());
                 case REMOVAL -> onTerrainObjRemoved(op1.contents());
                 case PERMUTATION -> System.out.println("Tile Terrain Obj Permutation");
@@ -123,7 +123,7 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
         tileContentsListView.setCellFactory(listView -> new ListCellFX<>(
                 listCellFX -> new CellControlManager<>(
                         listCellFX,
-                        cellData -> ResourcesSL.get(
+                        cellData -> Stuff.get(
                                 cellData,
                                 () -> weaver().loadController(GameTileContentElementController.class),
                                 listView.hashCode()))));
@@ -131,13 +131,13 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
         terrainObjListView.setCellFactory(listView -> new ListCellFX<>(
                 listCellFX -> new CellControlManager<>(
                         listCellFX,
-                        cellData -> ResourcesSL.get(
+                        cellData -> Stuff.get(
                                 cellData,
                                 () -> weaver().loadController(TerrainTileContentElementController.class),
                                 listView.hashCode()))));
         
         
-        getUIData().readOnlySelectedTileProperty().addListener((observable, oldValue, newValue) -> ToolsFX.runFX(() -> {
+        getUIData().readOnlySelectedTileProperty().addListener((observable, oldValue, newValue) -> FX.runFX(() -> {
             if (oldValue != null) {
                 selectedTileContents.unbind();
                 selectedTileTerrainObjsProperty.unbindBidirectional(oldValue.getModel().terrainTileObjects());
@@ -153,7 +153,7 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
         }, true));
         
         
-        texturePreviewImageBinding = BindingsSL.recursiveObjBinding(getLock(), tile -> {
+        texturePreviewImageBinding = Bind.recursiveObjBinding(getLock(), tile -> {
             if (tile != null) {
                 final TileModel model = tile.getModel();
                 if (model != null)
@@ -164,8 +164,8 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
         texturePreviewImagePane.imageProperty().bind(texturePreviewImageBinding);
         
         
-        selectedGameObjectBinding = BindingsSL.objBinding(() -> tileContentsListView.getSelectionModel().getSelectedItem(), tileContentsListView.getSelectionModel().selectedItemProperty());
-        editGameObjectButton.disableProperty().bind(BindingsSL.boolBinding(() -> getSelectedGameObject() == null, selectedGameObjectBinding));
+        selectedGameObjectBinding = Bind.objBinding(() -> tileContentsListView.getSelectionModel().getSelectedItem(), tileContentsListView.getSelectionModel().selectedItemProperty());
+        editGameObjectButton.disableProperty().bind(Bind.boolBinding(() -> getSelectedGameObject() == null, selectedGameObjectBinding));
         
         
         return this;
@@ -191,14 +191,14 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
     //
     
     private void onObjAdded(GameObject obj) {
-        if (obj != null) ToolsFX.runFX(() -> {
+        if (obj != null) FX.runFX(() -> {
             tileContentsListView.getItems().add(obj);
             tileContentsListView.getSelectionModel().select(obj);
         });
     }
     
     private void onObjRemoved(GameObject obj) {
-        if (obj != null) ToolsFX.runFX(() -> {
+        if (obj != null) FX.runFX(() -> {
             tileContentsListView.getItems().remove(obj);
             if (tileContentsListView.getSelectionModel().getSelectedItem() == null)
                 tileContentsListView.getSelectionModel().selectFirst();
@@ -206,13 +206,13 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
     }
     
     private void onTerrainObjAdded(TileTerrainObject obj) {
-        if (obj != null) ToolsFX.runFX(() -> {
+        if (obj != null) FX.runFX(() -> {
             terrainObjListView.getItems().add(obj);
             terrainObjListView.getSelectionModel().select(obj);
         });
     }
     private void onTerrainObjRemoved(TileTerrainObject obj) {
-        if (obj != null) ToolsFX.runFX(() -> {
+        if (obj != null) FX.runFX(() -> {
             terrainObjListView.getItems().remove(obj);
             if (terrainObjListView.getSelectionModel().getSelectedItem() == null)
                 terrainObjListView.getSelectionModel().selectFirst();
@@ -220,10 +220,10 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
     }
     
     private void onAddTerrainObj(ActionEvent event) {
-        ToolsFX.callFX(() -> selectedTileTerrainObjsProperty.add(new TileTerrainObject(getUIData().getSelectedTile().getModel())));
+        FX.callFX(() -> selectedTileTerrainObjsProperty.add(new TileTerrainObject(getUIData().getSelectedTile().getModel())));
     }
     private void onRemoveTerrainObj(ActionEvent event) {
-        ToolsFX.runFX(() -> {
+        FX.runFX(() -> {
             final TileTerrainObject selectedTerrainObject = terrainObjListView.getSelectionModel().getSelectedItem();
             if (selectedTerrainObject != null)
                 selectedTileTerrainObjsProperty.remove(selectedTerrainObject);
@@ -236,7 +236,7 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
     private void onEditGameObject(@NotNull ActionEvent event) {
         final GameObject selectedGameObject = getSelectedGameObject();
         if (selectedGameObject != null)
-            ToolsFX.runFX(() -> getPage().turnToNew(new GameObjectEditorPage(getPage().getOwner(), getPage()).init()));
+            FX.runFX(() -> getPage().turnToNew(new GameObjectEditorPage(getPage().getOwner(), getPage()).init()));
         else
             System.err.println("WARNING: Attempting to edit a null GameObject.");
     }

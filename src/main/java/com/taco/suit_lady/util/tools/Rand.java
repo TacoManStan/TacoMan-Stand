@@ -9,7 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * A utility for generating pseudo-random numbers.
  */
-public final class RandomSL {
+public final class Rand {
     
     /**
      * {@link Random} instance unique to the current {@link Thread} as defined by {@link ThreadLocalRandom#current()}.
@@ -32,7 +32,7 @@ public final class RandomSL {
         source = GLOBAL_SOURCE;
     }
     
-    private RandomSL() { } //No Instance
+    private Rand() { } //No Instance
     
     public static Random getRandom() {
         return random;
@@ -40,13 +40,13 @@ public final class RandomSL {
     
     public static Random getRandomBySource(String source) {
         switch (source) {
-            case RandomSL.GLOBAL_SOURCE -> {
+            case Rand.GLOBAL_SOURCE -> {
                 return random;
             }
-            case RandomSL.THREAD_SOURCE -> {
+            case Rand.THREAD_SOURCE -> {
                 return ThreadLocalRandom.current();
             }
-            case RandomSL.METHOD_SOURCE -> {
+            case Rand.METHOD_SOURCE -> {
                 return new Random();
             }
         }
@@ -58,7 +58,7 @@ public final class RandomSL {
     }
     
     public static void setSource(String source) {
-        RandomSL.source = source;
+        Rand.source = source;
     }
     
     //
@@ -303,7 +303,7 @@ public final class RandomSL {
      * @throws NullPointerException If the specified array is {@code null}.
      */
     public static <T> @Nullable T getRandomElement(@NotNull T[] arr) {
-        if (Exceptions.nullCheck(arr, "Input Array").length == 0)
+        if (Exc.nullCheck(arr, "Input Array").length == 0)
             return null;
         return arr[nextInt(arr.length - 1)];
     }

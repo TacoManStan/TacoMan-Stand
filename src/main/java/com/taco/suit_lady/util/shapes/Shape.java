@@ -6,13 +6,12 @@ import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.springable.StrictSpringable;
-import com.taco.suit_lady.util.tools.BindingsSL;
-import com.taco.suit_lady.util.tools.Exceptions;
-import com.taco.suit_lady.util.tools.PropertiesSL;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
+import com.taco.suit_lady.util.tools.Bind;
+import com.taco.suit_lady.util.tools.Exc;
+import com.taco.suit_lady.util.tools.Props;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import com.taco.suit_lady.util.values.NumberValuePair;
 import com.taco.suit_lady.util.values.NumberValuePairable;
-import com.taco.suit_lady.util.values.Value;
 import com.taco.suit_lady.util.values.ValueOpType;
 import javafx.beans.Observable;
 import javafx.beans.binding.DoubleBinding;
@@ -22,7 +21,6 @@ import javafx.collections.FXCollections;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -90,8 +88,8 @@ public abstract class Shape
         
         //
         
-        this.locationBinding = BindingsSL.numPairBinding(xProperty, yProperty);
-        this.dimensionsBinding = BindingsSL.numPairBinding(widthProperty, heightProperty);
+        this.locationBinding = Bind.numPairBinding(xProperty, yProperty);
+        this.dimensionsBinding = Bind.numPairBinding(widthProperty, heightProperty);
         
         this.locationMap = new SimpleMapProperty<>(FXCollections.observableHashMap());
         
@@ -116,28 +114,28 @@ public abstract class Shape
     
     public final ReadOnlyDoubleProperty readOnlyXProperty() { return xProperty.getReadOnlyProperty(); }
     public final double getX() { return xProperty.get(); }
-    public final double setX(@NotNull Number newValue) { return PropertiesSL.setProperty(xProperty, newValue); }
+    public final double setX(@NotNull Number newValue) { return Props.setProperty(xProperty, newValue); }
     
     public final ReadOnlyDoubleProperty readOnlyYProperty() { return yProperty.getReadOnlyProperty(); }
     public final double getY() { return yProperty.get(); }
-    public final double setY(@NotNull Number newValue) { return PropertiesSL.setProperty(yProperty, newValue); }
+    public final double setY(@NotNull Number newValue) { return Props.setProperty(yProperty, newValue); }
     
     
     protected final ReadOnlyDoubleWrapper widthProperty() { return widthProperty; }
     public final ReadOnlyDoubleProperty readOnlyWidthProperty() { return widthProperty.getReadOnlyProperty(); }
     public final double getWidth() { return widthProperty.get(); }
-    public final double setWidth(@NotNull Number newValue) { return PropertiesSL.setProperty(widthProperty, newValue); }
+    public final double setWidth(@NotNull Number newValue) { return Props.setProperty(widthProperty, newValue); }
     
     protected final ReadOnlyDoubleWrapper heightProperty() { return heightProperty; }
     public final ReadOnlyDoubleProperty readOnlyHeightProperty() { return heightProperty.getReadOnlyProperty(); }
     public final double getHeight() { return heightProperty.get(); }
-    public final double setHeight(@NotNull Number newValue) { return PropertiesSL.setProperty(heightProperty, newValue); }
+    public final double setHeight(@NotNull Number newValue) { return Props.setProperty(heightProperty, newValue); }
     
     //
     
     public final ReadOnlyObjectProperty<LocType> readOnlyLocTypeProperty() { return locTypeProperty.getReadOnlyProperty(); }
     public final LocType getLocType() { return locTypeProperty.get(); }
-    public final LocType setLocType(@NotNull LocType newValue) { return PropertiesSL.setProperty(locTypeProperty, newValue); }
+    public final LocType setLocType(@NotNull LocType newValue) { return Props.setProperty(locTypeProperty, newValue); }
     
     
     protected ReadOnlyDoubleWrapper locationProperty(@NotNull Axis axis) {
@@ -145,24 +143,24 @@ public abstract class Shape
             case X_AXIS -> xProperty;
             case Y_AXIS -> yProperty;
             
-            default -> throw Exceptions.unsupported("Cannot find location property matching axis: " + axis);
+            default -> throw Exc.unsupported("Cannot find location property matching axis: " + axis);
         };
     }
     public ReadOnlyDoubleProperty readOnlyLocationProperty(@NotNull Axis axis) { return locationProperty(axis).getReadOnlyProperty(); }
     public double getLocation(@NotNull Axis axis) { return locationProperty(axis).get(); }
-    public double setLocation(@NotNull Number newValue, @NotNull Axis axis) { return PropertiesSL.setProperty(locationProperty(axis), newValue); }
+    public double setLocation(@NotNull Number newValue, @NotNull Axis axis) { return Props.setProperty(locationProperty(axis), newValue); }
     
     protected ReadOnlyDoubleWrapper dimensionProperty(@NotNull Axis axis) {
         return sync(() -> switch (axis) {
             case X_AXIS -> widthProperty;
             case Y_AXIS -> heightProperty;
             
-            default -> throw Exceptions.unsupported("Cannot find dimension property matching axis: " + axis);
+            default -> throw Exc.unsupported("Cannot find dimension property matching axis: " + axis);
         });
     }
     public ReadOnlyDoubleProperty readOnlyDimensionProperty(@NotNull Axis axis) { return dimensionProperty(axis).getReadOnlyProperty(); }
     public double getDimension(@NotNull Axis axis) { return dimensionProperty(axis).get(); }
-    public double setDimension(@NotNull Number newValue, @NotNull Axis axis) { return PropertiesSL.setProperty(dimensionProperty(axis), newValue); }
+    public double setDimension(@NotNull Number newValue, @NotNull Axis axis) { return Props.setProperty(dimensionProperty(axis), newValue); }
     
     //<editor-fold desc="> Bindings">
     
@@ -172,7 +170,7 @@ public abstract class Shape
             
             DoubleBinding binding = locationMap.get(key);
             if (binding == null) {
-                binding = BindingsSL.doubleBinding(
+                binding = Bind.doubleBinding(
                         () -> getLocation(axis, locType),
                         locationProperty(axis), dimensionProperty(axis));
                 locationMap.put(key, binding);
@@ -260,13 +258,13 @@ public abstract class Shape
     public final @NotNull ReadOnlyObjectProperty<BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color>> readOnlyPixelGeneratorProperty() { return pixelGeneratorProperty.getReadOnlyProperty(); }
     public final @NotNull BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> getPixelGenerator() { return pixelGeneratorProperty.get(); }
     protected final @NotNull BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> setPixelGenerator(@NotNull BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> newValue) {
-        return PropertiesSL.setProperty(pixelGeneratorProperty, newValue);
+        return Props.setProperty(pixelGeneratorProperty, newValue);
     }
     
     
     public final @NotNull ReadOnlyObjectProperty<Image> readOnlyImageProperty() { return imageProperty.getReadOnlyProperty(); }
     public final @NotNull Image getImage() { return imageProperty.get(); }
-    private @Nullable Image setImage(@NotNull Image newValue) { return PropertiesSL.setProperty(imageProperty, newValue); }
+    private @Nullable Image setImage(@NotNull Image newValue) { return Props.setProperty(imageProperty, newValue); }
     
     //</editor-fold>
     
@@ -323,7 +321,7 @@ public abstract class Shape
     private RuntimeException unsupportedLocType(@Nullable LocType input) {
         final String prefix = "Cannot find location binding matching Shape LocType [" + getLocType() + "]";
         final String suffix = input != null ? " and input LocType [" + input + "]" : "";
-        return Exceptions.unsupported(prefix + suffix);
+        return Exc.unsupported(prefix + suffix);
     }
     
     private @NotNull String locKey(@NotNull Axis axis, @NotNull LocType locType) {
@@ -333,7 +331,7 @@ public abstract class Shape
     //
     
     private @NotNull Image regenerateImage() {
-        return sync(() -> ToolsFX.generateImage(
+        return sync(() -> FX.generateImage(
                 getLock(),
                 getLocation(LocType.MIN),
                 getDimensions(),

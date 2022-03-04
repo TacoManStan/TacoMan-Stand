@@ -3,8 +3,8 @@ package com.taco.suit_lady.ui.jfx.lists;
 import com.taco.suit_lady.ui.jfx.lists.treehandler.IndexedCellFXable;
 import com.taco.suit_lady.ui.jfx.lists.treehandler.TreeItemFX;
 import com.taco.suit_lady.ui.ui_internal.controllers.CellController;
-import com.taco.suit_lady.util.tools.BindingsSL;
-import com.taco.suit_lady.util.tools.Exceptions;
+import com.taco.suit_lady.util.tools.Bind;
+import com.taco.suit_lady.util.tools.Exc;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.ObjectBinding;
@@ -42,7 +42,7 @@ public class TreeCellFX<T extends Serializable, C extends CellController<T>> ext
      * @throws NullPointerException If the specified {@link Function cellControlManagerFactory} is {@code null}.
      */
     public TreeCellFX(@NotNull Function<TreeCellFX<T, C>, CellControlManager<T, C>> cellControlManagerFactory) {
-        Exceptions.nullCheck(cellControlManagerFactory, "Cell Control Manager Factory Function");
+        Exc.nullCheck(cellControlManagerFactory, "Cell Control Manager Factory Function");
         
         this.cellControlManager = cellControlManagerFactory.apply(this);
         this.lock = this.cellControlManager.getLock();
@@ -53,12 +53,12 @@ public class TreeCellFX<T extends Serializable, C extends CellController<T>> ext
                 if (treeItem instanceof TreeItemFX)
                     return (TreeItemFX<T>) treeItem;
                 else
-                    throw Exceptions.ex(new ClassCastException(), "TreeCellFX objects must only contain TreeItemFX items.`");
+                    throw Exc.ex(new ClassCastException(), "TreeCellFX objects must only contain TreeItemFX items.`");
             return null;
         }, treeItemProperty());
         
-        final BindingsSL.RecursiveBinding<TreeItemFX<T>, Boolean> recursiveVisibleBinding = BindingsSL.recursiveBinding(
-                treeItemFX -> treeItemFX != null ? treeItemFX.visibleProperty() : BindingsSL.constBoolBinding(false), treeItemFXBinding());
+        final Bind.RecursiveBinding<TreeItemFX<T>, Boolean> recursiveVisibleBinding = Bind.recursiveBinding(
+                treeItemFX -> treeItemFX != null ? treeItemFX.visibleProperty() : Bind.constBoolBinding(false), treeItemFXBinding());
         this.contentVisibleBinding = Bindings.createBooleanBinding(() -> recursiveVisibleBinding.getValue(), recursiveVisibleBinding);
         this.contentVisibleBinding.addListener(observable -> setDisable(!recursiveVisibleBinding.getValue()));
     }
@@ -104,7 +104,7 @@ public class TreeCellFX<T extends Serializable, C extends CellController<T>> ext
      * <p><b>Details</b></p>
      * <ol>
      *     <li>If the {@link #getItemFX() content} of this {@link TreeCellFX} is {@code null}, the {@link BooleanBinding} returned by {@link #contentVisibleBinding() this method} will reflect {@code false}.</li>
-     *     <li>The {@link BooleanBinding} returned by {@link #contentVisibleBinding() this method} is bound to a {@link BindingsSL.RecursiveBinding RecursiveBinding}, therefore, the {@link BooleanBinding binding} will reflect accurate results, even when the {@link #getItemFX() content} of this {@link TreeCellFX} changes or is {@code null}.</li>
+     *     <li>The {@link BooleanBinding} returned by {@link #contentVisibleBinding() this method} is bound to a {@link Bind.RecursiveBinding RecursiveBinding}, therefore, the {@link BooleanBinding binding} will reflect accurate results, even when the {@link #getItemFX() content} of this {@link TreeCellFX} changes or is {@code null}.</li>
      *     <li>The {@link BooleanBinding} returned by {@link #contentVisibleBinding() this method} is defined in the {@link TreeCellFX} {@link TreeCellFX#TreeCellFX(Function) constructor}.</li>
      * </ol>
      *

@@ -5,8 +5,8 @@ import com.taco.suit_lady.game.interfaces.WrappedGameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.ui.jfx.util.BoundsBinding;
-import com.taco.suit_lady.util.tools.BindingsSL;
-import com.taco.suit_lady.util.tools.PropertiesSL;
+import com.taco.suit_lady.util.tools.Bind;
+import com.taco.suit_lady.util.tools.Props;
 import com.taco.tacository.json.*;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.StringBinding;
@@ -73,10 +73,10 @@ public class GameObjectModelDefinition
     //
     
     private void initBounds() {
-        this.xLocationBinding = BindingsSL.intBinding(
+        this.xLocationBinding = Bind.intBinding(
                 () -> -getModel().getOwner().getGameMap().getModel().getCamera().getAggregateX() + getOffsetX() + getModel().getOwner().getLocationX(false),
                 xOffsetProperty, getModel().getOwner().xLocationProperty(), getModel().getOwner().getGameMap().getModel().getCamera().xAggregateBinding());
-        this.yLocationBinding = BindingsSL.intBinding(
+        this.yLocationBinding = Bind.intBinding(
                 () -> -getModel().getOwner().getGameMap().getModel().getCamera().getAggregateY() + getOffsetY() + getModel().getOwner().getLocationY(false),
                 xOffsetProperty, getModel().getOwner().yLocationProperty(), getModel().getOwner().getGameMap().getModel().getCamera().yAggregateBinding());
         //        this.yLocationBinding = BindingsSL.intBinding(
@@ -89,8 +89,8 @@ public class GameObjectModelDefinition
     private void initJson() {
         printer().get(getClass()).print("Initializing JSON");
         
-        this.jIdBinding = BindingsSL.stringBinding(() -> calcJId(true), imageTypeProperty, imageIdProperty);
-        this.jIdBindingUnsafe = BindingsSL.stringBinding(() -> calcJId(false), imageTypeProperty, imageIdProperty);
+        this.jIdBinding = Bind.stringBinding(() -> calcJId(true), imageTypeProperty, imageIdProperty);
+        this.jIdBindingUnsafe = Bind.stringBinding(() -> calcJId(false), imageTypeProperty, imageIdProperty);
         
         this.jIdBinding.addListener((observable, oldValue, newValue) -> reload());
         
@@ -106,11 +106,11 @@ public class GameObjectModelDefinition
     
     public final @NotNull ReadOnlyStringProperty readOnlyImageTypeProperty() { return imageTypeProperty.getReadOnlyProperty(); }
     public final @NotNull String getImageType() { return imageTypeProperty.get(); }
-    protected final String setImageType(@NotNull String newValue) { return PropertiesSL.setProperty(imageTypeProperty, newValue); }
+    protected final String setImageType(@NotNull String newValue) { return Props.setProperty(imageTypeProperty, newValue); }
     
     public final @NotNull ReadOnlyStringProperty readOnlyImageIdProperty() { return imageIdProperty.getReadOnlyProperty(); }
     public final @NotNull String getImageId() { return imageIdProperty.get(); }
-    protected final String setImageId(@NotNull String newValue) { return PropertiesSL.setProperty(imageIdProperty, newValue); }
+    protected final String setImageId(@NotNull String newValue) { return Props.setProperty(imageIdProperty, newValue); }
     
     
     public final @NotNull StringBinding jIdBinding(boolean safe) { return safe ? jIdBinding : jIdBindingUnsafe; }
@@ -121,20 +121,20 @@ public class GameObjectModelDefinition
     
     public final ReadOnlyIntegerProperty readOnlyOffsetPropertyX() { return xOffsetProperty.getReadOnlyProperty(); }
     public final int getOffsetX() { return xOffsetProperty.get(); }
-    protected final int setOffsetX(@NotNull Number newValue) { return PropertiesSL.setProperty(xOffsetProperty, newValue.intValue()); }
+    protected final int setOffsetX(@NotNull Number newValue) { return Props.setProperty(xOffsetProperty, newValue.intValue()); }
     
     public final ReadOnlyIntegerProperty readOnlyOffsetPropertyY() { return yOffsetProperty.getReadOnlyProperty(); }
     public final int getOffsetY() { return yOffsetProperty.get(); }
-    protected final int setOffsetY(@NotNull Number newValue) { return PropertiesSL.setProperty(yOffsetProperty, newValue.intValue()); }
+    protected final int setOffsetY(@NotNull Number newValue) { return Props.setProperty(yOffsetProperty, newValue.intValue()); }
     
     
     public final ReadOnlyIntegerProperty readOnlyWidthProperty() { return widthProperty.getReadOnlyProperty(); }
     public final int getWidth() { return widthProperty.get(); }
-    protected final int setWidth(@NotNull Number newValue) { return PropertiesSL.setProperty(widthProperty, newValue.intValue()); }
+    protected final int setWidth(@NotNull Number newValue) { return Props.setProperty(widthProperty, newValue.intValue()); }
     
     public final ReadOnlyIntegerProperty readOnlyHeightProperty() { return heightProperty.getReadOnlyProperty(); }
     public final int getHeight() { return heightProperty.get(); }
-    protected final int setHeight(@NotNull Number newValue) { return PropertiesSL.setProperty(heightProperty, newValue.intValue()); }
+    protected final int setHeight(@NotNull Number newValue) { return Props.setProperty(heightProperty, newValue.intValue()); }
     
     
     public final IntegerBinding xLocationBinding() { return xLocationBinding; }

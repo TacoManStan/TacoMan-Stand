@@ -2,8 +2,8 @@ package com.taco.suit_lady.util.tools.printer;
 
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.tools.Enums;
-import com.taco.suit_lady.util.tools.Exceptions;
-import com.taco.suit_lady.util.tools.TasksSL;
+import com.taco.suit_lady.util.tools.Exc;
+import com.taco.suit_lady.util.tools.Exe;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.collections.FXCollections;
@@ -15,7 +15,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 @Component
-public class Printer
+public class Print
         implements Lockable {
     
     private final ReentrantLock lock;
@@ -25,7 +25,7 @@ public class Printer
     private final MapProperty<Class<?>, PrintData> classDataMap;
     private final MapProperty<Object, PrintData> objDataMap;
     
-    private Printer() {
+    private Print() {
         this.lock = new ReentrantLock();
         
         this.globalPrintData = new PrintData("Global", true, true);
@@ -38,23 +38,23 @@ public class Printer
     
     public final PrintData get() { return globalPrintData; }
     
-    public final PrintData get(@NotNull Object objKey, @Nullable OnAbsentDefinition onAbsent) {
+    public final PrintData get(@NotNull Object objKey, @Nullable AbsentDef onAbsent) {
         return sync(() -> {
             PrintData data = getDataFor(objKey);
             
             if (data == null) {
-                switch (Enums.get(OnAbsentDefinition.class)) {
+                switch (Enums.get(AbsentDef.class)) {
                     case DO_NOTHING -> { }
                     case CREATE_NEW -> getDataMapFor(objKey).put(objKey, data = new PrintData());
                     case USE_GLOBAL -> data = get();
-                    case THROW_EXCEPTION -> throw Exceptions.ex("PrintData for Key [" + objKey + "] cannot be null.");
+                    case THROW_EXCEPTION -> throw Exc.ex("PrintData for Key [" + objKey + "] cannot be null.");
                 }
             }
             
             return data;
         });
     }
-    public final PrintData get(@NotNull Object objKey) { return get(objKey, OnAbsentDefinition.CREATE_NEW); }
+    public final PrintData get(@NotNull Object objKey) { return get(objKey, AbsentDef.CREATE_NEW); }
     
     //</editor-fold>
     
@@ -84,8 +84,8 @@ public class Printer
     
     protected static void print(@Nullable Object msg, @Nullable String title, boolean printPrefix, boolean err) {
         title = title != null ? " - [" + title + "]" : "";
-        final String prefix = printPrefix ? TasksSL.getCallingPrefix(1) + title + ": " : "";
-        final String fullMsg = msg != null ? prefix + msg : TasksSL.getCallingPrefix(1);
+        final String prefix = printPrefix ? Exe.getCallingPrefix(1) + title + ": " : "";
+        final String fullMsg = msg != null ? prefix + msg : Exe.getCallingPrefix(1);
         if (err)
             System.err.println(fullMsg);
         else

@@ -8,7 +8,7 @@ import com.taco.suit_lady.ui.ContentData;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
-import com.taco.suit_lady.util.tools.PropertiesSL;
+import com.taco.suit_lady.util.tools.Props;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.image.Image;
@@ -50,11 +50,11 @@ public abstract class ListableContent<
     
     public final ObjectProperty<EC> elementControllerProperty() { return elementControllerProperty; }
     public final EC getElementController() { return elementControllerProperty.get(); }
-    public final EC setElementController(EC newValue) { return PropertiesSL.setProperty(elementControllerProperty, newValue); }
+    public final EC setElementController(EC newValue) { return Props.setProperty(elementControllerProperty, newValue); }
     
     public final ObjectProperty<Image> iconImageProperty() { return iconImageProperty; }
     public final Image getIconImage() { return iconImageProperty.get(); }
-    public final Image setIconImage(Image newValue) { return PropertiesSL.setProperty(iconImageProperty, newValue); }
+    public final Image setIconImage(Image newValue) { return Props.setProperty(iconImageProperty, newValue); }
     
     //</editor-fold>
     

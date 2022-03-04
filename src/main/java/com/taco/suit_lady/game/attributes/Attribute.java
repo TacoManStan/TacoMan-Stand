@@ -4,8 +4,8 @@ import com.taco.suit_lady.game.interfaces.WrappedGameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
-import com.taco.suit_lady.util.tools.Exceptions;
-import com.taco.suit_lady.util.tools.PropertiesSL;
+import com.taco.suit_lady.util.tools.Exc;
+import com.taco.suit_lady.util.tools.Props;
 import javafx.beans.property.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,7 +34,7 @@ public class Attribute<T>
     
     public Attribute(@NotNull AttributeManager owner, @Nullable String id, @Nullable T value, @Nullable Class<T> attributeType) {
         if (value == null && attributeType == null)
-            throw Exceptions.unsupported("Value and Attribute Type parameters must not both be null.");
+            throw Exc.unsupported("Value and Attribute Type parameters must not both be null.");
         
         this.owner = owner;
         
@@ -54,11 +54,11 @@ public class Attribute<T>
     
     public final ReadOnlyStringProperty readOnlyIdProperty() { return idProperty.getReadOnlyProperty(); }
     public final String getId() { return idProperty.get(); }
-    public final String setId(@NotNull String newValue) { return PropertiesSL.setProperty(idProperty, newValue); }
+    public final String setId(@NotNull String newValue) { return Props.setProperty(idProperty, newValue); }
     
     public final ObjectProperty<T> valueProperty() { return valueProperty; }
     public final T getValue() { return valueProperty.get(); }
-    public final T setValue(T newValue) { return PropertiesSL.setProperty(valueProperty, newValue); }
+    public final T setValue(T newValue) { return Props.setProperty(valueProperty, newValue); }
     
     
     public final Class<T> getAttributeType() { return attributeType; }

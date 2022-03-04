@@ -4,10 +4,10 @@ import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.springable.StrictSpringable;
-import com.taco.suit_lady.util.tools.ArraysSL;
-import com.taco.suit_lady.util.tools.Exceptions;
-import com.taco.suit_lady.util.tools.Objs;
-import com.taco.suit_lady.util.tools.PropertiesSL;
+import com.taco.suit_lady.util.tools.list_tools.A;
+import com.taco.suit_lady.util.tools.Exc;
+import com.taco.suit_lady.util.tools.Obj;
+import com.taco.suit_lady.util.tools.Props;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.Node;
@@ -51,9 +51,9 @@ public class DragAndDropHandler<T extends Serializable>
         this.owner = owner;
         
         this.dataFormat = dataFormat;
-        if (ArraysSL.containsNull(transferModes))
-            throw Exceptions.ex(new NullPointerException(), "TransferMode Array cannot contain null elements:  " + ArraysSL.toString(transferModes));
-        this.transferModes = !ArraysSL.isEmpty(transferModes) ? transferModes : TransferMode.ANY;
+        if (A.containsNull(transferModes))
+            throw Exc.ex(new NullPointerException(), "TransferMode Array cannot contain null elements:  " + A.toString(transferModes));
+        this.transferModes = !A.isEmpty(transferModes) ? transferModes : TransferMode.ANY;
         
         this.valueProperty = new ReadOnlyObjectWrapper<>();
         
@@ -93,34 +93,34 @@ public class DragAndDropHandler<T extends Serializable>
     
     public final @NotNull ReadOnlyObjectProperty<T> valueProperty() { return valueProperty.getReadOnlyProperty(); }
     public final @Nullable T getValue() { return valueProperty.get(); }
-    public final @Nullable T setValue(@Nullable T newValue) { return PropertiesSL.setProperty(valueProperty, newValue); }
+    public final @Nullable T setValue(@Nullable T newValue) { return Props.setProperty(valueProperty, newValue); }
     
     //<editor-fold desc="> Drag Handler Properties">
     
     public final @NotNull ReadOnlyObjectProperty<Consumer<DragEventData<T, MouseEvent>>> readOnlyDragDetectedHandlerProperty() { return dragDetectedSourceHandlerProperty.getReadOnlyProperty(); }
     public final @Nullable Consumer<DragEventData<T, MouseEvent>> getDragDetectedHandler() { return dragDetectedSourceHandlerProperty.get(); }
-    public final @Nullable Consumer<DragEventData<T, MouseEvent>> setDragDetectedHandler(@Nullable Consumer<DragEventData<T, MouseEvent>> newValue) { return PropertiesSL.setProperty(dragDetectedSourceHandlerProperty, newValue); }
+    public final @Nullable Consumer<DragEventData<T, MouseEvent>> setDragDetectedHandler(@Nullable Consumer<DragEventData<T, MouseEvent>> newValue) { return Props.setProperty(dragDetectedSourceHandlerProperty, newValue); }
     
     public final @NotNull ReadOnlyObjectProperty<Consumer<DragEventData<T, DragEvent>>> readOnlyDragDoneHandlerProperty() { return dragDoneSourceHandlerProperty.getReadOnlyProperty(); }
     public final @Nullable Consumer<DragEventData<T, DragEvent>> getDragDoneHandler() { return dragDoneSourceHandlerProperty.get(); }
-    public final @Nullable Consumer<DragEventData<T, DragEvent>> setDragDoneHandler(@Nullable Consumer<DragEventData<T, DragEvent>> newValue) { return PropertiesSL.setProperty(dragDoneSourceHandlerProperty, newValue); }
+    public final @Nullable Consumer<DragEventData<T, DragEvent>> setDragDoneHandler(@Nullable Consumer<DragEventData<T, DragEvent>> newValue) { return Props.setProperty(dragDoneSourceHandlerProperty, newValue); }
     
     
     public final @NotNull ReadOnlyObjectProperty<Consumer<DragEventData<T, DragEvent>>> readOnlyDragOverHandlerProperty() { return dragOverTargetHandlerProperty.getReadOnlyProperty(); }
     public final @Nullable Consumer<DragEventData<T, DragEvent>> getDragOverHandler() { return dragOverTargetHandlerProperty.get(); }
-    public final @Nullable Consumer<DragEventData<T, DragEvent>> setDragOverHandler(@Nullable Consumer<DragEventData<T, DragEvent>> newValue) { return PropertiesSL.setProperty(dragOverTargetHandlerProperty, newValue); }
+    public final @Nullable Consumer<DragEventData<T, DragEvent>> setDragOverHandler(@Nullable Consumer<DragEventData<T, DragEvent>> newValue) { return Props.setProperty(dragOverTargetHandlerProperty, newValue); }
     
     public final @NotNull ReadOnlyObjectProperty<Consumer<DragEventData<T, DragEvent>>> readOnlyDragEnteredHandlerProperty() { return dragEnteredTargetHandlerProperty.getReadOnlyProperty(); }
     public final @Nullable Consumer<DragEventData<T, DragEvent>> getDragEnteredHandler() { return dragEnteredTargetHandlerProperty.get(); }
-    public final @Nullable Consumer<DragEventData<T, DragEvent>> setDragEnteredHandler(@Nullable Consumer<DragEventData<T, DragEvent>> newValue) { return PropertiesSL.setProperty(dragEnteredTargetHandlerProperty, newValue); }
+    public final @Nullable Consumer<DragEventData<T, DragEvent>> setDragEnteredHandler(@Nullable Consumer<DragEventData<T, DragEvent>> newValue) { return Props.setProperty(dragEnteredTargetHandlerProperty, newValue); }
     
     public final @NotNull ReadOnlyObjectProperty<Consumer<DragEventData<T, DragEvent>>> readOnlyDragExitedHandlerProperty() { return dragExitedTargetHandlerProperty.getReadOnlyProperty(); }
     public final @Nullable Consumer<DragEventData<T, DragEvent>> getDragExitedHandler() { return dragExitedTargetHandlerProperty.get(); }
-    public final @Nullable Consumer<DragEventData<T, DragEvent>> setDragExitedHandler(@Nullable Consumer<DragEventData<T, DragEvent>> newValue) { return PropertiesSL.setProperty(dragExitedTargetHandlerProperty, newValue); }
+    public final @Nullable Consumer<DragEventData<T, DragEvent>> setDragExitedHandler(@Nullable Consumer<DragEventData<T, DragEvent>> newValue) { return Props.setProperty(dragExitedTargetHandlerProperty, newValue); }
     
     public final @NotNull ReadOnlyObjectProperty<Consumer<DragEventData<T, DragEvent>>> readOnlyDragDroppedHandlerProperty() { return dragDroppedTargetHandlerProperty.getReadOnlyProperty(); }
     public final @Nullable Consumer<DragEventData<T, DragEvent>> getDragDroppedHandler() { return dragDroppedTargetHandlerProperty.get(); }
-    public final @Nullable Consumer<DragEventData<T, DragEvent>> setDragDroppedHandler(@Nullable Consumer<DragEventData<T, DragEvent>> newValue) { return PropertiesSL.setProperty(dragDroppedTargetHandlerProperty, newValue); }
+    public final @Nullable Consumer<DragEventData<T, DragEvent>> setDragDroppedHandler(@Nullable Consumer<DragEventData<T, DragEvent>> newValue) { return Props.setProperty(dragDroppedTargetHandlerProperty, newValue); }
     
     //</editor-fold>
     
@@ -149,7 +149,7 @@ public class DragAndDropHandler<T extends Serializable>
                 cbContent.put(getDataFormat(), value);
                 db.setContent(cbContent);
                 
-                Objs.doIfNonNull(this::getDragDetectedHandler, handler -> handler.accept(new DragEventData<>(event, this, DragEventType.DETECTED)));
+                Obj.doIfNonNull(this::getDragDetectedHandler, handler -> handler.accept(new DragEventData<>(event, this, DragEventType.DETECTED)));
             } else
                 System.err.println("WARNING: Attempting to drag null element.");
             
@@ -158,7 +158,7 @@ public class DragAndDropHandler<T extends Serializable>
     }
     
     private void onDragDone(@NotNull DragEvent event) {
-        syncFX(() -> Objs.doIfNonNull(this::getDragDoneHandler, handler -> handler.accept(new DragEventData<>(event, this, DragEventType.DONE))));
+        syncFX(() -> Obj.doIfNonNull(this::getDragDoneHandler, handler -> handler.accept(new DragEventData<>(event, this, DragEventType.DONE))));
     }
     
     //
@@ -167,7 +167,7 @@ public class DragAndDropHandler<T extends Serializable>
         syncFX(() -> {
             if (event.getGestureSource() != getOwner()) {
                 event.acceptTransferModes(getTransferModes());
-                Objs.doIfNonNull(this::getDragOverHandler, handler -> handler.accept(new DragEventData<>(event, this, DragEventType.OVER)));
+                Obj.doIfNonNull(this::getDragOverHandler, handler -> handler.accept(new DragEventData<>(event, this, DragEventType.OVER)));
             }
             event.consume();
         });
@@ -179,7 +179,7 @@ public class DragAndDropHandler<T extends Serializable>
             
             boolean success = false;
             if (db.hasContent(getDataFormat())) {
-                Objs.doIfNonNull(this::getDragDroppedHandler, handler -> handler.accept(new DragEventData<>(event, this, DragEventType.DROPPED)));
+                Obj.doIfNonNull(this::getDragDroppedHandler, handler -> handler.accept(new DragEventData<>(event, this, DragEventType.DROPPED)));
                 success = true;
             }
             
@@ -190,18 +190,18 @@ public class DragAndDropHandler<T extends Serializable>
     
     
     private void onDragEntered(@NotNull DragEvent event) {
-        syncFX(() -> Objs.doIfNonNull(this::getDragEnteredHandler, handler -> handler.accept(new DragEventData<>(event, this, DragEventType.ENTERED))));
+        syncFX(() -> Obj.doIfNonNull(this::getDragEnteredHandler, handler -> handler.accept(new DragEventData<>(event, this, DragEventType.ENTERED))));
     }
     
     private void onDragExited(@NotNull DragEvent event) {
-        syncFX(() -> Objs.doIfNonNull(this::getDragExitedHandler, handler -> handler.accept(new DragEventData<>(event, this, DragEventType.EXITED))));
+        syncFX(() -> Obj.doIfNonNull(this::getDragExitedHandler, handler -> handler.accept(new DragEventData<>(event, this, DragEventType.EXITED))));
     }
     
     //
     
     @Deprecated
     private void onDragEvent(@NotNull DragEvent event, @Nullable Consumer<DragEventData<T, DragEvent>> eventHandler, @NotNull DragEventType eventType) {
-        Objs.doIfNonNull(
+        Obj.doIfNonNull(
                 () -> eventHandler,
                 handler -> handler.accept(new DragEventData<>(event, this, eventType)),
                 handler -> System.err.println("WARNING: Drag Handler is null [ " + event + " ]  |  [ " + eventType + " ]"));

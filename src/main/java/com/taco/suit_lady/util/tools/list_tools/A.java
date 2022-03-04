@@ -1,13 +1,14 @@
-package com.taco.suit_lady.util.tools;
+package com.taco.suit_lady.util.tools.list_tools;
 
 import com.taco.suit_lady.ui.jfx.util.Dimensions;
+import com.taco.suit_lady.util.tools.Exc;
+import com.taco.suit_lady.util.tools.TB;
 import org.checkerframework.checker.index.qual.NonNegative;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
@@ -15,7 +16,7 @@ import java.util.function.*;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public class ArraysSL {
+public class A {
     
     //<editor-fold desc="--- MATRIX METHODS ---">
     
@@ -95,7 +96,7 @@ public class ArraysSL {
      * <p>Returns the {@link T element} at the specified {@code movedToIndex} using <i>{@code () -> null}</i> as the {@link Supplier Fallback Supplier}.</p>
      * <p><b>Passthrough Definition</b></p>
      * <blockquote><i><code>
-     * {@link ArraysSL}<b>.</b>{@link ArraysSL#getAt(int, List, Supplier, Supplier) getAt}<b>(</b>{@code movedToIndex}<b>,</b> {@code list}<b>,</b> <u>{@code () -> null)}</u><b>,</b> <u>{@code () -> null)}</u><b>)</b>
+     * {@link A}<b>.</b>{@link A#getAt(int, List, Supplier, Supplier) getAt}<b>(</b>{@code movedToIndex}<b>,</b> {@code list}<b>,</b> <u>{@code () -> null)}</u><b>,</b> <u>{@code () -> null)}</u><b>)</b>
      * </code></i></blockquote>
      *
      * @param index The {@code movedToIndex} to {@link List#get(int) retrieve} the desired {@link T element} from.
@@ -113,7 +114,7 @@ public class ArraysSL {
      * <p>Returns the {@link T element} at the specified {@code movedToIndex} using optional {@link Supplier Fallback Supplier} to handle all types of invalid queries.</p>
      * <p><b>Passthrough Definition</b></p>
      * <blockquote><i><code>
-     * {@link ArraysSL}<b>.</b>{@link ArraysSL#getAt(int, List, Supplier, Supplier) getAt}<b>(</b>{@code movedToIndex}<b>,</b> {@code list}<b>,</b> {@code fallbackSupplier}<b>,</b> {@code fallbackSupplier}<b>)</b>
+     * {@link A}<b>.</b>{@link A#getAt(int, List, Supplier, Supplier) getAt}<b>(</b>{@code movedToIndex}<b>,</b> {@code list}<b>,</b> {@code fallbackSupplier}<b>,</b> {@code fallbackSupplier}<b>)</b>
      * </code></i></blockquote>
      *
      * @param index            The {@code movedToIndex} to {@link List#get(int) retrieve} the desired {@link T element} from.
@@ -188,7 +189,7 @@ public class ArraysSL {
      * @throws NullPointerException      If the {@link T element} at the specified {@code movedToIndex} is {@code null} and the {@link Supplier ifNullFallbackSupplier} was not specified.
      */
     public static <T> T getAt(@NonNegative int index, @NotNull List<T> list, @Nullable Supplier<T> ifInvalidIndexFallbackSupplier, @Nullable Supplier<T> ifNullFallbackSupplier) {
-        Exceptions.nullCheck(list, "List cannot be null.");
+        Exc.nullCheck(list, "List cannot be null.");
         
         T value;
         
@@ -198,11 +199,11 @@ public class ArraysSL {
                 if (ifNullFallbackSupplier != null)
                     value = ifNullFallbackSupplier.get();
                 else
-                    throw Exceptions.ex(new NullPointerException(), "Value at movedToIndex [" + index + "] is null, but ifNull fallback Supplier was not provided.");
+                    throw Exc.ex(new NullPointerException(), "Value at movedToIndex [" + index + "] is null, but ifNull fallback Supplier was not provided.");
         } else if (ifInvalidIndexFallbackSupplier != null)
             value = ifInvalidIndexFallbackSupplier.get();
         else
-            throw Exceptions.ex(new IndexOutOfBoundsException(), "Index value [" + index + "] is not valid for List:  " + list);
+            throw Exc.ex(new IndexOutOfBoundsException(), "Index value [" + index + "] is not valid for List:  " + list);
         
         return value;
     }
@@ -230,7 +231,7 @@ public class ArraysSL {
         if (arr.length < 1)
             return arr;
         HashSet<T> set = new LinkedHashSet<>(java.util.Arrays.asList(arr));
-        return set.toArray((T[]) Array.newInstance(arr.getClass(), set.size()));
+        return set.toArray((T[]) java.lang.reflect.Array.newInstance(arr.getClass(), set.size()));
     }
     
     /**
@@ -429,7 +430,7 @@ public class ArraysSL {
                 for (T[] arr: arrs)
                     if (arr != null)
                         totalLength += arr.length;
-                T[] arr = (T[]) Array.newInstance(arrs[0].getClass().getComponentType(), totalLength);
+                T[] arr = (T[]) java.lang.reflect.Array.newInstance(arrs[0].getClass().getComponentType(), totalLength);
                 int currentIndex = 0;
                 for (T[] arr2: arrs) {
                     System.arraycopy(arr2, 0, arr, currentIndex, arr2.length);
@@ -460,7 +461,7 @@ public class ArraysSL {
      * array.
      */
     public static int[] concat(int[] arr1, int[] arr2) {
-        int[] copy = (int[]) Array.newInstance(arr1.getClass().getComponentType(), arr1.length + arr2.length);
+        int[] copy = (int[]) java.lang.reflect.Array.newInstance(arr1.getClass().getComponentType(), arr1.length + arr2.length);
         System.arraycopy(arr1, 0, copy, 0, arr1.length);
         System.arraycopy(arr2, 0, copy, arr1.length, arr2.length);
         return copy;
@@ -469,7 +470,7 @@ public class ArraysSL {
     
     @SafeVarargs public static <T, R> R[] convert(@NotNull Function<T, R> converter, @NotNull R[] resultArr, boolean allowMismatch, @NotNull T... inputArr) {
         if ((!allowMismatch && inputArr.length != resultArr.length) || inputArr.length < resultArr.length)
-            throw Exceptions.unsupported("Array Length Mismatch:  [" + resultArr.length + " :: " + inputArr.length + "]");
+            throw Exc.unsupported("Array Length Mismatch:  [" + resultArr.length + " :: " + inputArr.length + "]");
         IntStream.range(0, inputArr.length).forEach(i -> resultArr[i] = converter.apply(inputArr[i]));
         return resultArr;
     }
@@ -596,7 +597,7 @@ public class ArraysSL {
     }
     
     public static <T> T[] createAndFillArray(List<T> list, Class<T> clazz) {
-        T[] arr = createArray((Class<T[]>) ToolsSL.getArrayClass(clazz), list.size());
+        T[] arr = createArray((Class<T[]>) TB.getArrayClass(clazz), list.size());
         if (arr != null)
             for (int i = 0; i < list.size(); i++) {
                 T element = list.get(i);
@@ -607,7 +608,7 @@ public class ArraysSL {
     }
     
     public static <T> T[] createArray(Class<T[]> type, int size) {
-        return type.cast(Array.newInstance(type.getComponentType(), size));
+        return type.cast(java.lang.reflect.Array.newInstance(type.getComponentType(), size));
     }
     
     //
@@ -624,7 +625,7 @@ public class ArraysSL {
      * @see #getMapValues(Map, List)
      */
     public static <V> ArrayList<V> getMapValues(Map<?, V> map) {
-        return (ArrayList<V>) getMapValues(Exceptions.nullCheck(map, "Map"), null);
+        return (ArrayList<V>) getMapValues(Exc.nullCheck(map, "Map"), null);
     }
     
     /**
@@ -643,13 +644,13 @@ public class ArraysSL {
      * @see #getMapValues(Map)
      */
     public static <V> List<V> getMapValues(Map<?, V> map, List<V> targetList) {
-        Collection<V> _mapContents = Exceptions.nullCheck(map, "Map").values();
+        Collection<V> _mapContents = Exc.nullCheck(map, "Map").values();
         
         if (targetList == null)
             return new ArrayList<>(_mapContents);
         
         if (!targetList.addAll(_mapContents))
-            throw Exceptions.ex("Failed to add contents of map (" + map + ")" + " to target list (" + targetList + ")");
+            throw Exc.ex("Failed to add contents of map (" + map + ")" + " to target list (" + targetList + ")");
         
         return targetList;
     }
@@ -730,7 +731,7 @@ public class ArraysSL {
      * @param <T>  The type of {@link T element} being added.
      */
     public static <T> void addToFront(List<T> list, T obj) {
-        Exceptions.nullCheck(list, "List").add(0, Exceptions.nullCheck(obj, "Object Param"));
+        Exc.nullCheck(list, "List").add(0, Exc.nullCheck(obj, "Object Param"));
     }
     
     // </editor-fold>
@@ -760,7 +761,7 @@ public class ArraysSL {
      * @throws NullPointerException If the specified {@code List} is {@code null}.
      */
     public static <T> boolean insertAfter(List<T> list, T searchElement, T objToInsert) {
-        throw Exceptions.nyi();
+        throw Exc.nyi();
     } // TODO
     
     /**
@@ -786,7 +787,7 @@ public class ArraysSL {
      * @throws NullPointerException If the specified {@code List} is {@code null}.
      */
     public static <T> boolean insertBefore(List<T> list, T searchElement, T objToInsert) {
-        throw Exceptions.nyi();
+        throw Exc.nyi();
     } // TODO
     
     //
@@ -842,8 +843,8 @@ public class ArraysSL {
     //
     
     public static <V> boolean remove(Map<?, V> map, V obj) {
-        Exceptions.nullCheck(map, "Map");
-        Exceptions.nullCheck(obj, "Object to Remove");
+        Exc.nullCheck(map, "Map");
+        Exc.nullCheck(obj, "Object to Remove");
         //        ConsoleBB.CONSOLE.dev("Removing \"" + obj + "\" from \"" + map + "\"");
         
         // DO NOT SIMPLIFY: removeAll(obj) would only remove the first instance.
@@ -851,8 +852,8 @@ public class ArraysSL {
     }
     
     public static <V> boolean removeFirst(Map<?, V> map, V obj) {
-        Exceptions.nullCheck(map, "Map");
-        Exceptions.nullCheck(obj, "Object to Remove");
+        Exc.nullCheck(map, "Map");
+        Exc.nullCheck(obj, "Object to Remove");
         
         return map.values().remove(obj);
     }
@@ -1194,12 +1195,12 @@ public class ArraysSL {
      */
     // TO-DOC
     public static <T> List<Object> purge(@NotNull Collection<Object> collection, @NotNull Class<T> clazz) {
-        throw Exceptions.nyi();
+        throw Exc.nyi();
     }
     
     /**
      * <p><b>Passthrough Definition</b></p>
-     * <blockquote><i><code>{@link ArraysSL}<b>.</b>{@link #containsType(Collection, Class, boolean, boolean, boolean) containsType}<b>(</b>collection<b>,</b> clazz<b>,</b> <u>false</u><b>,</b> <u>false</u><b>,</b> <u>true</u><b>)</b></code></i></blockquote>
+     * <blockquote><i><code>{@link A}<b>.</b>{@link #containsType(Collection, Class, boolean, boolean, boolean) containsType}<b>(</b>collection<b>,</b> clazz<b>,</b> <u>false</u><b>,</b> <u>false</u><b>,</b> <u>true</u><b>)</b></code></i></blockquote>
      *
      * @param collection The {@link Collection} being iterated.
      * @param clazz      The {@link Class type} of {@link Object} to scan for when iterating the specified {@link Collection}.
@@ -1213,7 +1214,7 @@ public class ArraysSL {
     
     /**
      * <p><b>Passthrough Definition</b></p>
-     * <blockquote><i><code>{@link ArraysSL}<b>.</b>{@link #containsType(Collection, Class, boolean, boolean, boolean) containsType}<b>(</b>collection<b>,</b> clazz<b>,</b> <u>false</u><b>,</b> <u>false</u><b>,</b> <u>false</u><b>)</b></code></i></blockquote>
+     * <blockquote><i><code>{@link A}<b>.</b>{@link #containsType(Collection, Class, boolean, boolean, boolean) containsType}<b>(</b>collection<b>,</b> clazz<b>,</b> <u>false</u><b>,</b> <u>false</u><b>,</b> <u>false</u><b>)</b></code></i></blockquote>
      *
      * @param collection The {@link Collection} being iterated.
      * @param clazz      The {@link Class type} of {@link Object} to scan for when iterating the specified {@link Collection}.
@@ -1240,7 +1241,7 @@ public class ArraysSL {
     public static boolean containsType(@NotNull Collection<?> collection, @NotNull Class<?> clazz, boolean allowNullElements, boolean allowEmpty, boolean requireAll) {
         // If the collection instance is null, throw a NPE.
         // If the collection is empty, return the value of the specified allowEmpty boolean.
-        if (Exceptions.nullCheck(collection, "Collection Parameter").isEmpty())
+        if (Exc.nullCheck(collection, "Collection Parameter").isEmpty())
             return allowEmpty;
         
         // Keeps track of whether a valid element has been found or not.
@@ -1286,7 +1287,7 @@ public class ArraysSL {
      * @throws NullPointerException If the specified {@code Collection} is null.
      */
     public static <V> ArrayList<V> copy(Collection<V> collection) {
-        return new ArrayList<>(Exceptions.nullCheck(collection, "Collection"));
+        return new ArrayList<>(Exc.nullCheck(collection, "Collection"));
     }
     
     /**
@@ -1302,7 +1303,7 @@ public class ArraysSL {
      * @throws NullPointerException If the specified {@code Map} is null.
      */
     public static <K, V> Map<K, V> copy(Map<K, V> map) {
-        HashMap<K, V> _map = new HashMap<>(Exceptions.nullCheck(map, "Map").size());
+        HashMap<K, V> _map = new HashMap<>(Exc.nullCheck(map, "Map").size());
         _map.putAll(map);
         return _map;
     }
@@ -1660,7 +1661,7 @@ public class ArraysSL {
         if (list != null) {
             ArrayList<String> stringArr = new ArrayList<>(list.size());
             for (Object obj: list)
-                stringArr.add(obj == null ? "null" : ToolsSL.getSimpleName(obj.getClass()));
+                stringArr.add(obj == null ? "null" : TB.getSimpleName(obj.getClass()));
             return stringArr.toString();
         }
         return null;
@@ -1961,13 +1962,13 @@ public class ArraysSL {
                 T[] sourceArr, Z[] targetArr, ElementCopier<T, Z> copier,
                 Supplier<Z> onNull) {
             if (sourceArr == null)
-                throw Exceptions.ex(new NullPointerException("Source array cannot be null"));
+                throw Exc.ex(new NullPointerException("Source array cannot be null"));
             else if (targetArr == null)
-                throw Exceptions.ex(new NullPointerException("Target array cannot be null"));
+                throw Exc.ex(new NullPointerException("Target array cannot be null"));
             else if (copier == null)
-                throw Exceptions.ex(new NullPointerException("ElementCopier cannot be null"));
+                throw Exc.ex(new NullPointerException("ElementCopier cannot be null"));
             else if (sourceArr.length != targetArr.length)
-                throw Exceptions
+                throw Exc
                         .ex(new IndexOutOfBoundsException("Source array length must equal target array length"));
             for (int i = 0; i < sourceArr.length; i++) {
                 if (sourceArr[i] != null)

@@ -9,15 +9,12 @@ import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.ImagePain
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
-import com.taco.suit_lady.util.tools.BindingsSL;
-import com.taco.suit_lady.util.tools.PropertiesSL;
-import com.taco.suit_lady.util.tools.ResourcesSL;
+import com.taco.suit_lady.util.tools.Bind;
+import com.taco.suit_lady.util.tools.Stuff;
 import com.taco.tacository.json.JElement;
 import com.taco.tacository.json.JLoadable;
 import com.taco.tacository.json.JObject;
-import com.taco.tacository.json.JUtil;
 import javafx.beans.binding.ObjectBinding;
-import javafx.beans.property.*;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -57,8 +54,8 @@ public class GameObjectModel
     public GameObjectModel init() {
         this.getDefinition().init();
         
-        this.imageBinding = BindingsSL.objBinding(
-                () -> ResourcesSL.getGameImage(getDefinition().getImageType() + "/", getDefinition().getImageId()),
+        this.imageBinding = Bind.objBinding(
+                () -> Stuff.getGameImage(getDefinition().getImageType() + "/", getDefinition().getImageId()),
                 getDefinition().readOnlyImageTypeProperty(), getDefinition().readOnlyImageIdProperty());
         
         this.modelPaintCommand.init();

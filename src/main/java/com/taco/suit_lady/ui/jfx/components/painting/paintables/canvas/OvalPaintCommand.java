@@ -2,7 +2,7 @@ package com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas;
 
 import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,7 +17,7 @@ public class OvalPaintCommand extends ShapePaintCommand {
     @Override protected void onPaint() {
         Bounds bounds = getBounds();
         if (isValidDimensions())
-            ToolsFX.drawOval(getSurface(), bounds, false, isFill());
+            FX.drawOval(getSurface(), bounds, false, isFill());
     }
     
     @Override public @NotNull OvalPaintCommand init() {

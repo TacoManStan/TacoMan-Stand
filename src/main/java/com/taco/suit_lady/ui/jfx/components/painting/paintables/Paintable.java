@@ -8,8 +8,7 @@ import com.taco.suit_lady.ui.jfx.util.BoundsBinding;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
-import com.taco.suit_lady.util.tools.PropertiesSL;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
+import com.taco.suit_lady.util.tools.Props;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -65,29 +64,29 @@ public interface Paintable<P extends Paintable<P, S>, S extends Surface<P, S>>
     
     default @NotNull ObjectProperty<S> surfaceProperty() { return data().surfaceProperty(); }
     default S getSurface() { return surfaceProperty().get(); }
-    default S setSurface(S newValue) { return PropertiesSL.setProperty(surfaceProperty(), newValue); }
+    default S setSurface(S newValue) { return Props.setProperty(surfaceProperty(), newValue); }
     
     default @NotNull ObjectProperty<Predicate<S>> autoRemoveConditionProperty() { return data().autoRemoveConditionProperty(); }
     default Predicate<S> getAutoRemoveCondition() { return autoRemoveConditionProperty().get(); }
-    default Predicate<S> setAutoRemoveCondition(Predicate<S> newValue) { return PropertiesSL.setProperty(autoRemoveConditionProperty(), newValue); }
+    default Predicate<S> setAutoRemoveCondition(Predicate<S> newValue) { return Props.setProperty(autoRemoveConditionProperty(), newValue); }
     
     default @NotNull BooleanProperty disabledProperty() { return data().disabledProperty(); }
     default boolean isDisabled() { return disabledProperty().get(); }
-    default boolean setDisabled(boolean newValue) { return PropertiesSL.setProperty(disabledProperty(), newValue); }
+    default boolean setDisabled(boolean newValue) { return Props.setProperty(disabledProperty(), newValue); }
     
     default @NotNull BooleanProperty pausedProperty() { return data().pausedProperty(); }
     default boolean isPaused() { return pausedProperty().get(); }
-    default boolean setPaused(boolean newValue) { return PropertiesSL.setProperty(pausedProperty(), newValue); }
+    default boolean setPaused(boolean newValue) { return Props.setProperty(pausedProperty(), newValue); }
     default boolean pause() { return setPaused(true); }
     default boolean resume() { return setPaused(false); }
     
     default @NotNull BooleanProperty surfaceRepaintDisabledProperty() { return data().repaintSurfaceDisabledProperty(); }
     default boolean isSurfaceRepaintDisabled() { return surfaceRepaintDisabledProperty().get(); }
-    default boolean setSurfaceRepaintDisabled(boolean newValue) { return PropertiesSL.setProperty(surfaceRepaintDisabledProperty(), newValue); }
+    default boolean setSurfaceRepaintDisabled(boolean newValue) { return Props.setProperty(surfaceRepaintDisabledProperty(), newValue); }
     
     default @NotNull IntegerProperty paintPriorityProperty() { return data().paintPriorityProperty(); }
     default int getPaintPriority() { return paintPriorityProperty().get(); }
-    default int setPaintPriority(int newValue) { return PropertiesSL.setProperty(paintPriorityProperty(), newValue); }
+    default int setPaintPriority(int newValue) { return Props.setProperty(paintPriorityProperty(), newValue); }
     
     default @NotNull BoundsBinding boundsBinding() { return data().boundsBinding(); }
     

@@ -3,11 +3,11 @@ package com.taco.suit_lady.ui;
 import com.taco.suit_lady.ui.jfx.components.button.ImageButtonGroup;
 import com.taco.suit_lady.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.BindingsSL;
-import com.taco.suit_lady.util.tools.Exceptions;
-import com.taco.suit_lady.util.tools.Objs;
+import com.taco.suit_lady.util.tools.Bind;
+import com.taco.suit_lady.util.tools.Exc;
+import com.taco.suit_lady.util.tools.Obj;
 import com.taco.suit_lady.ui.jfx.components.button.ImageButton;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -105,13 +105,13 @@ public class Sidebar
             @Nullable ImagePane backImagePane,
             @NotNull ToolBar toolBar)
     {
-        this.weaver = Exceptions.nullCheck(weaver, "FxWeaver");
-        this.ctx = Exceptions.nullCheck(ctx, "Application Context");
+        this.weaver = Exc.nullCheck(weaver, "FxWeaver");
+        this.ctx = Exc.nullCheck(ctx, "Application Context");
         
         this.lock = new ReentrantLock();
         
-        Exceptions.nullCheck(childButtonPane, "Sidebar Child Button Pane");
-        Exceptions.nullCheck(contentPane, "Sidebar Content Pane");
+        Exc.nullCheck(childButtonPane, "Sidebar Child Button Pane");
+        Exc.nullCheck(contentPane, "Sidebar Content Pane");
         
         this.childButtonPane = childButtonPane;
         this.contentPane = contentPane;
@@ -133,7 +133,7 @@ public class Sidebar
         //
         
         this.backImageButton.getImagePane().visibleProperty().bind(
-                BindingsSL.recursiveBinding(selectedBookshelf -> {
+                Bind.recursiveBinding(selectedBookshelf -> {
                     if (selectedBookshelf != null)
                         return Bindings.and(Bindings.not(selectedBookshelf.isEmptyBinding()), selectedBookshelf.getBookDisplayer().visibleBinding());
                     return null;
@@ -166,7 +166,7 @@ public class Sidebar
             }
         });
         
-        this.bookshelvesProperty.addListener((ListChangeListener<SidebarBookshelf>) c -> ToolsFX.runFX(() -> {
+        this.bookshelvesProperty.addListener((ListChangeListener<SidebarBookshelf>) c -> FX.runFX(() -> {
             while (c.next()) {
                 c.getAddedSubList().forEach(sidebarBookshelf -> {
                     toolBar.getItems().add(sidebarBookshelf.getButton());
@@ -183,7 +183,7 @@ public class Sidebar
      * <p>Initializes this {@link Sidebar} and associated components and functionality..</p>
      * <p><b>Details</b></p>
      * <ol>
-     *     <li>Executed on the {@link ToolsFX#runFX(Runnable, boolean) JavaFX Thread}.</li>
+     *     <li>Executed on the {@link FX#runFX(Runnable, boolean) JavaFX Thread}.</li>
      *     <li>The calling {@link Thread} blocks until initialization process is complete.</li>
      *     <li><code><i>{@link #initialize()}</i></code> can <u>only</u> be called <u>once</u>.</li>
      *     <li>Calling <code><i>{@link #initialize()}</i></code> more than once on a single {@link Sidebar} instance can (and likely will) result in unexpected and/or unpredictable runtime functionality.</li>
@@ -197,7 +197,7 @@ public class Sidebar
      */
     public void initialize()
     {
-        ToolsFX.runFX(() -> {
+        FX.runFX(() -> {
             backImageButton.init();
             childButtonPane.setAlignment(Pos.TOP_LEFT);
             
@@ -317,11 +317,11 @@ public class Sidebar
      * @see #selectedBookshelfProperty()
      * @see #getSelectedBookshelf()
      * @see #setSelectedBookshelf(SidebarBookshelf)
-     * @see Objs#equalsExcludeNull(Object, Object)
+     * @see Obj#equalsExcludeNull(Object, Object)
      */
     public boolean isBookshelfSelected(SidebarBookshelf menu)
     {
-        return Objs.equalsExcludeNull(menu, getSelectedBookshelf());
+        return Obj.equalsExcludeNull(menu, getSelectedBookshelf());
     }
     
     //</editor-fold>

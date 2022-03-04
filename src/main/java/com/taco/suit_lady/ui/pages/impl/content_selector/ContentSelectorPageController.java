@@ -8,11 +8,11 @@ import com.taco.suit_lady.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.ui.jfx.components.button.ImageButton;
 import com.taco.suit_lady.ui.jfx.lists.CellControlManager;
 import com.taco.suit_lady.ui.jfx.lists.ListCellFX;
-import com.taco.suit_lady.util.tools.ResourcesSL;
-import com.taco.suit_lady.util.tools.TasksSL;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
-import com.taco.suit_lady.util.tools.list_tools.ListsSL;
-import com.taco.suit_lady.util.tools.list_tools.Operation;
+import com.taco.suit_lady.util.tools.Stuff;
+import com.taco.suit_lady.util.tools.Exe;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
+import com.taco.suit_lady.util.tools.list_tools.L;
+import com.taco.suit_lady.util.tools.list_tools.Op;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -81,13 +81,13 @@ public abstract class ContentSelectorPageController<
         contentList.setCellFactory(listView -> new ListCellFX<>(
                 listCellFX -> new CellControlManager<>(
                         listCellFX,
-                        cellData -> ResourcesSL.get(
+                        cellData -> Stuff.get(
                                 cellData,
                                 () -> weaver().loadController(getPage().elementControllerDefinition()),
                                 listView.hashCode()))));
         
-        ListsSL.applyListener(getPage().getContentHandler().contentList(), (op, opType, triggerType) -> {
-            if (triggerType == Operation.TriggerType.CHANGE)
+        L.applyListener(getPage().getContentHandler().contentList(), (op, opType, triggerType) -> {
+            if (triggerType == Op.TriggerType.CHANGE)
                 switch (opType) {
                     case ADDITION -> onAdded(op.contents());
                     case REMOVAL -> onRemoved(op.contents());
@@ -95,11 +95,11 @@ public abstract class ContentSelectorPageController<
         });
         
         selectedContentMMProperty.addListener(
-                (observable, oldValue, newValue) -> TasksSL.sync(
+                (observable, oldValue, newValue) -> Exe.sync(
                         lock, () -> contentList.getSelectionModel().select(newValue)));
         
         contentList.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> TasksSL.sync(
+                (observable, oldValue, newValue) -> Exe.sync(
                         lock, () -> selectedContentMMProperty.set(newValue)));
         
         getPage().getContentHandler().selectedContentProperty().bindBidirectional(selectedContentMMProperty);
@@ -121,8 +121,8 @@ public abstract class ContentSelectorPageController<
     
     //<editor-fold desc="--- INTERNAL ---">
     
-    private void onAdded(T content) { ToolsFX.runFX(() -> ToolsFX.addElement(content, contentList, true), true); }
-    private void onRemoved(T content) { ToolsFX.runFX(() -> contentList.getItems().remove(content), true); }
+    private void onAdded(T content) { FX.runFX(() -> FX.addElement(content, contentList, true), true); }
+    private void onRemoved(T content) { FX.runFX(() -> contentList.getItems().remove(content), true); }
     
     private void addInstance() { logiCore().execute(() -> getPage().getContentHandler().addInstance()); }
     

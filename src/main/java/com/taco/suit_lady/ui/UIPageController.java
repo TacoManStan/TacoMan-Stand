@@ -1,6 +1,6 @@
 package com.taco.suit_lady.ui;
 
-import com.taco.suit_lady.util.tools.Exceptions;
+import com.taco.suit_lady.util.tools.Exc;
 import com.taco.suit_lady.ui.ui_internal.controllers.Controller;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
@@ -34,9 +34,9 @@ public abstract class UIPageController<T extends UIPage<?>> extends Controller {
      */
     protected void setPage(@NotNull UIPage<?> page) {
         try {
-            this.page = (T) Exceptions.nullCheck(page, "UIPage");
+            this.page = (T) Exc.nullCheck(page, "UIPage");
         } catch (Exception e) {
-            throw Exceptions.ex(e, "UIPage must be of type T [" + page.getClass() + "]");
+            throw Exc.ex(e, "UIPage must be of type T [" + page.getClass() + "]");
         }
         onPageBindingComplete();
     }

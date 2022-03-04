@@ -1,10 +1,8 @@
 package com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas;
 
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.PropertiesSL;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
-import com.taco.suit_lady.util.tools.list_tools.ListsSL;
-import com.taco.suit_lady.util.tools.list_tools.Operation;
+import com.taco.suit_lady.util.tools.Props;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -13,7 +11,6 @@ import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -33,7 +30,7 @@ public class AggregateImagePaintCommand extends PaintCommand {
     
     public final BooleanProperty scaledProperty() { return scaledProperty; }
     public final boolean isScaled() { return scaledProperty.get(); }
-    public final boolean setScaled(boolean newValue) { return PropertiesSL.setProperty(scaledProperty, newValue); }
+    public final boolean setScaled(boolean newValue) { return Props.setProperty(scaledProperty, newValue); }
     
     //</editor-fold>
     
@@ -49,9 +46,9 @@ public class AggregateImagePaintCommand extends PaintCommand {
             for (Image image: imageListProperty) {
                 if (image != null) {
                     if (isScaled())
-                        ToolsFX.drawImageScaled(getSurface(), image, getBounds(), 1, 1, false);
+                        FX.drawImageScaled(getSurface(), image, getBounds(), 1, 1, false);
                     else
-                        ToolsFX.drawImage(getSurface(), getBounds(), image, false, false);
+                        FX.drawImage(getSurface(), getBounds(), image, false, false);
                 }
             }
     }

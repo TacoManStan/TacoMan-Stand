@@ -3,9 +3,9 @@ package com.taco.suit_lady.game.attributes;
 import com.taco.suit_lady.game.interfaces.WrappedGameComponent;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.game.ui.GameViewContent;
-import com.taco.suit_lady.util.tools.BindingsSL;
-import com.taco.suit_lady.util.tools.printer.Printer;
-import com.taco.suit_lady.util.tools.TasksSL;
+import com.taco.suit_lady.util.tools.Bind;
+import com.taco.suit_lady.util.tools.printer.Print;
+import com.taco.suit_lady.util.tools.Exe;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleMapProperty;
@@ -46,7 +46,7 @@ public class AttributeManager
     //<editor-fold desc=">> Attribute Add Methods">
     
     public final @Nullable Attribute<?> addAttribute(@Nullable Attribute<?> attribute) {
-        return TasksSL.sync(testLock, () -> {
+        return Exe.sync(testLock, () -> {
             if (attribute != null && attribute.getId() != null)
                 if (attributeMap.containsValue(attribute))
                     System.err.println("WARNING: AttributeManager already contains Attribute [" + attribute + "]");
@@ -76,7 +76,7 @@ public class AttributeManager
     
     //<editor-fold desc=">> Attribute Accessor Methods">
     
-    public final <T> Attribute<T> getAttribute(@NotNull String id, @NotNull Class<T> type) { return TasksSL.sync(testLock, () -> (Attribute<T>) attributeMap.get(id)); }
+    public final <T> Attribute<T> getAttribute(@NotNull String id, @NotNull Class<T> type) { return Exe.sync(testLock, () -> (Attribute<T>) attributeMap.get(id)); }
     
     
     public final Attribute<Boolean> getBooleanAttribute(@NotNull String id) { return getAttribute(id, Boolean.class); }
@@ -154,7 +154,7 @@ public class AttributeManager
     //</editor-fold>
     
     public final List<Attribute<?>> attributeList() {
-        return TasksSL.sync(testLock, () -> new ArrayList<>(attributeMap.values()));
+        return Exe.sync(testLock, () -> new ArrayList<>(attributeMap.values()));
     }
     
     //</editor-fold>
@@ -170,10 +170,10 @@ public class AttributeManager
     public static <T> @NotNull Function<Attribute<T>, Region> getValuePaneFactory() {
         return attribute -> {
             if (attribute == null)
-                Printer.err("Attribute cannot be null.");
+                Print.err("Attribute cannot be null.");
             
             final Label label = new Label();
-            label.textProperty().bind(BindingsSL.stringBinding(() -> attribute.getValue() != null ? attribute.getValue().toString() : "Attribute Value is Null", attribute.valueProperty()));
+            label.textProperty().bind(Bind.stringBinding(() -> attribute.getValue() != null ? attribute.getValue().toString() : "Attribute Value is Null", attribute.valueProperty()));
             return label;
         };
     }

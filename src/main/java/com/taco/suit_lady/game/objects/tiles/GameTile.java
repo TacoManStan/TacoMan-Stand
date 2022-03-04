@@ -10,8 +10,8 @@ import com.taco.suit_lady.ui.jfx.util.Dimensions;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
-import com.taco.suit_lady.util.tools.BindingsSL;
-import com.taco.suit_lady.util.tools.PropertiesSL;
+import com.taco.suit_lady.util.tools.Bind;
+import com.taco.suit_lady.util.tools.Props;
 import com.taco.tacository.json.*;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.*;
@@ -49,8 +49,8 @@ public class GameTile
         this.xTileLocationProperty = new ReadOnlyIntegerWrapper(xLoc);
         this.yTileLocationProperty = new ReadOnlyIntegerWrapper(yLoc);
         
-        this.xPixelLocationBinding = BindingsSL.intBinding(() -> getTileLocationX() * getGameMap().getTileSize(), readOnlyTileLocationXProperty());
-        this.yPixelLocationBinding = BindingsSL.intBinding(() -> getTileLocationY() * getGameMap().getTileSize(), readOnlyTileLocationYProperty());
+        this.xPixelLocationBinding = Bind.intBinding(() -> getTileLocationX() * getGameMap().getTileSize(), readOnlyTileLocationXProperty());
+        this.yPixelLocationBinding = Bind.intBinding(() -> getTileLocationY() * getGameMap().getTileSize(), readOnlyTileLocationYProperty());
         
         this.occupyingObjects = new SimpleListProperty<>(FXCollections.observableArrayList());
         
@@ -66,7 +66,7 @@ public class GameTile
     @Override public @NotNull Integer getLocationY() { return MapObject.super.getLocationY().intValue(); }
     
     public final ReadOnlyIntegerProperty readOnlyTileLocationXProperty() { return xTileLocationProperty.getReadOnlyProperty(); }
-    public final int setTileLocationX(int newValue) { return PropertiesSL.setProperty(xTileLocationProperty, newValue); }
+    public final int setTileLocationX(int newValue) { return Props.setProperty(xTileLocationProperty, newValue); }
     public final int getTileLocationX() { return xTileLocationProperty.get(); }
     
     
@@ -74,7 +74,7 @@ public class GameTile
     @Override public @NotNull Integer getLocationX() { return MapObject.super.getLocationX().intValue(); }
     
     public final ReadOnlyIntegerProperty readOnlyTileLocationYProperty() { return yTileLocationProperty.getReadOnlyProperty(); }
-    public final int setTileLocationY(int newValue) { return PropertiesSL.setProperty(yTileLocationProperty, newValue); }
+    public final int setTileLocationY(int newValue) { return Props.setProperty(yTileLocationProperty, newValue); }
     public final int getTileLocationY() { return yTileLocationProperty.get(); }
     
     

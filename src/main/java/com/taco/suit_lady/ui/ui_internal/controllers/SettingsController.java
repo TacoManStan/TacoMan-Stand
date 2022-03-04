@@ -5,8 +5,8 @@ import com.taco.suit_lady.ui.jfx.dialog.DialogController;
 import com.taco.suit_lady.ui.ui_internal.settings.SettingContainer;
 import com.taco.suit_lady.ui.ui_internal.settings.SettingGroup;
 import com.taco.suit_lady.ui.ui_internal.settings.SettingsTitledPane;
-import com.taco.suit_lady.util.tools.BindingsSL;
-import com.taco.suit_lady.util.tools.Exceptions;
+import com.taco.suit_lady.util.tools.Bind;
+import com.taco.suit_lady.util.tools.Exc;
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -67,12 +67,12 @@ public class SettingsController extends DialogController<Void>
         this.contentView = new TransitionContentView<>(contentPane);
         
         this.selectedPaneBinding = Bindings.createObjectBinding(this::getExpandedPane, categoryAccordion.expandedPaneProperty());
-        this.selectedGroupBinding = BindingsSL.recursiveBinding(
+        this.selectedGroupBinding = Bind.recursiveBinding(
                 (TitledPane pane) -> pane != null
                         ? ((SettingsTitledPane) pane).selectedGroupProperty()
-                        : BindingsSL.constObjBinding(null),
+                        : Bind.constObjBinding(null),
                 expandedPaneProperty()
-                                                               );
+                                                         );
         
         //
         
@@ -162,7 +162,7 @@ public class SettingsController extends DialogController<Void>
     
     private void addSettingContainer(SettingContainer settingContainer)
     {
-        Exceptions.nullCheck(settingContainer, "Setting Container");
+        Exc.nullCheck(settingContainer, "Setting Container");
         SettingsTitledPane _pane = new SettingsTitledPane(settingContainer);
         //		_pane.setAnimated(false);
         categoryAccordion.getPanes().add(_pane);

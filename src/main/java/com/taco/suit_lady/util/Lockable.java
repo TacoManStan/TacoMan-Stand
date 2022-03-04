@@ -1,7 +1,7 @@
 package com.taco.suit_lady.util;
 
-import com.taco.suit_lady.util.tools.TasksSL;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
+import com.taco.suit_lady.util.tools.Exe;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,51 +36,51 @@ import java.util.function.Supplier;
     // Sync
     
     /**
-     * See {@link TasksSL#sync(Lock, Runnable, Consumer[])}.
+     * See {@link Exe#sync(Lock, Runnable, Consumer[])}.
      *
-     * @param action           See {@link TasksSL#sync(Lock, Runnable, boolean, Consumer[])}.
-     * @param onFinallyActions See {@link TasksSL#sync(Lock, Runnable, boolean, Consumer[])}.
+     * @param action           See {@link Exe#sync(Lock, Runnable, boolean, Consumer[])}.
+     * @param onFinallyActions See {@link Exe#sync(Lock, Runnable, boolean, Consumer[])}.
      */
     default void sync(Runnable action, Consumer<Throwable>... onFinallyActions) {
         syncIf(action, null, onFinallyActions);
     }
     default void syncIf(Runnable action, Supplier<Boolean> syncCondition, Consumer<Throwable>... onFinallyActions) {
         if (syncCondition == null || syncCondition.get())
-            TasksSL.sync(getLock(), action, isNullableLock(), onFinallyActions);
+            Exe.sync(getLock(), action, isNullableLock(), onFinallyActions);
         else
             action.run();
     }
     
-    default void syncCheckFX(Runnable action, boolean require) { sync(() -> ToolsFX.checkFX(require, null, action)); }
+    default void syncCheckFX(Runnable action, boolean require) { sync(() -> FX.checkFX(require, null, action)); }
     default void syncRequireFX(Runnable action) { syncCheckFX(action, true); }
     default void syncForbidFX(Runnable action) { syncCheckFX(action, false); }
     
     /**
-     * See {@link TasksSL#sync(Lock, Supplier, Consumer[])}.
+     * See {@link Exe#sync(Lock, Supplier, Consumer[])}.
      *
-     * @param action           See {@link TasksSL#sync(Lock, Supplier, boolean, Consumer[])}.
-     * @param onFinallyActions See {@link TasksSL#sync(Lock, Supplier, boolean, Consumer[])}.
+     * @param action           See {@link Exe#sync(Lock, Supplier, boolean, Consumer[])}.
+     * @param onFinallyActions See {@link Exe#sync(Lock, Supplier, boolean, Consumer[])}.
      */
     default <R> R sync(Supplier<R> action, Consumer<Throwable>... onFinallyActions) {
         return syncIf(action, null, onFinallyActions);
     }
     default <R> R syncIf(Supplier<R> action, Supplier<Boolean> syncCondition, Consumer<Throwable>... onFinallyActions) {
         if (syncCondition == null || syncCondition.get())
-            return TasksSL.sync(getLock(), action, isNullableLock(), onFinallyActions);
+            return Exe.sync(getLock(), action, isNullableLock(), onFinallyActions);
         else
             return action.get();
     }
     
-    default <R> R syncCheckFX(Supplier<R> action, boolean require) { return sync(() -> ToolsFX.checkFX(require, null, action)); }
+    default <R> R syncCheckFX(Supplier<R> action, boolean require) { return sync(() -> FX.checkFX(require, null, action)); }
     default <R> R syncRequireFX(Supplier<R> action) { return syncCheckFX(action, true); }
     default <R> R syncForbidFX(Supplier<R> action) { return syncCheckFX(action, false); }
     
     /**
-     * See {@link TasksSL#sync(Lock, Function, Supplier, boolean, Consumer[])}.
+     * See {@link Exe#sync(Lock, Function, Supplier, boolean, Consumer[])}.
      *
-     * @param action           See {@link TasksSL#sync(Lock, Function, Supplier, boolean, Consumer[])}.
-     * @param actionSupplier   See {@link TasksSL#sync(Lock, Function, Supplier, boolean, Consumer[])}.
-     * @param onFinallyActions See {@link TasksSL#sync(Lock, Function, Supplier, boolean, Consumer[])}.
+     * @param action           See {@link Exe#sync(Lock, Function, Supplier, boolean, Consumer[])}.
+     * @param actionSupplier   See {@link Exe#sync(Lock, Function, Supplier, boolean, Consumer[])}.
+     * @param onFinallyActions See {@link Exe#sync(Lock, Function, Supplier, boolean, Consumer[])}.
      */
     default <T, R> R sync(Function<T, R> action, Supplier<T> actionSupplier, Consumer<Throwable>... onFinallyActions) {
         return syncIf(action, actionSupplier, null, onFinallyActions);
@@ -88,49 +88,49 @@ import java.util.function.Supplier;
     default <T, R> R syncIf(Function<T, R> action, Supplier<T> actionSupplier, Predicate<T> syncCondition, Consumer<Throwable>... onFinallyActions) {
         final T input = actionSupplier.get();
         if (syncCondition == null || syncCondition.test(input))
-            return TasksSL.sync(getLock(), action, () -> input, isNullableLock(), onFinallyActions);
+            return Exe.sync(getLock(), action, () -> input, isNullableLock(), onFinallyActions);
         else
             return action.apply(input);
     }
     
     
     default void syncFX(Runnable action, Consumer<Throwable>... onFinallyActions) {
-        TasksSL.sync(getLock(), () -> ToolsFX.runFX(action, true), isNullableLock(), onFinallyActions);
+        Exe.sync(getLock(), () -> FX.runFX(action, true), isNullableLock(), onFinallyActions);
     }
     default void syncIfFX(Runnable action, Supplier<Boolean> syncCondition, Consumer<Throwable>... onFinallyActions) {
         if (syncCondition == null || syncCondition.get())
-            TasksSL.sync(getLock(), () -> ToolsFX.runFX(action, true), isNullableLock(), onFinallyActions);
+            Exe.sync(getLock(), () -> FX.runFX(action, true), isNullableLock(), onFinallyActions);
         else
-            ToolsFX.runFX(action, true);
+            FX.runFX(action, true);
     }
     
     default <R> R syncFX(Supplier<R> action, Consumer<Throwable>... onFinallyActions) {
-        return TasksSL.sync(getLock(), () -> ToolsFX.callFX(action::get), isNullableLock(), onFinallyActions);
+        return Exe.sync(getLock(), () -> FX.callFX(action::get), isNullableLock(), onFinallyActions);
     }
     default <R> R syncIfFX(Supplier<R> action, Supplier<Boolean> syncCondition, Consumer<Throwable>... onFinallyActions) {
         if (syncCondition == null || syncCondition.get())
-            return TasksSL.sync(getLock(), () -> ToolsFX.callFX(action::get), isNullableLock(), onFinallyActions);
+            return Exe.sync(getLock(), () -> FX.callFX(action::get), isNullableLock(), onFinallyActions);
         else
-            return ToolsFX.callFX(action::get);
+            return FX.callFX(action::get);
     }
     
     /**
-     * <p>Identical to <i>{@link #sync(Function, Supplier, Consumer[])}</i> except the specified {@link Function} is executed on the {@link ToolsFX#callFX(Callable) Java FX Thread}.</p>
+     * <p>Identical to <i>{@link #sync(Function, Supplier, Consumer[])}</i> except the specified {@link Function} is executed on the {@link FX#callFX(Callable) Java FX Thread}.</p>
      * <p><b>Details</b></p>
      * <ol>
-     *     <li>Only the specified {@link Function} operation is executed on the {@link ToolsFX#callFX(Callable) Java FX Thread}.</li>
+     *     <li>Only the specified {@link Function} operation is executed on the {@link FX#callFX(Callable) Java FX Thread}.</li>
      * </ol>
      */
     //TO-EXPAND
     default <T, R> R syncFX(Function<T, R> action, Supplier<T> actionSupplier, Consumer<Throwable>... onFinallyActions) {
-        return TasksSL.sync(getLock(), t -> ToolsFX.callFX(() -> action.apply(t)), actionSupplier, isNullableLock(), onFinallyActions);
+        return Exe.sync(getLock(), t -> FX.callFX(() -> action.apply(t)), actionSupplier, isNullableLock(), onFinallyActions);
     }
     default <T, R> R syncIfFX(Function<T, R> action, Supplier<T> actionSupplier, Predicate<T> syncCondition, Consumer<Throwable>... onFinallyActions) {
         final T input = actionSupplier.get();
         if (syncCondition == null || syncCondition.test(input))
-            return TasksSL.sync(getLock(), t -> ToolsFX.callFX(() -> action.apply(t)), () -> input, isNullableLock(), onFinallyActions);
+            return Exe.sync(getLock(), t -> FX.callFX(() -> action.apply(t)), () -> input, isNullableLock(), onFinallyActions);
         else
-            return ToolsFX.callFX(() -> action.apply(input));
+            return FX.callFX(() -> action.apply(input));
     }
     
     // Lock Methods

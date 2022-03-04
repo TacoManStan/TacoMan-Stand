@@ -1,6 +1,6 @@
 package com.taco.suit_lady._to_sort._new;
 
-import com.taco.suit_lady.util.tools.Exceptions;
+import com.taco.suit_lady.util.tools.Exc;
 import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -23,7 +23,7 @@ public class ReadOnlyObservableList<T>
     
     public ReadOnlyObservableList(@NotNull ObservableList<T> backingList)
     {
-        this.list = Exceptions.nullCheck(backingList, "Backing List");
+        this.list = Exc.nullCheck(backingList, "Backing List");
     }
     
     public final int getSize()
@@ -45,46 +45,46 @@ public class ReadOnlyObservableList<T>
     
     public final void addListener(ListChangeListener<? super T> listener)
     {
-        list.addListener(Exceptions.nullCheck(listener, "ListChangeListener"));
+        list.addListener(Exc.nullCheck(listener, "ListChangeListener"));
     }
     
     public final void removeListener(ListChangeListener<? super T> listener)
     {
-        list.removeListener(Exceptions.nullCheck(listener, "ListChangeListener"));
+        list.removeListener(Exc.nullCheck(listener, "ListChangeListener"));
     }
     
     @SafeVarargs
     public final void addListeners(ListChangeListener<? super T>... listeners)
     {
-        Arrays.stream(Exceptions.nullCheck(listeners, "ListChangeListener Array")).forEach(this::addListener);
+        Arrays.stream(Exc.nullCheck(listeners, "ListChangeListener Array")).forEach(this::addListener);
     }
     
     @SafeVarargs
     public final void removeListeners(ListChangeListener<? super T>... listeners)
     {
-        Arrays.stream(Exceptions.nullCheck(listeners, "ListChangeListener Array")).forEach(this::removeListener);
+        Arrays.stream(Exc.nullCheck(listeners, "ListChangeListener Array")).forEach(this::removeListener);
     }
     
     //
     
     public final void addListener(InvalidationListener listener)
     {
-        list.addListener(Exceptions.nullCheck(listener, "InvalidationListener"));
+        list.addListener(Exc.nullCheck(listener, "InvalidationListener"));
     }
     
     public final void removeListener(InvalidationListener listener)
     {
-        list.removeListener(Exceptions.nullCheck(listener, "InvalidationListener"));
+        list.removeListener(Exc.nullCheck(listener, "InvalidationListener"));
     }
     
     public final void addListeners(InvalidationListener... listeners)
     {
-        Arrays.stream(Exceptions.nullCheck(listeners, "InvalidationListener Array")).forEach(this::addListener);
+        Arrays.stream(Exc.nullCheck(listeners, "InvalidationListener Array")).forEach(this::addListener);
     }
     
     public final void removeListeners(InvalidationListener... listeners)
     {
-        Arrays.stream(Exceptions.nullCheck(listeners, "InvalidationListener Array")).forEach(this::removeListener);
+        Arrays.stream(Exc.nullCheck(listeners, "InvalidationListener Array")).forEach(this::removeListener);
     }
     
     //</editor-fold>

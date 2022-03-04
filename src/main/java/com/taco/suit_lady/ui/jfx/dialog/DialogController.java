@@ -1,6 +1,6 @@
 package com.taco.suit_lady.ui.jfx.dialog;
 
-import com.taco.suit_lady.util.tools.ArraysSL;
+import com.taco.suit_lady.util.tools.list_tools.A;
 import com.taco.suit_lady.util.tools.fx_tools.DialogsFX;
 import com.taco.suit_lady.ui.ui_internal.controllers.Controller;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -113,7 +113,7 @@ public abstract class DialogController<R>
 	 */
 	private ButtonType[] setButtonTypes(ButtonType... buttonTypes) {
 		if (buttonTypes != null && buttonTypes.length > 0)
-			if (!ArraysSL.containsNull(buttonTypes))
+			if (!A.containsNull(buttonTypes))
 				return buttonTypes;
 			else
 				throw new NullPointerException("No ButtonType can be null.");

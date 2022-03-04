@@ -2,7 +2,7 @@ package com.taco.tacository.json;
 
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.taco.suit_lady._to_sort._new.Debugger;
-import com.taco.suit_lady.util.tools.Exceptions;
+import com.taco.suit_lady.util.tools.Exc;
 
 import java.util.Arrays;
 import java.util.List;
@@ -104,10 +104,10 @@ public class TestData implements JObject, JLoadableObject {
         final List<List<String>> stringMatrix = JUtil.loadMatrix(parent, "var5", o -> (String) o);
         final int matrixWidth = stringMatrix.size();
         if (matrixWidth == 0)
-            throw Exceptions.ex("Matrix Width cannot be 0");
+            throw Exc.ex("Matrix Width cannot be 0");
         final int matrixHeight = stringMatrix.get(0).size();
         if (matrixHeight == 0)
-            throw Exceptions.ex("Matrix Height cannot be 0");
+            throw Exc.ex("Matrix Height cannot be 0");
         
         var5 = new String[matrixWidth][matrixHeight];
         for (int i = 0; i < matrixWidth; i++)

@@ -3,7 +3,7 @@ package com.taco.suit_lady.ui.ui_internal.controllers;
 import com.taco.suit_lady.util.timing.Timing;
 import com.taco.suit_lady.ui.console.ConsoleMessageable;
 import com.taco.suit_lady.ui.jfx.components.button.ImageButton;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import com.taco.suit_lady.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.ui.jfx.lists.treehandler.WrappingTreeCellData;
 import com.taco.tacository.quick.ConsoleBB;
@@ -115,7 +115,7 @@ public final class ConsoleElementController extends CellController<WrappingTreeC
     }
     
     private void addLabel(Label label) {
-        ToolsFX.runFX(() -> contentHBox.getChildren().add(label), true);
+        FX.runFX(() -> contentHBox.getChildren().add(label), true);
     }
     
     //</editor-fold>

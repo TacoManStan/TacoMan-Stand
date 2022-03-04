@@ -3,12 +3,10 @@ package com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasSurface;
 import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.PropertiesSL;
-import com.taco.suit_lady.util.tools.ResourcesSL;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
+import com.taco.suit_lady.util.tools.Props;
+import com.taco.suit_lady.util.tools.Stuff;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ObservableObjectValue;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,7 +26,7 @@ public abstract class ImagePaintCommandBase extends PaintCommand {
     
     public final ObjectProperty<Image> imageProperty() { return imageProperty; }
     public final Image getImage() { return imageProperty.get(); }
-    public final Image setImage(Image newValue) { return PropertiesSL.setProperty(imageProperty, newValue); }
+    public final Image setImage(Image newValue) { return Props.setProperty(imageProperty, newValue); }
     
     //</editor-fold>
     
@@ -42,7 +40,7 @@ public abstract class ImagePaintCommandBase extends PaintCommand {
     
     @Override public @NotNull ImagePaintCommandBase init() {
         imageProperty.addListener((observable, oldValue, newValue) -> repaintSurface());
-        imageProperty.set(ResourcesSL.getGameImage("map"));
+        imageProperty.set(Stuff.getGameImage("map"));
         
         return (ImagePaintCommandBase) super.init();
     }

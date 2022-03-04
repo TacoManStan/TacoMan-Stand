@@ -4,7 +4,7 @@ import com.github.cliftonlabs.json_simple.JsonException;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsoner;
 import com.mongodb.client.MongoClients;
-import com.taco.suit_lady.util.tools.Exceptions;
+import com.taco.suit_lady.util.tools.Exc;
 import org.bson.Document;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +29,7 @@ public final class JFiles {
             Jsoner.serialize(root.getJValue(), writer);
             writer.close();
         } catch (IOException e) {
-            throw Exceptions.ex(e);
+            throw Exc.ex(e);
         }
     }
     
@@ -63,7 +63,7 @@ public final class JFiles {
         try {
             return load(jLoadable, Files.newBufferedReader(Paths.get(pathPrefix + jLoadable.getJID() + ".json")));
         } catch (IOException e) {
-            throw Exceptions.ex(e);
+            throw Exc.ex(e);
         }
     }
     
@@ -78,7 +78,7 @@ public final class JFiles {
             jLoadable.load((JsonObject) Jsoner.deserialize(reader));
             return jLoadable;
         } catch (JsonException e) {
-            throw Exceptions.ex(e);
+            throw Exc.ex(e);
         }
     }
     
@@ -90,7 +90,7 @@ public final class JFiles {
         try {
             return java.nio.file.Files.readString(getPath(jID));
         } catch (IOException e) {
-            throw Exceptions.ex(e);
+            throw Exc.ex(e);
         }
     }
     
@@ -102,7 +102,7 @@ public final class JFiles {
             writer.close();
             return writer.toString();
         } catch (IOException e) {
-            throw Exceptions.ex(e);
+            throw Exc.ex(e);
         }
     }
     

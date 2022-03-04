@@ -1,9 +1,9 @@
 package com.taco.suit_lady.util.tools;
 
+import com.taco.suit_lady.util.tools.list_tools.A;
 import com.taco.tacository.obj_traits.common.Nameable;
 
 import java.awt.*;
-import java.lang.reflect.Array;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -14,8 +14,8 @@ import java.util.Locale;
 /**
  * Contains methods related to manipulating strings.
  */
-public class StringsSL {
-    private StringsSL() { } //No Instance
+public class Str {
+    private Str() { } //No Instance
     
     /**
      * A constant representing one thousand (1,000).
@@ -117,7 +117,7 @@ public class StringsSL {
     }
     
     private static boolean matches(int index, char[] chars1, char... chars2) {
-        final Character[] reverse = ArraysSL.getReverse(ArraysSL.toArray(chars2));
+        final Character[] reverse = A.getReverse(A.toArray(chars2));
         for (int i = 0; i < reverse.length; i++)
             if (chars1[index - i] != reverse[i])
                 return false;
@@ -166,9 +166,9 @@ public class StringsSL {
      */
     public static String classToString(Class aClass) {
         if (aClass != null) {
-            String simpleName = ToolsSL.getSimpleName(aClass);
+            String simpleName = TB.getSimpleName(aClass);
             ArrayList<Integer> indexes = new ArrayList<>();
-            ArrayList<Character> characters = new ArrayList<>(java.util.Arrays.asList(ArraysSL.toArray(simpleName.toCharArray())));
+            ArrayList<Character> characters = new ArrayList<>(java.util.Arrays.asList(A.toArray(simpleName.toCharArray())));
             if (characters.size() > 1) {
                 boolean succeeded = false;
                 while (!succeeded) {
@@ -180,7 +180,7 @@ public class StringsSL {
                         }
                     }
                 }
-                return String.valueOf(ArraysSL.toArray(characters.toArray(new Character[characters.size()])));
+                return String.valueOf(A.toArray(characters.toArray(new Character[characters.size()])));
             }
         }
         return null;
@@ -379,9 +379,9 @@ public class StringsSL {
      * @return The specified {@code host String} with the specified values replaced.
      */
     public static String replace(String host, String replaceWith, boolean useRegex, String... toReplaceValues) {
-        Exceptions.nullCheck(host, "Host string cannot be null.");
-        Exceptions.nullCheck(replaceWith, "To-Replace string cannot be null.");
-        Exceptions.nullCheck(toReplaceValues, "Replace with array cannot be null.");
+        Exc.nullCheck(host, "Host string cannot be null.");
+        Exc.nullCheck(replaceWith, "To-Replace string cannot be null.");
+        Exc.nullCheck(toReplaceValues, "Replace with array cannot be null.");
         for (String toReplace: toReplaceValues)
             if (toReplace != null)
                 if (useRegex)
@@ -444,7 +444,7 @@ public class StringsSL {
             throw new NullPointerException("Host String cannot be null.");
         ArrayList<Character> chars = new ArrayList<>();
         for (char c: host.toCharArray())
-            if (ArraysSL.contains(c, toKeeps))
+            if (A.contains(c, toKeeps))
                 chars.add(0, c);
         char[] charsArr = new char[chars.size()];
         for (int i = 0; i < chars.size(); i++)
@@ -546,7 +546,7 @@ public class StringsSL {
     public static String htmlList(boolean alwaysList, String... components) {
         String text = "";
         if (components != null) {
-            ArrayList<String> componentsList = new ArrayList<>(ArraysSL.removeNull(components));
+            ArrayList<String> componentsList = new ArrayList<>(A.removeNull(components));
             if (componentsList.size() > 1 || alwaysList) {
                 text += "<ol>";
                 for (String component: componentsList)
@@ -675,7 +675,7 @@ public class StringsSL {
     
     public static String replaceSeparator(String filePath) {
         String separator = "/";
-        return StringsSL.replace(filePath, separator, false, "/", "\\");
+        return Str.replace(filePath, separator, false, "/", "\\");
     }
     
     //
@@ -685,7 +685,7 @@ public class StringsSL {
      * <ul>
      *     <li>If the {@code object} param is null, null is returned.</li>
      *     <li>
-     *         If the {@code object} param is an {@link Array}, the class name of the array is returned.
+     *         If the {@code object} param is an {@link java.lang.reflect.Array}, the class name of the array is returned.
      *         <br>
      *         ( See {@link Collections#singletonList(Object)} )
      *     </li>
@@ -699,8 +699,8 @@ public class StringsSL {
     public static String toString(Object obj) {
         if (obj == null)
             return null;
-        else if (obj instanceof Array)
-            return Collections.singletonList((Array) obj).toString();
+        else if (obj instanceof java.lang.reflect.Array)
+            return Collections.singletonList((java.lang.reflect.Array) obj).toString();
         else if (obj instanceof Nameable)
             return ((Nameable) obj).getName();
         else

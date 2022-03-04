@@ -4,8 +4,8 @@ import com.taco.suit_lady._to_sort._new.ReadOnlyObservableList;
 import com.taco.suit_lady._to_sort._new.ReadOnlyObservableListWrapper;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.Exceptions;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
+import com.taco.suit_lady.util.tools.Exc;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -41,13 +41,13 @@ public class OverlayHandler
      * @param initialOverlays The vararg {@code array} of {@link OverlaySurface Overlays} to be added to this {@link OverlayHandler} upon its construction.
      */
     public OverlayHandler(@NotNull Springable springable, @Nullable ReentrantLock lock, @Nullable OverlaySurface... initialOverlays) {
-        this.springable = Exceptions.nullCheck(springable, "Springable Input");
+        this.springable = Exc.nullCheck(springable, "Springable Input");
         this.lock = lock;
         
         
         this.overlays = new ReadOnlyObservableListWrapper<>(initInitialOverlayList(initialOverlays));
         
-        this.root = ToolsFX.togglePickOnBounds(new StackPane(), false);
+        this.root = FX.togglePickOnBounds(new StackPane(), false);
         
         //
         
@@ -201,11 +201,11 @@ public class OverlayHandler
             if (overlaySurface != null)
                 return overlaySurface;
             
-            final OverlaySurface newSurface = Exceptions.nullCheck(factory.get(), "Factory Result");
+            final OverlaySurface newSurface = Exc.nullCheck(factory.get(), "Factory Result");
             if (!addOverlay(newSurface))
-                throw Exceptions.ex("Could not add Overlay — " + newSurface);
+                throw Exc.ex("Could not add Overlay — " + newSurface);
             else if (!newSurface.getName().equals(name))
-                throw Exceptions.unsupported("Specified name (" + name + ") does not match factory name (" + newSurface.getName() + ")");
+                throw Exc.unsupported("Specified name (" + name + ") does not match factory name (" + newSurface.getName() + ")");
             
             return newSurface;
         });
@@ -310,16 +310,16 @@ public class OverlayHandler
      * <ol>
      *     <li>{@link FXCollections#sort(ObservableList) Sorts} the {@link OverlaySurface Overlays} contained within this {@link OverlayHandler}.</li>
      *     <li>
-     *         <b>Executed via the {@link ToolsFX#runFX(Runnable, boolean) JavaFX Thread}</b>
+     *         <b>Executed via the {@link FX#runFX(Runnable, boolean) JavaFX Thread}</b>
      *         <ol>
      *             <li>Clears the {@link StackPane#getChildren() contents} of the {@link #root() Root Pane} for this {@link OverlayHandler}.</li>
      *             <li>
      *                 <b>For each {@link OverlaySurface} contained within this {@link OverlayHandler}</b>
      *                 <ol>
-     *                     <li>{@link ToolsFX#bindToParent(Region, Region, boolean) Binds} the {@link OverlaySurface} to the {@link #root() Root Pane} for this {@link OverlayHandler}.</li>
+     *                     <li>{@link FX#bindToParent(Region, Region, boolean) Binds} the {@link OverlaySurface} to the {@link #root() Root Pane} for this {@link OverlayHandler}.</li>
      *                 </ol>
      *             </li>
-     *             <li>{@link ToolsFX#togglePickOnBounds(Node, boolean) Toggles} {@link Pane#pickOnBoundsProperty() Pick on Bounds} for the {@link #root() Root Pane} to {@code false}.</li>
+     *             <li>{@link FX#togglePickOnBounds(Node, boolean) Toggles} {@link Pane#pickOnBoundsProperty() Pick on Bounds} for the {@link #root() Root Pane} to {@code false}.</li>
      *         </ol>
      *     </li>
      *     <li>Waits for completion.</li>
@@ -332,11 +332,11 @@ public class OverlayHandler
     private void refreshOverlays() {
         sync(() -> {
             FXCollections.sort(overlays);
-            ToolsFX.runFX(() -> {
+            FX.runFX(() -> {
                 root().getChildren().retainAll();
                 for (OverlaySurface overlay: overlays) {
-                    ToolsFX.bindToParent(overlay.getRoot(), root(), true);
-                    ToolsFX.togglePickOnBounds(overlay.getRoot(), false);
+                    FX.bindToParent(overlay.getRoot(), root(), true);
+                    FX.togglePickOnBounds(overlay.getRoot(), false);
                 }
             }, true);
         });

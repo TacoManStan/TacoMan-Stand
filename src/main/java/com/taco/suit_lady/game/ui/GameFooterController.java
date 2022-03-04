@@ -4,8 +4,8 @@ import com.taco.suit_lady.ui.FooterController;
 import com.taco.suit_lady.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.ui.jfx.components.button.ImageButton;
 import com.taco.suit_lady.ui.jfx.util.Dimensions;
-import com.taco.suit_lady.util.tools.ArraysSL;
-import com.taco.suit_lady.util.tools.printer.Printer;
+import com.taco.suit_lady.util.tools.list_tools.A;
+import com.taco.suit_lady.util.tools.printer.Print;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.layout.AnchorPane;
@@ -80,14 +80,14 @@ public class GameFooterController
                 "Selection Portrait Dummy Image",
                 "account_manager",
                 selectionPreviewImagePane,
-                () -> Printer.print("Selection Portrait Dummy Preview Pressed"),
+                () -> Print.print("Selection Portrait Dummy Preview Pressed"),
                 null,
                 false,
                 new Point2D(100, 200)
         ).init();
         
         this.commandCardButtonMatrix = new ImageButton[ccWidth()][ccHeight()];
-        ArraysSL.fillMatrix(dimensions -> {
+        A.fillMatrix(dimensions -> {
             final ImagePane imagePane = new ImagePane();
             commandCardGridPane.add(imagePane, dimensions.width().intValue(), dimensions.height().intValue());
             return new ImageButton(
@@ -95,7 +95,7 @@ public class GameFooterController
                     "Command Card Dummy Button [" + dimensions.width() + ", " + dimensions.height() + "]",
                     "home",
                     imagePane,
-                    () -> Printer.print("CC Button Pressed: " + dimensions),
+                    () -> Print.print("CC Button Pressed: " + dimensions),
                     null,
                     false,
                     null).init();
@@ -113,7 +113,7 @@ public class GameFooterController
     
     public final @NotNull ImageButton[][] getCommandCardButtonMatrix() { return commandCardButtonMatrix; }
     public final @Nullable ImageButton getCommandCardButtonAt(int x, int y) { return (x < ccWidth() && y < ccHeight() && x >= 0 && y >= 0) ? commandCardButtonMatrix[x][y] : null; }
-    public final @Nullable Dimensions getCommandCardButtonLocation(@Nullable ImageButton button) { return button != null ? ArraysSL.iterateMatrix((d, ip) -> ip.equals(button) ? d : null, commandCardButtonMatrix) : null; }
+    public final @Nullable Dimensions getCommandCardButtonLocation(@Nullable ImageButton button) { return button != null ? A.iterateMatrix((d, ip) -> ip.equals(button) ? d : null, commandCardButtonMatrix) : null; }
     
     //</editor-fold>
     

@@ -1,6 +1,7 @@
 package com.taco.suit_lady.util.tools;
 
 import com.taco.suit_lady.util.enums.DefaultableEnum;
+import com.taco.suit_lady.util.tools.list_tools.A;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,18 +29,18 @@ public final class Enums {
      * @return The default {@link Class#getEnumConstants() Enum Constant} for the {@link Enum} defined by the specified {@link Class}.
      */
     public static <E extends Enum<E>> @NotNull E get(@NotNull Class<E> clazz) {
-        final String name = "[" + Exceptions.nullCheck(clazz, "Enum Class Input").getSimpleName() + "]";
+        final String name = "[" + Exc.nullCheck(clazz, "Enum Class Input").getSimpleName() + "]";
         if (!clazz.isEnum())
-            throw Exceptions.typeMismatch("Class must be an enum: " + name);
+            throw Exc.typeMismatch("Class must be an enum: " + name);
         else {
             final E[] values = clazz.getEnumConstants();
-            if (ArraysSL.isEmpty(Exceptions.nullCheck(values, "Enum Values " + name)))
-                throw Exceptions.unsupported("Enum [" + clazz.getSimpleName() + "] does not have any values.");
+            if (A.isEmpty(Exc.nullCheck(values, "Enum Values " + name)))
+                throw Exc.unsupported("Enum [" + clazz.getSimpleName() + "] does not have any values.");
             else {
                 if (DefaultableEnum.class.isAssignableFrom(clazz))
-                    return Exceptions.nullCheck(((DefaultableEnum<E>) values[0]).defaultValue(), "DefaultableEnum Value: " + name);
+                    return Exc.nullCheck(((DefaultableEnum<E>) values[0]).defaultValue(), "DefaultableEnum Value: " + name);
                 else
-                    return Exceptions.nullCheck(values[0], "Enum & Index 0: " + name);
+                    return Exc.nullCheck(values[0], "Enum & Index 0: " + name);
             }
         }
     }
@@ -76,7 +77,7 @@ public final class Enums {
      * @return An array containing all of the enums that are part of the specified enum.
      */
     public static <T extends Enum> T[] list(Enum e) {
-        Exceptions.nullCheck(e, "Enum");
+        Exc.nullCheck(e, "Enum");
         
         Enum[] declaring;
         declaring = e.getClass().getEnumConstants();
@@ -93,7 +94,7 @@ public final class Enums {
      * @return An array containing all of the enums that are part of the specified enum {@link Class}.
      */
     public static <T extends Enum> T[] list(Class<T> enumClass) {
-        return Exceptions.nullCheck(enumClass, "Enum Class").getEnumConstants();
+        return Exc.nullCheck(enumClass, "Enum Class").getEnumConstants();
     }
     
     //
@@ -110,15 +111,15 @@ public final class Enums {
      * @return The {@link Enum} that equals the specified enum name.
      */
     public static <T extends Enum> T valueOf(String enumName, T t) {
-        Exceptions.nullCheck(enumName, "Enum Name");
-        Exceptions.nullCheck(t, "Enum");
+        Exc.nullCheck(enumName, "Enum Name");
+        Exc.nullCheck(t, "Enum");
         
         Enum[] enums = list(t);
         for (Enum e: enums)
             if (e == null)
-                throw Exceptions.ex("e is null for enum: " + t.name());
-            else if (!ToolsSL.instanceOf(t, e.getClass()))
-                throw Exceptions.ex("e is not instance of T for enum: " + t.name());
+                throw Exc.ex("e is null for enum: " + t.name());
+            else if (!TB.instanceOf(t, e.getClass()))
+                throw Exc.ex("e is not instance of T for enum: " + t.name());
             else if (e.name().equals(enumName))
                 return (T) e;
         return null;
@@ -136,13 +137,13 @@ public final class Enums {
      * @return The {@link Enum} that equals the specified enum name.
      */
     public static <T extends Enum> T valueOf(String enumName, Class<T> enumClass) {
-        Exceptions.nullCheck(enumName, "Enum Name");
-        Exceptions.nullCheck(enumClass, "Enum Class");
+        Exc.nullCheck(enumName, "Enum Name");
+        Exc.nullCheck(enumClass, "Enum Class");
         
         T[] enums = list(enumClass);
         for (T e: enums)
             if (e == null)
-                throw Exceptions.ex("e is null for enum: " + ToolsSL.getSimpleName(enumClass));
+                throw Exc.ex("e is null for enum: " + TB.getSimpleName(enumClass));
             else if (e.name().equals(enumName))
                 return e;
         return null;
@@ -159,7 +160,7 @@ public final class Enums {
      * @return The first {@code enum value} for the specified {@code enum class}.
      */
     public static <T extends Enum> T first(Class<T> enumClass) {
-        return ArraysSL.getFirstNonNullElement(list(Exceptions.nullCheck(enumClass, "Enum Class")));
+        return A.getFirstNonNullElement(list(Exc.nullCheck(enumClass, "Enum Class")));
     }
     
     /**
@@ -171,7 +172,7 @@ public final class Enums {
      * @return The first {@code enum value} for the specified {@code enum}.
      */
     public static <T extends Enum> T first(T e) {
-        return ArraysSL.getFirstNonNullElement(list(Exceptions.nullCheck(e, "Enum")));
+        return A.getFirstNonNullElement(list(Exc.nullCheck(e, "Enum")));
     }
     
     //
@@ -189,13 +190,13 @@ public final class Enums {
      * @see #fullName(Enum)
      */
     public static String name(Enum anEnum) {
-        return Exceptions.nullCheck(anEnum, "Enum").name();
+        return Exc.nullCheck(anEnum, "Enum").name();
     }
     
     /**
      * Returns the name of the specified enum (<i>not</i> the enum's value name).
      * <p>
-     * Equivalent to '{@link ToolsSL#getSimpleName(Object) GeneralTools.getSimpleName(anEnum)}'.
+     * Equivalent to '{@link TB#getSimpleName(Object) GeneralTools.getSimpleName(anEnum)}'.
      *
      * @param anEnum The {@link Enum}.
      *
@@ -205,7 +206,7 @@ public final class Enums {
      * @see #fullName(Enum)
      */
     public static String enumName(Enum anEnum) {
-        return ToolsSL.getSimpleName(Exceptions.nullCheck(anEnum, "Enum"));
+        return TB.getSimpleName(Exc.nullCheck(anEnum, "Enum"));
     }
     
     /**
@@ -221,7 +222,7 @@ public final class Enums {
      * @see #name(Enum)
      */
     public static String fullName(Enum anEnum) {
-        Exceptions.nullCheck(anEnum, "Enum");
+        Exc.nullCheck(anEnum, "Enum");
         return enumName(anEnum) + "." + name(anEnum);
     }
     

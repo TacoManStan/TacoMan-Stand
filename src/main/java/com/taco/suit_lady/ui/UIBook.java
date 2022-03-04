@@ -4,7 +4,7 @@ import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
-import com.taco.suit_lady.util.tools.ResourcesSL;
+import com.taco.suit_lady.util.tools.Stuff;
 import com.taco.suit_lady.ui.jfx.components.button.ButtonViewable;
 import com.taco.suit_lady.ui.jfx.components.button.ImageButton;
 import com.taco.suit_lady.ui.pages.fallback_page.FallbackPage;
@@ -62,7 +62,7 @@ public class UIBook
      *                          <ul>
      *                              <li>See <i>{@link #nameProperty()}</i></li>
      *                          </ul>
-     * @param buttonID          The {@link #getButtonID() ID} mapped to the {@link ResourcesSL#getImage(String, String, String) cached} {@link Image image} to be used as the {@link #buttonViewProperty() button} for this {@link UIBook}.
+     * @param buttonID          The {@link #getButtonID() ID} mapped to the {@link Stuff#getImage(String, String, String) cached} {@link Image image} to be used as the {@link #buttonViewProperty() button} for this {@link UIBook}.
      *                          <p>
      * @param coverPageFunction The {@link Function} that will retrieve the {@link UIPage} to be used as the {@link UIPageHandler#coverPageProperty() cover page} of this {@link UIBook}.
      *                          <ul>

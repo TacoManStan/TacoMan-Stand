@@ -3,12 +3,11 @@ package com.taco.suit_lady.game.commands;
 import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.game.ui.GameViewContent;
-import com.taco.suit_lady.logic.LogiCore;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
-import com.taco.suit_lady.util.tools.BindingsSL;
-import com.taco.suit_lady.util.tools.PropertiesSL;
+import com.taco.suit_lady.util.tools.Bind;
+import com.taco.suit_lady.util.tools.Props;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
@@ -38,7 +37,7 @@ public class MoveBehavior
         this.owner = owner;
         
         this.speedProperty = new SimpleDoubleProperty(initialSpeed);
-        this.speedPerTickBinding = BindingsSL.doubleBinding(() -> (getSpeed() / 60) * getGameMap().getTileSize(), speedProperty, gameMapProperty());
+        this.speedPerTickBinding = Bind.doubleBinding(() -> (getSpeed() / 60) * getGameMap().getTileSize(), speedProperty, gameMapProperty());
         
         this.xDirectionProperty = new SimpleIntegerProperty();
         this.yDirectionProperty = new SimpleIntegerProperty();
@@ -48,7 +47,7 @@ public class MoveBehavior
     
     public final DoubleProperty speedProperty() { return speedProperty; }
     public final double getSpeed() { return speedProperty.get(); }
-    public final double setSpeed(double newValue) { return PropertiesSL.setProperty(speedProperty, newValue); }
+    public final double setSpeed(double newValue) { return Props.setProperty(speedProperty, newValue); }
     
     public final DoubleBinding speedPerTickBinding() { return speedPerTickBinding; }
     public final double getSpeedPerTick() { return speedPerTickBinding.get(); }
@@ -56,11 +55,11 @@ public class MoveBehavior
     
     public final IntegerProperty xDirectionProperty() { return xDirectionProperty; }
     public final int getDirectionX() { return xDirectionProperty.get(); }
-    public final int setDirectionX(int newValue) { return PropertiesSL.setProperty(xDirectionProperty, newValue); }
+    public final int setDirectionX(int newValue) { return Props.setProperty(xDirectionProperty, newValue); }
     
     public final IntegerProperty yDirectionProperty() { return yDirectionProperty; }
     public final int getDirectionY() { return yDirectionProperty.get(); }
-    public final int setDirectionY(int newValue) { return PropertiesSL.setProperty(yDirectionProperty, newValue); }
+    public final int setDirectionY(int newValue) { return Props.setProperty(yDirectionProperty, newValue); }
     
     //</editor-fold>
     

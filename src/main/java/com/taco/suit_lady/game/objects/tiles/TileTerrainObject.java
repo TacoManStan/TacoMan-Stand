@@ -7,10 +7,9 @@ import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
-import com.taco.suit_lady.util.tools.BindingsSL;
-import com.taco.suit_lady.util.tools.PropertiesSL;
-import com.taco.suit_lady.util.tools.ResourcesSL;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
+import com.taco.suit_lady.util.tools.Bind;
+import com.taco.suit_lady.util.tools.Props;
+import com.taco.suit_lady.util.tools.Stuff;
 import com.taco.tacository.json.*;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.binding.StringBinding;
@@ -39,8 +38,8 @@ public class TileTerrainObject
         this.idProperty = new SimpleObjectProperty<>(TileTerrainObjectID.defaultInstance());
         this.orientationIdProperty = new SimpleObjectProperty<>(TileTerrainObjectOrientationID.defaultInstance());
         
-        this.aggregateTextureIdBinding = BindingsSL.stringBinding(() -> getId().value() + getOrientationId().value(), idProperty, orientationIdProperty);
-        this.imageBinding = BindingsSL.objBinding(() -> ResourcesSL.getGameImage("tiles/", getAggregateTextureId()), aggregateTextureIdBinding);
+        this.aggregateTextureIdBinding = Bind.stringBinding(() -> getId().value() + getOrientationId().value(), idProperty, orientationIdProperty);
+        this.imageBinding = Bind.objBinding(() -> Stuff.getGameImage("tiles/", getAggregateTextureId()), aggregateTextureIdBinding);
         
         //
         
@@ -54,11 +53,11 @@ public class TileTerrainObject
     
     public final @NotNull ObjectProperty<TileTerrainObjectID> idProperty() { return idProperty; }
     public final @NotNull TileTerrainObjectID getId() { return idProperty.get(); }
-    public final @NotNull TileTerrainObjectID setId(@NotNull TileTerrainObjectID newValue) { return PropertiesSL.setProperty(idProperty, newValue); }
+    public final @NotNull TileTerrainObjectID setId(@NotNull TileTerrainObjectID newValue) { return Props.setProperty(idProperty, newValue); }
     
     public final @NotNull ObjectProperty<TileTerrainObjectOrientationID> orientationIdProperty() { return orientationIdProperty; }
     public final @NotNull TileTerrainObjectOrientationID getOrientationId() { return orientationIdProperty.get(); }
-    public final @NotNull TileTerrainObjectOrientationID setOrientationId(@NotNull TileTerrainObjectOrientationID newValue) { return PropertiesSL.setProperty(orientationIdProperty, newValue); }
+    public final @NotNull TileTerrainObjectOrientationID setOrientationId(@NotNull TileTerrainObjectOrientationID newValue) { return Props.setProperty(orientationIdProperty, newValue); }
     
     
     public final @NotNull StringBinding aggregateTextureIdBinding() { return aggregateTextureIdBinding; }

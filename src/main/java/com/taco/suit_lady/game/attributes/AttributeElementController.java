@@ -1,8 +1,8 @@
 package com.taco.suit_lady.game.attributes;
 
 import com.taco.suit_lady.ui.ui_internal.controllers.CellController;
-import com.taco.suit_lady.util.tools.BindingsSL;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
+import com.taco.suit_lady.util.tools.Bind;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.fxml.FXML;
@@ -39,11 +39,11 @@ public class AttributeElementController extends CellController<Attribute<?>> {
     @Override public void initialize() {
         super.initialize();
         
-        valuePaneProperty.addListener((observable, oldValue, newValue) -> ToolsFX.requireFX(() -> {
+        valuePaneProperty.addListener((observable, oldValue, newValue) -> FX.requireFX(() -> {
             if (oldValue != null)
                 valueAnchorPane.getChildren().remove(oldValue);
             if (newValue != null) {
-                ToolsFX.setAnchors(newValue);
+                FX.setAnchors(newValue);
                 valueAnchorPane.getChildren().add(newValue);
             }
         }));
@@ -72,7 +72,7 @@ public class AttributeElementController extends CellController<Attribute<?>> {
         }
         
         if (newCellContents != null) {
-            attributeNameLabel.textProperty().bind(BindingsSL.stringBinding(() -> newCellContents.getId() + ": ", newCellContents.readOnlyIdProperty()));
+            attributeNameLabel.textProperty().bind(Bind.stringBinding(() -> newCellContents.getId() + ": ", newCellContents.readOnlyIdProperty()));
             valuePaneProperty.set(newCellContents.getModel().refreshBindings());
         }
     }

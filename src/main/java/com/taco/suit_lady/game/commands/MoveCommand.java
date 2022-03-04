@@ -6,11 +6,10 @@ import com.taco.suit_lady.game.objects.CollisionMap;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.logic.GameTask;
 import com.taco.suit_lady.logic.triggers.implementations.UnitArrivedEvent;
-import com.taco.suit_lady.util.tools.BindingsSL;
-import com.taco.suit_lady.util.tools.Exceptions;
-import com.taco.suit_lady.util.tools.Objs;
-import com.taco.suit_lady.util.tools.printer.Printer;
-import com.taco.suit_lady.util.tools.PropertiesSL;
+import com.taco.suit_lady.util.tools.Bind;
+import com.taco.suit_lady.util.tools.Obj;
+import com.taco.suit_lady.util.tools.printer.Print;
+import com.taco.suit_lady.util.tools.Props;
 import com.taco.suit_lady.util.values.NumberValuePair;
 import com.taco.suit_lady.util.values.ValuePair;
 import javafx.beans.binding.ObjectBinding;
@@ -58,7 +57,7 @@ public class MoveCommand
         
         this.xTargetProperty = new SimpleDoubleProperty(owner.getLocationX(false));
         this.yTargetProperty = new SimpleDoubleProperty(owner.getLocationY(false));
-        this.targetBinding = BindingsSL.objBinding(() -> new NumberValuePair(getTargetX(), getTargetY()), xTargetProperty, yTargetProperty);
+        this.targetBinding = Bind.objBinding(() -> new NumberValuePair(getTargetX(), getTargetY()), xTargetProperty, yTargetProperty);
         
         this.observableTargetXProperty = new ReadOnlyObjectWrapper<>();
         this.observableTargetYProperty = new ReadOnlyObjectWrapper<>();
@@ -70,9 +69,9 @@ public class MoveCommand
         
         this.targetBinding.addListener((observable, oldValue, newValue) -> {
             if (isDebugEnabled()) {
-                Printer.print("Movement Target Updated  [ " + oldValue + "  -->  " + newValue + " ]", false);
-                Printer.print("Owner Location: " + getOwner().getLocation(false), false);
-                Printer.print("Owner Location Centered: " + getOwner().getLocation(true), false);
+                Print.print("Movement Target Updated  [ " + oldValue + "  -->  " + newValue + " ]", false);
+                Print.print("Owner Location: " + getOwner().getLocation(false), false);
+                Print.print("Owner Location Centered: " + getOwner().getLocation(true), false);
             }
         });
         
@@ -109,11 +108,11 @@ public class MoveCommand
     
     //    public final @NotNull DoubleProperty xTargetProperty() { return xTargetProperty; }
     public final double getTargetX() { return xTargetProperty.get(); }
-    public final double setTargetX(@NotNull Number newValue) { return PropertiesSL.setProperty(xTargetProperty, newValue); }
+    public final double setTargetX(@NotNull Number newValue) { return Props.setProperty(xTargetProperty, newValue); }
     
     //    public final @NotNull DoubleProperty yTargetProperty() { return yTargetProperty; }
     public final double getTargetY() { return yTargetProperty.get(); }
-    public final double setTargetY(@NotNull Number newValue) { return PropertiesSL.setProperty(yTargetProperty, newValue); }
+    public final double setTargetY(@NotNull Number newValue) { return Props.setProperty(yTargetProperty, newValue); }
     
     @Contract(" -> new") public final @NotNull Point2D getTarget() { return new Point2D(getTargetX(), getTargetY()); }
     public final @NotNull Point2D setTarget(@Nullable Point2D newValue) { return sync(() -> new Point2D(setTargetX(newValue.getX()), setTargetY(newValue.getY()))); }
@@ -124,13 +123,13 @@ public class MoveCommand
     public final @NotNull ReadOnlyObjectProperty<ObservableValue<? extends Number>> readOnlyObservableTargetXProperty() { return observableTargetXProperty.getReadOnlyProperty(); }
     public final @Nullable ObservableValue<? extends Number> getObservableTargetX() { return observableTargetXProperty.get(); }
     public final double getObservableTargetValueX() {
-        return Objs.getIfNonNull(this::getObservableTargetX, obs -> obs.getValue().doubleValue(), obs -> 0D);
+        return Obj.getIfNonNull(this::getObservableTargetX, obs -> obs.getValue().doubleValue(), obs -> 0D);
     }
     private @Nullable ObservableValue<? extends Number> setObservableTargetX(@Nullable ObservableValue<? extends Number> newValue) {
         return sync(() -> {
             final ObservableValue<? extends Number> oldValue = getObservableTargetX();
             if (!Objects.equals(newValue, oldValue))
-                PropertiesSL.setProperty(observableTargetXProperty, newValue);
+                Props.setProperty(observableTargetXProperty, newValue);
             return oldValue;
         });
     }
@@ -140,13 +139,13 @@ public class MoveCommand
     public final @NotNull ReadOnlyObjectProperty<ObservableValue<? extends Number>> readOnlyObservableTargetYProperty() { return observableTargetYProperty.getReadOnlyProperty(); }
     public final @Nullable ObservableValue<? extends Number> getObservableTargetY() { return observableTargetYProperty.get(); }
     public final double getObservableTargetValueY() {
-        return Objs.getIfNonNull(this::getObservableTargetY, obs -> obs.getValue().doubleValue(), obs -> 0D);
+        return Obj.getIfNonNull(this::getObservableTargetY, obs -> obs.getValue().doubleValue(), obs -> 0D);
     }
     private @Nullable ObservableValue<? extends Number> setObservableTargetY(@Nullable ObservableValue<? extends Number> newValue) {
         return sync(() -> {
             final ObservableValue<? extends Number> oldValue = getObservableTargetY();
             if (!Objects.equals(newValue, oldValue))
-                PropertiesSL.setProperty(observableTargetYProperty, newValue);
+                Props.setProperty(observableTargetYProperty, newValue);
             return oldValue;
         });
     }
@@ -165,13 +164,13 @@ public class MoveCommand
     
     public final @NotNull BooleanProperty pausedProperty() { return pausedProperty; }
     public final boolean isPaused() { return pausedProperty.get(); }
-    public final boolean setPaused(boolean newValue) { return PropertiesSL.setProperty(pausedProperty, newValue); }
+    public final boolean setPaused(boolean newValue) { return Props.setProperty(pausedProperty, newValue); }
     
     //
     
     public final BooleanProperty debugEnabledProperty() { return debugEnabledProperty; }
     public final boolean isDebugEnabled() { return debugEnabledProperty.get(); }
-    public final boolean setDebugEnabled(boolean newValue) { return PropertiesSL.setProperty(debugEnabledProperty, newValue); }
+    public final boolean setDebugEnabled(boolean newValue) { return Props.setProperty(debugEnabledProperty, newValue); }
     
     //<editor-fold desc="> Move Methods">
     
@@ -196,7 +195,7 @@ public class MoveCommand
     public final @NotNull Point2D moveAndBind(@NotNull ObservableValue<? extends Number> observableTargetX, @NotNull ObservableValue<? extends Number> observableTargetY) {
         return sync(() -> {
             if (isDebugEnabled())
-                Printer.err("Move and Bind:  [" + observableTargetX.getValue() + ", " + observableTargetY.getValue() + "]", false);
+                Print.err("Move and Bind:  [" + observableTargetX.getValue() + ", " + observableTargetY.getValue() + "]", false);
             
             final Point2D oldValue = getTarget();
             
@@ -206,7 +205,7 @@ public class MoveCommand
             setPaused(false);
             
             if (isDebugEnabled())
-                Printer.err("Move and Bind 2b:  [" + observableTargetX.getValue() + ", " + observableTargetY.getValue() + "]", false);
+                Print.err("Move and Bind 2b:  [" + observableTargetX.getValue() + ", " + observableTargetY.getValue() + "]", false);
             
             return oldValue;
         });

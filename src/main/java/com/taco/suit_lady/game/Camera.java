@@ -7,10 +7,10 @@ import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.springable.StrictSpringable;
-import com.taco.suit_lady.util.tools.BindingsSL;
-import com.taco.suit_lady.util.tools.Exceptions;
-import com.taco.suit_lady.util.tools.printer.Printer;
-import com.taco.suit_lady.util.tools.PropertiesSL;
+import com.taco.suit_lady.util.tools.Bind;
+import com.taco.suit_lady.util.tools.Exc;
+import com.taco.suit_lady.util.tools.printer.Print;
+import com.taco.suit_lady.util.tools.Props;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.ObjectBinding;
@@ -89,7 +89,7 @@ public class Camera
         //
         
         this.content = content;
-        this.mapBinding = BindingsSL.directObjBinding(content.gameMapProperty());
+        this.mapBinding = Bind.directObjBinding(content.gameMapProperty());
         
         //
         
@@ -100,10 +100,10 @@ public class Camera
         this.yOffsetProperty = new SimpleIntegerProperty(0);
         
         
-        this.locationBinding = BindingsSL.objBinding(() -> new Point2D(getLocationX(), getLocationY()), xLocationProperty, yLocationProperty);
-        this.offsetsBinding = BindingsSL.objBinding(() -> new Point2D(getOffsetX(), getOffsetY()), xOffsetProperty, yOffsetProperty);
+        this.locationBinding = Bind.objBinding(() -> new Point2D(getLocationX(), getLocationY()), xLocationProperty, yLocationProperty);
+        this.offsetsBinding = Bind.objBinding(() -> new Point2D(getOffsetX(), getOffsetY()), xOffsetProperty, yOffsetProperty);
         
-        this.tileLocationBinding = BindingsSL.objBinding(
+        this.tileLocationBinding = Bind.objBinding(
                 () -> new Point2D(getLocationX() * getGameMap().getTileSize(), getLocationY() * getGameMap().getTileSize()),
                 xLocationProperty, yLocationProperty);
     }
@@ -116,22 +116,22 @@ public class Camera
     }
     
     private void initBindings() {
-        this.viewportWidthBinding = BindingsSL.directIntBinding(getGame().getController().getMapPane().widthProperty());
-        this.viewportHeightBinding = BindingsSL.directIntBinding(getGame().getController().getMapPane().heightProperty());
+        this.viewportWidthBinding = Bind.directIntBinding(getGame().getController().getMapPane().widthProperty());
+        this.viewportHeightBinding = Bind.directIntBinding(getGame().getController().getMapPane().heightProperty());
         
-        this.xAggregateBinding = BindingsSL.intBinding(() -> getLocationX() + getOffsetX(), xLocationProperty(), xOffsetProperty());
-        this.yAggregateBinding = BindingsSL.intBinding(() -> getLocationY() + getOffsetY(), yLocationProperty(), yOffsetProperty());
+        this.xAggregateBinding = Bind.intBinding(() -> getLocationX() + getOffsetX(), xLocationProperty(), xOffsetProperty());
+        this.yAggregateBinding = Bind.intBinding(() -> getLocationY() + getOffsetY(), yLocationProperty(), yOffsetProperty());
         
         //
         
-        this.mapImageBinding = BindingsSL.directObjBinding(getGameMap().getModel().mapImageProperty());
+        this.mapImageBinding = Bind.directObjBinding(getGameMap().getModel().mapImageProperty());
         
-        this.mapImageWidthBinding = BindingsSL.recursiveIntBinding(lock, image -> image.widthProperty(), mapImageBinding);
-        this.mapImageHeightBinding = BindingsSL.recursiveIntBinding(lock, image -> image.heightProperty(), mapImageBinding);
+        this.mapImageWidthBinding = Bind.recursiveIntBinding(lock, image -> image.widthProperty(), mapImageBinding);
+        this.mapImageHeightBinding = Bind.recursiveIntBinding(lock, image -> image.heightProperty(), mapImageBinding);
         
         
-        this.xMultiplierBinding = BindingsSL.doubleBinding(() -> ((double) getMapImageWidth() / (double) getMapWidth()), mapImageWidthBinding);
-        this.yMultiplierBinding = BindingsSL.doubleBinding(() -> ((double) getMapImageHeight() / (double) getMapHeight()), mapImageHeightBinding);
+        this.xMultiplierBinding = Bind.doubleBinding(() -> ((double) getMapImageWidth() / (double) getMapWidth()), mapImageWidthBinding);
+        this.yMultiplierBinding = Bind.doubleBinding(() -> ((double) getMapImageHeight() / (double) getMapHeight()), mapImageHeightBinding);
     }
     
     //</editor-fold>
@@ -151,11 +151,11 @@ public class Camera
     public final IntegerProperty xLocationProperty() { return xLocationProperty; }
     public final int getLocationX() { return xLocationProperty.get(); }
     public final int setLocationX(int newValue) {
-        Printer.print("Changing Camera Location X: " + newValue);
+        Print.print("Changing Camera Location X: " + newValue);
         if (!isViewBound())
-            return PropertiesSL.setProperty(xLocationProperty, newValue);
+            return Props.setProperty(xLocationProperty, newValue);
         
-        Printer.err("Cannot change Camera location: View is bound.");
+        Print.err("Cannot change Camera location: View is bound.");
         return getLocationX();
     }
     
@@ -171,9 +171,9 @@ public class Camera
     public final int getLocationY() { return yLocationProperty.get(); }
     public final int setLocationY(int newValue) {
         if (!isViewBound())
-            return PropertiesSL.setProperty(yLocationProperty, newValue);
+            return Props.setProperty(yLocationProperty, newValue);
         
-        Printer.err("Cannot change Camera location: View is bound.");
+        Print.err("Cannot change Camera location: View is bound.");
         return getLocationY();
     }
     
@@ -189,7 +189,7 @@ public class Camera
      */
     public final IntegerProperty xOffsetProperty() { return xOffsetProperty; }
     public final int getOffsetX() { return xOffsetProperty.get(); }
-    public final int setOffsetX(int newValue) { return PropertiesSL.setProperty(xOffsetProperty, newValue); }
+    public final int setOffsetX(int newValue) { return Props.setProperty(xOffsetProperty, newValue); }
     
     /**
      * <p>Represents the number of units (pixels, not tiles) this camera's view is shifted on the {@code x} plane.</p>
@@ -201,7 +201,7 @@ public class Camera
      */
     public final IntegerProperty yOffsetProperty() { return yOffsetProperty; }
     public final int getOffsetY() { return yOffsetProperty.get(); }
-    public final int setOffsetY(int newValue) { return PropertiesSL.setProperty(yOffsetProperty, newValue); }
+    public final int setOffsetY(int newValue) { return Props.setProperty(yOffsetProperty, newValue); }
     
     //
     
@@ -314,7 +314,7 @@ public class Camera
     
     private void validateLocationBindings() {
         if (xLocationProperty.isBound() != yLocationProperty.isBound())
-            throw Exceptions.ex("ERROR: X and Y Camera Location Property Binding Statuses Do Not Match  [X: " + xLocationProperty.isBound() + "  Y: " + yLocationProperty.isBound() + "]");
+            throw Exc.ex("ERROR: X and Y Camera Location Property Binding Statuses Do Not Match  [X: " + xLocationProperty.isBound() + "  Y: " + yLocationProperty.isBound() + "]");
     }
     
     //</editor-fold>

@@ -5,7 +5,7 @@ import com.taco.suit_lady.game.objects.tiles.GameTile;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
-import com.taco.suit_lady.util.tools.PropertiesSL;
+import com.taco.suit_lady.util.tools.Props;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +36,7 @@ public class GameUIData
     protected final ReadOnlyObjectWrapper<GameTile> selectedTileProperty() { return selectedTileProperty; }
     public final ReadOnlyObjectProperty<GameTile> readOnlySelectedTileProperty() { return selectedTileProperty.getReadOnlyProperty(); }
     public final GameTile getSelectedTile() { return selectedTileProperty.get(); }
-    protected final GameTile setSelectedTile(GameTile newValue) { return PropertiesSL.setProperty(selectedTileProperty, newValue); }
+    protected final GameTile setSelectedTile(GameTile newValue) { return Props.setProperty(selectedTileProperty, newValue); }
     
     //</editor-fold>
     

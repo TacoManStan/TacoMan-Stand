@@ -1,15 +1,11 @@
 package com.taco.suit_lady.util.tools.printer;
 
-import com.taco.suit_lady.util.Lockable;
-import com.taco.suit_lady.util.tools.PropertiesSL;
+import com.taco.suit_lady.util.tools.Props;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.concurrent.locks.Lock;
 
 public class PrintData {
     
@@ -28,15 +24,15 @@ public class PrintData {
     
     public final StringProperty titleProperty() { return titleProperty; }
     public final String getTitle() { return titleProperty.get(); }
-    public final String setTitle(@Nullable String newValue) { return PropertiesSL.setProperty(titleProperty, newValue); }
+    public final String setTitle(@Nullable String newValue) { return Props.setProperty(titleProperty, newValue); }
     
     public final BooleanProperty enabledProperty() { return enabledProperty; }
     public final boolean isEnabled() { return enabledProperty.get(); }
-    public final boolean setEnabled(boolean newValue) { return PropertiesSL.setProperty(enabledProperty, newValue); }
+    public final boolean setEnabled(boolean newValue) { return Props.setProperty(enabledProperty, newValue); }
     
     public final BooleanProperty printPrefixProperty() { return printPrefixProperty; }
     public final boolean isPrintPrefix() { return printPrefixProperty.get(); }
-    public final boolean setPrintPrefix(boolean newValue) { return PropertiesSL.setProperty(printPrefixProperty, newValue); }
+    public final boolean setPrintPrefix(boolean newValue) { return Props.setProperty(printPrefixProperty, newValue); }
     
     //</editor-fold>
     
@@ -47,7 +43,7 @@ public class PrintData {
     
     private void print(@Nullable Object msg, boolean err) {
         if (isEnabled())
-            Printer.print(msg, getTitle(), isPrintPrefix(), err);
+            Print.print(msg, getTitle(), isPrintPrefix(), err);
     }
     
     //</editor-fold>

@@ -4,8 +4,8 @@ import com.taco.suit_lady.game.ui.GFXObject;
 import com.taco.suit_lady.logic.TaskManager;
 import com.taco.suit_lady.logic.triggers.Galaxy;
 import com.taco.suit_lady.ui.ui_internal.controllers.Controller;
-import com.taco.suit_lady.util.tools.Exceptions;
-import com.taco.suit_lady.util.tools.TasksSL;
+import com.taco.suit_lady.util.tools.Exc;
+import com.taco.suit_lady.util.tools.Exe;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -51,7 +51,7 @@ public abstract class ContentController<T extends Content<T, TD, TC, F, FC>, TD 
     
     public TC init(@NotNull T content) {
         if (this.content != null)
-            throw Exceptions.unsupported("Content has already been set (" + getContent() + ")");
+            throw Exc.unsupported("Content has already been set (" + getContent() + ")");
         this.content = content;
         
         this.taskManager = new TaskManager<>((TC) this).init();
@@ -115,7 +115,7 @@ public abstract class ContentController<T extends Content<T, TD, TC, F, FC>, TD 
     
     @Override public boolean needsGfxUpdate() { return needsUpdate; }
     @Override public void updateGfx() {
-        TasksSL.sync(gfxLock, () -> {
+        Exe.sync(gfxLock, () -> {
             onGfxUpdateAlways();
             if (needsGfxUpdate()) {
                 gfxOperations.forEach(Runnable::run);
@@ -140,7 +140,7 @@ public abstract class ContentController<T extends Content<T, TD, TC, F, FC>, TD 
     //<editor-fold desc="--- INTERNAL ---">
     
     private void addOperation(@NotNull Runnable operation) {
-        TasksSL.sync(gfxLock, () -> {
+        Exe.sync(gfxLock, () -> {
             gfxOperations.add(operation);
             needsUpdate = true;
         });

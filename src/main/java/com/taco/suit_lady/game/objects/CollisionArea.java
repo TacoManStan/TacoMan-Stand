@@ -3,8 +3,8 @@ package com.taco.suit_lady.game.objects;
 import com.taco.suit_lady.game.interfaces.WrappedGameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.util.shapes.Shape;
-import com.taco.suit_lady.util.tools.Exceptions;
-import com.taco.suit_lady.util.tools.PropertiesSL;
+import com.taco.suit_lady.util.tools.Exc;
+import com.taco.suit_lady.util.tools.Props;
 import com.taco.suit_lady.util.values.NumberValuePair;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -39,7 +39,7 @@ public class CollisionArea
     protected final ReadOnlyObjectWrapper<CollisionMap> ownerProperty() { return ownerProperty; }
     public final ReadOnlyObjectProperty<CollisionMap> readOnlyOwnerProperty() { return ownerProperty.getReadOnlyProperty(); }
     public final CollisionMap getOwner() { return ownerProperty.get(); }
-    protected final CollisionMap setOwner(CollisionMap newValue) { return PropertiesSL.setProperty(ownerProperty, newValue); }
+    protected final CollisionMap setOwner(CollisionMap newValue) { return Props.setProperty(ownerProperty, newValue); }
     
     protected final ListProperty<Shape> includedShapes() { return includedShapes; }
     protected final ListProperty<Shape> excludedShapes() { return excludedShapes; }
@@ -95,6 +95,6 @@ public class CollisionArea
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override public @Nullable Lock getLock() { return lock; }
-    @Override public @NotNull GameViewContent getGame() { return Exceptions.nullCheck(getOwner(), "CollisionMap Owner").getGame(); }
+    @Override public @NotNull GameViewContent getGame() { return Exc.nullCheck(getOwner(), "CollisionMap Owner").getGame(); }
     //</editor-fold>
 }

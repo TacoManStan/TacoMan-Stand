@@ -16,7 +16,7 @@ import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.*;
-import com.taco.suit_lady.util.tools.printer.Printer;
+import com.taco.suit_lady.util.tools.printer.Print;
 import com.taco.suit_lady.util.values.ValuePair;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ObjectProperty;
@@ -74,7 +74,7 @@ public class GameViewContent
                                             this,
                                             "Tile Selector",
                                             "details",
-                                            uiBook -> ResourcesSL.get(
+                                            uiBook -> Stuff.get(
                                                     "pages",
                                                     uiBook.getUID(uiBook.getButtonID()),
                                                     () -> tileEditorPage = new GameTileEditorPage(uiBook, this).init()),
@@ -83,7 +83,7 @@ public class GameViewContent
                                             this,
                                             "Attribute List Test",
                                             "clients",
-                                            uiBook -> ResourcesSL.get(
+                                            uiBook -> Stuff.get(
                                                     "pages",
                                                     uiBook.getUID(uiBook.getButtonID()),
                                                     () -> attributePage = new AttributePage(uiBook, this)),
@@ -92,7 +92,7 @@ public class GameViewContent
                                             this,
                                             "Game View",
                                             "game_engine",
-                                            uiBook -> ResourcesSL.get(
+                                            uiBook -> Stuff.get(
                                                     "pages",
                                                     uiBook.getUID(uiBook.getButtonID()),
                                                     () -> coverPage = new GameViewPage(uiBook, this)),
@@ -111,12 +111,12 @@ public class GameViewContent
     
     private void initGame() {
         gameMapProperty.addListener((observable, oldValue, newValue) -> {
-            Objs.getIfNonNull(() -> oldValue, value -> syncFX(() -> {
+            Obj.getIfNonNull(() -> oldValue, value -> syncFX(() -> {
                 getController().getMapPane().getChildren().remove(value.getModel().getParentPane());
                 return value.shutdown();
             }));
             
-            Objs.getIf(() -> newValue, value -> value != null && !Objs.equals(newValue, oldValue), value -> {
+            Obj.getIf(() -> newValue, value -> value != null && !Obj.equals(newValue, oldValue), value -> {
                 value.init();
                 
                 getController().getMapPane().getChildren().retainAll();
@@ -158,7 +158,7 @@ public class GameViewContent
     
     public final @NotNull ObjectProperty<GameMap> gameMapProperty() { return gameMapProperty; }
     public final GameMap getGameMap() { return gameMapProperty.get(); }
-    public final GameMap setGameMap(@NotNull GameMap newValue) { return PropertiesSL.setProperty(gameMapProperty, newValue); }
+    public final GameMap setGameMap(@NotNull GameMap newValue) { return Props.setProperty(gameMapProperty, newValue); }
     
     //</editor-fold>
     
@@ -217,7 +217,7 @@ public class GameViewContent
     }
     
     private void abilityTest(int abilityNum) {
-        Printer.print("Ability Used: " + abilityNum);
+        Print.print("Ability Used: " + abilityNum);
         if (abilityNum == 1)
             new Ability_LaunchMissile(testObject).use(new ValuePair<>("target", getController().getMouseOnMapSafe()));
     }
@@ -292,7 +292,7 @@ public class GameViewContent
             //            case LEFT -> shiftTile(0, -1);
             //            case RIGHT -> shiftTile(0, 1);
             
-            default -> Printer.err("Unrecognized Direction :" + direction);
+            default -> Print.err("Unrecognized Direction :" + direction);
         }
     }
     
@@ -301,7 +301,7 @@ public class GameViewContent
         if (selectedTile != null)
             getUIData().setSelectedTile(getGameMap().getTileAtTileIndex(selectedTile.getTileLocationX() + xShift, selectedTile.getTileLocationY() + yShift));
         else
-            Printer.err("Selected Tile is Null.");
+            Print.err("Selected Tile is Null.");
     }
     
     //

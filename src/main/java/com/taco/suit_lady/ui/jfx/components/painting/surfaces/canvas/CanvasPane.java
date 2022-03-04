@@ -2,7 +2,7 @@ package com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas;
 
 import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import javafx.scene.layout.AnchorPane;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
@@ -35,7 +35,7 @@ public class CanvasPane extends AnchorPane
 //        this.setStyle("-fx-border-color: blue");
         
         getChildren().add(canvas);
-        ToolsFX.setAnchors(canvas, leftAnchor, rightAnchor, topAnchor, bottomAnchor);
+        FX.setAnchors(canvas, leftAnchor, rightAnchor, topAnchor, bottomAnchor);
     }
     
     public final CanvasSurface canvas() {

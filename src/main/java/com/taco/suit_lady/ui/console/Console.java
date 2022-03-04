@@ -8,10 +8,10 @@ import com.taco.suit_lady.ui.ui_internal.console.ConsolePage;
 import com.taco.suit_lady.ui.ui_internal.console.ConsoleUIDataContainer;
 import com.taco.suit_lady.ui.ui_internal.controllers.ConsoleElementController;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.BindingsSL;
-import com.taco.suit_lady.util.tools.Exceptions;
-import com.taco.suit_lady.util.tools.ResourcesSL;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
+import com.taco.suit_lady.util.tools.Bind;
+import com.taco.suit_lady.util.tools.Exc;
+import com.taco.suit_lady.util.tools.Stuff;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
@@ -85,7 +85,7 @@ public class Console
      * <p><b>Initialization Process</b></p>
      * <ol>
      *     <li>Locks the synchronization {@link ReentrantLock lock}.</li>
-     *     <li>Throws an {@link Exceptions#ex(String) exception} if this {@link Console} has already been {@link #isInitialized() initialized}.</li>
+     *     <li>Throws an {@link Exc#ex(String) exception} if this {@link Console} has already been {@link #isInitialized() initialized}.</li>
      *     <li>Calls the <code><i>{@link #initStreams()}</i></code> method.</li>
      *     <li>
      *         Adds a {@link ListChangeListener} to the {@link #getMessages() Message List}:
@@ -102,7 +102,7 @@ public class Console
         lock.lock();
         try {
             if (initialized)
-                throw Exceptions.ex("Console has already been created.");
+                throw Exc.ex("Console has already been created.");
             initialized = true;
             
             initStreams();
@@ -112,7 +112,7 @@ public class Console
                 final List<WrappingTreeLoader<ConsoleMessageable<?>, ConsoleElementController>> activeConsoleHandlers = getActiveConsoles();
                 while (change.next())
                     if (change.wasAdded())
-                        activeConsoleHandlers.forEach(treeHandler -> ToolsFX.runFX(
+                        activeConsoleHandlers.forEach(treeHandler -> FX.runFX(
                                 () -> change.getAddedSubList().forEach(
                                         message -> treeHandler.generateCellData(
                                                 CONSOLE_ROOT_NAME,
@@ -171,7 +171,7 @@ public class Console
     public final ConsolePage getPage()
     {
         if (consolePage == null) // Lazy initialization
-            consolePage = ResourcesSL.get("pages", "console");
+            consolePage = Stuff.get("pages", "console");
         return consolePage;
     }
     
@@ -194,7 +194,7 @@ public class Console
     private void append(String str)
     {
         // CHANGE-HERE
-        ToolsFX.runFX(() -> messages.add(new SimpleConsoleMessage(str)), false);
+        FX.runFX(() -> messages.add(new SimpleConsoleMessage(str)), false);
     }
     
     //</editor-fold>
@@ -203,19 +203,19 @@ public class Console
     
     public void consolify(ConsoleUIDataContainer consoleContainer)
     {
-        Exceptions.nullCheck(consoleContainer, "Console UI Data Container");
+        Exc.nullCheck(consoleContainer, "Console UI Data Container");
     
-        ToolsFX.runFX(() -> {
+        FX.runFX(() -> {
             // treeView.setShowRoot(false); // Disabled temporarily because for some reason hiding the root causes messages to be truncated.
         
             // The below binding is used to trigger a refresh whenever a console display checkbox is toggled.
-            final IntegerBinding incrementingBinding = BindingsSL.incrementingBinding(
+            final IntegerBinding incrementingBinding = Bind.incrementingBinding(
                     consoleContainer.showTRiBotProperty(),
                     consoleContainer.showClientProperty(),
                     consoleContainer.showScriptProperty(),
                     consoleContainer.showSelectedInstanceOnlyProperty()
                     //                    ctx.getBean(DummyContentsHandler.class).readOnlySelectedClientProperty()
-                                                                                     );
+                                                                               );
         
             final WrappingTreeLoader<ConsoleMessageable<?>, ConsoleElementController> treeLoader = new WrappingTreeLoader<>(
                     consoleContainer.getTreeView(),

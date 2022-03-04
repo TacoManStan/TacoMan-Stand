@@ -6,8 +6,8 @@ import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasSurfa
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.springable.StrictSpringable;
-import com.taco.suit_lady.util.tools.printer.Printer;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
+import com.taco.suit_lady.util.tools.printer.Print;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.input.KeyEvent;
@@ -127,7 +127,7 @@ public class ContentManager
     private void onChange(@Nullable Content<?, ?, ?, ?, ?> oldContent, @Nullable Content<?, ?, ?, ?, ?> newContent) {
         // TODO - Execute onRemoved() and onSet via a JavaFX Task implementation. For now, though, this will work.
         // When the above is completed, don't forget to update the onRemoved() and onSet() Javadocs as well.
-        ToolsFX.runFX(() -> {
+        FX.runFX(() -> {
             if (oldContent != null) {
                 getContentPrimaryPane().getChildren().remove(oldContent.getController().root());
                 oldContent.getController().root().prefWidthProperty().unbind();
@@ -150,8 +150,8 @@ public class ContentManager
                 logiCore().execute(oldContent::onRemovedInternal);
             }
             if (newContent != null) {
-                ToolsFX.bindToParent(newContent.getController().root(), getContentPrimaryPane(), true);
-                ToolsFX.bindToParent(newContent.getOverlayHandler().root(), getContentPrimaryPane(), true);
+                FX.bindToParent(newContent.getController().root(), getContentPrimaryPane(), true);
+                FX.bindToParent(newContent.getOverlayHandler().root(), getContentPrimaryPane(), true);
     
                 if (newContent.getController().hasFooter()) {
                     ui().getController().footerPane().getChildren().add(newContent.getFooter().getController().root());
@@ -166,11 +166,11 @@ public class ContentManager
     
     protected boolean submitKeyEvent(@NotNull KeyEvent keyEvent, boolean fx) {
         Content<?, ?, ?, ?, ?> content = getContent();
-        Printer.print("Submitting Key Event:  [" + keyEvent.getCode() + "  |  " + content.getClass().getSimpleName() + "  |  " + fx + "]");
+        Print.print("Submitting Key Event:  [" + keyEvent.getCode() + "  |  " + content.getClass().getSimpleName() + "  |  " + fx + "]");
         if (content != null)
             return content.handleKeyEvent(keyEvent, fx);
         else
-            Printer.err("Content is Null");
+            Print.err("Content is Null");
         return false;
     }
 }

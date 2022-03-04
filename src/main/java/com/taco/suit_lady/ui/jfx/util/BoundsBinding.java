@@ -1,8 +1,8 @@
 package com.taco.suit_lady.ui.jfx.util;
 
-import com.taco.suit_lady.util.tools.BindingsSL;
-import com.taco.suit_lady.util.tools.Objs;
-import com.taco.suit_lady.util.tools.PropertiesSL;
+import com.taco.suit_lady.util.tools.Bind;
+import com.taco.suit_lady.util.tools.Obj;
+import com.taco.suit_lady.util.tools.Props;
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
@@ -53,15 +53,15 @@ public class BoundsBinding
         //
         
         if (bind) {
-            Objs.doIfNonNull(() -> observableX, xProperty::bind);
-            Objs.doIfNonNull(() -> observableY, yProperty::bind);
-            Objs.doIfNonNull(() -> observableWidth, widthProperty::bind);
-            Objs.doIfNonNull(() -> observableHeight, heightProperty::bind);
+            Obj.doIfNonNull(() -> observableX, xProperty::bind);
+            Obj.doIfNonNull(() -> observableY, yProperty::bind);
+            Obj.doIfNonNull(() -> observableWidth, widthProperty::bind);
+            Obj.doIfNonNull(() -> observableHeight, heightProperty::bind);
         } else {
-            Objs.doIfNonNull(() -> observableX, obs -> setX(obs.getValue()));
-            Objs.doIfNonNull(() -> observableY, obs -> setY(obs.getValue()));
-            Objs.doIfNonNull(() -> observableWidth, obs -> setWidth(obs.getValue()));
-            Objs.doIfNonNull(() -> observableHeight, obs -> setHeight(obs.getValue()));
+            Obj.doIfNonNull(() -> observableX, obs -> setX(obs.getValue()));
+            Obj.doIfNonNull(() -> observableY, obs -> setY(obs.getValue()));
+            Obj.doIfNonNull(() -> observableWidth, obs -> setWidth(obs.getValue()));
+            Obj.doIfNonNull(() -> observableHeight, obs -> setHeight(obs.getValue()));
         }
     }
     public BoundsBinding(@Nullable ObservableValue<? extends Number> observableX, ObservableValue<? extends Number> observableY,
@@ -69,7 +69,7 @@ public class BoundsBinding
         this(observableX, observableY, observableWidth, observableHeight, true);
     }
     public BoundsBinding(@NotNull Number x, @NotNull Number y, @NotNull Number width, @NotNull Number height) {
-        this(BindingsSL.constDoubleBinding(x), BindingsSL.constDoubleBinding(y), BindingsSL.constDoubleBinding(width), BindingsSL.constDoubleBinding(height), false);
+        this(Bind.constDoubleBinding(x), Bind.constDoubleBinding(y), Bind.constDoubleBinding(width), Bind.constDoubleBinding(height), false);
     }
     public BoundsBinding() { this(null, null, null, null, false); }
     
@@ -77,19 +77,19 @@ public class BoundsBinding
     
     public final IntegerProperty xProperty() { return xProperty; }
     @Override public final int x() { return xProperty.get(); }
-    public final int setX(@NotNull Number newValue) { return PropertiesSL.setProperty(xProperty, newValue.intValue()); }
+    public final int setX(@NotNull Number newValue) { return Props.setProperty(xProperty, newValue.intValue()); }
     
     public final IntegerProperty yProperty() { return yProperty; }
     @Override public final int y() { return yProperty.get(); }
-    public final int setY(@NotNull Number newValue) { return PropertiesSL.setProperty(yProperty, newValue.intValue()); }
+    public final int setY(@NotNull Number newValue) { return Props.setProperty(yProperty, newValue.intValue()); }
     
     public final IntegerProperty widthProperty() { return widthProperty; }
     @Override public final int width() { return widthProperty.get(); }
-    public final int setWidth(@NotNull Number newValue) { return PropertiesSL.setProperty(widthProperty, newValue.intValue()); }
+    public final int setWidth(@NotNull Number newValue) { return Props.setProperty(widthProperty, newValue.intValue()); }
     
     public final IntegerProperty heightProperty() { return heightProperty; }
     @Override public final int height() { return heightProperty.get(); }
-    public final int setHeight(@NotNull Number newValue) { return PropertiesSL.setProperty(heightProperty, newValue.intValue()); }
+    public final int setHeight(@NotNull Number newValue) { return Props.setProperty(heightProperty, newValue.intValue()); }
     
     //<editor-fold desc="> Bindings">
     

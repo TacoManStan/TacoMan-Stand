@@ -5,8 +5,8 @@ import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.ui.UIPageController;
 import com.taco.suit_lady.ui.jfx.lists.CellControlManager;
 import com.taco.suit_lady.ui.jfx.lists.ListCellFX;
-import com.taco.suit_lady.util.tools.ResourcesSL;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
+import com.taco.suit_lady.util.tools.Stuff;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -42,12 +42,12 @@ public class AttributePageController extends UIPageController<AttributePage>
         attributeListView.setCellFactory(listView -> new ListCellFX<>(
                 listCellFX -> new CellControlManager<>(
                         listCellFX,
-                        cellData -> ResourcesSL.get(
+                        cellData -> Stuff.get(
                                 cellData,
                                 () -> weaver().loadController(AttributeElementController.class),
                                 listView.hashCode()))));
         
-        testButton.setOnAction(event -> ToolsFX.requireFX(() -> {
+        testButton.setOnAction(event -> FX.requireFX(() -> {
             addTestAttributes(getGame().getTestObject().attributes());
         }));
     }

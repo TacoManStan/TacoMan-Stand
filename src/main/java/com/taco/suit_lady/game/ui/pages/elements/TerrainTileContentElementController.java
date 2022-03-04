@@ -7,7 +7,7 @@ import com.taco.suit_lady.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.ui.jfx.components.button.ImageButton;
 import com.taco.suit_lady.ui.jfx.components.button.ImageButtonGroup;
 import com.taco.suit_lady.ui.ui_internal.controllers.CellController;
-import com.taco.suit_lady.util.tools.Exceptions;
+import com.taco.suit_lady.util.tools.Exc;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
@@ -84,7 +84,7 @@ public class TerrainTileContentElementController extends CellController<TileTerr
         initImageButtons();
         buttonGroup.selectedButtonProperty().addListener((observable, oldValue, newValue) -> {
             if (oldValue == null && newValue == null)
-                throw Exceptions.ex("Old and new button values cannot both be null.");
+                throw Exc.ex("Old and new button values cannot both be null.");
             
             final TileTerrainObject contents = getContents();
             if (contents != null) {
@@ -176,7 +176,7 @@ public class TerrainTileContentElementController extends CellController<TileTerr
             else if (button.equals(swImageButton))
                 return TileTerrainObjectOrientationID.SOUTH_WEST;
             else
-                throw Exceptions.ex("Unmapped ImageButton: " + button);
+                throw Exc.ex("Unmapped ImageButton: " + button);
         return null;
     }
     
@@ -195,7 +195,7 @@ public class TerrainTileContentElementController extends CellController<TileTerr
                 case SOUTH_EAST -> seImageButton;
                 case SOUTH_WEST -> swImageButton;
                 
-                default -> throw Exceptions.ex("Unmapped Orientation ID: " + orientationID);
+                default -> throw Exc.ex("Unmapped Orientation ID: " + orientationID);
             };
         return null;
     }

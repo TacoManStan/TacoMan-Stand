@@ -4,9 +4,9 @@ import com.taco.suit_lady.ui.ContentData;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.StrictSpringable;
-import com.taco.suit_lady.util.tools.Exceptions;
-import com.taco.suit_lady.util.tools.PropertiesSL;
-import com.taco.suit_lady.util.tools.TasksSL;
+import com.taco.suit_lady.util.tools.Exc;
+import com.taco.suit_lady.util.tools.Props;
+import com.taco.suit_lady.util.tools.Exe;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
@@ -55,7 +55,7 @@ public abstract class ContentHandler<
     
     public final ObjectProperty<T> selectedContentProperty() { return selectedContentProperty; }
     public final T getSelectedContent() { return selectedContentProperty.get(); }
-    public final T setSelectedContent(T newValue) { return PropertiesSL.setProperty(selectedContentProperty, newValue); }
+    public final T setSelectedContent(T newValue) { return Props.setProperty(selectedContentProperty, newValue); }
     
     //</editor-fold>
     
@@ -96,9 +96,9 @@ public abstract class ContentHandler<
     public void shutdown() {
         // TODO: Move to separate, synchronized task threads for each DummyClient instance.
         logiCore().execute(() -> {
-            TasksSL.sync(lock, () -> contentList.forEach(client -> onShutdown(client)));
+            Exe.sync(lock, () -> contentList.forEach(client -> onShutdown(client)));
             if (!contentList.isEmpty())
-                throw Exceptions.ex("Mandelbrot Content List should be empty! (" + contentList + ")");
+                throw Exc.ex("Mandelbrot Content List should be empty! (" + contentList + ")");
         });
     }
     

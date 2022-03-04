@@ -1,6 +1,6 @@
 package com.taco.suit_lady.game.attributes;
 
-import com.taco.suit_lady.util.tools.BindingsSL;
+import com.taco.suit_lady.util.tools.Bind;
 import javafx.scene.control.Label;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,7 +15,7 @@ public class DefaultAttributeModel<T> extends AttributeModel<T, Label> {
     @Override protected Label constructDisplay() { return new Label(); }
     
     @Override protected Label refreshBindings() {
-        getDisplay().textProperty().bind(BindingsSL.stringBinding(this::getText, getOwner().valueProperty()));
+        getDisplay().textProperty().bind(Bind.stringBinding(this::getText, getOwner().valueProperty()));
         return getDisplay();
     }
     

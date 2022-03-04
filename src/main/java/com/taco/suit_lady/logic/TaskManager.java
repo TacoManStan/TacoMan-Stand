@@ -4,9 +4,9 @@ import com.taco.suit_lady.game.ui.GFXObject;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
-import com.taco.suit_lady.util.tools.Objs;
-import com.taco.suit_lady.util.tools.printer.Printer;
-import com.taco.suit_lady.util.tools.PropertiesSL;
+import com.taco.suit_lady.util.tools.Obj;
+import com.taco.suit_lady.util.tools.printer.Print;
+import com.taco.suit_lady.util.tools.Props;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import org.jetbrains.annotations.Contract;
@@ -68,7 +68,7 @@ public class TaskManager<E extends Tickable<E>>
     
     public final ReadOnlyBooleanProperty readOnlyEnableSynchronizationProperty() { return enableSynchronizationProperty.getReadOnlyProperty(); }
     public final boolean isSynchronizationEnabled() { return enableSynchronizationProperty.get(); }
-    public final boolean setSynchronizationEnabled(boolean newValue) { return PropertiesSL.setProperty(enableSynchronizationProperty, newValue); }
+    public final boolean setSynchronizationEnabled(boolean newValue) { return Props.setProperty(enableSynchronizationProperty, newValue); }
     
     public final ReadOnlyLongProperty readOnlyTickCountProperty() { return tickCountProperty.getReadOnlyProperty(); }
     public final long getTickCount() { return tickCountProperty.get(); }
@@ -117,8 +117,8 @@ public class TaskManager<E extends Tickable<E>>
     
     @Override public final @NotNull OneTimeTask<E> executeOnceAndGet(@NotNull Runnable action, @Nullable Runnable onTerminateAction) {
         return addTaskAndGet(new OneTimeTask<>(getOwner()) {
-            @Override protected void tick() { Objs.run(action); }
-            @Override protected void shutdown() { Objs.run(onTerminateAction); }
+            @Override protected void tick() { Obj.run(action); }
+            @Override protected void shutdown() { Obj.run(onTerminateAction); }
         });
     }
     
@@ -135,9 +135,9 @@ public class TaskManager<E extends Tickable<E>>
     
     @Override public final @NotNull GameTask<E> executeAndGet(@NotNull Runnable action, @Nullable Runnable onTerminateAction, @Nullable Supplier<Boolean> terminateCondition) {
         return addTaskAndGet(new GameTask<>(getOwner()) {
-            @Override protected void tick() { Objs.run(action); }
-            @Override protected void shutdown() { Objs.run(onTerminateAction); }
-            @Override protected boolean isDone() { return Objs.get(terminateCondition, () -> false); }
+            @Override protected void tick() { Obj.run(action); }
+            @Override protected void shutdown() { Obj.run(onTerminateAction); }
+            @Override protected boolean isDone() { return Obj.get(terminateCondition, () -> false); }
         });
     }
     
@@ -184,7 +184,7 @@ public class TaskManager<E extends Tickable<E>>
                 gfxObject.updateGfx();
                 //                    Print.print("Updating Gfx");
             } else
-                Printer.err("GFXObject is null  [" + getOwner() + "]");
+                Print.err("GFXObject is null  [" + getOwner() + "]");
         }
     }
     
@@ -193,10 +193,10 @@ public class TaskManager<E extends Tickable<E>>
             sync(() -> {
                 //                if (getOwner() instanceof Tickable<?> tickableOwner && !tickableOwner.shutdown())
                 //                        throw ExceptionsSL.ex("Shutdown operation failed for Tickable  [" + tickableOwner + "]");
-                Printer.print("Running shutdown operation");
+                Print.print("Running shutdown operation");
                 logiCore().removeGfxObject(getGfxOwner());
                 for (Runnable shutdownOperation: shutdownOperations)
-                    Objs.run(shutdownOperation);
+                    Obj.run(shutdownOperation);
             });
     }
     
@@ -204,7 +204,7 @@ public class TaskManager<E extends Tickable<E>>
         if (isShutdown())
             syncFX(() -> {
                 for (Runnable gfxShutdownOperation: gfxShutdownOperations)
-                    Objs.run(gfxShutdownOperation);
+                    Obj.run(gfxShutdownOperation);
             });
     }
     

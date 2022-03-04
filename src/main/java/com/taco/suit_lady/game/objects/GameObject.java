@@ -17,6 +17,7 @@ import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.shapes.Circle;
 import com.taco.suit_lady.util.tools.*;
+import com.taco.suit_lady.util.tools.list_tools.A;
 import com.taco.suit_lady.util.values.NumberValuePairable;
 import com.taco.tacository.json.JElement;
 import com.taco.tacository.json.JLoadable;
@@ -89,13 +90,13 @@ public class GameObject
         
         //
         
-        this.xLocationCenteredBinding = BindingsSL.doubleBinding(() -> getLocationX(false) + (getWidth() / 2D), xLocationProperty, widthProperty);
-        this.yLocationCenteredBinding = BindingsSL.doubleBinding(() -> getLocationY(false) + (getHeight() / 2D), yLocationProperty, heightProperty);
+        this.xLocationCenteredBinding = Bind.doubleBinding(() -> getLocationX(false) + (getWidth() / 2D), xLocationProperty, widthProperty);
+        this.yLocationCenteredBinding = Bind.doubleBinding(() -> getLocationY(false) + (getHeight() / 2D), yLocationProperty, heightProperty);
         
-        this.locationBinding = BindingsSL.objBinding(() -> new Point2D(getLocationX(false), getLocationY(false)), xLocationProperty, yLocationProperty);
-        this.locationCenteredBinding = BindingsSL.objBinding(() -> new Point2D(getLocationX(true), getLocationY(true)), xLocationProperty, yLocationProperty);
+        this.locationBinding = Bind.objBinding(() -> new Point2D(getLocationX(false), getLocationY(false)), xLocationProperty, yLocationProperty);
+        this.locationCenteredBinding = Bind.objBinding(() -> new Point2D(getLocationX(true), getLocationY(true)), xLocationProperty, yLocationProperty);
         
-        this.dimensionsBinding = BindingsSL.objBinding(() -> new Dimensions(getWidth(), getHeight()), widthProperty, heightProperty);
+        this.dimensionsBinding = Bind.objBinding(() -> new Dimensions(getWidth(), getHeight()), widthProperty, heightProperty);
         
         //
         
@@ -119,17 +120,17 @@ public class GameObject
         
         getModel().init();
         
-        this.occupiedTilesBinding = BindingsSL.objBinding(this::calculateOccupiedTiles, xLocationProperty, yLocationProperty, widthProperty, heightProperty, gameMapProperty());
+        this.occupiedTilesBinding = Bind.objBinding(this::calculateOccupiedTiles, xLocationProperty, yLocationProperty, widthProperty, heightProperty, gameMapProperty());
         //TODO: This is more efficient than before but still comically inefficient - not a problem now but will quickly become one as more GameObjects are added to the map (and moving at the same time)
         this.occupiedTilesBinding.addListener((observable, oldValue, newValue) -> {
             final ArrayList<GameTile> oldTiles = new ArrayList<>();
             final ArrayList<GameTile> newTiles = new ArrayList<>();
             
-            ArraysSL.iterateMatrix(tile -> oldTiles.add(tile), oldValue);
-            ArraysSL.iterateMatrix(tile -> newTiles.add(tile), newValue);
+            A.iterateMatrix(tile -> oldTiles.add(tile), oldValue);
+            A.iterateMatrix(tile -> newTiles.add(tile), newValue);
             
-            oldTiles.forEach(tile -> Objs.doIf(() -> tile, t -> !newTiles.contains(t), t -> t.getOccupyingObjects().remove(this)));
-            newTiles.forEach(tile -> Objs.doIf(() -> tile, t -> !t.getOccupyingObjects().contains(this), t -> t.getOccupyingObjects().add(this)));
+            oldTiles.forEach(tile -> Obj.doIf(() -> tile, t -> !newTiles.contains(t), t -> t.getOccupyingObjects().remove(this)));
+            newTiles.forEach(tile -> Obj.doIf(() -> tile, t -> !t.getOccupyingObjects().contains(this), t -> t.getOccupyingObjects().add(this)));
         });
         
         initTriggerEvents();
@@ -158,7 +159,7 @@ public class GameObject
         taskManager().addShutdownOperation(() -> getGameMap().gameObjects().remove(this));
         taskManager().addGfxShutdownOperation(() -> getModel().shutdown());
         taskManager().addGfxShutdownOperation(() -> getGameMap().getModel().refreshMapImage());
-        taskManager().addShutdownOperation(() -> ArraysSL.iterateMatrix(tile -> tile.getOccupyingObjects().remove(this), getOccupiedTiles()));
+        taskManager().addShutdownOperation(() -> A.iterateMatrix(tile -> tile.getOccupyingObjects().remove(this), getOccupiedTiles()));
     }
     
     private CollisionArea collisionArea = null;
@@ -213,7 +214,7 @@ public class GameObject
     public final @NotNull ObservableDoubleValue xLocationProperty(boolean center) { return center ? xLocationCenteredBinding : xLocationProperty; }
     
     public final double getLocationX(boolean center) { return center ? xLocationCenteredBinding.get() : xLocationProperty.get(); }
-    public final double setLocationX(@NotNull Number newValue, boolean center) { return PropertiesSL.setProperty(xLocationProperty, center ? newValue.doubleValue() - (getWidth() / 2D) : newValue.doubleValue()); }
+    public final double setLocationX(@NotNull Number newValue, boolean center) { return Props.setProperty(xLocationProperty, center ? newValue.doubleValue() - (getWidth() / 2D) : newValue.doubleValue()); }
     public final double moveX(@NotNull Number amount) { return setLocationX(getLocationX(false) + amount.doubleValue(), false); }
     
     public final double getTileLocationX(boolean center) { return pixelToTile(getLocationX(center)).doubleValue(); }
@@ -225,7 +226,7 @@ public class GameObject
     public final @NotNull ObservableDoubleValue yLocationProperty(boolean center) { return center ? yLocationCenteredBinding : yLocationProperty; }
     
     public final double getLocationY(boolean center) { return center ? yLocationCenteredBinding.get() : yLocationProperty.get(); }
-    public final double setLocationY(@NotNull Number newValue, boolean center) { return PropertiesSL.setProperty(yLocationProperty, center ? newValue.doubleValue() - (getHeight() / 2D) : newValue.doubleValue()); }
+    public final double setLocationY(@NotNull Number newValue, boolean center) { return Props.setProperty(yLocationProperty, center ? newValue.doubleValue() - (getHeight() / 2D) : newValue.doubleValue()); }
     public final double moveY(@NotNull Number amount) { return setLocationY(getLocationY(false) + amount.doubleValue(), false); }
     
     public final double getTileLocationY(boolean center) { return pixelToTile(getLocationY(center)).doubleValue(); }
@@ -272,11 +273,11 @@ public class GameObject
     
     public final IntegerProperty widthProperty() { return widthProperty; }
     public final int getWidth() { return widthProperty.get(); }
-    public final int setWidth(int newValue) { return PropertiesSL.setProperty(widthProperty, newValue); }
+    public final int setWidth(int newValue) { return Props.setProperty(widthProperty, newValue); }
     
     public final IntegerProperty heightProperty() { return heightProperty; }
     public final int getHeight() { return heightProperty.get(); }
-    public final int setHeight(int newValue) { return PropertiesSL.setProperty(heightProperty, newValue); }
+    public final int setHeight(int newValue) { return Props.setProperty(heightProperty, newValue); }
     
     
     public final ObjectBinding<Dimensions> dimensionsBinding() { return dimensionsBinding; }

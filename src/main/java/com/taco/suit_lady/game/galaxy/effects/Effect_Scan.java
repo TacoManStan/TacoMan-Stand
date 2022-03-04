@@ -1,8 +1,8 @@
 package com.taco.suit_lady.game.galaxy.effects;
 
 import com.taco.suit_lady.game.objects.GameObject;
-import com.taco.suit_lady.util.tools.PropertiesSL;
-import com.taco.suit_lady.util.tools.list_tools.ListsSL;
+import com.taco.suit_lady.util.tools.Props;
+import com.taco.suit_lady.util.tools.list_tools.L;
 import com.taco.suit_lady.util.values.ValuePair;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -37,7 +37,7 @@ public class Effect_Scan extends Effect_Targeted {
         };
     }
     
-    public final Effect_Targeted setScanEffect(@Nullable Effect_Targeted newValue) { return PropertiesSL.setProperty(scanEffectProperty, newValue); }
+    public final Effect_Targeted setScanEffect(@Nullable Effect_Targeted newValue) { return Props.setProperty(scanEffectProperty, newValue); }
     
     //</editor-fold>
     
@@ -49,7 +49,7 @@ public class Effect_Scan extends Effect_Targeted {
         
         getGameMap().scanMap(missile.getLocation(true), radius)
                     .forEach(gameObject -> getScanEffectTest(missile).trigger(
-                            ListsSL.map(new ValuePair<>("target", gameObject))));
+                            L.map(new ValuePair<>("target", gameObject))));
         
         return true;
     }

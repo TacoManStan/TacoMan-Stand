@@ -2,7 +2,7 @@ package com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas;
 
 import com.taco.suit_lady.ui.jfx.components.ContentPane;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import org.jetbrains.annotations.NotNull;
 
 public class CanvasContentPane extends ContentPane {
@@ -16,13 +16,13 @@ public class CanvasContentPane extends ContentPane {
         this.overlayCanvasPane = new CanvasPane(this);
         this.backdropCanvasPane = new CanvasPane(this);
         
-        ToolsFX.bindToParent(overlayCanvasPane, this, false);
-        ToolsFX.bindToParent(backdropCanvasPane, this, false);
+        FX.bindToParent(overlayCanvasPane, this, false);
+        FX.bindToParent(backdropCanvasPane, this, false);
         
         getChildren().add(overlayCanvasPane);
         getChildren().add(0, backdropCanvasPane);
         
-        ToolsFX.togglePickOnBounds(this, false);
+        FX.togglePickOnBounds(this, false);
     }
     
     protected final CanvasPane getOverlayCanvasPane() {

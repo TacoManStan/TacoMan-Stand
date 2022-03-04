@@ -3,7 +3,7 @@ package com.taco.suit_lady.util.tools;
 import com.taco.suit_lady.util.InternalException;
 import com.taco.suit_lady.util.exceptions.NYIException;
 import com.taco.suit_lady.util.exceptions.ReadOnlyViolationException;
-import com.taco.suit_lady.util.tools.printer.Printer;
+import com.taco.suit_lady.util.tools.printer.Print;
 import com.taco.tacository.quick.ConsoleBB;
 import org.hibernate.TypeMismatchException;
 import org.jetbrains.annotations.Contract;
@@ -15,7 +15,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public class Exceptions {
+public class Exc {
     
     //<editor-fold desc="--- STACK TRACE METHODS ---">
     
@@ -56,21 +56,21 @@ public class Exceptions {
      * *************************************************************************** */
     
     public static <T> T check(T obj, Predicate<T> condition) {
-        Exceptions.nullCheck(condition, "Condition");
+        Exc.nullCheck(condition, "Condition");
         return check(obj, condition, RuntimeException::new);
     }
     
     public static <T> T check(T obj, Predicate<T> condition, String message) {
-        Exceptions.nullCheck(condition, "Condition");
-        Exceptions.nullCheck(message, "Message");
+        Exc.nullCheck(condition, "Condition");
+        Exc.nullCheck(message, "Message");
         return check(obj, condition, () -> new RuntimeException(message));
     }
     
     public static <T> T check(T obj, Predicate<T> condition, Supplier<RuntimeException> exceptionSupplier) {
-        Exceptions.nullCheck(condition, "Condition");
-        Exceptions.nullCheck(exceptionSupplier, "Exception Supplier");
+        Exc.nullCheck(condition, "Condition");
+        Exc.nullCheck(exceptionSupplier, "Exception Supplier");
         if (condition.test(obj))
-            throw Exceptions.ex(exceptionSupplier.get());
+            throw Exc.ex(exceptionSupplier.get());
         return obj;
     }
     
@@ -292,7 +292,7 @@ public class Exceptions {
      * The example above does the following:
      * <ol>
      * <li>Creates a variable of type {@code long} equal to {@code 1000} called {@code myVariable}.</li>
-     * <li>Uses the {@link Exceptions#boundsCheck(Number, double, double, String) check} method to check if the bounds of {@code myVariable} are between -50 and 750.</li>
+     * <li>Uses the {@link Exc#boundsCheck(Number, double, double, String) check} method to check if the bounds of {@code myVariable} are between -50 and 750.</li>
      * <li>Determines that {@code myVariable} is not within the specified bounds ({@code 750 is less than 1000}</li>
      * <li>Throws a {@code IndexOutOfBoundsException}</li>
      * </ol>
@@ -305,7 +305,7 @@ public class Exceptions {
      * @return The specified {@code value} (if the bounds-check is successful).
      */
     public static <T extends Number> T boundsCheck(T value, double floor, double ceiling, boolean isFloorInclusive, boolean isCeilingInclusive, String valueName) {
-        Exceptions.nullCheck(value, "Value");
+        Exc.nullCheck(value, "Value");
         final String _valueString = valueName != null ? valueName + " (" + value + ")" : "" + value;
         if (isFloorInclusive && value.doubleValue() < floor)
             throw ex(new IndexOutOfBoundsException(_valueString + " must be greater than or equal to " + floor + "."));
@@ -510,9 +510,9 @@ public class Exceptions {
         else
             _exception = type.get(new RuntimeException(message, cause));
         
-        Printer.err("ExceptionTools Stack Trace " +
-                    "[Thread | " + Thread.currentThread() + "] " +
-                    "[Exception | " + _exception + "]");
+        Print.err("ExceptionTools Stack Trace " +
+                  "[Thread | " + Thread.currentThread() + "] " +
+                  "[Exception | " + _exception + "]");
         //		FXDialogTools.showInfoDialog("Exception Thrown", _exception.toString());
         _exception.printStackTrace();
         

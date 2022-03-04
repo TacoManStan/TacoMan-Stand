@@ -9,7 +9,7 @@ import com.taco.suit_lady.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
-import com.taco.suit_lady.util.tools.BindingsSL;
+import com.taco.suit_lady.util.tools.Bind;
 import javafx.beans.binding.ObjectBinding;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -46,16 +46,16 @@ public class GameObjectEditorPageController extends UIPageController<GameObjectE
     //<editor-fold desc="--- INITIALIZATION ---">
     
     public GameObjectEditorPageController init() {
-        selectedGameObjectImageBinding = BindingsSL.recursiveObjBinding(gameObject -> {
+        selectedGameObjectImageBinding = Bind.recursiveObjBinding(gameObject -> {
             if (gameObject != null) {
                 final GameObjectModel gameObjectModel = gameObject.getModel();
                 if (gameObjectModel != null)
                     return gameObjectModel.imageBinding();
             }
-            return BindingsSL.constObjBinding(null);
+            return Bind.constObjBinding(null);
         }, selectedGameObjectBinding());
         
-        titleLabel.textProperty().bind(BindingsSL.stringBinding(() -> {
+        titleLabel.textProperty().bind(Bind.stringBinding(() -> {
             final GameObject gameObject = getSelectedGameObject();
             if (gameObject != null)
                 return "Game Object [" + gameObject.getLocationX(false) + ", " + gameObject.getLocationY(false) + "]";

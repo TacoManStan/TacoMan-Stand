@@ -12,8 +12,8 @@ import com.taco.suit_lady.ui.ui_internal.controllers.SettingsController;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.*;
 import com.taco.suit_lady.util.tools.fx_tools.DialogsFX;
-import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
-import com.taco.suit_lady.util.tools.printer.Printer;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
+import com.taco.suit_lady.util.tools.printer.Print;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -206,7 +206,7 @@ public class AppController
         // TODO: Synchronize with the actual title of the application.
         this.stage.titleProperty().set("Suit Lady");
         
-        this.stage.getIcons().add(ResourcesSL.getImage("buttons/logo/", "logo", "png"));
+        this.stage.getIcons().add(Stuff.getImage("buttons/logo/", "logo", "png"));
         
         sidebarImagePane.setRotationAxis(Rotate.Y_AXIS);
         sidebarPaneAnchor.managedProperty().bind(sidebarPaneAnchor.visibleProperty());
@@ -214,7 +214,7 @@ public class AppController
         ui().init();
         
         contentAnchorPane.getChildren().add(ui().getContentManager().getContentBasePane());
-        ToolsFX.setAnchors(ui().getContentManager().getContentBasePane());
+        FX.setAnchors(ui().getContentManager().getContentBasePane());
         
         initImageButtons();
         initSidebar();
@@ -229,9 +229,9 @@ public class AppController
         //                        consoleSelectedInstanceOnlyCheckBox.selectedProperty()
         //                ));
         
-        ToolsFX.constructDraggableNode(dragBar);
-        ToolsFX.constructResizableNode(getStage(), cornerResizePane, topResizePane, bottomResizePane, leftResizePane, rightResizePane,
-                                       minimizeImagePane, maximizeImagePane, closeImagePane, settingsImagePane, sidebarImagePane);
+        FX.constructDraggableNode(dragBar);
+        FX.constructResizableNode(getStage(), cornerResizePane, topResizePane, bottomResizePane, leftResizePane, rightResizePane,
+                                  minimizeImagePane, maximizeImagePane, closeImagePane, settingsImagePane, sidebarImagePane);
         
         bookshelfTitleLabel.textProperty().bind(
                 Bindings.createStringBinding(() -> {
@@ -247,7 +247,7 @@ public class AppController
         //
         
         root.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            Printer.print("Filtering Key Event: " + event.getCode());
+            Print.print("Filtering Key Event: " + event.getCode());
             if (ui().getContentManager().submitKeyEvent(event, true))
                 event.consume();
             getGameContent().getController().taskManager().addTask(
@@ -260,7 +260,7 @@ public class AppController
         
         //
         
-        upsLabel.textProperty().bind(BindingsSL.stringBinding(() -> "" + logiCore().getUps(), logiCore().readOnlyUpsProperty()));
+        upsLabel.textProperty().bind(Bind.stringBinding(() -> "" + logiCore().getUps(), logiCore().readOnlyUpsProperty()));
     }
     
     private void initSidebar() {
@@ -279,7 +279,7 @@ public class AppController
                 this,
                 "Mandelbrot Content Selector Demo",
                 "mandelbrot2",
-                uiBook -> ResourcesSL.get(
+                uiBook -> Stuff.get(
                         "pages",
                         uiBook.getUID(uiBook.getButtonID()),
                         () -> new MandelbrotContentSelectorPage(uiBook)),
@@ -288,7 +288,7 @@ public class AppController
                 this,
                 "Development",
                 "game_engine",
-                uiBook -> ResourcesSL.get(
+                uiBook -> Stuff.get(
                         "pages",
                         uiBook.getButtonID(),
                         () -> new ExamplePage(uiBook, "green")),
@@ -297,7 +297,7 @@ public class AppController
                 this,
                 "Avatar ImageButton Demo",
                 "avatar",
-                uiBook -> ResourcesSL.get(
+                uiBook -> Stuff.get(
                         "pages",
                         uiBook.getButtonID(),
                         () -> new ExamplePage(uiBook, "red")),
@@ -309,7 +309,7 @@ public class AppController
                 this,
                 "Entity Debug",
                 "entity-debug",
-                uiBook -> ResourcesSL.get(
+                uiBook -> Stuff.get(
                         "pages",
                         uiBook.getButtonID(),
                         () -> new EntityDebugPage(uiBook)),
@@ -324,7 +324,7 @@ public class AppController
                 this,
                 "Social",
                 "play",
-                uiBook -> ResourcesSL.get(
+                uiBook -> Stuff.get(
                         "pages",
                         uiBook.getButtonID(),
                         () -> new ExamplePage(uiBook, "blue")),
@@ -339,7 +339,7 @@ public class AppController
                 this,
                 "Demo 1",
                 "calendar",
-                uiBook -> ResourcesSL.get(
+                uiBook -> Stuff.get(
                         "pages",
                         uiBook.getButtonID(),
                         () -> new ExamplePage(uiBook, "gray")),
@@ -348,7 +348,7 @@ public class AppController
                 this,
                 "Demo 2",
                 "social",
-                uiBook -> ResourcesSL.get(
+                uiBook -> Stuff.get(
                         "pages",
                         uiBook.getButtonID(),
                         () -> new ExamplePage(uiBook, "gray")),
@@ -357,7 +357,7 @@ public class AppController
                 this,
                 "Demo 3",
                 "popout_var2",
-                uiBook -> ResourcesSL.get(
+                uiBook -> Stuff.get(
                         "pages",
                         uiBook.getButtonID(),
                         () -> new ExamplePage(uiBook, "gray")),
@@ -366,7 +366,7 @@ public class AppController
                 this,
                 "Demo 4",
                 "account_manager",
-                uiBook -> ResourcesSL.get(
+                uiBook -> Stuff.get(
                         "pages",
                         uiBook.getButtonID(),
                         () -> new ExamplePage(uiBook, "gray")),
@@ -375,7 +375,7 @@ public class AppController
                 this,
                 "Demo 5",
                 "entity_debug",
-                uiBook -> ResourcesSL.get(
+                uiBook -> Stuff.get(
                         "pages",
                         uiBook.getButtonID(),
                         () -> new ExamplePage(uiBook, "gray")),
@@ -384,7 +384,7 @@ public class AppController
                 this,
                 "Demo 6",
                 "graph",
-                uiBook -> ResourcesSL.get(
+                uiBook -> Stuff.get(
                         "pages",
                         uiBook.getButtonID(),
                         () -> new ExamplePage(uiBook, "gray")),
@@ -393,7 +393,7 @@ public class AppController
                 this,
                 "Tester",
                 "demo",
-                uiBook -> ResourcesSL.get(
+                uiBook -> Stuff.get(
                         "pages",
                         uiBook.getButtonID(),
                         () -> new TesterPage(uiBook)),
@@ -565,7 +565,7 @@ public class AppController
                 "Logo",
                 "logo",
                 logoImagePane,
-                () -> WebSL.browse("google", true),
+                () -> Web.browse("google", true),
                 null,
                 false,
                 new Point2D(20.0, 20.0)
@@ -597,7 +597,7 @@ public class AppController
         sidebarPane.setPrefWidth(PUI_WIDTH);
         STAGE_MIN_WIDTH = stage.getWidth() - PUI_WIDTH;
         STAGE_MIN_HEIGHT = stage.getHeight();
-        ToolsFX.lockSize(stage, STAGE_MIN_WIDTH + PUI_WIDTH, STAGE_MIN_HEIGHT);
+        FX.lockSize(stage, STAGE_MIN_WIDTH + PUI_WIDTH, STAGE_MIN_HEIGHT);
         Button b;
     }
     
@@ -678,7 +678,7 @@ public class AppController
             
             stageWidthProperty.removeListener(stageWidthChangeListener);
             stage.setWidth(end_stage_width);
-            ToolsFX.lockSize(stage, end_stage_pref_width, ToolsFX.NO_CHANGE_SIZE_LOCK);
+            FX.lockSize(stage, end_stage_pref_width, FX.NO_CHANGE_SIZE_LOCK);
             
             sidebarPaneAnchor.setVisible(!hiding);
             sidebarPaneAnchor.setPrefWidth(PUI_WIDTH);
