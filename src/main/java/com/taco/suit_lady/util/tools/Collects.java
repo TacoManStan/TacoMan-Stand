@@ -9,15 +9,13 @@ import javafx.collections.ObservableMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class CollectionsSL {
+public class Collects {
     
     //<editor-fold desc="--- ADD/REMOVE OPERATIONS ---">
     
@@ -277,7 +275,7 @@ public class CollectionsSL {
     
     private final Presets presets;
     
-    CollectionsSL() {
+    Collects() {
         this.presets = new Presets();
     }
     
