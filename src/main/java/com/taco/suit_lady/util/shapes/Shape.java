@@ -53,6 +53,7 @@ public abstract class Shape
     
     
     private final ReadOnlyObjectWrapper<BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color>> pixelGeneratorProperty;
+    private final ReadOnlyBooleanWrapper collisionImageEnabledProperty;
     
     //
     
@@ -85,6 +86,7 @@ public abstract class Shape
         
         
         this.pixelGeneratorProperty = new ReadOnlyObjectWrapper<>(pixelGenerator);
+        this.collisionImageEnabledProperty = new ReadOnlyBooleanWrapper(false);
         
         //
         
@@ -102,8 +104,11 @@ public abstract class Shape
     public Shape init() {
         // TODO: Add pixel factory property — w/ both preset implementations & the option to create custom implementations — for generating various types of images to represent the collision data
         
-        locationBinding.addListener((observable, oldValue, newValue) -> needsUpdate = true);
-        dimensionsBinding.addListener((observable, oldValue, newValue) -> needsUpdate = true);
+        for (ObjectBinding<NumberValuePair> binding: Arrays.asList(locationBinding, dimensionsBinding))
+            binding.addListener((observable, oldValue, newValue) -> {
+                if (isCollisionImageEnabled())
+                    needsUpdate = true;
+            });
         
         return this;
     }
@@ -261,6 +266,10 @@ public abstract class Shape
         return Props.setProperty(pixelGeneratorProperty, newValue);
     }
     
+    public final @NotNull ReadOnlyBooleanProperty readOnlyCollisionImageEnabledProperty() { return collisionImageEnabledProperty.getReadOnlyProperty(); }
+    public final boolean isCollisionImageEnabled() { return collisionImageEnabledProperty.get(); }
+    public final boolean setCollisionImageEnabled(boolean newValue) { return Props.setProperty(collisionImageEnabledProperty, newValue); }
+    
     
     public final @NotNull ReadOnlyObjectProperty<Image> readOnlyImageProperty() { return imageProperty.getReadOnlyProperty(); }
     public final @NotNull Image getImage() { return imageProperty.get(); }
@@ -330,7 +339,7 @@ public abstract class Shape
     
     //
     
-    private @NotNull Image regenerateImage() {
+    protected @NotNull Image regenerateImage() {
         return sync(() -> FX.generateImage(
                 getLock(),
                 getLocation(LocType.MIN),

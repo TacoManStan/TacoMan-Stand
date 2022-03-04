@@ -4,13 +4,19 @@ import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Calc;
 import com.taco.suit_lady.util.tools.Props;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import com.taco.suit_lady.util.values.NumberValuePair;
 import com.taco.suit_lady.util.values.NumberValuePairable;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleWrapper;
 import javafx.geometry.Point2D;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -89,7 +95,17 @@ public class Circle extends Shape {
         return borderPoints;
     }
     
+    @Override protected @NotNull Image regenerateImage() {
+        return syncRequireFX(() -> {
+            final Canvas canvas = new Canvas(getWidth(), getHeight());
+            canvas.getGraphicsContext2D().setFill(Color.BLACK);
+            canvas.getGraphicsContext2D().fillOval(getLocation(Axis.X_AXIS, LocType.MIN), getLocation(Axis.Y_AXIS, LocType.MIN), getWidth(), getHeight());
+            return canvas.snapshot(new SnapshotParameters(), null);
+        });
+    }
+    
     //
+    
     @Override public String toString() {
         return "Circle{" +
                "diameter=" + (int) getDiameter() +

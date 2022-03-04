@@ -7,6 +7,7 @@ import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.logic.TaskManager;
 import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.ImagePaintCommand;
 import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.shapes.Circle;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.Bind;
