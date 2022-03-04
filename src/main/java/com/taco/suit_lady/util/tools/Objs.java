@@ -109,7 +109,9 @@ public class Objs {
     
     //</editor-fold>
     
-    //<editor-fold desc="--- FUNCTIONAL INTERFACE CONVERSION METHODS ---">
+    //<editor-fold desc="--- FUNCTIONAL INTERFACE METHODS ---">
+    
+    //<editor-fold desc="> Conversion Methods">
     
     public static <V> @NotNull Runnable asRunnable(@NotNull Callable<V> callable, @Nullable Consumer<Throwable> exceptionHandler) {
         return () -> {
@@ -158,7 +160,7 @@ public class Objs {
     
     public static <V> @NotNull Callable<V> asCallable(@NotNull Supplier<V> supplier) { return supplier::get; }
     
-    //<editor-fold desc="> Internal">
+    //<editor-fold desc=">> Conversion Methods: Internal">
     
     private static @NotNull Consumer<Throwable> exConsumer(@Nullable Consumer<Throwable> exceptionHandler) { return exceptionHandler != null ? exceptionHandler : Throwable::printStackTrace; }
     private static @NotNull <V> Function<Throwable, V> exFunction(@Nullable Function<Throwable, V> exceptionHandler) {
@@ -171,4 +173,35 @@ public class Objs {
     //</editor-fold>
     
     //</editor-fold>
+    
+//    public static <T> @NotNull Supplier<T> getSupplier(@Nullable Supplier<T> input, @Nullable Supplier<Supplier<T>> onFailSupplier) { return getSupplier()}
+//    public static <T> @NotNull Supplier<T> getSupplier(@Nullable Supplier<T> input, @Nullable Predicate<Supplier<T>> filter, @Nullable Supplier<Supplier<T>> onFailSupplier) {
+//        if (getPredicate(filter).test(input))
+//            return input;
+//        else {
+//
+//        }
+//    }
+//
+//    public static <T> @NotNull Predicate<T> getPredicate(@Nullable Predicate<T> input) { return getPredicate(input, getPredicate(), Objs::getPredicate); }
+//    public static <T> @NotNull Predicate<T> getPredicate(@Nullable Predicate<T> input, @Nullable Supplier<Predicate<T>> onFailSupplier) { return getPredicate(input, getPredicate(), onFailSupplier); }
+//    public static <T> @NotNull Predicate<T> getPredicate(@Nullable Predicate<T> input, @Nullable Predicate<Predicate<T>> filter, @Nullable Supplier<Predicate<T>> onFailSupplier) {
+//        if (getPredicate(filter).test(input)) {
+//            return input;
+//        } else {
+//            onFailSupplier = onFailSupplier != null ? onFailSupplier : Objs::getPredicate;
+//            return onFailSupplier.get();
+//        }
+//    }
+//    public static <T> @NotNull Predicate<T> getPredicate() { return Objects::nonNull; }
+//
+//    public static @NotNull Runnable getRunnable(@Nullable Runnable input, @Nullable Predicate<Runnable> filter, @Nullable Supplier<Runnable> onFailSupplier) {
+//        if (input != null)
+//            return input;
+//        else {
+//
+//        }
+//    }
+//
+//    //</editor-fold>
 }
