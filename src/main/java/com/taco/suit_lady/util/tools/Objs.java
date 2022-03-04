@@ -1,5 +1,6 @@
 package com.taco.suit_lady.util.tools;
 
+import org.docx4j.wml.R;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -178,14 +179,18 @@ public class Objs {
     
     //<editor-fold desc="> Runnable Execution">
     
-    public static void run(@Nullable Runnable runnable, @NotNull Predicate<Runnable> filter) {
-        if (filter.test(runnable))
+    public static void run(@Nullable Runnable runnable, @NotNull Predicate<Runnable> filter, @NotNull Runnable fallbackOperation) {
+        if (runnable != null && filter.test(runnable))
             runnable.run();
+        else
+            fallbackOperation.run();
     }
     
     //
     
-    public static void run(@Nullable Runnable runnable) { run(runnable, Objects::nonNull); }
+    public static void run(@Nullable Runnable runnable, @NotNull Predicate<Runnable> filter) { run(runnable, filter, () -> { }); }
+    public static void run(@Nullable Runnable runnable, @NotNull Runnable fallbackOperation) { run(runnable, run -> true, fallbackOperation); }
+    public static void run(@Nullable Runnable runnable) { run(runnable, run -> true, () -> { }); }
     
     //</editor-fold>
     
