@@ -1,16 +1,18 @@
 package com.taco.suit_lady.util.tools;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public class ObjectsSL {
-    private ObjectsSL() { } //No Instance
+public class Objs {
+    private Objs() { } //No Instance
     
     //<editor-fold desc="--- EQUALITY CHECKS ---">
     
@@ -104,6 +106,69 @@ public class ObjectsSL {
             return filterFailedOperation.apply(input);
         return null;
     }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- FUNCTIONAL INTERFACE CONVERSION METHODS ---">
+    
+    public static <V> @NotNull Runnable asRunnable(@NotNull Callable<V> callable, @Nullable Consumer<Throwable> exceptionHandler) {
+        return () -> {
+            try {
+                callable.call();
+            } catch (Exception e) {
+                exConsumer(exceptionHandler).accept(e);
+            }
+        };
+    }
+    
+    public static <V> @NotNull Runnable asRunnable(@NotNull Callable<V> callable) { return asRunnable(callable, null); }
+    
+    public static <T> @NotNull Consumer<T> asConsumer(@NotNull Runnable runnable) { return ignored -> runnable.run(); }
+    
+    //
+    
+    public static <V> @NotNull Supplier<V> asSupplier(@NotNull Runnable runnable) {
+        return () -> {
+            runnable.run();
+            return null;
+        };
+    }
+    
+    public static <V> @NotNull Supplier<V> asSupplier(@NotNull Callable<V> callable, @Nullable Function<Throwable, V> exceptionHandler) {
+        return () -> {
+            try {
+                return callable.call();
+            } catch (Exception e) {
+                return exFunction(exceptionHandler).apply(e);
+            }
+        };
+    }
+    
+    public static <V> @NotNull Supplier<V> asSupplier(@NotNull Callable<V> callable) { return asSupplier(callable, null); }
+    
+    //
+    
+    @Contract(pure = true)
+    public static <V> @NotNull Callable<V> asCallable(@NotNull Runnable runnable) {
+        return () -> {
+            runnable.run();
+            return null;
+        };
+    }
+    
+    public static <V> @NotNull Callable<V> asCallable(@NotNull Supplier<V> supplier) { return supplier::get; }
+    
+    //<editor-fold desc="> Internal">
+    
+    private static @NotNull Consumer<Throwable> exConsumer(@Nullable Consumer<Throwable> exceptionHandler) { return exceptionHandler != null ? exceptionHandler : Throwable::printStackTrace; }
+    private static @NotNull <V> Function<Throwable, V> exFunction(@Nullable Function<Throwable, V> exceptionHandler) {
+        return exceptionHandler != null ? exceptionHandler : t -> {
+            t.printStackTrace();
+            return null;
+        };
+    }
+    
+    //</editor-fold>
     
     //</editor-fold>
 }

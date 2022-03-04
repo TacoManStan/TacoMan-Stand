@@ -17,7 +17,7 @@ import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.shapes.Circle;
 import com.taco.suit_lady.util.tools.*;
-import com.taco.suit_lady.util.values.NumberValuePair;
+import com.taco.suit_lady.util.values.NumberValuePairable;
 import com.taco.tacository.json.JElement;
 import com.taco.tacository.json.JLoadable;
 import com.taco.tacository.json.JObject;
@@ -25,6 +25,7 @@ import com.taco.tacository.json.JUtil;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;
+import javafx.beans.value.ObservableDoubleValue;
 import javafx.collections.FXCollections;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
@@ -127,8 +128,8 @@ public class GameObject
             ArraysSL.iterateMatrix(tile -> oldTiles.add(tile), oldValue);
             ArraysSL.iterateMatrix(tile -> newTiles.add(tile), newValue);
             
-            oldTiles.forEach(tile -> ObjectsSL.doIf(() -> tile, t -> !newTiles.contains(t), t -> t.getOccupyingObjects().remove(this)));
-            newTiles.forEach(tile -> ObjectsSL.doIf(() -> tile, t -> !t.getOccupyingObjects().contains(this), t -> t.getOccupyingObjects().add(this)));
+            oldTiles.forEach(tile -> Objs.doIf(() -> tile, t -> !newTiles.contains(t), t -> t.getOccupyingObjects().remove(this)));
+            newTiles.forEach(tile -> Objs.doIf(() -> tile, t -> !t.getOccupyingObjects().contains(this), t -> t.getOccupyingObjects().add(this)));
         });
         
         initTriggerEvents();
@@ -183,7 +184,7 @@ public class GameObject
     
     private void refreshCollisionData() {
         double modifier = 1.0; //Only to test different sizes of collision ranges
-//        circle.setRadius(Math.max((int) ((getWidth() / 2) * modifier), (int) ((getHeight() / 2) * modifier)));
+        //        circle.setRadius(Math.max((int) ((getWidth() / 2) * modifier), (int) ((getHeight() / 2) * modifier)));
         circle.setDiameter(Math.max(getWidth(), getHeight()));
         circle.setLocation(getLocation(true));
     }
@@ -208,39 +209,57 @@ public class GameObject
     
     //<editor-fold desc=">> Location Properties">
     
-    @Override public final @NotNull DoubleProperty xLocationProperty() { return xLocationProperty; }
-    public final DoubleBinding xLocationCenteredBinding() { return xLocationCenteredBinding; }
+    @Override public final @NotNull DoubleProperty xLocationProperty() { return (DoubleProperty) xLocationProperty(false); }
+    public final @NotNull ObservableDoubleValue xLocationProperty(boolean center) { return center ? xLocationCenteredBinding : xLocationProperty; }
     
-    @Override public @NotNull Double getLocationX() { return MapObject.super.getLocationX().doubleValue(); }
     public final double getLocationX(boolean center) { return center ? xLocationCenteredBinding.get() : xLocationProperty.get(); }
     public final double setLocationX(@NotNull Number newValue, boolean center) { return PropertiesSL.setProperty(xLocationProperty, center ? newValue.doubleValue() - (getWidth() / 2D) : newValue.doubleValue()); }
-    
-    public final double setTileLocationX(@NotNull Number newValue) { return PropertiesSL.setProperty(xLocationProperty, newValue.doubleValue() * getGameMap().getTileSize()); }
     public final double moveX(@NotNull Number amount) { return setLocationX(getLocationX(false) + amount.doubleValue(), false); }
-    public final double moveTileX(@NotNull Number amount) { return setLocationX(getLocationX(false) + (amount.doubleValue() * getGameMap().getTileSize()), false); }
+    
+    public final double getTileLocationX(boolean center) { return pixelToTile(getLocationX(center)).doubleValue(); }
+    public final double setTileLocationX(@NotNull Number newValue, boolean center) { return pixelToTile(setLocationX(tileToPixel(newValue), center)).doubleValue(); }
+    public final double moveTileX(@NotNull Number amount) { return pixelToTile(moveX(tileToPixel(amount))).doubleValue(); }
     
     
-    @Override public final @NotNull DoubleProperty yLocationProperty() { return yLocationProperty; }
-    public final DoubleBinding yLocationCenteredBinding() { return yLocationCenteredBinding; }
+    @Override public final @NotNull DoubleProperty yLocationProperty() { return (DoubleProperty) yLocationProperty(false); }
+    public final @NotNull ObservableDoubleValue yLocationProperty(boolean center) { return center ? yLocationCenteredBinding : yLocationProperty; }
     
-    @Override public @NotNull Double getLocationY() { return MapObject.super.getLocationY().doubleValue(); }
     public final double getLocationY(boolean center) { return center ? yLocationCenteredBinding.get() : yLocationProperty.get(); }
     public final double setLocationY(@NotNull Number newValue, boolean center) { return PropertiesSL.setProperty(yLocationProperty, center ? newValue.doubleValue() - (getHeight() / 2D) : newValue.doubleValue()); }
-    
-    public final double setTileLocationY(@NotNull Number newValue) { return PropertiesSL.setProperty(yLocationProperty, newValue.doubleValue() * getGameMap().getTileSize()); }
     public final double moveY(@NotNull Number amount) { return setLocationY(getLocationY(false) + amount.doubleValue(), false); }
-    public final double moveTileY(@NotNull Number amount) { return setLocationY(getLocationY(false) + (amount.doubleValue() * getGameMap().getTileSize()), false); }
+    
+    public final double getTileLocationY(boolean center) { return pixelToTile(getLocationY(center)).doubleValue(); }
+    public final double setTileLocationY(@NotNull Number newValue, boolean center) { return pixelToTile(setLocationY(tileToPixel(newValue), center)).doubleValue(); }
+    public final double moveTileY(@NotNull Number amount) { return pixelToTile(moveY(tileToPixel(amount))).doubleValue(); }
     
     //
     
+    //<editor-fold desc="> Location Bindings">
+    
     public final ObjectBinding<Point2D> locationBinding(boolean center) { return center ? locationCenteredBinding : locationBinding; }
+    
     public final Point2D getLocation(boolean center) { return locationBinding(center).get(); }
     public final Point2D setLocation(@NotNull Point2D newValue, boolean center) {
-        final Point2D oldValue = locationBinding(center).get();
-        setLocationX(newValue.getX(), center);
-        setLocationY(newValue.getY(), center);
-        return oldValue;
+        return new Point2D(setLocationX(newValue.getX(), center), setLocationY(newValue.getY(), center));
     }
+    
+    public final Point2D move(@NotNull Number x, @NotNull Number y) { return new Point2D(moveX(x), moveY(y)); }
+    public final Point2D move(@NotNull Point2D amount) { return move(amount.getX(), amount.getY()); }
+    public final Point2D move(@NotNull NumberValuePairable<?> amount) { return move(amount.asPoint()); }
+    
+    // Tile Location
+    
+    public final Point2D getTileLocation(boolean center) { return new Point2D(getTileLocationX(center), getTileLocationY(center)); }
+    public final Point2D setTileLocation(@NotNull Point2D newValue, boolean center) {
+        return new Point2D(setTileLocationX(newValue.getX(), center), setTileLocationY(newValue.getY(), center));
+    }
+    
+    
+    public final Point2D moveTile(@NotNull Number x, @NotNull Number y) { return new Point2D(moveTileX(x), moveTileY(y)); }
+    public final Point2D moveTile(@NotNull Point2D amount) { return moveTile(amount.getX(), amount.getY()); }
+    public final Point2D moveTile(@NotNull NumberValuePairable<?> amount) { return moveTile(amount.asPoint()); }
+    
+    //</editor-fold>
     
     //
     

@@ -5,7 +5,7 @@ import com.taco.suit_lady.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.BindingsSL;
 import com.taco.suit_lady.util.tools.Exceptions;
-import com.taco.suit_lady.util.tools.ObjectsSL;
+import com.taco.suit_lady.util.tools.Objs;
 import com.taco.suit_lady.ui.jfx.components.button.ImageButton;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import javafx.beans.binding.Bindings;
@@ -317,11 +317,11 @@ public class Sidebar
      * @see #selectedBookshelfProperty()
      * @see #getSelectedBookshelf()
      * @see #setSelectedBookshelf(SidebarBookshelf)
-     * @see ObjectsSL#equalsExcludeNull(Object, Object)
+     * @see Objs#equalsExcludeNull(Object, Object)
      */
     public boolean isBookshelfSelected(SidebarBookshelf menu)
     {
-        return ObjectsSL.equalsExcludeNull(menu, getSelectedBookshelf());
+        return Objs.equalsExcludeNull(menu, getSelectedBookshelf());
     }
     
     //</editor-fold>

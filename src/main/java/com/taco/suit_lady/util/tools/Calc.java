@@ -18,8 +18,8 @@ import java.util.function.Consumer;
 /**
  * Contains methods related to doing various calculations.
  */
-public class CalculationsSL {
-    private CalculationsSL() {
+public class Calc {
+    private Calc() {
     } // No instance
     
     /**
@@ -351,7 +351,7 @@ public class CalculationsSL {
     // </editor-fold>
     
     public static void generateStraightPath(final Point start, final Point end, final Consumer<Point> point_consumer) {
-        CalculationsSL.generateStraightPath(start, end, point_consumer, true);
+        Calc.generateStraightPath(start, end, point_consumer, true);
     }
     
     public static void generateStraightPath(final Point start, final Point end, final Consumer<Point> point_consumer,
@@ -398,7 +398,7 @@ public class CalculationsSL {
     }
     
     public static List<Point> generateStraightPath(final Point start, final Point end) {
-        return CalculationsSL.generateStraightPath(start, end, true);
+        return Calc.generateStraightPath(start, end, true);
     }
     
     public static List<Point> generateStraightPath(final Point start, final Point end,
@@ -419,7 +419,7 @@ public class CalculationsSL {
         
         final List<Point> arr = new ArrayList<>((int) points + 2);
         
-        CalculationsSL.generateStraightPath(start, end, p -> arr.add(p), add_start);
+        Calc.generateStraightPath(start, end, p -> arr.add(p), add_start);
         
         return arr;
     }
@@ -492,7 +492,7 @@ public class CalculationsSL {
         double sum = 0;
         
         for (int i = 0; i < steps; i++)
-            sum -= (table[i] = -CalculationsSL.gaussian(i * step));
+            sum -= (table[i] = -Calc.gaussian(i * step));
         
         for (int i = 0; i < steps; i++)
             table[i] /= sum;
@@ -564,12 +564,12 @@ public class CalculationsSL {
         final double end_y = end.getY();
         
         line.stream().limit(line.size() - 1).skip(1).forEach(p -> {
-            final double angle = CalculationsSL.getAngle(start_x, start_y, p.getX(), p.getY(), end_x, end_y)
-                                 * CalculationsSL.RAD_TO_DEG_NEG;
+            final double angle = Calc.getAngle(start_x, start_y, p.getX(), p.getY(), end_x, end_y)
+                                 * Calc.RAD_TO_DEG_NEG;
             if (angle == 0)
                 return;
             
-            final double[] rt = CalculationsSL.getRotatedPoint(start_x, start_y, p.getX(), p.getY(), angle * 2.0);
+            final double[] rt = Calc.getRotatedPoint(start_x, start_y, p.getX(), p.getY(), angle * 2.0);
             
             p.setLocation(rt[0], rt[1]);
         });
@@ -581,19 +581,19 @@ public class CalculationsSL {
         if (line.size() < 2)
             return p;
         
-        return CalculationsSL.flipLinePoint(line.get(0), line.get(line.size() - 1), p);
+        return Calc.flipLinePoint(line.get(0), line.get(line.size() - 1), p);
     }
     
     public static Point flipLinePoint(final Point start, final Point end, final Point p) {
         final double start_x = start.getX();
         final double start_y = start.getY();
         
-        final double angle = CalculationsSL.getAngle(start_x, start_y, p.getX(), p.getY(), end.getX(), end.getY())
-                             * CalculationsSL.RAD_TO_DEG_NEG;
+        final double angle = Calc.getAngle(start_x, start_y, p.getX(), p.getY(), end.getX(), end.getY())
+                             * Calc.RAD_TO_DEG_NEG;
         if (angle == 0)
             return p;
         
-        final double[] rt = CalculationsSL.getRotatedPoint(start_x, start_y, p.x, p.y, angle * 2.0);
+        final double[] rt = Calc.getRotatedPoint(start_x, start_y, p.x, p.y, angle * 2.0);
         
         p.setLocation(rt[0], rt[1]);
         

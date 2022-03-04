@@ -6,7 +6,7 @@ import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.ArraysSL;
 import com.taco.suit_lady.util.tools.Exceptions;
-import com.taco.suit_lady.util.tools.ObjectsSL;
+import com.taco.suit_lady.util.tools.Objs;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -149,7 +149,7 @@ public class DragAndDropHandler<T extends Serializable>
                 cbContent.put(getDataFormat(), value);
                 db.setContent(cbContent);
                 
-                ObjectsSL.doIfNonNull(this::getDragDetectedHandler, handler -> handler.accept(new DragEventData<>(event, this, DragEventType.DETECTED)));
+                Objs.doIfNonNull(this::getDragDetectedHandler, handler -> handler.accept(new DragEventData<>(event, this, DragEventType.DETECTED)));
             } else
                 System.err.println("WARNING: Attempting to drag null element.");
             
@@ -158,7 +158,7 @@ public class DragAndDropHandler<T extends Serializable>
     }
     
     private void onDragDone(@NotNull DragEvent event) {
-        syncFX(() -> ObjectsSL.doIfNonNull(this::getDragDoneHandler, handler -> handler.accept(new DragEventData<>(event, this, DragEventType.DONE))));
+        syncFX(() -> Objs.doIfNonNull(this::getDragDoneHandler, handler -> handler.accept(new DragEventData<>(event, this, DragEventType.DONE))));
     }
     
     //
@@ -167,7 +167,7 @@ public class DragAndDropHandler<T extends Serializable>
         syncFX(() -> {
             if (event.getGestureSource() != getOwner()) {
                 event.acceptTransferModes(getTransferModes());
-                ObjectsSL.doIfNonNull(this::getDragOverHandler, handler -> handler.accept(new DragEventData<>(event, this, DragEventType.OVER)));
+                Objs.doIfNonNull(this::getDragOverHandler, handler -> handler.accept(new DragEventData<>(event, this, DragEventType.OVER)));
             }
             event.consume();
         });
@@ -179,7 +179,7 @@ public class DragAndDropHandler<T extends Serializable>
             
             boolean success = false;
             if (db.hasContent(getDataFormat())) {
-                ObjectsSL.doIfNonNull(this::getDragDroppedHandler, handler -> handler.accept(new DragEventData<>(event, this, DragEventType.DROPPED)));
+                Objs.doIfNonNull(this::getDragDroppedHandler, handler -> handler.accept(new DragEventData<>(event, this, DragEventType.DROPPED)));
                 success = true;
             }
             
@@ -190,18 +190,18 @@ public class DragAndDropHandler<T extends Serializable>
     
     
     private void onDragEntered(@NotNull DragEvent event) {
-        syncFX(() -> ObjectsSL.doIfNonNull(this::getDragEnteredHandler, handler -> handler.accept(new DragEventData<>(event, this, DragEventType.ENTERED))));
+        syncFX(() -> Objs.doIfNonNull(this::getDragEnteredHandler, handler -> handler.accept(new DragEventData<>(event, this, DragEventType.ENTERED))));
     }
     
     private void onDragExited(@NotNull DragEvent event) {
-        syncFX(() -> ObjectsSL.doIfNonNull(this::getDragExitedHandler, handler -> handler.accept(new DragEventData<>(event, this, DragEventType.EXITED))));
+        syncFX(() -> Objs.doIfNonNull(this::getDragExitedHandler, handler -> handler.accept(new DragEventData<>(event, this, DragEventType.EXITED))));
     }
     
     //
     
     @Deprecated
     private void onDragEvent(@NotNull DragEvent event, @Nullable Consumer<DragEventData<T, DragEvent>> eventHandler, @NotNull DragEventType eventType) {
-        ObjectsSL.doIfNonNull(
+        Objs.doIfNonNull(
                 () -> eventHandler,
                 handler -> handler.accept(new DragEventData<>(event, this, eventType)),
                 handler -> System.err.println("WARNING: Drag Handler is null [ " + event + " ]  |  [ " + eventType + " ]"));

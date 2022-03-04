@@ -58,12 +58,17 @@ public class CollisionArea
         });
     }
     
-    public final boolean intersects(@NotNull CollisionArea other) {
+    public final boolean intersects(@NotNull CollisionArea other) { return intersects(other, 0, 0); }
+    public final boolean intersects(@NotNull CollisionArea other, @NotNull Number xMod, @NotNull Number yMod) {
         return sync(() -> {
-            for (Shape shape: includedShapes())
-                for (Shape otherShape: other.includedShapes())
-                    if (shape.intersects(otherShape))
+            for (Shape included: includedShapes())
+                for (NumberValuePair borderPoint: included.getBorderPoints(xMod, yMod))
+                    if (other.contains(borderPoint))
                         return true;
+//            for (Shape otherIncluded: other.includedShapes())
+//                for (NumberValuePair borderPoint: otherIncluded.getBorderPoints(xMod, yMod))
+//                    if (contains(borderPoint))
+//                        return true;
             return false;
         });
     }
@@ -76,11 +81,11 @@ public class CollisionArea
 //            printer().get().print("Excluded: " + excludedShapes);
             
             for (Shape excluded: excludedShapes())
-                for (NumberValuePair borderPoint: excluded.getBorderPointsCopy())
+                for (NumberValuePair borderPoint: excluded.getBorderPoints())
                     if (other.contains(borderPoint))
                         return false;
             for (Shape included: includedShapes())
-                for (NumberValuePair borderPoint: included.getBorderPointsCopy())
+                for (NumberValuePair borderPoint: included.getBorderPoints())
                     if (other.contains(borderPoint))
                         return true;
             return false;

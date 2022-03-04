@@ -12,6 +12,8 @@ import com.taco.suit_lady.util.tools.PropertiesSL;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import com.taco.suit_lady.util.values.NumberValuePair;
 import com.taco.suit_lady.util.values.NumberValuePairable;
+import com.taco.suit_lady.util.values.Value;
+import com.taco.suit_lady.util.values.ValueOpType;
 import javafx.beans.Observable;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.ObjectBinding;
@@ -31,6 +33,7 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
 public abstract class Shape
         implements SpringableWrapper, Lockable, GFXObject<Shape> {
@@ -60,7 +63,6 @@ public abstract class Shape
     
     
     private final MapProperty<String, DoubleBinding> locationMap;
-    private final ObjectBinding<List<NumberValuePair>> borderPointsBinding;
     
     //
     
@@ -92,7 +94,6 @@ public abstract class Shape
         this.dimensionsBinding = BindingsSL.numPairBinding(widthProperty, heightProperty);
         
         this.locationMap = new SimpleMapProperty<>(FXCollections.observableHashMap());
-        this.borderPointsBinding = BindingsSL.objBinding(this::generateBorderPoints, getObservables());
         
         //
         
@@ -244,9 +245,13 @@ public abstract class Shape
     
     //
     
-    public final ObjectBinding<List<NumberValuePair>> borderPointsBinding() { return borderPointsBinding; }
-    public final List<NumberValuePair> getBorderPoints() { return borderPointsBinding.get(); }
-    @Contract(" -> new") public final @NotNull List<NumberValuePair> getBorderPointsCopy() { return new ArrayList<>(getBorderPoints()); }
+    public final @NotNull List<NumberValuePair> getBorderPoints() { return generateBorderPoints(); }
+    public final @NotNull List<NumberValuePair> getBorderPoints(@NotNull Number xMod, @NotNull Number yMod) {
+        return sync(() -> generateBorderPoints()
+                .stream()
+                .map(nvp -> nvp.applyEach(xMod, yMod, ValueOpType.ADD))
+                .collect(Collectors.toCollection(ArrayList::new)));
+    }
     
     //</editor-fold>
     
@@ -270,12 +275,10 @@ public abstract class Shape
     public final boolean contains(@NotNull Point2D point) { return contains(point.getX(), point.getY()); }
     public final boolean contains(@NotNull NumberValuePairable<?> point) { return contains(point.asPoint()); }
     
-    public boolean intersects(@NotNull Shape other) {
+    public boolean intersects(@NotNull Shape other, @NotNull Number xMod, @NotNull Number yMod) {
+        
         return sync(() -> {
-            for (NumberValuePair numPair: other.getBorderPointsCopy())
-                if (contains(numPair))
-                    return true;
-            for (NumberValuePair numPair: getBorderPointsCopy())
+            for (NumberValuePair numPair: getBorderPoints(xMod, yMod))
                 if (other.contains(numPair))
                     return true;
             return false;

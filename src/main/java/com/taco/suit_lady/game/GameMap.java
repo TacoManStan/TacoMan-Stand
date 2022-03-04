@@ -13,6 +13,9 @@ import com.taco.suit_lady.util.tools.ArraysSL;
 import com.taco.suit_lady.util.tools.BindingsSL;
 import com.taco.suit_lady.util.tools.Maths;
 import com.taco.suit_lady.util.tools.PropertiesSL;
+import com.taco.suit_lady.util.values.NumberValue;
+import com.taco.suit_lady.util.values.NumberValuePair;
+import com.taco.suit_lady.util.values.NumberValuePairable;
 import com.taco.tacository.json.*;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.ObjectBinding;
@@ -228,6 +231,8 @@ public class GameMap
     }
     public final @NotNull ArrayList<GameObject> scanMap(@NotNull Point2D targetPoint, double radius) { return scanMap(targetPoint, radius, null); }
     
+    //
+    
     //    public final @NotNull ArrayList<MapObject> scanMap(@NotNull GameObject target, double radius) {
     //        final ArrayList<MapObject> scannedObjects = new ArrayList<>();
     //        ArraysSL.iterateMatrix(tile -> scannedObjects.addAll(scanMap(tile, gameObject -> tile.inRange(gameObject, radius))), target.getOccupiedTiles());
@@ -253,7 +258,7 @@ public class GameMap
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override public @NotNull GameViewContent getGame() { return content; }
-    
+    @Override public @NotNull GameMap getGameMap() { return this; }
     //
     
     @Override public @NotNull Springable springable() { return content; }

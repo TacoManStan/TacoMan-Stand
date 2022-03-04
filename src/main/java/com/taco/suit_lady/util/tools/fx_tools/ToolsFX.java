@@ -246,7 +246,7 @@ public class ToolsFX {
     }
     
     public static void checkFX(boolean require, @Nullable Lock lock, @Nullable Runnable action) {
-        checkFX(require, lock, () -> ObjectsSL.getIfNonNull(() -> action, v -> {
+        checkFX(require, lock, () -> Objs.getIfNonNull(() -> action, v -> {
             v.run();
             return null;
         }));
@@ -255,7 +255,7 @@ public class ToolsFX {
     public static <T> T checkFX(boolean require, @Nullable Lock lock, @Nullable Supplier<T> action) {
         return TasksSL.sync(lock, () -> {
             checkFX(require);
-            return ObjectsSL.getIfNonNull(() -> action, v -> action.get());
+            return Objs.getIfNonNull(() -> action, v -> action.get());
         }, true);
     }
     
@@ -618,7 +618,7 @@ public class ToolsFX {
      * @return The integer value from the specified {@link TextField}.
      */
     public static int getIntValue(@NotNull TextField textField) {
-        return (int) CalculationsSL.getLongkmb(textField.getText(), false);
+        return (int) Calc.getLongkmb(textField.getText(), false);
     }
     
     /**
@@ -631,7 +631,7 @@ public class ToolsFX {
      * @return The integer value from the specified {@link TextField}.
      */
     public static long getLongValue(@NotNull TextField textField) {
-        return CalculationsSL.getLongkmb(textField.getText(), false);
+        return Calc.getLongkmb(textField.getText(), false);
     }
     
     /**
@@ -644,7 +644,7 @@ public class ToolsFX {
      * @return The double value from the specified {@link TextField}.
      */
     public static double getValue(@NotNull TextField textField) {
-        return CalculationsSL.getkmb(textField.getText(), false);
+        return Calc.getkmb(textField.getText(), false);
     }
     
     /**

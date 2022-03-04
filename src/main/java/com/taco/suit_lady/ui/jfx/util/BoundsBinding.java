@@ -1,7 +1,7 @@
 package com.taco.suit_lady.ui.jfx.util;
 
 import com.taco.suit_lady.util.tools.BindingsSL;
-import com.taco.suit_lady.util.tools.ObjectsSL;
+import com.taco.suit_lady.util.tools.Objs;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.Binding;
@@ -53,15 +53,15 @@ public class BoundsBinding
         //
         
         if (bind) {
-            ObjectsSL.doIfNonNull(() -> observableX, xProperty::bind);
-            ObjectsSL.doIfNonNull(() -> observableY, yProperty::bind);
-            ObjectsSL.doIfNonNull(() -> observableWidth, widthProperty::bind);
-            ObjectsSL.doIfNonNull(() -> observableHeight, heightProperty::bind);
+            Objs.doIfNonNull(() -> observableX, xProperty::bind);
+            Objs.doIfNonNull(() -> observableY, yProperty::bind);
+            Objs.doIfNonNull(() -> observableWidth, widthProperty::bind);
+            Objs.doIfNonNull(() -> observableHeight, heightProperty::bind);
         } else {
-            ObjectsSL.doIfNonNull(() -> observableX, obs -> setX(obs.getValue()));
-            ObjectsSL.doIfNonNull(() -> observableY, obs -> setY(obs.getValue()));
-            ObjectsSL.doIfNonNull(() -> observableWidth, obs -> setWidth(obs.getValue()));
-            ObjectsSL.doIfNonNull(() -> observableHeight, obs -> setHeight(obs.getValue()));
+            Objs.doIfNonNull(() -> observableX, obs -> setX(obs.getValue()));
+            Objs.doIfNonNull(() -> observableY, obs -> setY(obs.getValue()));
+            Objs.doIfNonNull(() -> observableWidth, obs -> setWidth(obs.getValue()));
+            Objs.doIfNonNull(() -> observableHeight, obs -> setHeight(obs.getValue()));
         }
     }
     public BoundsBinding(@Nullable ObservableValue<? extends Number> observableX, ObservableValue<? extends Number> observableY,

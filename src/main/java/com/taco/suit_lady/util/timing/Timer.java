@@ -1,6 +1,6 @@
 package com.taco.suit_lady.util.timing;
 
-import com.taco.suit_lady.util.tools.CalculationsSL;
+import com.taco.suit_lady.util.tools.Calc;
 import com.taco.suit_lady.util.tools.Exceptions;
 import javafx.beans.property.*;
 import org.jetbrains.annotations.NotNull;
@@ -95,7 +95,7 @@ public class Timer
     @Override
     public final void setTimeout(@NotNull Number timeout)
     {
-        timeoutProperty.set(CalculationsSL.clampMin(timeout.longValue(), -1L));
+        timeoutProperty.set(Calc.clampMin(timeout.longValue(), -1L));
     }
     
     //

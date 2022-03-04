@@ -76,7 +76,7 @@ public class GameMapModel
     }
     
     private void initPane() {
-        parentPaneProperty.addListener((observable, oldValue, newValue) -> ObjectsSL.doIfNonNull(
+        parentPaneProperty.addListener((observable, oldValue, newValue) -> Objs.doIfNonNull(
                 () -> newValue, value -> {
                     ToolsFX.setAnchors(value);
                     refreshCanvas();
@@ -112,7 +112,7 @@ public class GameMapModel
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final Camera getCamera() { return camera; }
+    @Override public final @NotNull Camera getCamera() { return camera; }
     
     
     public final ObjectProperty<StackPane> parentPaneProperty() { return parentPaneProperty; }

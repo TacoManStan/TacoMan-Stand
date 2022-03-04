@@ -8,7 +8,7 @@ import com.taco.suit_lady.ui.ui_internal.controllers.CellController;
 import com.taco.suit_lady.ui.ui_internal.drag_and_drop.DragAndDropHandler;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.tools.BindingsSL;
-import com.taco.suit_lady.util.tools.CalculationsSL;
+import com.taco.suit_lady.util.tools.Calc;
 import com.taco.suit_lady.util.tools.fx_tools.ToolsFX;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -154,7 +154,7 @@ public class GameViewContentController
             final Dimensions minBounds = new Dimensions(xOffset, yOffset);
             final Dimensions maxBounds = new Dimensions(getGameMap().getPixelWidth() - xOffset, getGameMap().getPixelHeight() - yOffset);
             mouseOnMapProperty.set(viewToMap);
-            mouseOnMapPropertySafe.set(CalculationsSL.getPointInBounds(viewToMap, minBounds, maxBounds));
+            mouseOnMapPropertySafe.set(Calc.getPointInBounds(viewToMap, minBounds, maxBounds));
 //            Print.err("Mouse on Map Safe: " + getMouseOnMapSafe() + "  |  " + getGameMap().getPixelDimensions(), false);
             //            Print.err("Mouse On Map Location Safe: " + getMouseOnMapSafe());
         });

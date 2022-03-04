@@ -19,6 +19,6 @@ public record NumberValuePair(Number a, Number b)
     }
     
     @Override public String toString() {
-        return getString(true);
+        return getString(false);
     }
 }

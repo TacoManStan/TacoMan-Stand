@@ -11,6 +11,8 @@ import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.timing.Timer;
 import com.taco.suit_lady.util.timing.Timers;
+import com.taco.suit_lady.util.tools.Exceptions;
+import com.taco.suit_lady.util.tools.Objs;
 import com.taco.suit_lady.util.tools.printer.Printer;
 import com.taco.suit_lady.util.tools.PropertiesSL;
 import com.taco.suit_lady.util.tools.TasksSL;
@@ -154,19 +156,19 @@ public class LogiCore
     
     //<editor-fold desc="> Execution">
     
-    public final void execute(@Nullable Runnable action) {
-        if (action != null)
-            gameLoopExecutor.execute(action);
-    }
-    public final <V> V execute(@Nullable Callable<V> action, @NotNull Consumer<Throwable> exceptionHandler) {
-        if (action != null) try {
-            return gameLoopExecutor.schedule(action, 0L, TimeUnit.MILLISECONDS).get();
+    public final <V> @Nullable ScheduledFuture<V> execute(@NotNull Callable<V> action) { return gameLoopExecutor.schedule(action, 0L, TimeUnit.MILLISECONDS); }
+    public final void execute(@NotNull Runnable action) { execute(Objs.asCallable(action)); }
+    
+    public final <V> V executeAndGet(@NotNull Callable<V> action, @Nullable Consumer<Throwable> exceptionHandler) {
+        exceptionHandler = exceptionHandler != null ? exceptionHandler : Throwable::printStackTrace;
+        try {
+            return execute(action).get();
         } catch (Exception e) {
             exceptionHandler.accept(e);
+            throw Exceptions.ex(e);
         }
-        return null;
     }
-    public final <V> V execute(@Nullable Callable<V> action) { return execute(action, Throwable::printStackTrace); }
+    public final <V> V executeAndGet(@NotNull Callable<V> action) { return executeAndGet(action, null); }
     
     //
     

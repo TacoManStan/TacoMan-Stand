@@ -51,6 +51,10 @@ import java.util.function.Supplier;
             action.run();
     }
     
+    default void syncCheckFX(Runnable action, boolean require) { sync(() -> ToolsFX.checkFX(require, null, action)); }
+    default void syncRequireFX(Runnable action) { syncCheckFX(action, true); }
+    default void syncForbidFX(Runnable action) { syncCheckFX(action, false); }
+    
     /**
      * See {@link TasksSL#sync(Lock, Supplier, Consumer[])}.
      *
@@ -66,6 +70,10 @@ import java.util.function.Supplier;
         else
             return action.get();
     }
+    
+    default <R> R syncCheckFX(Supplier<R> action, boolean require) { return sync(() -> ToolsFX.checkFX(require, null, action)); }
+    default <R> R syncRequireFX(Supplier<R> action) { return syncCheckFX(action, true); }
+    default <R> R syncForbidFX(Supplier<R> action) { return syncCheckFX(action, false); }
     
     /**
      * See {@link TasksSL#sync(Lock, Function, Supplier, boolean, Consumer[])}.

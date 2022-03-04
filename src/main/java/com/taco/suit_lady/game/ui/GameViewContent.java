@@ -5,7 +5,6 @@ import com.taco.suit_lady.game.galaxy.abilities.specific.Ability_LaunchMissile;
 import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.game.objects.tiles.GameTile;
-import com.taco.suit_lady.game.Camera;
 import com.taco.suit_lady.game.GameMap;
 import com.taco.suit_lady.game.ui.pages.GameTileEditorPage;
 import com.taco.suit_lady.game.ui.pages.GameViewPage;
@@ -112,12 +111,12 @@ public class GameViewContent
     
     private void initGame() {
         gameMapProperty.addListener((observable, oldValue, newValue) -> {
-            ObjectsSL.getIfNonNull(() -> oldValue, value -> syncFX(() -> {
+            Objs.getIfNonNull(() -> oldValue, value -> syncFX(() -> {
                 getController().getMapPane().getChildren().remove(value.getModel().getParentPane());
                 return value.shutdown();
             }));
             
-            ObjectsSL.getIf(() -> newValue, value -> value != null && !ObjectsSL.equals(newValue, oldValue), value -> {
+            Objs.getIf(() -> newValue, value -> value != null && !Objs.equals(newValue, oldValue), value -> {
                 value.init();
                 
                 getController().getMapPane().getChildren().retainAll();
@@ -134,18 +133,18 @@ public class GameViewContent
     
     private void initTestObjects() {
         testObject.init();
-        testObject.setTileLocationX(20);
-        testObject.setTileLocationY(20);
+        testObject.setTileLocationX(20, false);
+        testObject.setTileLocationY(20, false);
         getGameMap().gameObjects().add(testObject);
         
         testObject2.init();
-        testObject2.setTileLocationX(30);
-        testObject2.setTileLocationY(20);
+        testObject2.setTileLocationX(30, false);
+        testObject2.setTileLocationY(20, false);
         getGameMap().gameObjects().add(testObject2);
         
         testObjectTree.init();
-        testObjectTree.setTileLocationX(40);
-        testObjectTree.setTileLocationY(10);
+        testObjectTree.setTileLocationX(40, false);
+        testObjectTree.setTileLocationY(10, false);
         getGameMap().gameObjects().add(testObjectTree);
         
         getCamera().bindViewTo(testObject);
@@ -160,8 +159,6 @@ public class GameViewContent
     public final @NotNull ObjectProperty<GameMap> gameMapProperty() { return gameMapProperty; }
     public final GameMap getGameMap() { return gameMapProperty.get(); }
     public final GameMap setGameMap(@NotNull GameMap newValue) { return PropertiesSL.setProperty(gameMapProperty, newValue); }
-    
-    public final @NotNull Camera getCamera() { return getGameMap().getModel().getCamera(); }
     
     //</editor-fold>
     
@@ -231,7 +228,7 @@ public class GameViewContent
             if (fx)
                 selectTileAtMouse();
         } else if (event.getButton().equals(MouseButton.SECONDARY)) {
-            if (fx)
+            if (!fx)
                 getTestObject().getCommand().moveAndBind(getController().mouseOnMapBindingSafeX(), getController().mouseOnMapBindingSafeY());
         } else if (event.getButton().equals(MouseButton.MIDDLE)) {
             if (!fx)
@@ -242,7 +239,7 @@ public class GameViewContent
     }
     @Override protected boolean handleMouseReleaseEvent(@NotNull MouseEvent event, boolean fx) {
         if (event.getButton().equals(MouseButton.SECONDARY)) {
-            if (fx)
+            if (!fx)
                 getTestObject().getCommand().unbindAndMove(getController().getMouseOnMapSafe());
         }
         
@@ -251,7 +248,7 @@ public class GameViewContent
     
     @Override protected boolean handleMouseDragEvent(@NotNull MouseEvent event, boolean fx) {
         if (event.getButton() == MouseButton.SECONDARY) {
-            if (fx)
+            if (!fx)
                 getTestObject().getCommand().moveAndBind(getController().mouseOnMapBindingSafeX(), getController().mouseOnMapBindingSafeY());
         }
         

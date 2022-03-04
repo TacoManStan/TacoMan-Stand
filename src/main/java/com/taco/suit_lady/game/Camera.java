@@ -267,8 +267,8 @@ public class Camera
         } else {
             validateLocationBindings();
             
-            xLocationProperty.bind(gameObject.xLocationCenteredBinding());
-            yLocationProperty.bind(gameObject.yLocationCenteredBinding());
+            xLocationProperty.bind(gameObject.xLocationProperty(true));
+            yLocationProperty.bind(gameObject.yLocationProperty(true));
             
             validateLocationBindings();
             
@@ -291,14 +291,14 @@ public class Camera
                 xLocationProperty.unbind();
                 isBound = false;
             } else {
-                xLocationProperty.bind(gameObject.xLocationCenteredBinding());
+                xLocationProperty.bind(gameObject.xLocationProperty(true));
                 isBound = true;
             }
             
             if (yLocationProperty.isBound()) {
                 yLocationProperty.unbind();
             } else {
-                yLocationProperty.bind(gameObject.yLocationCenteredBinding());
+                yLocationProperty.bind(gameObject.yLocationProperty(true));
             }
             
             validateLocationBindings();
