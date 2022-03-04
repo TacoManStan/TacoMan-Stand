@@ -5,10 +5,7 @@ import com.taco.suit_lady.game.interfaces.WrappedGameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.util.tools.Exceptions;
 import com.taco.suit_lady.util.tools.PropertiesSL;
-import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.property.ReadOnlyBooleanWrapper;
-import javafx.beans.property.ReadOnlyLongProperty;
-import javafx.beans.property.ReadOnlyLongWrapper;
+import javafx.beans.property.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,6 +17,8 @@ public abstract class GameTask<E extends Tickable<E>>
     
     private final ReadOnlyLongWrapper tickCountProperty;
     private final ReadOnlyBooleanWrapper synchronizationEnabledProperty;
+    
+    private final ReadOnlyObjectWrapper<TaskState> stateProperty;
     
     public GameTask(@NotNull E owner) { this(null, owner); }
     
@@ -34,6 +33,8 @@ public abstract class GameTask<E extends Tickable<E>>
         
         this.tickCountProperty = new ReadOnlyLongWrapper(0);
         this.synchronizationEnabledProperty = new ReadOnlyBooleanWrapper(false);
+        
+        this.stateProperty = new ReadOnlyObjectWrapper<>(TaskState.PRE_EXECUTION);
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
@@ -47,6 +48,10 @@ public abstract class GameTask<E extends Tickable<E>>
     public final ReadOnlyBooleanProperty readOnlySynchronizationEnabledProperty() { return synchronizationEnabledProperty.getReadOnlyProperty(); }
     public final boolean isSynchronizationEnabled() { return synchronizationEnabledProperty.get(); }
     protected final boolean setSynchronizationEnabled(boolean newValue) { return PropertiesSL.setProperty(synchronizationEnabledProperty, newValue); }
+    
+    public final @NotNull ReadOnlyObjectProperty<TaskState> readOnlyStateProperty() { return stateProperty.getReadOnlyProperty(); }
+    public final @NotNull TaskState getState() { return stateProperty.get(); }
+    protected final @NotNull TaskState setState(@NotNull TaskState newValue) { return PropertiesSL.setProperty(stateProperty, newValue); }
     
     //</editor-fold>
     
