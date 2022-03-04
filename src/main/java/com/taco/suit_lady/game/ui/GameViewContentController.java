@@ -110,7 +110,7 @@ public class GameViewContentController
             @Override protected void shutdown() { }
             @Override protected boolean isDone() { return false; }
         };
-        taskManager().add(updateTask);
+        taskManager().addTask(updateTask);
     }
     
     @Override public void initialize() {

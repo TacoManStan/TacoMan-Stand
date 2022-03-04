@@ -19,7 +19,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
 
 public class TaskManager<E extends Tickable<E>>
-        implements SpringableWrapper, Lockable {
+        implements SpringableWrapper, Lockable, Tickable<E> {
     
     private final ReentrantLock internalLock;
     
@@ -114,8 +114,8 @@ public class TaskManager<E extends Tickable<E>>
     
     //<editor-fold desc="> Add/Remove Methods">
     
-    public final <T extends GameTask<E>> boolean add(@NotNull T task) { return addAndGet(task) != null; }
-    public final <T extends GameTask<E>> @Nullable T addAndGet(@NotNull T task) {
+    @Override public final <T extends GameTask<E>> boolean addTask(@NotNull T task) { return addTaskAndGet(task) != null; }
+    @Override public final <T extends GameTask<E>> @Nullable T addTaskAndGet(@NotNull T task) {
         return syncIf(() -> {
             if (tasks.add(task))
                 return task;
@@ -123,8 +123,8 @@ public class TaskManager<E extends Tickable<E>>
         }, this::isSynchronizationEnabled);
     }
     
-    public final <T extends GameTask<E>> boolean remove(@NotNull T task) { return removeAndGet(task) != null; }
-    public final <T extends GameTask<E>> @Nullable T removeAndGet(@NotNull T task) {
+    @Override public final <T extends GameTask<E>> boolean removeTask(@NotNull T task) { return removeTaskAndGet(task) != null; }
+    @Override public final <T extends GameTask<E>> @Nullable T removeTaskAndGet(@NotNull T task) {
         return syncIf(() -> {
             if (tasks.remove(task))
                 return task;
@@ -141,47 +141,46 @@ public class TaskManager<E extends Tickable<E>>
     
     //</editor-fold>
     
-    
     //<editor-fold desc="> Execution Methods">
     
     //<editor-fold desc=">> Execute Once Methods">
     
-    public final @NotNull OneTimeTask<E> executeOnceAndGet(@NotNull Runnable action, @Nullable Runnable onTerminateAction) {
-        return addAndGet(new OneTimeTask<>(getOwner()) {
+    @Override public final @NotNull OneTimeTask<E> executeOnceAndGet(@NotNull Runnable action, @Nullable Runnable onTerminateAction) {
+        return addTaskAndGet(new OneTimeTask<>(getOwner()) {
             @Override protected void tick() { Objs.run(action); }
             @Override protected void shutdown() { Objs.run(onTerminateAction); }
         });
     }
     
-    public final @NotNull OneTimeTask<E> executeOnceAndGet(@NotNull Runnable action) { return executeOnceAndGet(action, null); }
+    @Override public final @NotNull OneTimeTask<E> executeOnceAndGet(@NotNull Runnable action) { return executeOnceAndGet(action, null); }
     
     //
     
-    public final boolean executeOnce(@NotNull Runnable action, @Nullable Runnable onTerminateAction) { return executeOnceAndGet(action, onTerminateAction) != null; }
-    public final boolean executeOnce(@NotNull Runnable action) { return executeOnceAndGet(action) != null; }
+    @Override public final boolean executeOnce(@NotNull Runnable action, @Nullable Runnable onTerminateAction) { return executeOnceAndGet(action, onTerminateAction) != null; }
+    @Override public final boolean executeOnce(@NotNull Runnable action) { return executeOnceAndGet(action) != null; }
     
     //</editor-fold>
     
     //<editor-fold desc=">> Execute Persistent Methods">
     
-    public final @NotNull GameTask<E> executeAndGet(@NotNull Runnable action, @Nullable Runnable onTerminateAction, @Nullable Supplier<Boolean> terminateCondition) {
-        return addAndGet(new GameTask<>(getOwner()) {
+    @Override public final @NotNull GameTask<E> executeAndGet(@NotNull Runnable action, @Nullable Runnable onTerminateAction, @Nullable Supplier<Boolean> terminateCondition) {
+        return addTaskAndGet(new GameTask<>(getOwner()) {
             @Override protected void tick() { Objs.run(action); }
             @Override protected void shutdown() { Objs.run(onTerminateAction); }
             @Override protected boolean isDone() { return Objs.get(terminateCondition, () -> false); }
         });
     }
     
-    public final @NotNull GameTask<E> executeAndGet(@NotNull Runnable action, @Nullable Runnable onTerminateAction) { return executeAndGet(action, onTerminateAction, null); }
-    public final @NotNull GameTask<E> executeAndGet(@NotNull Runnable action, @Nullable Supplier<Boolean> terminateCondition) { return executeAndGet(action, null, terminateCondition); }
-    public final @NotNull GameTask<E> executeAndGet(@NotNull Runnable action) { return executeAndGet(action, null, null); }
+    @Override public final @NotNull GameTask<E> executeAndGet(@NotNull Runnable action, @Nullable Runnable onTerminateAction) { return executeAndGet(action, onTerminateAction, null); }
+    @Override public final @NotNull GameTask<E> executeAndGet(@NotNull Runnable action, @Nullable Supplier<Boolean> terminateCondition) { return executeAndGet(action, null, terminateCondition); }
+    @Override public final @NotNull GameTask<E> executeAndGet(@NotNull Runnable action) { return executeAndGet(action, null, null); }
     
     //
     
-    public final boolean execute(@NotNull Runnable action, @Nullable Runnable onTerminateAction, @Nullable Supplier<Boolean> terminateCondition) { return executeAndGet(action, onTerminateAction, terminateCondition) != null; }
-    public final boolean execute(@NotNull Runnable action, @Nullable Runnable onTerminateAction) { return executeAndGet(action, onTerminateAction) != null; }
-    public final boolean execute(@NotNull Runnable action, @Nullable Supplier<Boolean> terminateCondition) { return executeAndGet(action, terminateCondition) != null; }
-    public final boolean execute(@NotNull Runnable action) { return executeAndGet(action) != null; }
+    @Override public final boolean execute(@NotNull Runnable action, @Nullable Runnable onTerminateAction, @Nullable Supplier<Boolean> terminateCondition) { return executeAndGet(action, onTerminateAction, terminateCondition) != null; }
+    @Override public final boolean execute(@NotNull Runnable action, @Nullable Runnable onTerminateAction) { return executeAndGet(action, onTerminateAction) != null; }
+    @Override public final boolean execute(@NotNull Runnable action, @Nullable Supplier<Boolean> terminateCondition) { return executeAndGet(action, terminateCondition) != null; }
+    @Override public final boolean execute(@NotNull Runnable action) { return executeAndGet(action) != null; }
     
     //</editor-fold>
     
@@ -194,6 +193,9 @@ public class TaskManager<E extends Tickable<E>>
     public final E getOwner() { return owner; }
     @Contract(pure = true) public final @Nullable GFXObject<E> getGfxOwner() { return (owner instanceof GFXObject<?>) ? (GFXObject<E>) owner : null; }
     public final boolean isGfxOwner() { return getGfxOwner() != null; }
+    
+    
+    protected final @NotNull ListProperty<GameTask<E>> tasks() { return tasks; }
     
     
     public final ReadOnlyBooleanProperty readOnlyEnableSynchronizationProperty() { return enableSynchronizationProperty.getReadOnlyProperty(); }
@@ -211,6 +213,10 @@ public class TaskManager<E extends Tickable<E>>
     //</editor-fold>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+    @Override public final @NotNull TaskManager<E> taskManager() { return this; }
+    
+    //
     
     @Override public @NotNull Springable springable() { return owner; }
     @Override public @Nullable Lock getLock() { return internalLock; }

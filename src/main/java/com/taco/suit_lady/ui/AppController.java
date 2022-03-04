@@ -250,7 +250,7 @@ public class AppController
             Printer.print("Filtering Key Event: " + event.getCode());
             if (ui().getContentManager().submitKeyEvent(event, true))
                 event.consume();
-            getGameContent().getController().taskManager().add(
+            getGameContent().getController().taskManager().addTask(
                     Galaxy.newOneTimeTask(
                             getGameContent().getController(),
                             () -> ui().getContentManager().submitKeyEvent(event, false)));

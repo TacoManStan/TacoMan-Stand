@@ -101,7 +101,7 @@ public class GameObject
         
         initAttributes();
         
-        taskManager().add(this.command = new MoveCommand(this));
+        taskManager().addTask(this.command = new MoveCommand(this));
         
         //
         
