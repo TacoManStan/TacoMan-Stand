@@ -2,6 +2,9 @@ package com.taco.suit_lady.game;
 
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.taco.suit_lady.game.objects.GameObject;
+import com.taco.suit_lady.game.objects.collision.Collidable;
+import com.taco.suit_lady.game.objects.collision.CollisionArea;
+import com.taco.suit_lady.game.objects.collision.CollisionMap;
 import com.taco.suit_lady.game.objects.tiles.GameTile;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.ui.jfx.util.Dimensions;
@@ -12,6 +15,7 @@ import com.taco.suit_lady.util.tools.list_tools.A;
 import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Calc;
 import com.taco.suit_lady.util.tools.Props;
+import com.taco.suit_lady.util.values.ValuePairable;
 import com.taco.tacository.json.*;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.ObjectBinding;
@@ -156,6 +160,10 @@ public class GameMap
     
     //</editor-fold>
     
+    //<editor-fold desc="--- LOGIC ---">
+    
+    //<editor-fold desc="> Tile Accessors">
+    
     public final @Nullable GameTile getNeighbor(@NotNull GameTile gameTile, int xTranslate, int yTranslate) {
         int xTemp = gameTile.getLocationX() + xTranslate;
         int yTemp = gameTile.getLocationY() + yTranslate;
@@ -213,6 +221,10 @@ public class GameMap
     public final @NotNull GameTile getTileAtPoint(@NotNull Number x, @NotNull Number y) { return getTileAtPoint(new Point2D(x.doubleValue(), y.doubleValue())); }
     public final @NotNull GameTile getTileAtPoint(@NotNull Point2D point) { return getTileAtTileIndex(point.getX() / getTileSize(), point.getY() / getTileSize()); }
     
+    //</editor-fold>
+    
+    //<editor-fold desc="> GameObject Accessors">
+    
     @Contract("_ -> new")
     public final @NotNull ArrayList<GameObject> getObjectsAtPoint(@NotNull Point2D point) { return new ArrayList<>(getTileAtPoint(point).getOccupyingObjects()); }
     
@@ -226,6 +238,22 @@ public class GameMap
                             .collect(Collectors.toCollection(ArrayList::new));
     }
     public final @NotNull ArrayList<GameObject> scanMap(@NotNull Point2D targetPoint, double radius) { return scanMap(targetPoint, radius, null); }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="> Pathability Check Methods">
+    
+    public final boolean isPathable(@NotNull Number x, @NotNull Number y) { return !sync(() -> gameObjects().stream().anyMatch(gameObject -> gameObject.collisionMap().containsPoint(x, y))); }
+    public final boolean isPathable(@NotNull Point2D point) { return isPathable(point.getX(), point.getY()); }
+    public final boolean isPathable(@NotNull ValuePairable<Number, Number> point) { return isPathable(point.a(), point.b()); }
+    
+    public final boolean isPathable(@NotNull Collidable<?> collidable) { return !sync(() -> gameObjects().stream().anyMatch(gameObject -> gameObject.collidesWith(collidable))); }
+    public final boolean isPathable(@NotNull CollisionArea<?> collisionArea) { return !sync(() -> gameObjects().stream().anyMatch(gameObject -> gameObject.collidesWith(collisionArea))); }
+    public final boolean isPathable(@NotNull CollisionMap<?> collisionMap) { return !sync(() -> gameObjects().stream().anyMatch(gameObject -> gameObject.collidesWith(collisionMap))); }
+    
+    //</editor-fold>
+    
+    //</editor-fold>
     
     //
     

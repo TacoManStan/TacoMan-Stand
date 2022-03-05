@@ -12,6 +12,7 @@ public abstract class Ability_TargetEffect<E extends Effect> extends Ability {
     
     private final ReadOnlyObjectWrapper<E> effectProperty;
     
+    
     public Ability_TargetEffect(@NotNull GameObject source) {
         super(source);
         

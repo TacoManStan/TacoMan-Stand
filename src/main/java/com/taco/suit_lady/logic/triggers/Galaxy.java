@@ -1,8 +1,8 @@
 package com.taco.suit_lady.logic.triggers;
 
 import com.taco.suit_lady.game.GameComponent;
-import com.taco.suit_lady.game.galaxy.effects.Effect;
-import com.taco.suit_lady.game.galaxy.effects.Effect_Targeted;
+import com.taco.suit_lady.game.galaxy.validators.Validatable;
+import com.taco.suit_lady.game.galaxy.validators.ValidationFilter;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.logic.OneTimeTask;
 import com.taco.suit_lady.logic.Tickable;
@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -64,6 +65,24 @@ public final class Galaxy {
     }
     
     //</editor-fold>
+    
+    //<editor-fold desc="> Validator Factory Methods">
+    
+    public static <T extends Validatable<T>> @NotNull ValidationFilter<T> newValidator(@NotNull T owner, @NotNull Function<Map<String, Object>, Boolean> paramHandler) {
+        return new ValidationFilter<>(owner) {
+            @Override protected boolean validate(@NotNull Map<String, Object> params) {
+                return paramHandler.apply(params);
+            }
+        };
+    }
+    
+    public static <T extends Validatable<T>> @NotNull ValidationFilter<T> newValidator(@NotNull T owner, @NotNull Supplier<Boolean> paramHandler) {
+        return newValidator(owner, map -> paramHandler.get());
+    }
+    
+    //</editor-fold>
+    
+    //
     
     //<editor-fold desc="> GameTask Factory Methods">
     

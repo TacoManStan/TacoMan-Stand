@@ -6,6 +6,8 @@ import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.Exc;
 import com.taco.suit_lady.util.tools.fx_tools.FX;
 import com.taco.suit_lady.util.values.NumberValuePairable;
+import com.taco.suit_lady.util.values.ValuePair;
+import com.taco.suit_lady.util.values.ValuePairable;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
@@ -72,6 +74,18 @@ public class CollisionMap<T extends Collidable<T>>
     //</editor-fold>
     
     //<editor-fold desc="--- LOGIC ---">
+    
+    //<editor-fold desc="> Contains Point Methods">
+    
+    public final boolean containsPoint(@NotNull Number x, @NotNull Number y) {
+        return sync(() -> collisionAreas.stream().anyMatch(area -> area.containsPoint(x, y)));
+    }
+    
+    public final boolean containsPoint(@NotNull Point2D point) { return containsPoint(point.getX(), point.getY()); }
+    public final boolean containsPoint(@NotNull ValuePairable<Number, Number> point) { return containsPoint(point.a(), point.b()); }
+    
+    //</editor-fold>
+    
     
     //<editor-fold desc="> Collision Checks">
     

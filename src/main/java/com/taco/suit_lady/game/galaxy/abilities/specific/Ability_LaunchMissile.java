@@ -13,7 +13,9 @@ public class Ability_LaunchMissile extends Ability_TargetEffect<Effect_LaunchMis
         super(source);
     }
     
-    @Override public void use(@NotNull Map<String, Object> params) {
-        new Effect_LaunchMissile(getOwner()).trigger(params);
-    }
+    //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+    @Override public boolean execute(@NotNull Map<String, Object> params) { return new Effect_LaunchMissile(getSource()).trigger(params); }
+    
+    //</editor-fold>
 }

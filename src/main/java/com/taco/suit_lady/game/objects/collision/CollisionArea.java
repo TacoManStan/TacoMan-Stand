@@ -11,6 +11,7 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
+import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,7 +47,7 @@ public class CollisionArea<T extends Collidable<T>>
     
     //</editor-fold>
     
-    public final boolean contains(@NotNull NumberValuePair point) {
+    public final boolean containsPoint(@NotNull NumberValuePair point) {
         return sync(() -> {
             for (Shape excluded: excludedShapes())
                 if (excluded.contains(point))
@@ -58,17 +59,22 @@ public class CollisionArea<T extends Collidable<T>>
         });
     }
     
+    public final boolean containsPoint(@NotNull Number x, @NotNull Number y) { return containsPoint(new NumberValuePair(x, y)); }
+    public final boolean containsPoint(@NotNull Point2D point) { return containsPoint(new NumberValuePair(point.getX(), point.getY())); }
+    
+    //
+    
     public final boolean intersects(@NotNull CollisionArea<?> other) { return intersects(other, 0, 0); }
     public final boolean intersects(@NotNull CollisionArea<?> other, @NotNull Number xMod, @NotNull Number yMod) {
         return sync(() -> {
             for (Shape included: includedShapes())
                 for (NumberValuePair borderPoint: included.getBorderPoints(xMod, yMod))
-                    if (other.contains(borderPoint))
+                    if (other.containsPoint(borderPoint))
                         return true;
-//            for (Shape otherIncluded: other.includedShapes())
-//                for (NumberValuePair borderPoint: otherIncluded.getBorderPoints(xMod, yMod))
-//                    if (contains(borderPoint))
-//                        return true;
+            //            for (Shape otherIncluded: other.includedShapes())
+            //                for (NumberValuePair borderPoint: otherIncluded.getBorderPoints(xMod, yMod))
+            //                    if (contains(borderPoint))
+            //                        return true;
             return false;
         });
     }
@@ -76,17 +82,17 @@ public class CollisionArea<T extends Collidable<T>>
     public final boolean intersectsLegacy(@NotNull CollisionArea<?> other) {
         return sync(() -> {
             printer().get().setPrintPrefix(false);
-//            printer().get().print("Checking Intersection...");
-//            printer().get().print("Included: " + includedShapes);
-//            printer().get().print("Excluded: " + excludedShapes);
+            //            printer().get().print("Checking Intersection...");
+            //            printer().get().print("Included: " + includedShapes);
+            //            printer().get().print("Excluded: " + excludedShapes);
             
             for (Shape excluded: excludedShapes())
                 for (NumberValuePair borderPoint: excluded.getBorderPoints())
-                    if (other.contains(borderPoint))
+                    if (other.containsPoint(borderPoint))
                         return false;
             for (Shape included: includedShapes())
                 for (NumberValuePair borderPoint: included.getBorderPoints())
-                    if (other.contains(borderPoint))
+                    if (other.containsPoint(borderPoint))
                         return true;
             return false;
         });

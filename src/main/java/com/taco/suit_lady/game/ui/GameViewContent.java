@@ -1,14 +1,17 @@
 package com.taco.suit_lady.game.ui;
 
 import com.taco.suit_lady.game.attributes.AttributePage;
+import com.taco.suit_lady.game.galaxy.abilities.Ability;
 import com.taco.suit_lady.game.galaxy.abilities.specific.Ability_Blink;
 import com.taco.suit_lady.game.galaxy.abilities.specific.Ability_LaunchMissile;
 import com.taco.suit_lady.game.GameComponent;
+import com.taco.suit_lady.game.galaxy.validators.ValidationFilter;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.game.objects.tiles.GameTile;
 import com.taco.suit_lady.game.GameMap;
 import com.taco.suit_lady.game.ui.pages.GameTileEditorPage;
 import com.taco.suit_lady.game.ui.pages.GameViewPage;
+import com.taco.suit_lady.logic.triggers.Galaxy;
 import com.taco.suit_lady.ui.Content;
 import com.taco.suit_lady.ui.SidebarBookshelf;
 import com.taco.suit_lady.ui.UIBook;
@@ -26,6 +29,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.input.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class GameViewContent
@@ -219,9 +223,15 @@ public class GameViewContent
     private void abilityTest(int abilityNum) {
         Print.print("Ability Used: " + abilityNum);
         switch (abilityNum) {
-            case 1 -> new Ability_LaunchMissile(testObject).use(new ValuePair<>("target", getController().getMouseOnMapSafe()));
-            case 2 -> new Ability_Blink(testObject).use(new ValuePair<>("target", getController().getMouseOnMapSafe()));
+            case 1 -> new Ability_LaunchMissile(testObject).execute(new ValuePair<>("target", getController().getMouseOnMapSafe()));
+            case 2 -> new Ability_Blink(testObject).execute(new ValuePair<>("target", getController().getMouseOnMapSafe()));
         }
+    }
+    
+    private @NotNull Ability_Blink blinkTest() {
+        final Ability_Blink ability = new Ability_Blink(testObject);
+        ability.validator().addValidator(Galaxy.newValidator(ability, params -> !testObject.collisionMap().containsPoint((ValuePair<Number, Number>) params.get("target"))));
+        return ability;
     }
     
     @Override protected boolean handleMousePressEvent(@NotNull MouseEvent event, boolean fx) {
@@ -231,7 +241,7 @@ public class GameViewContent
                 selectTileAtMouse();
         } else if (event.getButton().equals(MouseButton.SECONDARY)) {
             if (!fx)
-                getTestObject().moveAndBind(getController().mouseOnMapBindingSafeX(), getController().mouseOnMapBindingSafeY());
+                getTestObject().mover().moveAndBind(getController().mouseOnMapBindingSafeX(), getController().mouseOnMapBindingSafeY());
         } else if (event.getButton().equals(MouseButton.MIDDLE)) {
             if (!fx)
                 abilityTest(2);
@@ -242,7 +252,7 @@ public class GameViewContent
     @Override protected boolean handleMouseReleaseEvent(@NotNull MouseEvent event, boolean fx) {
         if (event.getButton().equals(MouseButton.SECONDARY)) {
             if (!fx)
-                getTestObject().unbindAndMove(getController().getMouseOnMapSafe());
+                getTestObject().mover().unbindAndMove(getController().getMouseOnMapSafe());
         }
         
         return true;
@@ -251,7 +261,7 @@ public class GameViewContent
     @Override protected boolean handleMouseDragEvent(@NotNull MouseEvent event, boolean fx) {
         if (event.getButton() == MouseButton.SECONDARY) {
             if (!fx)
-                getTestObject().moveAndBind(getController().mouseOnMapBindingSafeX(), getController().mouseOnMapBindingSafeY());
+                getTestObject().mover().moveAndBind(getController().mouseOnMapBindingSafeX(), getController().mouseOnMapBindingSafeY());
         }
         
         return true;

@@ -74,7 +74,7 @@ public class Effect_LaunchMissile extends Effect_Targeted {
             missile.taskManager().shutdown();
         }));
         
-        missile.move(target);
+        missile.mover().move(target);
         
         return missile;
     }
