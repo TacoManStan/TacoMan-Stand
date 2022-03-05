@@ -17,7 +17,7 @@ public class Ability_Blink extends Ability_TargetEffect<Effect_LaunchMissile> {
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public boolean execute(@NotNull Map<String, Object> params) { return Effect_Blink.newInstance(getSource()).trigger(params); }
+    @Override protected boolean execute(@NotNull Map<String, Object> params) { return Effect_Blink.newInstance(getSource()).trigger(params); }
     
     //</editor-fold>
 }

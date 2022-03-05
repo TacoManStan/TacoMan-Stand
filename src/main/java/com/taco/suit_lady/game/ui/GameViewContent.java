@@ -20,7 +20,9 @@ import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.*;
+import com.taco.suit_lady.util.tools.list_tools.L;
 import com.taco.suit_lady.util.tools.printer.Print;
+import com.taco.suit_lady.util.values.NumberValuePairable;
 import com.taco.suit_lady.util.values.ValuePair;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ObjectProperty;
@@ -223,14 +225,18 @@ public class GameViewContent
     private void abilityTest(int abilityNum) {
         Print.print("Ability Used: " + abilityNum);
         switch (abilityNum) {
-            case 1 -> new Ability_LaunchMissile(testObject).execute(new ValuePair<>("target", getController().getMouseOnMapSafe()));
-            case 2 -> new Ability_Blink(testObject).execute(new ValuePair<>("target", getController().getMouseOnMapSafe()));
+            case 1 -> new Ability_LaunchMissile(testObject).use(new ValuePair<>("target", getController().getMouseOnMapSafe()));
+            case 2 -> blinkTest().use(new ValuePair<>("target", getController().getMouseOnMapSafe()));
         }
     }
     
     private @NotNull Ability_Blink blinkTest() {
         final Ability_Blink ability = new Ability_Blink(testObject);
-        ability.validator().addValidator(Galaxy.newValidator(ability, params -> !testObject.collisionMap().containsPoint((ValuePair<Number, Number>) params.get("target"))));
+//        ability.validator().addValidator(Galaxy.newValidator(
+//                ability, params -> !testObject.collisionMap().containsPoint(
+//                        L.get("target", Point2D.class, params))));
+        ability.validator().addValidator(Galaxy.newValidator(
+                ability, params -> getGameMap().isPathable(L.get("target", Point2D.class, params))));
         return ability;
     }
     

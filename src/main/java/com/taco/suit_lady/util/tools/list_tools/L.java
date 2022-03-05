@@ -414,8 +414,9 @@ public final class L {
     
     //<editor-fold desc="--- MAP OPERATIONS ---">
     
-    @SafeVarargs
-    public static <K, V> @NotNull HashMap<K, V> map(@Nullable Predicate<ValuePair<K, V>> filter, @NotNull ValuePair<K, V>... contents) {
+    //<editor-fold desc="> Factory & Conversion Methods">
+    
+    @SafeVarargs public static <K, V> @NotNull HashMap<K, V> map(@Nullable Predicate<ValuePair<K, V>> filter, @NotNull ValuePair<K, V>... contents) {
         filter = filter != null ? filter : valuePair -> true;
         final HashMap<K, V> map = new HashMap<>();
         Arrays.stream(contents)
@@ -425,10 +426,12 @@ public final class L {
         return map;
     }
     
-    @SafeVarargs
-    public static <K, V> @NotNull HashMap<K, V> map(@NotNull ValuePair<K, V>... contents) {
-        return map(null, contents);
-    }
+    @SafeVarargs public static <K, V> @NotNull HashMap<K, V> map(@NotNull ValuePair<K, V>... contents) { return map(null, contents); }
+    
+    //</editor-fold>
+    
+    public static <K, V> @Nullable V get(@NotNull K key, @NotNull Class<V> returnType, @NotNull Map<K, Object> map) { return (V) map.get(key); }
+    public static <K, V> @Nullable V get(@NotNull K key, @NotNull Map<K, Object> map) { return (V) map.get(key); }
     
     //</editor-fold>
     

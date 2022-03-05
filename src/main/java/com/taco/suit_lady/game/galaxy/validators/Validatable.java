@@ -1,14 +1,23 @@
 package com.taco.suit_lady.game.galaxy.validators;
 
 import com.taco.suit_lady.game.WrappedGameComponent;
+import com.taco.suit_lady.util.values.ValuePair;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
+
+@SuppressWarnings("unchecked")
 public interface Validatable<T extends Validatable<T>>
         extends WrappedGameComponent {
     
     @NotNull Validator<T> validator();
     
-    //
+    //<editor-fold desc="--- DEFAULT METHODS ---">
     
     default boolean isValid() { return validator().isValid(); }
+    
+    default boolean revalidate(@NotNull Map<String, Object> params) { return validator().revalidate(params); }
+    default boolean revalidate(@NotNull ValuePair<String, Object>... params) { return validator().revalidate(params); }
+    
+    //</editor-fold>
 }

@@ -37,15 +37,15 @@ public abstract class Ability
     
     //<editor-fold desc="--- ABSTRACT ---">
     
-    @SafeVarargs public final boolean execute(@NotNull ValuePair<String, Object>... params) { return execute(L.map(params)); }
-    public abstract boolean execute(@NotNull Map<String, Object> params);
+    @SafeVarargs protected final boolean execute(@NotNull ValuePair<String, Object>... params) { return execute(L.map(params)); }
+    protected abstract boolean execute(@NotNull Map<String, Object> params);
     
     //</editor-fold>
     
     //<editor-fold desc="--- LOGIC ---">
     
     @SafeVarargs public final boolean use(@NotNull ValuePair<String, Object>... params) { return use(L.map(params)); }
-    public final boolean use(@NotNull Map<String, Object> params) { return sync(() -> isValid() && execute(params)); }
+    public final boolean use(@NotNull Map<String, Object> params) { return sync(() -> revalidate(params) && execute(params)); }
     
     //</editor-fold>
     

@@ -3,6 +3,7 @@ package com.taco.suit_lady.game.galaxy.validators;
 import com.taco.suit_lady.game.WrappedGameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.util.tools.list_tools.L;
+import com.taco.suit_lady.util.tools.printer.Print;
 import com.taco.suit_lady.util.values.ValuePair;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
@@ -51,14 +52,19 @@ public class Validator<T extends Validatable<T>>
     
     //<editor-fold desc="> Validation Methods">
     
-    public boolean validate(@NotNull Map<String, Object> params) {
+    public boolean revalidate(@NotNull Map<String, Object> params) {
         return sync(() -> {
-            final boolean valid = validatorsProperty.stream().anyMatch(v -> v.revalidate(params));
+            final boolean valid = validatorsProperty.isEmpty() || validatorsProperty.stream().anyMatch(v -> {
+                final boolean valid2 = v.revalidate(params);
+                printer().get(getClass()).print("Valid 2: " + valid2);
+                return valid2;
+            });
+            printer().get(getClass()).print("Valid: " + valid);
             validProperty.set(valid);
             return valid;
         });
     }
-    @SafeVarargs public final boolean validate(@NotNull ValuePair<String, Object>... params) { return validate(L.map(params)); }
+    @SafeVarargs public final boolean revalidate(@NotNull ValuePair<String, Object>... params) { return revalidate(L.map(params)); }
     
     //</editor-fold>
     
