@@ -1,6 +1,8 @@
 package com.taco.suit_lady.logic.triggers;
 
 import com.taco.suit_lady.game.GameComponent;
+import com.taco.suit_lady.game.galaxy.effects.Effect;
+import com.taco.suit_lady.game.galaxy.effects.Effect_Targeted;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.logic.OneTimeTask;
 import com.taco.suit_lady.logic.Tickable;
@@ -12,8 +14,10 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
  * <p>Contains static utility methods for streamlined {@link Trigger}-related operations (e.g., {@link Trigger} factory methods).</p>

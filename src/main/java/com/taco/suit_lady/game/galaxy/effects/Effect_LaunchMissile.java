@@ -1,5 +1,6 @@
 package com.taco.suit_lady.game.galaxy.effects;
 
+import com.taco.suit_lady.game.galaxy.effects.specific.Effect_MissileImpact;
 import com.taco.suit_lady.game.objects.Mover;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.logic.triggers.Galaxy;
@@ -32,9 +33,9 @@ public class Effect_LaunchMissile extends Effect_Targeted {
     public final ReadOnlyObjectProperty<Effect> readOnlyImpactEffectProperty() { return impactEffectProperty.getReadOnlyProperty(); }
     public final Effect getImpactEffect() { return impactEffectProperty.get(); }
     
-    public final Effect getImpactEffectTest() {
+    public final Effect getImpactEffectTest(@NotNull GameObject missile) {
 //        return new Effect_LaunchMissile(getSource());
-        return new Effect_Scan(getSource());
+        return new Effect_Scan(getSource(), new Effect_MissileImpact(missile));
     }
     
     public final ReadOnlyStringProperty readOnlyMissileObjectProperty() { return missileObjectProperty.getReadOnlyProperty(); }
@@ -65,7 +66,7 @@ public class Effect_LaunchMissile extends Effect_Targeted {
         
         logiCore().triggers().register(Galaxy.newUnitArrivedTrigger(missile, event -> {
             Print.print("Missile Arrived [" + missile + "]  ||  [" + event.getMovedFrom() + "  -->  " + event.getMovedTo());
-            final Effect impactEffect = getImpactEffectTest();
+            final Effect impactEffect = getImpactEffectTest(missile);
             if (impactEffect != null)
                 impactEffect.trigger(L.map(
                         new ValuePair<>("missile", missile),

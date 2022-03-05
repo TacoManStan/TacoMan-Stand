@@ -16,10 +16,12 @@ public class Effect_Scan extends Effect_Targeted {
     
     private final ReadOnlyObjectWrapper<Effect_Targeted> scanEffectProperty;
     
-    public Effect_Scan(@NotNull GameObject source) {
+    public Effect_Scan(@NotNull GameObject source, @Nullable Effect_Targeted scanEffect) {
         super(source);
-        this.scanEffectProperty = new ReadOnlyObjectWrapper<>();
+        this.scanEffectProperty = new ReadOnlyObjectWrapper<>(scanEffect);
     }
+    
+    public Effect_Scan(@NotNull GameObject source) { this(source, null); }
     
     //<editor-fold desc="--- PROPERTIES ---">
     
@@ -48,7 +50,7 @@ public class Effect_Scan extends Effect_Targeted {
         final double radius = (double) params.get("radius");
         
         getGameMap().scanMap(missile.getLocation(true), radius)
-                    .forEach(gameObject -> getScanEffectTest(missile).trigger(
+                    .forEach(gameObject -> getScanEffect().trigger(
                             L.map(new ValuePair<>("target", gameObject))));
         
         return true;

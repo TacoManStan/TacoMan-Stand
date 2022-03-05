@@ -1,6 +1,7 @@
 package com.taco.suit_lady.game.ui;
 
 import com.taco.suit_lady.game.attributes.AttributePage;
+import com.taco.suit_lady.game.galaxy.abilities.specific.Ability_Blink;
 import com.taco.suit_lady.game.galaxy.abilities.specific.Ability_LaunchMissile;
 import com.taco.suit_lady.game.GameComponent;
 import com.taco.suit_lady.game.objects.GameObject;
@@ -217,8 +218,10 @@ public class GameViewContent
     
     private void abilityTest(int abilityNum) {
         Print.print("Ability Used: " + abilityNum);
-        if (abilityNum == 1)
-            new Ability_LaunchMissile(testObject).use(new ValuePair<>("target", getController().getMouseOnMapSafe()));
+        switch (abilityNum) {
+            case 1 -> new Ability_LaunchMissile(testObject).use(new ValuePair<>("target", getController().getMouseOnMapSafe()));
+            case 2 -> new Ability_Blink(testObject).use(new ValuePair<>("target", getController().getMouseOnMapSafe()));
+        }
     }
     
     @Override protected boolean handleMousePressEvent(@NotNull MouseEvent event, boolean fx) {
@@ -231,7 +234,7 @@ public class GameViewContent
                 getTestObject().moveAndBind(getController().mouseOnMapBindingSafeX(), getController().mouseOnMapBindingSafeY());
         } else if (event.getButton().equals(MouseButton.MIDDLE)) {
             if (!fx)
-                abilityTest(1);
+                abilityTest(2);
         }
         
         return true;
