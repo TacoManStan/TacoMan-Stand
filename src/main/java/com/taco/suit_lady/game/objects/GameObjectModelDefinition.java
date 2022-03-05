@@ -1,7 +1,7 @@
 package com.taco.suit_lady.game.objects;
 
 import com.github.cliftonlabs.json_simple.JsonObject;
-import com.taco.suit_lady.game.interfaces.WrappedGameComponent;
+import com.taco.suit_lady.game.WrappedGameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.ui.jfx.util.BoundsBinding;

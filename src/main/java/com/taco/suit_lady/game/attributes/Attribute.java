@@ -1,6 +1,6 @@
 package com.taco.suit_lady.game.attributes;
 
-import com.taco.suit_lady.game.interfaces.WrappedGameComponent;
+import com.taco.suit_lady.game.WrappedGameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;

@@ -2,8 +2,11 @@ package com.taco.suit_lady.game.objects.tiles;
 
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.taco.suit_lady.game.GameMap;
-import com.taco.suit_lady.game.interfaces.GameComponent;
+import com.taco.suit_lady.game.objects.collision.Collidable;
+import com.taco.suit_lady.game.GameComponent;
 import com.taco.suit_lady.game.objects.*;
+import com.taco.suit_lady.game.objects.collision.CollisionArea;
+import com.taco.suit_lady.game.objects.collision.CollisionMap;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.ui.jfx.util.Dimensions;
 import com.taco.suit_lady.util.Lockable;

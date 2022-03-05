@@ -1,6 +1,6 @@
 package com.taco.suit_lady.game.galaxy.abilities;
 
-import com.taco.suit_lady.game.interfaces.GameObjectComponent;
+import com.taco.suit_lady.game.GameObjectComponent;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.util.tools.list_tools.L;
 import com.taco.suit_lady.util.values.ValuePair;

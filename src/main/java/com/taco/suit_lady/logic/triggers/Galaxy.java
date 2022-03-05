@@ -1,6 +1,6 @@
 package com.taco.suit_lady.logic.triggers;
 
-import com.taco.suit_lady.game.interfaces.GameComponent;
+import com.taco.suit_lady.game.GameComponent;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.logic.OneTimeTask;
 import com.taco.suit_lady.logic.Tickable;

@@ -5,7 +5,7 @@ import com.taco.suit_lady._to_sort._new.initialization.Initializer;
 import com.taco.suit_lady._to_sort._new.initialization.LockMode;
 import com.taco.suit_lady.game.ui.GFXObject;
 import com.taco.suit_lady.logic.triggers.TriggerEventManager;
-import com.taco.suit_lady.game.interfaces.GameComponent;
+import com.taco.suit_lady.game.GameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;

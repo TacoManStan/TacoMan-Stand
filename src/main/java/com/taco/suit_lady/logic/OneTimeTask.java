@@ -1,6 +1,6 @@
 package com.taco.suit_lady.logic;
 
-import com.taco.suit_lady.game.interfaces.GameComponent;
+import com.taco.suit_lady.game.GameComponent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -1,9 +1,8 @@
-package com.taco.suit_lady.game.commands;
+package com.taco.suit_lady.game.objects;
 
 import com.taco.suit_lady.game.attributes.Attribute;
-import com.taco.suit_lady.game.objects.Collidable;
-import com.taco.suit_lady.game.objects.CollisionMap;
-import com.taco.suit_lady.game.objects.GameObject;
+import com.taco.suit_lady.game.objects.collision.Collidable;
+import com.taco.suit_lady.game.objects.collision.CollisionMap;
 import com.taco.suit_lady.logic.GameTask;
 import com.taco.suit_lady.logic.triggers.implementations.UnitArrivedEvent;
 import com.taco.suit_lady.util.tools.Bind;
@@ -23,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 import java.util.concurrent.locks.Lock;
 
-public class MoveCommand
+public class Mover
         extends GameTask<GameObject>
         implements Collidable<GameObject> {
     
@@ -49,7 +48,7 @@ public class MoveCommand
     
     private final BooleanProperty debugEnabledProperty;
     
-    public MoveCommand(@NotNull GameObject owner) {
+    public Mover(@NotNull GameObject owner) {
         super(owner, owner);
         
         //        this.lock = new ReentrantLock();
@@ -57,7 +56,7 @@ public class MoveCommand
         
         this.xTargetProperty = new SimpleDoubleProperty(owner.getLocationX(false));
         this.yTargetProperty = new SimpleDoubleProperty(owner.getLocationY(false));
-        this.targetBinding = Bind.objBinding(() -> new NumberValuePair(getTargetX(), getTargetY()), xTargetProperty, yTargetProperty);
+        this.targetBinding = Bind.objBinding(() -> sync(() -> new NumberValuePair(getTargetX(), getTargetY())), xTargetProperty, yTargetProperty);
         
         this.observableTargetXProperty = new ReadOnlyObjectWrapper<>();
         this.observableTargetYProperty = new ReadOnlyObjectWrapper<>();
@@ -106,24 +105,24 @@ public class MoveCommand
     
     //<editor-fold desc="> Target Properties">
     
-    //    public final @NotNull DoubleProperty xTargetProperty() { return xTargetProperty; }
-    public final double getTargetX() { return xTargetProperty.get(); }
-    public final double setTargetX(@NotNull Number newValue) { return Props.setProperty(xTargetProperty, newValue); }
+    private @NotNull DoubleProperty xTargetProperty() { return xTargetProperty; }
+    public final double getTargetX() { return sync(xTargetProperty::get); }
+    public final double setTargetX(@NotNull Number newValue) { return sync(() -> Props.setProperty(xTargetProperty, newValue)); }
     
     //    public final @NotNull DoubleProperty yTargetProperty() { return yTargetProperty; }
-    public final double getTargetY() { return yTargetProperty.get(); }
-    public final double setTargetY(@NotNull Number newValue) { return Props.setProperty(yTargetProperty, newValue); }
+    public final double getTargetY() { return sync(yTargetProperty::get); }
+    public final double setTargetY(@NotNull Number newValue) { return sync(() -> Props.setProperty(yTargetProperty, newValue)); }
     
-    @Contract(" -> new") public final @NotNull Point2D getTarget() { return new Point2D(getTargetX(), getTargetY()); }
+    @Contract(" -> new") public final @NotNull Point2D getTarget() { return sync(() -> new Point2D(getTargetX(), getTargetY())); }
     public final @NotNull Point2D setTarget(@Nullable Point2D newValue) { return sync(() -> new Point2D(setTargetX(newValue.getX()), setTargetY(newValue.getY()))); }
     
     // Observable Target
     
     private @NotNull ReadOnlyObjectWrapper<ObservableValue<? extends Number>> observableTargetXProperty() { return observableTargetXProperty; }
-    public final @NotNull ReadOnlyObjectProperty<ObservableValue<? extends Number>> readOnlyObservableTargetXProperty() { return observableTargetXProperty.getReadOnlyProperty(); }
-    public final @Nullable ObservableValue<? extends Number> getObservableTargetX() { return observableTargetXProperty.get(); }
+    public final @NotNull ReadOnlyObjectProperty<ObservableValue<? extends Number>> readOnlyObservableTargetXProperty() { return sync(observableTargetXProperty::getReadOnlyProperty); }
+    public final @Nullable ObservableValue<? extends Number> getObservableTargetX() { return sync(observableTargetXProperty::get); }
     public final double getObservableTargetValueX() {
-        return Obj.getIfNonNull(this::getObservableTargetX, obs -> obs.getValue().doubleValue(), obs -> 0D);
+        return sync(() -> Obj.getIfNonNull(this::getObservableTargetX, obs -> obs.getValue().doubleValue(), obs -> 0D));
     }
     private @Nullable ObservableValue<? extends Number> setObservableTargetX(@Nullable ObservableValue<? extends Number> newValue) {
         return sync(() -> {
@@ -136,10 +135,10 @@ public class MoveCommand
     public final boolean isBoundX() { return getObservableTargetX() != null; }
     
     private @NotNull ReadOnlyObjectWrapper<ObservableValue<? extends Number>> observableTargetYProperty() { return observableTargetYProperty; }
-    public final @NotNull ReadOnlyObjectProperty<ObservableValue<? extends Number>> readOnlyObservableTargetYProperty() { return observableTargetYProperty.getReadOnlyProperty(); }
-    public final @Nullable ObservableValue<? extends Number> getObservableTargetY() { return observableTargetYProperty.get(); }
+    public final @NotNull ReadOnlyObjectProperty<ObservableValue<? extends Number>> readOnlyObservableTargetYProperty() { return sync(observableTargetYProperty::getReadOnlyProperty); }
+    public final @Nullable ObservableValue<? extends Number> getObservableTargetY() { return sync(observableTargetYProperty::get); }
     public final double getObservableTargetValueY() {
-        return Obj.getIfNonNull(this::getObservableTargetY, obs -> obs.getValue().doubleValue(), obs -> 0D);
+        return sync(() -> Obj.getIfNonNull(this::getObservableTargetY, obs -> obs.getValue().doubleValue(), obs -> 0D));
     }
     private @Nullable ObservableValue<? extends Number> setObservableTargetY(@Nullable ObservableValue<? extends Number> newValue) {
         return sync(() -> {
@@ -153,8 +152,7 @@ public class MoveCommand
     
     
     public final Point2D getObservableTargetValue() { return sync(() -> new Point2D(getObservableTargetX().getValue().doubleValue(), getObservableTargetY().getValue().doubleValue())); }
-    public final ValuePair<ObservableValue<? extends Number>, ObservableValue<? extends Number>> setObservableTargetValues(
-            @Nullable ObservableValue<? extends Number> obsX, @Nullable ObservableValue<? extends Number> obsY) {
+    public final ValuePair<ObservableValue<? extends Number>, ObservableValue<? extends Number>> setObservableTargetValues(@Nullable ObservableValue<? extends Number> obsX, @Nullable ObservableValue<? extends Number> obsY) {
         return sync(() -> new ValuePair<>(setObservableTargetX(obsX), setObservableTargetY(obsY)));
     }
     
@@ -163,14 +161,14 @@ public class MoveCommand
     //
     
     public final @NotNull BooleanProperty pausedProperty() { return pausedProperty; }
-    public final boolean isPaused() { return pausedProperty.get(); }
-    public final boolean setPaused(boolean newValue) { return Props.setProperty(pausedProperty, newValue); }
+    public final boolean isPaused() { return sync(pausedProperty::get); }
+    public final boolean setPaused(boolean newValue) { return sync(() -> Props.setProperty(pausedProperty, newValue)); }
     
     //
     
     public final BooleanProperty debugEnabledProperty() { return debugEnabledProperty; }
-    public final boolean isDebugEnabled() { return debugEnabledProperty.get(); }
-    public final boolean setDebugEnabled(boolean newValue) { return Props.setProperty(debugEnabledProperty, newValue); }
+    public final boolean isDebugEnabled() { return sync(debugEnabledProperty::get); }
+    public final boolean setDebugEnabled(boolean newValue) { return sync(() -> Props.setProperty(debugEnabledProperty, newValue)); }
     
     //<editor-fold desc="> Move Methods">
     
@@ -230,10 +228,10 @@ public class MoveCommand
             if (!isPaused()) {
                 //            final double speed = ((getOwner().attributes().getDoubleValue(MoveCommand.ATTRIBUTE_ID) * logiCore.getUPSMultiplier()) * logiCore.getGameMap().getTileSize()) / 100D;
                 //            System.out.println("Pre-Speed: " + logiCore().secondsToTicks(getOwner().attributes().getDoubleValue(MoveCommand.ATTRIBUTE_ID)));
-                final double acceleration = getOwner().attributes().getDoubleValue(MoveCommand.ACCELERATION_ID, () -> 1D);
-                final Attribute<Double> speedAttribute = getOwner().attributes().getDoubleAttribute(MoveCommand.SPEED_ID);
+                final double acceleration = getOwner().attributes().getDoubleValue(Mover.ACCELERATION_ID, () -> 1D);
+                final Attribute<Double> speedAttribute = getOwner().attributes().getDoubleAttribute(Mover.SPEED_ID);
                 speedAttribute.setValue(speedAttribute.getValue() * acceleration);
-                final double speed = logiCore().secondsToTicks(getOwner().attributes().getDoubleValue(MoveCommand.SPEED_ID) * getGameMap().getTileSize());
+                final double speed = logiCore().secondsToTicks(getOwner().attributes().getDoubleValue(Mover.SPEED_ID) * getGameMap().getTileSize());
                 //            System.out.println("Speed: " + speed);
                 
                 final double xDistance = targetX - locX;
@@ -254,7 +252,7 @@ public class MoveCommand
                         if (targetX != locX)
                             xMovement = targetX - locX; //Might need to be swapped
                         //                        getOwner().setLocationX(getTargetX(), true);
-                    } else if (xMovement < 0 &&targetX >= locX + xMovement) {
+                    } else if (xMovement < 0 && targetX >= locX + xMovement) {
                         if (targetX != locX)
                             xMovement = targetX - locX;
                         //                        getOwner().setLocationX(getTargetX(), true);
@@ -263,7 +261,7 @@ public class MoveCommand
                     //                    getOwner().moveX(xMovement);
                     
                     if (yMovement > 0 && targetY < locY + yMovement) {
-                        if (targetY  != locY)
+                        if (targetY != locY)
                             yMovement = targetY - locY;
                     } else if (yMovement < 0 && targetY > locY + yMovement) {
                         if (targetY != locY)
@@ -298,10 +296,10 @@ public class MoveCommand
                         //                        Printer.print("Collision Detected", false);
                         setPaused(true);
                     } else {
-                        getOwner().move(xMove, yMove);
-//                        if (getGameMap().gameObjects().stream().anyMatch(this::collidesWith)) {
-//                            throw Exceptions.ex("KJHGDSKJHF BLLLLAARRGH");
-//                        }
+                        getOwner().translateLocation(xMove, yMove);
+                        //                        if (getGameMap().gameObjects().stream().anyMatch(this::collidesWith)) {
+                        //                            throw Exceptions.ex("KJHGDSKJHF BLLLLAARRGH");
+                        //                        }
                     }
                 }
                 
@@ -327,11 +325,14 @@ public class MoveCommand
     //</editor-fold>
     
     private NumberValuePair syncTarget() {
-        ObservableValue<? extends Number> obsX = getObservableTargetX();
-        ObservableValue<? extends Number> obsY = getObservableTargetY();
-        Number x = obsX != null ? obsX.getValue() : getTargetX();
-        Number y = obsY != null ? obsY.getValue() : getTargetY();
-        setTarget(new Point2D(x.doubleValue(), y.doubleValue()));
-        return new NumberValuePair(x, y);
+        return sync(() -> {
+            ObservableValue<? extends Number> obsX = getObservableTargetX();
+            ObservableValue<? extends Number> obsY = getObservableTargetY();
+            Number x = obsX != null ? obsX.getValue() : getTargetX();
+            Number y = obsY != null ? obsY.getValue() : getTargetY();
+            
+            setTarget(new Point2D(x.doubleValue(), y.doubleValue()));
+            return new NumberValuePair(x, y);
+        });
     }
 }

@@ -1,6 +1,6 @@
 package com.taco.suit_lady.game.ui.pages;
 
-import com.taco.suit_lady.game.interfaces.GameComponent;
+import com.taco.suit_lady.game.GameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.ui.UIBook;
 import com.taco.suit_lady.ui.UIPage;

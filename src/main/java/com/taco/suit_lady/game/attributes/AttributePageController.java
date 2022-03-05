@@ -1,6 +1,6 @@
 package com.taco.suit_lady.game.attributes;
 
-import com.taco.suit_lady.game.interfaces.GameComponent;
+import com.taco.suit_lady.game.GameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.ui.UIPageController;
 import com.taco.suit_lady.ui.jfx.lists.CellControlManager;

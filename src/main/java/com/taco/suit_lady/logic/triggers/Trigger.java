@@ -1,7 +1,7 @@
 package com.taco.suit_lady.logic.triggers;
 
 import com.taco.suit_lady.game.Entity;
-import com.taco.suit_lady.game.interfaces.WrappedGameComponent;
+import com.taco.suit_lady.game.WrappedGameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.util.tools.Exc;
 import com.taco.suit_lady.util.tools.Props;

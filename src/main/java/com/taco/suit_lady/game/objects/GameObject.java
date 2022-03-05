@@ -3,9 +3,11 @@ package com.taco.suit_lady.game.objects;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.taco.suit_lady.game.attributes.AttributeManager;
 import com.taco.suit_lady.game.Entity;
-import com.taco.suit_lady.game.commands.MoveCommand;
-import com.taco.suit_lady.game.interfaces.GameComponent;
-import com.taco.suit_lady.game.interfaces.WrappedGameComponent;
+import com.taco.suit_lady.game.GameComponent;
+import com.taco.suit_lady.game.WrappedGameComponent;
+import com.taco.suit_lady.game.objects.collision.Collidable;
+import com.taco.suit_lady.game.objects.collision.CollisionArea;
+import com.taco.suit_lady.game.objects.collision.CollisionMap;
 import com.taco.suit_lady.game.objects.tiles.GameTile;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.logic.TaskManager;
@@ -38,7 +40,7 @@ import java.io.Serial;
 import java.util.ArrayList;
 
 public class GameObject
-        implements WrappedGameComponent, Entity, MapObject, JObject, JLoadable, UIDProcessable, Tickable<GameObject>, Collidable<GameObject> {
+        implements WrappedGameComponent, Entity, MapObject, JObject, JLoadable, UIDProcessable, Tickable<GameObject>, Collidable<GameObject>, Movable {
     
     private final GameViewContent content;
     private final TaskManager<GameObject> taskManager;
@@ -72,7 +74,7 @@ public class GameObject
     
     //
     
-    private final MoveCommand command;
+    private final Mover mover;
     
     public GameObject(@NotNull GameComponent gameComponent, @Nullable String objID, @Nullable String modelId) {
         this.content = gameComponent.getGame();
@@ -105,7 +107,7 @@ public class GameObject
         
         initAttributes();
         
-        taskManager().addTask(this.command = new MoveCommand(this));
+        taskManager().addTask(this.mover = new Mover(this));
         
         //
         
@@ -147,8 +149,8 @@ public class GameObject
     }
     
     private void initAttributes() {
-        attributes().addDoubleAttribute(MoveCommand.SPEED_ID, 8); //Measured in tiles/second
-        attributes().addDoubleAttribute(MoveCommand.MAX_SPEED_ID, 100);
+        attributes().addDoubleAttribute(Mover.SPEED_ID, 8); //Measured in tiles/second
+        attributes().addDoubleAttribute(Mover.MAX_SPEED_ID, 100);
         attributes().addAttribute("health", 500);
     }
     
@@ -200,7 +202,6 @@ public class GameObject
     public final @NotNull AttributeManager attributes() { return attributes; }
     @Override public final @NotNull CollisionMap<GameObject> collisionMap() { return collisionMap; }
     
-    public final MoveCommand getCommand() { return command; }
     public final String getObjID() { return objID; }
     public final String setObjID(@Nullable String newValue) {
         String oldValue = getObjID();
@@ -217,11 +218,11 @@ public class GameObject
     
     public final double getLocationX(boolean center) { return center ? xLocationCenteredBinding.get() : xLocationProperty.get(); }
     public final double setLocationX(@NotNull Number newValue, boolean center) { return Props.setProperty(xLocationProperty, center ? newValue.doubleValue() - (getWidth() / 2D) : newValue.doubleValue()); }
-    public final double moveX(@NotNull Number amount) { return setLocationX(getLocationX(false) + amount.doubleValue(), false); }
+    public final double translateX(@NotNull Number amount) { return setLocationX(getLocationX(false) + amount.doubleValue(), false); }
     
     public final double getTileLocationX(boolean center) { return pixelToTile(getLocationX(center)).doubleValue(); }
     public final double setTileLocationX(@NotNull Number newValue, boolean center) { return pixelToTile(setLocationX(tileToPixel(newValue), center)).doubleValue(); }
-    public final double moveTileX(@NotNull Number amount) { return pixelToTile(moveX(tileToPixel(amount))).doubleValue(); }
+    public final double translateTileX(@NotNull Number amount) { return pixelToTile(translateX(tileToPixel(amount))).doubleValue(); }
     
     
     @Override public final @NotNull DoubleProperty yLocationProperty() { return (DoubleProperty) yLocationProperty(false); }
@@ -229,11 +230,11 @@ public class GameObject
     
     public final double getLocationY(boolean center) { return center ? yLocationCenteredBinding.get() : yLocationProperty.get(); }
     public final double setLocationY(@NotNull Number newValue, boolean center) { return Props.setProperty(yLocationProperty, center ? newValue.doubleValue() - (getHeight() / 2D) : newValue.doubleValue()); }
-    public final double moveY(@NotNull Number amount) { return setLocationY(getLocationY(false) + amount.doubleValue(), false); }
+    public final double translateY(@NotNull Number amount) { return setLocationY(getLocationY(false) + amount.doubleValue(), false); }
     
     public final double getTileLocationY(boolean center) { return pixelToTile(getLocationY(center)).doubleValue(); }
     public final double setTileLocationY(@NotNull Number newValue, boolean center) { return pixelToTile(setLocationY(tileToPixel(newValue), center)).doubleValue(); }
-    public final double moveTileY(@NotNull Number amount) { return pixelToTile(moveY(tileToPixel(amount))).doubleValue(); }
+    public final double translateTileY(@NotNull Number amount) { return pixelToTile(translateY(tileToPixel(amount))).doubleValue(); }
     
     //
     
@@ -246,9 +247,9 @@ public class GameObject
         return new Point2D(setLocationX(newValue.getX(), center), setLocationY(newValue.getY(), center));
     }
     
-    public final Point2D move(@NotNull Number x, @NotNull Number y) { return new Point2D(moveX(x), moveY(y)); }
-    public final Point2D move(@NotNull Point2D amount) { return move(amount.getX(), amount.getY()); }
-    public final Point2D move(@NotNull NumberValuePairable<?> amount) { return move(amount.asPoint()); }
+    public final Point2D translateLocation(@NotNull Number x, @NotNull Number y) { return new Point2D(translateX(x), translateY(y)); }
+    public final Point2D translateLocation(@NotNull Point2D amount) { return translateLocation(amount.getX(), amount.getY()); }
+    public final Point2D translateLocation(@NotNull NumberValuePairable<?> amount) { return translateLocation(amount.asPoint()); }
     
     // Tile Location
     
@@ -258,9 +259,9 @@ public class GameObject
     }
     
     
-    public final Point2D moveTile(@NotNull Number x, @NotNull Number y) { return new Point2D(moveTileX(x), moveTileY(y)); }
-    public final Point2D moveTile(@NotNull Point2D amount) { return moveTile(amount.getX(), amount.getY()); }
-    public final Point2D moveTile(@NotNull NumberValuePairable<?> amount) { return moveTile(amount.asPoint()); }
+    public final Point2D translateTileLocation(@NotNull Number x, @NotNull Number y) { return new Point2D(translateTileX(x), translateTileY(y)); }
+    public final Point2D translateTileLocation(@NotNull Point2D amount) { return translateTileLocation(amount.getX(), amount.getY()); }
+    public final Point2D translateTileLocation(@NotNull NumberValuePairable<?> amount) { return translateTileLocation(amount.asPoint()); }
     
     //</editor-fold>
     
@@ -291,7 +292,12 @@ public class GameObject
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
+    //<editor-fold desc="> Game">
+    
     @Override public @NotNull GameViewContent getGame() { return content; }
+    @Override public @NotNull Mover mover() { return mover; }
+    
+    //</editor-fold>
     
     //<editor-fold desc="> Json">
     

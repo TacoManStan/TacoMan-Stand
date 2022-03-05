@@ -1,7 +1,7 @@
 package com.taco.suit_lady.game.ui.pages;
 
 import com.taco.suit_lady.game.objects.tiles.GameTile;
-import com.taco.suit_lady.game.interfaces.GameComponent;
+import com.taco.suit_lady.game.GameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.ui.UIPageController;
 import com.taco.tacository.json.JFiles;
@@ -79,8 +79,8 @@ public class GameViewPageController extends UIPageController<GameViewPage>
             System.out.println("Map Width: " + getGameMap().getPixelWidth() + "::" + getGameMap().getWidth());
             System.out.println("Map Height: " + getGameMap().getPixelHeight() + "::" + getGameMap().getHeight());
             
-            System.out.println("Movement Target X: " + getGame().getTestObject().getCommand().getTargetX());
-            System.out.println("Movement Target Y: " + getGame().getTestObject().getCommand().getTargetY());
+            System.out.println("Movement Target X: " + getGame().getTestObject().mover().getTargetX());
+            System.out.println("Movement Target Y: " + getGame().getTestObject().mover().getTargetY());
             
             
             System.out.println("Test Object Width: " + getGame().getTestObject().getWidth());

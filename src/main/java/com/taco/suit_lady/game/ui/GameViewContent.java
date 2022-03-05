@@ -2,7 +2,7 @@ package com.taco.suit_lady.game.ui;
 
 import com.taco.suit_lady.game.attributes.AttributePage;
 import com.taco.suit_lady.game.galaxy.abilities.specific.Ability_LaunchMissile;
-import com.taco.suit_lady.game.interfaces.GameComponent;
+import com.taco.suit_lady.game.GameComponent;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.game.objects.tiles.GameTile;
 import com.taco.suit_lady.game.GameMap;
@@ -228,7 +228,7 @@ public class GameViewContent
                 selectTileAtMouse();
         } else if (event.getButton().equals(MouseButton.SECONDARY)) {
             if (!fx)
-                getTestObject().getCommand().moveAndBind(getController().mouseOnMapBindingSafeX(), getController().mouseOnMapBindingSafeY());
+                getTestObject().moveAndBind(getController().mouseOnMapBindingSafeX(), getController().mouseOnMapBindingSafeY());
         } else if (event.getButton().equals(MouseButton.MIDDLE)) {
             if (!fx)
                 abilityTest(1);
@@ -239,7 +239,7 @@ public class GameViewContent
     @Override protected boolean handleMouseReleaseEvent(@NotNull MouseEvent event, boolean fx) {
         if (event.getButton().equals(MouseButton.SECONDARY)) {
             if (!fx)
-                getTestObject().getCommand().unbindAndMove(getController().getMouseOnMapSafe());
+                getTestObject().unbindAndMove(getController().getMouseOnMapSafe());
         }
         
         return true;
@@ -248,7 +248,7 @@ public class GameViewContent
     @Override protected boolean handleMouseDragEvent(@NotNull MouseEvent event, boolean fx) {
         if (event.getButton() == MouseButton.SECONDARY) {
             if (!fx)
-                getTestObject().getCommand().moveAndBind(getController().mouseOnMapBindingSafeX(), getController().mouseOnMapBindingSafeY());
+                getTestObject().moveAndBind(getController().mouseOnMapBindingSafeX(), getController().mouseOnMapBindingSafeY());
         }
         
         return true;

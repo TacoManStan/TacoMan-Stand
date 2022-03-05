@@ -1,6 +1,5 @@
 package com.taco.suit_lady.game;
 
-import com.taco.suit_lady.game.interfaces.GameComponent;
 import com.taco.suit_lady.game.objects.tiles.TileModel;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.CroppedImagePaintCommand;

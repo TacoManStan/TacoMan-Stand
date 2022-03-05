@@ -1,6 +1,6 @@
 package com.taco.suit_lady.game.galaxy.effects;
 
-import com.taco.suit_lady.game.interfaces.WrappedGameComponent;
+import com.taco.suit_lady.game.WrappedGameComponent;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.util.tools.list_tools.L;

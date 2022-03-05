@@ -1,4 +1,4 @@
-package com.taco.suit_lady.game.objects;
+package com.taco.suit_lady.game.objects.collision;
 
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.shapes.Shape;
@@ -41,8 +41,8 @@ public class CollisionArea<T extends Collidable<T>>
     public final CollisionMap<T> getOwner() { return ownerProperty.get(); }
     protected final CollisionMap<T> setOwner(CollisionMap<T> newValue) { return Props.setProperty(ownerProperty, newValue); }
     
-    protected final ListProperty<Shape> includedShapes() { return includedShapes; }
-    protected final ListProperty<Shape> excludedShapes() { return excludedShapes; }
+    public final ListProperty<Shape> includedShapes() { return includedShapes; }
+    public final ListProperty<Shape> excludedShapes() { return excludedShapes; }
     
     //</editor-fold>
     
