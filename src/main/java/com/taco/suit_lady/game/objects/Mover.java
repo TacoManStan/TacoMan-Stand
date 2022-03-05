@@ -290,16 +290,13 @@ public class Mover
                     //                    Printer.print();
                     //                    Printer.print("Attempting to move to: " + new NumberValuePair(xMove, yMove), false);
                     
-                    if (getGameMap().gameObjects().stream().anyMatch(gameObject -> {
-                        return collidesWith(gameObject, xMove, yMove);
-                    })) {
-                        //                        Printer.print("Collision Detected", false);
-                        setPaused(true);
-                    } else {
+//                    if (getGameMap().gameObjects().stream().anyMatch(gameObject -> {
+//                        return collidesWith(gameObject, xMove, yMove);
+//                    })) {
+                    if (getGameMap().isPathable(getOwner(), xMove, yMove)) {
                         getOwner().translateLocation(xMove, yMove);
-                        //                        if (getGameMap().gameObjects().stream().anyMatch(this::collidesWith)) {
-                        //                            throw Exceptions.ex("KJHGDSKJHF BLLLLAARRGH");
-                        //                        }
+                    } else {
+                        setPaused(true);
                     }
                 }
                 

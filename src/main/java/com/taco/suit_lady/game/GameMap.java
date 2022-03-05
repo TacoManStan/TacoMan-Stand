@@ -15,6 +15,7 @@ import com.taco.suit_lady.util.tools.list_tools.A;
 import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Calc;
 import com.taco.suit_lady.util.tools.Props;
+import com.taco.suit_lady.util.values.ValuePair;
 import com.taco.suit_lady.util.values.ValuePairable;
 import com.taco.tacository.json.*;
 import javafx.beans.binding.IntegerBinding;
@@ -243,13 +244,41 @@ public class GameMap
     
     //<editor-fold desc="> Pathability Check Methods">
     
+    //<editor-fold desc=">> Point Pathability Check Methods">
+    
     public final boolean isPathable(@NotNull Number x, @NotNull Number y) { return !sync(() -> gameObjects().stream().anyMatch(gameObject -> gameObject.collisionMap().containsPoint(x, y))); }
     public final boolean isPathable(@NotNull Point2D point) { return isPathable(point.getX(), point.getY()); }
     public final boolean isPathable(@NotNull ValuePairable<Number, Number> point) { return isPathable(point.a(), point.b()); }
     
-    public final boolean isPathable(@NotNull Collidable<?> collidable) { return !sync(() -> gameObjects().stream().anyMatch(gameObject -> gameObject.collidesWith(collidable))); }
-    public final boolean isPathable(@NotNull CollisionArea<?> collisionArea) { return !sync(() -> gameObjects().stream().anyMatch(gameObject -> gameObject.collidesWith(collisionArea))); }
-    public final boolean isPathable(@NotNull CollisionMap<?> collisionMap) { return !sync(() -> gameObjects().stream().anyMatch(gameObject -> gameObject.collidesWith(collisionMap))); }
+    //</editor-fold>
+    
+    //<editor-fold desc=">> Collision Pathability Check Methods">
+    
+    public final boolean isPathable(@NotNull Collidable<?> collidable, @NotNull Number xMod, @NotNull Number yMod) {
+        return !sync(() -> gameObjects().stream().anyMatch(gameObject -> collidable.collidesWith(gameObject, xMod, yMod)));
+    }
+    public final boolean isPathable(@NotNull Collidable<?> collidable, @NotNull Point2D mod) { return isPathable(collidable, mod.getX(), mod.getY()); }
+    public final boolean isPathable(@NotNull Collidable<?> collidable, @NotNull ValuePairable<Number, Number> mod) { return isPathable(collidable, mod.a(), mod.b()); }
+    
+    public final boolean isPathable(@NotNull CollisionArea<?> collisionArea, @NotNull Number xMod, @NotNull Number yMod) {
+        return !sync(() -> gameObjects().stream().anyMatch(gameObject -> collisionArea.collidesWith(gameObject, xMod, yMod)));
+    }
+    public final boolean isPathable(@NotNull CollisionArea<?> collisionArea, @NotNull Point2D mod) { return isPathable(collisionArea, mod.getX(), mod.getY()); }
+    public final boolean isPathable(@NotNull CollisionArea<?> collisionArea, @NotNull ValuePairable<Number, Number> mod) { return isPathable(collisionArea, mod.a(), mod.b()); }
+    
+    public final boolean isPathable(@NotNull CollisionMap<?> collisionMap, @NotNull Number xMod, @NotNull Number yMod) {
+        return !sync(() -> gameObjects().stream().anyMatch(gameObject -> gameObject.collidesWith(collisionMap, xMod, yMod)));
+    }
+    public final boolean isPathable(@NotNull CollisionMap<?> collisionMap, @NotNull Point2D mod) { return isPathable(collisionMap, mod.getX(), mod.getY()); }
+    public final boolean isPathable(@NotNull CollisionMap<?> collisionMap, @NotNull ValuePairable<Number, Number> mod) { return isPathable(collisionMap, mod.a(), mod.b()); }
+    
+    //
+    
+    public final boolean isPathable(@NotNull Collidable<?> collidable) { return isPathable(collidable, 0, 0); }
+    public final boolean isPathable(@NotNull CollisionArea<?> collisionArea) { return isPathable(collisionArea, 0, 0); }
+    public final boolean isPathable(@NotNull CollisionMap<?> collisionMap) { return isPathable(collisionMap, 0, 0); }
+    
+    //</editor-fold>
     
     //</editor-fold>
     

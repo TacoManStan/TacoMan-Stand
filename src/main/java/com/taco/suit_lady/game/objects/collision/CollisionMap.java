@@ -6,7 +6,6 @@ import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.Exc;
 import com.taco.suit_lady.util.tools.fx_tools.FX;
 import com.taco.suit_lady.util.values.NumberValuePairable;
-import com.taco.suit_lady.util.values.ValuePair;
 import com.taco.suit_lady.util.values.ValuePairable;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
@@ -53,7 +52,8 @@ public class CollisionMap<T extends Collidable<T>>
     
     public final T getOwner() { return owner; }
     
-    public final List<CollisionArea<T>> collisionAreas() { return new ArrayList<>(collisionAreas); }
+    public final @NotNull List<CollisionArea<T>> collisionAreasCopy() { return new ArrayList<>(collisionAreas); }
+    
     public final boolean addCollisionArea(@NotNull CollisionArea<T> area) {
         return FX.forbidFX(getLock(), () -> {
             if (collisionAreas.contains(area))
@@ -91,7 +91,7 @@ public class CollisionMap<T extends Collidable<T>>
     
     public final boolean collidesWith(@NotNull CollisionMap<?> other, @NotNull Number xMod, @NotNull Number yMod) {
         return !this.equals(other) && FX.forbidFX(
-                getLock(), () -> other.collisionAreas().stream().anyMatch(
+                getLock(), () -> other.collisionAreasCopy().stream().anyMatch(
                         otherArea -> this.collidesWith(otherArea, xMod, yMod)));
     }
     
@@ -106,7 +106,7 @@ public class CollisionMap<T extends Collidable<T>>
     public final boolean collidesWith(@NotNull CollisionArea<?> other, @NotNull Number xMod, @NotNull Number yMod) {
         return !this.equals(other.getOwner()) && FX.forbidFX(
                 getLock(), () -> collisionAreas.stream().anyMatch(
-                        area -> area.intersects(other, xMod, yMod)));
+                        area -> area.collidesWith(other, xMod, yMod)));
     }
     
     public final boolean collidesWith(@NotNull CollisionArea<?> other, @NotNull Point2D mod) { return collidesWith(other, mod.getX(), mod.getY()); }

@@ -47,6 +47,10 @@ public class CollisionArea<T extends Collidable<T>>
     
     //</editor-fold>
     
+    //<editor-fold desc="--- LOGIC ---">
+    
+    //<editor-fold desc="> Contains Point Methods">
+    
     public final boolean containsPoint(@NotNull NumberValuePair point) {
         return sync(() -> {
             for (Shape excluded: excludedShapes())
@@ -62,10 +66,11 @@ public class CollisionArea<T extends Collidable<T>>
     public final boolean containsPoint(@NotNull Number x, @NotNull Number y) { return containsPoint(new NumberValuePair(x, y)); }
     public final boolean containsPoint(@NotNull Point2D point) { return containsPoint(new NumberValuePair(point.getX(), point.getY())); }
     
-    //
+    //</editor-fold>
     
-    public final boolean intersects(@NotNull CollisionArea<?> other) { return intersects(other, 0, 0); }
-    public final boolean intersects(@NotNull CollisionArea<?> other, @NotNull Number xMod, @NotNull Number yMod) {
+    //<editor-fold desc="> Collision Check Methods">
+    
+    public final boolean collidesWith(@NotNull CollisionArea<?> other, @NotNull Number xMod, @NotNull Number yMod) {
         return sync(() -> {
             for (Shape included: includedShapes())
                 for (NumberValuePair borderPoint: included.getBorderPoints(xMod, yMod))
@@ -78,25 +83,19 @@ public class CollisionArea<T extends Collidable<T>>
             return false;
         });
     }
+    public final boolean collidesWith(@NotNull CollisionArea<?> other) { return collidesWith(other, 0, 0); }
     
-    public final boolean intersectsLegacy(@NotNull CollisionArea<?> other) {
-        return sync(() -> {
-            printer().get().setPrintPrefix(false);
-            //            printer().get().print("Checking Intersection...");
-            //            printer().get().print("Included: " + includedShapes);
-            //            printer().get().print("Excluded: " + excludedShapes);
-            
-            for (Shape excluded: excludedShapes())
-                for (NumberValuePair borderPoint: excluded.getBorderPoints())
-                    if (other.containsPoint(borderPoint))
-                        return false;
-            for (Shape included: includedShapes())
-                for (NumberValuePair borderPoint: included.getBorderPoints())
-                    if (other.containsPoint(borderPoint))
-                        return true;
-            return false;
-        });
+    public final boolean collidesWith(@NotNull CollisionMap<?> collisionMap, @NotNull Number xMod, @NotNull Number yMod) {
+        return sync(() -> collisionMap.collisionAreasCopy().stream().anyMatch(other -> collidesWith(other, xMod, yMod)));
     }
+    public final boolean collidesWith(@NotNull CollisionMap<?> collisionMap) { return collidesWith(collisionMap, 0, 0); }
+    
+    public final boolean collidesWith(@NotNull Collidable<?> collidable, @NotNull Number xMod, @NotNull Number yMod) { return collidesWith(collidable.collisionMap(), xMod, yMod); }
+    public final boolean collidesWith(@NotNull Collidable<?> collidable) { return collidesWith(collidable, 0, 0); }
+    
+    //</editor-fold>
+    
+    //</editor-fold>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
