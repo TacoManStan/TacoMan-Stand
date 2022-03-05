@@ -290,10 +290,10 @@ public class Mover
                     //                    Printer.print();
                     //                    Printer.print("Attempting to move to: " + new NumberValuePair(xMove, yMove), false);
                     
-//                    if (getGameMap().gameObjects().stream().anyMatch(gameObject -> {
-//                        return collidesWith(gameObject, xMove, yMove);
-//                    })) {
-                    if (getGameMap().isPathable(getOwner(), xMove, yMove)) {
+                    //                    if (getGameMap().gameObjects().stream().anyMatch(gameObject -> {
+                    //                        return collidesWith(gameObject, xMove, yMove);
+                    //                    })) {
+                    if (getGameMap().isPathable(getOwner(), true, xMove, yMove)) {
                         getOwner().translateLocation(xMove, yMove);
                     } else {
                         setPaused(true);

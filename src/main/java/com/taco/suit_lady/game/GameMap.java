@@ -254,29 +254,47 @@ public class GameMap
     
     //<editor-fold desc=">> Collision Pathability Check Methods">
     
-    public final boolean isPathable(@NotNull Collidable<?> collidable, @NotNull Number xMod, @NotNull Number yMod) {
-        return !sync(() -> gameObjects().stream().anyMatch(gameObject -> collidable.collidesWith(gameObject, xMod, yMod)));
+    public final boolean isPathable(@NotNull Collidable<?> collidable, boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
+        final double xModD = xMod.doubleValue();
+        final double yModD = yMod.doubleValue();
+        return !sync(() -> gameObjects().stream().anyMatch(gameObject -> {
+            final double xD = translate ? xModD : xModD - gameObject.getLocationX(true);
+            final double yD = translate ? yModD : yModD - gameObject.getLocationY(true);
+            return collidable.collidesWith(gameObject, xD, yD);
+        }));
     }
-    public final boolean isPathable(@NotNull Collidable<?> collidable, @NotNull Point2D mod) { return isPathable(collidable, mod.getX(), mod.getY()); }
-    public final boolean isPathable(@NotNull Collidable<?> collidable, @NotNull ValuePairable<Number, Number> mod) { return isPathable(collidable, mod.a(), mod.b()); }
+    public final boolean isPathable(@NotNull Collidable<?> collidable, boolean translate, @NotNull Point2D mod) { return isPathable(collidable, translate, mod.getX(), mod.getY()); }
+    public final boolean isPathable(@NotNull Collidable<?> collidable, boolean translate, @NotNull ValuePairable<Number, Number> mod) { return isPathable(collidable, translate, mod.a(), mod.b()); }
     
-    public final boolean isPathable(@NotNull CollisionArea<?> collisionArea, @NotNull Number xMod, @NotNull Number yMod) {
-        return !sync(() -> gameObjects().stream().anyMatch(gameObject -> collisionArea.collidesWith(gameObject, xMod, yMod)));
+    public final boolean isPathable(@NotNull CollisionArea<?> collisionArea, boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
+        final double xModD = xMod.doubleValue();
+        final double yModD = yMod.doubleValue();
+        return !sync(() -> gameObjects().stream().anyMatch(gameObject -> {
+            final double xD = translate ? xModD : xModD - gameObject.getLocationX(true);
+            final double yD = translate ? yModD : yModD - gameObject.getLocationY(true);
+            return collisionArea.collidesWith(gameObject, xD, yD);
+        }));
     }
-    public final boolean isPathable(@NotNull CollisionArea<?> collisionArea, @NotNull Point2D mod) { return isPathable(collisionArea, mod.getX(), mod.getY()); }
-    public final boolean isPathable(@NotNull CollisionArea<?> collisionArea, @NotNull ValuePairable<Number, Number> mod) { return isPathable(collisionArea, mod.a(), mod.b()); }
+    public final boolean isPathable(@NotNull CollisionArea<?> collisionArea, boolean translate, @NotNull Point2D mod) { return isPathable(collisionArea, translate, mod.getX(), mod.getY()); }
+    public final boolean isPathable(@NotNull CollisionArea<?> collisionArea, boolean translate, @NotNull ValuePairable<Number, Number> mod) { return isPathable(collisionArea, translate, mod.a(), mod.b()); }
     
-    public final boolean isPathable(@NotNull CollisionMap<?> collisionMap, @NotNull Number xMod, @NotNull Number yMod) {
-        return !sync(() -> gameObjects().stream().anyMatch(gameObject -> gameObject.collidesWith(collisionMap, xMod, yMod)));
+    public final boolean isPathable(@NotNull CollisionMap<?> collisionMap, boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
+        final double xModD = xMod.doubleValue();
+        final double yModD = yMod.doubleValue();
+        return !sync(() -> gameObjects().stream().anyMatch(gameObject -> {
+            final double xD = translate ? xModD : xModD - gameObject.getLocationX(true);
+            final double yD = translate ? yModD : yModD - gameObject.getLocationY(true);
+            return gameObject.collidesWith(collisionMap, xD, yD);
+        }));
     }
-    public final boolean isPathable(@NotNull CollisionMap<?> collisionMap, @NotNull Point2D mod) { return isPathable(collisionMap, mod.getX(), mod.getY()); }
-    public final boolean isPathable(@NotNull CollisionMap<?> collisionMap, @NotNull ValuePairable<Number, Number> mod) { return isPathable(collisionMap, mod.a(), mod.b()); }
+    public final boolean isPathable(@NotNull CollisionMap<?> collisionMap, boolean translate, @NotNull Point2D mod) { return isPathable(collisionMap, translate, mod.getX(), mod.getY()); }
+    public final boolean isPathable(@NotNull CollisionMap<?> collisionMap, boolean translate, @NotNull ValuePairable<Number, Number> mod) { return isPathable(collisionMap, translate, mod.a(), mod.b()); }
     
     //
     
-    public final boolean isPathable(@NotNull Collidable<?> collidable) { return isPathable(collidable, 0, 0); }
-    public final boolean isPathable(@NotNull CollisionArea<?> collisionArea) { return isPathable(collisionArea, 0, 0); }
-    public final boolean isPathable(@NotNull CollisionMap<?> collisionMap) { return isPathable(collisionMap, 0, 0); }
+    public final boolean isPathable(@NotNull Collidable<?> collidable, boolean translate) { return isPathable(collidable, translate, 0, 0); }
+    public final boolean isPathable(@NotNull CollisionArea<?> collisionArea, boolean translate) { return isPathable(collisionArea, translate, 0, 0); }
+    public final boolean isPathable(@NotNull CollisionMap<?> collisionMap, boolean translate) { return isPathable(collisionMap, translate, 0, 0); }
     
     //</editor-fold>
     
