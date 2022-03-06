@@ -1,6 +1,8 @@
 package com.taco.suit_lady.game.galaxy.validators;
 
-import com.taco.suit_lady.game.WrappedGameComponent;
+import com.taco.suit_lady.game.GameComponent;
+import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.values.ValuePair;
 import org.jetbrains.annotations.NotNull;
 
@@ -8,7 +10,7 @@ import java.util.Map;
 
 @SuppressWarnings("unchecked")
 public interface Validatable<T extends Validatable<T>>
-        extends WrappedGameComponent {
+        extends SpringableWrapper, Lockable, GameComponent {
     
     @NotNull Validator<T> validator();
     

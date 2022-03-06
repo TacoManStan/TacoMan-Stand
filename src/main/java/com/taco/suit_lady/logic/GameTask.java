@@ -1,16 +1,21 @@
 package com.taco.suit_lady.logic;
 
 import com.taco.suit_lady.game.GameComponent;
-import com.taco.suit_lady.game.WrappedGameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
+import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.springable.Springable;
+import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.Exc;
 import com.taco.suit_lady.util.tools.Props;
 import javafx.beans.property.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 public abstract class GameTask<E extends Tickable<E>>
-        implements WrappedGameComponent {
+        implements SpringableWrapper, Lockable, GameComponent {
     
     private final GameViewContent game;
     private final E owner;
@@ -39,7 +44,7 @@ public abstract class GameTask<E extends Tickable<E>>
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final E getOwner() { return owner; }
+    public final @NotNull E getOwner() { return owner; }
     
     
     public final ReadOnlyLongProperty readOnlyTickCountProperty() { return tickCountProperty.getReadOnlyProperty(); }
@@ -65,6 +70,15 @@ public abstract class GameTask<E extends Tickable<E>>
     //</editor-fold>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+    @Override public @NotNull Springable springable() { return game; }
+    
+    private Lock lock;
+    @Override public @Nullable Lock getLock() {
+        if (lock == null)
+            lock = new ReentrantLock();
+        return lock;
+    }
     
     @Override public final @NotNull GameViewContent getGame() { return game; }
     

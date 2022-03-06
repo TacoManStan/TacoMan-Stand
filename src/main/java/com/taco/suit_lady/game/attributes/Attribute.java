@@ -1,19 +1,26 @@
 package com.taco.suit_lady.game.attributes;
 
-import com.taco.suit_lady.game.WrappedGameComponent;
+import com.taco.suit_lady.game.GameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
+import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
+import com.taco.suit_lady.util.springable.Springable;
+import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.Exc;
 import com.taco.suit_lady.util.tools.Props;
-import javafx.beans.property.*;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyStringProperty;
+import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.property.SimpleObjectProperty;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
+import java.util.concurrent.locks.Lock;
 
 public class Attribute<T>
-        implements WrappedGameComponent, Serializable, UIDProcessable {
+        implements SpringableWrapper, Lockable, GameComponent, Serializable, UIDProcessable {
     
     private final AttributeManager owner;
     
@@ -68,6 +75,9 @@ public class Attribute<T>
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override public @NotNull GameViewContent getGame() { return owner.getGame(); }
+    
+    @Override public @NotNull Springable springable() { return getOwner(); }
+    @Override public @Nullable Lock getLock() { return getOwner().getLock(); }
     
     //
     

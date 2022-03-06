@@ -1,14 +1,10 @@
 package com.taco.suit_lady.game.objects.collision;
 
-import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.util.shapes.Shape;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.springable.SpringableWrapper;
-import com.taco.suit_lady.util.tools.Props;
 import com.taco.suit_lady.util.values.NumberValuePair;
 import javafx.beans.property.ListProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.geometry.Point2D;
@@ -19,28 +15,25 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class CollisionArea<T extends Collidable<T>>
-        implements SpringableWrapper, Lockable {
+        implements Collidable<T> {
     
     private final ReentrantLock lock;
-    private final ReadOnlyObjectWrapper<CollisionMap<T>> ownerProperty;
+    
+    private final CollisionMap<T> collisionMap;
     
     private final ListProperty<Shape> includedShapes;
     private final ListProperty<Shape> excludedShapes;
     
-    public CollisionArea(CollisionMap<T> owner) {
+    public CollisionArea(@NotNull CollisionMap<T> collisionMap) {
         this.lock = new ReentrantLock();
-        this.ownerProperty = new ReadOnlyObjectWrapper<>(owner);
+        
+        this.collisionMap = collisionMap;
         
         this.includedShapes = new SimpleListProperty<>(FXCollections.observableArrayList());
         this.excludedShapes = new SimpleListProperty<>(FXCollections.observableArrayList());
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
-    
-    protected final ReadOnlyObjectWrapper<CollisionMap<T>> ownerProperty() { return ownerProperty; }
-    public final ReadOnlyObjectProperty<CollisionMap<T>> readOnlyOwnerProperty() { return ownerProperty.getReadOnlyProperty(); }
-    public final CollisionMap<T> getOwner() { return ownerProperty.get(); }
-    protected final CollisionMap<T> setOwner(CollisionMap<T> newValue) { return Props.setProperty(ownerProperty, newValue); }
     
     public final ListProperty<Shape> includedShapes() { return includedShapes; }
     public final ListProperty<Shape> excludedShapes() { return excludedShapes; }
@@ -86,7 +79,9 @@ public class CollisionArea<T extends Collidable<T>>
     public final boolean collidesWith(@NotNull CollisionArea<?> other) { return collidesWith(other, 0, 0); }
     
     public final boolean collidesWith(@NotNull CollisionMap<?> collisionMap, @NotNull Number xMod, @NotNull Number yMod) {
-        return sync(() -> collisionMap.collisionAreasCopy().stream().anyMatch(other -> collidesWith(other, xMod, yMod)));
+        return sync(() -> collisionMap.collisionAreasCopy().stream().anyMatch(other -> {
+            return collidesWith(other, xMod, yMod);
+        }));
     }
     public final boolean collidesWith(@NotNull CollisionMap<?> collisionMap) { return collidesWith(collisionMap, 0, 0); }
     
@@ -99,7 +94,13 @@ public class CollisionArea<T extends Collidable<T>>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull Springable springable() { return getOwner(); }
+    @Override public @NotNull CollisionMap<T> collisionMap() { return collisionMap; }
+    
+    //
+    
+    @Override public @NotNull GameViewContent getGame() { return collisionMap().getGame(); }
+    
+    @Override public @NotNull Springable springable() { return collisionMap(); }
     @Override public @Nullable Lock getLock() { return lock; }
     
     //</editor-fold>

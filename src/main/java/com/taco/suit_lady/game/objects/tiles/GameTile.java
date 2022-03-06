@@ -92,7 +92,7 @@ public class GameTile
     
     
     
-    public final GameMap getOwner() { return owner; }
+    public final @NotNull GameMap getOwner() { return owner; }
     public final ListProperty<GameObject> getOccupyingObjects() { return occupyingObjects; }
     
     public final TileModel getModel() { return model; }

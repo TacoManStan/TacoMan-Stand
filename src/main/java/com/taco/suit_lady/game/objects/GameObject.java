@@ -1,10 +1,9 @@
 package com.taco.suit_lady.game.objects;
 
 import com.github.cliftonlabs.json_simple.JsonObject;
-import com.taco.suit_lady.game.attributes.AttributeManager;
 import com.taco.suit_lady.game.Entity;
 import com.taco.suit_lady.game.GameComponent;
-import com.taco.suit_lady.game.WrappedGameComponent;
+import com.taco.suit_lady.game.attributes.AttributeManager;
 import com.taco.suit_lady.game.objects.collision.Collidable;
 import com.taco.suit_lady.game.objects.collision.CollisionArea;
 import com.taco.suit_lady.game.objects.collision.CollisionMap;
@@ -18,7 +17,10 @@ import com.taco.suit_lady.ui.jfx.util.Dimensions;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.shapes.Circle;
-import com.taco.suit_lady.util.tools.*;
+import com.taco.suit_lady.util.springable.Springable;
+import com.taco.suit_lady.util.tools.Bind;
+import com.taco.suit_lady.util.tools.Obj;
+import com.taco.suit_lady.util.tools.Props;
 import com.taco.suit_lady.util.tools.list_tools.A;
 import com.taco.suit_lady.util.values.NumberValuePairable;
 import com.taco.tacository.json.JElement;
@@ -38,12 +40,18 @@ import java.io.IOException;
 import java.io.ObjectStreamException;
 import java.io.Serial;
 import java.util.ArrayList;
+import java.util.concurrent.locks.Lock;
 
 public class GameObject
-        implements WrappedGameComponent, Entity, MapObject, JObject, JLoadable, UIDProcessable, Tickable<GameObject>, Collidable<GameObject>, Movable {
+        implements Entity, MapObject, JObject, JLoadable, UIDProcessable, Tickable<GameObject>, Collidable<GameObject>, Movable {
     
-    private final GameViewContent content;
+    private final GameComponent gameComponent;
+    private Lock lock;
+    
+    private String objID;
+    
     private final TaskManager<GameObject> taskManager;
+    private final Mover mover;
     
     private final GameObjectModel model;
     private final AttributeManager attributes;
@@ -69,20 +77,15 @@ public class GameObject
     private ObjectBinding<GameTile[][]> occupiedTilesBinding = null;
     private final ListProperty<GameTile> occupiedTilesList;
     
+    //<editor-fold desc="--- CONSTRUCTORS ---">
     
-    private String objID;
-    
-    //
-    
-    private final Mover mover;
-    
-    public GameObject(@NotNull GameComponent gameComponent, @Nullable String objID, @Nullable String modelId) {
-        this.content = gameComponent.getGame();
+    public GameObject(@Nullable Lock lock, @NotNull GameComponent gameComponent, @Nullable String objID, @Nullable String modelID) {
+        this.gameComponent = gameComponent;
         this.taskManager = new TaskManager<>(this);
         
         this.objID = objID;
         
-        this.model = new GameObjectModel(this, "units", modelId);
+        this.model = new GameObjectModel(this, "units", modelID);
         this.attributes = new AttributeManager(this);
         this.collisionMap = new CollisionMap<>(this);
         
@@ -114,8 +117,14 @@ public class GameObject
         this.occupiedTilesList = new SimpleListProperty<>(FXCollections.observableArrayList());
     }
     
-    public GameObject(@NotNull GameComponent gameComponent, @Nullable String objID) { this(gameComponent, objID, null); }
-    public GameObject(@NotNull GameComponent gameComponent) { this(gameComponent, null, null); }
+    public GameObject(@Nullable Lock lock, @NotNull GameComponent gameComponent, @Nullable String objID) { this(lock, gameComponent, objID, null); }
+    public GameObject(@Nullable Lock lock, @NotNull GameComponent gameComponent) { this(lock, gameComponent, null, null); }
+    
+    public GameObject(@NotNull GameComponent gameComponent, @Nullable String objID, @Nullable String modelID) { this(null, gameComponent, objID, modelID); }
+    public GameObject(@NotNull GameComponent gameComponent, @Nullable String objID) { this(null, gameComponent, objID, null); }
+    public GameObject(@NotNull GameComponent gameComponent) { this(null, gameComponent, null, null); }
+    
+    //</editor-fold>
     
     //<editor-fold desc="--- INITIALIZATION ---">
     
@@ -294,8 +303,15 @@ public class GameObject
     
     //<editor-fold desc="> Game">
     
-    @Override public @NotNull GameViewContent getGame() { return content; }
     @Override public @NotNull Mover mover() { return mover; }
+    
+    //
+    
+    @Override public @NotNull GameViewContent getGame() { return gameComponent.getGame(); }
+    
+    @Override public @NotNull Springable springable() { return getGame(); }
+    @Override public final @Nullable Lock getLock() { return lock != null ? lock : getGame().getLock(); }
+    public final void setLock(@Nullable Lock lock) { this.lock = lock; }
     
     //</editor-fold>
     

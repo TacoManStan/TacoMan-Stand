@@ -1,11 +1,14 @@
 package com.taco.suit_lady.game.attributes;
 
-import com.taco.suit_lady.game.WrappedGameComponent;
+import com.taco.suit_lady.game.GameComponent;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.game.ui.GameViewContent;
+import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.springable.Springable;
+import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.Bind;
-import com.taco.suit_lady.util.tools.printer.Print;
 import com.taco.suit_lady.util.tools.Exe;
+import com.taco.suit_lady.util.tools.printer.Print;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleMapProperty;
@@ -18,20 +21,21 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class AttributeManager
-        implements WrappedGameComponent {
+        implements SpringableWrapper, Lockable, GameComponent {
     
-    private final ReentrantLock testLock;
+    private final ReentrantLock internalLock;
     
     private final GameObject owner;
     private final MapProperty<String, Attribute<?>> attributeMap;
     
     public AttributeManager(@NotNull GameObject owner) {
-        this.testLock = new ReentrantLock();
+        this.internalLock = new ReentrantLock();
         
         this.owner = owner;
         this.attributeMap = new SimpleMapProperty<>(FXCollections.observableHashMap());
@@ -46,7 +50,7 @@ public class AttributeManager
     //<editor-fold desc=">> Attribute Add Methods">
     
     public final @Nullable Attribute<?> addAttribute(@Nullable Attribute<?> attribute) {
-        return Exe.sync(testLock, () -> {
+        return sync(() -> {
             if (attribute != null && attribute.getId() != null)
                 if (attributeMap.containsValue(attribute))
                     System.err.println("WARNING: AttributeManager already contains Attribute [" + attribute + "]");
@@ -76,7 +80,7 @@ public class AttributeManager
     
     //<editor-fold desc=">> Attribute Accessor Methods">
     
-    public final <T> Attribute<T> getAttribute(@NotNull String id, @NotNull Class<T> type) { return Exe.sync(testLock, () -> (Attribute<T>) attributeMap.get(id)); }
+    public final <T> Attribute<T> getAttribute(@NotNull String id, @NotNull Class<T> type) { return sync(() -> (Attribute<T>) attributeMap.get(id)); }
     
     
     public final Attribute<Boolean> getBooleanAttribute(@NotNull String id) { return getAttribute(id, Boolean.class); }
@@ -95,12 +99,15 @@ public class AttributeManager
     
     public final <T> Property<T> getProperty(@NotNull String id, @NotNull Class<T> type) { return getAttribute(id, type).valueProperty(); }
     public final <T> @Nullable T getValue(@NotNull String id, @NotNull Class<T> type, @NotNull Supplier<T> defaultValueSupplier) {
-        final Attribute<T> attribute = getAttribute(id, type);
-        if (attribute != null)
-            return attribute.getValue();
-        final T factoryValue = defaultValueSupplier.get();
-        addAttribute(new Attribute<>(this, id, factoryValue));
-        return factoryValue;
+        //TODO: Note that this wasn't previously synchronized, so if there are deadlocks, this might be why.
+        return sync(() -> {
+            final Attribute<T> attribute = getAttribute(id, type);
+            if (attribute != null)
+                return attribute.getValue();
+            final T factoryValue = defaultValueSupplier.get();
+            addAttribute(new Attribute<>(this, id, factoryValue));
+            return factoryValue;
+        });
     }
     
     //
@@ -154,7 +161,7 @@ public class AttributeManager
     //</editor-fold>
     
     public final List<Attribute<?>> attributeList() {
-        return Exe.sync(testLock, () -> new ArrayList<>(attributeMap.values()));
+        return Exe.sync(internalLock, () -> new ArrayList<>(attributeMap.values()));
     }
     
     //</editor-fold>
@@ -164,6 +171,9 @@ public class AttributeManager
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override public @NotNull GameViewContent getGame() { return owner.getGame(); }
+    
+    @Override public @NotNull Springable springable() { return getOwner(); }
+    @Override public @Nullable Lock getLock() { return internalLock; }
     
     //</editor-fold>
     

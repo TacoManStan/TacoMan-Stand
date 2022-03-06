@@ -1,12 +1,18 @@
 package com.taco.suit_lady.game.attributes;
 
-import com.taco.suit_lady.game.WrappedGameComponent;
+import com.taco.suit_lady.game.GameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
+import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.springable.Springable;
+import com.taco.suit_lady.util.springable.SpringableWrapper;
 import javafx.scene.layout.Region;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.concurrent.locks.Lock;
 
 public abstract class AttributeModel<T, R extends Region>
-        implements WrappedGameComponent {
+        implements SpringableWrapper, Lockable, GameComponent {
     
     private final Attribute<T> owner;
     private final R attributeDisplay;
@@ -26,8 +32,10 @@ public abstract class AttributeModel<T, R extends Region>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull GameViewContent getGame() { return owner.getGame(); }
+    @Override public @NotNull GameViewContent getGame() { return getOwner().getGame(); }
     
+    @Override public @NotNull Springable springable() { return getOwner(); }
+    @Override public @Nullable Lock getLock() { return getOwner().getLock(); }
     //</editor-fold>
     
     //<editor-fold desc="--- ABSTRACT ---">

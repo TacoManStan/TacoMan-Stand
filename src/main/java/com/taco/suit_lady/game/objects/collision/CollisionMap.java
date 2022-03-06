@@ -1,5 +1,6 @@
 package com.taco.suit_lady.game.objects.collision;
 
+import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
@@ -16,10 +17,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.locks.Lock;
 
 public class CollisionMap<T extends Collidable<T>>
-        implements SpringableWrapper, Lockable {
+        implements SpringableWrapper, Lockable, Collidable<T> {
     
     private final T owner;
     
@@ -29,6 +31,8 @@ public class CollisionMap<T extends Collidable<T>>
     private final ListProperty<CollisionArea<T>> collisionAreas;
     
     public CollisionMap(T owner) {
+        if (owner instanceof CollisionMap<?>)
+            throw Exc.typeMismatch("CollisionMaps cannot be the owner of another CollisionMap.");
         this.owner = owner;
         
         //        this.widthProperty = new ReadOnlyIntegerWrapper();
@@ -50,7 +54,7 @@ public class CollisionMap<T extends Collidable<T>>
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final T getOwner() { return owner; }
+    public final @NotNull T getOwner() { return owner; }
     
     public final @NotNull List<CollisionArea<T>> collisionAreasCopy() { return new ArrayList<>(collisionAreas); }
     
@@ -65,6 +69,12 @@ public class CollisionMap<T extends Collidable<T>>
     //</editor-fold>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
+    
+    @Override public final @NotNull CollisionMap<T> collisionMap() { return this; }
+    
+    //
+    
+    @Override public @NotNull GameViewContent getGame() { return getOwner().getGame(); }
     
     @Override public @NotNull Springable springable() { return getOwner(); }
     
@@ -89,31 +99,45 @@ public class CollisionMap<T extends Collidable<T>>
     
     //<editor-fold desc="> Collision Checks">
     
-    public final boolean collidesWith(@NotNull CollisionMap<?> other, @NotNull Number xMod, @NotNull Number yMod) {
-        return !this.equals(other) && FX.forbidFX(
-                getLock(), () -> other.collisionAreasCopy().stream().anyMatch(
-                        otherArea -> this.collidesWith(otherArea, xMod, yMod)));
-    }
-    
-    public final boolean collidesWith(@NotNull CollisionMap<?> other, @NotNull Point2D mod) { return collidesWith(other, mod.getX(), mod.getY()); }
-    public final boolean collidesWith(@NotNull CollisionMap<?> other, @NotNull NumberValuePairable<?> mod) { return collidesWith(other, mod.asPoint()); }
-    
-    public final boolean collidesWith(@NotNull CollisionMap<?> other, @NotNull Number mod) { return collidesWith(other, mod, mod); }
-    public final boolean collidesWith(@NotNull CollisionMap<?> other) { return collidesWith(other, 0, 0); }
-    
+    //    public final boolean collidesWith(@NotNull CollisionMap<?> other, @NotNull Number xMod, @NotNull Number yMod) {
+    //        return !isSibling(other) && FX.forbidFX(
+    //                getLock(), () -> other.collisionAreasCopy().stream().anyMatch(
+    //                        otherArea -> this.collidesWith(otherArea, xMod, yMod)));
+    //    }
     //
+    //    public final boolean collidesWith(@NotNull CollisionMap<?> other, @NotNull Point2D mod) { return collidesWith(other, mod.getX(), mod.getY()); }
+    //    public final boolean collidesWith(@NotNull CollisionMap<?> other, @NotNull NumberValuePairable<?> mod) { return collidesWith(other, mod.asPoint()); }
+    //
+    //    public final boolean collidesWith(@NotNull CollisionMap<?> other, @NotNull Number mod) { return collidesWith(other, mod, mod); }
+    //    public final boolean collidesWith(@NotNull CollisionMap<?> other) { return collidesWith(other, 0, 0); }
+    //
+    //    //
+    //
+    //    public final boolean collidesWith(@NotNull CollisionArea<?> other, @NotNull Number xMod, @NotNull Number yMod) {
+    //        return !isSibling(other) && FX.forbidFX(
+    //                getLock(), () -> collisionAreas.stream().anyMatch(
+    //                        area -> area.collidesWith(other, xMod, yMod)));
+    //    }
+    //
+    //    public final boolean collidesWith(@NotNull CollisionArea<?> other, @NotNull Point2D mod) { return collidesWith(other, mod.getX(), mod.getY()); }
+    //    public final boolean collidesWith(@NotNull CollisionArea<?> other, @NotNull NumberValuePairable<?> mod) { return collidesWith(other, mod.asPoint()); }
+    //
+    //    public final boolean collidesWith(@NotNull CollisionArea<?> other, @NotNull Number mod) { return collidesWith(other, mod, mod); }
+    //    public final boolean collidesWith(@NotNull CollisionArea<?> other) { return collidesWith(other, 0, 0); }
+    //
+    //    //
     
-    public final boolean collidesWith(@NotNull CollisionArea<?> other, @NotNull Number xMod, @NotNull Number yMod) {
-        return !this.equals(other.getOwner()) && FX.forbidFX(
+    public final boolean collidesWith(@NotNull Collidable<?> other, @NotNull Number xMod, @NotNull Number yMod) {
+        return !isSibling(other) && FX.forbidFX(
                 getLock(), () -> collisionAreas.stream().anyMatch(
                         area -> area.collidesWith(other, xMod, yMod)));
     }
     
-    public final boolean collidesWith(@NotNull CollisionArea<?> other, @NotNull Point2D mod) { return collidesWith(other, mod.getX(), mod.getY()); }
-    public final boolean collidesWith(@NotNull CollisionArea<?> other, @NotNull NumberValuePairable<?> mod) { return collidesWith(other, mod.asPoint()); }
+    public final boolean collidesWith(@NotNull Collidable<?> other, @NotNull Point2D mod) { return collidesWith(other, mod.getX(), mod.getY()); }
+    public final boolean collidesWith(@NotNull Collidable<?> other, @NotNull NumberValuePairable<?> mod) { return collidesWith(other, mod.asPoint()); }
     
-    public final boolean collidesWith(@NotNull CollisionArea<?> other, @NotNull Number mod) { return collidesWith(other, mod, mod); }
-    public final boolean collidesWith(@NotNull CollisionArea<?> other) { return collidesWith(other, 0, 0); }
+    public final boolean collidesWith(@NotNull Collidable<?> other, @NotNull Number mod) { return collidesWith(other, mod, mod); }
+    public final boolean collidesWith(@NotNull Collidable<?> other) { return collidesWith(other, 0, 0); }
     
     //</editor-fold>
     

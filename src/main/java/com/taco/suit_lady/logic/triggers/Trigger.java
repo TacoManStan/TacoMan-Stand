@@ -1,8 +1,11 @@
 package com.taco.suit_lady.logic.triggers;
 
 import com.taco.suit_lady.game.Entity;
-import com.taco.suit_lady.game.WrappedGameComponent;
+import com.taco.suit_lady.game.GameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
+import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.springable.Springable;
+import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.Exc;
 import com.taco.suit_lady.util.tools.Props;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -10,8 +13,10 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.concurrent.locks.Lock;
+
 public abstract class Trigger<T extends TriggerEvent<T>>
-        implements WrappedGameComponent {
+        implements SpringableWrapper, Lockable, GameComponent {
     
     private final Entity owner;
     private final ReadOnlyObjectWrapper<TriggerCondition<T>> conditionProperty;
@@ -46,7 +51,10 @@ public abstract class Trigger<T extends TriggerEvent<T>>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public final @NotNull GameViewContent getGame() { return owner.getGame(); }
+    @Override public final @NotNull GameViewContent getGame() { return getOwner().getGame(); }
+    
+    @Override public final @NotNull Springable springable() { return getOwner(); }
+    @Override public @Nullable Lock getLock() { return getOwner().getLock(); }
     
     //</editor-fold>
 }

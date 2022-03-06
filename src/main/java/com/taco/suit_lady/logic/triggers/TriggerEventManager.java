@@ -1,20 +1,29 @@
 package com.taco.suit_lady.logic.triggers;
 
 import com.taco.suit_lady.game.GameComponent;
-import com.taco.suit_lady.game.WrappedGameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
+import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.springable.Springable;
+import com.taco.suit_lady.util.springable.SpringableWrapper;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.concurrent.locks.Lock;
 
 public class TriggerEventManager
-        implements WrappedGameComponent {
+        implements SpringableWrapper, Lockable, GameComponent {
     
+    private Lock lock;
     private final GameComponent gameComponent;
+    
     private final HashMap<Class<? extends TriggerEvent<?>>, TriggerGroup<?>> triggerMap;
     
-    public TriggerEventManager(@NotNull GameComponent gameComponent) {
+    public TriggerEventManager(@NotNull GameComponent gameComponent) { this(null, gameComponent); }
+    public TriggerEventManager(@Nullable Lock lock, @NotNull GameComponent gameComponent) {
+        this.lock = lock;
         this.gameComponent = gameComponent;
+        
         this.triggerMap = new HashMap<>();
     }
     
@@ -34,6 +43,10 @@ public class TriggerEventManager
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override public final @NotNull GameViewContent getGame() { return gameComponent.getGame(); }
+    
+    @Override public final @NotNull Springable springable() { return getGame(); }
+    @Override public final @Nullable Lock getLock() { return lock != null ? lock : getGame().getLock(); }
+    public final void setLock(@Nullable Lock lock) { this.lock = lock; }
     
     //</editor-fold>
     

@@ -1,15 +1,20 @@
 package com.taco.suit_lady.logic.triggers;
 
 import com.taco.suit_lady.game.GameComponent;
-import com.taco.suit_lady.game.WrappedGameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
+import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.springable.Springable;
+import com.taco.suit_lady.util.springable.SpringableWrapper;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.concurrent.locks.Lock;
 
 public abstract class TriggerEvent<T extends TriggerEvent<T>>
-        implements WrappedGameComponent {
+        implements SpringableWrapper, Lockable, GameComponent {
     
     private final GameComponent source;
     private final ListProperty<Trigger<T>> triggers;
@@ -29,6 +34,9 @@ public abstract class TriggerEvent<T extends TriggerEvent<T>>
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override public final @NotNull GameViewContent getGame() { return source.getGame(); }
+    
+    @Override public @NotNull Springable springable() { return getGame(); }
+    @Override public @Nullable Lock getLock() { return getGame().getLock(); }
     
     //</editor-fold>
 }

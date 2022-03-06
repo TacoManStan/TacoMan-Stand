@@ -4,6 +4,9 @@ import com.taco.suit_lady.game.GameComponent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 public abstract class OneTimeTask<E extends Tickable<E>> extends GameTask<E> {
     
     public OneTimeTask(@NotNull E owner) { super(owner); }
@@ -14,7 +17,6 @@ public abstract class OneTimeTask<E extends Tickable<E>> extends GameTask<E> {
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override protected void shutdown() { }
-    
     @Override protected boolean isDone() { return getTickCount() >= 1; }
     
     //</editor-fold>

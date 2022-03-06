@@ -1,10 +1,13 @@
 package com.taco.suit_lady.game.objects;
 
 import com.github.cliftonlabs.json_simple.JsonObject;
-import com.taco.suit_lady.game.WrappedGameComponent;
+import com.taco.suit_lady.game.GameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.ui.jfx.util.BoundsBinding;
+import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.springable.Springable;
+import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Props;
 import com.taco.tacository.json.*;
@@ -17,8 +20,10 @@ import javafx.beans.property.ReadOnlyStringWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.concurrent.locks.Lock;
+
 public class GameObjectModelDefinition
-        implements WrappedGameComponent, JObject, JLoadable {
+        implements SpringableWrapper, Lockable, GameComponent, JObject, JLoadable {
     
     private final GameObjectModel model;
     
@@ -158,7 +163,8 @@ public class GameObjectModelDefinition
     
     @Override public final @NotNull GameViewContent getGame() { return getModel().getGame(); }
     
-    //
+    @Override public final @NotNull Springable springable() { return getModel(); }
+    @Override public @Nullable Lock getLock() { return getModel().getLock(); }
     
     //<editor-fold desc="> JSON">
     

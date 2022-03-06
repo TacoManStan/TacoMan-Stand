@@ -5,6 +5,7 @@ import com.taco.suit_lady.game.objects.collision.Collidable;
 import com.taco.suit_lady.game.objects.collision.CollisionMap;
 import com.taco.suit_lady.logic.GameTask;
 import com.taco.suit_lady.logic.triggers.implementations.UnitArrivedEvent;
+import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Obj;
 import com.taco.suit_lady.util.tools.printer.Print;
@@ -51,7 +52,6 @@ public class Mover
     public Mover(@NotNull GameObject owner) {
         super(owner, owner);
         
-        //        this.lock = new ReentrantLock();
         this.lock = owner.collisionMap().getLock();
         
         this.xTargetProperty = new SimpleDoubleProperty(owner.getLocationX(false));
@@ -73,32 +73,6 @@ public class Mover
                 Print.print("Owner Location Centered: " + getOwner().getLocation(true), false);
             }
         });
-        
-        //        this.observableTargetXProperty.addListener((observable, oldValue, newValue) -> {
-        //            if (Objects.equals(oldValue, newValue))
-        //                throw Exceptions.unsupported("This shouldn't ever be possible X:  [" + oldValue + "  -->  " + newValue + "]");
-        //
-        //            if (newValue != null)
-        //                xTargetProperty.bind(newValue);
-        //            else
-        //                xTargetProperty.unbind();
-        //        });
-        //        this.observableTargetYProperty.addListener((observable, oldValue, newValue) -> {
-        //            if (Objects.equals(oldValue, newValue))
-        //                throw Exceptions.unsupported("This shouldn't ever be possible Y:  [" + oldValue + "  -->  " + newValue + "]");
-        //
-        //            if (newValue != null)
-        //                yTargetProperty.bind(newValue);
-        //            else
-        //                yTargetProperty.unbind();
-        //        });
-        
-        
-        //        this.xTargetProperty.addListener((observable, oldValue, newValue) -> Print.print("X Target Changed  [" + oldValue + " --> " + newValue + "]", false));
-        //        this.yTargetProperty.addListener((observable, oldValue, newValue) -> Print.print("Y Target Changed  [" + oldValue + " --> " + newValue + "]", false));
-        
-        
-        //        this.speedBinding = BindingsSL.directDoubleBinding(owner.attributes().getDoubleProperty(MoveCommand.ATTRIBUTE_ID));
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
@@ -226,13 +200,10 @@ public class Mover
             final double locY = loc.getY();
             
             if (!isPaused()) {
-                //            final double speed = ((getOwner().attributes().getDoubleValue(MoveCommand.ATTRIBUTE_ID) * logiCore.getUPSMultiplier()) * logiCore.getGameMap().getTileSize()) / 100D;
-                //            System.out.println("Pre-Speed: " + logiCore().secondsToTicks(getOwner().attributes().getDoubleValue(MoveCommand.ATTRIBUTE_ID)));
                 final double acceleration = getOwner().attributes().getDoubleValue(Mover.ACCELERATION_ID, () -> 1D);
                 final Attribute<Double> speedAttribute = getOwner().attributes().getDoubleAttribute(Mover.SPEED_ID);
                 speedAttribute.setValue(speedAttribute.getValue() * acceleration);
                 final double speed = logiCore().secondsToTicks(getOwner().attributes().getDoubleValue(Mover.SPEED_ID) * getGameMap().getTileSize());
-                //            System.out.println("Speed: " + speed);
                 
                 final double xDistance = targetX - locX;
                 final double yDistance = targetY - locY;
@@ -246,19 +217,13 @@ public class Mover
                     double xMovement = (multiplier * xDistance);
                     double yMovement = (multiplier * yDistance);
                     
-                    //            ToolsFX.runFX(() -> {
-                    
                     if (xMovement > 0 && targetX < locX + xMovement) {
                         if (targetX != locX)
-                            xMovement = targetX - locX; //Might need to be swapped
-                        //                        getOwner().setLocationX(getTargetX(), true);
+                            xMovement = targetX - locX;
                     } else if (xMovement < 0 && targetX >= locX + xMovement) {
                         if (targetX != locX)
                             xMovement = targetX - locX;
-                        //                        getOwner().setLocationX(getTargetX(), true);
                     }
-                    //                else
-                    //                    getOwner().moveX(xMovement);
                     
                     if (yMovement > 0 && targetY < locY + yMovement) {
                         if (targetY != locY)
@@ -268,31 +233,9 @@ public class Mover
                             yMovement = targetY - locY;
                     }
                     
-                    //                final Point2D newLoc2 = new Point2D(getOwner().getLocationX(true), getOwner().getLocationY(true));
-                    //                if (getGameMap().gameObjects().stream().anyMatch(gameObject -> {
-                    //                    return !gameObject.equals(getOwner()) && gameObject.collidesWith(this);
-                    //                })) {
-                    //                    getOwner().setLocation(oldLoc, true);
-                    //                    int count = 0;
-                    //                    if (getGameMap().gameObjects().stream().anyMatch(gameObject -> {
-                    //                        return !gameObject.equals(getOwner()) && gameObject.collidesWith(this);
-                    //                    })) {
-                    //                        count++;
-                    //                        String isTestObj = "" + getOwner().isTestObject1();
-                    //                        Printer.err("[" + isTestObj + "]: Collision Still Detected (" + count + "): " + oldLoc + "  -->  " + newLoc2 + "  -->  " + getOwner().getLocation(true), false);
-                    //                    }
-                    //                    setPaused(true);
-                    //                }
-                    
                     final double xMove = xMovement;
                     final double yMove = yMovement;
                     
-                    //                    Printer.print();
-                    //                    Printer.print("Attempting to move to: " + new NumberValuePair(xMove, yMove), false);
-                    
-                    //                    if (getGameMap().gameObjects().stream().anyMatch(gameObject -> {
-                    //                        return collidesWith(gameObject, xMove, yMove);
-                    //                    })) {
                     if (getGameMap().isPathable(getOwner(), true, xMove, yMove)) {
                         getOwner().translateLocation(xMove, yMove);
                     } else {
@@ -305,7 +248,6 @@ public class Mover
                     logiCore().triggers().submit(new UnitArrivedEvent(getOwner(), loc, newLoc));
                     setPaused(true);
                 }
-                //            }, true);
             }
         });
     }
@@ -316,7 +258,8 @@ public class Mover
     
     //
     
-    @Override public @Nullable Lock getLock() { return lock; }
+    @Override public final @NotNull Springable springable() { return collisionMap(); }
+    @Override public final @Nullable Lock getLock() { return lock; }
     
     
     //</editor-fold>

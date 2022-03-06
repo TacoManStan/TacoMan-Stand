@@ -1,16 +1,21 @@
 package com.taco.suit_lady.game.galaxy.effects;
 
-import com.taco.suit_lady.game.WrappedGameComponent;
+import com.taco.suit_lady.game.GameComponent;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.game.ui.GameViewContent;
+import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.springable.Springable;
+import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.list_tools.L;
 import com.taco.suit_lady.util.values.ValuePair;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
 
 public abstract class Effect
-        implements WrappedGameComponent {
+        implements SpringableWrapper, Lockable, GameComponent {
     
     private final GameObject source;
     
@@ -33,7 +38,9 @@ public abstract class Effect
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull GameViewContent getGame() { return source.getGame(); }
+    @Override public final @NotNull GameViewContent getGame() { return getSource().getGame(); }
+    @Override public final @NotNull Springable springable() { return getSource(); }
+    @Override public @Nullable Lock getLock() { return getSource().getLock(); }
     
     //</editor-fold>
 }

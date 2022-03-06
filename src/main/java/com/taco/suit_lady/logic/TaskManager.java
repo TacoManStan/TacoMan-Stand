@@ -119,6 +119,8 @@ public class TaskManager<E extends Tickable<E>>
         return addTaskAndGet(new OneTimeTask<>(getOwner()) {
             @Override protected void tick() { Obj.run(action); }
             @Override protected void shutdown() { Obj.run(onTerminateAction); }
+    
+            @Override public @Nullable Lock getLock() { return TaskManager.this.getLock(); }
         });
     }
     
@@ -134,10 +136,13 @@ public class TaskManager<E extends Tickable<E>>
     //<editor-fold desc=">> Execute Persistent Methods">
     
     @Override public final @NotNull GameTask<E> executeAndGet(@NotNull Runnable action, @Nullable Runnable onTerminateAction, @Nullable Supplier<Boolean> terminateCondition) {
+        final Lock lock = getLock();
         return addTaskAndGet(new GameTask<>(getOwner()) {
             @Override protected void tick() { Obj.run(action); }
             @Override protected void shutdown() { Obj.run(onTerminateAction); }
             @Override protected boolean isDone() { return Obj.get(terminateCondition, () -> false); }
+    
+            @Override public @Nullable Lock getLock() { return lock; } //TODO: Give more control over this
         });
     }
     

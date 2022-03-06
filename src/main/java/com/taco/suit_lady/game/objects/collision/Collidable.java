@@ -1,21 +1,29 @@
 package com.taco.suit_lady.game.objects.collision;
 
+import com.taco.suit_lady.game.GameComponent;
+import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
+import com.taco.suit_lady.util.springable.SpringableWrapper;
+import com.taco.suit_lady.util.tools.Obj;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.concurrent.locks.Lock;
 
 public interface Collidable<T extends Collidable<T>>
-        extends Springable, Lockable {
+        extends SpringableWrapper, Lockable, GameComponent {
     
     @NotNull CollisionMap<T> collisionMap();
     
+    //<editor-fold desc="--- DEFAULT METHODS ---">
+    
+    default boolean collidesWith(@NotNull Collidable<?> other, @NotNull Number xMod, @NotNull Number yMod) { return collisionMap().collidesWith(other.collisionMap(), xMod, yMod); }
+    default boolean collidesWith(@NotNull Collidable<?> other) { return collidesWith(other, 0, 0); }
+    
     //
     
-    default boolean collidesWith(CollisionMap<?> other, @NotNull Number xMod, @NotNull Number yMod) { return collisionMap().collidesWith(other, xMod, yMod); }
-    default boolean collidesWith(CollisionArea<?> otherArea, @NotNull Number xMod, @NotNull Number yMod) { return collisionMap().collidesWith(otherArea, xMod, yMod); }
-    default boolean collidesWith(Collidable<?> other, @NotNull Number xMod, @NotNull Number yMod) { return collisionMap().collidesWith(other.collisionMap(), xMod, yMod); }
+    default boolean isSibling(@NotNull Collidable<?> other) { return Obj.equals(collisionMap(), other.collisionMap()); }
     
-    default boolean collidesWith(CollisionArea<?> otherArea) { return collidesWith(otherArea, 0, 0); }
-    default boolean collidesWith(CollisionMap<?> other) { return collidesWith(other, 0, 0); }
-    default boolean collidesWith(Collidable<?> other) { return collidesWith(other, 0, 0); }
+    //</editor-fold>
 }

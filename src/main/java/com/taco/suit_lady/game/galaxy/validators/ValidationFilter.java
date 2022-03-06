@@ -1,17 +1,22 @@
 package com.taco.suit_lady.game.galaxy.validators;
 
-import com.taco.suit_lady.game.WrappedGameComponent;
+import com.taco.suit_lady.game.GameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
+import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.springable.Springable;
+import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.list_tools.L;
 import com.taco.suit_lady.util.values.ValuePair;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
 
 public abstract class ValidationFilter<T extends Validatable<T>>
-        implements WrappedGameComponent {
+        implements SpringableWrapper, Lockable, GameComponent {
     
     private final T owner;
     private final ReadOnlyBooleanWrapper validProperty;
@@ -52,6 +57,9 @@ public abstract class ValidationFilter<T extends Validatable<T>>
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override public @NotNull GameViewContent getGame() { return getOwner().getGame(); }
+    
+    @Override public @NotNull Springable springable() { return getOwner(); }
+    @Override public @Nullable Lock getLock() { return getOwner().getLock(); }
     
     //</editor-fold>
 }

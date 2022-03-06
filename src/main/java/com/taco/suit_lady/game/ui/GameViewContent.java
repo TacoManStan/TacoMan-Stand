@@ -236,7 +236,7 @@ public class GameViewContent
 //                ability, params -> !testObject.collisionMap().containsPoint(
 //                        L.get("target", Point2D.class, params))));
         ability.validator().addValidator(Galaxy.newValidator(
-                ability, params -> getGameMap().isPathable(L.get("target", Point2D.class, params))));
+                ability, params -> getGameMap().isPathable(ability.getSource(), false, L.get("target", Point2D.class, params))));
         return ability;
     }
     

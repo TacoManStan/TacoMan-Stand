@@ -109,6 +109,8 @@ public class GameViewContentController
         
             @Override protected void shutdown() { }
             @Override protected boolean isDone() { return false; }
+    
+            @Override public @Nullable Lock getLock() { return lock; }
         };
         taskManager().addTask(updateTask);
     }

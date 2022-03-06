@@ -4,6 +4,7 @@ import com.taco.suit_lady.game.galaxy.validators.Validatable;
 import com.taco.suit_lady.game.galaxy.validators.Validator;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.game.ui.GameViewContent;
+import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.list_tools.L;
 import com.taco.suit_lady.util.values.ValuePair;
 import org.jetbrains.annotations.NotNull;
@@ -51,10 +52,14 @@ public abstract class Ability
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public final @NotNull Lock getLock() { return lock != null ? lock : Validatable.super.getLock(); }
+    @Override public final @NotNull Validator<Ability> validator() { return validator; }
+    
+    //
     
     @Override public @NotNull GameViewContent getGame() { return getSource().getGame(); }
-    @Override public final @NotNull Validator<Ability> validator() { return validator; }
+    
+    @Override public final @NotNull Springable springable() { return getSource(); }
+    @Override public final @NotNull Lock getLock() { return lock != null ? lock : getSource().getLock(); }
     
     //</editor-fold>
 }
