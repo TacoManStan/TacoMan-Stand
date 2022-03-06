@@ -3,7 +3,7 @@ package com.taco.suit_lady.ui;
 import com.taco.suit_lady.ui.jfx.util.Dimensions;
 import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.printer.Print;
+import com.taco.suit_lady.util.tools.printer.Printer;
 import com.taco.suit_lady.util.tools.Props;
 import com.taco.suit_lady.util.tools.fx_tools.FX;
 import javafx.beans.property.*;
@@ -134,12 +134,12 @@ public class AppUI
     
     public final boolean trackRegion(@NotNull Region region) {
         if (printTrackingDetails)
-            Print.print("Starting Tracking for \"" + region + "\"");
+            Printer.print("Starting Tracking for \"" + region + "\"");
         return trackedRegions().contains(region) || trackedRegions.add(region);
     }
     public final boolean stopTrackingRegion(@NotNull Region region) {
         if (printTrackingDetails)
-            Print.print("Stopping Tracking for \"" + region + "\"");
+            Printer.print("Stopping Tracking for \"" + region + "\"");
         return !trackedRegions().contains(region) || trackedRegions.remove(region);
     }
     
@@ -150,7 +150,7 @@ public class AppUI
     public final @NotNull Point2D getMouseOnRegion(@NotNull Region region) {
         final Point2D regionLocation = mouseMap().get(region);
         if (regionLocation == null)
-            Print.err("WARNING: Attempting to retrieve mouse location for untracked Region [" + region + "]");
+            Printer.err("WARNING: Attempting to retrieve mouse location for untracked Region [" + region + "]");
         return regionLocation;
     }
     public final @NotNull Point2D getMouseOnRegionSafe(@NotNull Region region) { return getSafe(getMouseOnRegion(region), region); }
@@ -186,11 +186,11 @@ public class AppUI
                     final Point2D screenToLocalOld = oldMouseOnScreen != null ? region.screenToLocal(oldMouseOnScreen) : null;
                     final Point2D screenToLocalNew = region.screenToLocal(newMouseOnScreen);
                     if (printTrackingDetails)
-                        Print.print("Updating Mouse Tracking for Region \"" + region + "\":  " + "["
-                                    + screenToLocalOld + "::" + getSafe(screenToLocalOld, region)
-                                    + " --> " +
-                                    screenToLocalNew + "::" + getSafe(screenToLocalNew, region)
-                                    + "]", false);
+                        Printer.print("Updating Mouse Tracking for Region \"" + region + "\":  " + "["
+                                      + screenToLocalOld + "::" + getSafe(screenToLocalOld, region)
+                                      + " --> " +
+                                      screenToLocalNew + "::" + getSafe(screenToLocalNew, region)
+                                      + "]", false);
                     mouseMap.put(region, region.screenToLocal(newMouseOnScreen));
                 });
             }

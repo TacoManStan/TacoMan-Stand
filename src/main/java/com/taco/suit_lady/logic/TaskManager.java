@@ -5,7 +5,7 @@ import com.taco.suit_lady.util.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.Obj;
-import com.taco.suit_lady.util.tools.printer.Print;
+import com.taco.suit_lady.util.tools.printer.Printer;
 import com.taco.suit_lady.util.tools.Props;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
@@ -189,7 +189,7 @@ public class TaskManager<E extends Tickable<E>>
                 gfxObject.updateGfx();
                 //                    Print.print("Updating Gfx");
             } else
-                Print.err("GFXObject is null  [" + getOwner() + "]");
+                Printer.err("GFXObject is null  [" + getOwner() + "]");
         }
     }
     
@@ -198,7 +198,7 @@ public class TaskManager<E extends Tickable<E>>
             sync(() -> {
                 //                if (getOwner() instanceof Tickable<?> tickableOwner && !tickableOwner.shutdown())
                 //                        throw ExceptionsSL.ex("Shutdown operation failed for Tickable  [" + tickableOwner + "]");
-                Print.print("Running shutdown operation");
+                Printer.print("Running shutdown operation");
                 logiCore().removeGfxObject(getGfxOwner());
                 for (Runnable shutdownOperation: shutdownOperations)
                     Obj.run(shutdownOperation);

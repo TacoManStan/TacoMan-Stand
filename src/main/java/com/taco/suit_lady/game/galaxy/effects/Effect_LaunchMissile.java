@@ -4,7 +4,7 @@ import com.taco.suit_lady.game.galaxy.effects.specific.Effect_MissileImpact;
 import com.taco.suit_lady.game.objects.Mover;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.logic.triggers.Galaxy;
-import com.taco.suit_lady.util.tools.printer.Print;
+import com.taco.suit_lady.util.tools.printer.Printer;
 import com.taco.suit_lady.util.tools.list_tools.L;
 import com.taco.suit_lady.util.values.ValuePair;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -65,7 +65,7 @@ public class Effect_LaunchMissile extends Effect_Targeted {
         missile.attributes().getDoubleAttribute(Mover.SPEED_ID).setValue(2D);
         
         logiCore().triggers().register(Galaxy.newUnitArrivedTrigger(missile, event -> {
-            Print.print("Missile Arrived [" + missile + "]  ||  [" + event.getMovedFrom() + "  -->  " + event.getMovedTo());
+            Printer.print("Missile Arrived [" + missile + "]  ||  [" + event.getMovedFrom() + "  -->  " + event.getMovedTo());
             final Effect impactEffect = getImpactEffectTest(missile);
             if (impactEffect != null)
                 impactEffect.trigger(L.map(

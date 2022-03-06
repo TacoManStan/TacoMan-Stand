@@ -13,7 +13,7 @@ import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.*;
 import com.taco.suit_lady.util.tools.fx_tools.DialogsFX;
 import com.taco.suit_lady.util.tools.fx_tools.FX;
-import com.taco.suit_lady.util.tools.printer.Print;
+import com.taco.suit_lady.util.tools.printer.Printer;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -247,7 +247,7 @@ public class AppController
         //
         
         root.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            Print.print("Filtering Key Event: " + event.getCode());
+            Printer.print("Filtering Key Event: " + event.getCode());
             if (ui().getContentManager().submitKeyEvent(event, true))
                 event.consume();
             getGameContent().getController().taskManager().addTask(

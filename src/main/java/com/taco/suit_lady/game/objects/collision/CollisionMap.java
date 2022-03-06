@@ -127,17 +127,17 @@ public class CollisionMap<T extends Collidable<T>>
     //
     //    //
     
-    public final boolean collidesWith(@NotNull Collidable<?> other, @NotNull Number xMod, @NotNull Number yMod) {
+    public final boolean collidesWith(@NotNull Collidable<?> other, boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
         return !isSibling(other) && FX.forbidFX(
                 getLock(), () -> collisionAreas.stream().anyMatch(
-                        area -> area.collidesWith(other, xMod, yMod)));
+                        area -> area.collidesWith(other, translate, xMod, yMod)));
     }
     
-    public final boolean collidesWith(@NotNull Collidable<?> other, @NotNull Point2D mod) { return collidesWith(other, mod.getX(), mod.getY()); }
-    public final boolean collidesWith(@NotNull Collidable<?> other, @NotNull NumberValuePairable<?> mod) { return collidesWith(other, mod.asPoint()); }
+    public final boolean collidesWith(@NotNull Collidable<?> other, boolean translate, @NotNull Point2D mod) { return collidesWith(other, translate, mod.getX(), mod.getY()); }
+    public final boolean collidesWith(@NotNull Collidable<?> other, boolean translate, @NotNull NumberValuePairable<?> mod) { return collidesWith(other, translate, mod.asPoint()); }
     
-    public final boolean collidesWith(@NotNull Collidable<?> other, @NotNull Number mod) { return collidesWith(other, mod, mod); }
-    public final boolean collidesWith(@NotNull Collidable<?> other) { return collidesWith(other, 0, 0); }
+    public final boolean collidesWith(@NotNull Collidable<?> other, boolean translate, @NotNull Number mod) { return collidesWith(other, translate, mod, mod); }
+    public final boolean collidesWith(@NotNull Collidable<?> other, boolean translate) { return collidesWith(other, translate, 0, 0); }
     
     //</editor-fold>
     

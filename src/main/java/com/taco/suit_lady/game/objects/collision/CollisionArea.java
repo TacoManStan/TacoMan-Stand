@@ -63,12 +63,15 @@ public class CollisionArea<T extends Collidable<T>>
     
     //<editor-fold desc="> Collision Check Methods">
     
-    public final boolean collidesWith(@NotNull CollisionArea<?> other, @NotNull Number xMod, @NotNull Number yMod) {
+    public final boolean collidesWithArea(@NotNull CollisionArea<?> other, boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
         return sync(() -> {
             for (Shape included: includedShapes())
-                for (NumberValuePair borderPoint: included.getBorderPoints(xMod, yMod))
-                    if (other.containsPoint(borderPoint))
+                for (Shape otherIncluded: other.includedShapes())
+                    if (included.intersects(otherIncluded, translate, xMod, yMod))
                         return true;
+//                for (NumberValuePair borderPoint: included.getBorderPoints(translate, xMod, yMod))
+//                    if (other.containsPoint(borderPoint))
+//                        return true;
             //            for (Shape otherIncluded: other.includedShapes())
             //                for (NumberValuePair borderPoint: otherIncluded.getBorderPoints(xMod, yMod))
             //                    if (contains(borderPoint))
@@ -76,17 +79,15 @@ public class CollisionArea<T extends Collidable<T>>
             return false;
         });
     }
-    public final boolean collidesWith(@NotNull CollisionArea<?> other) { return collidesWith(other, 0, 0); }
+    public final boolean collidesWithArea(@NotNull CollisionArea<?> other, boolean translate) { return collidesWithArea(other, translate, 0, 0); }
     
-    public final boolean collidesWith(@NotNull CollisionMap<?> collisionMap, @NotNull Number xMod, @NotNull Number yMod) {
-        return sync(() -> collisionMap.collisionAreasCopy().stream().anyMatch(other -> {
-            return collidesWith(other, xMod, yMod);
-        }));
+    public final boolean collidesWithMap(@NotNull CollisionMap<?> collisionMap, boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
+        return sync(() -> collisionMap.collisionAreasCopy().stream().anyMatch(other -> collidesWithArea(other, translate, xMod, yMod)));
     }
-    public final boolean collidesWith(@NotNull CollisionMap<?> collisionMap) { return collidesWith(collisionMap, 0, 0); }
+    public final boolean collidesWithMap(@NotNull CollisionMap<?> collisionMap, boolean translate) { return collidesWithMap(collisionMap, translate, 0, 0); }
     
-    public final boolean collidesWith(@NotNull Collidable<?> collidable, @NotNull Number xMod, @NotNull Number yMod) { return collidesWith(collidable.collisionMap(), xMod, yMod); }
-    public final boolean collidesWith(@NotNull Collidable<?> collidable) { return collidesWith(collidable, 0, 0); }
+    public final boolean collidesWith(@NotNull Collidable<?> collidable, boolean translate, @NotNull Number xMod, @NotNull Number yMod) { return collidesWithMap(collidable.collisionMap(), translate, xMod, yMod); }
+    public final boolean collidesWith(@NotNull Collidable<?> collidable, boolean translate) { return collidesWith(collidable, translate, 0, 0); }
     
     //</editor-fold>
     

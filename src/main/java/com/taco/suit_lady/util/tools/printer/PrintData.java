@@ -43,7 +43,7 @@ public class PrintData {
     
     private void print(@Nullable Object msg, boolean err) {
         if (isEnabled())
-            Print.print(msg, getTitle(), isPrintPrefix(), err);
+            Printer.print(msg, getTitle(), isPrintPrefix(), err);
     }
     
     //</editor-fold>

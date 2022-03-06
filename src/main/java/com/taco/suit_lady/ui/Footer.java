@@ -2,7 +2,7 @@ package com.taco.suit_lady.ui;
 
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.Exc;
-import com.taco.suit_lady.util.tools.printer.Print;
+import com.taco.suit_lady.util.tools.printer.Printer;
 import javafx.scene.layout.Pane;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
@@ -57,7 +57,7 @@ public abstract class Footer<F extends Footer<F, FC, T, TD, TC>, FC extends Foot
     protected abstract @NotNull Class<FC> controllerDefinition();
     
     protected void onContentChange(boolean shown) {
-        Print.print(shown ? "Content Shown (" + getContent() + ")" : "Content Hidden (" + getContent() + ")");
+        Printer.print(shown ? "Content Shown (" + getContent() + ")" : "Content Hidden (" + getContent() + ")");
     }
     
     //</editor-fold>

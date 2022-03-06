@@ -1,11 +1,9 @@
 package com.taco.suit_lady.game.ui;
 
 import com.taco.suit_lady.game.attributes.AttributePage;
-import com.taco.suit_lady.game.galaxy.abilities.Ability;
 import com.taco.suit_lady.game.galaxy.abilities.specific.Ability_Blink;
 import com.taco.suit_lady.game.galaxy.abilities.specific.Ability_LaunchMissile;
 import com.taco.suit_lady.game.GameComponent;
-import com.taco.suit_lady.game.galaxy.validators.ValidationFilter;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.game.objects.tiles.GameTile;
 import com.taco.suit_lady.game.GameMap;
@@ -21,8 +19,7 @@ import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.*;
 import com.taco.suit_lady.util.tools.list_tools.L;
-import com.taco.suit_lady.util.tools.printer.Print;
-import com.taco.suit_lady.util.values.NumberValuePairable;
+import com.taco.suit_lady.util.tools.printer.Printer;
 import com.taco.suit_lady.util.values.ValuePair;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ObjectProperty;
@@ -31,7 +28,6 @@ import javafx.geometry.Point2D;
 import javafx.scene.input.*;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class GameViewContent
@@ -223,7 +219,7 @@ public class GameViewContent
     }
     
     private void abilityTest(int abilityNum) {
-        Print.print("Ability Used: " + abilityNum);
+        Printer.print("Ability Used: " + abilityNum);
         switch (abilityNum) {
             case 1 -> new Ability_LaunchMissile(testObject).use(new ValuePair<>("target", getController().getMouseOnMapSafe()));
             case 2 -> blinkTest().use(new ValuePair<>("target", getController().getMouseOnMapSafe()));
@@ -310,7 +306,7 @@ public class GameViewContent
             //            case LEFT -> shiftTile(0, -1);
             //            case RIGHT -> shiftTile(0, 1);
             
-            default -> Print.err("Unrecognized Direction :" + direction);
+            default -> Printer.err("Unrecognized Direction :" + direction);
         }
     }
     
@@ -319,7 +315,7 @@ public class GameViewContent
         if (selectedTile != null)
             getUIData().setSelectedTile(getGameMap().getTileAtTileIndex(selectedTile.getTileLocationX() + xShift, selectedTile.getTileLocationY() + yShift));
         else
-            Print.err("Selected Tile is Null.");
+            Printer.err("Selected Tile is Null.");
     }
     
     //

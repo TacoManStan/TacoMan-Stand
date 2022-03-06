@@ -3,7 +3,7 @@ package com.taco.suit_lady.util.tools;
 import com.taco.suit_lady.util.InternalException;
 import com.taco.suit_lady.util.exceptions.NYIException;
 import com.taco.suit_lady.util.exceptions.ReadOnlyViolationException;
-import com.taco.suit_lady.util.tools.printer.Print;
+import com.taco.suit_lady.util.tools.printer.Printer;
 import com.taco.tacository.quick.ConsoleBB;
 import org.hibernate.TypeMismatchException;
 import org.jetbrains.annotations.Contract;
@@ -510,9 +510,9 @@ public class Exc {
         else
             _exception = type.get(new RuntimeException(message, cause));
         
-        Print.err("ExceptionTools Stack Trace " +
-                  "[Thread | " + Thread.currentThread() + "] " +
-                  "[Exception | " + _exception + "]");
+        Printer.err("ExceptionTools Stack Trace " +
+                    "[Thread | " + Thread.currentThread() + "] " +
+                    "[Exception | " + _exception + "]");
         //		FXDialogTools.showInfoDialog("Exception Thrown", _exception.toString());
         _exception.printStackTrace();
         

@@ -33,22 +33,25 @@ public class Box extends Shape {
         return checkX && checkY;
     }
     
-    @Override protected @NotNull List<NumberValuePair> generateBorderPoints() {
+    @Override protected @NotNull List<NumberValuePair> generateBorderPoints(boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
+        final double xModD = xMod.doubleValue();
+        final double yModD = yMod.doubleValue();
+        
         final ArrayList<NumberValuePair> borderPoints = new ArrayList<>();
         
         //Corner Points
-        borderPoints.add(point(0, 0));
-        borderPoints.add(point(0, getHeight() - 1));
-        borderPoints.add(point(getWidth() - 1, 0));
-        borderPoints.add(point(getWidth() - 1, getHeight() - 1));
+        borderPoints.add(point(translate,0, 0));
+        borderPoints.add(point(translate,0, getHeight() - 1));
+        borderPoints.add(point(translate,getWidth() - 1, 0));
+        borderPoints.add(point(translate,getWidth() - 1, getHeight() - 1));
         
         for (int i = 1; i < getWidth() - 1; i++) {
-            borderPoints.add(point(i, 0));
-            borderPoints.add(point(i, getHeight() - 1));
+            borderPoints.add(point(translate,i, 0));
+            borderPoints.add(point(translate,i, getHeight() - 1));
         }
         for (int j = 1; j < getHeight() - 1; j++) {
-            borderPoints.add(point(0, j));
-            borderPoints.add(point(0, getWidth() - 1));
+            borderPoints.add(point(translate,0, j));
+            borderPoints.add(point(translate,0, getWidth() - 1));
         }
         
         return borderPoints;
@@ -58,7 +61,11 @@ public class Box extends Shape {
     
     //<editor-fold desc="--- INTERNAL ---">
     
-    protected @NotNull NumberValuePair point(@NotNull Number x, @NotNull Number y) { return getLocation(LocType.MIN).applyEach(x, y); }
+    protected @NotNull NumberValuePair point(boolean translate, @NotNull Number x, @NotNull Number y) {
+        if (translate)
+            return getLocation(LocType.MIN).applyEach(x, y);
+        return new NumberValuePair(x, y);
+    }
     
     //</editor-fold>
 }

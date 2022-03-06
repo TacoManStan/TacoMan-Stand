@@ -248,13 +248,7 @@ public abstract class Shape
     
     //
     
-    public final @NotNull List<NumberValuePair> getBorderPoints() { return generateBorderPoints(); }
-    public final @NotNull List<NumberValuePair> getBorderPoints(@NotNull Number xMod, @NotNull Number yMod) {
-        return sync(() -> generateBorderPoints()
-                .stream()
-                .map(nvp -> nvp.applyEach(xMod, yMod, ValueOpType.ADD))
-                .collect(Collectors.toCollection(ArrayList::new)));
-    }
+    public final @NotNull List<NumberValuePair> borderPointsCopy(boolean translate, @NotNull Number xMod, @NotNull Number yMod) { return new ArrayList<>(generateBorderPoints(translate, xMod, yMod)); }
     
     //</editor-fold>
     
@@ -282,14 +276,13 @@ public abstract class Shape
     public final boolean contains(@NotNull Point2D point) { return contains(point.getX(), point.getY()); }
     public final boolean contains(@NotNull NumberValuePairable<?> point) { return contains(point.asPoint()); }
     
-    public boolean intersects(@NotNull Shape other, @NotNull Number xMod, @NotNull Number yMod) {
-        
-        return sync(() -> {
-            for (NumberValuePair numPair: getBorderPoints(xMod, yMod))
+    public boolean intersects(@NotNull Shape other, boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
+//        return sync(() -> {
+            for (NumberValuePair numPair: borderPointsCopy(translate, xMod, yMod))
                 if (other.contains(numPair))
                     return true;
             return false;
-        });
+//        });
     }
     
     //</editor-fold>
@@ -318,7 +311,7 @@ public abstract class Shape
     //<editor-fold desc="--- ABSTRACT ---">
     
     public abstract boolean contains(@NotNull Number x, @NotNull Number y);
-    protected abstract @NotNull List<NumberValuePair> generateBorderPoints();
+    protected abstract @NotNull List<NumberValuePair> generateBorderPoints(boolean translate, @NotNull Number xMod, @NotNull Number yMod);
     //    protected abstract boolean intersects(@NotNull Shape other);
     
     protected @NotNull List<Observable> observables() { return Collections.emptyList(); }

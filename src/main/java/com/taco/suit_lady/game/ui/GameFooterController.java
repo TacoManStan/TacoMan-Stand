@@ -5,7 +5,7 @@ import com.taco.suit_lady.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.ui.jfx.components.button.ImageButton;
 import com.taco.suit_lady.ui.jfx.util.Dimensions;
 import com.taco.suit_lady.util.tools.list_tools.A;
-import com.taco.suit_lady.util.tools.printer.Print;
+import com.taco.suit_lady.util.tools.printer.Printer;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.layout.AnchorPane;
@@ -80,7 +80,7 @@ public class GameFooterController
                 "Selection Portrait Dummy Image",
                 "account_manager",
                 selectionPreviewImagePane,
-                () -> Print.print("Selection Portrait Dummy Preview Pressed"),
+                () -> Printer.print("Selection Portrait Dummy Preview Pressed"),
                 null,
                 false,
                 new Point2D(100, 200)
@@ -95,7 +95,7 @@ public class GameFooterController
                     "Command Card Dummy Button [" + dimensions.width() + ", " + dimensions.height() + "]",
                     "home",
                     imagePane,
-                    () -> Print.print("CC Button Pressed: " + dimensions),
+                    () -> Printer.print("CC Button Pressed: " + dimensions),
                     null,
                     false,
                     null).init();

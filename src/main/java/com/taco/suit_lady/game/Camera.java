@@ -8,7 +8,7 @@ import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Exc;
-import com.taco.suit_lady.util.tools.printer.Print;
+import com.taco.suit_lady.util.tools.printer.Printer;
 import com.taco.suit_lady.util.tools.Props;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.IntegerBinding;
@@ -150,11 +150,11 @@ public class Camera
     public final IntegerProperty xLocationProperty() { return xLocationProperty; }
     public final int getLocationX() { return xLocationProperty.get(); }
     public final int setLocationX(int newValue) {
-        Print.print("Changing Camera Location X: " + newValue);
+        Printer.print("Changing Camera Location X: " + newValue);
         if (!isViewBound())
             return Props.setProperty(xLocationProperty, newValue);
         
-        Print.err("Cannot change Camera location: View is bound.");
+        Printer.err("Cannot change Camera location: View is bound.");
         return getLocationX();
     }
     
@@ -172,7 +172,7 @@ public class Camera
         if (!isViewBound())
             return Props.setProperty(yLocationProperty, newValue);
         
-        Print.err("Cannot change Camera location: View is bound.");
+        Printer.err("Cannot change Camera location: View is bound.");
         return getLocationY();
     }
     

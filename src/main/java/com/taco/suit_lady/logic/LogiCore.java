@@ -13,7 +13,7 @@ import com.taco.suit_lady.util.timing.Timer;
 import com.taco.suit_lady.util.timing.Timers;
 import com.taco.suit_lady.util.tools.Exc;
 import com.taco.suit_lady.util.tools.Obj;
-import com.taco.suit_lady.util.tools.printer.Print;
+import com.taco.suit_lady.util.tools.printer.Printer;
 import com.taco.suit_lady.util.tools.Props;
 import com.taco.suit_lady.util.tools.Exe;
 import com.taco.suit_lady.util.tools.fx_tools.FX;
@@ -103,10 +103,10 @@ public class LogiCore
     private void startup(@NotNull Object @NotNull [] params) {
         gameProperty.set((GameViewContent) params[0]);
         
-        Print.print("Starting Up");
+        Printer.print("Starting Up");
         tickables.addListener((ListChangeListener<? super Tickable<?>>) c -> {
             needsCopyRefresh = true;
-            Print.err("Value Changed");
+            Printer.err("Value Changed");
         });
         needsCopyRefresh = true;
         //        ListsSL.applyListener(null, tickables, op -> {
@@ -248,7 +248,7 @@ public class LogiCore
     }
     
     private void shutdown() {
-        Print.err("Shutting Down LogiCore");
+        Printer.err("Shutting Down LogiCore");
         gameLoopExecutor.shutdown();
         //        sequentialExecutor.shutdown();
         //        scheduledExecutor.shutdown();

@@ -1,15 +1,8 @@
 package com.taco.suit_lady.game.galaxy.effects;
 
 import com.taco.suit_lady.game.objects.GameObject;
-import com.taco.suit_lady.game.objects.Mover;
-import com.taco.suit_lady.logic.triggers.Galaxy;
-import com.taco.suit_lady.util.tools.list_tools.L;
-import com.taco.suit_lady.util.tools.printer.Print;
-import com.taco.suit_lady.util.values.ValuePair;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.property.ReadOnlyStringProperty;
-import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

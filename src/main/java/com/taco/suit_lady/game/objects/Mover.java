@@ -8,7 +8,7 @@ import com.taco.suit_lady.logic.triggers.implementations.UnitArrivedEvent;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Obj;
-import com.taco.suit_lady.util.tools.printer.Print;
+import com.taco.suit_lady.util.tools.printer.Printer;
 import com.taco.suit_lady.util.tools.Props;
 import com.taco.suit_lady.util.values.NumberValuePair;
 import com.taco.suit_lady.util.values.ValuePair;
@@ -68,9 +68,9 @@ public class Mover
         
         this.targetBinding.addListener((observable, oldValue, newValue) -> {
             if (isDebugEnabled()) {
-                Print.print("Movement Target Updated  [ " + oldValue + "  -->  " + newValue + " ]", false);
-                Print.print("Owner Location: " + getOwner().getLocation(false), false);
-                Print.print("Owner Location Centered: " + getOwner().getLocation(true), false);
+                Printer.print("Movement Target Updated  [ " + oldValue + "  -->  " + newValue + " ]", false);
+                Printer.print("Owner Location: " + getOwner().getLocation(false), false);
+                Printer.print("Owner Location Centered: " + getOwner().getLocation(true), false);
             }
         });
     }
@@ -167,7 +167,7 @@ public class Mover
     public final @NotNull Point2D moveAndBind(@NotNull ObservableValue<? extends Number> observableTargetX, @NotNull ObservableValue<? extends Number> observableTargetY) {
         return sync(() -> {
             if (isDebugEnabled())
-                Print.err("Move and Bind:  [" + observableTargetX.getValue() + ", " + observableTargetY.getValue() + "]", false);
+                Printer.err("Move and Bind:  [" + observableTargetX.getValue() + ", " + observableTargetY.getValue() + "]", false);
             
             final Point2D oldValue = getTarget();
             
@@ -177,7 +177,7 @@ public class Mover
             setPaused(false);
             
             if (isDebugEnabled())
-                Print.err("Move and Bind 2b:  [" + observableTargetX.getValue() + ", " + observableTargetY.getValue() + "]", false);
+                Printer.err("Move and Bind 2b:  [" + observableTargetX.getValue() + ", " + observableTargetY.getValue() + "]", false);
             
             return oldValue;
         });

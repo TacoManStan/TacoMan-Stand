@@ -8,7 +8,7 @@ import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Exe;
-import com.taco.suit_lady.util.tools.printer.Print;
+import com.taco.suit_lady.util.tools.printer.Printer;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleMapProperty;
@@ -180,7 +180,7 @@ public class AttributeManager
     public static <T> @NotNull Function<Attribute<T>, Region> getValuePaneFactory() {
         return attribute -> {
             if (attribute == null)
-                Print.err("Attribute cannot be null.");
+                Printer.err("Attribute cannot be null.");
             
             final Label label = new Label();
             label.textProperty().bind(Bind.stringBinding(() -> attribute.getValue() != null ? attribute.getValue().toString() : "Attribute Value is Null", attribute.valueProperty()));

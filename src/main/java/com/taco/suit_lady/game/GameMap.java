@@ -3,8 +3,6 @@ package com.taco.suit_lady.game;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.game.objects.collision.Collidable;
-import com.taco.suit_lady.game.objects.collision.CollisionArea;
-import com.taco.suit_lady.game.objects.collision.CollisionMap;
 import com.taco.suit_lady.game.objects.tiles.GameTile;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.ui.jfx.util.Dimensions;
@@ -15,7 +13,8 @@ import com.taco.suit_lady.util.tools.list_tools.A;
 import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Calc;
 import com.taco.suit_lady.util.tools.Props;
-import com.taco.suit_lady.util.values.ValuePair;
+import com.taco.suit_lady.util.tools.printer.PrintData;
+import com.taco.suit_lady.util.tools.printer.Printer;
 import com.taco.suit_lady.util.values.ValuePairable;
 import com.taco.tacository.json.*;
 import javafx.beans.binding.IntegerBinding;
@@ -65,6 +64,8 @@ public class GameMap
     
     private String mapID;
     
+    private final PrintData p;
+    
     public GameMap(@NotNull GameViewContent content, @Nullable ReentrantLock lock, int tileSize, String mapID) {
         this.content = content;
         this.lock = lock != null ? lock : new ReentrantLock();
@@ -94,6 +95,11 @@ public class GameMap
         
         
         this.mapID = mapID;
+        
+        //
+        
+        p = printer().get("print-data-1");
+        p.setEnabled(false);
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">
@@ -257,10 +263,9 @@ public class GameMap
     public final boolean isPathable(@NotNull Collidable<?> collidable, boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
         final double xModD = xMod.doubleValue();
         final double yModD = yMod.doubleValue();
+        p.print("Checking Collision For: [" + xMod + ", " + yMod + "]");
         return !sync(() -> gameObjects().stream().anyMatch(gameObject -> {
-            final double xD = translate ? xModD : xModD - gameObject.getLocationX(false);
-            final double yD = translate ? yModD : yModD - gameObject.getLocationY(false);
-            return collidable.collidesWith(gameObject, xD, yD);
+            return collidable.collidesWith(gameObject, translate, xModD, yModD);
         }));
     }
     

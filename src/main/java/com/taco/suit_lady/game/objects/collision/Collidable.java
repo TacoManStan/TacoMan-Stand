@@ -18,8 +18,8 @@ public interface Collidable<T extends Collidable<T>>
     
     //<editor-fold desc="--- DEFAULT METHODS ---">
     
-    default boolean collidesWith(@NotNull Collidable<?> other, @NotNull Number xMod, @NotNull Number yMod) { return collisionMap().collidesWith(other.collisionMap(), xMod, yMod); }
-    default boolean collidesWith(@NotNull Collidable<?> other) { return collidesWith(other, 0, 0); }
+    default boolean collidesWith(@NotNull Collidable<?> other, boolean translate, @NotNull Number xMod, @NotNull Number yMod) { return collisionMap().collidesWith(other.collisionMap(), translate, xMod, yMod); }
+    default boolean collidesWith(@NotNull Collidable<?> other, boolean translate) { return collidesWith(other, translate, 0, 0); }
     
     //
     

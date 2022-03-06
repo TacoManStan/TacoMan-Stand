@@ -15,7 +15,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 @Component
-public class Print
+public class Printer
         implements Lockable {
     
     private final ReentrantLock lock;
@@ -25,7 +25,7 @@ public class Print
     private final MapProperty<Class<?>, PrintData> classDataMap;
     private final MapProperty<Object, PrintData> objDataMap;
     
-    private Print() {
+    private Printer() {
         this.lock = new ReentrantLock();
         
         this.globalPrintData = new PrintData("Global", true, true);
