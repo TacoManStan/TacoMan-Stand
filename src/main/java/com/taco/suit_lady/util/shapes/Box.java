@@ -27,13 +27,13 @@ public class Box extends Shape {
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public boolean contains(@NotNull Number x, @NotNull Number y) {
+    @Override public boolean containsPoint(@NotNull Number x, @NotNull Number y) {
         boolean checkX = x.doubleValue() > getLocation(Axis.X_AXIS, LocType.MIN) && x.doubleValue() < getLocation(Axis.X_AXIS, LocType.MAX);
         boolean checkY = y.doubleValue() > getLocation(Axis.Y_AXIS, LocType.MIN) && y.doubleValue() < getLocation(Axis.Y_AXIS, LocType.MAX);
         return checkX && checkY;
     }
     
-    @Override protected @NotNull List<NumberValuePair> generateBorderPoints(boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
+    @Override protected @NotNull List<NumberValuePair> regenerateBorderPoints(boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
         final double xModD = xMod.doubleValue();
         final double yModD = yMod.doubleValue();
         

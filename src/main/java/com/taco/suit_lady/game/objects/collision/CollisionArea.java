@@ -47,10 +47,10 @@ public class CollisionArea<T extends Collidable<T>>
     public final boolean containsPoint(@NotNull NumberValuePair point) {
         return sync(() -> {
             for (Shape excluded: excludedShapes())
-                if (excluded.contains(point))
+                if (excluded.containsPoint(point))
                     return false;
             for (Shape included: includedShapes())
-                if (included.contains(point))
+                if (included.containsPoint(point))
                     return true;
             return false;
         });

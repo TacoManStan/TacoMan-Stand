@@ -12,7 +12,6 @@ import com.taco.suit_lady.util.tools.Props;
 import com.taco.suit_lady.util.tools.fx_tools.FX;
 import com.taco.suit_lady.util.values.NumberValuePair;
 import com.taco.suit_lady.util.values.NumberValuePairable;
-import com.taco.suit_lady.util.values.ValueOpType;
 import javafx.beans.Observable;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.ObjectBinding;
@@ -31,7 +30,6 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.BiFunction;
-import java.util.stream.Collectors;
 
 public abstract class Shape
         implements SpringableWrapper, Lockable, GFXObject<Shape> {
@@ -66,7 +64,9 @@ public abstract class Shape
     //
     
     private final ReadOnlyObjectWrapper<Image> imageProperty;
-    private boolean needsUpdate;
+    
+    private boolean needsGfxUpdate;
+    private boolean needsBorderPointsUpdate;
     
     public Shape(@NotNull Springable springable, @Nullable Lock lock, @Nullable LocType locType, @Nullable BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> pixelGenerator) {
         this.lock = lock != null ? lock : new ReentrantLock();
@@ -98,7 +98,9 @@ public abstract class Shape
         //
         
         this.imageProperty = new ReadOnlyObjectWrapper<>();
-        this.needsUpdate = false;
+        
+        this.needsGfxUpdate = false;
+        this.needsBorderPointsUpdate = false;
     }
     
     public Shape init() {
@@ -107,7 +109,7 @@ public abstract class Shape
         for (ObjectBinding<NumberValuePair> binding: Arrays.asList(locationBinding, dimensionsBinding))
             binding.addListener((observable, oldValue, newValue) -> {
                 if (isImageEnabled())
-                    needsUpdate = true;
+                    needsGfxUpdate = true;
             });
         
         return this;
@@ -218,37 +220,46 @@ public abstract class Shape
             };
         });
     }
-    public @NotNull NumberValuePair getLocation(@NotNull LocType locType) {
-        return new NumberValuePair(getLocation(Axis.X_AXIS, locType), getLocation(Axis.Y_AXIS, locType));
-    }
+    public @NotNull NumberValuePair getLocation(@NotNull LocType locType) { return new NumberValuePair(getLocation(Axis.X_AXIS, locType), getLocation(Axis.Y_AXIS, locType)); }
     
     //
     
-    public final ObjectBinding<NumberValuePair> locationBinding() { return locationBinding; }
-    public final NumberValuePair getLocation() { return locationBinding.get(); }
-    public final NumberValuePair setLocation(@NotNull NumberValuePairable<?> newValue) { return setLocation(newValue.a(), newValue.b()); }
-    public final Point2D setLocation(@NotNull Point2D newValue) { return setLocation(newValue.getX(), newValue.getY()).asPoint(); }
-    public final NumberValuePair setLocation(@NotNull Number newX, @NotNull Number newY) {
-        final NumberValuePair oldValue = getLocation();
-        setX(newX);
-        setY(newY);
-        return oldValue;
-    }
+    public final @NotNull ObjectBinding<NumberValuePair> locationBinding() { return locationBinding; }
+    public final @NotNull NumberValuePair getLocation() { return locationBinding.get(); }
+    public final @NotNull NumberValuePair setLocation(@NotNull Number newX, @NotNull Number newY) { return sync(() -> new NumberValuePair(setX(newX), setY(newY))); }
     
-    public final ObjectBinding<NumberValuePair> dimensionsBinding() { return dimensionsBinding; }
-    public final NumberValuePair getDimensions() { return dimensionsBinding.get(); }
-    public final NumberValuePair setDimensions(@NotNull NumberValuePair newValue) { return setDimensions(newValue.a(), newValue.b()); }
-    public final Point2D setDimensions(@NotNull Point2D newValue) { return setDimensions(newValue.getX(), newValue.getY()).asPoint(); }
-    public final NumberValuePair setDimensions(@NotNull Number newWidth, @NotNull Number newHeight) {
-        final NumberValuePair oldValue = getDimensions();
-        setWidth(newWidth);
-        setHeight(newHeight);
-        return oldValue;
-    }
+    public final @NotNull NumberValuePair setLocation(@NotNull NumberValuePairable<?> newValue) { return setLocation(newValue.a(), newValue.b()); }
+    public final @NotNull Point2D setLocation(@NotNull Point2D newValue) { return setLocation(newValue.getX(), newValue.getY()).asPoint(); }
+    
+    
+    public final @NotNull ObjectBinding<NumberValuePair> dimensionsBinding() { return dimensionsBinding; }
+    public final @NotNull NumberValuePair getDimensions() { return dimensionsBinding.get(); }
+    public final @NotNull NumberValuePair setDimensions(@NotNull Number newWidth, @NotNull Number newHeight) { return sync(() -> new NumberValuePair(setWidth(newWidth), setHeight(newHeight))); }
+    
+    public final @NotNull NumberValuePair setDimensions(@NotNull NumberValuePair newValue) { return setDimensions(newValue.a(), newValue.b()); }
+    public final @NotNull Point2D setDimensions(@NotNull Point2D newValue) { return setDimensions(newValue.getX(), newValue.getY()).asPoint(); }
     
     //
     
-    public final @NotNull List<NumberValuePair> borderPointsCopy(boolean translate, @NotNull Number xMod, @NotNull Number yMod) { return new ArrayList<>(generateBorderPoints(translate, xMod, yMod)); }
+    //<editor-fold desc="> Border Points">
+    
+    public final @NotNull List<NumberValuePair> getBorderPoints(boolean translate, @NotNull Number xMod, @NotNull Number yMod) { return sync(() -> new ArrayList<>(regenerateBorderPoints(translate, xMod, yMod))); }
+    public final @NotNull List<NumberValuePair> getBorderPoints(boolean translate, @NotNull Point2D mod) { return getBorderPoints(translate, mod.getX(), mod.getY()); }
+    public final @NotNull List<NumberValuePair> getBorderPoints(boolean translate, @NotNull NumberValuePairable<?> mod) { return getBorderPoints(translate, mod.asPoint()); }
+    
+    public final @NotNull List<NumberValuePair> getBorderPoints() { return getBorderPoints(true, 0, 0); }
+    
+    //
+    
+    public final @NotNull List<NumberValuePair> getBorderPointsTranslated(@NotNull Number xMod, @NotNull Number yMod) { return getBorderPoints(true, xMod, yMod); }
+    public final @NotNull List<NumberValuePair> getBorderPointsTranslated(@NotNull Point2D mod) { return getBorderPointsTranslated(mod.getX(), mod.getY()); }
+    public final @NotNull List<NumberValuePair> getBorderPointsTranslated(@NotNull NumberValuePairable<?> mod) { return getBorderPointsTranslated(mod.asPoint()); }
+    
+    public final @NotNull List<NumberValuePair> getBorderPointsMoved(@NotNull Number xMod, @NotNull Number yMod) { return getBorderPoints(true, xMod, yMod); }
+    public final @NotNull List<NumberValuePair> getBorderPointsMoved(@NotNull Point2D mod) { return getBorderPointsMoved(mod.getX(), mod.getY()); }
+    public final @NotNull List<NumberValuePair> getBorderPointsMoved(@NotNull NumberValuePairable<?> mod) { return getBorderPointsMoved(mod.asPoint()); }
+    
+    //</editor-fold>
     
     //</editor-fold>
     
@@ -264,7 +275,6 @@ public abstract class Shape
     public final boolean isImageEnabled() { return imageEnabledProperty.get(); }
     public final boolean setImageEnabled(boolean newValue) { return Props.setProperty(imageEnabledProperty, newValue); }
     
-    
     public final @NotNull ReadOnlyObjectProperty<Image> readOnlyImageProperty() { return imageProperty.getReadOnlyProperty(); }
     public final @NotNull Image getImage() { return imageProperty.get(); }
     private @Nullable Image setImage(@NotNull Image newValue) { return Props.setProperty(imageProperty, newValue); }
@@ -273,30 +283,25 @@ public abstract class Shape
     
     //<editor-fold desc="--- LOGIC ---">
     
-    public final boolean contains(@NotNull Point2D point) { return contains(point.getX(), point.getY()); }
-    public final boolean contains(@NotNull NumberValuePairable<?> point) { return contains(point.asPoint()); }
+    public final boolean containsPoint(@NotNull Point2D point) { return containsPoint(point.getX(), point.getY()); }
+    public final boolean containsPoint(@NotNull NumberValuePairable<?> point) { return containsPoint(point.asPoint()); }
     
     public boolean intersects(@NotNull Shape other, boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
-//        return sync(() -> {
-            for (NumberValuePair numPair: borderPointsCopy(translate, xMod, yMod))
-                if (other.contains(numPair))
-                    return true;
-            return false;
-//        });
+        return sync(() -> getBorderPoints(translate, xMod, yMod).stream().anyMatch(other::containsPoint));
     }
     
     //</editor-fold>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public boolean needsGfxUpdate() {
-        return needsUpdate;
-    }
+    @Override public boolean needsGfxUpdate() { return needsGfxUpdate; }
     
     @Override public void onGfxUpdate() {
         //TODO: Sync?
-        setImage(regenerateImage());
-        needsUpdate = false;
+        sync(() -> {
+            setImage(regenerateImage());
+            needsGfxUpdate = false;
+        });
     }
     
     //
@@ -310,8 +315,8 @@ public abstract class Shape
     
     //<editor-fold desc="--- ABSTRACT ---">
     
-    public abstract boolean contains(@NotNull Number x, @NotNull Number y);
-    protected abstract @NotNull List<NumberValuePair> generateBorderPoints(boolean translate, @NotNull Number xMod, @NotNull Number yMod);
+    public abstract boolean containsPoint(@NotNull Number x, @NotNull Number y);
+    protected abstract @NotNull List<NumberValuePair> regenerateBorderPoints(boolean translate, @NotNull Number xMod, @NotNull Number yMod);
     //    protected abstract boolean intersects(@NotNull Shape other);
     
     protected @NotNull List<Observable> observables() { return Collections.emptyList(); }
@@ -340,7 +345,7 @@ public abstract class Shape
                 getPixelGenerator()));
     }
     
-    private @NotNull BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> defaultPixelGenerator() { return (imgLoc, loc) -> contains(loc) ? Color.BLACK : Color.TRANSPARENT; }
+    private @NotNull BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> defaultPixelGenerator() { return (imgLoc, loc) -> containsPoint(loc) ? Color.BLACK : Color.TRANSPARENT; }
     
     private @NotNull Observable @NotNull [] getObservables(@NotNull Observable... excluded) {
         return sync(() -> {
