@@ -207,41 +207,6 @@ public abstract class Shape
         });
     }
     
-    public double getLocationLegacy(@NotNull Axis axis, @NotNull LocType locType) {
-        return sync(() -> {
-            final double loc = getLocation(axis);
-            final double dim = getDimension(axis);
-            
-            return switch (getLocType()) {
-                case MIN -> switch (locType) {
-                    case MIN -> loc;
-                    case MAX -> loc + dim;
-                    case CENTER -> loc + (dim / 2);
-                    
-                    default -> throw unsupportedLocType(locType);
-                };
-                
-                case MAX -> switch (locType) {
-                    case MIN -> loc - dim;
-                    case MAX -> loc;
-                    case CENTER -> loc - (dim / 2);
-                    
-                    default -> throw unsupportedLocType(locType);
-                };
-                
-                case CENTER -> switch (locType) {
-                    case MIN -> loc - (dim / 2);
-                    case MAX -> loc + (dim / 2);
-                    case CENTER -> loc;
-                    
-                    default -> throw unsupportedLocType(locType);
-                };
-                
-                default -> throw unsupportedLocType(null);
-            };
-        });
-    }
-    
     //
     
     public final @NotNull ObjectBinding<NumberValuePair> locationBinding() { return locationBinding; }
