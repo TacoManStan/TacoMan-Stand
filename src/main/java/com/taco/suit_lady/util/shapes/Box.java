@@ -18,9 +18,15 @@ public class Box extends Shape {
     
     public Box(@NotNull Springable springable,
                @Nullable Lock lock,
+               @NotNull Number locX, @NotNull Number locY,
+               @NotNull Number dimX, @NotNull Number dimY,
                @Nullable LocType locType,
                @Nullable BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> pixelGenerator) {
-        super(springable, lock, locType, pixelGenerator);
+        super(springable, lock, locX, locY, dimX, dimY, locType, pixelGenerator);
+    }
+    
+    public Box(@NotNull Springable springable, @Nullable Lock lock, @Nullable LocType locType, @Nullable BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> pixelGenerator) {
+        this(springable, lock, 0, 0, 0, 0, locType, pixelGenerator);
     }
     public Box(@NotNull Springable springable, @Nullable Lock lock, @Nullable LocType locType) { this(springable, lock, locType, null); }
     public Box(@NotNull Springable springable, @Nullable Lock lock, @Nullable BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> pixelGenerator) { this(springable, lock, null, pixelGenerator); }
@@ -50,18 +56,18 @@ public class Box extends Shape {
         final ArrayList<NumberValuePair> borderPoints = new ArrayList<>();
         
         //Corner Points
-        borderPoints.add(point(translate,0, 0));
-        borderPoints.add(point(translate,0, getHeight() - 1));
-        borderPoints.add(point(translate,getWidth() - 1, 0));
-        borderPoints.add(point(translate,getWidth() - 1, getHeight() - 1));
+        borderPoints.add(point(translate, 0, 0));
+        borderPoints.add(point(translate, 0, getHeight() - 1));
+        borderPoints.add(point(translate, getWidth() - 1, 0));
+        borderPoints.add(point(translate, getWidth() - 1, getHeight() - 1));
         
         for (int i = 1; i < getWidth() - 1; i++) {
-            borderPoints.add(point(translate,i, 0));
-            borderPoints.add(point(translate,i, getHeight() - 1));
+            borderPoints.add(point(translate, i, 0));
+            borderPoints.add(point(translate, i, getHeight() - 1));
         }
         for (int j = 1; j < getHeight() - 1; j++) {
-            borderPoints.add(point(translate,0, j));
-            borderPoints.add(point(translate,0, getWidth() - 1));
+            borderPoints.add(point(translate, 0, j));
+            borderPoints.add(point(translate, 0, getWidth() - 1));
         }
         
         return borderPoints;

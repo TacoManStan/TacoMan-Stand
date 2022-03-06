@@ -68,7 +68,17 @@ public abstract class Shape
     private boolean needsGfxUpdate;
     private boolean needsBorderPointsUpdate;
     
-    public Shape(@NotNull Springable springable, @Nullable Lock lock, @Nullable LocType locType, @Nullable BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> pixelGenerator) {
+    public Shape(@NotNull Springable springable, @Nullable Lock lock,
+                 @Nullable LocType locType,
+                 @Nullable BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> pixelGenerator) {
+        this(springable, lock, 0, 0, 0, 0, locType, pixelGenerator);
+    }
+    
+    public Shape(@NotNull Springable springable, @Nullable Lock lock,
+                 @NotNull Number locX, @NotNull Number locY,
+                 @NotNull Number dimX, @NotNull Number dimY,
+                 @Nullable LocType locType,
+                 @Nullable BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> pixelGenerator) {
         this.lock = lock != null ? lock : new ReentrantLock();
         this.springable = springable.asStrict();
         
@@ -101,6 +111,11 @@ public abstract class Shape
         
         this.needsGfxUpdate = false;
         this.needsBorderPointsUpdate = false;
+        
+        //
+        
+        setLocation(locX, locY);
+        setDimensions(dimX, dimY);
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">
@@ -295,6 +310,21 @@ public abstract class Shape
     @Override public @Nullable Lock getLock() { return lock; }
     
     @Override public @NotNull TaskManager<Shape> taskManager() { return taskManager; }
+    
+    //
+    
+    @Override public String toString() {
+        return "Shape{" +
+               "nativeLoc=" + getLocation() +
+               ", minLoc=" + getLocation(LocType.MIN) +
+               ", maxLoc=" + getLocation(LocType.MAX) +
+               ", centerLoc=" + getLocation(LocType.CENTER) +
+               ", dimensions=" + getDimensions() +
+               ", locType=" + getLocType() +
+               ", imageEnabled=" + isImageEnabled() +
+               '}';
+    }
+    
     
     //</editor-fold>
     

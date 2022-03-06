@@ -92,6 +92,9 @@ public class GameViewPageController extends UIPageController<GameViewPage>
             
             System.out.println("Test Object Location X (Center): " + getGame().getTestObject().getLocationX(true));
             System.out.println("Test Object Location Y (Center): " + getGame().getTestObject().getLocationY(true));
+            
+            
+            System.out.println("Test Object Bounds Box:" + getGame().getTestObject().boundsBox());
         });
         testButton4.setText("Print Movement Data");
         

@@ -14,6 +14,8 @@ import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Calc;
 import com.taco.suit_lady.util.tools.Props;
 import com.taco.suit_lady.util.tools.printer.PrintData;
+import com.taco.suit_lady.util.values.NumberValuePair;
+import com.taco.suit_lady.util.values.NumberValuePairable;
 import com.taco.suit_lady.util.values.ValuePairable;
 import com.taco.tacository.json.*;
 import javafx.beans.binding.IntegerBinding;
@@ -98,7 +100,7 @@ public class GameMap
         //
         
         p = printer().get("print-data-1");
-        p.setEnabled(false);
+        p.setEnabled(true);
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">
@@ -249,9 +251,21 @@ public class GameMap
     
     //<editor-fold desc="> Pathability Check Methods">
     
+    public final boolean isInBounds(@NotNull Number x, @NotNull Number y) {
+        return sync(() -> {
+            final double xD = x.doubleValue();
+            final double yD = y.doubleValue();
+            final double pixelWidth = getPixelWidth();
+            final double pixelHeight = getPixelHeight();
+            return xD >= 0 && yD >= 0 && xD < pixelWidth && yD < pixelHeight;
+        });
+    }
+    
     //<editor-fold desc=">> Point Pathability Check Methods">
     
-    public final boolean isPathable(@NotNull Number x, @NotNull Number y) { return !sync(() -> gameObjects().stream().anyMatch(gameObject -> gameObject.collisionMap().containsPoint(x, y))); }
+    public final boolean isPathable(@NotNull Number x, @NotNull Number y) {
+        return !sync(() -> !isInBounds(x, y) || gameObjects().stream().anyMatch(gameObject -> gameObject.collisionMap().containsPoint(x, y)));
+    }
     public final boolean isPathable(@NotNull Point2D point) { return isPathable(point.getX(), point.getY()); }
     public final boolean isPathable(@NotNull ValuePairable<Number, Number> point) { return isPathable(point.a(), point.b()); }
     

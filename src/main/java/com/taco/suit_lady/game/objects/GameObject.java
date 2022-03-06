@@ -199,26 +199,14 @@ public class GameObject
                                 : (circle = new Circle(this).init()));
             collisionMap().addCollisionArea(collisionArea);
         }));
+        
         refreshCollisionData();
     }
     
     private void refreshCollisionData() {
         execute(() -> sync(() -> {
-            double modifier = 1.0; //Only to test different sizes of collision ranges
-            //        circle.setRadius(Math.max((int) ((getWidth() / 2) * modifier), (int) ((getHeight() / 2) * modifier)));
-            
             collShape.setDimensions(getDimensions());
             collShape.setLocation(getLocation(!useCollisionBox));
-            
-//            if (circle != null) {
-//                circle.setDiameter(Math.max(getWidth(), getHeight()));
-//                circle.setLocation(getLocation(true));
-//            }
-//
-//            if (box != null) {
-//                box.setDimensions(getDimensions());
-//                box.setLocation(getLocation(false));
-//            }
         }));
     }
     
@@ -275,10 +263,16 @@ public class GameObject
     //TODO: Change boolean param to instead accept a LocType enum
     public final Point2D getLocation(boolean center) { return locationBinding(center).get(); }
     public final Point2D setLocation(@NotNull Point2D newValue, boolean center) {
-        return new Point2D(setLocationX(newValue.getX(), center), setLocationY(newValue.getY(), center));
+        return sync(() -> {
+            return new Point2D(setLocationX(newValue.getX(), center), setLocationY(newValue.getY(), center));
+        });
     }
     
-    public final Point2D translateLocation(@NotNull Number x, @NotNull Number y) { return new Point2D(translateX(x), translateY(y)); }
+    public final Point2D translateLocation(@NotNull Number x, @NotNull Number y) {
+        return sync(() -> {
+            return new Point2D(translateX(x), translateY(y));
+        });
+    }
     public final Point2D translateLocation(@NotNull Point2D amount) { return translateLocation(amount.getX(), amount.getY()); }
     public final Point2D translateLocation(@NotNull NumberValuePairable<?> amount) { return translateLocation(amount.asPoint()); }
     
@@ -325,13 +319,13 @@ public class GameObject
     
     //<editor-fold desc="> Game">
     
+    @Override public @NotNull GameViewContent getGame() { return gameComponent.getGame(); }
     @Override public @NotNull Mover mover() { return mover; }
     
     //
     
-    @Override public @NotNull GameViewContent getGame() { return gameComponent.getGame(); }
-    
     @Override public @NotNull Springable springable() { return getGame(); }
+    
     @Override public final @Nullable Lock getLock() { return lock != null ? lock : getGame().getLock(); }
     public final void setLock(@Nullable Lock lock) { this.lock = lock; }
     

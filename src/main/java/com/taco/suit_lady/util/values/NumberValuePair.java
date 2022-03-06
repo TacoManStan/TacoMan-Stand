@@ -21,4 +21,8 @@ public record NumberValuePair(Number a, Number b)
     @Override public String toString() {
         return getString(false);
     }
+    
+    //
+    
+    public static <T extends NumberValuePairable<T>> @NotNull Function<Number, Number> emptyModifier() { return number -> number; }
 }

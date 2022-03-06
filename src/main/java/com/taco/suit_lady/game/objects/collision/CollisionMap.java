@@ -1,9 +1,12 @@
 package com.taco.suit_lady.game.objects.collision;
 
 import com.taco.suit_lady.game.ui.GameViewContent;
+import com.taco.suit_lady.util.shapes.Box;
+import com.taco.suit_lady.util.shapes.Shape;
 import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
+import com.taco.suit_lady.util.tools.Calc;
 import com.taco.suit_lady.util.tools.Exc;
 import com.taco.suit_lady.util.tools.fx_tools.FX;
 import com.taco.suit_lady.util.values.NumberValuePairable;
@@ -12,12 +15,15 @@ import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.geometry.Point2D;
+import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
+import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
 public class CollisionMap<T extends Collidable<T>>
         implements SpringableWrapper, Lockable, Collidable<T> {
@@ -95,7 +101,6 @@ public class CollisionMap<T extends Collidable<T>>
     
     //</editor-fold>
     
-    
     //<editor-fold desc="> Collision Checks">
     
     //    public final boolean collidesWith(@NotNull CollisionMap<?> other, @NotNull Number xMod, @NotNull Number yMod) {
@@ -139,6 +144,18 @@ public class CollisionMap<T extends Collidable<T>>
     public final boolean collidesWith(@NotNull Collidable<?> other, boolean translate) { return collidesWith(other, translate, 0, 0); }
     
     //</editor-fold>
+    
+    @Override public final @NotNull Box boundsBox(boolean synchronize, @Nullable BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> pixelGenerator) {
+        final Lock lock = synchronize ? getLock() : null;
+        return Calc.boundsBox(this, lock, pixelGenerator, getShapes());
+    }
+    
+    public final @NotNull List<Shape> getShapes() {
+        return sync(() -> collisionAreasCopy()
+                .stream()
+                .flatMap(area -> area.includedShapes().stream())
+                .collect(Collectors.toCollection(ArrayList::new)));
+    }
     
     //</editor-fold>
 }

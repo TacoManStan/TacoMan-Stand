@@ -1,7 +1,11 @@
 package com.taco.suit_lady.util.tools;
 
+import com.taco.suit_lady.util.shapes.Axis;
+import com.taco.suit_lady.util.shapes.Box;
+import com.taco.suit_lady.util.shapes.LocType;
+import com.taco.suit_lady.util.shapes.Shape;
+import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.timing.Timing;
-import com.taco.suit_lady.util.values.NumberValuePair;
 import com.taco.suit_lady.util.values.NumberValuePairable;
 import com.taco.suit_lady.util.values.ValuePair;
 import com.taco.suit_lady.util.values.ValuePairable;
@@ -15,6 +19,8 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 /**
@@ -658,14 +664,63 @@ public class Calc {
     public static double degreesToRads(@NotNull Number angle) { return angle.doubleValue() * (Math.PI / 180); }
     public static double radsToDegrees(@NotNull Number angle) { return angle.doubleValue() * (180 / Math.PI); }
     
+    //<editor-fold desc="> Circle Methods">
     
-    public static @NotNull NumberValuePair pointOnCircle(@NotNull Number x, @NotNull Number y, @NotNull Number radius, @NotNull Number degrees) {
-        final double pX = (Math.cos(degreesToRads(degrees)) * radius.doubleValue()) + x.doubleValue();
-        final double pY = (Math.sin(degreesToRads(degrees)) * radius.doubleValue()) + y.doubleValue();
-        return new NumberValuePair(pX, pY);
+    //    public static @NotNull NumberValuePair pointOnCircle(@NotNull Number x, @NotNull Number y, @NotNull Number radius, @NotNull Number degrees) {
+    //        final double pX = (Math.cos(degreesToRads(degrees)) * radius.doubleValue()) + x.doubleValue();
+    //        final double pY = (Math.sin(degreesToRads(degrees)) * radius.doubleValue()) + y.doubleValue();
+    //        return new NumberValuePair(pX, pY);
+    //    }
+    //    public static @NotNull NumberValuePair pointOnCircle(@NotNull NumberValuePairable<?> offset, @NotNull Number radius, @NotNull Number degrees) { return pointOnCircle(offset.a(), offset.b(), radius, degrees); }
+    //    public static @NotNull NumberValuePair pointOnCircle(@NotNull Number radius, @NotNull Number degrees) { return pointOnCircle(0, 0, radius, degrees); }
+    
+    //
+    
+    public static @NotNull Point2D point2D(@NotNull Number pX, @NotNull Number pY) { return new Point2D(pX.doubleValue(), pY.doubleValue()); }
+    
+    //</editor-fold>
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- SHAPES ---">
+    
+    public static @NotNull Box boundsBox(@NotNull Springable springable, @Nullable Lock lock,
+                                        @Nullable BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, javafx.scene.paint.Color> pixelGenerator,
+                                        @NotNull List<Shape> inputs) {
+        final ArrayList<Shape> shapes = new ArrayList<>(inputs);
+        
+        if (inputs.isEmpty())
+            return new Box(springable);
+        
+        double minLocX = Integer.MAX_VALUE;
+        double maxLocX = Integer.MIN_VALUE;
+        
+        double minLocY = Integer.MAX_VALUE;
+        double maxLocY = Integer.MIN_VALUE;
+        
+        for (Shape s: shapes) {
+            final double minPointX = s.getLocation(Axis.X_AXIS, LocType.MIN);
+            final double maxPointX = s.getLocation(Axis.X_AXIS, LocType.MAX);
+            
+            final double minPointY = s.getLocation(Axis.Y_AXIS, LocType.MIN);
+            final double maxPointY = s.getLocation(Axis.Y_AXIS, LocType.MAX);
+            
+            if (minPointX < minLocX)
+                minLocX = minPointX;
+            if (maxPointX > maxLocX)
+                maxLocX = maxPointX;
+            
+            if (minPointY < minLocY)
+                minLocY = minPointY;
+            if (maxPointY > maxLocY)
+                maxLocY = maxPointY;
+        }
+        
+        final double width = maxLocX - minLocX;
+        final double height = maxLocY - minLocY;
+        
+        return new Box(springable, lock, minLocX, minLocY, width, height, LocType.MIN, pixelGenerator);
     }
-    public static @NotNull NumberValuePair pointOnCircle(@NotNull NumberValuePairable<?> offset, @NotNull Number radius, @NotNull Number degrees) { return pointOnCircle(offset.a(), offset.b(), radius, degrees); }
-    public static @NotNull NumberValuePair pointOnCircle(@NotNull Number radius, @NotNull Number degrees) { return pointOnCircle(0, 0, radius, degrees); }
     
     //</editor-fold>
     

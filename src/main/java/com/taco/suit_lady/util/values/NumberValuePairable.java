@@ -1,5 +1,6 @@
 package com.taco.suit_lady.util.values;
 
+import com.taco.suit_lady.util.tools.Calc;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,6 +13,8 @@ public interface NumberValuePairable<T extends NumberValuePairable<T>>
     
     //<editor-fold desc="--- DEFAULT METHODS ---">
     
+    //<editor-fold desc="> Converter Methods">
+    
     default boolean bBool() { return ValueUtil.asBool(b()); }
     
     default int bInt() { return ValueUtil.asInt(b()); }
@@ -20,25 +23,24 @@ public interface NumberValuePairable<T extends NumberValuePairable<T>>
     default float bFloat() { return ValueUtil.asFloat(b()); }
     default double bDouble() { return ValueUtil.asDouble(b()); }
     
-    
     default NumberValuePair asNumberValuePair() { return new NumberValuePair(a(), b()); }
+    default Point2D asPoint() { return new Point2D(aDouble(), bDouble()); }
     
-    //
+    //</editor-fold>
+    
+    //<editor-fold desc="> Modify Methods">
     
     default T modify(@NotNull CardinalDirection direction) { return modify(direction, 1, 1); }
     default T modify(@NotNull CardinalDirection direction, @NotNull Number magnitude) { return modify(direction, magnitude, magnitude); }
     default T modify(@NotNull CardinalDirection direction, @NotNull NumberValuePairable<?> magnitude) { return modify(direction, magnitude.a(), magnitude.b()); }
     default T modify(@NotNull CardinalDirection direction, @NotNull Number xMagnitude, @NotNull Number yMagnitude) {
-        return modify(
-                numA -> numA.doubleValue() + (direction.xMod() * xMagnitude.doubleValue()),
-                numB -> numB.doubleValue() + (direction.yMod() * yMagnitude.doubleValue()));
+        return modify(numA -> numA.doubleValue() + (direction.xMod() * xMagnitude.doubleValue()),
+                      numB -> numB.doubleValue() + (direction.yMod() * yMagnitude.doubleValue()));
     }
     
-    //
+    //</editor-fold>
     
-    default Point2D asPoint() { return new Point2D(aDouble(), bDouble()); }
-    
-    //<editor-fold desc="> Apply">
+    //<editor-fold desc="> Apply Methods">
     
     default @NotNull Number apply(@NotNull ValueOpType opType, @NotNull OpResultType resultType) { return opType.apply(this, resultType); }
     default @NotNull Number apply(@NotNull ValueOpType opType) { return apply(opType, OpResultType.EXACT); }
@@ -67,7 +69,58 @@ public interface NumberValuePairable<T extends NumberValuePairable<T>>
     
     //</editor-fold>
     
+    //<editor-fold desc="> Copy Methods">
+    
+    default @NotNull T copyOf(@NotNull Number x, @NotNull Number y) { return modify(numX -> x, numY -> y); }
+    
+    default @NotNull T copyOf(@NotNull NumberValuePairable<?> point) { return copyOf(point.a(), point.b()); }
+    default @NotNull T copyOf(@NotNull Point2D point) { return copyOf(point.getX(), point.getY()); }
+    default @NotNull T copyOf() { return copyOf(a(), b()); }
+    
     //</editor-fold>
+    
+    //<editor-fold desc="> Calculation Methods">
+    
+    default void jdHeheXD() {
+        Point2D point;
+    }
+    
+    default double distance(@NotNull Point2D other) { return asPoint().distance(other); }
+    default double distance(@NotNull Number x, @NotNull Number y) { return asPoint().distance(Calc.point2D(x, y)); }
+    default double distance(@NotNull NumberValuePairable<?> other) { return asPoint().distance(other.asPoint()); }
+    
+    //
+    
+    default double angle(@NotNull Point2D other) { return asPoint().angle(other); }
+    default double angle(@NotNull Number x, @NotNull Number y) { return angle(Calc.point2D(x, y)); }
+    default double angle(@NotNull NumberValuePairable<?> other) { return asPoint().angle(other.asPoint()); }
+    
+    //
+    
+    //<editor-fold desc=">> Interpolation Methods">
+    
+    default @NotNull T interpolate(@NotNull Point2D other, @NotNull Number percentage) { return copyOf(asPoint().interpolate(other, percentage.doubleValue())); }
+    default @NotNull T interpolate(@NotNull Number oX, @NotNull Number oY, @NotNull Number percentage) { return interpolate(Calc.point2D(oX, oY), percentage); }
+    default @NotNull T interpolate(@NotNull NumberValuePairable<?> other, @NotNull Number percentage) { return interpolate(other.asPoint(), percentage); }
+    
+    //
+    
+    default @NotNull T interpolateTowards(@NotNull Point2D other, @NotNull Number distance) { return interpolateTowards(Calc.degreesToRads(angle(other)), distance); }
+    default @NotNull T interpolateTowards(@NotNull Number oX, @NotNull Number oY, @NotNull Number distance) { return interpolateTowards(Calc.point2D(oX, oY), distance); }
+    default @NotNull T interpolateTowards(@NotNull NumberValuePairable<?> other, @NotNull Number distance) { return interpolateTowards(other.asPoint(), distance); }
+    
+    default @NotNull T interpolateTowards(@NotNull Number angle, @NotNull Number distance) {
+        final double retX = (distance.doubleValue() * Math.cos(angle.doubleValue())) + aDouble();
+        final double retY = (distance.doubleValue() * Math.sin(angle.doubleValue())) + bDouble();
+        return copyOf(retX, retY);
+    }
+    
+    //</editor-fold>
+    
+    //</editor-fold>
+    
+    
+    //
     
     default String getString(boolean asInt) {
         if (asInt)
@@ -76,4 +129,6 @@ public interface NumberValuePairable<T extends NumberValuePairable<T>>
             return "[" + a() + ", " + b() + "]";
     }
     default String getString() { return getString(false); }
+    
+    //</editor-fold>
 }

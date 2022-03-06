@@ -1,18 +1,25 @@
 package com.taco.suit_lady.game.objects.collision;
 
 import com.taco.suit_lady.game.ui.GameViewContent;
+import com.taco.suit_lady.util.shapes.Axis;
+import com.taco.suit_lady.util.shapes.Box;
+import com.taco.suit_lady.util.shapes.LocType;
 import com.taco.suit_lady.util.shapes.Shape;
 import com.taco.suit_lady.util.springable.Springable;
+import com.taco.suit_lady.util.tools.Calc;
 import com.taco.suit_lady.util.values.NumberValuePair;
+import com.taco.suit_lady.util.values.NumberValuePairable;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.geometry.Point2D;
+import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.BiFunction;
 
 public class CollisionArea<T extends Collidable<T>>
         implements Collidable<T> {
@@ -88,6 +95,52 @@ public class CollisionArea<T extends Collidable<T>>
     
     public final boolean collidesWith(@NotNull Collidable<?> collidable, boolean translate, @NotNull Number xMod, @NotNull Number yMod) { return collidesWithMap(collidable.collisionMap(), translate, xMod, yMod); }
     public final boolean collidesWith(@NotNull Collidable<?> collidable, boolean translate) { return collidesWith(collidable, translate, 0, 0); }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="> Bounds Methods">
+    
+    public final @NotNull Box calcBoundsLegacy(boolean synchronize, @Nullable BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> pixelGenerator) {
+        return sync(() -> {
+            if (includedShapes().isEmpty())
+                return new Box(this);
+            
+            double minLocX = Integer.MAX_VALUE;
+            double maxLocX = Integer.MIN_VALUE;
+            
+            double minLocY = Integer.MAX_VALUE;
+            double maxLocY = Integer.MIN_VALUE;
+            
+            for (Shape s: includedShapes()) {
+                final double minPointX = s.getLocation(Axis.X_AXIS, LocType.MIN);
+                final double maxPointX = s.getLocation(Axis.X_AXIS, LocType.MAX);
+                
+                final double minPointY = s.getLocation(Axis.Y_AXIS, LocType.MIN);
+                final double maxPointY = s.getLocation(Axis.Y_AXIS, LocType.MAX);
+                
+                if (minPointX < minLocX)
+                    minLocX = minPointX;
+                if (maxPointX > maxLocX)
+                    maxLocX = maxPointX;
+    
+                if (minPointY < minLocY)
+                    minLocY = minPointY;
+                if (maxPointY > maxLocY)
+                    maxLocY = maxPointY;
+            }
+            
+            final Lock lock = synchronize ? getLock() : null;
+            final double width = maxLocX - minLocX;
+            final double height = maxLocY - minLocY;
+            
+            return new Box(this, lock, minLocX, minLocY, width, height, LocType.MIN, pixelGenerator);
+        });
+    }
+    
+    @Override public final @NotNull Box boundsBox(boolean synchronize, @Nullable BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> pixelGenerator) {
+        final Lock lock = synchronize ? getLock() : null;
+        return Calc.boundsBox(this, lock, pixelGenerator, includedShapes());
+    }
     
     //</editor-fold>
     
