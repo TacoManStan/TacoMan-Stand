@@ -5,7 +5,7 @@ import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.logic.GameTask;
 import com.taco.suit_lady.logic.Tickable;
 import com.taco.suit_lady.ui.ContentController;
-import com.taco.suit_lady.ui.jfx.util.Dimensions;
+import com.taco.suit_lady.util.values.bounds.Dimensions;
 import com.taco.suit_lady.ui.ui_internal.controllers.CellController;
 import com.taco.suit_lady.ui.ui_internal.drag_and_drop.DragAndDropHandler;
 import com.taco.suit_lady.util.synchronization.Lockable;

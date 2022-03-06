@@ -3,7 +3,7 @@ package com.taco.suit_lady.game.galaxy.validators;
 import com.taco.suit_lady.game.GameComponent;
 import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
-import com.taco.suit_lady.util.values.ValuePair;
+import com.taco.suit_lady.util.values.Value2D;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -19,7 +19,7 @@ public interface Validatable<T extends Validatable<T>>
     default boolean isValid() { return validator().isValid(); }
     
     default boolean revalidate(@NotNull Map<String, Object> params) { return validator().revalidate(params); }
-    default boolean revalidate(@NotNull ValuePair<String, Object>... params) { return validator().revalidate(params); }
+    default boolean revalidate(@NotNull Value2D<String, Object>... params) { return validator().revalidate(params); }
     
     //</editor-fold>
 }

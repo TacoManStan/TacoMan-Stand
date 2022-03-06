@@ -3,7 +3,7 @@ package com.taco.suit_lady.util.tools;
 import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.tools.list_tools.A;
 import com.taco.suit_lady.util.tools.list_tools.L;
-import com.taco.suit_lady.util.values.NumberValuePair;
+import com.taco.suit_lady.util.values.numbers.Num2D;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.binding.*;
@@ -501,8 +501,8 @@ public class Bind {
         return Bindings.createIntegerBinding(_int::incrementAndGet, obs);
     }
     
-    public static @NotNull ObjectBinding<NumberValuePair> numPairBinding(@NotNull ObservableValue<? extends Number> obs1, @NotNull ObservableValue<? extends Number> obs2) {
-        return Bind.objBinding(() -> new NumberValuePair(obs1.getValue(), obs2.getValue()), obs1, obs2);
+    public static @NotNull ObjectBinding<Num2D> numPairBinding(@NotNull ObservableValue<? extends Number> obs1, @NotNull ObservableValue<? extends Number> obs2) {
+        return Bind.objBinding(() -> new Num2D(obs1.getValue(), obs2.getValue()), obs1, obs2);
     }
     
     //</editor-fold>

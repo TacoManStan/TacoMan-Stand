@@ -1,4 +1,4 @@
-package com.taco.suit_lady.util.values;
+package com.taco.suit_lady.util.values.numbers;
 
 import com.taco.suit_lady.util.tools.list_tools.A;
 import com.taco.suit_lady.util.tools.Exc;
@@ -39,7 +39,7 @@ public enum CardinalDirection {
     
     //
     
-    public static CardinalDirection getMatching(@NotNull NumberValuePairable<?> input) {
+    public static CardinalDirection getMatching(@NotNull NumExpr2D<?> input) {
         if (input.aInt() < -1 || input.aInt() > 1 || input.bInt() < -1 || input.bInt() > 1)
             throw Exc.unsupported("Input Values Must be in Range [-1,1]:  " + input);
         return Arrays.stream(values()).filter(direction -> direction.xMod() == input.aInt() && direction.yMod() == input.bInt()).findFirst().orElse(null);

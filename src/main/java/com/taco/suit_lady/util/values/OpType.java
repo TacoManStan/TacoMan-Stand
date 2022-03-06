@@ -1,8 +1,9 @@
 package com.taco.suit_lady.util.values;
 
+import com.taco.suit_lady.util.values.numbers.NumExpr2D;
 import org.jetbrains.annotations.NotNull;
 
-public enum ValueOpType {
+public enum OpType {
     
     //<editor-fold desc="--- ENUM VALUE DEFINITIONS ---">
     
@@ -68,11 +69,11 @@ public enum ValueOpType {
     
     //</editor-fold>
     
-    ValueOpType() { }
+    OpType() { }
     
     public abstract @NotNull Number apply(@NotNull Number num1, @NotNull Number num2, @NotNull OpResultType opResultType);
     
-    public final @NotNull Number apply(@NotNull NumberValuePairable<?> numPair, @NotNull OpResultType opResultType) {
+    public final @NotNull Number apply(@NotNull NumExpr2D<?> numPair, @NotNull OpResultType opResultType) {
         return apply(numPair.a(), numPair.b(), opResultType);
     }
 }

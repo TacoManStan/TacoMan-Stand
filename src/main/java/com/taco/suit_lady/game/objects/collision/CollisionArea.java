@@ -7,8 +7,8 @@ import com.taco.suit_lady.util.shapes.LocType;
 import com.taco.suit_lady.util.shapes.Shape;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.Calc;
-import com.taco.suit_lady.util.values.NumberValuePair;
-import com.taco.suit_lady.util.values.NumberValuePairable;
+import com.taco.suit_lady.util.values.numbers.Num2D;
+import com.taco.suit_lady.util.values.numbers.NumExpr2D;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
@@ -51,7 +51,7 @@ public class CollisionArea<T extends Collidable<T>>
     
     //<editor-fold desc="> Contains Point Methods">
     
-    public final boolean containsPoint(@NotNull NumberValuePair point) {
+    public final boolean containsPoint(@NotNull Num2D point) {
         return sync(() -> {
             for (Shape excluded: excludedShapes())
                 if (excluded.containsPoint(point))
@@ -63,8 +63,8 @@ public class CollisionArea<T extends Collidable<T>>
         });
     }
     
-    public final boolean containsPoint(@NotNull Number x, @NotNull Number y) { return containsPoint(new NumberValuePair(x, y)); }
-    public final boolean containsPoint(@NotNull Point2D point) { return containsPoint(new NumberValuePair(point.getX(), point.getY())); }
+    public final boolean containsPoint(@NotNull Number x, @NotNull Number y) { return containsPoint(new Num2D(x, y)); }
+    public final boolean containsPoint(@NotNull Point2D point) { return containsPoint(new Num2D(point.getX(), point.getY())); }
     
     //</editor-fold>
     
@@ -100,7 +100,7 @@ public class CollisionArea<T extends Collidable<T>>
     
     //<editor-fold desc="> Bounds Methods">
     
-    public final @NotNull Box calcBoundsLegacy(boolean synchronize, @Nullable BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> pixelGenerator) {
+    public final @NotNull Box calcBoundsLegacy(boolean synchronize, @Nullable BiFunction<NumExpr2D<?>, NumExpr2D<?>, Color> pixelGenerator) {
         return sync(() -> {
             if (includedShapes().isEmpty())
                 return new Box(this);
@@ -137,7 +137,7 @@ public class CollisionArea<T extends Collidable<T>>
         });
     }
     
-    @Override public final @NotNull Box boundsBox(boolean synchronize, @Nullable BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> pixelGenerator) {
+    @Override public final @NotNull Box boundsBox(boolean synchronize, @Nullable BiFunction<NumExpr2D<?>, NumExpr2D<?>, Color> pixelGenerator) {
         final Lock lock = synchronize ? getLock() : null;
         return Calc.boundsBox(this, lock, pixelGenerator, includedShapes());
     }

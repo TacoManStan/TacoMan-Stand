@@ -1,23 +1,28 @@
-package com.taco.suit_lady.ui.jfx.util;
+package com.taco.suit_lady.util.values.bounds;
 
 import com.taco.suit_lady.util.tools.list_tools.A;
+import com.taco.suit_lady.util.values.numbers.Num2D;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface Boundable {
+public interface Boundable<N extends Number> {
     
-    int x();
-    int y();
+    @NotNull N x();
+    @NotNull N y();
     
-    int width();
-    int height();
+    @NotNull N width();
+    @NotNull N height();
+    
+    //
     
     //<editor-fold desc="--- DEFAULT ---">
     
-    default Bounds getBounds() { return new Bounds(x(), y(), width(), height()); }
-    default Point2D getDimensions() { return new Point2D(width(), height()); }
+    default @NotNull Bounds<N> cloneBounds() { return new Bounds<>(x(), y(), width(), height()); }
+    
+    default @NotNull Num2D getDimensions(boolean... safe) { return new Num2D(getWidth(safe), getHeight(safe)); }
+    default @NotNull Num2D getLocation(boolean... safe) { return new Num2D(getWidth(safe), getHeight(safe)); }
     
     default int getMinX(boolean... safe) { return getX(safe); }
     default int getMaxX(boolean... safe) { return getMinX(safe) + getWidth(safe); }
@@ -26,20 +31,6 @@ public interface Boundable {
     default double getMidX(boolean... safe) { return getMinX(safe) + (getWidth(safe) / 2d); }
     default double getMidY(boolean... safe) { return getMinY(safe) + (getHeight(safe) / 2d); }
     
-    
-    default @NotNull java.awt.Rectangle asAWT(boolean... safe) { return new java.awt.Rectangle(x(), y(), width(), height()); }
-    default @NotNull javafx.scene.shape.Rectangle asJFX(boolean... safe) { return new javafx.scene.shape.Rectangle(x(), y(), width(), height()); }
-    
-    default @NotNull java.awt.Dimension asDimensionsAWT(boolean... safe) { return new java.awt.Dimension(width(), height()); }
-    default @NotNull javafx.geometry.Dimension2D asDimensionsJFX(boolean... safe) { return new javafx.geometry.Dimension2D(width(), height()); }
-    
-    default @NotNull BoundingBox asBoundingBox(boolean... safe) { return new BoundingBox(x(), y(), width(), height()); }
-    
-    
-    default double getCrossDistance(boolean... safe) {
-        return getLocation(LocationDefinition.TOP_LEFT, safe)
-                .distance(getLocation(LocationDefinition.BOTTOM_LEFT, safe));
-    }
     default double getArea(boolean... safe) { return getWidth(safe) * getHeight(safe); }
     
     

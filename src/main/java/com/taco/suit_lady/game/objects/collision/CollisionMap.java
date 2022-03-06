@@ -9,8 +9,8 @@ import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.Calc;
 import com.taco.suit_lady.util.tools.Exc;
 import com.taco.suit_lady.util.tools.fx_tools.FX;
-import com.taco.suit_lady.util.values.NumberValuePairable;
-import com.taco.suit_lady.util.values.ValuePairable;
+import com.taco.suit_lady.util.values.numbers.NumExpr2D;
+import com.taco.suit_lady.util.values.ValueExpr2D;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
@@ -97,7 +97,7 @@ public class CollisionMap<T extends Collidable<T>>
     }
     
     public final boolean containsPoint(@NotNull Point2D point) { return containsPoint(point.getX(), point.getY()); }
-    public final boolean containsPoint(@NotNull ValuePairable<Number, Number> point) { return containsPoint(point.a(), point.b()); }
+    public final boolean containsPoint(@NotNull ValueExpr2D<Number, Number> point) { return containsPoint(point.a(), point.b()); }
     
     //</editor-fold>
     
@@ -138,14 +138,14 @@ public class CollisionMap<T extends Collidable<T>>
     }
     
     public final boolean collidesWith(@NotNull Collidable<?> other, boolean translate, @NotNull Point2D mod) { return collidesWith(other, translate, mod.getX(), mod.getY()); }
-    public final boolean collidesWith(@NotNull Collidable<?> other, boolean translate, @NotNull NumberValuePairable<?> mod) { return collidesWith(other, translate, mod.asPoint()); }
+    public final boolean collidesWith(@NotNull Collidable<?> other, boolean translate, @NotNull NumExpr2D<?> mod) { return collidesWith(other, translate, mod.asPoint()); }
     
     public final boolean collidesWith(@NotNull Collidable<?> other, boolean translate, @NotNull Number mod) { return collidesWith(other, translate, mod, mod); }
     public final boolean collidesWith(@NotNull Collidable<?> other, boolean translate) { return collidesWith(other, translate, 0, 0); }
     
     //</editor-fold>
     
-    @Override public final @NotNull Box boundsBox(boolean synchronize, @Nullable BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> pixelGenerator) {
+    @Override public final @NotNull Box boundsBox(boolean synchronize, @Nullable BiFunction<NumExpr2D<?>, NumExpr2D<?>, Color> pixelGenerator) {
         final Lock lock = synchronize ? getLock() : null;
         return Calc.boundsBox(this, lock, pixelGenerator, getShapes());
     }

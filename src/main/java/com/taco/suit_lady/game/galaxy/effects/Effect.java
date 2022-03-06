@@ -7,7 +7,7 @@ import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.list_tools.L;
-import com.taco.suit_lady.util.values.ValuePair;
+import com.taco.suit_lady.util.values.Value2D;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,7 +32,7 @@ public abstract class Effect
     //<editor-fold desc="--- ABSTRACT ---">
     
     public abstract boolean trigger(@NotNull Map<String, Object> params);
-    @SafeVarargs public final boolean trigger(@NotNull ValuePair<String, Object>... params) { return trigger(L.map(params)); }
+    @SafeVarargs public final boolean trigger(@NotNull Value2D<String, Object>... params) { return trigger(L.map(params)); }
     
     //</editor-fold>
     

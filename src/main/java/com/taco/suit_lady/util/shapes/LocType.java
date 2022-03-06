@@ -4,8 +4,8 @@ import com.taco.suit_lady.util.enums.Enumable;
 import com.taco.suit_lady.util.tools.Enu;
 import com.taco.suit_lady.util.tools.Exc;
 import com.taco.suit_lady.util.tools.Exe;
-import com.taco.suit_lady.util.values.NumberValuePair;
-import com.taco.suit_lady.util.values.NumberValuePairable;
+import com.taco.suit_lady.util.values.numbers.Num2D;
+import com.taco.suit_lady.util.values.numbers.NumExpr2D;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -72,45 +72,45 @@ public enum LocType
     
     //<editor-fold desc="> Location 2D">
     
-    public static @NotNull NumberValuePair translate(@Nullable Lock lock, boolean allowNullLock,
-                                                     @NotNull Number locX, @NotNull Number locY,
-                                                     @NotNull Number dimX, @NotNull Number dimY,
-                                                     @NotNull LocType sourceLocType, @NotNull LocType targetLocType) {
-        return runLocked(lock, allowNullLock, () -> new NumberValuePair(
+    public static @NotNull Num2D translate(@Nullable Lock lock, boolean allowNullLock,
+                                           @NotNull Number locX, @NotNull Number locY,
+                                           @NotNull Number dimX, @NotNull Number dimY,
+                                           @NotNull LocType sourceLocType, @NotNull LocType targetLocType) {
+        return runLocked(lock, allowNullLock, () -> new Num2D(
                 translate(locX, dimX, sourceLocType, targetLocType),
                 translate(locY, dimY, sourceLocType, targetLocType)));
     }
     
-    public static @NotNull NumberValuePair translate(@NotNull Number locX, @NotNull Number locY,
-                                                     @NotNull Number dimX, @NotNull Number dimY,
-                                                     @NotNull LocType sourceLocType, @NotNull LocType targetLocType) {
+    public static @NotNull Num2D translate(@NotNull Number locX, @NotNull Number locY,
+                                           @NotNull Number dimX, @NotNull Number dimY,
+                                           @NotNull LocType sourceLocType, @NotNull LocType targetLocType) {
         return translate(null, true, locX, locY, dimX, dimY, sourceLocType, targetLocType);
     }
-    public static @NotNull NumberValuePair translate(@NotNull Number locX, @NotNull Number locY, @NotNull Number dimX, @NotNull Number dimY, @NotNull LocType locType) {
+    public static @NotNull Num2D translate(@NotNull Number locX, @NotNull Number locY, @NotNull Number dimX, @NotNull Number dimY, @NotNull LocType locType) {
         return translate(null, true, locX, locY, dimX, dimY, locType, locType);
     }
-    public static @NotNull NumberValuePair translate(@NotNull Number locX, @NotNull Number locY, @NotNull Number dimX, @NotNull Number dimY) {
+    public static @NotNull Num2D translate(@NotNull Number locX, @NotNull Number locY, @NotNull Number dimX, @NotNull Number dimY) {
         return translate(null, true, locX, locY, dimX, dimY, Enu.get(LocType.class), Enu.get(LocType.class));
     }
     
     //
     
-    public static @NotNull NumberValuePair translate(@Nullable Lock lock, boolean allowNullLock,
-                                                     @NotNull NumberValuePairable<?> locs,
-                                                     @NotNull NumberValuePairable<?> dims,
-                                                     @NotNull LocType sourceLocType, @NotNull LocType targetLocType) {
+    public static @NotNull Num2D translate(@Nullable Lock lock, boolean allowNullLock,
+                                           @NotNull NumExpr2D<?> locs,
+                                           @NotNull NumExpr2D<?> dims,
+                                           @NotNull LocType sourceLocType, @NotNull LocType targetLocType) {
         return translate(lock, allowNullLock, locs.a(), locs.b(), dims.a(), dims.b(), sourceLocType, targetLocType);
     }
     
-    public static @NotNull NumberValuePair translate(@NotNull NumberValuePairable<?> locs,
-                                                     @NotNull NumberValuePairable<?> dims,
-                                                     @NotNull LocType sourceLocType, @NotNull LocType targetLocType) {
+    public static @NotNull Num2D translate(@NotNull NumExpr2D<?> locs,
+                                           @NotNull NumExpr2D<?> dims,
+                                           @NotNull LocType sourceLocType, @NotNull LocType targetLocType) {
         return translate(null, true, locs, dims, sourceLocType, targetLocType);
     }
-    public static @NotNull NumberValuePair translate(@NotNull NumberValuePairable<?> locs, @NotNull NumberValuePairable<?> dims, @NotNull LocType locType) {
+    public static @NotNull Num2D translate(@NotNull NumExpr2D<?> locs, @NotNull NumExpr2D<?> dims, @NotNull LocType locType) {
         return translate(null, true, locs, dims, locType, locType);
     }
-    public static @NotNull NumberValuePair translate(@NotNull NumberValuePairable<?> locs, @NotNull NumberValuePairable<?> dims) {
+    public static @NotNull Num2D translate(@NotNull NumExpr2D<?> locs, @NotNull NumExpr2D<?> dims) {
         return translate(null, true, locs, dims, Enu.get(LocType.class), Enu.get(LocType.class));
     }
     

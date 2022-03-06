@@ -1,11 +1,13 @@
-package com.taco.suit_lady.util.values;
+package com.taco.suit_lady.util.values.numbers;
 
+import com.taco.suit_lady.util.values.ValueExpr;
+import com.taco.suit_lady.util.values.ValueUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 
-public interface NumberValueable<T extends NumberValueable<T>>
-        extends Valueable<Number> {
+public interface NumExpr<T extends NumExpr<T>>
+        extends ValueExpr<Number> {
     
     @NotNull T modify(Function<Number, Number> aFunction);
     
@@ -21,7 +23,7 @@ public interface NumberValueable<T extends NumberValueable<T>>
     
     //
     
-    default NumberValue asNumberValue() { return new NumberValue(a()); }
+    default Num asNumberValue() { return new Num(a()); }
     
     //</editor-fold>
 }

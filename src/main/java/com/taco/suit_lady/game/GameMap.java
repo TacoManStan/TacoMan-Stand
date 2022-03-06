@@ -5,7 +5,7 @@ import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.game.objects.collision.Collidable;
 import com.taco.suit_lady.game.objects.tiles.GameTile;
 import com.taco.suit_lady.game.ui.GameViewContent;
-import com.taco.suit_lady.ui.jfx.util.Dimensions;
+import com.taco.suit_lady.util.values.bounds.Dimensions;
 import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
@@ -14,9 +14,7 @@ import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Calc;
 import com.taco.suit_lady.util.tools.Props;
 import com.taco.suit_lady.util.tools.printer.PrintData;
-import com.taco.suit_lady.util.values.NumberValuePair;
-import com.taco.suit_lady.util.values.NumberValuePairable;
-import com.taco.suit_lady.util.values.ValuePairable;
+import com.taco.suit_lady.util.values.ValueExpr2D;
 import com.taco.tacository.json.*;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.ObjectBinding;
@@ -267,7 +265,7 @@ public class GameMap
         return !sync(() -> !isInBounds(x, y) || gameObjects().stream().anyMatch(gameObject -> gameObject.collisionMap().containsPoint(x, y)));
     }
     public final boolean isPathable(@NotNull Point2D point) { return isPathable(point.getX(), point.getY()); }
-    public final boolean isPathable(@NotNull ValuePairable<Number, Number> point) { return isPathable(point.a(), point.b()); }
+    public final boolean isPathable(@NotNull ValueExpr2D<Number, Number> point) { return isPathable(point.a(), point.b()); }
     
     //</editor-fold>
     
@@ -283,7 +281,7 @@ public class GameMap
     }
     
     public final boolean isPathable(@NotNull Collidable<?> collidable, boolean translate, @NotNull Point2D mod) { return isPathable(collidable, translate, mod.getX(), mod.getY()); }
-    public final boolean isPathable(@NotNull Collidable<?> collidable, boolean translate, @NotNull ValuePairable<Number, Number> mod) { return isPathable(collidable, translate, mod.a(), mod.b()); }
+    public final boolean isPathable(@NotNull Collidable<?> collidable, boolean translate, @NotNull ValueExpr2D<Number, Number> mod) { return isPathable(collidable, translate, mod.a(), mod.b()); }
     
     public final boolean isPathable(@NotNull Collidable<?> collidable, boolean translate) { return isPathable(collidable, translate, 0, 0); }
     

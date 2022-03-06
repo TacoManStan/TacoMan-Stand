@@ -3,7 +3,7 @@ package com.taco.suit_lady.game.ui;
 import com.taco.suit_lady.ui.FooterController;
 import com.taco.suit_lady.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.ui.jfx.components.button.ImageButton;
-import com.taco.suit_lady.ui.jfx.util.Dimensions;
+import com.taco.suit_lady.util.values.bounds.Dimensions;
 import com.taco.suit_lady.util.tools.list_tools.A;
 import com.taco.suit_lady.util.tools.printer.Printer;
 import javafx.fxml.FXML;

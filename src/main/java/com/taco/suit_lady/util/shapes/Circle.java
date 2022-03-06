@@ -2,10 +2,9 @@ package com.taco.suit_lady.util.shapes;
 
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.Bind;
-import com.taco.suit_lady.util.tools.Calc;
 import com.taco.suit_lady.util.tools.Props;
-import com.taco.suit_lady.util.values.NumberValuePair;
-import com.taco.suit_lady.util.values.NumberValuePairable;
+import com.taco.suit_lady.util.values.numbers.Num2D;
+import com.taco.suit_lady.util.values.numbers.NumExpr2D;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleWrapper;
@@ -31,14 +30,14 @@ public class Circle extends Shape {
     
     public Circle(@NotNull Springable springable,
                   @Nullable Lock lock,
-                  @Nullable BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> pixelGenerator) {
+                  @Nullable BiFunction<NumExpr2D<?>, NumExpr2D<?>, Color> pixelGenerator) {
         super(springable, lock, LocType.CENTER, pixelGenerator);
         
         this.diameterProperty = new ReadOnlyDoubleWrapper();
         this.radiusBinding = Bind.doubleBinding(() -> getDiameter() / 2, diameterProperty);
     }
     public Circle(@NotNull Springable springable, @Nullable Lock lock) { this(springable, lock, null); }
-    public Circle(@NotNull Springable springable, @Nullable BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> pixelGenerator) { this(springable, null, pixelGenerator); }
+    public Circle(@NotNull Springable springable, @Nullable BiFunction<NumExpr2D<?>, NumExpr2D<?>, Color> pixelGenerator) { this(springable, null, pixelGenerator); }
     public Circle(@NotNull Springable springable) { this(springable, null, null); }
     
     //<editor-fold desc="--- INITIALIZATION ---">
@@ -101,7 +100,7 @@ public class Circle extends Shape {
     
     @Override public boolean containsPoint(@NotNull Number x, @NotNull Number y) { return sync(() -> getLocation(LocType.CENTER).asPoint().distance(x.doubleValue(), y.doubleValue()) < getRadius()); }
     
-    @Override protected @NotNull List<NumberValuePair> regenerateBorderPoints(boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
+    @Override protected @NotNull List<Num2D> regenerateBorderPoints(boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
         return sync(() -> {
             final double xModD = xMod.doubleValue();
             final double yModD = yMod.doubleValue();
@@ -109,7 +108,7 @@ public class Circle extends Shape {
             final int precision = getPrecision();
             final double distance = getRadius();
             
-            final NumberValuePair locationImpl = translate ? getLocation(LocType.CENTER) : new NumberValuePair(xModD + getRadius(), yModD + getRadius());
+            final Num2D locationImpl = translate ? getLocation(LocType.CENTER) : new Num2D(xModD + getRadius(), yModD + getRadius());
             
             return IntStream.iterate(0, i -> i < 360, i -> i + precision)
                             .mapToObj(i -> locationImpl.interpolateTowards(i, distance))

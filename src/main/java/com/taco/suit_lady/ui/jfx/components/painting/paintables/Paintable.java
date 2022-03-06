@@ -2,9 +2,9 @@ package com.taco.suit_lady.ui.jfx.components.painting.paintables;
 
 import com.taco.suit_lady._to_sort._new.Self;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.Surface;
-import com.taco.suit_lady.ui.jfx.util.Boundable;
-import com.taco.suit_lady.ui.jfx.util.Bounds;
-import com.taco.suit_lady.ui.jfx.util.BoundsBinding;
+import com.taco.suit_lady.util.values.bounds.Boundable;
+import com.taco.suit_lady.util.values.bounds.Bounds;
+import com.taco.suit_lady.util.values.bounds.BoundsBinding;
 import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
@@ -95,11 +95,11 @@ public interface Paintable<P extends Paintable<P, S>, S extends Surface<P, S>>
     
     //
     
-    default @Override int x() { return boundsBinding().x(); }
-    default @Override int y() { return boundsBinding().y(); }
+    default @Override @NotNull int x() { return boundsBinding().x(); }
+    default @Override @NotNull int y() { return boundsBinding().y(); }
     
-    default @Override int width() { return boundsBinding().width(); }
-    default @Override int height() { return boundsBinding().height(); }
+    default @Override @NotNull int width() { return boundsBinding().width(); }
+    default @Override @NotNull int height() { return boundsBinding().height(); }
     
     
     default @Override @NotNull Bounds getBounds() { return boundsBinding().getBounds(); }

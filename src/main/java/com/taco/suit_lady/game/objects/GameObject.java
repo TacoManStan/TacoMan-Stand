@@ -13,7 +13,7 @@ import com.taco.suit_lady.logic.TaskManager;
 import com.taco.suit_lady.logic.Tickable;
 import com.taco.suit_lady.logic.triggers.Galaxy;
 import com.taco.suit_lady.logic.triggers.implementations.UnitMovedEvent;
-import com.taco.suit_lady.ui.jfx.util.Dimensions;
+import com.taco.suit_lady.util.values.bounds.Dimensions;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.shapes.Box;
@@ -24,7 +24,7 @@ import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Obj;
 import com.taco.suit_lady.util.tools.Props;
 import com.taco.suit_lady.util.tools.list_tools.A;
-import com.taco.suit_lady.util.values.NumberValuePairable;
+import com.taco.suit_lady.util.values.numbers.NumExpr2D;
 import com.taco.tacository.json.JElement;
 import com.taco.tacository.json.JLoadable;
 import com.taco.tacository.json.JObject;
@@ -274,7 +274,7 @@ public class GameObject
         });
     }
     public final Point2D translateLocation(@NotNull Point2D amount) { return translateLocation(amount.getX(), amount.getY()); }
-    public final Point2D translateLocation(@NotNull NumberValuePairable<?> amount) { return translateLocation(amount.asPoint()); }
+    public final Point2D translateLocation(@NotNull NumExpr2D<?> amount) { return translateLocation(amount.asPoint()); }
     
     // Tile Location
     
@@ -286,7 +286,7 @@ public class GameObject
     
     public final Point2D translateTileLocation(@NotNull Number x, @NotNull Number y) { return new Point2D(translateTileX(x), translateTileY(y)); }
     public final Point2D translateTileLocation(@NotNull Point2D amount) { return translateTileLocation(amount.getX(), amount.getY()); }
-    public final Point2D translateTileLocation(@NotNull NumberValuePairable<?> amount) { return translateTileLocation(amount.asPoint()); }
+    public final Point2D translateTileLocation(@NotNull NumExpr2D<?> amount) { return translateTileLocation(amount.asPoint()); }
     
     //</editor-fold>
     

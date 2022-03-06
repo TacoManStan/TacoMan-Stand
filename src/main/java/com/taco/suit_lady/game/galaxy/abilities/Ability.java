@@ -6,7 +6,7 @@ import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.list_tools.L;
-import com.taco.suit_lady.util.values.ValuePair;
+import com.taco.suit_lady.util.values.Value2D;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,14 +38,14 @@ public abstract class Ability
     
     //<editor-fold desc="--- ABSTRACT ---">
     
-    @SafeVarargs protected final boolean execute(@NotNull ValuePair<String, Object>... params) { return execute(L.map(params)); }
+    @SafeVarargs protected final boolean execute(@NotNull Value2D<String, Object>... params) { return execute(L.map(params)); }
     protected abstract boolean execute(@NotNull Map<String, Object> params);
     
     //</editor-fold>
     
     //<editor-fold desc="--- LOGIC ---">
     
-    @SafeVarargs public final boolean use(@NotNull ValuePair<String, Object>... params) { return use(L.map(params)); }
+    @SafeVarargs public final boolean use(@NotNull Value2D<String, Object>... params) { return use(L.map(params)); }
     public final boolean use(@NotNull Map<String, Object> params) { return sync(() -> revalidate(params) && execute(params)); }
     
     //</editor-fold>

@@ -8,7 +8,7 @@ import com.taco.suit_lady.game.objects.*;
 import com.taco.suit_lady.game.objects.collision.CollisionArea;
 import com.taco.suit_lady.game.objects.collision.CollisionMap;
 import com.taco.suit_lady.game.ui.GameViewContent;
-import com.taco.suit_lady.ui.jfx.util.Dimensions;
+import com.taco.suit_lady.util.values.bounds.Dimensions;
 import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.shapes.Box;
 import com.taco.suit_lady.util.springable.Springable;

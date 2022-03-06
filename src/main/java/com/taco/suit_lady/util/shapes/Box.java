@@ -1,8 +1,8 @@
 package com.taco.suit_lady.util.shapes;
 
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.values.NumberValuePair;
-import com.taco.suit_lady.util.values.NumberValuePairable;
+import com.taco.suit_lady.util.values.numbers.Num2D;
+import com.taco.suit_lady.util.values.numbers.NumExpr2D;
 import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,15 +21,15 @@ public class Box extends Shape {
                @NotNull Number locX, @NotNull Number locY,
                @NotNull Number dimX, @NotNull Number dimY,
                @Nullable LocType locType,
-               @Nullable BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> pixelGenerator) {
+               @Nullable BiFunction<NumExpr2D<?>, NumExpr2D<?>, Color> pixelGenerator) {
         super(springable, lock, locX, locY, dimX, dimY, locType, pixelGenerator);
     }
     
-    public Box(@NotNull Springable springable, @Nullable Lock lock, @Nullable LocType locType, @Nullable BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> pixelGenerator) {
+    public Box(@NotNull Springable springable, @Nullable Lock lock, @Nullable LocType locType, @Nullable BiFunction<NumExpr2D<?>, NumExpr2D<?>, Color> pixelGenerator) {
         this(springable, lock, 0, 0, 0, 0, locType, pixelGenerator);
     }
     public Box(@NotNull Springable springable, @Nullable Lock lock, @Nullable LocType locType) { this(springable, lock, locType, null); }
-    public Box(@NotNull Springable springable, @Nullable Lock lock, @Nullable BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> pixelGenerator) { this(springable, lock, null, pixelGenerator); }
+    public Box(@NotNull Springable springable, @Nullable Lock lock, @Nullable BiFunction<NumExpr2D<?>, NumExpr2D<?>, Color> pixelGenerator) { this(springable, lock, null, pixelGenerator); }
     public Box(@NotNull Springable springable, @Nullable Lock lock) { this(springable, lock, null, null); }
     public Box(@NotNull Springable springable) { this(springable, null, null, null); }
     
@@ -49,11 +49,11 @@ public class Box extends Shape {
         return checkX && checkY;
     }
     
-    @Override protected @NotNull List<NumberValuePair> regenerateBorderPoints(boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
+    @Override protected @NotNull List<Num2D> regenerateBorderPoints(boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
         final double xModD = xMod.doubleValue();
         final double yModD = yMod.doubleValue();
         
-        final ArrayList<NumberValuePair> borderPoints = new ArrayList<>();
+        final ArrayList<Num2D> borderPoints = new ArrayList<>();
         
         //Corner Points
         borderPoints.add(point(translate, 0, 0));
@@ -77,10 +77,10 @@ public class Box extends Shape {
     
     //<editor-fold desc="--- INTERNAL ---">
     
-    protected @NotNull NumberValuePair point(boolean translate, @NotNull Number x, @NotNull Number y) {
+    protected @NotNull Num2D point(boolean translate, @NotNull Number x, @NotNull Number y) {
         if (translate)
             return getLocation(LocType.MIN).applyEach(x, y);
-        return new NumberValuePair(x, y);
+        return new Num2D(x, y);
     }
     
     //</editor-fold>

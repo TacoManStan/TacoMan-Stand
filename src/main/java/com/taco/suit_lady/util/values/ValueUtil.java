@@ -3,7 +3,7 @@ package com.taco.suit_lady.util.values;
 import com.taco.suit_lady.util.tools.Exc;
 import org.jetbrains.annotations.NotNull;
 
-class ValueUtil {
+public class ValueUtil {
     private ValueUtil() { } //No Instance
     
     public static boolean asBool(@NotNull Number num) {

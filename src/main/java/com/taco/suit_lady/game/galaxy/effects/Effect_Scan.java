@@ -3,7 +3,7 @@ package com.taco.suit_lady.game.galaxy.effects;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.util.tools.Props;
 import com.taco.suit_lady.util.tools.list_tools.L;
-import com.taco.suit_lady.util.values.ValuePair;
+import com.taco.suit_lady.util.values.Value2D;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import org.jetbrains.annotations.Contract;
@@ -51,7 +51,7 @@ public class Effect_Scan extends Effect_Targeted {
         
         getGameMap().scanMap(missile.getLocation(true), radius)
                     .forEach(gameObject -> getScanEffect().trigger(
-                            L.map(new ValuePair<>("target", gameObject))));
+                            L.map(new Value2D<>("target", gameObject))));
         
         return true;
     }

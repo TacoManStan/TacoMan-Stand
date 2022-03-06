@@ -1,8 +1,8 @@
-package com.taco.suit_lady.ui.jfx.util;
+package com.taco.suit_lady.util.values.bounds;
 
 import com.taco.suit_lady.util.values.OpResultType;
-import com.taco.suit_lady.util.values.ValuePair;
-import com.taco.suit_lady.util.values.NumberValuePairable;
+import com.taco.suit_lady.util.values.Value2D;
+import com.taco.suit_lady.util.values.numbers.NumExpr2D;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +12,7 @@ import java.io.Serializable;
 import java.util.function.Function;
 
 public record Dimensions(@NotNull Number width, @NotNull Number height, @NotNull OpResultType resultType)
-        implements Serializable, NumberValuePairable<Dimensions> {
+        implements Serializable, NumExpr2D<Dimensions> {
     
     public Dimensions(@NotNull Number width, @NotNull Number height) { this(width, height, OpResultType.EXACT); }
     
@@ -20,7 +20,7 @@ public record Dimensions(@NotNull Number width, @NotNull Number height, @NotNull
     
     @Contract(" -> new") public @NotNull Dimensions copy() { return new Dimensions(width(), height(), resultType()); }
     
-    public @NotNull ValuePair<Number, Number> copyAsPair() { return new ValuePair<>(width(), height()); }
+    public @NotNull Value2D<Number, Number> copyAsPair() { return new Value2D<>(width(), height()); }
     public @NotNull Point2D copyAsPoint() { return new Point2D(aDouble(), bDouble()); }
     
     //</editor-fold>
@@ -29,10 +29,10 @@ public record Dimensions(@NotNull Number width, @NotNull Number height, @NotNull
     
     @Contract("_ -> new") public static @NotNull Dimensions copyFrom(@NotNull Dimensions dimensions) { return dimensions.copy(); }
     
-    public static @NotNull Dimensions copyFromPair(@NotNull ValuePair<? extends Number, ? extends Number> pair, @NotNull OpResultType resultType) {
-        return new Dimensions(pair.a().intValue(), pair.b().intValue(), resultType);
+    public static @NotNull Dimensions copyFromPair(@NotNull Value2D<? extends Number, ? extends Number> value2D, @NotNull OpResultType resultType) {
+        return new Dimensions(value2D.a().intValue(), value2D.b().intValue(), resultType);
     }
-    public static @NotNull Dimensions copyFromPair(@NotNull ValuePair<? extends Number, ? extends Number> pair) { return copyFromPair(pair, OpResultType.EXACT); }
+    public static @NotNull Dimensions copyFromPair(@NotNull Value2D<? extends Number, ? extends Number> value2D) { return copyFromPair(value2D, OpResultType.EXACT); }
     
     public static @NotNull Dimensions copyFromPoint(@NotNull Point2D point, @NotNull OpResultType resultType) {
         return new Dimensions((int) point.getX(), (int) point.getY(), resultType);

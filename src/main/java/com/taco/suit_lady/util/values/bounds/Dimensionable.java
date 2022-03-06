@@ -1,4 +1,4 @@
-package com.taco.suit_lady.ui.jfx.util;
+package com.taco.suit_lady.util.values.bounds;
 
 import org.jetbrains.annotations.NotNull;
 

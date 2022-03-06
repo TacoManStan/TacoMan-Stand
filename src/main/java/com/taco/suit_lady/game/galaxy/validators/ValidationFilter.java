@@ -6,7 +6,7 @@ import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.list_tools.L;
-import com.taco.suit_lady.util.values.ValuePair;
+import com.taco.suit_lady.util.values.Value2D;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import org.jetbrains.annotations.NotNull;
@@ -44,7 +44,7 @@ public abstract class ValidationFilter<T extends Validatable<T>>
             return valid;
         });
     }
-    @SafeVarargs public final boolean revalidate(@NotNull ValuePair<String, Object>... params) { return revalidate(L.map(params)); }
+    @SafeVarargs public final boolean revalidate(@NotNull Value2D<String, Object>... params) { return revalidate(L.map(params)); }
     
     //</editor-fold>
     

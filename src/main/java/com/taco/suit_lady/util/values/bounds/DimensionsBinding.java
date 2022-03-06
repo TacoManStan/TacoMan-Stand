@@ -1,4 +1,4 @@
-package com.taco.suit_lady.ui.jfx.util;
+package com.taco.suit_lady.util.values.bounds;
 
 import com.taco.suit_lady.util.tools.Props;
 import javafx.beans.InvalidationListener;

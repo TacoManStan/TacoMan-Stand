@@ -6,7 +6,7 @@ import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.logic.triggers.Galaxy;
 import com.taco.suit_lady.util.tools.printer.Printer;
 import com.taco.suit_lady.util.tools.list_tools.L;
-import com.taco.suit_lady.util.values.ValuePair;
+import com.taco.suit_lady.util.values.Value2D;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
@@ -69,8 +69,8 @@ public class Effect_LaunchMissile extends Effect_Targeted {
             final Effect impactEffect = getImpactEffectTest(missile);
             if (impactEffect != null)
                 impactEffect.trigger(L.map(
-                        new ValuePair<>("missile", missile),
-                        new ValuePair<>("radius", 25D)));
+                        new Value2D<>("missile", missile),
+                        new Value2D<>("radius", 25D)));
             missile.taskManager().shutdown();
         }));
         

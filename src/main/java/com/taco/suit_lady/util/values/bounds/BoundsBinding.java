@@ -1,4 +1,4 @@
-package com.taco.suit_lady.ui.jfx.util;
+package com.taco.suit_lady.util.values.bounds;
 
 import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Obj;
@@ -76,25 +76,25 @@ public class BoundsBinding
     //<editor-fold desc="--- PROPERTIES ---">
     
     public final IntegerProperty xProperty() { return xProperty; }
-    @Override public final int x() { return xProperty.get(); }
+    @Override public final @NotNull int x() { return xProperty.get(); }
     public final int setX(@NotNull Number newValue) { return Props.setProperty(xProperty, newValue.intValue()); }
     
     public final IntegerProperty yProperty() { return yProperty; }
-    @Override public final int y() { return yProperty.get(); }
+    @Override public final @NotNull int y() { return yProperty.get(); }
     public final int setY(@NotNull Number newValue) { return Props.setProperty(yProperty, newValue.intValue()); }
     
     public final IntegerProperty widthProperty() { return widthProperty; }
-    @Override public final int width() { return widthProperty.get(); }
+    @Override public final @NotNull int width() { return widthProperty.get(); }
     public final int setWidth(@NotNull Number newValue) { return Props.setProperty(widthProperty, newValue.intValue()); }
     
     public final IntegerProperty heightProperty() { return heightProperty; }
-    @Override public final int height() { return heightProperty.get(); }
+    @Override public final @NotNull int height() { return heightProperty.get(); }
     public final int setHeight(@NotNull Number newValue) { return Props.setProperty(heightProperty, newValue.intValue()); }
     
     //<editor-fold desc="> Bindings">
     
     public final ObjectBinding<Bounds> boundsBinding() { return boundsBinding; }
-    @Override public final Bounds getBounds() { return boundsBinding.get(); }
+    @Override public final @NotNull Bounds getBounds() { return boundsBinding.get(); }
     public final void setBounds(@NotNull Bounds newValue) {
         setX(newValue.x());
         setY(newValue.y());

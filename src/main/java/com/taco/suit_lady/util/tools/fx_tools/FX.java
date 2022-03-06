@@ -1,8 +1,8 @@
 package com.taco.suit_lady.util.tools.fx_tools;
 
 import com.sun.javafx.application.PlatformImpl;
-import com.taco.suit_lady.ui.jfx.util.Bounds;
-import com.taco.suit_lady.ui.jfx.util.Dimensions;
+import com.taco.suit_lady.util.values.bounds.Bounds;
+import com.taco.suit_lady.util.values.bounds.Dimensions;
 import com.taco.suit_lady.util.SimplePredicate;
 import com.taco.suit_lady.util.UndefinedRuntimeException;
 import com.taco.suit_lady.util.tools.*;
@@ -11,6 +11,8 @@ import com.taco.suit_lady.ui.jfx.hyperlink.HyperlinkNodeFX;
 import com.taco.suit_lady.ui.jfx.lists.Listable;
 import com.taco.suit_lady.util.tools.list_tools.A;
 import com.taco.suit_lady.util.values.*;
+import com.taco.suit_lady.util.values.numbers.NumExpr2D;
+import com.taco.suit_lady.util.values.numbers.NumExpr;
 import com.taco.tacository.quick.ConsoleBB;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -75,7 +77,7 @@ public class FX {
     private FX() { } //No Instance
     
     public static @NotNull Dimensions getDimensions(@NotNull Region region) { return Dimensions.copyFromPair(getDimensionsPair(region)); }
-    public static @NotNull ValuePair<Double, Double> getDimensionsPair(@NotNull Region region) { return new ValuePair<>(region.getWidth(), region.getHeight()); }
+    public static @NotNull Value2D<Double, Double> getDimensionsPair(@NotNull Region region) { return new Value2D<>(region.getWidth(), region.getHeight()); }
     
     //<editor-fold desc="EDT/FX Thread">
     
@@ -1032,10 +1034,10 @@ public class FX {
     
     //<editor-fold desc="> Empty Image Construction">
     
-    public static @NotNull WritableImage emptyImage(@NotNull NumberValuePairable<?> dimensions) { return emptyImage(dimensions.a(), dimensions.b()); }
+    public static @NotNull WritableImage emptyImage(@NotNull NumExpr2D<?> dimensions) { return emptyImage(dimensions.a(), dimensions.b()); }
     public static @NotNull WritableImage emptyImage(@NotNull Point2D dimensions) { return emptyImage(dimensions.getX(), dimensions.getY()); }
     
-    public static @NotNull WritableImage emptyImage(@NotNull NumberValueable<?> dimension) { return emptyImage(dimension.a()); }
+    public static @NotNull WritableImage emptyImage(@NotNull NumExpr<?> dimension) { return emptyImage(dimension.a()); }
     public static @NotNull WritableImage emptyImage(@NotNull Number dimension) { return emptyImage(dimension, dimension); }
     
     public static @NotNull WritableImage emptyImage(@NotNull Number width, @NotNull Number height) { return new WritableImage(width.intValue(), height.intValue()); }
@@ -1049,28 +1051,28 @@ public class FX {
     public static @NotNull Image generateImage(@Nullable Lock lock,
                                                @NotNull Number locationX, @NotNull Number locationY,
                                                @NotNull Number width, @NotNull Number height,
-                                               @NotNull BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> pixelGenerator) {
+                                               @NotNull BiFunction<NumExpr2D<?>, NumExpr2D<?>, Color> pixelGenerator) {
         return Exe.sync(
                 lock, () -> generateImage(
                         null, A.fillMatrix(
                                 t -> pixelGenerator.apply(t, t.applyEach(
-                                        locationX, locationY, ValueOpType.ADD, ValueOpType.ADD, OpResultType.EXACT)),
+                                        locationX, locationY, OpType.ADD, OpType.ADD, OpResultType.EXACT)),
                                 new Color[width.intValue()][height.intValue()])), true);
     }
     public static @NotNull Image generateImage(@Nullable Lock lock,
-                                               @NotNull NumberValuePairable<?> location,
-                                               @NotNull NumberValuePairable<?> dimensions,
-                                               @NotNull BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> pixelGenerator) {
+                                               @NotNull NumExpr2D<?> location,
+                                               @NotNull NumExpr2D<?> dimensions,
+                                               @NotNull BiFunction<NumExpr2D<?>, NumExpr2D<?>, Color> pixelGenerator) {
         return generateImage(lock, location.a(), location.b(), dimensions.a(), dimensions.b(), pixelGenerator);
     }
     public static @NotNull Image generateImage(@Nullable Lock lock,
                                                @NotNull Number width, @NotNull Number height,
-                                               @NotNull Function<NumberValuePairable<?>, Color> pixelGenerator) {
+                                               @NotNull Function<NumExpr2D<?>, Color> pixelGenerator) {
         return generateImage(lock, 0, 0, width, height, (loc, dim) -> pixelGenerator.apply(dim));
     }
     public static @NotNull Image generateImage(@Nullable Lock lock,
-                                               @NotNull NumberValuePairable<?> dimensions,
-                                               @NotNull Function<NumberValuePairable<?>, Color> pixelGenerator) {
+                                               @NotNull NumExpr2D<?> dimensions,
+                                               @NotNull Function<NumExpr2D<?>, Color> pixelGenerator) {
         return generateImage(lock, dimensions.a(), dimensions.b(), pixelGenerator);
     }
     

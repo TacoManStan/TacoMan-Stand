@@ -10,8 +10,8 @@ import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Exc;
 import com.taco.suit_lady.util.tools.Props;
 import com.taco.suit_lady.util.tools.fx_tools.FX;
-import com.taco.suit_lady.util.values.NumberValuePair;
-import com.taco.suit_lady.util.values.NumberValuePairable;
+import com.taco.suit_lady.util.values.numbers.Num2D;
+import com.taco.suit_lady.util.values.numbers.NumExpr2D;
 import javafx.beans.Observable;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.ObjectBinding;
@@ -50,13 +50,13 @@ public abstract class Shape
     private final ReadOnlyObjectWrapper<LocType> locTypeProperty;
     
     
-    private final ReadOnlyObjectWrapper<BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color>> pixelGeneratorProperty;
+    private final ReadOnlyObjectWrapper<BiFunction<NumExpr2D<?>, NumExpr2D<?>, Color>> pixelGeneratorProperty;
     private final ReadOnlyBooleanWrapper imageEnabledProperty;
     
     //
     
-    private final ObjectBinding<NumberValuePair> locationBinding;
-    private final ObjectBinding<NumberValuePair> dimensionsBinding;
+    private final ObjectBinding<Num2D> locationBinding;
+    private final ObjectBinding<Num2D> dimensionsBinding;
     
     
     private final MapProperty<String, DoubleBinding> locationMap;
@@ -70,7 +70,7 @@ public abstract class Shape
     
     public Shape(@NotNull Springable springable, @Nullable Lock lock,
                  @Nullable LocType locType,
-                 @Nullable BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> pixelGenerator) {
+                 @Nullable BiFunction<NumExpr2D<?>, NumExpr2D<?>, Color> pixelGenerator) {
         this(springable, lock, 0, 0, 0, 0, locType, pixelGenerator);
     }
     
@@ -78,7 +78,7 @@ public abstract class Shape
                  @NotNull Number locX, @NotNull Number locY,
                  @NotNull Number dimX, @NotNull Number dimY,
                  @Nullable LocType locType,
-                 @Nullable BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> pixelGenerator) {
+                 @Nullable BiFunction<NumExpr2D<?>, NumExpr2D<?>, Color> pixelGenerator) {
         this.lock = lock != null ? lock : new ReentrantLock();
         this.springable = springable.asStrict();
         
@@ -123,7 +123,7 @@ public abstract class Shape
     public Shape init() {
         // TODO: Add pixel factory property — w/ both preset implementations & the option to create custom implementations — for generating various types of images to represent the collision data
         
-        for (ObjectBinding<NumberValuePair> binding: Arrays.asList(locationBinding, dimensionsBinding))
+        for (ObjectBinding<Num2D> binding: Arrays.asList(locationBinding, dimensionsBinding))
             binding.addListener((observable, oldValue, newValue) -> {
                 if (isImageEnabled())
                     needsGfxUpdate = true;
@@ -209,7 +209,7 @@ public abstract class Shape
     public double getLocation(@NotNull Axis axis, @NotNull LocType locType) {
         return LocType.translate(getLock(), isNullableLock(), getLocation(axis), getDimension(axis), getLocType(), locType);
     }
-    public @NotNull NumberValuePair getLocation(@NotNull LocType locType) {
+    public @NotNull Num2D getLocation(@NotNull LocType locType) {
         return LocType.translate(getLock(), isNullableLock(), getLocation(), getDimensions(), getLocType(), locType);
     }
     
@@ -224,50 +224,50 @@ public abstract class Shape
     
     //
     
-    public final @NotNull ObjectBinding<NumberValuePair> locationBinding() { return locationBinding; }
-    public final @NotNull NumberValuePair getLocation() { return locationBinding.get(); }
-    public final @NotNull NumberValuePair setLocation(@NotNull Number newX, @NotNull Number newY) { return sync(() -> new NumberValuePair(setX(newX), setY(newY))); }
+    public final @NotNull ObjectBinding<Num2D> locationBinding() { return locationBinding; }
+    public final @NotNull Num2D getLocation() { return locationBinding.get(); }
+    public final @NotNull Num2D setLocation(@NotNull Number newX, @NotNull Number newY) { return sync(() -> new Num2D(setX(newX), setY(newY))); }
     
-    public final @NotNull NumberValuePair setLocation(@NotNull NumberValuePairable<?> newValue) { return setLocation(newValue.a(), newValue.b()); }
+    public final @NotNull Num2D setLocation(@NotNull NumExpr2D<?> newValue) { return setLocation(newValue.a(), newValue.b()); }
     public final @NotNull Point2D setLocation(@NotNull Point2D newValue) { return setLocation(newValue.getX(), newValue.getY()).asPoint(); }
     
     
-    public final @NotNull ObjectBinding<NumberValuePair> dimensionsBinding() { return dimensionsBinding; }
-    public final @NotNull NumberValuePair getDimensions() { return dimensionsBinding.get(); }
-    public final @NotNull NumberValuePair setDimensions(@NotNull Number newWidth, @NotNull Number newHeight) { return sync(() -> new NumberValuePair(setWidth(newWidth), setHeight(newHeight))); }
+    public final @NotNull ObjectBinding<Num2D> dimensionsBinding() { return dimensionsBinding; }
+    public final @NotNull Num2D getDimensions() { return dimensionsBinding.get(); }
+    public final @NotNull Num2D setDimensions(@NotNull Number newWidth, @NotNull Number newHeight) { return sync(() -> new Num2D(setWidth(newWidth), setHeight(newHeight))); }
     
-    public final @NotNull NumberValuePair setDimensions(@NotNull NumberValuePairable<?> newValue) { return setDimensions(newValue.a(), newValue.b()); }
+    public final @NotNull Num2D setDimensions(@NotNull NumExpr2D<?> newValue) { return setDimensions(newValue.a(), newValue.b()); }
     public final @NotNull Point2D setDimensions(@NotNull Point2D newValue) { return setDimensions(newValue.getX(), newValue.getY()).asPoint(); }
     
     //
     
     //<editor-fold desc="> Border Points">
     
-    public final @NotNull List<NumberValuePair> getBorderPoints(boolean translate, @NotNull Number xMod, @NotNull Number yMod) { return sync(() -> new ArrayList<>(regenerateBorderPoints(translate, xMod, yMod))); }
-    public final @NotNull List<NumberValuePair> getBorderPoints(boolean translate, @NotNull Point2D mod) { return getBorderPoints(translate, mod.getX(), mod.getY()); }
-    public final @NotNull List<NumberValuePair> getBorderPoints(boolean translate, @NotNull NumberValuePairable<?> mod) { return getBorderPoints(translate, mod.asPoint()); }
+    public final @NotNull List<Num2D> getBorderPoints(boolean translate, @NotNull Number xMod, @NotNull Number yMod) { return sync(() -> new ArrayList<>(regenerateBorderPoints(translate, xMod, yMod))); }
+    public final @NotNull List<Num2D> getBorderPoints(boolean translate, @NotNull Point2D mod) { return getBorderPoints(translate, mod.getX(), mod.getY()); }
+    public final @NotNull List<Num2D> getBorderPoints(boolean translate, @NotNull NumExpr2D<?> mod) { return getBorderPoints(translate, mod.asPoint()); }
     
-    public final @NotNull List<NumberValuePair> getBorderPoints() { return getBorderPoints(true, 0, 0); }
+    public final @NotNull List<Num2D> getBorderPoints() { return getBorderPoints(true, 0, 0); }
     
     //
     
-    public final @NotNull List<NumberValuePair> getBorderPointsTranslated(@NotNull Number xMod, @NotNull Number yMod) { return getBorderPoints(true, xMod, yMod); }
-    public final @NotNull List<NumberValuePair> getBorderPointsTranslated(@NotNull Point2D mod) { return getBorderPointsTranslated(mod.getX(), mod.getY()); }
-    public final @NotNull List<NumberValuePair> getBorderPointsTranslated(@NotNull NumberValuePairable<?> mod) { return getBorderPointsTranslated(mod.asPoint()); }
+    public final @NotNull List<Num2D> getBorderPointsTranslated(@NotNull Number xMod, @NotNull Number yMod) { return getBorderPoints(true, xMod, yMod); }
+    public final @NotNull List<Num2D> getBorderPointsTranslated(@NotNull Point2D mod) { return getBorderPointsTranslated(mod.getX(), mod.getY()); }
+    public final @NotNull List<Num2D> getBorderPointsTranslated(@NotNull NumExpr2D<?> mod) { return getBorderPointsTranslated(mod.asPoint()); }
     
-    public final @NotNull List<NumberValuePair> getBorderPointsMoved(@NotNull Number xMod, @NotNull Number yMod) { return getBorderPoints(true, xMod, yMod); }
-    public final @NotNull List<NumberValuePair> getBorderPointsMoved(@NotNull Point2D mod) { return getBorderPointsMoved(mod.getX(), mod.getY()); }
-    public final @NotNull List<NumberValuePair> getBorderPointsMoved(@NotNull NumberValuePairable<?> mod) { return getBorderPointsMoved(mod.asPoint()); }
-    
-    //</editor-fold>
+    public final @NotNull List<Num2D> getBorderPointsMoved(@NotNull Number xMod, @NotNull Number yMod) { return getBorderPoints(true, xMod, yMod); }
+    public final @NotNull List<Num2D> getBorderPointsMoved(@NotNull Point2D mod) { return getBorderPointsMoved(mod.getX(), mod.getY()); }
+    public final @NotNull List<Num2D> getBorderPointsMoved(@NotNull NumExpr2D<?> mod) { return getBorderPointsMoved(mod.asPoint()); }
     
     //</editor-fold>
     
     //</editor-fold>
     
-    public final @NotNull ReadOnlyObjectProperty<BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color>> readOnlyPixelGeneratorProperty() { return pixelGeneratorProperty.getReadOnlyProperty(); }
-    public final @NotNull BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> getPixelGenerator() { return pixelGeneratorProperty.get(); }
-    protected final @NotNull BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> setPixelGenerator(@NotNull BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> newValue) {
+    //</editor-fold>
+    
+    public final @NotNull ReadOnlyObjectProperty<BiFunction<NumExpr2D<?>, NumExpr2D<?>, Color>> readOnlyPixelGeneratorProperty() { return pixelGeneratorProperty.getReadOnlyProperty(); }
+    public final @NotNull BiFunction<NumExpr2D<?>, NumExpr2D<?>, Color> getPixelGenerator() { return pixelGeneratorProperty.get(); }
+    protected final @NotNull BiFunction<NumExpr2D<?>, NumExpr2D<?>, Color> setPixelGenerator(@NotNull BiFunction<NumExpr2D<?>, NumExpr2D<?>, Color> newValue) {
         return Props.setProperty(pixelGeneratorProperty, newValue);
     }
     
@@ -284,7 +284,7 @@ public abstract class Shape
     //<editor-fold desc="--- LOGIC ---">
     
     public final boolean containsPoint(@NotNull Point2D point) { return sync(() -> containsPoint(point.getX(), point.getY())); }
-    public final boolean containsPoint(@NotNull NumberValuePairable<?> point) { return sync(() -> containsPoint(point.asPoint())); }
+    public final boolean containsPoint(@NotNull NumExpr2D<?> point) { return sync(() -> containsPoint(point.asPoint())); }
     
     public boolean intersects(@NotNull Shape other, boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
         return sync(() -> { return getBorderPoints(translate, xMod, yMod).stream().anyMatch(other::containsPoint); });
@@ -331,7 +331,7 @@ public abstract class Shape
     //<editor-fold desc="--- ABSTRACT ---">
     
     public abstract boolean containsPoint(@NotNull Number x, @NotNull Number y);
-    protected abstract @NotNull List<NumberValuePair> regenerateBorderPoints(boolean translate, @NotNull Number xMod, @NotNull Number yMod);
+    protected abstract @NotNull List<Num2D> regenerateBorderPoints(boolean translate, @NotNull Number xMod, @NotNull Number yMod);
     //    protected abstract boolean intersects(@NotNull Shape other);
     
     protected @NotNull List<Observable> observables() { return Collections.emptyList(); }
@@ -360,7 +360,7 @@ public abstract class Shape
                 getPixelGenerator()));
     }
     
-    private @NotNull BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> defaultPixelGenerator() { return (imgLoc, loc) -> containsPoint(loc) ? Color.BLACK : Color.TRANSPARENT; }
+    private @NotNull BiFunction<NumExpr2D<?>, NumExpr2D<?>, Color> defaultPixelGenerator() { return (imgLoc, loc) -> containsPoint(loc) ? Color.BLACK : Color.TRANSPARENT; }
     
     private @NotNull Observable @NotNull [] getObservables(@NotNull Observable... excluded) {
         return sync(() -> {

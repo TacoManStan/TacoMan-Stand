@@ -20,7 +20,7 @@ import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.*;
 import com.taco.suit_lady.util.tools.list_tools.L;
 import com.taco.suit_lady.util.tools.printer.Printer;
-import com.taco.suit_lady.util.values.ValuePair;
+import com.taco.suit_lady.util.values.Value2D;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -221,8 +221,8 @@ public class GameViewContent
     private void abilityTest(int abilityNum) {
         Printer.print("Ability Used: " + abilityNum);
         switch (abilityNum) {
-            case 1 -> new Ability_LaunchMissile(testObject).use(new ValuePair<>("target", getController().getMouseOnMapSafe()));
-            case 2 -> blinkTest().use(new ValuePair<>("target", getController().getMouseOnMapSafe()));
+            case 1 -> new Ability_LaunchMissile(testObject).use(new Value2D<>("target", getController().getMouseOnMapSafe()));
+            case 2 -> blinkTest().use(new Value2D<>("target", getController().getMouseOnMapSafe()));
         }
     }
     

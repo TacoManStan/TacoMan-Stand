@@ -4,7 +4,7 @@ import com.taco.suit_lady.util.tools.Exc;
 import com.taco.suit_lady.util.tools.Exe;
 import com.taco.suit_lady.util.tools.list_tools.Op.OperationType;
 import com.taco.suit_lady.util.tools.list_tools.Op.TriggerType;
-import com.taco.suit_lady.util.values.ValuePair;
+import com.taco.suit_lady.util.values.Value2D;
 import com.taco.tacository.collections.ReadOnlySelectionList;
 import com.taco.tacository.collections.SelectionList;
 import javafx.beans.property.ReadOnlyListWrapper;
@@ -416,7 +416,7 @@ public final class L {
     
     //<editor-fold desc="> Factory & Conversion Methods">
     
-    @SafeVarargs public static <K, V> @NotNull HashMap<K, V> map(@Nullable Predicate<ValuePair<K, V>> filter, @NotNull ValuePair<K, V>... contents) {
+    @SafeVarargs public static <K, V> @NotNull HashMap<K, V> map(@Nullable Predicate<Value2D<K, V>> filter, @NotNull Value2D<K, V>... contents) {
         filter = filter != null ? filter : valuePair -> true;
         final HashMap<K, V> map = new HashMap<>();
         Arrays.stream(contents)
@@ -426,7 +426,7 @@ public final class L {
         return map;
     }
     
-    @SafeVarargs public static <K, V> @NotNull HashMap<K, V> map(@NotNull ValuePair<K, V>... contents) { return map(null, contents); }
+    @SafeVarargs public static <K, V> @NotNull HashMap<K, V> map(@NotNull Value2D<K, V>... contents) { return map(null, contents); }
     
     //</editor-fold>
     

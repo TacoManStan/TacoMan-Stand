@@ -1,11 +1,13 @@
-package com.taco.suit_lady.ui.jfx.util;
+package com.taco.suit_lady.util.values.bounds;
 
 import com.taco.suit_lady.util.tools.Exc;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
 
-public record Bounds(int x, int y, int width, int height)
-        implements Boundable {
+import java.io.Serializable;
+
+public record Bounds<N extends Number>(N x, N y, N width, N height)
+        implements Boundable, Cloneable, Serializable {
     
     //<editor-fold desc="--- STATIC CONVERSION ---">
     
@@ -28,21 +30,23 @@ public record Bounds(int x, int y, int width, int height)
     
     //</editor-fold>
     
+    public Bounds(@NotNull Boundable from) {
+        this(from.x(), from.y(), from.width(), from.height());
+    }
+    
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public Bounds getBounds() { return this; }
+    @Override public @NotNull Bounds getBounds() { return this; }
     
-    //</editor-fold>
+    //<editor-fold desc="> Foundational">
     
-    
-    //<editor-fold desc="--- FOUNDATIONAL ---">
-    
-    @Override
-    public boolean equals(Object o) {
+    @Override public boolean equals(Object o) {
         if (this == o)
             return true;
         if (!(o instanceof Bounds bounds))
             return false;
+        
+        return x
         
         if (x != bounds.x)
             return false;
@@ -53,8 +57,7 @@ public record Bounds(int x, int y, int width, int height)
         return height == bounds.height;
     }
     
-    @Override
-    public int hashCode() {
+    @Override public int hashCode() {
         int result = x;
         
         result = 31 * result + y;
@@ -64,8 +67,7 @@ public record Bounds(int x, int y, int width, int height)
         return result;
     }
     
-    @Override
-    public String toString() {
+    @Override public String toString() {
         return "Bounds2D{" +
                "x=" + x +
                ", y=" + y +
@@ -75,4 +77,8 @@ public record Bounds(int x, int y, int width, int height)
     }
     
     //</editor-fold>
+    
+    //</editor-fold>
+    
+
 }

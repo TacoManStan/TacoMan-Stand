@@ -5,7 +5,7 @@ import com.taco.suit_lady.util.shapes.Box;
 import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.Obj;
-import com.taco.suit_lady.util.values.NumberValuePairable;
+import com.taco.suit_lady.util.values.numbers.NumExpr2D;
 import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,12 +24,12 @@ public interface Collidable<T extends Collidable<T>>
     
     //
     
-    default @NotNull Box boundsBox(boolean synchronize, @Nullable BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> pixelGenerator) {
+    default @NotNull Box boundsBox(boolean synchronize, @Nullable BiFunction<NumExpr2D<?>, NumExpr2D<?>, Color> pixelGenerator) {
         return collisionMap().boundsBox(synchronize, pixelGenerator);
     }
     
     default @NotNull Box boundsBox(boolean synchronize) { return boundsBox(synchronize, null); }
-    default @NotNull Box boundsBox(@Nullable BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> pixelGenerator) { return boundsBox(false, pixelGenerator); }
+    default @NotNull Box boundsBox(@Nullable BiFunction<NumExpr2D<?>, NumExpr2D<?>, Color> pixelGenerator) { return boundsBox(false, pixelGenerator); }
     default @NotNull Box boundsBox() { return boundsBox(false, null); }
     
     //

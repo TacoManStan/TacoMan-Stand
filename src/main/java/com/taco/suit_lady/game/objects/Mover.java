@@ -10,8 +10,8 @@ import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Obj;
 import com.taco.suit_lady.util.tools.printer.Printer;
 import com.taco.suit_lady.util.tools.Props;
-import com.taco.suit_lady.util.values.NumberValuePair;
-import com.taco.suit_lady.util.values.ValuePair;
+import com.taco.suit_lady.util.values.numbers.Num2D;
+import com.taco.suit_lady.util.values.Value2D;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
@@ -39,7 +39,7 @@ public class Mover
     
     private final DoubleProperty xTargetProperty;
     private final DoubleProperty yTargetProperty;
-    private final ObjectBinding<NumberValuePair> targetBinding;
+    private final ObjectBinding<Num2D> targetBinding;
     
     private final ReadOnlyObjectWrapper<ObservableValue<? extends Number>> observableTargetXProperty;
     private final ReadOnlyObjectWrapper<ObservableValue<? extends Number>> observableTargetYProperty;
@@ -56,7 +56,7 @@ public class Mover
         
         this.xTargetProperty = new SimpleDoubleProperty(owner.getLocationX(false));
         this.yTargetProperty = new SimpleDoubleProperty(owner.getLocationY(false));
-        this.targetBinding = Bind.objBinding(() -> sync(() -> new NumberValuePair(getTargetX(), getTargetY())), xTargetProperty, yTargetProperty);
+        this.targetBinding = Bind.objBinding(() -> sync(() -> new Num2D(getTargetX(), getTargetY())), xTargetProperty, yTargetProperty);
         
         this.observableTargetXProperty = new ReadOnlyObjectWrapper<>();
         this.observableTargetYProperty = new ReadOnlyObjectWrapper<>();
@@ -126,8 +126,8 @@ public class Mover
     
     
     public final Point2D getObservableTargetValue() { return sync(() -> new Point2D(getObservableTargetX().getValue().doubleValue(), getObservableTargetY().getValue().doubleValue())); }
-    public final ValuePair<ObservableValue<? extends Number>, ObservableValue<? extends Number>> setObservableTargetValues(@Nullable ObservableValue<? extends Number> obsX, @Nullable ObservableValue<? extends Number> obsY) {
-        return sync(() -> new ValuePair<>(setObservableTargetX(obsX), setObservableTargetY(obsY)));
+    public final Value2D<ObservableValue<? extends Number>, ObservableValue<? extends Number>> setObservableTargetValues(@Nullable ObservableValue<? extends Number> obsX, @Nullable ObservableValue<? extends Number> obsY) {
+        return sync(() -> new Value2D<>(setObservableTargetX(obsX), setObservableTargetY(obsY)));
     }
     
     //</editor-fold>
@@ -264,7 +264,7 @@ public class Mover
     
     //</editor-fold>
     
-    private NumberValuePair syncTarget() {
+    private Num2D syncTarget() {
         return sync(() -> {
             ObservableValue<? extends Number> obsX = getObservableTargetX();
             ObservableValue<? extends Number> obsY = getObservableTargetY();
@@ -272,7 +272,7 @@ public class Mover
             Number y = obsY != null ? obsY.getValue() : getTargetY();
             
             setTarget(new Point2D(x.doubleValue(), y.doubleValue()));
-            return new NumberValuePair(x, y);
+            return new Num2D(x, y);
         });
     }
 }

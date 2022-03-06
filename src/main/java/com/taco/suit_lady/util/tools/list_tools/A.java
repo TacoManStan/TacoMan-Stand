@@ -1,6 +1,6 @@
 package com.taco.suit_lady.util.tools.list_tools;
 
-import com.taco.suit_lady.ui.jfx.util.Dimensions;
+import com.taco.suit_lady.util.values.bounds.Dimensions;
 import com.taco.suit_lady.util.tools.Exc;
 import com.taco.suit_lady.util.tools.TB;
 import org.checkerframework.checker.index.qual.NonNegative;

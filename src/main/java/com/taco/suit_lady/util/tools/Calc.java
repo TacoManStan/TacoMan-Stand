@@ -6,9 +6,9 @@ import com.taco.suit_lady.util.shapes.LocType;
 import com.taco.suit_lady.util.shapes.Shape;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.timing.Timing;
-import com.taco.suit_lady.util.values.NumberValuePairable;
-import com.taco.suit_lady.util.values.ValuePair;
-import com.taco.suit_lady.util.values.ValuePairable;
+import com.taco.suit_lady.util.values.numbers.NumExpr2D;
+import com.taco.suit_lady.util.values.Value2D;
+import com.taco.suit_lady.util.values.ValueExpr2D;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Point2D;
@@ -611,9 +611,9 @@ public class Calc {
     
     public static @NotNull Point2D getPointInBounds(
             @NotNull Point2D origin,
-            @Nullable ValuePairable<? extends Number, ? extends Number> minBounds,
-            @NotNull ValuePairable<? extends Number, ? extends Number> maxBounds) {
-        minBounds = minBounds != null ? minBounds : new ValuePair<>(0, 0);
+            @Nullable ValueExpr2D<? extends Number, ? extends Number> minBounds,
+            @NotNull ValueExpr2D<? extends Number, ? extends Number> maxBounds) {
+        minBounds = minBounds != null ? minBounds : new Value2D<>(0, 0);
         
         if (minBounds.a().doubleValue() >= maxBounds.a().doubleValue())
             throw Exc.unsupported("Min X Bounds (" + minBounds.a().doubleValue() + ") must be less than Max X Bounds (" + maxBounds.a().doubleValue());
@@ -635,17 +635,17 @@ public class Calc {
         
         return new Point2D(x, y);
     }
-    public static @NotNull Point2D getPointInBounds(@NotNull Point2D origin, @NotNull ValuePairable<? extends Number, ? extends Number> maxBounds) { return getPointInBounds(origin, null, maxBounds); }
+    public static @NotNull Point2D getPointInBounds(@NotNull Point2D origin, @NotNull ValueExpr2D<? extends Number, ? extends Number> maxBounds) { return getPointInBounds(origin, null, maxBounds); }
     
     public static @NotNull ObjectBinding<Point2D> getPointInBoundsBinding(
             @NotNull ObservableValue<Point2D> originProperty,
-            @Nullable ValuePairable<? extends Number, ? extends Number> minBounds,
-            @NotNull ValuePairable<? extends Number, ? extends Number> maxBounds) {
+            @Nullable ValueExpr2D<? extends Number, ? extends Number> minBounds,
+            @NotNull ValueExpr2D<? extends Number, ? extends Number> maxBounds) {
         return Bind.objBinding(() -> getPointInBounds(originProperty.getValue(), minBounds, maxBounds), originProperty);
     }
     public static @NotNull ObjectBinding<Point2D> getPointInBoundsBinding(
             @NotNull ObservableValue<Point2D> originProperty,
-            @NotNull ValuePairable<? extends Number, ? extends Number> maxBounds) { return getPointInBoundsBinding(originProperty, null, maxBounds); }
+            @NotNull ValueExpr2D<? extends Number, ? extends Number> maxBounds) { return getPointInBoundsBinding(originProperty, null, maxBounds); }
     
     //
     
@@ -685,7 +685,7 @@ public class Calc {
     //<editor-fold desc="--- SHAPES ---">
     
     public static @NotNull Box boundsBox(@NotNull Springable springable, @Nullable Lock lock,
-                                        @Nullable BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, javafx.scene.paint.Color> pixelGenerator,
+                                        @Nullable BiFunction<NumExpr2D<?>, NumExpr2D<?>, javafx.scene.paint.Color> pixelGenerator,
                                         @NotNull List<Shape> inputs) {
         final ArrayList<Shape> shapes = new ArrayList<>(inputs);
         
