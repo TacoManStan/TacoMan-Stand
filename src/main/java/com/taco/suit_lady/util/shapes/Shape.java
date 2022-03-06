@@ -217,7 +217,7 @@ public abstract class Shape
     public final @NotNull Point2D setLocation(@NotNull Point2D newValue) { return setLocation(newValue.getX(), newValue.getY()).asPoint(); }
     
     
-    public final @NotNull ObjectBinding<NumberValuePairable<?>> dimensionsBinding() { return dimensionsBinding; }
+    public final @NotNull ObjectBinding<NumberValuePair> dimensionsBinding() { return dimensionsBinding; }
     public final @NotNull NumberValuePair getDimensions() { return dimensionsBinding.get(); }
     public final @NotNull NumberValuePair setDimensions(@NotNull Number newWidth, @NotNull Number newHeight) { return sync(() -> new NumberValuePair(setWidth(newWidth), setHeight(newHeight))); }
     
