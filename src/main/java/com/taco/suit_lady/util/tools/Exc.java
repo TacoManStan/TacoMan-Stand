@@ -390,6 +390,15 @@ public class Exc {
     
     public static void throwNYI() { throw nyi(); }
     
+    //<editor-fold desc=">> Needs Implementation">
+    
+    public static @NotNull RuntimeException needsImpl() { return needsImpl(null, null); }
+    public static @NotNull RuntimeException needsImpl(@Nullable Throwable cause) { return needsImpl(null, cause); }
+    public static @NotNull RuntimeException needsImpl(@Nullable Object msg) { return needsImpl(msg, null); }
+    public static @NotNull RuntimeException needsImpl(@Nullable Object msg, @Nullable Throwable cause) { return nyi("Method Requires Implementation", msg, cause); }
+    
+    //</editor-fold>
+    
     //</editor-fold>
     
     //</editor-fold>
