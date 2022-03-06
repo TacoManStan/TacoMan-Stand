@@ -41,15 +41,15 @@ public interface Tickable<E extends Tickable<E>>
     
     //<editor-fold desc=">> Execute Persistent Methods">
     
-    default @NotNull GameTask<E> executeAndGet(@Nullable Lock lock, @NotNull Runnable action, @Nullable Runnable onTerminateAction, @Nullable Supplier<Boolean> terminateCondition) { return taskManager().executeAndGet(action, onTerminateAction, terminateCondition); }
-    default @NotNull GameTask<E> executeAndGet(@Nullable Lock lock, @NotNull Runnable action, @Nullable Runnable onTerminateAction) { return taskManager().executeAndGet(action, onTerminateAction); }
-    default @NotNull GameTask<E> executeAndGet(@Nullable Lock lock, @NotNull Runnable action, @Nullable Supplier<Boolean> terminateCondition) { return taskManager().executeAndGet(action, terminateCondition); }
-    default @NotNull GameTask<E> executeAndGet(@Nullable Lock lock, @NotNull Runnable action) { return taskManager().executeAndGet(action); }
-    
-    default boolean execute(@Nullable Lock lock, @NotNull Runnable action, @Nullable Runnable onTerminateAction, @Nullable Supplier<Boolean> terminateCondition) { return taskManager().execute(action, onTerminateAction, terminateCondition); }
-    default boolean execute(@Nullable Lock lock, @NotNull Runnable action, @Nullable Runnable onTerminateAction) { return taskManager().execute(action, onTerminateAction); }
-    default boolean execute(@Nullable Lock lock, @NotNull Runnable action, @Nullable Supplier<Boolean> terminateCondition) { return taskManager().execute(action, terminateCondition); }
-    default boolean execute(@Nullable Lock lock, @NotNull Runnable action) { return taskManager().execute(action); }
+//    default @NotNull GameTask<E> executeAndGet(@Nullable Lock lock, @NotNull Runnable action, @Nullable Runnable onTerminateAction, @Nullable Supplier<Boolean> terminateCondition) { return taskManager().executeAndGet(action, onTerminateAction, terminateCondition); }
+//    default @NotNull GameTask<E> executeAndGet(@Nullable Lock lock, @NotNull Runnable action, @Nullable Runnable onTerminateAction) { return taskManager().executeAndGet(action, onTerminateAction); }
+//    default @NotNull GameTask<E> executeAndGet(@Nullable Lock lock, @NotNull Runnable action, @Nullable Supplier<Boolean> terminateCondition) { return taskManager().executeAndGet(action, terminateCondition); }
+//    default @NotNull GameTask<E> executeAndGet(@Nullable Lock lock, @NotNull Runnable action) { return taskManager().executeAndGet(action); }
+//
+//    default boolean execute(@Nullable Lock lock, @NotNull Runnable action, @Nullable Runnable onTerminateAction, @Nullable Supplier<Boolean> terminateCondition) { return taskManager().execute(action, onTerminateAction, terminateCondition); }
+//    default boolean execute(@Nullable Lock lock, @NotNull Runnable action, @Nullable Runnable onTerminateAction) { return taskManager().execute(action, onTerminateAction); }
+//    default boolean execute(@Nullable Lock lock, @NotNull Runnable action, @Nullable Supplier<Boolean> terminateCondition) { return taskManager().execute(action, terminateCondition); }
+//    default boolean execute(@Nullable Lock lock, @NotNull Runnable action) { return taskManager().execute(action); }
     
     //
     
