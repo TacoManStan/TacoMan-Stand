@@ -18,6 +18,7 @@ import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.shapes.Box;
 import com.taco.suit_lady.util.shapes.Circle;
+import com.taco.suit_lady.util.shapes.Shape;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Obj;
@@ -178,23 +179,26 @@ public class GameObject
         taskManager().addShutdownOperation(() -> A.iterateMatrix(tile -> tile.getOccupyingObjects().remove(this), getOccupiedTiles()));
     }
     
+    private final boolean useCollisionBox = false;
     private CollisionArea<GameObject> collisionArea = null;
     
+    private Shape collShape;
     @SuppressWarnings("FieldMayBeFinal") private Circle circle = null;
     @SuppressWarnings("FieldMayBeFinal") private Box box = null;
     
     private void initCollisionMap() {
-        executeOnce(() -> {
+        executeOnce(() -> sync(() -> {
             printer().get(getClass()).setEnabled(true);
             printer().get(getClass()).setPrintPrefix(false);
             printer().get(getClass()).print("Initializing Collision Map For: " + this);
             
             collisionArea = new CollisionArea<>(collisionMap());
-            collisionArea.includedShapes().add(circle = new Circle(this).init());
-//            collisionArea.includedShapes().add(box = new Box(this).init());
-            
+            collisionArea.includedShapes().add(
+                    collShape = useCollisionBox
+                                ? (box = new Box(this).init())
+                                : (circle = new Circle(this).init()));
             collisionMap().addCollisionArea(collisionArea);
-        });
+        }));
         refreshCollisionData();
     }
     
@@ -202,10 +206,19 @@ public class GameObject
         execute(() -> sync(() -> {
             double modifier = 1.0; //Only to test different sizes of collision ranges
             //        circle.setRadius(Math.max((int) ((getWidth() / 2) * modifier), (int) ((getHeight() / 2) * modifier)));
-            if (circle != null) {
-                circle.setDiameter(Math.max(getWidth(), getHeight()));
-                circle.setLocation(getLocation(true));
-            }
+            
+            collShape.setDimensions(getDimensions());
+            collShape.setLocation(getLocation(!useCollisionBox));
+            
+//            if (circle != null) {
+//                circle.setDiameter(Math.max(getWidth(), getHeight()));
+//                circle.setLocation(getLocation(true));
+//            }
+//
+//            if (box != null) {
+//                box.setDimensions(getDimensions());
+//                box.setLocation(getLocation(false));
+//            }
         }));
     }
     
@@ -219,9 +232,11 @@ public class GameObject
     
     public final String getObjID() { return objID; }
     public final String setObjID(@Nullable String newValue) {
-        String oldValue = getObjID();
-        objID = newValue;
-        return oldValue;
+        return sync(() -> {
+            String oldValue = getObjID();
+            objID = newValue;
+            return oldValue;
+        });
     }
     
     //<editor-fold desc="> Map Properties">
@@ -257,6 +272,7 @@ public class GameObject
     
     public final ObjectBinding<Point2D> locationBinding(boolean center) { return center ? locationCenteredBinding : locationBinding; }
     
+    //TODO: Change boolean param to instead accept a LocType enum
     public final Point2D getLocation(boolean center) { return locationBinding(center).get(); }
     public final Point2D setLocation(@NotNull Point2D newValue, boolean center) {
         return new Point2D(setLocationX(newValue.getX(), center), setLocationY(newValue.getY(), center));
