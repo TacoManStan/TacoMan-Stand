@@ -3,7 +3,7 @@ package com.taco.suit_lady.logic.triggers;
 import com.taco.suit_lady.game.Entity;
 import com.taco.suit_lady.game.GameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
-import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.Exc;

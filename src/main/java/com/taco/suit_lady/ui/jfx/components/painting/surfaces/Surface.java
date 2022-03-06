@@ -2,7 +2,7 @@ package com.taco.suit_lady.ui.jfx.components.painting.surfaces;
 
 import com.taco.suit_lady._to_sort._new.Self;
 import com.taco.suit_lady.ui.jfx.components.painting.paintables.Paintable;
-import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import javafx.beans.binding.IntegerBinding;

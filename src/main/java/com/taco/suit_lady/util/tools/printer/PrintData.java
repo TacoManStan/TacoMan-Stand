@@ -38,8 +38,21 @@ public class PrintData {
     
     //<editor-fold desc="--- LOGIC ---">
     
+    //<editor-fold desc="> Generic Print Methods">
+    
+    //<editor-fold desc=">> Standard Print Methods">
+    
     public void print(@Nullable Object msg) { print(msg, false); }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc=">> Error Print Methods">
+    
     public void err(@Nullable Object msg) { print(msg, true); }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc=">> Internal: Generic Print Methods">
     
     private void print(@Nullable Object msg, boolean err) {
         if (isEnabled())
@@ -48,4 +61,7 @@ public class PrintData {
     
     //</editor-fold>
     
+    //</editor-fold>
+    
+    //</editor-fold>
 }

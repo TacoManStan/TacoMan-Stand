@@ -5,7 +5,7 @@ import com.taco.suit_lady.ui.jfx.components.painting.surfaces.Surface;
 import com.taco.suit_lady.ui.jfx.util.Boundable;
 import com.taco.suit_lady.ui.jfx.util.Bounds;
 import com.taco.suit_lady.ui.jfx.util.BoundsBinding;
-import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.Props;

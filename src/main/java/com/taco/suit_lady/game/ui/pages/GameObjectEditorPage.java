@@ -4,7 +4,7 @@ import com.taco.suit_lady.game.GameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.ui.UIBook;
 import com.taco.suit_lady.ui.UIPage;
-import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.synchronization.Lockable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.locks.Lock;

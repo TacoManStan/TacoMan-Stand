@@ -1,7 +1,7 @@
 package com.taco.suit_lady.logic;
 
 import com.taco.suit_lady.game.ui.GFXObject;
-import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.Obj;

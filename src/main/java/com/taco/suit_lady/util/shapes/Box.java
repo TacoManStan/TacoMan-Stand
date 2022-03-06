@@ -14,6 +14,8 @@ import java.util.function.BiFunction;
 
 public class Box extends Shape {
     
+    //<editor-fold desc="--- CONSTRUCTORS ---">
+    
     public Box(@NotNull Springable springable,
                @Nullable Lock lock,
                @Nullable LocType locType,
@@ -24,6 +26,14 @@ public class Box extends Shape {
     public Box(@NotNull Springable springable, @Nullable Lock lock, @Nullable BiFunction<NumberValuePairable<?>, NumberValuePairable<?>, Color> pixelGenerator) { this(springable, lock, null, pixelGenerator); }
     public Box(@NotNull Springable springable, @Nullable Lock lock) { this(springable, lock, null, null); }
     public Box(@NotNull Springable springable) { this(springable, null, null, null); }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- INITIALIZATION ---">
+    
+    @Override public Box init() { return (Box) super.init(); }
+    
+    //</editor-fold>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     

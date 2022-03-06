@@ -5,7 +5,7 @@ import com.taco.suit_lady.ui.FooterController;
 import com.taco.suit_lady.ui.Content;
 import com.taco.suit_lady.ui.ContentController;
 import com.taco.suit_lady.ui.ContentData;
-import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.tools.Props;

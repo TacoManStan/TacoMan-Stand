@@ -16,6 +16,7 @@ import com.taco.suit_lady.logic.triggers.implementations.UnitMovedEvent;
 import com.taco.suit_lady.ui.jfx.util.Dimensions;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
+import com.taco.suit_lady.util.shapes.Box;
 import com.taco.suit_lady.util.shapes.Circle;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.Bind;
@@ -178,7 +179,9 @@ public class GameObject
     }
     
     private CollisionArea<GameObject> collisionArea = null;
-    private Circle circle;
+    
+    @SuppressWarnings("FieldMayBeFinal") private Circle circle = null;
+    @SuppressWarnings("FieldMayBeFinal") private Box box = null;
     
     private void initCollisionMap() {
         executeOnce(() -> {
@@ -188,6 +191,7 @@ public class GameObject
             
             collisionArea = new CollisionArea<>(collisionMap());
             collisionArea.includedShapes().add(circle = new Circle(this).init());
+//            collisionArea.includedShapes().add(box = new Box(this).init());
             
             collisionMap().addCollisionArea(collisionArea);
         });
@@ -195,12 +199,14 @@ public class GameObject
     }
     
     private void refreshCollisionData() {
-        execute(() -> {
+        execute(() -> sync(() -> {
             double modifier = 1.0; //Only to test different sizes of collision ranges
             //        circle.setRadius(Math.max((int) ((getWidth() / 2) * modifier), (int) ((getHeight() / 2) * modifier)));
-            circle.setDiameter(Math.max(getWidth(), getHeight()));
-            circle.setLocation(getLocation(true));
-        });
+            if (circle != null) {
+                circle.setDiameter(Math.max(getWidth(), getHeight()));
+                circle.setLocation(getLocation(true));
+            }
+        }));
     }
     
     //</editor-fold>

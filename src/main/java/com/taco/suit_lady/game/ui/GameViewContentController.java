@@ -8,7 +8,7 @@ import com.taco.suit_lady.ui.ContentController;
 import com.taco.suit_lady.ui.jfx.util.Dimensions;
 import com.taco.suit_lady.ui.ui_internal.controllers.CellController;
 import com.taco.suit_lady.ui.ui_internal.drag_and_drop.DragAndDropHandler;
-import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Calc;
 import javafx.beans.binding.DoubleBinding;

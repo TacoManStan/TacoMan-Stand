@@ -1964,7 +1964,7 @@ public class FX {
         if (comboBox != null) {
             applyCellFactory(comboBox);
             if (t != null) {
-                final Enum[] e_list = Enums.list(t);
+                final Enum[] e_list = Enu.list(t);
                 for (Enum e: e_list)
                     if (!A.contains(e, excludeValues))
                         comboBox.getItems().add((T) e);

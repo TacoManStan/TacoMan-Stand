@@ -4,12 +4,14 @@ import com.taco.suit_lady.util.springable.Springable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.concurrent.locks.Lock;
 import java.util.function.Supplier;
 
 public interface Tickable<E extends Tickable<E>>
         extends Springable {
     
     @NotNull TaskManager<E> taskManager();
+    default boolean lockIfLockable() { return false; }
     
     //
     
@@ -38,6 +40,18 @@ public interface Tickable<E extends Tickable<E>>
     //</editor-fold>
     
     //<editor-fold desc=">> Execute Persistent Methods">
+    
+    default @NotNull GameTask<E> executeAndGet(@Nullable Lock lock, @NotNull Runnable action, @Nullable Runnable onTerminateAction, @Nullable Supplier<Boolean> terminateCondition) { return taskManager().executeAndGet(action, onTerminateAction, terminateCondition); }
+    default @NotNull GameTask<E> executeAndGet(@Nullable Lock lock, @NotNull Runnable action, @Nullable Runnable onTerminateAction) { return taskManager().executeAndGet(action, onTerminateAction); }
+    default @NotNull GameTask<E> executeAndGet(@Nullable Lock lock, @NotNull Runnable action, @Nullable Supplier<Boolean> terminateCondition) { return taskManager().executeAndGet(action, terminateCondition); }
+    default @NotNull GameTask<E> executeAndGet(@Nullable Lock lock, @NotNull Runnable action) { return taskManager().executeAndGet(action); }
+    
+    default boolean execute(@Nullable Lock lock, @NotNull Runnable action, @Nullable Runnable onTerminateAction, @Nullable Supplier<Boolean> terminateCondition) { return taskManager().execute(action, onTerminateAction, terminateCondition); }
+    default boolean execute(@Nullable Lock lock, @NotNull Runnable action, @Nullable Runnable onTerminateAction) { return taskManager().execute(action, onTerminateAction); }
+    default boolean execute(@Nullable Lock lock, @NotNull Runnable action, @Nullable Supplier<Boolean> terminateCondition) { return taskManager().execute(action, terminateCondition); }
+    default boolean execute(@Nullable Lock lock, @NotNull Runnable action) { return taskManager().execute(action); }
+    
+    //
     
     default @NotNull GameTask<E> executeAndGet(@NotNull Runnable action, @Nullable Runnable onTerminateAction, @Nullable Supplier<Boolean> terminateCondition) { return taskManager().executeAndGet(action, onTerminateAction, terminateCondition); }
     default @NotNull GameTask<E> executeAndGet(@NotNull Runnable action, @Nullable Runnable onTerminateAction) { return taskManager().executeAndGet(action, onTerminateAction); }

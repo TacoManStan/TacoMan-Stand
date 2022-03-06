@@ -1,7 +1,7 @@
 package com.taco.suit_lady.util.tools.printer;
 
-import com.taco.suit_lady.util.Lockable;
-import com.taco.suit_lady.util.tools.Enums;
+import com.taco.suit_lady.util.synchronization.Lockable;
+import com.taco.suit_lady.util.tools.Enu;
 import com.taco.suit_lady.util.tools.Exc;
 import com.taco.suit_lady.util.tools.Exe;
 import javafx.beans.property.MapProperty;
@@ -38,14 +38,20 @@ public class Printer
     
     public final PrintData get() { return globalPrintData; }
     
-    public final PrintData get(@NotNull Object objKey, @Nullable AbsentDef onAbsent) {
+    //</editor-fold>
+    
+    //<editor-fold desc="--- LOGIC ---">
+    
+    //<editor-fold desc="> PrintData Accessor Methods">
+    
+    public final PrintData get(@NotNull Object objKey, @Nullable AbsentDef absentDef) {
         return sync(() -> {
             PrintData data = getDataFor(objKey);
             
             if (data == null) {
-                switch (Enums.get(AbsentDef.class)) {
+                switch (Enu.get(AbsentDef.class)) {
                     case DO_NOTHING -> { }
-                    case CREATE_NEW -> getDataMapFor(objKey).put(objKey, data = new PrintData());
+                    case CREATE_NEW -> getMapFor(objKey).put(objKey, data = new PrintData());
                     case USE_GLOBAL -> data = get();
                     case THROW_EXCEPTION -> throw Exc.ex("PrintData for Key [" + objKey + "] cannot be null.");
                 }
@@ -54,7 +60,10 @@ public class Printer
             return data;
         });
     }
+    
     public final PrintData get(@NotNull Object objKey) { return get(objKey, AbsentDef.CREATE_NEW); }
+    
+    //</editor-fold>
     
     //</editor-fold>
     
@@ -64,12 +73,9 @@ public class Printer
     
     //</editor-fold>
     
-    //<editor-fold desc="--- LOGIC ---">
+    //<editor-fold desc="--- INTERNAL ---">
     
-    
-    //</editor-fold>
-    
-    private <T> MapProperty<T, PrintData> getDataMapFor(@NotNull Object objKey) {
+    private <T> MapProperty<T, PrintData> getMapFor(@NotNull Object objKey) {
         if (objKey instanceof String strKey) {
             return (MapProperty<T, PrintData>) keyDataMap;
         } else if (objKey instanceof Class<?> classKey) {
@@ -78,7 +84,10 @@ public class Printer
             return (MapProperty<T, PrintData>) objDataMap;
         }
     }
-    private PrintData getDataFor(@NotNull Object objKey) { return getDataMapFor(objKey).get(objKey); }
+    
+    private PrintData getDataFor(@NotNull Object objKey) { return getMapFor(objKey).get(objKey); }
+    
+    //</editor-fold>
     
     //<editor-fold desc="--- GENERIC STATIC ---">
     

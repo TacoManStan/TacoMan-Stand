@@ -1,6 +1,6 @@
 package com.taco.suit_lady._to_sort._new.initialization;
 
-import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.tools.Exc;
 import com.taco.suit_lady.util.tools.Exe;
 import javafx.beans.property.ReadOnlyBooleanProperty;

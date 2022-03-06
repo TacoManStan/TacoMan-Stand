@@ -1,9 +1,8 @@
 package com.taco.suit_lady.ui.jfx.components.painting.paintables;
 
-import com.taco.suit_lady.ui.jfx.components.painting.paintables.Paintable;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.Surface;
 import com.taco.suit_lady.ui.jfx.util.BoundsBinding;
-import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.springable.StrictSpringable;

@@ -2,7 +2,7 @@ package com.taco.suit_lady.util.shapes;
 
 import com.taco.suit_lady.game.ui.GFXObject;
 import com.taco.suit_lady.logic.TaskManager;
-import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.springable.StrictSpringable;
@@ -103,6 +103,8 @@ public abstract class Shape
         this.needsBorderPointsUpdate = false;
     }
     
+    //<editor-fold desc="--- INITIALIZATION ---">
+    
     public Shape init() {
         // TODO: Add pixel factory property — w/ both preset implementations & the option to create custom implementations — for generating various types of images to represent the collision data
         
@@ -114,6 +116,8 @@ public abstract class Shape
         
         return this;
     }
+    
+    //</editor-fold>
     
     //<editor-fold desc="--- PROPERTIES ---">
     
@@ -186,7 +190,24 @@ public abstract class Shape
             return binding;
         });
     }
+    
     public double getLocation(@NotNull Axis axis, @NotNull LocType locType) {
+        return LocType.translate(getLock(), isNullableLock(), getLocation(axis), getDimension(axis), getLocType(), locType);
+    }
+    public @NotNull NumberValuePair getLocation(@NotNull LocType locType) {
+        return LocType.translate(getLock(), isNullableLock(), getLocation(), getDimensions(), getLocType(), locType);
+    }
+    
+    public double setLocation(@NotNull Number newValue, @NotNull Axis axis, @NotNull LocType locType) {
+        printer().get().err("WARNING: Untested Method");
+        return sync(() -> {
+            final double newLoc = LocType.translate(newValue, getDimension(axis), locType, getLocType());
+            printer().get().print("Setting New Location: " + newLoc);
+            return setLocation(newLoc, axis);
+        });
+    }
+    
+    public double getLocationLegacy(@NotNull Axis axis, @NotNull LocType locType) {
         return sync(() -> {
             final double loc = getLocation(axis);
             final double dim = getDimension(axis);
@@ -220,7 +241,6 @@ public abstract class Shape
             };
         });
     }
-    public @NotNull NumberValuePair getLocation(@NotNull LocType locType) { return new NumberValuePair(getLocation(Axis.X_AXIS, locType), getLocation(Axis.Y_AXIS, locType)); }
     
     //
     
@@ -283,11 +303,11 @@ public abstract class Shape
     
     //<editor-fold desc="--- LOGIC ---">
     
-    public final boolean containsPoint(@NotNull Point2D point) { return containsPoint(point.getX(), point.getY()); }
-    public final boolean containsPoint(@NotNull NumberValuePairable<?> point) { return containsPoint(point.asPoint()); }
+    public final boolean containsPoint(@NotNull Point2D point) { return sync(() -> containsPoint(point.getX(), point.getY())); }
+    public final boolean containsPoint(@NotNull NumberValuePairable<?> point) { return sync(() -> containsPoint(point.asPoint())); }
     
     public boolean intersects(@NotNull Shape other, boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
-        return sync(() -> getBorderPoints(translate, xMod, yMod).stream().anyMatch(other::containsPoint));
+        return sync(() -> { return getBorderPoints(translate, xMod, yMod).stream().anyMatch(other::containsPoint); });
     }
     
     //</editor-fold>

@@ -397,6 +397,8 @@ public class Exc {
     public static @NotNull RuntimeException needsImpl(@Nullable Object msg) { return needsImpl(msg, null); }
     public static @NotNull RuntimeException needsImpl(@Nullable Object msg, @Nullable Throwable cause) { return nyi("Method Requires Implementation", msg, cause); }
     
+    public static void throwNeedsImpl() { throw needsImpl(); }
+    
     //</editor-fold>
     
     //</editor-fold>

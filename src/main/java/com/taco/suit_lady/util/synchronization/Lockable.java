@@ -1,4 +1,4 @@
-package com.taco.suit_lady.util;
+package com.taco.suit_lady.util.synchronization;
 
 import com.taco.suit_lady.util.tools.Exe;
 import com.taco.suit_lady.util.tools.fx_tools.FX;
@@ -16,7 +16,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-@SuppressWarnings("unchecked") public interface Lockable
+@SuppressWarnings("unchecked")
+public interface Lockable
         extends Lock {
     
     @Nullable Lock getLock();

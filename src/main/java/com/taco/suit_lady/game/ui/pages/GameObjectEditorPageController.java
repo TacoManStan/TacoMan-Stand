@@ -6,7 +6,7 @@ import com.taco.suit_lady.game.objects.GameObjectModel;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.ui.UIPageController;
 import com.taco.suit_lady.ui.jfx.components.ImagePane;
-import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
 import com.taco.suit_lady.util.tools.Bind;

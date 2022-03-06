@@ -2,7 +2,7 @@ package com.taco.suit_lady.ui.jfx.components.painting.surfaces;
 
 import com.taco.suit_lady._to_sort._new.ReadOnlyObservableList;
 import com.taco.suit_lady._to_sort._new.ReadOnlyObservableListWrapper;
-import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.Exc;
 import com.taco.suit_lady.util.tools.fx_tools.FX;

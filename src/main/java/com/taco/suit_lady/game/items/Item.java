@@ -2,8 +2,7 @@ package com.taco.suit_lady.game.items;
 
 import com.taco.suit_lady.game.Entity;
 import com.taco.suit_lady.game.ui.GameViewContent;
-import com.taco.suit_lady.logic.LogiCore;
-import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.synchronization.Lockable;
 import net.rgielen.fxweaver.core.FxWeaver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

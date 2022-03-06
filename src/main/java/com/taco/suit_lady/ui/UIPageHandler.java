@@ -1,6 +1,6 @@
 package com.taco.suit_lady.ui;
 
-import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.tools.fx_tools.FX;
 import com.taco.tacository.collections.ObservableLinkedList;
 import com.taco.suit_lady.util.tools.Exc;

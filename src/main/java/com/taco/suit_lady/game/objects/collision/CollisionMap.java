@@ -1,7 +1,7 @@
 package com.taco.suit_lady.game.objects.collision;
 
 import com.taco.suit_lady.game.ui.GameViewContent;
-import com.taco.suit_lady.util.Lockable;
+import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.Exc;
@@ -17,7 +17,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.locks.Lock;
 
 public class CollisionMap<T extends Collidable<T>>

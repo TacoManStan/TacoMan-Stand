@@ -8,8 +8,8 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Contains utility methods related to enums.
  */
-public final class Enums {
-    private Enums() { } //No Instance
+public final class Enu {
+    private Enu() { } //No Instance
     
     //<editor-fold desc="--- ACCESSORS (GET) ---">
     
@@ -50,7 +50,7 @@ public final class Enums {
      * <p><b>Details</b></p>
      * <ol>
      *     <li>If {@code non-null}, no additional operations are performed and the specified {@link Enum Enum Constant} is {@code returned}.</li>
-     *     <li>If {@code null}, the specified {@link Enum Enum Constant} is ignored and the value of <i>{@link Enums#get(Class)}</i> is {@code returned} instead.</li>
+     *     <li>If {@code null}, the specified {@link Enum Enum Constant} is ignored and the value of <i>{@link Enu#get(Class)}</i> is {@code returned} instead.</li>
      * </ol>
      *
      * @param enumConst If {@code non-null}, no additional operations are performed and the {@link Enum Enum Constant} defined by this {@code parameter} is {@code returned}.
