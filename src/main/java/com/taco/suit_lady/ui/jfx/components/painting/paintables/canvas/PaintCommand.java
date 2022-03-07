@@ -28,6 +28,10 @@ public abstract class PaintCommand
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
+    
+    
+    //
+    
     @Override public @NotNull PaintableData<PaintCommand, CanvasSurface> data() { return data; }
     
     @Override public void onAdd(CanvasSurface surface) { }

@@ -58,10 +58,21 @@ public class GameObjectModel
                 () -> Stuff.getGameImage(getDefinition().getImageType() + "/", getDefinition().getImageId()),
                 getDefinition().readOnlyImageTypeProperty(), getDefinition().readOnlyImageIdProperty());
         
+        if (getOwner().isTestObject1())
+            printer().get().print("Image: " + getImage());
+        
         this.modelPaintCommand.init();
         
-        getDefinition().boundsBinding().addListener((observable, oldValue, newValue) -> needsUpdate = true);
-        imageBinding.addListener((observable, oldValue, newValue) -> needsUpdate = true);
+        getDefinition().boundsBinding().addListener((observable, oldValue, newValue) -> {
+//            if (getOwner().isTestObject1())
+//                printer().get().print("Model Def Bounds Changed: [" + oldValue + " --> " + newValue + "]");
+            needsUpdate = true;
+        });
+        imageBinding.addListener((observable, oldValue, newValue) -> {
+            if (getOwner().isTestObject1())
+                printer().get().print("Image Changed: [" + oldValue + " --> " + newValue + "]");
+            needsUpdate = true;
+        });
         
         modelPaintCommand.setPaintPriority(1);
         
@@ -94,8 +105,17 @@ public class GameObjectModel
     //
     
     @Override public void onGfxUpdate() {
-//        printer().get(getClass()).print("Updating GameObject Gfx: " + getDefinition().getBounds());
+        if (getOwner().isTestObject1())
+            printer().get().print("Setting Gfx Bounds: " + getDefinition().getBounds());
+        
+        //        printer().get(getClass()).print("Updating GameObject Gfx: " + getDefinition().getBounds());
+        
+        
         modelPaintCommand.boundsBinding().setBounds(getDefinition().getBounds());
+        
+        if (getOwner().isTestObject1())
+            printer().get().print("Gfx Bounds Set: " + modelPaintCommand.getBounds());
+        
         modelPaintCommand.setImage(getImage());
         
         needsUpdate = false;
@@ -108,13 +128,13 @@ public class GameObjectModel
         return "game-object-model";
     }
     @Override public void load(JsonObject parent) {
-//        setImageId(JUtil.loadString(parent, "image-id"));
-//        setImageType(JUtil.loadString(parent, "image-type"));
+        //        setImageId(JUtil.loadString(parent, "image-id"));
+        //        setImageType(JUtil.loadString(parent, "image-type"));
     }
     @Override public JElement[] jFields() {
         return new JElement[]{
-//                JUtil.create("image-id", getImageId()),
-//                JUtil.create("image-type", getImageType())
+                //                JUtil.create("image-id", getImageId()),
+                //                JUtil.create("image-type", getImageType())
         };
     }
     

@@ -1,9 +1,9 @@
 package com.taco.suit_lady.util.tools;
 
-import com.taco.suit_lady.util.shapes.Axis;
-import com.taco.suit_lady.util.shapes.Box;
-import com.taco.suit_lady.util.shapes.LocType;
-import com.taco.suit_lady.util.shapes.Shape;
+import com.taco.suit_lady.util.values.enums.Axis;
+import com.taco.suit_lady.util.values.shapes.Box;
+import com.taco.suit_lady.util.values.enums.LocType;
+import com.taco.suit_lady.util.values.shapes.Shape;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.timing.Timing;
 import com.taco.suit_lady.util.values.numbers.NumExpr2D;
@@ -27,8 +27,7 @@ import java.util.function.Consumer;
  * Contains methods related to doing various calculations.
  */
 public class Calc {
-    private Calc() {
-    } // No instance
+    private Calc() { } // No instance
     
     /**
      * Returns the absolute value difference between the two specified integers.
@@ -649,6 +648,18 @@ public class Calc {
     
     //
     
+    public static  <N extends Number> @NotNull N bounded(@NotNull N value, @NotNull N min, @NotNull N max) {
+        if (min.doubleValue() >= max.doubleValue())
+            throw Exc.inputMismatch("Min must be less than max.");
+        else if (value.doubleValue() < min.doubleValue())
+            return min;
+        else if (value.doubleValue() > max.doubleValue())
+            return max;
+        return value;
+    }
+    
+    //
+    
     //<editor-fold desc="--- Maths Ported Content ---">
     
     //<editor-fold desc="--- BASIC ---">
@@ -685,8 +696,8 @@ public class Calc {
     //<editor-fold desc="--- SHAPES ---">
     
     public static @NotNull Box boundsBox(@NotNull Springable springable, @Nullable Lock lock,
-                                        @Nullable BiFunction<NumExpr2D<?>, NumExpr2D<?>, javafx.scene.paint.Color> pixelGenerator,
-                                        @NotNull List<Shape> inputs) {
+                                         @Nullable BiFunction<NumExpr2D<?>, NumExpr2D<?>, javafx.scene.paint.Color> pixelGenerator,
+                                         @NotNull List<Shape> inputs) {
         final ArrayList<Shape> shapes = new ArrayList<>(inputs);
         
         if (inputs.isEmpty())

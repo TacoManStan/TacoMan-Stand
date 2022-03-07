@@ -1,4 +1,4 @@
-package com.taco.suit_lady.util.shapes;
+package com.taco.suit_lady.util.values.enums;
 
 import com.taco.suit_lady.util.enums.Enumable;
 import com.taco.suit_lady.util.tools.Exc;

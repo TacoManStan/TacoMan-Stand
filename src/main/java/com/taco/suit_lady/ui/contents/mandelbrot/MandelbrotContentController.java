@@ -217,7 +217,9 @@ public class MandelbrotContentController extends ContentController<MandelbrotCon
         
         @Contract(" -> new")
         public final @NotNull Bounds getBounds() {
-            return Bounds.fromPoints(getTopLeft(), getDimensions());
+            final Point2D topLeft = getTopLeft();
+            final Point2D dim = getDimensions();
+            return Bounds.create(topLeft.getX(), topLeft.getY(), dim.getX(), dim.getY());
         }
         
         public final boolean isValid() {

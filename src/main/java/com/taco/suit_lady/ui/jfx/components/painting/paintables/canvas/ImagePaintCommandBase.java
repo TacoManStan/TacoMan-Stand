@@ -46,10 +46,15 @@ public abstract class ImagePaintCommandBase extends PaintCommand {
     }
     
     @Override protected void onPaint() {
-        //        System.out.println("On Paint: " + this);
         Image image = getImage();
-        if (image != null && isValidDimensions())
+        if (image == null)
+            printer().get().print("Image is Null");
+        if (!isValidDimensions())
+            printer().get().print("Dimensions are not valid [" + getBounds() + "]");
+        if (image != null && isValidDimensions()) {
+            printer().get().print("Drawing Image: " + image + ":  " + getSurface() + ":  " + getBounds());
             drawImage(image, getSurface(), getBounds());
+        }
         
         // Below is example use case for both source & target Bounds.
         // The example clips the image to show only the top left quadrant of the image

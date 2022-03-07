@@ -3,6 +3,8 @@ package com.taco.suit_lady.game.objects;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.taco.suit_lady.game.GameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
+import com.taco.suit_lady.util.tools.printer.PrintData;
+import com.taco.suit_lady.util.tools.printer.Printer;
 import com.taco.suit_lady.util.values.bounds.Bounds;
 import com.taco.suit_lady.util.values.bounds.BoundsBinding;
 import com.taco.suit_lady.util.synchronization.Lockable;
@@ -50,11 +52,11 @@ public class GameObjectModelDefinition
     protected GameObjectModelDefinition(@NotNull GameObjectModel model, @Nullable String imageType, @Nullable String imageId) {
         this.model = model;
         
-        this.xOffsetProperty = new ReadOnlyIntegerWrapper();
-        this.yOffsetProperty = new ReadOnlyIntegerWrapper();
+        this.xOffsetProperty = new ReadOnlyIntegerWrapper(1);
+        this.yOffsetProperty = new ReadOnlyIntegerWrapper(1);
         
-        this.widthProperty = new ReadOnlyIntegerWrapper();
-        this.heightProperty = new ReadOnlyIntegerWrapper();
+        this.widthProperty = new ReadOnlyIntegerWrapper(1);
+        this.heightProperty = new ReadOnlyIntegerWrapper(1);
         
         this.rawBoundsBinding = new BoundsBinding(xOffsetProperty, yOffsetProperty, widthProperty, heightProperty);
         
@@ -67,10 +69,10 @@ public class GameObjectModelDefinition
     //<editor-fold desc="--- INITIALIZATION ---">
     
     protected final GameObjectModelDefinition init() {
-        printer().get(getClass()).setEnabled(false);
+//        printer().get(getClass()).setEnabled(false);
         
-        initBounds();
         initJson();
+        initBounds();
         
         return this;
     }
@@ -78,17 +80,29 @@ public class GameObjectModelDefinition
     //
     
     private void initBounds() {
+        final PrintData p = printer().get(this);
+        p.setPrintPrefix(false);
+        
         this.xLocationBinding = Bind.intBinding(
-                () -> -getModel().getOwner().getGameMap().getModel().getCamera().getAggregateX() + getOffsetX() + getModel().getOwner().getLocationX(false),
-                xOffsetProperty, getModel().getOwner().xLocationProperty(), getModel().getOwner().getGameMap().getModel().getCamera().xAggregateBinding());
+                () -> -getCamera().getAggregateX() + getOffsetX() + getModel().getOwner().getLocationX(false),
+                xOffsetProperty, getModel().getOwner().xLocationProperty(), getCamera().xAggregateBinding());
         this.yLocationBinding = Bind.intBinding(
-                () -> -getModel().getOwner().getGameMap().getModel().getCamera().getAggregateY() + getOffsetY() + getModel().getOwner().getLocationY(false),
-                xOffsetProperty, getModel().getOwner().yLocationProperty(), getModel().getOwner().getGameMap().getModel().getCamera().yAggregateBinding());
+                () -> -getCamera().getAggregateY() + getOffsetY() + getModel().getOwner().getLocationY(false),
+                yOffsetProperty, getModel().getOwner().yLocationProperty(), getCamera().yAggregateBinding());
         //        this.yLocationBinding = BindingsSL.intBinding(
         //                () -> getOffsetY() + getModel().getOwner().getLocationY(false),
         //                yOffsetProperty, getModel().getOwner().yLocationProperty());
         
         this.boundsBinding = new BoundsBinding(xLocationBinding, yLocationBinding, widthProperty, heightProperty);
+        
+//        if (getModel().getOwner().isTestObject1()) {
+//            this.xLocationBinding.addListener((observable, oldValue, newValue) -> p.print("Location X Changed: [" + oldValue + " --> " + newValue + "]"));
+//            this.yLocationBinding.addListener((observable, oldValue, newValue) -> p.print("Location Y Changed: [" + oldValue + " --> " + newValue + "]"));
+//
+//            this.boundsBinding.addListener((observable, oldValue, newValue) -> p.print("Bounds Changed: [" + oldValue + " --> " + newValue + "]"));
+//        }
+        
+//        printer().get(this).print("Bounds: " + getBounds());
     }
     
     private void initJson() {

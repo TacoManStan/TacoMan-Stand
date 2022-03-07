@@ -24,7 +24,7 @@ public class CanvasPane extends AnchorPane
     }
     
     public CanvasPane(@NotNull Springable springable, @NotNull Bounds bounds) {
-        this(springable, bounds.getMinX(), bounds.getMinY(), bounds.getMaxX(), bounds.getMaxY());
+        this(springable, bounds.xMinD(), bounds.yMinD(), bounds.xMaxD(), bounds.yMaxD());
     }
     
     public CanvasPane(@NotNull Springable springable, double leftAnchor, double rightAnchor, double topAnchor, double bottomAnchor) {

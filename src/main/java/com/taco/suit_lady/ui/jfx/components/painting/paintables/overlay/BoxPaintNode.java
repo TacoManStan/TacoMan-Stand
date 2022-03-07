@@ -28,10 +28,10 @@ public class BoxPaintNode extends ShapePaintNode {
     
     @Override protected Rectangle refreshNode() { return shape; }
     @Override protected Rectangle syncBounds(@NotNull Node n) {
-        shape.setX(x());
-        shape.setY(y());
-        shape.setWidth(width());
-        shape.setHeight(height());
+        shape.setX(xD());
+        shape.setY(yD());
+        shape.setWidth(wD());
+        shape.setHeight(hD());
         return shape;
     }
     

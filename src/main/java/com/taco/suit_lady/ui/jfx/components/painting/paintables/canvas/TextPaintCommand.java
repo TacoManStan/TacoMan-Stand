@@ -66,13 +66,13 @@ public class TextPaintCommand extends ShapePaintCommand {
     }
     
     @Override protected void onPaint() {
-        final Bounds bounds = getBounds();
+        final Bounds bounds = getBounds().boundsPos();
         final String text = getText();
         if (text != null && isValidDimensions())
             if (isFill())
-                getSurface().getGraphicsContext2D().fillText(text, bounds.getX(true), bounds.getY(true));
+                getSurface().getGraphicsContext2D().fillText(text, bounds.xD(), bounds.yD());
             else
-                getSurface().getGraphicsContext2D().strokeText(text, bounds.getX(true), bounds.getY(true));
+                getSurface().getGraphicsContext2D().strokeText(text, bounds.xD(), bounds.yD());
     }
     
     //</editor-fold>

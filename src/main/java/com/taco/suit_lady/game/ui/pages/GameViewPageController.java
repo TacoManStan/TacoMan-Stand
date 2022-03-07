@@ -79,6 +79,9 @@ public class GameViewPageController extends UIPageController<GameViewPage>
             System.out.println("Map Width: " + getGameMap().getPixelWidth() + "::" + getGameMap().getWidth());
             System.out.println("Map Height: " + getGameMap().getPixelHeight() + "::" + getGameMap().getHeight());
             
+            System.out.println("Map Aggregate X: " + getCamera().getAggregateX());
+            System.out.println("Map Aggregate Y: " + getCamera().getAggregateY());
+            
             System.out.println("Movement Target X: " + getGame().getTestObject().mover().getTargetX());
             System.out.println("Movement Target Y: " + getGame().getTestObject().mover().getTargetY());
             
@@ -95,6 +98,8 @@ public class GameViewPageController extends UIPageController<GameViewPage>
             
             
             System.out.println("Test Object Bounds Box:" + getGame().getTestObject().boundsBox());
+            
+            System.out.println("Test Object Model Definition Bounds: " + getGame().getTestObject().getModel().getDefinition().getBounds());
         });
         testButton4.setText("Print Movement Data");
         

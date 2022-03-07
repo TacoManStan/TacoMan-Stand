@@ -1,15 +1,14 @@
 package com.taco.suit_lady.util.values.bounds;
 
 import com.taco.suit_lady.util.tools.Bind;
+import com.taco.suit_lady.util.tools.Enu;
 import com.taco.suit_lady.util.tools.Obj;
 import com.taco.suit_lady.util.tools.Props;
+import com.taco.suit_lady.util.tools.printer.Printer;
+import com.taco.suit_lady.util.values.enums.LocType;
 import javafx.beans.InvalidationListener;
-import javafx.beans.binding.Binding;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.IntegerBinding;
-import javafx.beans.binding.ObjectBinding;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.binding.*;
+import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -19,36 +18,26 @@ import org.jetbrains.annotations.Nullable;
 public class BoundsBinding
         implements Boundable, Binding<Bounds> {
     
-    private final IntegerProperty xProperty;
-    private final IntegerProperty yProperty;
-    private final IntegerProperty widthProperty;
-    private final IntegerProperty heightProperty;
+    private final DoubleProperty xProperty;
+    private final DoubleProperty yProperty;
+    private final DoubleProperty widthProperty;
+    private final DoubleProperty heightProperty;
     
+    private final ObjectProperty<LocType> locTypeProperty;
     
     private final ObjectBinding<Bounds> boundsBinding;
     
-    private final IntegerBinding xSafeBinding;
-    private final IntegerBinding ySafeBinding;
-    private final IntegerBinding widthSafeBinding;
-    private final IntegerBinding heightSafeBinding;
+    //<editor-fold desc="--- CONSTRUCTORS ---">
     
     public BoundsBinding(@Nullable ObservableValue<? extends Number> observableX, ObservableValue<? extends Number> observableY,
                          @Nullable ObservableValue<? extends Number> observableWidth, @Nullable ObservableValue<? extends Number> observableHeight,
-                         boolean bind) {
-        this.xProperty = new SimpleIntegerProperty();
-        this.yProperty = new SimpleIntegerProperty();
-        this.widthProperty = new SimpleIntegerProperty();
-        this.heightProperty = new SimpleIntegerProperty();
+                         @Nullable ObservableValue<LocType> observableLocType, boolean bind) {
+        this.xProperty = new SimpleDoubleProperty();
+        this.yProperty = new SimpleDoubleProperty();
+        this.widthProperty = new SimpleDoubleProperty();
+        this.heightProperty = new SimpleDoubleProperty();
         
-        
-        this.boundsBinding = Bindings.createObjectBinding(
-                () -> new Bounds(x(), y(), width(), height()),
-                xProperty, yProperty, widthProperty, heightProperty);
-        
-        this.xSafeBinding = Bindings.createIntegerBinding(() -> getX(true), xProperty);
-        this.ySafeBinding = Bindings.createIntegerBinding(() -> getY(true), yProperty);
-        this.widthSafeBinding = Bindings.createIntegerBinding(() -> getWidth(true), widthProperty);
-        this.heightSafeBinding = Bindings.createIntegerBinding(() -> getHeight(true), heightProperty);
+        this.locTypeProperty = new SimpleObjectProperty<>();
         
         //
         
@@ -57,39 +46,71 @@ public class BoundsBinding
             Obj.doIfNonNull(() -> observableY, yProperty::bind);
             Obj.doIfNonNull(() -> observableWidth, widthProperty::bind);
             Obj.doIfNonNull(() -> observableHeight, heightProperty::bind);
+            
+            Obj.doIfNonNull(() -> observableLocType, locTypeProperty::bind, obs -> locTypeProperty.set(Enu.get(LocType.class)));
         } else {
-            Obj.doIfNonNull(() -> observableX, obs -> setX(obs.getValue()));
-            Obj.doIfNonNull(() -> observableY, obs -> setY(obs.getValue()));
-            Obj.doIfNonNull(() -> observableWidth, obs -> setWidth(obs.getValue()));
-            Obj.doIfNonNull(() -> observableHeight, obs -> setHeight(obs.getValue()));
+            Obj.doIfNonNull(() -> observableX, obs -> setX(obs.getValue()), obs -> setX(1));
+            Obj.doIfNonNull(() -> observableY, obs -> setY(obs.getValue()), obs -> setY(1));
+            Obj.doIfNonNull(() -> observableWidth, obs -> setWidth(obs.getValue()), obs -> setWidth(1));
+            Obj.doIfNonNull(() -> observableHeight, obs -> setHeight(obs.getValue()), obs -> setHeight(1));
+            
+            Obj.doIfNonNull(() -> observableLocType, obs -> setLocType(obs.getValue()), obs -> locTypeProperty.set(Enu.get(LocType.class)));
         }
+        
+        //
+    
+        this.boundsBinding = Bindings.createObjectBinding(() -> new Bounds(x(), y(), w(), h(), locType()), xProperty, yProperty, widthProperty, heightProperty, locTypeProperty);
+    }
+    
+    //
+    
+    public BoundsBinding(@Nullable ObservableValue<? extends Number> observableX, ObservableValue<? extends Number> observableY,
+                         @Nullable ObservableValue<? extends Number> observableWidth, @Nullable ObservableValue<? extends Number> observableHeight,
+                         @Nullable ObservableValue<LocType> observableLocType) {
+        this(observableX, observableY, observableWidth, observableHeight, observableLocType, true);
     }
     public BoundsBinding(@Nullable ObservableValue<? extends Number> observableX, ObservableValue<? extends Number> observableY,
                          @Nullable ObservableValue<? extends Number> observableWidth, @Nullable ObservableValue<? extends Number> observableHeight) {
-        this(observableX, observableY, observableWidth, observableHeight, true);
+        this(observableX, observableY, observableWidth, observableHeight, null, true);
+    }
+    
+    public BoundsBinding(@NotNull Number x, @NotNull Number y, @NotNull Number width, @NotNull Number height, @NotNull LocType locType) {
+        this(Bind.constDoubleBinding(x), Bind.constDoubleBinding(y),
+             Bind.constDoubleBinding(width), Bind.constDoubleBinding(height),
+             Bind.constObjBinding(locType), false);
     }
     public BoundsBinding(@NotNull Number x, @NotNull Number y, @NotNull Number width, @NotNull Number height) {
-        this(Bind.constDoubleBinding(x), Bind.constDoubleBinding(y), Bind.constDoubleBinding(width), Bind.constDoubleBinding(height), false);
+        this(x, y, width, height, null);
     }
-    public BoundsBinding() { this(null, null, null, null, false); }
+    
+    public BoundsBinding() {
+        this(null, null, null, null, null, false);
+    }
+    
+    //</editor-fold>
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final IntegerProperty xProperty() { return xProperty; }
-    @Override public final @NotNull int x() { return xProperty.get(); }
-    public final int setX(@NotNull Number newValue) { return Props.setProperty(xProperty, newValue.intValue()); }
+    public final DoubleProperty xProperty() { return xProperty; }
+    @Override public final @NotNull Number x() { return xProperty.get(); }
+    public final double setX(@NotNull Number newValue) { return Props.setProperty(xProperty, newValue.doubleValue()); }
     
-    public final IntegerProperty yProperty() { return yProperty; }
-    @Override public final @NotNull int y() { return yProperty.get(); }
-    public final int setY(@NotNull Number newValue) { return Props.setProperty(yProperty, newValue.intValue()); }
+    public final DoubleProperty yProperty() { return yProperty; }
+    @Override public final @NotNull Number y() { return yProperty.get(); }
+    public final double setY(@NotNull Number newValue) { return Props.setProperty(yProperty, newValue.doubleValue()); }
     
-    public final IntegerProperty widthProperty() { return widthProperty; }
-    @Override public final @NotNull int width() { return widthProperty.get(); }
-    public final int setWidth(@NotNull Number newValue) { return Props.setProperty(widthProperty, newValue.intValue()); }
+    public final DoubleProperty widthProperty() { return widthProperty; }
+    @Override public final @NotNull Number w() { return widthProperty.get(); }
+    public final double setWidth(@NotNull Number newValue) { return Props.setProperty(widthProperty, newValue.doubleValue()); }
     
-    public final IntegerProperty heightProperty() { return heightProperty; }
-    @Override public final @NotNull int height() { return heightProperty.get(); }
-    public final int setHeight(@NotNull Number newValue) { return Props.setProperty(heightProperty, newValue.intValue()); }
+    public final DoubleProperty heightProperty() { return heightProperty; }
+    @Override public final @NotNull Number h() { return heightProperty.get(); }
+    public final double setHeight(@NotNull Number newValue) { return Props.setProperty(heightProperty, newValue.doubleValue()); }
+    
+    
+    public final @NotNull ObjectProperty<LocType> locTypeProperty() { return locTypeProperty; }
+    @Override public final @NotNull LocType locType() { return locTypeProperty.get(); }
+    public final @NotNull LocType setLocType(@NotNull LocType newValue) { return Props.setProperty(locTypeProperty, newValue); }
     
     //<editor-fold desc="> Bindings">
     
@@ -98,14 +119,11 @@ public class BoundsBinding
     public final void setBounds(@NotNull Bounds newValue) {
         setX(newValue.x());
         setY(newValue.y());
-        setWidth(newValue.width());
-        setHeight(newValue.height());
+        setWidth(newValue.w());
+        setHeight(newValue.h());
+        
+        setLocType(newValue.locType());
     }
-    
-    public final IntegerBinding xSafeBinding() { return xSafeBinding; }
-    public final IntegerBinding ySafeBinding() { return ySafeBinding; }
-    public final IntegerBinding widthSafeBinding() { return widthSafeBinding; }
-    public final IntegerBinding heightSafeBinding() { return heightSafeBinding; }
     
     //</editor-fold>
     

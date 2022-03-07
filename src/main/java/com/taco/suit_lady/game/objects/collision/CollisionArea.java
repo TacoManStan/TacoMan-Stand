@@ -1,10 +1,10 @@
 package com.taco.suit_lady.game.objects.collision;
 
 import com.taco.suit_lady.game.ui.GameViewContent;
-import com.taco.suit_lady.util.shapes.Axis;
-import com.taco.suit_lady.util.shapes.Box;
-import com.taco.suit_lady.util.shapes.LocType;
-import com.taco.suit_lady.util.shapes.Shape;
+import com.taco.suit_lady.util.values.enums.Axis;
+import com.taco.suit_lady.util.values.shapes.Box;
+import com.taco.suit_lady.util.values.enums.LocType;
+import com.taco.suit_lady.util.values.shapes.Shape;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.Calc;
 import com.taco.suit_lady.util.values.numbers.Num2D;

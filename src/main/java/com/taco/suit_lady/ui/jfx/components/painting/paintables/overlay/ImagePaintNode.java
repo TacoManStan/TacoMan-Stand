@@ -2,6 +2,8 @@ package com.taco.suit_lady.ui.jfx.components.painting.paintables.overlay;
 
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.Stuff;
+import com.taco.suit_lady.util.tools.printer.Printer;
+import com.taco.suit_lady.util.values.bounds.Bounds;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import org.jetbrains.annotations.NotNull;
@@ -22,10 +24,13 @@ public class ImagePaintNode extends PaintNode {
     
     @Override protected Node refreshNode() { return imageView; }
     @Override protected Node syncBounds(@NotNull Node n) {
-        imageView.setX(getX(true));
-        imageView.setY(getY(true));
-        imageView.setFitWidth(getWidth(true));
-        imageView.setFitHeight(getHeight(true));
+        final Bounds constraints = boundsPosDim();
+        
+        imageView.setX(constraints.xD());
+        imageView.setY(constraints.yD());
+        imageView.setFitWidth(constraints.wD());
+        imageView.setFitHeight(constraints.hD());
+        
         return imageView;
     }
     

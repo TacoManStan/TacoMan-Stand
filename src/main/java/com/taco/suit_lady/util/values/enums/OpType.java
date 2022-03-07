@@ -1,4 +1,4 @@
-package com.taco.suit_lady.util.values;
+package com.taco.suit_lady.util.values.enums;
 
 import com.taco.suit_lady.util.values.numbers.NumExpr2D;
 import org.jetbrains.annotations.NotNull;

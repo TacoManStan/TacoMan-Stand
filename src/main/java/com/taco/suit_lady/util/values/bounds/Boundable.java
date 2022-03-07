@@ -1,126 +1,274 @@
 package com.taco.suit_lady.util.values.bounds;
 
-import com.taco.suit_lady.util.tools.list_tools.A;
+import com.taco.suit_lady.util.tools.Enu;
+import com.taco.suit_lady.util.values.enums.Axis;
+import com.taco.suit_lady.util.values.enums.LocType;
+import com.taco.suit_lady.util.tools.Calc;
 import com.taco.suit_lady.util.values.numbers.Num2D;
-import javafx.geometry.BoundingBox;
-import javafx.geometry.Point2D;
+import com.taco.suit_lady.util.values.numbers.NumExpr2D;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface Boundable<N extends Number> {
+public interface Boundable {
     
-    @NotNull N x();
-    @NotNull N y();
+    @NotNull Number x();
+    @NotNull Number y();
     
-    @NotNull N width();
-    @NotNull N height();
+    @NotNull Number w();
+    @NotNull Number h();
     
-    //
+    @NotNull LocType locType();
     
     //<editor-fold desc="--- DEFAULT ---">
     
-    default @NotNull Bounds<N> cloneBounds() { return new Bounds<>(x(), y(), width(), height()); }
-    
-    default @NotNull Num2D getDimensions(boolean... safe) { return new Num2D(getWidth(safe), getHeight(safe)); }
-    default @NotNull Num2D getLocation(boolean... safe) { return new Num2D(getWidth(safe), getHeight(safe)); }
-    
-    default int getMinX(boolean... safe) { return getX(safe); }
-    default int getMaxX(boolean... safe) { return getMinX(safe) + getWidth(safe); }
-    default int getMinY(boolean... safe) { return getY(safe); }
-    default int getMaxY(boolean... safe) { return getMinY(safe) + getHeight(safe); }
-    default double getMidX(boolean... safe) { return getMinX(safe) + (getWidth(safe) / 2d); }
-    default double getMidY(boolean... safe) { return getMinY(safe) + (getHeight(safe) / 2d); }
-    
-    default double getArea(boolean... safe) { return getWidth(safe) * getHeight(safe); }
+    default @NotNull Bounds getBounds() { return new Bounds(x(), y(), w(), h(), locType()); }
+    default @NotNull Num2D getDimensions() { return new Num2D(w(), h()); }
+    default @NotNull Number getDimension(@NotNull Axis axis) { return axis.getFor(w(), h()); }
     
     
-    /**
-     * <p>Returns a {@link Point2D} object representing a coordinate point on this {@link Boundable} instance, defined by the specified {@link LocationDefinition LocationDefinition}.</p>
-     * <p><b>Details</b></p>
-     * <ol>
-     *     <li>If the specified {@link LocationDefinition LocationDefinition} is {@code null}, the {@link LocationDefinition#getDefault() default} value — <i>{@link LocationDefinition#TOP_LEFT LocationDefinition.TOP_LEFT}</i>, as defined by <i>{@link LocationDefinition#getDefault() LocationDefinition.getDefault()}</i> — is used instead.</li>
-     * </ol>
-     *
-     * @param locationDefinition The {@link LocationDefinition LocationDefinition} enum value representing which {@link Point2D point} on this {@link Boundable} should be returned.
-     *
-     * @return A {@link Point2D} object representing a coordinate point on this {@link Boundable} instance, defined by the specified {@link LocationDefinition LocationDefinition}.
-     */
-    default Point2D getLocation(@Nullable LocationDefinition locationDefinition, boolean... safe) {
-        locationDefinition = locationDefinition != null ? locationDefinition : LocationDefinition.getDefault();
-        return switch (locationDefinition) {
-            default -> new Point2D(getMinX(safe), getMinY(safe));
-            
-            case TOP_RIGHT -> new Point2D(getMaxX(safe), getMinY(safe));
-            case BOTTOM_LEFT -> new Point2D(getMinX(safe), getMaxY(safe));
-            case BOTTOM_RIGHT -> new Point2D(getMaxX(safe), getMaxY(safe));
-            
-            case CENTER -> new Point2D(getMidX(safe), getMidY(safe));
-            case CENTER_LEFT -> new Point2D(getMinX(safe), getMidY(safe));
-            case CENTER_RIGHT -> new Point2D(getMaxX(safe), getMidY(safe));
-            case CENTER_TOP -> new Point2D(getMidX(safe), getMinY(safe));
-            case CENTER_BOTTOM -> new Point2D(getMidX(safe), getMaxY(safe));
-        };
+    default @NotNull Num2D getLocation(@NotNull LocType locType) { return LocType.translate(x(), y(), w(), h(), locType(), locType); }
+    default @NotNull Number getLocation(@NotNull Axis axis) { return axis.getFor(x(), y()); }
+    default @NotNull Number getLocation(@NotNull Axis axis, @NotNull LocType locType) {
+        final Num2D loc = getLocation(locType);
+        return axis.getFor(loc.a(), loc.b());
     }
     
-    //<editor-fold desc="> Safe/Fallback Accessors">
+    //<editor-fold desc="> Min/Max/Mid Accessor Methods">
     
-    default int getX(boolean... safe) {
-        int x = x();
-        return vargs(safe) ? (x > 0 ? x : fallbackX()) : x;
-    }
-    default int getY(boolean... safe) {
-        int y = y();
-        return vargs(safe) ? (y > 0 ? y : fallbackY()) : y;
-    }
-    default int getWidth(boolean... safe) {
-        int width = width();
-        return vargs(safe) ? (width > 0 ? width : fallbackWidth()) : width;
-    }
-    default int getHeight(boolean... safe) {
-        int height = height();
-        return vargs(safe) ? (height > 0 ? height : fallbackHeight()) : height;
+    default @NotNull Number xMin() { return getLocation(Axis.X_AXIS, LocType.MIN); }
+    default @NotNull Number xMax() { return getLocation(Axis.X_AXIS, LocType.MAX); }
+    default @NotNull Number xMid() { return getLocation(Axis.X_AXIS, LocType.CENTER); }
+    
+    default @NotNull Number yMin() { return getLocation(Axis.Y_AXIS, LocType.MIN); }
+    default @NotNull Number yMax() { return getLocation(Axis.Y_AXIS, LocType.MAX); }
+    default @NotNull Number yMid() { return getLocation(Axis.Y_AXIS, LocType.CENTER); }
+    
+    //<editor-fold desc=">> Min/Max/Mid X-Axis Primitive Accessor Methods">
+    
+    default int xMinI() { return xMin().intValue(); }
+    default int xMaxI() { return xMax().intValue(); }
+    default int xMidI() { return xMid().intValue(); }
+    
+    default long xMinL() { return xMin().longValue(); }
+    default long xMaxL() { return xMax().longValue(); }
+    default long xMidL() { return xMid().longValue(); }
+    
+    default float xMinF() { return xMin().floatValue(); }
+    default float xMaxF() { return xMax().floatValue(); }
+    default float xMidF() { return xMid().floatValue(); }
+    
+    default double xMinD() { return xMin().doubleValue(); }
+    default double xMaxD() { return xMax().doubleValue(); }
+    default double xMidD() { return xMid().doubleValue(); }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc=">> Min/Max/Mid Y-Axis Primitive Accessor Methods">
+    
+    default int yMinI() { return yMin().intValue(); }
+    default int yMaxI() { return yMax().intValue(); }
+    default int yMidI() { return yMid().intValue(); }
+    
+    default long yMinL() { return yMin().longValue(); }
+    default long yMaxL() { return yMax().longValue(); }
+    default long yMidL() { return yMid().longValue(); }
+    
+    default float yMinF() { return yMin().floatValue(); }
+    default float yMaxF() { return yMax().floatValue(); }
+    default float yMidF() { return yMid().floatValue(); }
+    
+    default double yMinD() { return yMin().doubleValue(); }
+    default double yMaxD() { return yMax().doubleValue(); }
+    default double yMidD() { return yMid().doubleValue(); }
+    
+    //</editor-fold>
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="> Bounded Accessors">
+    
+    default @NotNull Number x(@NotNull Number min, @NotNull Number max) { return Calc.bounded(x(), min, max); }
+    default @NotNull Number x(@NotNull NumExpr2D<?> restraints) { return x(restraints.a(), restraints.b()); }
+    
+    default @NotNull Number y(@NotNull Number min, @NotNull Number max) { return Calc.bounded(y(), min, max); }
+    default @NotNull Number y(@NotNull NumExpr2D<?> restraints) { return y(restraints.a(), restraints.b()); }
+    
+    
+    default @NotNull Number w(@NotNull Number min, @NotNull Number max) { return Calc.bounded(w(), min, max); }
+    default @NotNull Number w(@NotNull NumExpr2D<?> restraints) { return w(restraints.a(), restraints.b()); }
+    
+    default @NotNull Number h(@NotNull Number min, @NotNull Number max) { return Calc.bounded(h(), min, max); }
+    default @NotNull Number h(@NotNull NumExpr2D<?> restraints) { return h(restraints.a(), restraints.b()); }
+    
+    //
+    
+    default @NotNull Bounds bounds(@NotNull Number minX, @NotNull Number minY, @NotNull Number minW, @NotNull Number minH,
+                                   @NotNull Number maxX, @NotNull Number maxY, @NotNull Number maxW, @NotNull Number maxH,
+                                   @Nullable LocType locType) {
+        return new Bounds(x(minX, maxX), y(minY, maxY),
+                          w(minW, maxW), h(minH, maxH),
+                          locType != null ? locType : Enu.get(LocType.class));
     }
     
     //
     
-    default int fallbackX() { return 1; }
-    default int fallbackY() { return 1; }
+    default @NotNull Bounds bounds(@NotNull NumExpr2D<?> minLoc, @NotNull NumExpr2D<?> maxLoc,
+                                   @NotNull NumExpr2D<?> minDim, @NotNull NumExpr2D<?> maxDim,
+                                   @Nullable LocType locType) {
+        return bounds(minLoc.a(), minLoc.b(), minDim.a(), minDim.b(),
+                      maxLoc.a(), maxLoc.b(), maxDim.a(), maxDim.b(),
+                      locType);
+    }
+    default @NotNull Bounds bounds(@NotNull NumExpr2D<?> minLoc, @NotNull NumExpr2D<?> maxLoc,
+                                   @NotNull NumExpr2D<?> minDim, @NotNull NumExpr2D<?> maxDim) {
+        return bounds(minLoc, maxLoc, minDim, maxDim, null);
+    }
     
-    default int fallbackWidth() { return 1; }
-    default int fallbackHeight() { return 1; }
+    default @NotNull Bounds bounds(@NotNull Boundable min, @NotNull Boundable max, @Nullable LocType locType) {
+        return bounds(min.x(), min.y(), min.w(), min.h(),
+                      max.x(), max.y(), max.w(), max.h(),
+                      locType);
+    }
+    default @NotNull Bounds bounds(@NotNull Boundable min, @NotNull Boundable max) { return bounds(min, max, null); }
+    
+    
+    //<editor-fold desc="> Floor/Ceil">
+    
+    default @NotNull Bounds boundsFloor(@NotNull Number minX, @NotNull Number minY, @NotNull Number minW, @NotNull Number minH, @Nullable LocType locType) {
+        return bounds(minX, minY, minW, minH, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, locType);
+    }
+    default @NotNull Bounds boundsFloor(@NotNull Number minX, @NotNull Number minY, @NotNull Number minW, @NotNull Number minH) {
+        return boundsFloor(minX, minY, minW, minH, null);
+    }
+    
+    
+    default @NotNull Bounds boundsFloorLoc(@NotNull Number minX, @NotNull Number minY, @Nullable LocType locType) {
+        return boundsFloor(minX, minY, Integer.MIN_VALUE, Integer.MIN_VALUE, locType);
+    }
+    default @NotNull Bounds boundsFloorLoc(@NotNull Number minX, @NotNull Number minY) {
+        return boundsFloorLoc(minX, minY, null);
+    }
+    default @NotNull Bounds boundsFloorLoc(@NotNull Number min) {
+        return boundsFloorLoc(min, min, null);
+    }
+    
+    default @NotNull Bounds boundsFloorDim(@NotNull Number minW, @NotNull Number minH, @Nullable LocType locType) {
+        return boundsFloor(Integer.MIN_VALUE, Integer.MIN_VALUE, minW, minH, locType);
+    }
+    default @NotNull Bounds boundsFloorDim(@NotNull Number minW, @NotNull Number minH) {
+        return boundsFloorDim(minW, minH, null);
+    }
+    default @NotNull Bounds boundsFloorDim(@NotNull Number min) {
+        return boundsFloorDim(min, min, null);
+    }
+    
+    //
+    
+    default @NotNull Bounds boundsCeil(@NotNull Number maxX, @NotNull Number maxY, @NotNull Number maxW, @NotNull Number maxH, @Nullable LocType locType) {
+        return bounds(Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE, maxX, maxY, maxW, maxH, locType);
+    }
+    default @NotNull Bounds boundsCeil(@NotNull Number maxX, @NotNull Number maxY, @NotNull Number maxW, @NotNull Number maxH) {
+        return boundsCeil(maxX, maxY, maxW, maxH, null);
+    }
+    
+    //
+    
+    //<editor-fold desc="> Preset Bounds Factory Methods">
+    
+    //<editor-fold desc=">> Preset POSITIVE Bounds Factory Methods">
+    
+    default @NotNull Bounds boundsPos(boolean constrainLocation, boolean constrainDimensions, @Nullable LocType locType) {
+        return boundsFloor(constrainLocation ? Double.MIN_VALUE : Integer.MIN_VALUE,
+                           constrainLocation ? Double.MIN_VALUE : Integer.MIN_VALUE,
+                           constrainDimensions ? Double.MIN_VALUE : Integer.MIN_VALUE,
+                           constrainDimensions ? Double.MIN_VALUE : Integer.MIN_VALUE,
+                           locType);
+    }
+    default @NotNull Bounds boundsPos(boolean constrainLocation, boolean constrainDimensions) {
+        return boundsPos(constrainLocation, constrainDimensions, null);
+    }
+    default @NotNull Bounds boundsPos(@Nullable LocType locType) { return boundsPos(true, true, locType); }
+    default @NotNull Bounds boundsPos() { return boundsPos(null); }
+    
+    default @NotNull Bounds boundsPosLoc(@Nullable LocType locType) { return boundsPos(true, false, locType); }
+    default @NotNull Bounds boundsPosLoc() { return boundsPosLoc(null); }
+    default @NotNull Bounds boundsPosDim(@Nullable LocType locType) { return boundsPos(false, true, locType); }
+    default @NotNull Bounds boundsPosDim() { return boundsPosDim(null); }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc=">> Preset NEGATIVE Bounds Factory Methods">
+    
+    default @NotNull Bounds boundsNeg(boolean constrainLocation, boolean constrainDimensions, @Nullable LocType locType) {
+        return boundsCeil(constrainLocation ? -Double.MIN_VALUE : Integer.MIN_VALUE,
+                          constrainLocation ? -Double.MIN_VALUE : Integer.MIN_VALUE,
+                          constrainDimensions ? -Double.MIN_VALUE : Integer.MIN_VALUE,
+                          constrainDimensions ? -Double.MIN_VALUE : Integer.MIN_VALUE,
+                          locType);
+    }
+    default @NotNull Bounds boundsNeg(boolean constrainLocation, boolean constrainDimensions) {
+        return boundsNeg(constrainLocation, constrainDimensions, null);
+    }
+    default @NotNull Bounds boundsNeg(@Nullable LocType locType) { return boundsNeg(true, true, locType); }
+    default @NotNull Bounds boundsNeg() { return boundsNeg(null); }
+    
+    default @NotNull Bounds boundsNegLoc(@Nullable LocType locType) { return boundsNeg(true, false, locType); }
+    default @NotNull Bounds boundsNegLoc() { return boundsNegLoc(null); }
+    default @NotNull Bounds boundsNegDim(@Nullable LocType locType) { return boundsNeg(false, true, locType); }
+    default @NotNull Bounds boundsNegDim() { return boundsNegDim(null); }
     
     //</editor-fold>
     
     //</editor-fold>
     
-    /**
-     * <p>An {@code enum} that defines a {@link Point2D point} on this {@link Boundable}.</p>
-     * <p><b>Details</b></p>
-     * <ol>
-     *     <li>Used in calculation methods such as <i>{@link #getLocation(LocationDefinition, boolean...) getLocation(LocationType)}</i>.</li>
-     * </ol>
-     */
-    enum LocationDefinition {
-        TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT,
-        CENTER, CENTER_LEFT, CENTER_RIGHT, CENTER_TOP, CENTER_BOTTOM;
-        
-        public static LocationDefinition getDefault() { return LocationDefinition.TOP_LEFT; }
-    }
+    //</editor-fold>
     
-    /**
-     * <p>A helper method that converts an {@code array} of {@code booleans} to a single {@code boolean} value.</p>
-     * <p><b>Details</b></p>
-     * <ol>
-     *     <li>If the specified {@code array} is {@code null}, return {@code false}.</li>
-     *     <li>If the specified {@code array} is {@code empty} (length of {@code 0}, return {@code false}.</li>
-     *     <li>In all other cases, return the {@code first} element in the {@code array}, regardless of its length.</li>
-     * </ol>
-     *
-     * @param varArgs The {@code varargs} of {@code booleans} to be converted into a single {@code boolean} primitive.
-     *
-     * @return A single {@code boolean} primitive based on the specified {@code varargs array} and the rules listed above.
-     */
-    private boolean vargs(boolean... varArgs) {
-        return varArgs != null && !A.isEmpty(varArgs) && varArgs[0];
-    }
+    //</editor-fold>
+    
+    //<editor-fold desc="> Primitive Accessors">
+    
+    default int xI() { return x().intValue(); }
+    default int yI() { return y().intValue(); }
+    default int wI() { return w().intValue(); }
+    default int hI() { return h().intValue(); }
+    
+    default long xL() { return x().longValue(); }
+    default long yL() { return y().longValue(); }
+    default long wL() { return w().longValue(); }
+    default long hL() { return h().longValue(); }
+    
+    default float xF() { return x().floatValue(); }
+    default float yF() { return y().floatValue(); }
+    default float wF() { return w().floatValue(); }
+    default float hF() { return h().floatValue(); }
+    
+    default double xD() { return x().doubleValue(); }
+    default double yD() { return y().doubleValue(); }
+    default double wD() { return w().doubleValue(); }
+    default double hD() { return h().doubleValue(); }
+    
+    //
+    
+    default int locI(@NotNull Axis axis) { return getLocation(axis).intValue(); }
+    default int locI(@NotNull Axis axis, @NotNull LocType locType) { return getLocation(axis, locType).intValue(); }
+    
+    default long locL(@NotNull Axis axis) { return getLocation(axis).longValue(); }
+    default long locL(@NotNull Axis axis, @NotNull LocType locType) { return getLocation(axis, locType).longValue(); }
+    
+    default float locF(@NotNull Axis axis) { return getLocation(axis).floatValue(); }
+    default float locF(@NotNull Axis axis, @NotNull LocType locType) { return getLocation(axis, locType).floatValue(); }
+    
+    default double locD(@NotNull Axis axis) { return getLocation(axis).doubleValue(); }
+    default double locD(@NotNull Axis axis, @NotNull LocType locType) { return getLocation(axis, locType).doubleValue(); }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="> Calculated Accessors">
+    
+    default double area() { return wD() * hD(); }
+    default double hypot() { return Math.hypot(wD(), hD()); }
+    
+    //</editor-fold>
+    
+    //</editor-fold>
 }

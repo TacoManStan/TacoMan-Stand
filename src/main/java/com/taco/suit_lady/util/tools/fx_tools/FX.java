@@ -1,6 +1,7 @@
 package com.taco.suit_lady.util.tools.fx_tools;
 
 import com.sun.javafx.application.PlatformImpl;
+import com.taco.suit_lady.util.tools.printer.Printer;
 import com.taco.suit_lady.util.values.bounds.Bounds;
 import com.taco.suit_lady.util.values.bounds.Dimensions;
 import com.taco.suit_lady.util.SimplePredicate;
@@ -11,6 +12,10 @@ import com.taco.suit_lady.ui.jfx.hyperlink.HyperlinkNodeFX;
 import com.taco.suit_lady.ui.jfx.lists.Listable;
 import com.taco.suit_lady.util.tools.list_tools.A;
 import com.taco.suit_lady.util.values.*;
+import com.taco.suit_lady.util.values.enums.Axis;
+import com.taco.suit_lady.util.values.enums.LocType;
+import com.taco.suit_lady.util.values.enums.OpResultType;
+import com.taco.suit_lady.util.values.enums.OpType;
 import com.taco.suit_lady.util.values.numbers.NumExpr2D;
 import com.taco.suit_lady.util.values.numbers.NumExpr;
 import com.taco.tacository.quick.ConsoleBB;
@@ -936,12 +941,12 @@ public class FX {
             
             if (fill)
                 canvas.getGraphicsContext2D().fillRect(
-                        bounds.x(), bounds.y(),
-                        bounds.width(), bounds.height());
+                        bounds.xD(), bounds.yD(),
+                        bounds.wD(), bounds.hD());
             else
                 canvas.getGraphicsContext2D().strokeRect(
-                        bounds.x(), bounds.y(),
-                        bounds.width(), bounds.height());
+                        bounds.xD(), bounds.yD(),
+                        bounds.wD(), bounds.hD());
         }, true);
     }
     
@@ -952,12 +957,12 @@ public class FX {
             
             if (fill)
                 canvas.getGraphicsContext2D().fillOval(
-                        bounds.x(), bounds.y(),
-                        bounds.width(), bounds.height());
+                        bounds.xD(), bounds.yD(),
+                        bounds.wD(), bounds.hD());
             else
                 canvas.getGraphicsContext2D().strokeOval(
-                        bounds.x(), bounds.y(),
-                        bounds.width(), bounds.height());
+                        bounds.xD(), bounds.yD(),
+                        bounds.wD(), bounds.hD());
         }, true);
     }
     
@@ -968,11 +973,11 @@ public class FX {
             
             if (fill)
                 canvas.getGraphicsContext2D().fillArc(
-                        bounds.x(), bounds.y(), bounds.width(), bounds.height(),
+                        bounds.xD(), bounds.yD(), bounds.wD(), bounds.hD(),
                         startAngle, arcExtent, closure);
             else
                 canvas.getGraphicsContext2D().strokeArc(
-                        bounds.x(), bounds.y(), bounds.width(), bounds.height(),
+                        bounds.xD(), bounds.yD(), bounds.wD(), bounds.hD(),
                         startAngle, arcExtent, closure);
         }, true);
     }
@@ -989,7 +994,11 @@ public class FX {
         FX.runFX(() -> {
             if (wipeCanvas)
                 clearCanvasUnsafe(canvas);
-            canvas.getGraphicsContext2D().drawImage(image, bounds.getX(safe), bounds.getY(safe), bounds.getWidth(safe), bounds.getHeight(safe));
+            
+            final Bounds c = bounds.boundsFloorDim(1);
+            Printer.print("Bounds Raw: " + bounds + "   |   " + "Bounds Floor: " + c);
+            
+            canvas.getGraphicsContext2D().drawImage(image, c.xD(), c.yD(), c.wD(), c.hD());
         }, true);
     }
     
@@ -1007,10 +1016,10 @@ public class FX {
             final int canvasWidth = (int) canvas.getWidth();
             final int canvasHeight = (int) canvas.getHeight();
             
-            final int xMinO = (int) (source.getMinX() * xScale);
-            final int yMinO = (int) (source.getMinY() * yScale);
-            final int xMaxO = xMinO + (int) (source.getWidth() * xScale);
-            final int yMaxO = yMinO + (int) (source.getHeight() * yScale);
+            final int xMinO = (int) (source.getLocation(Axis.X_AXIS, LocType.MIN).doubleValue() * xScale);
+            final int yMinO = (int) (source.getLocation(Axis.Y_AXIS, LocType.MIN).doubleValue() * yScale);
+            final int xMaxO = xMinO + (int) (source.wD() * xScale);
+            final int yMaxO = yMinO + (int) (source.hD() * yScale);
             
             final int xMinF = Math.max(xMinO, 0);
             final int yMinF = Math.max(yMinO, 0);

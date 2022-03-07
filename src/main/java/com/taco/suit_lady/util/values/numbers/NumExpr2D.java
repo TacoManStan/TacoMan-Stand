@@ -1,8 +1,9 @@
 package com.taco.suit_lady.util.values.numbers;
 
 import com.taco.suit_lady.util.tools.Calc;
-import com.taco.suit_lady.util.values.OpResultType;
-import com.taco.suit_lady.util.values.OpType;
+import com.taco.suit_lady.util.values.enums.CardinalDirection;
+import com.taco.suit_lady.util.values.enums.OpResultType;
+import com.taco.suit_lady.util.values.enums.OpType;
 import com.taco.suit_lady.util.values.ValueExpr2D;
 import com.taco.suit_lady.util.values.ValueUtil;
 import javafx.geometry.Point2D;

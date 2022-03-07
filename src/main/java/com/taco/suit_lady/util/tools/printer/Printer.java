@@ -101,15 +101,23 @@ public class Printer
             System.out.println(fullMsg);
     }
     
+    //
+    
     public static void print() { print(null, null, true, false); }
     public static void print(@Nullable Object msg) { print(msg, null, true, false); }
     public static void print(@Nullable Object msg, boolean printPrefix) { print(msg, null, printPrefix, false); }
     public static void print(@Nullable Object msg, @Nullable String title, boolean printPrefix) { print(msg, title, printPrefix, false); }
     
+    public static void printLite(@Nullable Object msg) { print(msg, Thread.currentThread().getName(), false); }
+    
+    //
+    
     public static void err() { print(null, null, true, true); }
     public static void err(@Nullable Object msg) { print(msg, null, true, true); }
     public static void err(@Nullable Object msg, boolean printPrefix) { print(msg, null, printPrefix, true); }
     public static void err(@Nullable Object msg, @Nullable String title, boolean printPrefix) { print(msg, title, printPrefix, true); }
+    
+    public static void errLite(@Nullable Object msg) { err(msg, Thread.currentThread().getName(), false); }
     
     //</editor-fold>
 }

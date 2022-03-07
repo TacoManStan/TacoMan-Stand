@@ -1,6 +1,6 @@
 package com.taco.suit_lady.util.values.bounds;
 
-import com.taco.suit_lady.util.values.OpResultType;
+import com.taco.suit_lady.util.values.enums.OpResultType;
 import com.taco.suit_lady.util.values.Value2D;
 import com.taco.suit_lady.util.values.numbers.NumExpr2D;
 import javafx.geometry.Point2D;

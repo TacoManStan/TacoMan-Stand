@@ -1,8 +1,10 @@
-package com.taco.suit_lady.util.shapes;
+package com.taco.suit_lady.util.values.shapes;
 
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Props;
+import com.taco.suit_lady.util.values.enums.Axis;
+import com.taco.suit_lady.util.values.enums.LocType;
 import com.taco.suit_lady.util.values.numbers.Num2D;
 import com.taco.suit_lady.util.values.numbers.NumExpr2D;
 import javafx.beans.binding.DoubleBinding;

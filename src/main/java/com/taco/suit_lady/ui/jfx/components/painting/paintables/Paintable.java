@@ -2,6 +2,7 @@ package com.taco.suit_lady.ui.jfx.components.painting.paintables;
 
 import com.taco.suit_lady._to_sort._new.Self;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.Surface;
+import com.taco.suit_lady.util.tools.Enu;
 import com.taco.suit_lady.util.values.bounds.Boundable;
 import com.taco.suit_lady.util.values.bounds.Bounds;
 import com.taco.suit_lady.util.values.bounds.BoundsBinding;
@@ -9,6 +10,7 @@ import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.Props;
+import com.taco.suit_lady.util.values.enums.LocType;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -47,11 +49,11 @@ public interface Paintable<P extends Paintable<P, S>, S extends Surface<P, S>>
     //
     
     default boolean isValidDimensions() {
-        return getBounds().width() > 0 && getBounds().height() > 0;
+        return getBounds().wD() > 0 && getBounds().hD() > 0;
     }
     
     default P repaintSurface() {
-//        System.out.println("Repainting Surface w/ Bounds : " + getBounds() + " for Paintable: " + this);
+        //        System.out.println("Repainting Surface w/ Bounds : " + getBounds() + " for Paintable: " + this);
         if (!isSurfaceRepaintDisabled()) {
             S surface = getSurface();
             if (surface != null)
@@ -95,16 +97,21 @@ public interface Paintable<P extends Paintable<P, S>, S extends Surface<P, S>>
     
     //
     
-    default @Override @NotNull int x() { return boundsBinding().x(); }
-    default @Override @NotNull int y() { return boundsBinding().y(); }
+    //<editor-fold desc="> Boundable">
     
-    default @Override @NotNull int width() { return boundsBinding().width(); }
-    default @Override @NotNull int height() { return boundsBinding().height(); }
+    default @Override @NotNull Number x() { return boundsBinding().x(); }
+    default @Override @NotNull Number y() { return boundsBinding().y(); }
+    
+    default @Override @NotNull Number w() { return boundsBinding().w(); }
+    default @Override @NotNull Number h() { return boundsBinding().h(); }
     
     
     default @Override @NotNull Bounds getBounds() { return boundsBinding().getBounds(); }
+    default @Override @NotNull LocType locType() { return Enu.get(LocType.class); }
     
-    //
+    //</editor-fold>
+    
+    //<editor-fold desc="> Foundational">
     
     default @Override @NotNull Lock getLock() { return data().getLock(); }
     default @Override @NotNull Springable springable() { return data().springable(); }
@@ -112,6 +119,8 @@ public interface Paintable<P extends Paintable<P, S>, S extends Surface<P, S>>
     //
     
     default @Override int compareTo(@NotNull P o) { return Integer.compare((Math.abs(self().getPaintPriority())), Math.abs(o.getPaintPriority())); }
+    
+    //</editor-fold>
     
     //</editor-fold>
 }

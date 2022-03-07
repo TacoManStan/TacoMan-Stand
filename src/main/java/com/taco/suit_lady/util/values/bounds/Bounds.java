@@ -1,78 +1,54 @@
 package com.taco.suit_lady.util.values.bounds;
 
-import com.taco.suit_lady.util.tools.Exc;
-import javafx.geometry.Point2D;
+import com.taco.suit_lady.util.tools.Enu;
+import com.taco.suit_lady.util.values.enums.LocType;
+import com.taco.suit_lady.util.values.numbers.Num2D;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 
-public record Bounds<N extends Number>(N x, N y, N width, N height)
+public record Bounds(@NotNull Number x, @NotNull Number y, @NotNull Number w, @NotNull Number h, @NotNull LocType locType)
         implements Boundable, Cloneable, Serializable {
     
-    //<editor-fold desc="--- STATIC CONVERSION ---">
-    
-    public static @NotNull Bounds fromRectAWT(@NotNull java.awt.Rectangle rectangle) {
-        Exc.nullCheck(rectangle, "AWT Rectangle");
-        return new Bounds(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
-    }
-    
-    public static @NotNull Bounds fromRectFX(@NotNull javafx.scene.shape.Rectangle rectangle) {
-        Exc.nullCheck(rectangle, "JFX Rectangle");
-        return new Bounds((int) rectangle.getX(), (int) rectangle.getY(), (int) rectangle.getWidth(), (int) rectangle.getHeight());
-    }
-    
-    public static @NotNull Bounds fromPoints(@NotNull Point2D location, @NotNull Point2D dimensions) {
-        Exc.nullCheck(location, "Location Point2D");
-        Exc.nullCheck(dimensions, "Dimensions Point2D");
-        
-        return new Bounds((int) location.getX(), (int) location.getY(), (int) dimensions.getX(), (int) dimensions.getY());
-    }
-    
-    //</editor-fold>
-    
-    public Bounds(@NotNull Boundable from) {
-        this(from.x(), from.y(), from.width(), from.height());
-    }
-    
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
-    
-    @Override public @NotNull Bounds getBounds() { return this; }
     
     //<editor-fold desc="> Foundational">
     
     @Override public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (!(o instanceof Bounds bounds))
-            return false;
+        if (this == o) return true;
+        if (!(o instanceof Bounds bounds)) return false;
         
-        return x
+        if (!x.equals(bounds.x)) return false;
+        if (!y.equals(bounds.y)) return false;
+        if (!w.equals(bounds.w)) return false;
+        if (!h.equals(bounds.h)) return false;
         
-        if (x != bounds.x)
-            return false;
-        if (y != bounds.y)
-            return false;
-        if (width != bounds.width)
-            return false;
-        return height == bounds.height;
+        return locType == bounds.locType;
     }
     
     @Override public int hashCode() {
-        int result = x;
-        
-        result = 31 * result + y;
-        result = 31 * result + width;
-        result = 31 * result + height;
-        
+        int result = x.hashCode();
+        result = 31 * result + y.hashCode();
+        result = 31 * result + w.hashCode();
+        result = 31 * result + h.hashCode();
+        result = 31 * result + locType.hashCode();
         return result;
     }
     
-    @Override public String toString() {
-        return "Bounds2D{" +
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
+    @Contract(" -> new")
+    @Override public @NotNull Object clone() { return new Bounds(x(), y(), w(), h(), locType()); }
+    
+    @Contract(pure = true)
+    @Override public @NotNull String toString() {
+        return "Bounds{" +
                "x=" + x +
                ", y=" + y +
-               ", width=" + width +
-               ", height=" + height +
+               ", w=" + w +
+               ", h=" + h +
+               ", locType=" + locType +
                '}';
     }
     
@@ -80,5 +56,39 @@ public record Bounds<N extends Number>(N x, N y, N width, N height)
     
     //</editor-fold>
     
-
+    //<editor-fold desc="--- STATIC ---">
+    
+    //<editor-fold desc="> Factory Construction Methods">
+    
+    public static @NotNull Bounds create(@NotNull Number x, @NotNull Number y, @NotNull Number w, @NotNull Number h, @Nullable LocType locType) {
+        return new Bounds(x, y, w, h, locType != null ? locType : Enu.get(LocType.class));
+    }
+    
+    //
+    
+    public static @NotNull Bounds create() { return create(Enu.get(LocType.class)); }
+    public static @NotNull Bounds create(@Nullable LocType locType) { return create(0, 0, 0, 0, locType); }
+    public static @NotNull Bounds create(@NotNull Number x, @NotNull Number y, @NotNull Number w, @NotNull Number h) { return create(x, y, w, h, null); }
+    
+    public static @NotNull Bounds create(@NotNull Num2D locs, @NotNull Num2D dims, @Nullable LocType locType) { return create(locs.a(), locs.b(), dims.a(), dims.b(), locType); }
+    public static @NotNull Bounds create(@NotNull Boundable from) { return create(from, from.locType()); }
+    public static @NotNull Bounds create(@NotNull Boundable from, @Nullable LocType locType) { return create(from.getLocation(locType), from.getDimensions(), locType); }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="> Specialty Factory Methods">
+    
+    public static @NotNull Bounds boundsMax(@Nullable LocType locType) {
+        return new Bounds(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, locType);
+    }
+    public static @NotNull Bounds boundsMax() { return boundsMax(null); }
+    
+    public static @NotNull Bounds boundsMin(@Nullable LocType locType) {
+        return new Bounds(Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE, locType);
+    }
+    public static @NotNull Bounds boundsMin() { return boundsMin(null); }
+    
+    //</editor-fold>
+    
+    //</editor-fold>
 }

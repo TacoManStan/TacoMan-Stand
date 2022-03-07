@@ -1,7 +1,8 @@
-package com.taco.suit_lady.util.values.numbers;
+package com.taco.suit_lady.util.values.enums;
 
 import com.taco.suit_lady.util.tools.list_tools.A;
 import com.taco.suit_lady.util.tools.Exc;
+import com.taco.suit_lady.util.values.numbers.NumExpr2D;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;

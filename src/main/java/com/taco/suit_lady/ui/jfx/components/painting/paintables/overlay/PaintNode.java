@@ -71,7 +71,7 @@ public abstract class PaintNode
     }
     
     protected Node syncBounds(@NotNull Node n) {
-        n.resizeRelocate(x(), y(), width(), height());
+        n.resizeRelocate(xD(), yD(), wD(), hD());
         return n;
     }
     
