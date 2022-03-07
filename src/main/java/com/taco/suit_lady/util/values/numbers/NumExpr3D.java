@@ -1,7 +1,6 @@
 package com.taco.suit_lady.util.values.numbers;
 
 import com.taco.suit_lady.util.values.ValueExpr3D;
-import com.taco.suit_lady.util.values.ValueUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
@@ -13,17 +12,15 @@ public interface NumExpr3D<T extends NumExpr3D<T>>
     
     //<editor-fold desc="--- DEFAULT METHODS ---">
     
-    default boolean cBool() { return ValueUtil.asBool(a()); }
+    default int cI() { return N.i(c()); }
+    default long cL() { return N.l(c()); }
     
-    default int cInt() { return ValueUtil.asInt(a()); }
-    default long cLong() { return ValueUtil.asLong(a()); }
-    
-    default float cFloat() { return ValueUtil.asFloat(a()); }
-    default double cDouble() { return ValueUtil.asDouble(a()); }
+    default float cF() { return N.f(c()); }
+    default double cD() { return N.d(c()); }
     
     //
     
-    default Num3D asNumberValueTrio() { return new Num3D(a(), b(), c()); }
+    default Num3D asNum3D() { return new Num3D(a(), b(), c()); }
     
     //</editor-fold>
 }

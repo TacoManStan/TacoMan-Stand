@@ -3,8 +3,18 @@ package com.taco.suit_lady.util.values.numbers;
 import javafx.scene.layout.Region;
 import org.jetbrains.annotations.NotNull;
 
-public class Nums {
-    private Nums() { } //No Instance
+public class N {
+    private N() { } //No Instance
+    
+    //<editor-fold desc="--- PRIMITIVE CONVERSION METHODS ---">
+    
+    public static int i(@NotNull Number num) { return num.intValue(); }
+    public static long l(@NotNull Number num) { return num.longValue(); }
+    
+    public static float f(@NotNull Number num) { return num.floatValue(); }
+    public static double d(@NotNull Number num) { return num.doubleValue(); }
+    
+    //</editor-fold>
     
     //<editor-fold desc="--- DIMENSIONS OF METHODS ---">
     

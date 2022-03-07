@@ -1,11 +1,10 @@
 package com.taco.suit_lady.util.values.numbers;
 
 import com.taco.suit_lady.util.tools.Calc;
+import com.taco.suit_lady.util.values.ValueExpr2D;
 import com.taco.suit_lady.util.values.enums.CardinalDirection;
 import com.taco.suit_lady.util.values.enums.OpResultType;
 import com.taco.suit_lady.util.values.enums.OpType;
-import com.taco.suit_lady.util.values.ValueExpr2D;
-import com.taco.suit_lady.util.values.ValueUtil;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,16 +19,14 @@ public interface NumExpr2D<T extends NumExpr2D<T>>
     
     //<editor-fold desc="> Converter Methods">
     
-    default boolean bBool() { return ValueUtil.asBool(b()); }
+    default int bI() { return N.i(b()); }
+    default long bL() { return N.l(b()); }
     
-    default int bInt() { return ValueUtil.asInt(b()); }
-    default long bLong() { return ValueUtil.asLong(a()); }
+    default float bF() { return N.f(b()); }
+    default double bD() { return N.d(b()); }
     
-    default float bFloat() { return ValueUtil.asFloat(b()); }
-    default double bDouble() { return ValueUtil.asDouble(b()); }
-    
-    default Num2D asNumberValuePair() { return new Num2D(a(), b()); }
-    default Point2D asPoint() { return new Point2D(aDouble(), bDouble()); }
+    default Num2D asNum2D() { return new Num2D(a(), b()); }
+    default Point2D asPoint() { return new Point2D(aD(), bD()); }
     
     //</editor-fold>
     
@@ -107,8 +104,8 @@ public interface NumExpr2D<T extends NumExpr2D<T>>
     default @NotNull T interpolateTowards(@NotNull NumExpr2D<?> other, @NotNull Number distance) { return interpolateTowards(other.asPoint(), distance); }
     
     default @NotNull T interpolateTowards(@NotNull Number angle, @NotNull Number distance) {
-        final double retX = (distance.doubleValue() * Math.cos(angle.doubleValue())) + aDouble();
-        final double retY = (distance.doubleValue() * Math.sin(angle.doubleValue())) + bDouble();
+        final double retX = (distance.doubleValue() * Math.cos(angle.doubleValue())) + aD();
+        final double retY = (distance.doubleValue() * Math.sin(angle.doubleValue())) + bD();
         return copyOf(retX, retY);
     }
     
@@ -120,7 +117,7 @@ public interface NumExpr2D<T extends NumExpr2D<T>>
     
     default String getString(boolean asInt) {
         if (asInt)
-            return "[" + aInt() + ", " + bInt() + "]";
+            return "[" + aI() + ", " + bI() + "]";
         else
             return "[" + a() + ", " + b() + "]";
     }

@@ -1087,7 +1087,7 @@ public class FX {
             final WritableImage image = new WritableImage(width, height);
             
             A.iterateMatrix((matrixCoordinates, color) -> {
-                image.getPixelWriter().setColor(matrixCoordinates.aInt(), matrixCoordinates.bInt(), color);
+                image.getPixelWriter().setColor(matrixCoordinates.aI(), matrixCoordinates.bI(), color);
                 return null;
             }, pixelDefinitionMatrix);
             
@@ -1108,12 +1108,12 @@ public class FX {
         final WritableImage aggregateImage = new WritableImage(tileSize * sourceMatrix.length, tileSize * sourceMatrix[0].length);
         
         A.iterateMatrix((dimensions, tile) -> {
-            final T t = sourceMatrix[dimensions.aInt()][dimensions.bInt()];
+            final T t = sourceMatrix[dimensions.aI()][dimensions.bI()];
             if (t != null) {
                 final Image image = factory.apply(t);
                 if (image != null)
                     aggregateImage.getPixelWriter().setPixels(
-                            tileSize * dimensions.aInt(), tileSize * dimensions.bInt(),
+                            tileSize * dimensions.aI(), tileSize * dimensions.bI(),
                             tileSize, tileSize,
                             image.getPixelReader(),
                             0, 0);

@@ -89,7 +89,7 @@ public class GameFooterController
         this.commandCardButtonMatrix = new ImageButton[ccWidth()][ccHeight()];
         A.fillMatrix(dimensions -> {
             final ImagePane imagePane = new ImagePane();
-            commandCardGridPane.add(imagePane, dimensions.aInt(), dimensions.bInt());
+            commandCardGridPane.add(imagePane, dimensions.aI(), dimensions.bI());
             return new ImageButton(
                     this,
                     "Command Card Dummy Button [" + dimensions.a() + ", " + dimensions.b() + "]",

@@ -199,8 +199,8 @@ public class AppUI
     
     private @NotNull Point2D getSafe(@NotNull Point2D source, @NotNull Num2D dimensions) {
         return sync(() -> {
-            double safeX = Math.min(Math.max(0, source.getX()), dimensions.aDouble());
-            double safeY = Math.min(Math.max(0, source.getY()), dimensions.bDouble());
+            double safeX = Math.min(Math.max(0, source.getX()), dimensions.aD());
+            double safeY = Math.min(Math.max(0, source.getY()), dimensions.bD());
             return new Point2D(safeX, safeY);
         });
     }

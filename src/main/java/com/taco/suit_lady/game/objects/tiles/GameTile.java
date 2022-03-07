@@ -50,7 +50,7 @@ public class GameTile
     }
     
     public GameTile(@NotNull GameMap owner, @NotNull Num2D dimensions) {
-        this(owner, dimensions.aInt(), dimensions.bInt());
+        this(owner, dimensions.aI(), dimensions.bI());
     }
     
     public GameTile(@NotNull GameMap owner, int xLoc, int yLoc) {
