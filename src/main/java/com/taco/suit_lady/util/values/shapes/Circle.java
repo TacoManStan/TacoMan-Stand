@@ -70,37 +70,26 @@ public class Circle extends Shape {
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     //TODO: Note that collision checks should still work with this overwritten method removed, but, well... it doesn't. So, fix that, because it'll definitely crop up as an issue later on.
-        @Override public boolean intersects(@NotNull Shape other, boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
-            return sync(() -> {
-                final Circle circleImpl = generateCircle(translate, xMod, yMod);
-                final Number xImpl = translate ? xMod : 0;
-                final Number yImpl = translate ? yMod : 0;
-                return sync(() -> {
-                    final Point2D center = circleImpl.getLocation(LocType.CENTER).applyEach(xImpl, yImpl).asPoint();
-                    if (other instanceof Circle otherCircle)
-                        return center.distance(other.getLocation(LocType.CENTER).asPoint()) < getRadius() + otherCircle.getRadius();
-                    else if (other instanceof Box otherBox)
-                        return other.getBorderPoints(true, 0, 0).stream().anyMatch(otherBorderPoint -> center.distance(otherBorderPoint.asPoint()) < getRadius());
-                    else
-                        return super.intersects(other, translate, xMod, yMod);
-                });
-            });
-        }
+//    @Override public boolean intersects(@NotNull Shape other, boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
+//        return sync(() -> {
+//            final Circle circleImpl = generateCircle(translate, xMod, yMod);
+//            final Number xImpl = translate ? xMod : 0;
+//            final Number yImpl = translate ? yMod : 0;
+//            return sync(() -> {
+//                final Point2D center = circleImpl.getLocation(LocType.CENTER).applyEach(xImpl, yImpl).asPoint();
+//                if (other instanceof Circle otherCircle)
+//                    return center.distance(other.getLocation(LocType.CENTER).asPoint()) < getRadius() + otherCircle.getRadius();
+//                else if (other instanceof Box otherBox)
+//                    return other.getBorderPoints(true, 0, 0).stream().anyMatch(otherBorderPoint -> center.distance(otherBorderPoint.asPoint()) < getRadius());
+//                else
+//                    return super.intersects(other, translate, xMod, yMod);
+//            });
+//        });
+//    }
     
-    private Circle generateCircle(boolean translate, @NotNull Number x, @NotNull Number y) {
-        return sync(() -> {
-            if (translate)
-                return this;
-            else {
-                final Circle circleImpl = new Circle(this);
-                circleImpl.setLocation(x, y);
-                circleImpl.setDiameter(getDiameter());
-                return circleImpl;
-            }
-        });
+    @Override public boolean containsPoint(@NotNull Number x, @NotNull Number y) {
+        return sync(() -> getLocation(LocType.CENTER).asPoint().distance(x.doubleValue(), y.doubleValue()) < getRadius());
     }
-    
-    @Override public boolean containsPoint(@NotNull Number x, @NotNull Number y) { return sync(() -> getLocation(LocType.CENTER).asPoint().distance(x.doubleValue(), y.doubleValue()) < getRadius()); }
     
     @Override protected @NotNull List<Num2D> regenerateBorderPoints(boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
         return sync(() -> {
@@ -119,6 +108,21 @@ public class Circle extends Shape {
             //            for (int i = 0; i < 360; i += precision)
             //            borderPoints.add(Calc.pointOnCircle(locationImpl, getRadius(), i));
             //            return borderPoints;
+        });
+    }
+    
+    @Override protected @NotNull Shape copyTo(boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
+        return sync(() -> {
+            final Circle copy = new Circle(this, getLock());
+            copy.setLocType(getLocType());
+            if (translate) {
+                copy.setLocation(getLocation());
+                copy.translateLocation(xMod, yMod);
+            } else {
+                copy.setLocation(xMod, yMod);
+            }
+            copy.setRadius(getRadius());
+            return copy;
         });
     }
     

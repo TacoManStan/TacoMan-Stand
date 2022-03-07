@@ -74,6 +74,20 @@ public class Box extends Shape {
         
         return borderPoints;
     }
+    @Override protected @NotNull Box copyTo(boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
+        return sync(() -> {
+            final Box copy = new Box(this, getLock());
+            copy.setLocType(getLocType());
+            if (translate) {
+                copy.setLocation(getLocation());
+                copy.translateLocation(xMod, yMod);
+            } else {
+                copy.setLocation(xMod, yMod);
+            }
+            copy.setDimensions(getDimensions());
+            return copy;
+        });
+    }
     
     //</editor-fold>
     

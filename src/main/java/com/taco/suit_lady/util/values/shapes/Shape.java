@@ -178,6 +178,11 @@ public abstract class Shape
     public double getLocation(@NotNull Axis axis) { return locationProperty(axis).get(); }
     public double setLocation(@NotNull Number newValue, @NotNull Axis axis) { return Props.setProperty(locationProperty(axis), newValue); }
     
+    public double translateLocation(@NotNull Number mod, @NotNull Axis axis) { return sync(() -> setLocation(getLocation(axis) + mod.doubleValue(), axis)); }
+    public @NotNull Num2D translateLocation(@NotNull Number xMod, @NotNull Number yMod) {
+        return sync(() -> new Num2D(translateLocation(xMod, Axis.X_AXIS), translateLocation(yMod, Axis.Y_AXIS)));
+    }
+    
     protected ReadOnlyDoubleWrapper dimensionProperty(@NotNull Axis axis) {
         return sync(() -> switch (axis) {
             case X_AXIS -> widthProperty;
@@ -289,7 +294,17 @@ public abstract class Shape
     public final boolean containsPoint(@NotNull NumExpr2D<?> point) { return sync(() -> containsPoint(point.asPoint())); }
     
     public boolean intersects(@NotNull Shape other, boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
-        return sync(() -> { return getBorderPoints(translate, xMod, yMod).stream().anyMatch(other::containsPoint); });
+        return sync(() -> {
+            final Shape copy = copyTo(translate, xMod, yMod);
+            return copy.getBorderPoints().stream().anyMatch(point -> other.containsPoint(point));
+//            other.getBorderPoints().stream().anyMatch(oPoint -> copy.containsPoint(oPoint));
+        });
+    }
+    
+    public boolean intersectsLegacy(@NotNull Shape other, boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
+        return sync(() -> {
+            return getBorderPoints(translate, xMod, yMod).stream().anyMatch(other::containsPoint);
+        });
     }
     
     //</editor-fold>
@@ -334,6 +349,7 @@ public abstract class Shape
     
     public abstract boolean containsPoint(@NotNull Number x, @NotNull Number y);
     protected abstract @NotNull List<Num2D> regenerateBorderPoints(boolean translate, @NotNull Number xMod, @NotNull Number yMod);
+    protected abstract @NotNull Shape copyTo(boolean translate, @NotNull Number xMod, @NotNull Number yMod);
     //    protected abstract boolean intersects(@NotNull Shape other);
     
     protected @NotNull List<Observable> observables() { return Collections.emptyList(); }

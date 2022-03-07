@@ -994,11 +994,8 @@ public class FX {
         FX.runFX(() -> {
             if (wipeCanvas)
                 clearCanvasUnsafe(canvas);
-            
-            final Bounds c = bounds.boundsFloorDim(1);
-            Printer.print("Bounds Raw: " + bounds + "   |   " + "Bounds Floor: " + c);
-            
-            canvas.getGraphicsContext2D().drawImage(image, c.xD(), c.yD(), c.wD(), c.hD());
+            final Bounds b = safe ? bounds.boundsFloorDim() : bounds;
+            canvas.getGraphicsContext2D().drawImage(image, b.xD(), b.yD(), b.wD(), b.hD());
         }, true);
     }
     

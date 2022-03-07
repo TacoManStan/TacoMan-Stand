@@ -131,38 +131,48 @@ public interface Boundable {
     }
     default @NotNull Bounds bounds(@NotNull Boundable min, @NotNull Boundable max) { return bounds(min, max, null); }
     
-    
     //<editor-fold desc="> Floor/Ceil">
     
-    default @NotNull Bounds boundsFloor(@NotNull Number minX, @NotNull Number minY, @NotNull Number minW, @NotNull Number minH, @Nullable LocType locType) {
+    //<editor-fold desc=">> Floor">
+    
+    default @NotNull Bounds boundsFloor(@NotNull Number minX, @NotNull Number minY,
+                                        @NotNull Number minW, @NotNull Number minH,
+                                        @Nullable LocType locType) {
         return bounds(minX, minY, minW, minH, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, locType);
     }
-    default @NotNull Bounds boundsFloor(@NotNull Number minX, @NotNull Number minY, @NotNull Number minW, @NotNull Number minH) {
+    
+    default @NotNull Bounds boundsFloor(@NotNull Number minX, @NotNull Number minY,
+                                        @NotNull Number minW, @NotNull Number minH) {
         return boundsFloor(minX, minY, minW, minH, null);
     }
     
+    //<editor-fold desc=">>> Floor Loc/Dim">
     
     default @NotNull Bounds boundsFloorLoc(@NotNull Number minX, @NotNull Number minY, @Nullable LocType locType) {
         return boundsFloor(minX, minY, Integer.MIN_VALUE, Integer.MIN_VALUE, locType);
     }
-    default @NotNull Bounds boundsFloorLoc(@NotNull Number minX, @NotNull Number minY) {
-        return boundsFloorLoc(minX, minY, null);
-    }
-    default @NotNull Bounds boundsFloorLoc(@NotNull Number min) {
-        return boundsFloorLoc(min, min, null);
-    }
+    default @NotNull Bounds boundsFloorLoc(@NotNull Number minX, @NotNull Number minY) { return boundsFloorLoc(minX, minY, null); }
+    default @NotNull Bounds boundsFloorLoc(@NotNull Number min) { return boundsFloorLoc(min, min, null); }
+    
+    default @NotNull Bounds boundsFloorLoc() { return boundsFloorLoc(Double.MIN_VALUE); }
+    default @NotNull Bounds boundsFloorLocI() { return boundsFloorLoc(1); }
+    
+    //
     
     default @NotNull Bounds boundsFloorDim(@NotNull Number minW, @NotNull Number minH, @Nullable LocType locType) {
         return boundsFloor(Integer.MIN_VALUE, Integer.MIN_VALUE, minW, minH, locType);
     }
-    default @NotNull Bounds boundsFloorDim(@NotNull Number minW, @NotNull Number minH) {
-        return boundsFloorDim(minW, minH, null);
-    }
-    default @NotNull Bounds boundsFloorDim(@NotNull Number min) {
-        return boundsFloorDim(min, min, null);
-    }
+    default @NotNull Bounds boundsFloorDim(@NotNull Number minW, @NotNull Number minH) { return boundsFloorDim(minW, minH, null); }
+    default @NotNull Bounds boundsFloorDim(@NotNull Number min) { return boundsFloorDim(min, min, null); }
     
-    //
+    default @NotNull Bounds boundsFloorDim() { return boundsFloorDim(Double.MIN_VALUE); }
+    default @NotNull Bounds boundsFloorDimI() { return boundsFloorLoc(1); }
+    
+    //</editor-fold>
+    
+    //</editor-fold>
+    
+    //<editor-fold desc=">> Ceil">
     
     default @NotNull Bounds boundsCeil(@NotNull Number maxX, @NotNull Number maxY, @NotNull Number maxW, @NotNull Number maxH, @Nullable LocType locType) {
         return bounds(Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE, maxX, maxY, maxW, maxH, locType);
@@ -171,7 +181,7 @@ public interface Boundable {
         return boundsCeil(maxX, maxY, maxW, maxH, null);
     }
     
-    //
+    //</editor-fold>
     
     //<editor-fold desc="> Preset Bounds Factory Methods">
     
