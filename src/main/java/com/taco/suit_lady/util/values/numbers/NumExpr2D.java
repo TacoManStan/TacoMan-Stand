@@ -86,21 +86,13 @@ public interface NumExpr2D<T extends NumExpr2D<T>>
     
     //<editor-fold desc="> Calculation Methods">
     
-    default void jdHeheXD() {
-        Point2D point;
-    }
-    
     default double distance(@NotNull Point2D other) { return asPoint().distance(other); }
     default double distance(@NotNull Number x, @NotNull Number y) { return asPoint().distance(Calc.point2D(x, y)); }
     default double distance(@NotNull NumExpr2D<?> other) { return asPoint().distance(other.asPoint()); }
     
-    //
-    
     default double angle(@NotNull Point2D other) { return asPoint().angle(other); }
     default double angle(@NotNull Number x, @NotNull Number y) { return angle(Calc.point2D(x, y)); }
     default double angle(@NotNull NumExpr2D<?> other) { return asPoint().angle(other.asPoint()); }
-    
-    //
     
     //<editor-fold desc=">> Interpolation Methods">
     
