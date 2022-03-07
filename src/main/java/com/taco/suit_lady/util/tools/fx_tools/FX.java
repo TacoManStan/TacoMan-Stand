@@ -1,7 +1,6 @@
 package com.taco.suit_lady.util.tools.fx_tools;
 
 import com.sun.javafx.application.PlatformImpl;
-import com.taco.suit_lady.util.tools.printer.Printer;
 import com.taco.suit_lady.util.values.bounds.Bounds;
 import com.taco.suit_lady.util.values.bounds.Dimensions;
 import com.taco.suit_lady.util.SimplePredicate;

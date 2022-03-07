@@ -8,7 +8,7 @@ import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.springable.StrictSpringable;
 import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Exc;
-import com.taco.suit_lady.util.tools.printer.Printer;
+import com.taco.suit_lady.util.tools.printing.Printer;
 import com.taco.suit_lady.util.tools.Props;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.IntegerBinding;

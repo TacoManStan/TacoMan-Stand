@@ -4,7 +4,6 @@ import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Enu;
 import com.taco.suit_lady.util.tools.Obj;
 import com.taco.suit_lady.util.tools.Props;
-import com.taco.suit_lady.util.tools.printer.Printer;
 import com.taco.suit_lady.util.values.enums.LocType;
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.*;

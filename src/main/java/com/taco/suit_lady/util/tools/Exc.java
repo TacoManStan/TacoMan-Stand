@@ -3,7 +3,7 @@ package com.taco.suit_lady.util.tools;
 import com.taco.suit_lady.util.InternalException;
 import com.taco.suit_lady.util.exceptions.NYIException;
 import com.taco.suit_lady.util.exceptions.ReadOnlyViolationException;
-import com.taco.suit_lady.util.tools.printer.Printer;
+import com.taco.suit_lady.util.tools.printing.Printer;
 import com.taco.tacository.quick.ConsoleBB;
 import org.hibernate.TypeMismatchException;
 import org.jetbrains.annotations.Contract;

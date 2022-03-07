@@ -1,4 +1,4 @@
-package com.taco.suit_lady.util.tools.printer;
+package com.taco.suit_lady.util.tools.printing;
 
 import com.taco.suit_lady.util.enums.DefaultableEnum;
 import org.jetbrains.annotations.NotNull;

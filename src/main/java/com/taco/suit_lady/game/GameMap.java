@@ -13,7 +13,7 @@ import com.taco.suit_lady.util.tools.list_tools.A;
 import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Calc;
 import com.taco.suit_lady.util.tools.Props;
-import com.taco.suit_lady.util.tools.printer.PrintData;
+import com.taco.suit_lady.util.tools.printing.PrintData;
 import com.taco.suit_lady.util.values.ValueExpr2D;
 import com.taco.tacository.json.*;
 import javafx.beans.binding.IntegerBinding;
@@ -98,7 +98,7 @@ public class GameMap
         //
         
         p = printer().get("print-data-1");
-        p.setEnabled(true);
+        p.setEnabled(false);
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">

@@ -1,4 +1,4 @@
-package com.taco.suit_lady.util.tools.printer;
+package com.taco.suit_lady.util.tools.printing;
 
 import com.taco.suit_lady.util.tools.Props;
 import javafx.beans.property.BooleanProperty;

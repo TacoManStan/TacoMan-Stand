@@ -2,7 +2,6 @@ package com.taco.suit_lady.ui.jfx.components.painting.paintables.overlay;
 
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.Stuff;
-import com.taco.suit_lady.util.tools.printer.Printer;
 import com.taco.suit_lady.util.values.bounds.Bounds;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;

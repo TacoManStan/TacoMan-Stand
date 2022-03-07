@@ -13,7 +13,7 @@ import com.taco.suit_lady.util.timing.Timer;
 import com.taco.suit_lady.util.timing.Timers;
 import com.taco.suit_lady.util.tools.Exc;
 import com.taco.suit_lady.util.tools.Obj;
-import com.taco.suit_lady.util.tools.printer.Printer;
+import com.taco.suit_lady.util.tools.printing.Printer;
 import com.taco.suit_lady.util.tools.Props;
 import com.taco.suit_lady.util.tools.Exe;
 import com.taco.suit_lady.util.tools.fx_tools.FX;
