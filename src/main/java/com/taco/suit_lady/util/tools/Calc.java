@@ -6,7 +6,7 @@ import com.taco.suit_lady.util.values.enums.LocType;
 import com.taco.suit_lady.util.values.shapes.Shape;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.timing.Timing;
-import com.taco.suit_lady.util.values.numbers.NumExpr2D;
+import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
 import com.taco.suit_lady.util.values.Value2D;
 import com.taco.suit_lady.util.values.ValueExpr2D;
 import javafx.beans.binding.ObjectBinding;

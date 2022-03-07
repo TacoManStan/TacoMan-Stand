@@ -1,6 +1,6 @@
 package com.taco.suit_lady.util.values.enums;
 
-import com.taco.suit_lady.util.values.numbers.NumExpr2D;
+import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
 import org.jetbrains.annotations.NotNull;
 
 public enum OpType {

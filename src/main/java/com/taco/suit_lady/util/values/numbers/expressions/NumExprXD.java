@@ -1,4 +1,4 @@
-package com.taco.suit_lady.util.values.numbers;
+package com.taco.suit_lady.util.values.numbers.expressions;
 
 //TODO
 public interface NumExprXD {

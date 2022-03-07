@@ -21,7 +21,7 @@ import com.taco.suit_lady.util.tools.Obj;
 import com.taco.suit_lady.util.tools.Props;
 import com.taco.suit_lady.util.tools.list_tools.A;
 import com.taco.suit_lady.util.values.numbers.Num2D;
-import com.taco.suit_lady.util.values.numbers.NumExpr2D;
+import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
 import com.taco.suit_lady.util.values.shapes.Box;
 import com.taco.suit_lady.util.values.shapes.Circle;
 import com.taco.suit_lady.util.values.shapes.Shape;

@@ -13,7 +13,7 @@ import com.taco.suit_lady.util.tools.fx_tools.FX;
 import com.taco.suit_lady.util.values.enums.Axis;
 import com.taco.suit_lady.util.values.enums.LocType;
 import com.taco.suit_lady.util.values.numbers.Num2D;
-import com.taco.suit_lady.util.values.numbers.NumExpr2D;
+import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
 import javafx.beans.Observable;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.ObjectBinding;

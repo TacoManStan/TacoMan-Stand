@@ -5,7 +5,7 @@ import com.taco.suit_lady.util.values.enums.Axis;
 import com.taco.suit_lady.util.values.enums.LocType;
 import com.taco.suit_lady.util.tools.Calc;
 import com.taco.suit_lady.util.values.numbers.Num2D;
-import com.taco.suit_lady.util.values.numbers.NumExpr2D;
+import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
