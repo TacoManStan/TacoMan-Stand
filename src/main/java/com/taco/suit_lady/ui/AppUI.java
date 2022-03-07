@@ -1,11 +1,11 @@
 package com.taco.suit_lady.ui;
 
-import com.taco.suit_lady.util.values.bounds.Dimensions;
-import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
-import com.taco.suit_lady.util.tools.printing.Printer;
+import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.tools.Props;
 import com.taco.suit_lady.util.tools.fx_tools.FX;
+import com.taco.suit_lady.util.tools.printing.Printer;
+import com.taco.suit_lady.util.values.numbers.Num2D;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.geometry.Point2D;
@@ -197,15 +197,15 @@ public class AppUI
         });
     }
     
-    private @NotNull Point2D getSafe(@NotNull Point2D source, @NotNull Dimensions dimensions) {
+    private @NotNull Point2D getSafe(@NotNull Point2D source, @NotNull Num2D dimensions) {
         return sync(() -> {
-            double safeX = Math.min(Math.max(0, source.getX()), dimensions.width().doubleValue());
-            double safeY = Math.min(Math.max(0, source.getY()), dimensions.height().doubleValue());
+            double safeX = Math.min(Math.max(0, source.getX()), dimensions.aDouble());
+            double safeY = Math.min(Math.max(0, source.getY()), dimensions.bDouble());
             return new Point2D(safeX, safeY);
         });
     }
-    private @Nullable Point2D getSafe(@Nullable Region region) { return region != null ? getSafe(region.screenToLocal(getMouseOnScreen()), FX.getDimensions(region)) : null; }
-    private @Nullable Point2D getSafe(@Nullable Point2D source, @Nullable Region region) { return source != null && region != null ? getSafe(source, FX.getDimensions(region)) : null; }
+    private @Nullable Point2D getSafe(@Nullable Region region) { return region != null ? getSafe(region.screenToLocal(getMouseOnScreen()), FX.dimensionsOf(region)) : null; }
+    private @Nullable Point2D getSafe(@Nullable Point2D source, @Nullable Region region) { return source != null && region != null ? getSafe(source, FX.dimensionsOf(region)) : null; }
     
     //</editor-fold>
 }

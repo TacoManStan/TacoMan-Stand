@@ -3,9 +3,9 @@ package com.taco.suit_lady.game.ui;
 import com.taco.suit_lady.ui.FooterController;
 import com.taco.suit_lady.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.ui.jfx.components.button.ImageButton;
-import com.taco.suit_lady.util.values.bounds.Dimensions;
 import com.taco.suit_lady.util.tools.list_tools.A;
 import com.taco.suit_lady.util.tools.printing.Printer;
+import com.taco.suit_lady.util.values.numbers.Num2D;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.layout.AnchorPane;
@@ -89,10 +89,10 @@ public class GameFooterController
         this.commandCardButtonMatrix = new ImageButton[ccWidth()][ccHeight()];
         A.fillMatrix(dimensions -> {
             final ImagePane imagePane = new ImagePane();
-            commandCardGridPane.add(imagePane, dimensions.width().intValue(), dimensions.height().intValue());
+            commandCardGridPane.add(imagePane, dimensions.aInt(), dimensions.bInt());
             return new ImageButton(
                     this,
-                    "Command Card Dummy Button [" + dimensions.width() + ", " + dimensions.height() + "]",
+                    "Command Card Dummy Button [" + dimensions.a() + ", " + dimensions.b() + "]",
                     "home",
                     imagePane,
                     () -> Printer.print("CC Button Pressed: " + dimensions),
@@ -113,7 +113,7 @@ public class GameFooterController
     
     public final @NotNull ImageButton[][] getCommandCardButtonMatrix() { return commandCardButtonMatrix; }
     public final @Nullable ImageButton getCommandCardButtonAt(int x, int y) { return (x < ccWidth() && y < ccHeight() && x >= 0 && y >= 0) ? commandCardButtonMatrix[x][y] : null; }
-    public final @Nullable Dimensions getCommandCardButtonLocation(@Nullable ImageButton button) { return button != null ? A.iterateMatrix((d, ip) -> ip.equals(button) ? d : null, commandCardButtonMatrix) : null; }
+    public final @Nullable Num2D getCommandCardButtonLocation(@Nullable ImageButton button) { return button != null ? A.iterateMatrix((d, ip) -> ip.equals(button) ? d : null, commandCardButtonMatrix) : null; }
     
     //</editor-fold>
     

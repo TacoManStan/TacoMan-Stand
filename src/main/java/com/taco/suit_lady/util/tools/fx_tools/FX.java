@@ -1,22 +1,21 @@
 package com.taco.suit_lady.util.tools.fx_tools;
 
 import com.sun.javafx.application.PlatformImpl;
-import com.taco.suit_lady.util.values.bounds.Bounds;
-import com.taco.suit_lady.util.values.bounds.Dimensions;
-import com.taco.suit_lady.util.SimplePredicate;
-import com.taco.suit_lady.util.UndefinedRuntimeException;
-import com.taco.suit_lady.util.tools.*;
 import com.taco.suit_lady.ui.jfx.Colorable;
 import com.taco.suit_lady.ui.jfx.hyperlink.HyperlinkNodeFX;
 import com.taco.suit_lady.ui.jfx.lists.Listable;
+import com.taco.suit_lady.util.SimplePredicate;
+import com.taco.suit_lady.util.UndefinedRuntimeException;
+import com.taco.suit_lady.util.tools.*;
 import com.taco.suit_lady.util.tools.list_tools.A;
-import com.taco.suit_lady.util.values.*;
+import com.taco.suit_lady.util.values.numbers.bounds.Bounds;
 import com.taco.suit_lady.util.values.enums.Axis;
 import com.taco.suit_lady.util.values.enums.LocType;
 import com.taco.suit_lady.util.values.enums.OpResultType;
 import com.taco.suit_lady.util.values.enums.OpType;
-import com.taco.suit_lady.util.values.numbers.NumExpr2D;
+import com.taco.suit_lady.util.values.numbers.Num2D;
 import com.taco.suit_lady.util.values.numbers.NumExpr;
+import com.taco.suit_lady.util.values.numbers.NumExpr2D;
 import com.taco.tacository.quick.ConsoleBB;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -80,8 +79,7 @@ import java.util.function.Supplier;
 public class FX {
     private FX() { } //No Instance
     
-    public static @NotNull Dimensions getDimensions(@NotNull Region region) { return Dimensions.copyFromPair(getDimensionsPair(region)); }
-    public static @NotNull Value2D<Double, Double> getDimensionsPair(@NotNull Region region) { return new Value2D<>(region.getWidth(), region.getHeight()); }
+    public static @NotNull Num2D dimensionsOf(@NotNull Region region) { return new Num2D(region.getWidth(), region.getHeight()); }
     
     //<editor-fold desc="EDT/FX Thread">
     
@@ -1061,7 +1059,7 @@ public class FX {
                 lock, () -> generateImage(
                         null, A.fillMatrix(
                                 t -> pixelGenerator.apply(t, t.applyEach(
-                                        locationX, locationY, OpType.ADD, OpType.ADD, OpResultType.EXACT)),
+                                        locationX, locationY, OpType.ADD, OpResultType.EXACT)),
                                 new Color[width.intValue()][height.intValue()])), true);
     }
     public static @NotNull Image generateImage(@Nullable Lock lock,

@@ -1,23 +1,30 @@
 package com.taco.suit_lady.game.objects.tiles;
 
 import com.github.cliftonlabs.json_simple.JsonObject;
-import com.taco.suit_lady.game.GameMap;
-import com.taco.suit_lady.game.objects.collision.Collidable;
 import com.taco.suit_lady.game.GameComponent;
-import com.taco.suit_lady.game.objects.*;
+import com.taco.suit_lady.game.GameMap;
+import com.taco.suit_lady.game.objects.GameObject;
+import com.taco.suit_lady.game.objects.MapObject;
+import com.taco.suit_lady.game.objects.collision.Collidable;
 import com.taco.suit_lady.game.objects.collision.CollisionArea;
 import com.taco.suit_lady.game.objects.collision.CollisionMap;
 import com.taco.suit_lady.game.ui.GameViewContent;
-import com.taco.suit_lady.util.values.bounds.Dimensions;
-import com.taco.suit_lady.util.synchronization.Lockable;
-import com.taco.suit_lady.util.values.shapes.Box;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
+import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Props;
-import com.taco.tacository.json.*;
+import com.taco.suit_lady.util.values.numbers.Num2D;
+import com.taco.suit_lady.util.values.shapes.Box;
+import com.taco.tacository.json.JElement;
+import com.taco.tacository.json.JLoadable;
+import com.taco.tacository.json.JObject;
+import com.taco.tacository.json.JUtil;
 import javafx.beans.binding.IntegerBinding;
-import javafx.beans.property.*;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.ReadOnlyIntegerProperty;
+import javafx.beans.property.ReadOnlyIntegerWrapper;
+import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,8 +49,8 @@ public class GameTile
         this(owner, 0, 0);
     }
     
-    public GameTile(@NotNull GameMap owner, @NotNull Dimensions dimensions) {
-        this(owner, dimensions.width().intValue(), dimensions.height().intValue());
+    public GameTile(@NotNull GameMap owner, @NotNull Num2D dimensions) {
+        this(owner, dimensions.aInt(), dimensions.bInt());
     }
     
     public GameTile(@NotNull GameMap owner, int xLoc, int yLoc) {

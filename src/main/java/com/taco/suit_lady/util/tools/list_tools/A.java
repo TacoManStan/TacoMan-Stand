@@ -1,8 +1,8 @@
 package com.taco.suit_lady.util.tools.list_tools;
 
-import com.taco.suit_lady.util.values.bounds.Dimensions;
 import com.taco.suit_lady.util.tools.Exc;
 import com.taco.suit_lady.util.tools.TB;
+import com.taco.suit_lady.util.values.numbers.Num2D;
 import org.checkerframework.checker.index.qual.NonNegative;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +12,10 @@ import java.awt.*;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
-import java.util.function.*;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -21,13 +24,13 @@ public class A {
     //<editor-fold desc="--- MATRIX METHODS ---">
     
     @Contract("_, _ -> param2")
-    public static <E> E[][] fillMatrix(@NotNull Function<Dimensions, E> elementFactory, @Nullable E[][] matrix) {
+    public static <E> E[][] fillMatrix(@NotNull Function<Num2D, E> elementFactory, @Nullable E[][] matrix) {
         if (matrix == null)
             return null;
         
         for (int i = 0; i < matrix.length; i++)
             for (int j = 0; j < matrix[i].length; j++)
-                matrix[i][j] = elementFactory.apply(new Dimensions(i, j));
+                matrix[i][j] = elementFactory.apply(new Num2D(i, j));
         
         return matrix;
     }
@@ -35,19 +38,19 @@ public class A {
     //
     
     @Contract("_, null, _ -> null")
-    public static <E, R> R iterateMatrix(@NotNull BiFunction<Dimensions, E, R> function, @Nullable E[][] matrix, boolean returnOnNonNullResult) {
+    public static <E, R> R iterateMatrix(@NotNull BiFunction<Num2D, E, R> function, @Nullable E[][] matrix, boolean returnOnNonNullResult) {
         if (matrix == null)
             return null;
         R r = null;
         for (int i = 0; i < matrix.length; i++)
             for (int j = 0; j < matrix[i].length; j++) {
-                r = function.apply(new Dimensions(i, j), matrix[i][j]);
+                r = function.apply(new Num2D(i, j), matrix[i][j]);
                 if (r != null && returnOnNonNullResult)
                     return r;
             }
         return r;
     }
-    public static <E, R> R iterateMatrix(@NotNull BiFunction<Dimensions, E, R> function, @Nullable E[][] matrix) { return iterateMatrix(function, matrix, true); }
+    public static <E, R> R iterateMatrix(@NotNull BiFunction<Num2D, E, R> function, @Nullable E[][] matrix) { return iterateMatrix(function, matrix, true); }
     
     public static <E, R> R iterateMatrix(@NotNull Function<E, R> function, @Nullable E[][] matrix, boolean returnOnNonNullResult) {
         if (matrix == null)

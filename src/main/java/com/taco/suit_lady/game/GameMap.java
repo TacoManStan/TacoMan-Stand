@@ -5,16 +5,16 @@ import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.game.objects.collision.Collidable;
 import com.taco.suit_lady.game.objects.tiles.GameTile;
 import com.taco.suit_lady.game.ui.GameViewContent;
-import com.taco.suit_lady.util.values.bounds.Dimensions;
-import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
-import com.taco.suit_lady.util.tools.list_tools.A;
+import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Calc;
 import com.taco.suit_lady.util.tools.Props;
+import com.taco.suit_lady.util.tools.list_tools.A;
 import com.taco.suit_lady.util.tools.printing.PrintData;
 import com.taco.suit_lady.util.values.ValueExpr2D;
+import com.taco.suit_lady.util.values.numbers.Num2D;
 import com.taco.tacository.json.*;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.ObjectBinding;
@@ -54,8 +54,8 @@ public class GameMap
     private final IntegerBinding pixelWidthBinding;
     private final IntegerBinding pixelHeightBinding;
     
-    private final ObjectBinding<Dimensions> dimensionsBinding;
-    private final ObjectBinding<Dimensions> pixelDimensionsBinding;
+    private final ObjectBinding<Num2D> dimensionsBinding;
+    private final ObjectBinding<Num2D> pixelDimensionsBinding;
     
     
     private GameMapModel model;
@@ -85,8 +85,8 @@ public class GameMap
         this.pixelWidthBinding = Bind.intBinding(() -> getWidth() * getTileSize(), widthBinding, tileSizeProperty);
         this.pixelHeightBinding = Bind.intBinding(() -> getHeight() * getTileSize(), heightBinding, tileSizeProperty);
         
-        this.dimensionsBinding = Bind.objBinding(() -> new Dimensions(getWidth(), getHeight()), widthBinding, heightBinding);
-        this.pixelDimensionsBinding = Bind.objBinding(() -> new Dimensions(getPixelWidth(), getPixelHeight()), pixelWidthBinding, pixelHeightBinding);
+        this.dimensionsBinding = Bind.objBinding(() -> new Num2D(getWidth(), getHeight()), widthBinding, heightBinding);
+        this.pixelDimensionsBinding = Bind.objBinding(() -> new Num2D(getPixelWidth(), getPixelHeight()), pixelWidthBinding, pixelHeightBinding);
         
         //
         
@@ -141,11 +141,11 @@ public class GameMap
     public final int getPixelHeight() { return pixelHeightBinding.get(); }
     
     
-    public final ObjectBinding<Dimensions> dimensionsBinding() { return dimensionsBinding; }
-    public final Dimensions getDimensions() { return dimensionsBinding.get(); }
+    public final ObjectBinding<Num2D> dimensionsBinding() { return dimensionsBinding; }
+    public final Num2D getDimensions() { return dimensionsBinding.get(); }
     
-    public final ObjectBinding<Dimensions> pixelDimensionsBinding() { return pixelDimensionsBinding; }
-    public final Dimensions getPixelDimensions() { return pixelDimensionsBinding.get(); }
+    public final ObjectBinding<Num2D> pixelDimensionsBinding() { return pixelDimensionsBinding; }
+    public final Num2D getPixelDimensions() { return pixelDimensionsBinding.get(); }
     
     //</editor-fold>
     

@@ -13,18 +13,18 @@ import com.taco.suit_lady.logic.TaskManager;
 import com.taco.suit_lady.logic.Tickable;
 import com.taco.suit_lady.logic.triggers.Galaxy;
 import com.taco.suit_lady.logic.triggers.implementations.UnitMovedEvent;
-import com.taco.suit_lady.util.values.bounds.Dimensions;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
-import com.taco.suit_lady.util.values.shapes.Box;
-import com.taco.suit_lady.util.values.shapes.Circle;
-import com.taco.suit_lady.util.values.shapes.Shape;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Obj;
 import com.taco.suit_lady.util.tools.Props;
 import com.taco.suit_lady.util.tools.list_tools.A;
+import com.taco.suit_lady.util.values.numbers.Num2D;
 import com.taco.suit_lady.util.values.numbers.NumExpr2D;
+import com.taco.suit_lady.util.values.shapes.Box;
+import com.taco.suit_lady.util.values.shapes.Circle;
+import com.taco.suit_lady.util.values.shapes.Shape;
 import com.taco.tacository.json.JElement;
 import com.taco.tacository.json.JLoadable;
 import com.taco.tacository.json.JObject;
@@ -74,7 +74,7 @@ public class GameObject
     private final ObjectBinding<Point2D> locationBinding;
     private final ObjectBinding<Point2D> locationCenteredBinding;
     
-    private final ObjectBinding<Dimensions> dimensionsBinding;
+    private final ObjectBinding<Num2D> dimensionsBinding;
     
     private ObjectBinding<GameTile[][]> occupiedTilesBinding = null;
     private final ListProperty<GameTile> occupiedTilesList;
@@ -106,7 +106,7 @@ public class GameObject
         this.locationBinding = Bind.objBinding(() -> new Point2D(getLocationX(false), getLocationY(false)), xLocationProperty, yLocationProperty);
         this.locationCenteredBinding = Bind.objBinding(() -> new Point2D(getLocationX(true), getLocationY(true)), xLocationProperty, yLocationProperty);
         
-        this.dimensionsBinding = Bind.objBinding(() -> new Dimensions(getWidth(), getHeight()), widthProperty, heightProperty);
+        this.dimensionsBinding = Bind.objBinding(() -> new Num2D(getWidth(), getHeight()), widthProperty, heightProperty);
         
         //
         
@@ -308,8 +308,8 @@ public class GameObject
     public final int setHeight(int newValue) { return Props.setProperty(heightProperty, newValue); }
     
     
-    public final ObjectBinding<Dimensions> dimensionsBinding() { return dimensionsBinding; }
-    public final Dimensions getDimensions() { return dimensionsBinding.get(); }
+    public final ObjectBinding<Num2D> dimensionsBinding() { return dimensionsBinding; }
+    public final Num2D getDimensions() { return dimensionsBinding.get(); }
     
     //</editor-fold>
     

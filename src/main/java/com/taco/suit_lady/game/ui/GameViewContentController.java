@@ -5,12 +5,12 @@ import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.logic.GameTask;
 import com.taco.suit_lady.logic.Tickable;
 import com.taco.suit_lady.ui.ContentController;
-import com.taco.suit_lady.util.values.bounds.Dimensions;
 import com.taco.suit_lady.ui.ui_internal.controllers.CellController;
 import com.taco.suit_lady.ui.ui_internal.drag_and_drop.DragAndDropHandler;
 import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Calc;
+import com.taco.suit_lady.util.values.numbers.Num2D;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -100,8 +100,8 @@ public class GameViewContentController
                 final Point2D viewToMap = getContent().getCamera().viewToMap(mouseOnContent);
                 final int xOffset = (int) Math.ceil(getContent().getTestObject().getWidth() / 2D);
                 final int yOffset = (int) Math.ceil(getContent().getTestObject().getHeight() / 2D);
-                final Dimensions minBounds = new Dimensions(xOffset, yOffset);
-                final Dimensions maxBounds = new Dimensions(getGameMap().getPixelWidth() - xOffset, getGameMap().getPixelHeight() - yOffset);
+                final Num2D minBounds = new Num2D(xOffset, yOffset);
+                final Num2D maxBounds = new Num2D(getGameMap().getPixelWidth() - xOffset, getGameMap().getPixelHeight() - yOffset);
             
                 mouseOnMapProperty.set(viewToMap);
                 mouseOnMapPropertySafe.set(Calc.getPointInBounds(viewToMap, minBounds, maxBounds));

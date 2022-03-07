@@ -124,7 +124,6 @@ public interface NumExpr2D<T extends NumExpr2D<T>>
     
     //</editor-fold>
     
-    
     //
     
     default String getString(boolean asInt) {

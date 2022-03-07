@@ -1,4 +1,4 @@
-package com.taco.suit_lady.util.values.bounds;
+package com.taco.suit_lady.util.values.numbers.bounds;
 
 import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Enu;
