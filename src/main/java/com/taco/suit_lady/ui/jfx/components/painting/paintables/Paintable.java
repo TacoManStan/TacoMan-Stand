@@ -3,9 +3,9 @@ package com.taco.suit_lady.ui.jfx.components.painting.paintables;
 import com.taco.suit_lady._to_sort._new.Self;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.Surface;
 import com.taco.suit_lady.util.tools.Enu;
-import com.taco.suit_lady.util.values.numbers.bounds.Boundable;
-import com.taco.suit_lady.util.values.numbers.bounds.Bounds;
-import com.taco.suit_lady.util.values.numbers.bounds.BoundsBinding;
+import com.taco.suit_lady.util.values.numbers.expressions.BoundsExpr;
+import com.taco.suit_lady.util.values.numbers.Bounds;
+import com.taco.suit_lady.util.values.numbers.bindings.BoundsBinding;
 import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
@@ -21,7 +21,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.function.Predicate;
 
 public interface Paintable<P extends Paintable<P, S>, S extends Surface<P, S>>
-        extends Self<P>, SpringableWrapper, Lockable, Comparable<P>, Boundable {
+        extends Self<P>, SpringableWrapper, Lockable, Comparable<P>, BoundsExpr {
     
     @NotNull PaintableData<P, S> data();
     

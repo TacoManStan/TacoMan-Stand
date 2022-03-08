@@ -1,15 +1,15 @@
-package com.taco.suit_lady.util.values.numbers.bounds;
+package com.taco.suit_lady.util.values.numbers.expressions;
 
 import com.taco.suit_lady.util.tools.Enu;
 import com.taco.suit_lady.util.values.enums.Axis;
 import com.taco.suit_lady.util.values.enums.LocType;
 import com.taco.suit_lady.util.tools.Calc;
 import com.taco.suit_lady.util.values.numbers.Num2D;
-import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
+import com.taco.suit_lady.util.values.numbers.Bounds;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface Boundable {
+public interface BoundsExpr {
     
     @NotNull Number x();
     @NotNull Number y();
@@ -124,12 +124,12 @@ public interface Boundable {
         return bounds(minLoc, maxLoc, minDim, maxDim, null);
     }
     
-    default @NotNull Bounds bounds(@NotNull Boundable min, @NotNull Boundable max, @Nullable LocType locType) {
+    default @NotNull Bounds bounds(@NotNull BoundsExpr min, @NotNull BoundsExpr max, @Nullable LocType locType) {
         return bounds(min.x(), min.y(), min.w(), min.h(),
                       max.x(), max.y(), max.w(), max.h(),
                       locType);
     }
-    default @NotNull Bounds bounds(@NotNull Boundable min, @NotNull Boundable max) { return bounds(min, max, null); }
+    default @NotNull Bounds bounds(@NotNull BoundsExpr min, @NotNull BoundsExpr max) { return bounds(min, max, null); }
     
     //<editor-fold desc="> Floor/Ceil">
     

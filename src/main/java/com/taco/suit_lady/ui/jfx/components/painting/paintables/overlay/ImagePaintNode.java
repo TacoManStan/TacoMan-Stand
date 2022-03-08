@@ -2,7 +2,7 @@ package com.taco.suit_lady.ui.jfx.components.painting.paintables.overlay;
 
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.Stuff;
-import com.taco.suit_lady.util.values.numbers.bounds.Bounds;
+import com.taco.suit_lady.util.values.numbers.Bounds;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import org.jetbrains.annotations.NotNull;

@@ -1,10 +1,12 @@
-package com.taco.suit_lady.util.values.numbers.bounds;
+package com.taco.suit_lady.util.values.numbers.bindings;
 
 import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Enu;
 import com.taco.suit_lady.util.tools.Obj;
 import com.taco.suit_lady.util.tools.Props;
 import com.taco.suit_lady.util.values.enums.LocType;
+import com.taco.suit_lady.util.values.numbers.Bounds;
+import com.taco.suit_lady.util.values.numbers.expressions.BoundsExpr;
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.*;
 import javafx.beans.property.*;
@@ -15,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class BoundsBinding
-        implements Boundable, Binding<Bounds> {
+        implements BoundsExpr, Binding<Bounds> {
     
     private final DoubleProperty xProperty;
     private final DoubleProperty yProperty;

@@ -1,8 +1,8 @@
-package com.taco.suit_lady.util.values.numbers.bounds;
+package com.taco.suit_lady.util.values.numbers;
 
 import com.taco.suit_lady.util.tools.Enu;
 import com.taco.suit_lady.util.values.enums.LocType;
-import com.taco.suit_lady.util.values.numbers.Num2D;
+import com.taco.suit_lady.util.values.numbers.expressions.BoundsExpr;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.Serializable;
 
 public record Bounds(@NotNull Number x, @NotNull Number y, @NotNull Number w, @NotNull Number h, @NotNull LocType locType)
-        implements Boundable, Cloneable, Serializable {
+        implements BoundsExpr, Cloneable, Serializable {
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
@@ -71,8 +71,8 @@ public record Bounds(@NotNull Number x, @NotNull Number y, @NotNull Number w, @N
     public static @NotNull Bounds create(@NotNull Number x, @NotNull Number y, @NotNull Number w, @NotNull Number h) { return create(x, y, w, h, null); }
     
     public static @NotNull Bounds create(@NotNull Num2D locs, @NotNull Num2D dims, @Nullable LocType locType) { return create(locs.a(), locs.b(), dims.a(), dims.b(), locType); }
-    public static @NotNull Bounds create(@NotNull Boundable from) { return create(from, from.locType()); }
-    public static @NotNull Bounds create(@NotNull Boundable from, @Nullable LocType locType) { return create(from.getLocation(locType), from.getDimensions(), locType); }
+    public static @NotNull Bounds create(@NotNull BoundsExpr from) { return create(from, from.locType()); }
+    public static @NotNull Bounds create(@NotNull BoundsExpr from, @Nullable LocType locType) { return create(from.getLocation(locType), from.getDimensions(), locType); }
     
     //</editor-fold>
     

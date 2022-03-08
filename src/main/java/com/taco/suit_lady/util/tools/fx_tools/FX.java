@@ -8,7 +8,7 @@ import com.taco.suit_lady.util.SimplePredicate;
 import com.taco.suit_lady.util.UndefinedRuntimeException;
 import com.taco.suit_lady.util.tools.*;
 import com.taco.suit_lady.util.tools.list_tools.A;
-import com.taco.suit_lady.util.values.numbers.bounds.Bounds;
+import com.taco.suit_lady.util.values.numbers.Bounds;
 import com.taco.suit_lady.util.values.enums.Axis;
 import com.taco.suit_lady.util.values.enums.LocType;
 import com.taco.suit_lady.util.values.enums.OpResultType;

@@ -1,6 +1,6 @@
 package com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas;
 
-import com.taco.suit_lady.util.values.numbers.bounds.Bounds;
+import com.taco.suit_lady.util.values.numbers.Bounds;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.fx_tools.FX;
 import javafx.scene.layout.AnchorPane;

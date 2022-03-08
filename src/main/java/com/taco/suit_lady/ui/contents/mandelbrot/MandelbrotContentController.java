@@ -4,7 +4,7 @@ import com.taco.suit_lady.logic.TaskManager;
 import com.taco.suit_lady.ui.ContentController;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasSurface;
 import com.taco.suit_lady.ui.jfx.components.painting.surfaces.canvas.CanvasPane;
-import com.taco.suit_lady.util.values.numbers.bounds.Bounds;
+import com.taco.suit_lady.util.values.numbers.Bounds;
 import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.tools.Exc;
 import com.taco.suit_lady.util.tools.fx_tools.FX;
