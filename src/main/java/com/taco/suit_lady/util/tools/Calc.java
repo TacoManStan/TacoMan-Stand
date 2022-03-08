@@ -749,34 +749,22 @@ public class Calc {
     
     //
     
-//    public static boolean isAngleCloserTo(@NotNull NumExpr2D<?> basePoint, @NotNull NumExpr2D<?> testPoint, @NotNull NumExpr2D<?> centerPoint, @NotNull Number targetAngle) {
-//        final double baseAngleMin = angle(centerPoint, basePoint, AngleType.MIN_ARC);
-//        final double baseAngleMax = angle(centerPoint, basePoint, AngleType.MAX_ARC);
-//
-//
-//        final double testAngle = angle(centerPoint, testPoint, AngleType.ACTUAL);
-//        return isCloserTo(baseAngle, testAngle, targetAngle);
-//    }
+    public static boolean minMaxAngleTest = false;
     
     public static @Nullable Num2D closestAngleTo(@NotNull NumExpr2D<?> center, @NotNull Number targetAngle, @NotNull NumExpr2D<?> @NotNull ... testPoints) {
         Num2D bestPoint = null;
         double bestAngle = Double.NaN;
         for (NumExpr2D<?> testPoint: testPoints) {
-            final double testAngleMin = angle(center, testPoint, AngleType.ACTUAL) - 360;
-            final double testAngleMax = angle(center, testPoint, AngleType.ACTUAL);
+            final double testAngle = angle(center, testPoint, AngleType.ACTUAL);
             
-            if (bestPoint == null || Double.isNaN(bestAngle)) {
+            if (bestPoint == null || Double.isNaN(bestAngle) || isCloserTo(bestAngle, testAngle, targetAngle)) {
                 bestPoint = testPoint.asNum2D();
-                bestAngle = testAngleMin;
+                bestAngle = testAngle;
             }
             
-            if (isCloserTo(bestAngle, testAngleMin, targetAngle)) {
+            if (minMaxAngleTest && isCloserTo(bestAngle, testAngle - 360, targetAngle)) {
                 bestPoint = testPoint.asNum2D();
-                bestAngle = testAngleMin;
-            }
-            if (isCloserTo(bestAngle, testAngleMax, targetAngle)) {
-                bestPoint = testPoint.asNum2D();
-                bestAngle = testAngleMax;
+                bestAngle = testAngle - 360;
             }
         }
         
