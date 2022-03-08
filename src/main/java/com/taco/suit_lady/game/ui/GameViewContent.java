@@ -137,17 +137,20 @@ public class GameViewContent
         testObject.init();
         testObject.setTileLocationX(20, false);
         testObject.setTileLocationY(20, false);
-        getGameMap().gameObjects().add(testObject);
+        getGameMap().addGameObject(testObject);
+//        getGameMap().gameObjects().add(testObject);
         
         testObject2.init();
         testObject2.setTileLocationX(30, false);
         testObject2.setTileLocationY(20, false);
-        getGameMap().gameObjects().add(testObject2);
+        getGameMap().addGameObject(testObject2);
+//        getGameMap().gameObjects().add(testObject2);
         
         testObjectTree.init();
         testObjectTree.setTileLocationX(40, false);
         testObjectTree.setTileLocationY(10, false);
-        getGameMap().gameObjects().add(testObjectTree);
+        getGameMap().addGameObject(testObjectTree);
+//        getGameMap().gameObjects().add(testObjectTree);
         
         getCamera().bindViewTo(testObject);
     }

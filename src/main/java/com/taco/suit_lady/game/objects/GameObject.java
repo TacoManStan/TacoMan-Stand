@@ -177,7 +177,7 @@ public class GameObject
     }
     
     private void initTaskManager() {
-        taskManager().addShutdownOperation(() -> getGameMap().gameObjects().remove(this));
+        taskManager().addShutdownOperation(() -> getGameMap().removeGameObject(this));
         taskManager().addGfxShutdownOperation(() -> getModel().shutdown());
         taskManager().addGfxShutdownOperation(() -> getGameMap().getModel().refreshMapImage());
         taskManager().addShutdownOperation(() -> A.iterateMatrix(tile -> tile.getOccupyingObjects().remove(this), getOccupiedTiles()));

@@ -88,6 +88,8 @@ public class Effect_LaunchMissile extends Effect_Targeted {
     
             missile.attributes().addDoubleAttribute(Mover.ACCELERATION_ID, 1.025D);
             missile.attributes().getDoubleAttribute(Mover.SPEED_ID).setValue(2D);
+            
+            getGameMap().addGameObject(missile);
     
             logiCore().triggers().register(Galaxy.newUnitArrivedTrigger(missile, event -> {
                 Printer.print("Missile Arrived [" + missile + "]  ||  [" + event.getMovedFrom() + "  -->  " + event.getMovedTo());

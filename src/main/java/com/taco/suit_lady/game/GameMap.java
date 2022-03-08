@@ -30,9 +30,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -156,7 +154,18 @@ public class GameMap
     public final GameTile[][] getTileMatrix() { return tileMatrixProperty.get(); }
     private GameTile[][] setTileMatrix(GameTile[][] newValue) { return Props.setProperty(tileMatrixProperty, newValue); }
     
-    public final ArrayList<GameObject> gameObjects() { return gameObjects; }
+    //TODO: Limit accessors to synchronized add/remove methods & copy accessor
+    public final List<GameObject> gameObjects() { return sync(() -> Collections.unmodifiableList(gameObjects)); }
+    
+    public final boolean addGameObject(@NotNull GameObject obj) { return sync(() -> gameObjects.add(obj)); }
+    public final boolean addGameObjects(@NotNull List<GameObject> objs) { return sync(() -> gameObjects.addAll(objs)); }
+    public final boolean addGameObjects(@NotNull GameObject... objs) { return removeGameObjects(Arrays.asList(objs)); }
+    
+    public final boolean removeGameObject(@NotNull GameObject obj) { return sync(() -> gameObjects.remove(obj)); }
+    public final boolean removeGameObjects(@NotNull List<GameObject> objs) { return sync(() -> gameObjects.removeAll(objs)); }
+    public final boolean removeGameObjects(@NotNull GameObject... objs) { return removeGameObjects(Arrays.asList(objs)); }
+    
+    
     public final GameMapModel getModel() { return model; }
     
     
@@ -382,7 +391,7 @@ public class GameMap
             }
         }
         
-        gameObjects().addAll(JUtil.loadArray(parent, "map-objects", o -> {
+        addGameObjects(JUtil.loadArray(parent, "map-objects", o -> {
             JsonObject jsonObject = (JsonObject) o;
             GameObject gameObject = new GameObject(getGame()).init();
             gameObject.load(jsonObject);
