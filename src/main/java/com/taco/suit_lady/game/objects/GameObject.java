@@ -131,6 +131,10 @@ public class GameObject
     //<editor-fold desc="--- INITIALIZATION ---">
     
     public final GameObject init() {
+        return init(() -> { });
+    }
+    
+    public final GameObject init(@NotNull Runnable postInitOperation) {
         setWidth(getGameMap().getTileSize());
         setHeight(getGameMap().getTileSize());
         
@@ -152,7 +156,7 @@ public class GameObject
         
         initTriggerEvents();
         initTaskManager();
-        initCollisionMap();
+        initCollisionMap(postInitOperation);
         
         //        locationBinding.addListener((observable, oldValue, newValue) -> Print.print("GameObject Location Changed:  [ " + oldValue + "  -->  " + newValue + " ]", false));
         
@@ -186,7 +190,7 @@ public class GameObject
     @SuppressWarnings("FieldMayBeFinal") private Circle circle = null;
     @SuppressWarnings("FieldMayBeFinal") private Box box = null;
     
-    private void initCollisionMap() {
+    private void initCollisionMap(@NotNull Runnable postInitOperation) {
         executeOnce(() -> sync(() -> {
             printer().get(getClass()).setEnabled(true);
             printer().get(getClass()).setPrintPrefix(false);
@@ -198,16 +202,23 @@ public class GameObject
                                 ? (box = new Box(this).init())
                                 : (circle = new Circle(this).init()));
             collisionMap().addCollisionArea(collisionArea);
-        }));
+            return null;
+        }), o -> {
+            refreshCollisionData();
+            postInitOperation.run();
+            startCollisionRefreshTask();
+        });
         
-        refreshCollisionData();
+        //        refreshCollisionData();
+    }
+    
+    private void startCollisionRefreshTask() {
+        execute(() -> sync(this::refreshCollisionData));
     }
     
     private void refreshCollisionData() {
-        execute(() -> sync(() -> {
-            collShape.setDimensions(getDimensions());
-            collShape.setLocation(getLocation(!useCollisionBox));
-        }));
+        collShape.setDimensions(getDimensions());
+        collShape.setLocation(getLocation(!useCollisionBox));
     }
     
     //</editor-fold>

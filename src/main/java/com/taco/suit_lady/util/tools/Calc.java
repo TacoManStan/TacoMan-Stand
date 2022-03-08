@@ -1,6 +1,8 @@
 package com.taco.suit_lady.util.tools;
 
 import com.taco.suit_lady.util.values.enums.Axis;
+import com.taco.suit_lady.util.values.numbers.Num;
+import com.taco.suit_lady.util.values.numbers.Num2D;
 import com.taco.suit_lady.util.values.shapes.Box;
 import com.taco.suit_lady.util.values.enums.LocType;
 import com.taco.suit_lady.util.values.shapes.Shape;
@@ -22,6 +24,10 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Contains methods related to doing various calculations.
@@ -648,7 +654,7 @@ public class Calc {
     
     //
     
-    public static  <N extends Number> @NotNull N bounded(@NotNull N value, @NotNull N min, @NotNull N max) {
+    public static <N extends Number> @NotNull N bounded(@NotNull N value, @NotNull N min, @NotNull N max) {
         if (min.doubleValue() >= max.doubleValue())
             throw Exc.inputMismatch("Min must be less than max.");
         else if (value.doubleValue() < min.doubleValue())
@@ -657,6 +663,47 @@ public class Calc {
             return max;
         return value;
     }
+    
+    //
+    
+    public static @NotNull ArrayList<Num2D> formCircle(@NotNull Num2D center, @NotNull Number radius, @NotNull Number precision) {
+        return IntStream.iterate(0, i -> i < 360, i -> i + precision.intValue())
+                        .mapToObj(i -> center.interpolateTowards(i, radius))
+                        .collect(Collectors.toCollection(ArrayList::new));
+    }
+    public static @NotNull ArrayList<Num2D> formCircle(@NotNull Num2D center, @NotNull Number radius) {
+        return formCircle(center, radius, 9);
+    }
+    
+    //
+    
+    public static @Nullable Num2D nearestMatching(@NotNull Num2D pos, @NotNull Num2D dims, @NotNull LocType inputLocType, @NotNull LocType outputLocType, @NotNull LocType testLocType, @NotNull Number step, @NotNull Number maxRange, @NotNull Predicate<Num2D> filter) {
+        final Num2D centerPos = LocType.translate(pos, dims, inputLocType, LocType.CENTER);
+        //        final ArrayList<Num2D> testPoints = formCircle(centerPos, maxRange);
+        Num2D closestPoint = null;
+        for (int i = 0; i < maxRange.intValue(); i += step.intValue()) {
+            final ArrayList<Num2D> testPoints = formCircle(centerPos, i);
+            for (Num2D testPoint: testPoints) {
+                final Num2D testPoint2 = LocType.translate(testPoint, dims, LocType.CENTER, testLocType);
+                //                if ((closestPoint == null || testPoint.distance(centerPos) < closestPoint.distance(centerPos)) && filter.test(testPoint))
+                if (filter.test(testPoint2))
+                    return LocType.translate(testPoint2, dims, testLocType, outputLocType); ;
+            }
+        }
+        //        for (Num2D testPoint: testPoints) {
+        //            for (int i = 0; i < maxRange.intValue(); i += step.intValue()) {
+        //                final Num2D testPoint2 = testPoint.interpolateTowards(testPoint, i);
+        //                if ((closestPoint == null || testPoint2.distance(centerPos) < closestPoint.distance(centerPos)) && filter.test(testPoint2))
+        //                    closestPoint = testPoint2;
+        //            }
+        //        }
+        return LocType.translate(closestPoint, dims, LocType.CENTER, outputLocType);
+    }
+    
+    public static @Nullable Num2D nearestMatching(@NotNull Num2D pos, @NotNull Num2D dims, @NotNull LocType locType, @NotNull LocType testLocType, @NotNull Number maxRange, @NotNull Predicate<Num2D> filter) {
+        return nearestMatching(pos, dims, locType, locType, testLocType, 1, maxRange, filter);
+    }
+    
     
     //
     

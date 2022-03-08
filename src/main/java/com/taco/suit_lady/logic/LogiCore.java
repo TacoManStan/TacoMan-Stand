@@ -211,7 +211,7 @@ public class LogiCore
                     if (tickable.taskManager().isShutdown())
                         toRemove.add(tickable);
                     else {
-                        tickable.taskManager().executeAndGet();
+                        tickable.taskManager().execute();
                         FX.runFX(() -> tickable.taskManager().executeGfx());
                         //                        if (tickable instanceof GFXObject gfxObject)
                         //                            gfxObjects.add(gfxObject);

@@ -13,7 +13,10 @@ import com.taco.suit_lady.util.tools.Calc;
 import com.taco.suit_lady.util.tools.Props;
 import com.taco.suit_lady.util.tools.list_tools.A;
 import com.taco.suit_lady.util.tools.printing.PrintData;
+import com.taco.suit_lady.util.tools.printing.Printer;
 import com.taco.suit_lady.util.values.ValueExpr2D;
+import com.taco.suit_lady.util.values.enums.LocType;
+import com.taco.suit_lady.util.values.numbers.N;
 import com.taco.suit_lady.util.values.numbers.Num2D;
 import com.taco.tacository.json.*;
 import javafx.beans.binding.IntegerBinding;
@@ -285,6 +288,23 @@ public class GameMap
     
     public final boolean isPathable(@NotNull Collidable<?> collidable, boolean translate) { return isPathable(collidable, translate, 0, 0); }
     
+    //
+    
+    public final @NotNull Num2D nearestPathablePoint(@NotNull GameObject obj, @NotNull Number step, @NotNull Number maxRange) {
+        //TODO: Add desired angle param to indicate which direction is preferred
+        //TODO: Add leniency param to indicate how much farther away than the actual closest point a target in the desired direction is allowed to be
+        //TODO: Also allow a min and max angle to be specified to indicate a direction in which the pathable point has to be
+        //TODO: ALso allow a target point & max distance the returned value is allowed to be from the specified point
+        return sync(() -> {
+            final Num2D pos = N.num2D(obj.getLocation(true));
+            return Calc.nearestMatching(pos, obj.getDimensions(), LocType.CENTER, LocType.CENTER, LocType.CENTER, step, maxRange, p -> {
+                boolean pathable = isPathable(obj, false, p);
+                Printer.print("Checking Pathability of Point: " + p + "  (" + pathable + ")");
+                return pathable;
+            });
+        });
+    }
+    
     //</editor-fold>
     
     //</editor-fold>
@@ -292,6 +312,7 @@ public class GameMap
     //</editor-fold>
     
     //
+    
     
     //    public final @NotNull ArrayList<MapObject> scanMap(@NotNull GameObject target, double radius) {
     //        final ArrayList<MapObject> scannedObjects = new ArrayList<>();

@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class TaskManager<E extends Tickable<E>>
@@ -119,7 +120,7 @@ public class TaskManager<E extends Tickable<E>>
         return addTaskAndGet(new OneTimeTask<>(getOwner()) {
             @Override protected void tick() { Obj.run(action); }
             @Override protected void shutdown() { Obj.run(onTerminateAction); }
-    
+            
             @Override public @Nullable Lock getLock() { return TaskManager.this.getLock(); }
         });
     }
@@ -131,6 +132,18 @@ public class TaskManager<E extends Tickable<E>>
     @Override public final boolean executeOnce(@NotNull Runnable action, @Nullable Runnable onTerminateAction) { return executeOnceAndGet(action, onTerminateAction) != null; }
     @Override public final boolean executeOnce(@NotNull Runnable action) { return executeOnceAndGet(action) != null; }
     
+    @Override public final <T> OneTimeTask<E> executeOnceAndGet(@NotNull Supplier<T> action, @NotNull Consumer<T> resultResponder) {
+        return addTaskAndGet(new OneTimeTask<>(getOwner()) {
+            private T value = null;
+            
+            @Override protected void tick() { value = Obj.get(action); }
+            @Override protected void shutdown() { Obj.consume(resultResponder, value); }
+            
+            @Override public @Nullable Lock getLock() { return TaskManager.this.getLock(); }
+        });
+    }
+    @Override public final <T> boolean executeOnce(@NotNull Supplier<T> action, @NotNull Consumer<T> resultResponder) { return executeOnceAndGet(action, resultResponder) != null; }
+    
     //</editor-fold>
     
     //<editor-fold desc=">> Execute Persistent Methods">
@@ -141,7 +154,7 @@ public class TaskManager<E extends Tickable<E>>
             @Override protected void tick() { Obj.run(action); }
             @Override protected void shutdown() { Obj.run(onTerminateAction); }
             @Override protected boolean isDone() { return Obj.get(terminateCondition, () -> false); }
-    
+            
             @Override public @Nullable Lock getLock() { return lock; } //TODO: Give more control over this
         });
     }
@@ -163,7 +176,7 @@ public class TaskManager<E extends Tickable<E>>
     
     //<editor-fold desc="> Internal">
     
-    void executeAndGet() {
+    void execute() {
         if (!isShutdown()) {
             final ArrayList<GameTask<E>> toRemove = new ArrayList<>();
             syncIf(() -> {

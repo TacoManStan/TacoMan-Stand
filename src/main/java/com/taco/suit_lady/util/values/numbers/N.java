@@ -1,10 +1,13 @@
 package com.taco.suit_lady.util.values.numbers;
 
+import javafx.geometry.Point2D;
 import javafx.scene.layout.Region;
 import org.jetbrains.annotations.NotNull;
 
 public class N {
     private N() { } //No Instance
+    
+    public static @NotNull Num2D num2D(@NotNull Point2D input) { return new Num2D(input.getX(), input.getY()); }
     
     //<editor-fold desc="--- PRIMITIVE CONVERSION METHODS ---">
     

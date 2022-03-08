@@ -1,10 +1,12 @@
 package com.taco.suit_lady.logic;
 
 import com.taco.suit_lady.util.springable.Springable;
+import com.taco.suit_lady.util.tools.Obj;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.locks.Lock;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public interface Tickable<E extends Tickable<E>>
@@ -36,6 +38,9 @@ public interface Tickable<E extends Tickable<E>>
     
     default boolean executeOnce(@NotNull Runnable action, @Nullable Runnable onTerminateAction) { return taskManager().executeOnce(action, onTerminateAction); }
     default boolean executeOnce(@NotNull Runnable action) { return taskManager().executeOnce(action); }
+    
+    default <T> OneTimeTask<E> executeOnceAndGet(@NotNull Supplier<T> action, @NotNull Consumer<T> resultResponder) { return taskManager().executeOnceAndGet(action, resultResponder); }
+    default <T> boolean executeOnce(@NotNull Supplier<T> action, @NotNull Consumer<T> resultResponder) { return taskManager().executeOnce(action, resultResponder); }
     
     //</editor-fold>
     

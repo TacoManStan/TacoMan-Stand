@@ -2,6 +2,7 @@ package com.taco.suit_lady.util.values.shapes;
 
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.Bind;
+import com.taco.suit_lady.util.tools.Calc;
 import com.taco.suit_lady.util.tools.Props;
 import com.taco.suit_lady.util.values.enums.Axis;
 import com.taco.suit_lady.util.values.enums.LocType;
@@ -10,6 +11,7 @@ import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleWrapper;
+import javafx.geometry.Point2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
@@ -69,45 +71,33 @@ public class Circle extends Shape {
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     //TODO: Note that collision checks should still work with this overwritten method removed, but, well... it doesn't. So, fix that, because it'll definitely crop up as an issue later on.
-//    @Override public boolean intersects(@NotNull Shape other, boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
-//        return sync(() -> {
-//            final Circle circleImpl = generateCircle(translate, xMod, yMod);
-//            final Number xImpl = translate ? xMod : 0;
-//            final Number yImpl = translate ? yMod : 0;
+//        @Override public boolean intersects(@NotNull Shape other, boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
 //            return sync(() -> {
-//                final Point2D center = circleImpl.getLocation(LocType.CENTER).applyEach(xImpl, yImpl).asPoint();
-//                if (other instanceof Circle otherCircle)
-//                    return center.distance(other.getLocation(LocType.CENTER).asPoint()) < getRadius() + otherCircle.getRadius();
-//                else if (other instanceof Box otherBox)
-//                    return other.getBorderPoints(true, 0, 0).stream().anyMatch(otherBorderPoint -> center.distance(otherBorderPoint.asPoint()) < getRadius());
-//                else
-//                    return super.intersects(other, translate, xMod, yMod);
+//                final Circle circleImpl = generateCircle(translate, xMod, yMod);
+//                final Number xImpl = translate ? xMod : 0;
+//                final Number yImpl = translate ? yMod : 0;
+//                return sync(() -> {
+//                    final Point2D center = circleImpl.getLocation(LocType.CENTER).applyEach(xImpl, yImpl).asPoint();
+//                    if (other instanceof Circle otherCircle)
+//                        return center.distance(other.getLocation(LocType.CENTER).asPoint()) < getRadius() + otherCircle.getRadius();
+//                    else if (other instanceof Box otherBox)
+//                        return other.getBorderPoints(true, 0, 0).stream().anyMatch(otherBorderPoint -> center.distance(otherBorderPoint.asPoint()) < getRadius());
+//                    else
+//                        return super.intersects(other, translate, xMod, yMod);
+//                });
 //            });
-//        });
-//    }
+//        }
     
     @Override public boolean containsPoint(@NotNull Number x, @NotNull Number y) {
         return sync(() -> getLocation(LocType.CENTER).asPoint().distance(x.doubleValue(), y.doubleValue()) < getRadius());
     }
     
     @Override protected @NotNull List<Num2D> regenerateBorderPoints(boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
-        return sync(() -> {
-            final double xModD = xMod.doubleValue();
-            final double yModD = yMod.doubleValue();
-            
-            final int precision = getPrecision();
-            final double distance = getRadius();
-            
-            final Num2D locationImpl = translate ? getLocation(LocType.CENTER) : new Num2D(xModD + getRadius(), yModD + getRadius());
-            
-            return IntStream.iterate(0, i -> i < 360, i -> i + precision)
-                            .mapToObj(i -> locationImpl.interpolateTowards(i, distance))
-                            .collect(Collectors.toCollection(ArrayList::new));
-            
-            //            for (int i = 0; i < 360; i += precision)
-            //            borderPoints.add(Calc.pointOnCircle(locationImpl, getRadius(), i));
-            //            return borderPoints;
-        });
+        return sync(() -> Calc.formCircle(
+                (translate
+                 ? getLocation(LocType.CENTER)
+                 : new Num2D(xMod.doubleValue() + getRadius(), yMod.doubleValue() + getRadius())),
+                getRadius(), getPrecision()));
     }
     
     @Override protected @NotNull Shape copyTo(boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
@@ -151,4 +141,17 @@ public class Circle extends Shape {
     
     
     //</editor-fold>
+    
+    private Circle generateCircle(boolean translate, @NotNull Number x, @NotNull Number y) {
+        return sync(() -> {
+            if (translate)
+                return this;
+            else {
+                final Circle circleImpl = new Circle(this);
+                circleImpl.setLocation(x, y);
+                circleImpl.setDiameter(getDiameter());
+                return circleImpl;
+            }
+        });
+    }
 }
