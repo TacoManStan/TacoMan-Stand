@@ -1,6 +1,8 @@
 package com.taco.suit_lady.util.values.numbers.expressions;
 
 import com.taco.suit_lady.util.tools.Calc;
+import com.taco.suit_lady.util.tools.Calc.AngleType;
+import com.taco.suit_lady.util.tools.printing.Printer;
 import com.taco.suit_lady.util.values.ValueExpr2D;
 import com.taco.suit_lady.util.values.enums.CardinalDirection;
 import com.taco.suit_lady.util.values.enums.OpResultType;
@@ -27,7 +29,7 @@ public interface NumExpr2D<T extends NumExpr2D<T>>
     default float bF() { return N.f(b()); }
     default double bD() { return N.d(b()); }
     
-    default Num2D asNum2D() { return new Num2D(a(), b()); }
+    default Num2D asNum2D() { return this instanceof Num2D this2D ? this2D : new Num2D(a(), b()); }
     default Point2D asPoint() { return new Point2D(aD(), bD()); }
     
     //</editor-fold>
@@ -89,9 +91,9 @@ public interface NumExpr2D<T extends NumExpr2D<T>>
     default double distance(@NotNull Number x, @NotNull Number y) { return asPoint().distance(Calc.point2D(x, y)); }
     default double distance(@NotNull NumExpr2D<?> other) { return asPoint().distance(other.asPoint()); }
     
-    default double angle(@NotNull Point2D other) { return asPoint().angle(other); }
-    default double angle(@NotNull Number x, @NotNull Number y) { return angle(Calc.point2D(x, y)); }
-    default double angle(@NotNull NumExpr2D<?> other) { return asPoint().angle(other.asPoint()); }
+    default double angle(@NotNull Point2D other, @NotNull AngleType angleType) { return Calc.angle(this, other, angleType); }
+    default double angle(@NotNull Number x, @NotNull Number y, @NotNull AngleType angleType) { return Calc.angle(this, x, y, angleType); }
+    default double angle(@NotNull NumExpr2D<?> other, @NotNull AngleType angleType) { return Calc.angle(this, other, angleType); }
     
     //<editor-fold desc=">> Interpolation Methods">
     
@@ -101,7 +103,7 @@ public interface NumExpr2D<T extends NumExpr2D<T>>
     
     //
     
-    default @NotNull T interpolateTowards(@NotNull Point2D other, @NotNull Number distance) { return interpolateTowards(Calc.degreesToRads(angle(other)), distance); }
+    default @NotNull T interpolateTowards(@NotNull Point2D other, @NotNull Number distance) { return interpolateTowards(Calc.degreesToRads(angle(other, AngleType.ACTUAL)), distance); }
     default @NotNull T interpolateTowards(@NotNull Number oX, @NotNull Number oY, @NotNull Number distance) { return interpolateTowards(Calc.point2D(oX, oY), distance); }
     default @NotNull T interpolateTowards(@NotNull NumExpr2D<?> other, @NotNull Number distance) { return interpolateTowards(other.asPoint(), distance); }
     

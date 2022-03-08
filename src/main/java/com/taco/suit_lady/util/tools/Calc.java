@@ -1,6 +1,8 @@
 package com.taco.suit_lady.util.tools;
 
+import com.taco.suit_lady.util.tools.printing.Printer;
 import com.taco.suit_lady.util.values.enums.Axis;
+import com.taco.suit_lady.util.values.numbers.N;
 import com.taco.suit_lady.util.values.numbers.Num;
 import com.taco.suit_lady.util.values.numbers.Num2D;
 import com.taco.suit_lady.util.values.shapes.Box;
@@ -24,7 +26,6 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -677,32 +678,211 @@ public class Calc {
     
     //
     
-    public static @Nullable Num2D nearestMatching(@NotNull Num2D pos, @NotNull Num2D dims, @NotNull LocType inputLocType, @NotNull LocType outputLocType, @NotNull LocType testLocType, @NotNull Number step, @NotNull Number maxRange, @NotNull Predicate<Num2D> filter) {
+    public static @Nullable Num2D nearestMatching(@NotNull Num2D pos, @NotNull Num2D dims,
+                                                  @NotNull LocType inputLocType, @NotNull LocType outputLocType, @NotNull LocType testLocType,
+                                                  @NotNull Number step, @NotNull Number maxRange,
+                                                  @NotNull Number targetAngle,
+                                                  @NotNull Predicate<Num2D> filter) {
         final Num2D centerPos = LocType.translate(pos, dims, inputLocType, LocType.CENTER);
+        final double targetAngleD = normalizeAngle(targetAngle);
         //        final ArrayList<Num2D> testPoints = formCircle(centerPos, maxRange);
         Num2D closestPoint = null;
         for (int i = 0; i < maxRange.intValue(); i += step.intValue()) {
             final ArrayList<Num2D> testPoints = formCircle(centerPos, i);
-            for (Num2D testPoint: testPoints) {
-                final Num2D testPoint2 = LocType.translate(testPoint, dims, LocType.CENTER, testLocType);
-                //                if ((closestPoint == null || testPoint.distance(centerPos) < closestPoint.distance(centerPos)) && filter.test(testPoint))
-                if (filter.test(testPoint2))
-                    return LocType.translate(testPoint2, dims, testLocType, outputLocType); ;
+            Num2D bestPoint = null;
+            for (Num2D testPointCenter: testPoints) {
+                final Num2D testPointAdj = LocType.translate(testPointCenter, dims, LocType.CENTER, testLocType);
+                if (filter.test(testPointAdj)) {
+                    if (bestPoint == null)
+                        bestPoint = testPointCenter;
+                    else {
+                        bestPoint = closestAngleTo(centerPos, targetAngle, bestPoint, testPointCenter);
+                    }
+//                    if (bestPoint == null || isAngleCloserTo(bestPoint, testPointCenter, centerPos, targetAngle))
+//                        bestPoint = testPointCenter;
+                    //                    if (bestPoint == null || Math.abs(centerPos.angle(testPointCenter) - targetAngleD) < Math.abs(centerPos.angle(bestPoint) - targetAngleD))
+                    //                    if (bestPoint == null || angleDifference(centerPos.angle(testPointCenter), targetAngle) < angleDifference(centerPos.angle(bestPoint), targetAngle))
+                    //                    if (bestPoint == null || angleDifference(centerPos.angle(testPointCenter), targetAngleD) < angleDifference(centerPos.angle(bestPoint), targetAngleD))
+                    //                        bestPoint = testPointCenter;
+                    //                    final Num2D testPoint3 = LocType.translate(testPointAdj, dims, testLocType, outputLocType);
+                }
             }
+            if (bestPoint != null)
+                return LocType.translate(bestPoint, dims, LocType.CENTER, outputLocType);;
         }
-        //        for (Num2D testPoint: testPoints) {
-        //            for (int i = 0; i < maxRange.intValue(); i += step.intValue()) {
-        //                final Num2D testPoint2 = testPoint.interpolateTowards(testPoint, i);
-        //                if ((closestPoint == null || testPoint2.distance(centerPos) < closestPoint.distance(centerPos)) && filter.test(testPoint2))
-        //                    closestPoint = testPoint2;
-        //            }
-        //        }
-        return LocType.translate(closestPoint, dims, LocType.CENTER, outputLocType);
+        throw Exc.ex("No valid pathing found.");
     }
     
-    public static @Nullable Num2D nearestMatching(@NotNull Num2D pos, @NotNull Num2D dims, @NotNull LocType locType, @NotNull LocType testLocType, @NotNull Number maxRange, @NotNull Predicate<Num2D> filter) {
-        return nearestMatching(pos, dims, locType, locType, testLocType, 1, maxRange, filter);
+    public static @Nullable Num2D nearestMatching(@NotNull Num2D pos, @NotNull Num2D dims,
+                                                  @NotNull LocType locType, @NotNull LocType testLocType,
+                                                  @NotNull Number maxRange, @NotNull Number targetAngle,
+                                                  @NotNull Predicate<Num2D> filter) {
+        return nearestMatching(pos, dims, locType, locType, testLocType, 1, maxRange, targetAngle, filter);
     }
+    
+    //<editor-fold desc="> Angle Calculations">
+    
+    public static double angle(@NotNull Number p1X, @NotNull Number p1Y, @NotNull Number p2X, @NotNull Number p2Y, @NotNull AngleType angleType) {
+        final double angle1 = normalizeAngle(Calc.radsToDegrees(Math.atan2(p1Y.doubleValue() - p2Y.doubleValue(), p1X.doubleValue() - p2X.doubleValue()), true) - 90);
+        if (angleType.equals(AngleType.ACTUAL))
+            return angle1;
+        final double angle2 = normalizeAngle(-angle1);
+        return switch (angleType) {
+            case ACTUAL -> angle1;
+            case INVERSE -> angle2;
+            case MIN_ARC -> Math.min(angle1, angle2);
+            case MAX_ARC -> Math.max(angle1, angle2);
+            
+            default -> throw Exc.typeMismatch("Unknown AngleType: " + angleType);
+        };
+    }
+    
+    public static double angle(@NotNull NumExpr2D<?> p1, @NotNull NumExpr2D<?> p2, @NotNull AngleType angleType) { return angle(p1.a(), p1.b(), p2.a(), p2.b(), angleType); }
+    public static double angle(@NotNull Point2D p1, @NotNull Point2D p2, @NotNull AngleType angleType) { return angle(N.num2D(p1), N.num2D(p2), angleType); }
+    public static double angle(@NotNull NumExpr2D<?> p1, @NotNull Point2D p2, @NotNull AngleType angleType) { return angle(p1, N.num2D(p2), angleType); }
+    public static double angle(@NotNull Point2D p1, @NotNull NumExpr2D<?> p2, @NotNull AngleType angleType) { return angle(N.num2D(p1), p2, angleType); }
+    
+    public static double angle(@NotNull NumExpr2D<?> p1, @NotNull Number p2X, @NotNull Number p2Y, @NotNull AngleType angleType) { return angle(p1, new Num2D(p2X, p2Y), angleType); }
+    public static double angle(@NotNull Point2D p1, @NotNull Number p2X, @NotNull Number p2Y, @NotNull AngleType angleType) { return angle(p1, new Num2D(p2X, p2Y), angleType); }
+    public static double angle(@NotNull Number p1X, @NotNull Number p1Y, @NotNull NumExpr2D<?> p2, @NotNull AngleType angleType) { return angle(new Num2D(p1X, p1Y), p2, angleType); }
+    public static double angle(@NotNull Number p1X, @NotNull Number p1Y, @NotNull Point2D p2, @NotNull AngleType angleType) { return angle(new Num2D(p1X, p1Y), p2, angleType); }
+    
+    //
+    
+//    public static boolean isAngleCloserTo(@NotNull NumExpr2D<?> basePoint, @NotNull NumExpr2D<?> testPoint, @NotNull NumExpr2D<?> centerPoint, @NotNull Number targetAngle) {
+//        final double baseAngleMin = angle(centerPoint, basePoint, AngleType.MIN_ARC);
+//        final double baseAngleMax = angle(centerPoint, basePoint, AngleType.MAX_ARC);
+//
+//
+//        final double testAngle = angle(centerPoint, testPoint, AngleType.ACTUAL);
+//        return isCloserTo(baseAngle, testAngle, targetAngle);
+//    }
+    
+    public static @Nullable Num2D closestAngleTo(@NotNull NumExpr2D<?> center, @NotNull Number targetAngle, @NotNull NumExpr2D<?> @NotNull ... testPoints) {
+        Num2D bestPoint = null;
+        double bestAngle = Double.NaN;
+        for (NumExpr2D<?> testPoint: testPoints) {
+            final double testAngleMin = angle(center, testPoint, AngleType.ACTUAL) - 360;
+            final double testAngleMax = angle(center, testPoint, AngleType.ACTUAL);
+            
+            if (bestPoint == null || Double.isNaN(bestAngle)) {
+                bestPoint = testPoint.asNum2D();
+                bestAngle = testAngleMin;
+            }
+            
+            if (isCloserTo(bestAngle, testAngleMin, targetAngle)) {
+                bestPoint = testPoint.asNum2D();
+                bestAngle = testAngleMin;
+            }
+            if (isCloserTo(bestAngle, testAngleMax, targetAngle)) {
+                bestPoint = testPoint.asNum2D();
+                bestAngle = testAngleMax;
+            }
+        }
+        
+        return bestPoint;
+    }
+    
+    public static boolean isCloserTo(@NotNull Number baseNum, @NotNull Number testNum, @NotNull Number target) {
+        final double distBase = Math.abs(baseNum.doubleValue() - target.doubleValue());
+        final double distTest = Math.abs(testNum.doubleValue() - target.doubleValue());
+        return distTest < distBase;
+    }
+    
+    public static double closestTo(@NotNull Number num1, @NotNull Number num2, @NotNull Number target) {
+        final double dist1 = Math.abs(num1.doubleValue() - target.doubleValue());
+        final double dist2 = Math.abs(num2.doubleValue() - target.doubleValue());
+        return dist1 < dist2 ? num1.doubleValue() : num2.doubleValue();
+    }
+    
+    //
+    
+    public enum AngleType {
+        ACTUAL,
+        INVERSE,
+        MIN_ARC,
+        MAX_ARC;
+        
+        AngleType() { }
+    }
+    
+    //</editor-fold>
+    
+    public static void main(String[] args) {
+        final Num2D[] p1s = new Num2D[]{
+                new Num2D(0, 0)
+        };
+        final Num2D[] p2s = new Num2D[]{
+                new Num2D(0, 0),
+                new Num2D(10, 0),
+                new Num2D(0, 10),
+                new Num2D(10, 10),
+                new Num2D(-10, 0),
+                new Num2D(300, 0)
+        };
+        
+        for (int i = 0; i < p1s.length; i++) {
+            for (int j = 0; j < p2s.length; j++) {
+                final Num2D p1 = p1s[i];
+                final Num2D p2 = p2s[j];
+                
+                //                final String prefix = "[" + i + "::" + p1 + ", " + j + "::" + p2 + "] ";
+                final String prefix = "[ " + p1 + " , " + p2 + " ]  -  ";
+                
+                //                System.out.println(prefix + "Angle [" + p1 + " ," + p2 + "]");
+                
+                System.out.println(prefix + "Point2D Native: " + p1.asPoint().angle(p2.asPoint()));
+                System.out.println(prefix + "Point2D Native Rev: " + p2.asPoint().angle(p1.asPoint()));
+                
+                System.out.println();
+                
+                System.out.println(prefix + "Num2D " + AngleType.ACTUAL + ": " + p1.angle(p2, AngleType.ACTUAL));
+                System.out.println(prefix + "Num2D Rev " + AngleType.ACTUAL + ": " + p2.angle(p1, AngleType.ACTUAL));
+                System.out.println("----------");
+                System.out.println(prefix + "Num2D " + AngleType.MIN_ARC + ": " + p1.angle(p2, AngleType.MIN_ARC));
+                System.out.println(prefix + "Num2D Rev " + AngleType.MIN_ARC + ": " + p2.angle(p1, AngleType.MIN_ARC));
+                System.out.println("----------");
+                System.out.println(prefix + "Num2D " + AngleType.MAX_ARC + ": " + p1.angle(p2, AngleType.MAX_ARC));
+                System.out.println(prefix + "Num2D Rev " + AngleType.MAX_ARC + ": " + p2.angle(p1, AngleType.MAX_ARC));
+                
+                
+                System.out.println();
+                
+                System.out.println(prefix + "Calc " + AngleType.ACTUAL + ": " + angle(p1, p2, AngleType.ACTUAL));
+                System.out.println(prefix + "Calc Rev " + AngleType.ACTUAL + ": " + angle(p2, p1, AngleType.ACTUAL));
+                System.out.println("----------");
+                System.out.println(prefix + "Calc " + AngleType.MIN_ARC + ": " + angle(p1, p2, AngleType.MIN_ARC));
+                System.out.println(prefix + "Calc Rev " + AngleType.MIN_ARC + ": " + angle(p2, p1, AngleType.MIN_ARC));
+                System.out.println("----------");
+                System.out.println(prefix + "Calc " + AngleType.MAX_ARC + ": " + angle(p1, p2, AngleType.MAX_ARC));
+                System.out.println(prefix + "Calc Rev " + AngleType.MAX_ARC + ": " + angle(p2, p1, AngleType.MAX_ARC));
+                
+                System.out.println();
+                System.out.println("--------------------------------------------------");
+                System.out.println();
+            }
+        }
+    }
+    
+    public static double normalizeAngle(@NotNull Number angle) {
+        //        Printer.print("Normalizing Angle: " + angle);
+        final double ang = angle.doubleValue();
+        double retAng = ang;
+        if (isNormalAngle(retAng))
+            return ang;
+        else if (ang >= 360) {
+            while (!isNormalAngle(retAng))
+                retAng -= 360;
+        } else if (ang < 0) {
+            while (!isNormalAngle(retAng))
+                retAng += 360;
+        } else {
+            throw Exc.ex("Wut.");
+        }
+        return retAng;
+    }
+    
+    public static boolean isNormalAngle(@NotNull Number angle) { return angle.doubleValue() >= 0 && angle.doubleValue() < 360; }
     
     
     //
@@ -720,7 +900,12 @@ public class Calc {
     //<editor-fold desc="--- TRIGONOMETRY ---">
     
     public static double degreesToRads(@NotNull Number angle) { return angle.doubleValue() * (Math.PI / 180); }
-    public static double radsToDegrees(@NotNull Number angle) { return angle.doubleValue() * (180 / Math.PI); }
+    
+    public static double radsToDegrees(@NotNull Number angle, boolean normalize) {
+        final double ang = angle.doubleValue() * (180 / Math.PI);
+        return normalize ? normalizeAngle(ang) : ang;
+    }
+    public static double radsToDegrees(@NotNull Number angle) { return radsToDegrees(angle, false); }
     
     //<editor-fold desc="> Circle Methods">
     

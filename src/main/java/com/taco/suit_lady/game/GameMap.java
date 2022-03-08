@@ -290,16 +290,16 @@ public class GameMap
     
     //
     
-    public final @NotNull Num2D nearestPathablePoint(@NotNull GameObject obj, @NotNull Number step, @NotNull Number maxRange) {
+    public final @NotNull Num2D nearestPathablePoint(@NotNull GameObject obj, @NotNull Number step, @NotNull Number maxRange, @NotNull Number targetAngle) {
         //TODO: Add desired angle param to indicate which direction is preferred
         //TODO: Add leniency param to indicate how much farther away than the actual closest point a target in the desired direction is allowed to be
         //TODO: Also allow a min and max angle to be specified to indicate a direction in which the pathable point has to be
         //TODO: ALso allow a target point & max distance the returned value is allowed to be from the specified point
         return sync(() -> {
             final Num2D pos = N.num2D(obj.getLocation(true));
-            return Calc.nearestMatching(pos, obj.getDimensions(), LocType.CENTER, LocType.CENTER, LocType.CENTER, step, maxRange, p -> {
+            return Calc.nearestMatching(pos, obj.getDimensions(), LocType.CENTER, LocType.CENTER, LocType.CENTER, step, maxRange, targetAngle, p -> {
                 boolean pathable = isPathable(obj, false, p);
-//                Printer.print("Checking Pathability of Point: " + p + "  (" + pathable + ")");
+                //                Printer.print("Checking Pathability of Point: " + p + "  (" + pathable + ")");
                 return pathable;
             });
         });

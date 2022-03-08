@@ -4,9 +4,12 @@ import com.taco.suit_lady.game.galaxy.effects.specific.Effect_MissileImpact;
 import com.taco.suit_lady.game.objects.Mover;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.logic.triggers.Galaxy;
+import com.taco.suit_lady.util.tools.Calc;
+import com.taco.suit_lady.util.tools.printing.PrintData;
 import com.taco.suit_lady.util.tools.printing.Printer;
 import com.taco.suit_lady.util.tools.list_tools.L;
 import com.taco.suit_lady.util.values.Value2D;
+import com.taco.suit_lady.util.values.numbers.N;
 import com.taco.suit_lady.util.values.numbers.Num2D;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -59,18 +62,27 @@ public class Effect_LaunchMissile extends Effect_Targeted {
     private @NotNull GameObject launchMissileTest(@NotNull Point2D target) {
         final GameObject missile = constructMissile();
         missile.init(() -> {
+            final PrintData p = printer().get("heheXD");
+            
             missile.setLocation(getSource().getLocation(false), false);
     
             missile.collisionMap().collisionAreasCopy().forEach(gameObjectCollisionArea -> {
                 gameObjectCollisionArea.includedShapes().forEach(shape -> printer().get("heheXD").print("Missile Collision Shape: " + shape));
             });
     
-            printer().get("heheXD").print("Pathable @ Owner: " + getGameMap().isPathable(missile, false, getSource().getLocation(true)));
+            p.print("Pathable @ Owner: " + getGameMap().isPathable(missile, false, getSource().getLocation(true)));
     
     
-            printer().get("heheXD").print("Obj Location: " + missile.getLocation(true));
-            printer().get("heheXD").print("Obj Dimensions: " + missile.getDimensions());
-            final Num2D nearestPathable = getGameMap().nearestPathablePoint(missile, 1, 200);
+            p.print("Obj Location: " + missile.getLocation(true));
+            p.print("Obj Dimensions: " + missile.getDimensions());
+            final Num2D sourceLocation = N.num2D(getSource().getLocation(true));
+            final Num2D targetLocation = N.num2D(target);
+            p.print("Source Location: " + sourceLocation);
+            p.print("Target Location: " + targetLocation);
+//            final double targetAngle = getSource().getLocation(true).angle(target);
+            final double targetAngle = sourceLocation.angle(targetLocation, Calc.AngleType.ACTUAL);
+            printer().get("heheXD").print("Target Angle: " + targetAngle);
+            final Num2D nearestPathable = getGameMap().nearestPathablePoint(missile, 1, 200, targetAngle);
             printer().get("heheXD").print("Missile Location: " + nearestPathable);
             missile.setLocation(nearestPathable.asPoint(), true);
     
