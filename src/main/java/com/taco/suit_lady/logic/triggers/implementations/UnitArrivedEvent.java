@@ -12,18 +12,24 @@ public class UnitArrivedEvent extends TriggerEvent<UnitArrivedEvent> {
     private final Point2D movedFrom;
     private final Point2D movedTo;
     
-    public UnitArrivedEvent(@NotNull GameObject source, @NotNull Point2D movedFrom, @NotNull Point2D movedTo) {
+    private final String type;
+    
+    public UnitArrivedEvent(@NotNull GameObject source, @NotNull Point2D movedFrom, @NotNull Point2D movedTo, @NotNull String type) {
         super(source);
         this.source = source;
         
         this.movedFrom = movedFrom;
         this.movedTo = movedTo;
+        
+        this.type = type;
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
     
     public final Point2D getMovedFrom() { return movedFrom; }
     public final Point2D getMovedTo() { return movedTo; }
+    
+    public final String getType() { return type; }
     
     //</editor-fold>
     

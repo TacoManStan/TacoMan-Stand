@@ -239,13 +239,14 @@ public class Mover
                     if (getGameMap().isPathable(getOwner(), true, xMove, yMove)) {
                         getOwner().translateLocation(xMove, yMove);
                     } else {
+                        logiCore().triggers().submit(new UnitArrivedEvent(getOwner(), loc, loc, "collision"));
                         setPaused(true);
                     }
                 }
                 
                 final Point2D newLoc = new Point2D(getOwner().getLocationX(true), getOwner().getLocationY(true));
                 if (getOwner().isAtPoint(getTarget(), true)) {
-                    logiCore().triggers().submit(new UnitArrivedEvent(getOwner(), loc, newLoc));
+                    logiCore().triggers().submit(new UnitArrivedEvent(getOwner(), loc, newLoc, "done"));
                     setPaused(true);
                 }
             }

@@ -299,7 +299,7 @@ public class GameMap
             final Num2D pos = N.num2D(obj.getLocation(true));
             return Calc.nearestMatching(pos, obj.getDimensions(), LocType.CENTER, LocType.CENTER, LocType.CENTER, step, maxRange, p -> {
                 boolean pathable = isPathable(obj, false, p);
-                Printer.print("Checking Pathability of Point: " + p + "  (" + pathable + ")");
+//                Printer.print("Checking Pathability of Point: " + p + "  (" + pathable + ")");
                 return pathable;
             });
         });
