@@ -169,26 +169,7 @@ public class GameMap
     @SafeVarargs public final @NotNull ArrayList<GameObject> scan(@NotNull FilterType filterType, @NotNull Predicate<GameObject>... filters) {
         if (A.isEmpty(filters))
             return new ArrayList<>();
-        return syncForbidFX(() -> gameObjects().stream().filter(gameObject -> {
-            int passedCount = 0;
-            for (Predicate<GameObject> filter: filters) {
-                boolean passed = filter.test(gameObject);
-                if (passed)
-                    passedCount++;
-                
-                if (passed && filterType.equals(FilterType.ANY))
-                    return true;
-                if (passed && filterType.equals(FilterType.NONE))
-                    return false;
-                if (!passed && filterType.equals(FilterType.ALL))
-                    return false;
-                if (passedCount > 1 && (filterType.equals(FilterType.ONE)))
-                    return false;
-            }
-            return passedCount != 0 || (!filterType.equals(FilterType.ALL) &&
-                                        !filterType.equals(FilterType.ONE) &&
-                                        !filterType.equals(FilterType.ANY));
-        }).collect(Collectors.toCollection(ArrayList::new)));
+        return syncForbidFX(() -> filterType.filter(gameObjects(), filters));
     }
     @SafeVarargs public final @NotNull ArrayList<GameObject> scan(@NotNull Predicate<GameObject>... filters) { return scan(Enu.get(FilterType.class), filters); }
     
