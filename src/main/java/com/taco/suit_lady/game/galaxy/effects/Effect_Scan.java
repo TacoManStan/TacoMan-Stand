@@ -66,7 +66,7 @@ public class Effect_Scan extends Effect_Targeted {
         });
         scannedObjs.forEach(gameObject -> getScanEffect().trigger(L.map(new Value2D<>("target", gameObject))));
         
-        getGameMap().scanMap(missile.getLocation(true), radius)
+        getGameMap().scan(missile.getLocation(true), radius)
                     .forEach(gameObject -> getScanEffect().trigger(
                             L.map(new Value2D<>("target", gameObject))));
         

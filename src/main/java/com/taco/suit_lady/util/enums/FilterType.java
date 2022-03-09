@@ -27,6 +27,10 @@ public enum FilterType
         return input.stream().filter(getFilter(filters)).collect(Collectors.toCollection(ArrayList::new));
     }
     
+    public final <T> @NotNull ArrayList<T> filter(@NotNull List<T> input, @NotNull List<Predicate<T>> filters) {
+        return filter(input, filters.toArray(new Predicate[0]));
+    }
+    
     @SafeVarargs public final <T> boolean matches(@NotNull T input, @NotNull Predicate<T>... filters) {
         if (A.isEmpty(filters))
             return false;

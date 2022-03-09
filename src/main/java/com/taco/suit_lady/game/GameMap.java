@@ -166,13 +166,6 @@ public class GameMap
     public final boolean removeGameObjects(@NotNull List<GameObject> objs) { return sync(() -> gameObjects.removeAll(objs)); }
     public final boolean removeGameObjects(@NotNull GameObject... objs) { return removeGameObjects(Arrays.asList(objs)); }
     
-    @SafeVarargs public final @NotNull ArrayList<GameObject> scan(@NotNull FilterType filterType, @NotNull Predicate<GameObject>... filters) {
-        if (A.isEmpty(filters))
-            return new ArrayList<>();
-        return syncForbidFX(() -> filterType.filter(gameObjects(), filters));
-    }
-    @SafeVarargs public final @NotNull ArrayList<GameObject> scan(@NotNull Predicate<GameObject>... filters) { return scan(Enu.get(FilterType.class), filters); }
-    
     public final GameMapModel getModel() { return model; }
     
     
@@ -253,16 +246,24 @@ public class GameMap
     @Contract("_ -> new")
     public final @NotNull ArrayList<GameObject> getObjectsAtPoint(@NotNull Point2D point) { return new ArrayList<>(getTileAtPoint(point).getOccupyingObjects()); }
     
+    //
     
-    public final @NotNull ArrayList<GameObject> scanMap(@NotNull Point2D targetPoint, double radius, @Nullable Predicate<GameObject> filter) {
-        filter = filter != null ? filter : gameObject -> true;
-        return gameObjects().stream()
-                            .filter(Objects::nonNull)
-                            .filter(gameObject -> gameObject.getLocation(true).distance(targetPoint) <= radius)
-                            .filter(filter)
-                            .collect(Collectors.toCollection(ArrayList::new));
+    @SafeVarargs public final @NotNull ArrayList<GameObject> scan(@NotNull FilterType filterType, @NotNull Predicate<GameObject>... filters) {
+        if (A.isEmpty(filters))
+            return new ArrayList<>();
+        return syncForbidFX(() -> filterType.filter(gameObjects(), filters));
     }
-    public final @NotNull ArrayList<GameObject> scanMap(@NotNull Point2D targetPoint, double radius) { return scanMap(targetPoint, radius, null); }
+    @SafeVarargs public final @NotNull ArrayList<GameObject> scan(@NotNull Predicate<GameObject>... filters) { return scan(Enu.get(FilterType.class), filters); }
+    
+    @SafeVarargs public final @NotNull ArrayList<GameObject> scan(@NotNull Point2D target, double radius, @NotNull FilterType filterType, @NotNull Predicate<GameObject>... filters) {
+        final ArrayList<Predicate<GameObject>> filterList = new ArrayList<>(Arrays.asList(filters));
+        filterList.add(Objects::nonNull);
+        filterList.add(gameObject -> gameObject.getLocation(true).distance(target) <= radius);
+        return scan(filterType, filterList.toArray(new Predicate[0]));
+    }
+    @SafeVarargs public final @NotNull ArrayList<GameObject> scan(@NotNull Point2D target, double radius, @NotNull Predicate<GameObject>... filters) {
+        return scan(target, radius, Enu.get(FilterType.class), filters);
+    }
     
     //</editor-fold>
     
