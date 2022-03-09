@@ -103,39 +103,32 @@ public class CollisionMap<T extends Collidable<T>>
     
     //<editor-fold desc="> Collision Checks">
     
-    //    public final boolean collidesWith(@NotNull CollisionMap<?> other, @NotNull Number xMod, @NotNull Number yMod) {
-    //        return !isSibling(other) && FX.forbidFX(
-    //                getLock(), () -> other.collisionAreasCopy().stream().anyMatch(
-    //                        otherArea -> this.collidesWith(otherArea, xMod, yMod)));
-    //    }
-    //
-    //    public final boolean collidesWith(@NotNull CollisionMap<?> other, @NotNull Point2D mod) { return collidesWith(other, mod.getX(), mod.getY()); }
-    //    public final boolean collidesWith(@NotNull CollisionMap<?> other, @NotNull NumberValuePairable<?> mod) { return collidesWith(other, mod.asPoint()); }
-    //
-    //    public final boolean collidesWith(@NotNull CollisionMap<?> other, @NotNull Number mod) { return collidesWith(other, mod, mod); }
-    //    public final boolean collidesWith(@NotNull CollisionMap<?> other) { return collidesWith(other, 0, 0); }
-    //
-    //    //
-    //
-    //    public final boolean collidesWith(@NotNull CollisionArea<?> other, @NotNull Number xMod, @NotNull Number yMod) {
-    //        return !isSibling(other) && FX.forbidFX(
-    //                getLock(), () -> collisionAreas.stream().anyMatch(
-    //                        area -> area.collidesWith(other, xMod, yMod)));
-    //    }
-    //
-    //    public final boolean collidesWith(@NotNull CollisionArea<?> other, @NotNull Point2D mod) { return collidesWith(other, mod.getX(), mod.getY()); }
-    //    public final boolean collidesWith(@NotNull CollisionArea<?> other, @NotNull NumberValuePairable<?> mod) { return collidesWith(other, mod.asPoint()); }
-    //
-    //    public final boolean collidesWith(@NotNull CollisionArea<?> other, @NotNull Number mod) { return collidesWith(other, mod, mod); }
-    //    public final boolean collidesWith(@NotNull CollisionArea<?> other) { return collidesWith(other, 0, 0); }
-    //
-    //    //
-    
-    public final boolean collidesWith(@NotNull Collidable<?> other, boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
+    @Override public final boolean collidesWith(@NotNull Collidable<?> other, boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
         return !isSibling(other) && FX.forbidFX(
                 getLock(), () -> collisionAreas.stream().anyMatch(
                         area -> area.collidesWith(other, translate, xMod, yMod)));
     }
+    @Override public boolean collidesWith(boolean translate, @NotNull Number xMod, @NotNull Number yMod, @NotNull Shape... shapes) {
+        return FX.forbidFX(() -> {
+            final List<Shape> shapesThis = shapes();
+            for (Shape shape: shapesThis)
+                for (Shape otherShape: shapes)
+                    if (shape.intersects(otherShape, translate, xMod, yMod))
+                        return true;
+            return false;
+        });
+    }
+    
+    @Override public @NotNull List<Shape> shapes() {
+        return FX.forbidFX(() -> {
+            final ArrayList<Shape> shapes = new ArrayList<>();
+            for (CollisionArea<T> area: collisionAreasCopy())
+                shapes.addAll(area.shapes());
+            return shapes;
+        });
+    }
+    
+    //
     
     public final boolean collidesWith(@NotNull Collidable<?> other, boolean translate, @NotNull Point2D mod) { return collidesWith(other, translate, mod.getX(), mod.getY()); }
     public final boolean collidesWith(@NotNull Collidable<?> other, boolean translate, @NotNull NumExpr2D<?> mod) { return collidesWith(other, translate, mod.asPoint()); }

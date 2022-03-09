@@ -17,6 +17,8 @@ import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.BiFunction;
@@ -76,9 +78,9 @@ public class CollisionArea<T extends Collidable<T>>
                 for (Shape otherIncluded: other.includedShapes())
                     if (included.intersects(otherIncluded, translate, xMod, yMod))
                         return true;
-//                for (NumberValuePair borderPoint: included.getBorderPoints(translate, xMod, yMod))
-//                    if (other.containsPoint(borderPoint))
-//                        return true;
+            //                for (NumberValuePair borderPoint: included.getBorderPoints(translate, xMod, yMod))
+            //                    if (other.containsPoint(borderPoint))
+            //                        return true;
             //            for (Shape otherIncluded: other.includedShapes())
             //                for (NumberValuePair borderPoint: otherIncluded.getBorderPoints(xMod, yMod))
             //                    if (contains(borderPoint))
@@ -93,49 +95,11 @@ public class CollisionArea<T extends Collidable<T>>
     }
     public final boolean collidesWithMap(@NotNull CollisionMap<?> collisionMap, boolean translate) { return collidesWithMap(collisionMap, translate, 0, 0); }
     
-    public final boolean collidesWith(@NotNull Collidable<?> collidable, boolean translate, @NotNull Number xMod, @NotNull Number yMod) { return collidesWithMap(collidable.collisionMap(), translate, xMod, yMod); }
-    public final boolean collidesWith(@NotNull Collidable<?> collidable, boolean translate) { return collidesWith(collidable, translate, 0, 0); }
+    @Override public final boolean collidesWith(@NotNull Collidable<?> collidable, boolean translate, @NotNull Number xMod, @NotNull Number yMod) { return collidesWithMap(collidable.collisionMap(), translate, xMod, yMod); }
     
     //</editor-fold>
     
     //<editor-fold desc="> Bounds Methods">
-    
-    public final @NotNull Box calcBoundsLegacy(boolean synchronize, @Nullable BiFunction<NumExpr2D<?>, NumExpr2D<?>, Color> pixelGenerator) {
-        return sync(() -> {
-            if (includedShapes().isEmpty())
-                return new Box(this);
-            
-            double minLocX = Integer.MAX_VALUE;
-            double maxLocX = Integer.MIN_VALUE;
-            
-            double minLocY = Integer.MAX_VALUE;
-            double maxLocY = Integer.MIN_VALUE;
-            
-            for (Shape s: includedShapes()) {
-                final double minPointX = s.getLocation(Axis.X_AXIS, LocType.MIN);
-                final double maxPointX = s.getLocation(Axis.X_AXIS, LocType.MAX);
-                
-                final double minPointY = s.getLocation(Axis.Y_AXIS, LocType.MIN);
-                final double maxPointY = s.getLocation(Axis.Y_AXIS, LocType.MAX);
-                
-                if (minPointX < minLocX)
-                    minLocX = minPointX;
-                if (maxPointX > maxLocX)
-                    maxLocX = maxPointX;
-    
-                if (minPointY < minLocY)
-                    minLocY = minPointY;
-                if (maxPointY > maxLocY)
-                    maxLocY = maxPointY;
-            }
-            
-            final Lock lock = synchronize ? getLock() : null;
-            final double width = maxLocX - minLocX;
-            final double height = maxLocY - minLocY;
-            
-            return new Box(this, lock, minLocX, minLocY, width, height, LocType.MIN, pixelGenerator);
-        });
-    }
     
     @Override public final @NotNull Box boundsBox(boolean synchronize, @Nullable BiFunction<NumExpr2D<?>, NumExpr2D<?>, Color> pixelGenerator) {
         final Lock lock = synchronize ? getLock() : null;
@@ -149,6 +113,17 @@ public class CollisionArea<T extends Collidable<T>>
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override public @NotNull CollisionMap<T> collisionMap() { return collisionMap; }
+    @Override public @NotNull List<Shape> shapes() { return sync(() -> Collections.unmodifiableList(includedShapes())); }
+    
+    @Override public boolean collidesWith(boolean translate, @NotNull Number xMod, @NotNull Number yMod, @NotNull Shape... shapes) {
+        return syncForbidFX(() -> {
+            for (Shape included: shapes())
+                for (Shape otherIncluded: shapes)
+                    if (included.intersects(otherIncluded, translate, xMod, yMod))
+                        return true;
+            return false;
+        });
+    }
     
     //
     

@@ -6,21 +6,29 @@ import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.Obj;
 import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
+import com.taco.suit_lady.util.values.shapes.Shape;
 import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.function.BiFunction;
 
 public interface Collidable<T extends Collidable<T>>
         extends SpringableWrapper, Lockable, GameComponent {
     
     @NotNull CollisionMap<T> collisionMap();
+    default @NotNull List<Shape> shapes() { return collisionMap().shapes(); }
     
     //<editor-fold desc="--- DEFAULT METHODS ---">
     
     default boolean collidesWith(@NotNull Collidable<?> other, boolean translate, @NotNull Number xMod, @NotNull Number yMod) { return collisionMap().collidesWith(other.collisionMap(), translate, xMod, yMod); }
     default boolean collidesWith(@NotNull Collidable<?> other, boolean translate) { return collidesWith(other, translate, 0, 0); }
+    
+    //
+    
+    default boolean collidesWith(boolean translate, @NotNull Number xMod, @NotNull Number yMod, @NotNull Shape... shapes) { return collisionMap().collidesWith(translate, xMod, yMod, shapes); }
+    default boolean collidesWith(@NotNull Shape... shapes) { return collidesWith(true, 0, 0, shapes); }
     
     //
     
