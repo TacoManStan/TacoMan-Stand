@@ -187,8 +187,6 @@ public class GameObject
     private CollisionArea<GameObject> collisionArea = null;
     
     private Shape collShape;
-    @SuppressWarnings("FieldMayBeFinal") private Circle circle = null;
-    @SuppressWarnings("FieldMayBeFinal") private Box box = null;
     
     private void initCollisionMap(@NotNull Runnable postInitOperation) {
         executeOnce(() -> sync(() -> {
@@ -197,19 +195,15 @@ public class GameObject
             printer().get(getClass()).print("Initializing Collision Map For: " + this);
             
             collisionArea = new CollisionArea<>(collisionMap());
-            collisionArea.includedShapes().add(
-                    collShape = useCollisionBox
-                                ? (box = new Box(this).init())
-                                : (circle = new Circle(this).init()));
+            collisionArea.includedShapes().add((collShape = (useCollisionBox ? new Box(this) : new Circle(this))).init());
             collisionMap().addCollisionArea(collisionArea);
+            
             return null;
         }), o -> {
             refreshCollisionData();
             postInitOperation.run();
             startCollisionRefreshTask();
         });
-        
-        //        refreshCollisionData();
     }
     
     private void startCollisionRefreshTask() {
