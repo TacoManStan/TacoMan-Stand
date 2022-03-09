@@ -5,6 +5,7 @@ import com.taco.suit_lady.game.galaxy.effects.Effect_Targeted;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.util.enums.FilterType;
 import com.taco.suit_lady.util.tools.Calc;
+import com.taco.suit_lady.util.tools.printing.Printer;
 import com.taco.suit_lady.util.values.numbers.N;
 import com.taco.suit_lady.util.values.numbers.Num2D;
 import javafx.geometry.Point2D;
@@ -38,6 +39,9 @@ public class Effect_Cleave extends Effect {
                         N.num2D(target),
                         cleaveSize),
                 gameObject -> !gameObject.equals(getSource()));
+    
+        Printer.print("Filtered:");
+        Printer.print(filtered);
         
         filtered.forEach(gameObject -> gameObject.taskManager().shutdown());
         

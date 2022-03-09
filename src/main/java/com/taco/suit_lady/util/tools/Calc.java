@@ -807,9 +807,20 @@ public class Calc {
     }
     
     public static boolean isInCone(@NotNull NumExpr2D<?> center, @NotNull NumExpr2D<?> testPoint, @NotNull Number radius, @NotNull NumExpr2D<?> targetPoint, @NotNull Number coneSize) {
+        Printer.print("Checking Cone:");
+        Printer.print("Center: " + center);
+        Printer.print("Test Point: " + testPoint);
+        Printer.print("Radius: " + radius);
+        Printer.print("Target Point: " + targetPoint);
+        Printer.print("Cone Size: " + coneSize);
+        
         final double targetAngle = center.angle(targetPoint, AngleType.ACTUAL);
         final double minAng = normalizeAngle(targetAngle - (coneSize.doubleValue() / 2));
         final double maxAng = normalizeAngle(targetAngle + (coneSize.doubleValue() / 2));
+        
+        Printer.print("Target Angle (Calc): " + targetAngle);
+        Printer.print("Min Ang (Calc): " + minAng);
+        Printer.print("Max Ang (Calc): " + maxAng);
         
         return isInCone(center, testPoint, radius, minAng, maxAng);
     }

@@ -22,7 +22,7 @@ public class Ability_Cleave extends Ability_TargetEffect<Effect_Cleave> {
     
     {
         this.cleaveAngleProperty = new ReadOnlyDoubleWrapper(45);
-        this.cleaveRangeProperty = new ReadOnlyDoubleWrapper(20);
+        this.cleaveRangeProperty = new ReadOnlyDoubleWrapper(100);
     }
     
     public Ability_Cleave(@NotNull GameObject source) {
