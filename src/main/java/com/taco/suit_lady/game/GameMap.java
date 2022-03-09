@@ -11,10 +11,10 @@ import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Calc;
+import com.taco.suit_lady.util.tools.Enu;
 import com.taco.suit_lady.util.tools.Props;
 import com.taco.suit_lady.util.tools.list_tools.A;
 import com.taco.suit_lady.util.tools.printing.PrintData;
-import com.taco.suit_lady.util.tools.printing.Printer;
 import com.taco.suit_lady.util.values.ValueExpr2D;
 import com.taco.suit_lady.util.values.enums.LocType;
 import com.taco.suit_lady.util.values.numbers.N;
@@ -166,7 +166,7 @@ public class GameMap
     public final boolean removeGameObjects(@NotNull List<GameObject> objs) { return sync(() -> gameObjects.removeAll(objs)); }
     public final boolean removeGameObjects(@NotNull GameObject... objs) { return removeGameObjects(Arrays.asList(objs)); }
     
-    @SafeVarargs public final @NotNull ArrayList<GameObject> gameObjectsMatching(@NotNull FilterType filterType, @NotNull Predicate<GameObject>... filters) {
+    @SafeVarargs public final @NotNull ArrayList<GameObject> scan(@NotNull FilterType filterType, @NotNull Predicate<GameObject>... filters) {
         if (A.isEmpty(filters))
             return new ArrayList<>();
         return syncForbidFX(() -> gameObjects().stream().filter(gameObject -> {
@@ -190,7 +190,7 @@ public class GameMap
                                         !filterType.equals(FilterType.ANY));
         }).collect(Collectors.toCollection(ArrayList::new)));
     }
-    
+    @SafeVarargs public final @NotNull ArrayList<GameObject> scan(@NotNull Predicate<GameObject>... filters) { return scan(Enu.get(FilterType.class), filters); }
     
     public final GameMapModel getModel() { return model; }
     

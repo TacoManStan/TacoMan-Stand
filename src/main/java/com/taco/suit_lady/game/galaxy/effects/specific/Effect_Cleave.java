@@ -7,8 +7,6 @@ import com.taco.suit_lady.util.enums.FilterType;
 import com.taco.suit_lady.util.tools.Calc;
 import com.taco.suit_lady.util.values.numbers.N;
 import com.taco.suit_lady.util.values.numbers.Num2D;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -32,8 +30,7 @@ public class Effect_Cleave extends Effect {
         final Num2D center = N.num2D(getSource().getLocation(true));
         final double angleToTarget = Calc.angle(center, target, Calc.AngleType.ACTUAL);
         
-        final ArrayList<GameObject> filtered = getGameMap().gameObjectsMatching(
-                FilterType.ALL,
+        final ArrayList<GameObject> filtered = getGameMap().scan(
                 gameObject -> Calc.isInCone(
                         center,
                         N.num2D(gameObject.getLocation(true)),

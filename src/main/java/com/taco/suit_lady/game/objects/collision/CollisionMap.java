@@ -30,9 +30,6 @@ public class CollisionMap<T extends Collidable<T>>
     
     private final T owner;
     
-    //    private final ReadOnlyIntegerWrapper widthProperty;
-    //    private final ReadOnlyIntegerWrapper heightProperty;
-    
     private final ListProperty<CollisionArea<T>> collisionAreas;
     
     public CollisionMap(T owner) {
@@ -40,17 +37,12 @@ public class CollisionMap<T extends Collidable<T>>
             throw Exc.typeMismatch("CollisionMaps cannot be the owner of another CollisionMap.");
         this.owner = owner;
         
-        //        this.widthProperty = new ReadOnlyIntegerWrapper();
-        //        this.heightProperty = new ReadOnlyIntegerWrapper();
-        
         this.collisionAreas = new SimpleListProperty<>(FXCollections.observableArrayList());
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">
     
     protected CollisionMap<T> init() {
-        //        widthProperty.bind(getOwner().widthProperty());
-        //        heightProperty.bind(getOwner().heightProperty());
         
         return this;
     }

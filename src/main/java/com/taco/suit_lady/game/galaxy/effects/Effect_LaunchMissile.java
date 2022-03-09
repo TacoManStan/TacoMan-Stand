@@ -99,7 +99,8 @@ public class Effect_LaunchMissile extends Effect_Targeted {
                     Printer.print("Triggering Impact Effect: " + impactEffect);
                     impactEffect.trigger(L.map(
                             new Value2D<>("missile", missile),
-                            new Value2D<>("radius", 25D)));
+                            new Value2D<>("radius", 25D),
+                            new Value2D<>("impact_location", N.num2D(missile.getLocation(true)))));
                 }
                 missile.taskManager().shutdown();
             }));

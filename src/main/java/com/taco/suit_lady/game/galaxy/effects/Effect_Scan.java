@@ -3,13 +3,17 @@ package com.taco.suit_lady.game.galaxy.effects;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.util.tools.Props;
 import com.taco.suit_lady.util.tools.list_tools.L;
+import com.taco.suit_lady.util.tools.printing.Printer;
 import com.taco.suit_lady.util.values.Value2D;
+import com.taco.suit_lady.util.values.numbers.Num2D;
+import com.taco.suit_lady.util.values.shapes.Circle;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public class Effect_Scan extends Effect_Targeted {
@@ -48,6 +52,19 @@ public class Effect_Scan extends Effect_Targeted {
     @Override public boolean trigger(@NotNull Map<String, Object> params) {
         final GameObject missile = (GameObject) params.get("missile");
         final double radius = (double) params.get("radius");
+        final Num2D impactLocation = (Num2D) params.get("impact_location");
+        
+        final Circle scanZone = new Circle(this, getLock());
+        scanZone.setLocation(impactLocation);
+        scanZone.setRadius(radius);
+    
+        Printer.print("Scanning: " + impactLocation + "  |  " + radius);
+        
+        final ArrayList<GameObject> scannedObjs = getGameMap().scan(gameObject -> {
+            return !gameObject.equals(getSource()) && !gameObject.equals(missile) &&
+                   gameObject.collidesWith(scanZone);
+        });
+        scannedObjs.forEach(gameObject -> getScanEffect().trigger(L.map(new Value2D<>("target", gameObject))));
         
         getGameMap().scanMap(missile.getLocation(true), radius)
                     .forEach(gameObject -> getScanEffect().trigger(
