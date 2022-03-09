@@ -251,7 +251,13 @@ public class GameViewContent
                 getTestObject().mover().moveAndBind(getController().mouseOnMapBindingSafeX(), getController().mouseOnMapBindingSafeY());
         } else if (event.getButton().equals(MouseButton.MIDDLE)) {
             if (!fx)
+                abilityTest(4);
+        } else if (event.getButton().equals(MouseButton.BACK)) {
+            if (!fx)
                 abilityTest(1);
+        } else if (event.getButton().equals(MouseButton.FORWARD)) {
+            if (!fx)
+                abilityTest(3);
         }
         
         return true;
