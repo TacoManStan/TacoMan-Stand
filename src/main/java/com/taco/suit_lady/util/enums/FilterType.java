@@ -65,7 +65,7 @@ public enum FilterType
         return t -> {
             int passedCount = 0;
             for (Predicate<T> filter: filters) {
-                final boolean passed = filter.test(t);
+                final boolean passed = t != null && filter.test(t);
                 if (passed)
                     passedCount++;
                 

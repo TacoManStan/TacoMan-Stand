@@ -257,7 +257,6 @@ public class GameMap
     
     @SafeVarargs public final @NotNull ArrayList<GameObject> scan(@NotNull Point2D target, double radius, @NotNull FilterType filterType, @NotNull Predicate<GameObject>... filters) {
         final ArrayList<Predicate<GameObject>> filterList = new ArrayList<>(Arrays.asList(filters));
-        filterList.add(Objects::nonNull);
         filterList.add(gameObject -> gameObject.getLocation(true).distance(target) <= radius);
         return scan(filterType, filterList.toArray(new Predicate[0]));
     }
