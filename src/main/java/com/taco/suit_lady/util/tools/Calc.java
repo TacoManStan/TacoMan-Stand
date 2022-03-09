@@ -3,7 +3,6 @@ package com.taco.suit_lady.util.tools;
 import com.taco.suit_lady.util.tools.printing.Printer;
 import com.taco.suit_lady.util.values.enums.Axis;
 import com.taco.suit_lady.util.values.numbers.N;
-import com.taco.suit_lady.util.values.numbers.Num;
 import com.taco.suit_lady.util.values.numbers.Num2D;
 import com.taco.suit_lady.util.values.shapes.Box;
 import com.taco.suit_lady.util.values.enums.LocType;
@@ -698,8 +697,8 @@ public class Calc {
                     else {
                         bestPoint = closestAngleTo(centerPos, targetAngle, bestPoint, testPointCenter);
                     }
-//                    if (bestPoint == null || isAngleCloserTo(bestPoint, testPointCenter, centerPos, targetAngle))
-//                        bestPoint = testPointCenter;
+                    //                    if (bestPoint == null || isAngleCloserTo(bestPoint, testPointCenter, centerPos, targetAngle))
+                    //                        bestPoint = testPointCenter;
                     //                    if (bestPoint == null || Math.abs(centerPos.angle(testPointCenter) - targetAngleD) < Math.abs(centerPos.angle(bestPoint) - targetAngleD))
                     //                    if (bestPoint == null || angleDifference(centerPos.angle(testPointCenter), targetAngle) < angleDifference(centerPos.angle(bestPoint), targetAngle))
                     //                    if (bestPoint == null || angleDifference(centerPos.angle(testPointCenter), targetAngleD) < angleDifference(centerPos.angle(bestPoint), targetAngleD))
@@ -708,7 +707,7 @@ public class Calc {
                 }
             }
             if (bestPoint != null)
-                return LocType.translate(bestPoint, dims, LocType.CENTER, outputLocType);;
+                return LocType.translate(bestPoint, dims, LocType.CENTER, outputLocType); ;
         }
         throw Exc.ex("No valid pathing found.");
     }
@@ -785,6 +784,41 @@ public class Calc {
     
     //
     
+    public static boolean isInCone(@NotNull NumExpr2D<?> center, @NotNull NumExpr2D<?> testPoint, @NotNull Number radius, @NotNull Number minAngle, @NotNull Number maxAngle) {
+        if (center.distance(testPoint) > radius.doubleValue())
+            return false;
+        
+        final Num2D angleBounds = normalizeAngleBounds(minAngle, maxAngle);
+        final double minAng = angleBounds.aD();
+        final double maxAng = angleBounds.bD();
+        
+        Printer.print("Min/Max Angles: " + angleBounds);
+        
+        if (minAng >= maxAng)
+            throw Exc.unsupported("Normalized min angle must be less than normalized max angle [" + minAng + ", " + maxAng + "]");
+        
+        final double testAng = angle(center, testPoint, AngleType.ACTUAL);
+        
+        Printer.print("Test Angle: " + testAng);
+        
+        return testAng >= minAng && testAng <= maxAng;
+    }
+    
+    public static boolean isInCone(@NotNull NumExpr2D<?> center, @NotNull NumExpr2D<?> testPoint, @NotNull NumExpr2D<?> limitPoint, @NotNull Number coneSize) {
+        if (coneSize.doubleValue() <= 0)
+            throw Exc.unsupported("Cone Size must be greater than 0.");
+        
+        final double limitRadius = center.distance(limitPoint);
+        final double limitAngle = center.angle(limitPoint, AngleType.ACTUAL);
+        
+        Printer.print("Limit Radius: " + limitRadius);
+        Printer.print("Limit Angle: " + limitAngle);
+        
+        return isInCone(center, testPoint, limitRadius, limitAngle - (coneSize.doubleValue() / 2), limitAngle + (coneSize.doubleValue() / 2));
+    }
+    
+    //
+    
     public enum AngleType {
         ACTUAL,
         INVERSE,
@@ -852,6 +886,17 @@ public class Calc {
         }
     }
     
+    public static @NotNull Num2D normalizeAngleBounds(@NotNull Number minAngle, @NotNull Number maxAngle) {
+        final double minAng = normalizeAngle(minAngle);
+        final double maxAng = normalizeAngle(maxAngle);
+        if (minAng > maxAng)
+            return new Num2D(maxAng, minAng);
+        else if (minAng < maxAng)
+            return new Num2D(minAng, maxAng);
+        else
+            throw Exc.unsupported("Normalized Min & Max Angles cannot be equal: " + new Num2D(minAng, maxAng));
+    }
+    
     public static double normalizeAngle(@NotNull Number angle) {
         //        Printer.print("Normalizing Angle: " + angle);
         final double ang = angle.doubleValue();
@@ -870,7 +915,9 @@ public class Calc {
         return retAng;
     }
     
-    public static boolean isNormalAngle(@NotNull Number angle) { return angle.doubleValue() >= 0 && angle.doubleValue() < 360; }
+    public static boolean isNormalAngle(@NotNull Number angle) {
+        return angle.doubleValue() >= 0 && angle.doubleValue() < 360;
+    }
     
     
     //
