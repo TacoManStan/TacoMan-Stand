@@ -2,6 +2,7 @@ package com.taco.suit_lady.game.ui;
 
 import com.taco.suit_lady.game.attributes.AttributePage;
 import com.taco.suit_lady.game.galaxy.abilities.specific.Ability_Blink;
+import com.taco.suit_lady.game.galaxy.abilities.specific.Ability_Cleave;
 import com.taco.suit_lady.game.galaxy.abilities.specific.Ability_LaunchMissile;
 import com.taco.suit_lady.game.GameComponent;
 import com.taco.suit_lady.game.objects.GameObject;
@@ -226,6 +227,7 @@ public class GameViewContent
         switch (abilityNum) {
             case 1 -> new Ability_LaunchMissile(testObject).use(new Value2D<>("target", getController().getMouseOnMapSafe()));
             case 2 -> blinkTest().use(new Value2D<>("target", getController().getMouseOnMapSafe()));
+            case 3 -> new Ability_Cleave(testObject).use(new Value2D<>("target", getController().getMouseOnMapSafe()));
         }
     }
     

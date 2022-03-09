@@ -3,6 +3,7 @@ package com.taco.suit_lady.util.tools;
 import com.taco.suit_lady.util.tools.printing.Printer;
 import com.taco.suit_lady.util.values.enums.Axis;
 import com.taco.suit_lady.util.values.numbers.N;
+import com.taco.suit_lady.util.values.numbers.Num;
 import com.taco.suit_lady.util.values.numbers.Num2D;
 import com.taco.suit_lady.util.values.shapes.Box;
 import com.taco.suit_lady.util.values.enums.LocType;
@@ -650,7 +651,9 @@ public class Calc {
     }
     public static @NotNull ObjectBinding<Point2D> getPointInBoundsBinding(
             @NotNull ObservableValue<Point2D> originProperty,
-            @NotNull ValueExpr2D<? extends Number, ? extends Number> maxBounds) { return getPointInBoundsBinding(originProperty, null, maxBounds); }
+            @NotNull ValueExpr2D<? extends Number, ? extends Number> maxBounds) {
+        return getPointInBoundsBinding(originProperty, null, maxBounds);
+    }
     
     //
     
@@ -689,23 +692,9 @@ public class Calc {
         for (int i = 0; i < maxRange.intValue(); i += step.intValue()) {
             final ArrayList<Num2D> testPoints = formCircle(centerPos, i);
             Num2D bestPoint = null;
-            for (Num2D testPointCenter: testPoints) {
-                final Num2D testPointAdj = LocType.translate(testPointCenter, dims, LocType.CENTER, testLocType);
-                if (filter.test(testPointAdj)) {
-                    if (bestPoint == null)
-                        bestPoint = testPointCenter;
-                    else {
-                        bestPoint = closestAngleTo(centerPos, targetAngle, bestPoint, testPointCenter);
-                    }
-                    //                    if (bestPoint == null || isAngleCloserTo(bestPoint, testPointCenter, centerPos, targetAngle))
-                    //                        bestPoint = testPointCenter;
-                    //                    if (bestPoint == null || Math.abs(centerPos.angle(testPointCenter) - targetAngleD) < Math.abs(centerPos.angle(bestPoint) - targetAngleD))
-                    //                    if (bestPoint == null || angleDifference(centerPos.angle(testPointCenter), targetAngle) < angleDifference(centerPos.angle(bestPoint), targetAngle))
-                    //                    if (bestPoint == null || angleDifference(centerPos.angle(testPointCenter), targetAngleD) < angleDifference(centerPos.angle(bestPoint), targetAngleD))
-                    //                        bestPoint = testPointCenter;
-                    //                    final Num2D testPoint3 = LocType.translate(testPointAdj, dims, testLocType, outputLocType);
-                }
-            }
+            for (Num2D testPointCenter: testPoints)
+                if (filter.test(LocType.translate(testPointCenter, dims, LocType.CENTER, testLocType)))
+                    bestPoint = bestPoint == null ? testPointCenter : closestAngleTo(centerPos, targetAngle, bestPoint, testPointCenter);
             if (bestPoint != null)
                 return LocType.translate(bestPoint, dims, LocType.CENTER, outputLocType); ;
         }
@@ -815,6 +804,14 @@ public class Calc {
         Printer.print("Limit Angle: " + limitAngle);
         
         return isInCone(center, testPoint, limitRadius, limitAngle - (coneSize.doubleValue() / 2), limitAngle + (coneSize.doubleValue() / 2));
+    }
+    
+    public static boolean isInCone(@NotNull NumExpr2D<?> center, @NotNull NumExpr2D<?> testPoint, @NotNull Number radius, @NotNull NumExpr2D<?> targetPoint, @NotNull Number coneSize) {
+        final double targetAngle = center.angle(targetPoint, AngleType.ACTUAL);
+        final double minAng = normalizeAngle(targetAngle - (coneSize.doubleValue() / 2));
+        final double maxAng = normalizeAngle(targetAngle + (coneSize.doubleValue() / 2));
+        
+        return isInCone(center, testPoint, radius, minAng, maxAng);
     }
     
     //

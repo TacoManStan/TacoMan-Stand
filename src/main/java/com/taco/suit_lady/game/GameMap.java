@@ -5,6 +5,7 @@ import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.game.objects.collision.Collidable;
 import com.taco.suit_lady.game.objects.tiles.GameTile;
 import com.taco.suit_lady.game.ui.GameViewContent;
+import com.taco.suit_lady.util.enums.FilterType;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.synchronization.Lockable;
@@ -164,6 +165,31 @@ public class GameMap
     public final boolean removeGameObject(@NotNull GameObject obj) { return sync(() -> gameObjects.remove(obj)); }
     public final boolean removeGameObjects(@NotNull List<GameObject> objs) { return sync(() -> gameObjects.removeAll(objs)); }
     public final boolean removeGameObjects(@NotNull GameObject... objs) { return removeGameObjects(Arrays.asList(objs)); }
+    
+    @SafeVarargs public final @NotNull ArrayList<GameObject> gameObjectsMatching(@NotNull FilterType filterType, @NotNull Predicate<GameObject>... filters) {
+        if (A.isEmpty(filters))
+            return new ArrayList<>();
+        return syncForbidFX(() -> gameObjects().stream().filter(gameObject -> {
+            int passedCount = 0;
+            for (Predicate<GameObject> filter: filters) {
+                boolean passed = filter.test(gameObject);
+                if (passed)
+                    passedCount++;
+                
+                if (passed && filterType.equals(FilterType.ANY))
+                    return true;
+                if (passed && filterType.equals(FilterType.NONE))
+                    return false;
+                if (!passed && filterType.equals(FilterType.ALL))
+                    return false;
+                if (passedCount > 1 && (filterType.equals(FilterType.ONE)))
+                    return false;
+            }
+            return passedCount != 0 || (!filterType.equals(FilterType.ALL) &&
+                                        !filterType.equals(FilterType.ONE) &&
+                                        !filterType.equals(FilterType.ANY));
+        }).collect(Collectors.toCollection(ArrayList::new)));
+    }
     
     
     public final GameMapModel getModel() { return model; }

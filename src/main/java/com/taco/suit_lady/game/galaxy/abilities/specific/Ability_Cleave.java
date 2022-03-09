@@ -13,22 +13,20 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
 
-public class Ability_Cleave extends Ability_InstantEffect {
+public class Ability_Cleave extends Ability_TargetEffect<Effect_Cleave> {
     
     private final ReadOnlyDoubleWrapper cleaveAngleProperty;
+    private final ReadOnlyDoubleWrapper cleaveRangeProperty;
     
     //<editor-fold desc="--- CONSTRUCTORS ---">
     
     {
         this.cleaveAngleProperty = new ReadOnlyDoubleWrapper(45);
+        this.cleaveRangeProperty = new ReadOnlyDoubleWrapper(20);
     }
     
     public Ability_Cleave(@NotNull GameObject source) {
         super(source);
-    }
-    
-    public Ability_Cleave(@NotNull GameObject source, @Nullable Lock lock) {
-        super(source, lock);
     }
     
     //</editor-fold>
@@ -36,7 +34,8 @@ public class Ability_Cleave extends Ability_InstantEffect {
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override protected boolean execute(@NotNull Map<String, Object> params) {
-        params.put("target_angle", cleaveAngleProperty.get());
+        params.put("cleave_size", cleaveAngleProperty.get());
+        params.put("cleave_range", cleaveRangeProperty.get());
         return Effect_Cleave.newInstance(getSource()).trigger(params);
     }
     

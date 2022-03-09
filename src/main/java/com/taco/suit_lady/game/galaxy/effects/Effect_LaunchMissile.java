@@ -61,6 +61,7 @@ public class Effect_LaunchMissile extends Effect_Targeted {
     
     private @NotNull GameObject launchMissileTest(@NotNull Point2D target) {
         final GameObject missile = constructMissile();
+        missile.setObjID("missile");
         missile.init(() -> {
             final PrintData p = printer().get("heheXD");
             
@@ -94,10 +95,12 @@ public class Effect_LaunchMissile extends Effect_Targeted {
             logiCore().triggers().register(Galaxy.newUnitArrivedTrigger(missile, event -> {
                 Printer.print("Missile Arrived [" + missile + "]  ||  [" + event.getMovedFrom() + "  -->  " + event.getMovedTo());
                 final Effect impactEffect = getImpactEffectTest(missile);
-                if (impactEffect != null)
+                if (impactEffect != null) {
+                    Printer.print("Triggering Impact Effect: " + impactEffect);
                     impactEffect.trigger(L.map(
                             new Value2D<>("missile", missile),
                             new Value2D<>("radius", 25D)));
+                }
                 missile.taskManager().shutdown();
             }));
     
