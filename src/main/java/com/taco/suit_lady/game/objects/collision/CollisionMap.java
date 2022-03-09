@@ -110,7 +110,7 @@ public class CollisionMap<T extends Collidable<T>>
     }
     @Override public boolean collidesWith(boolean translate, @NotNull Number xMod, @NotNull Number yMod, @NotNull Shape... shapes) {
         return FX.forbidFX(() -> {
-            final List<Shape> shapesThis = shapes();
+            final List<Shape> shapesThis = shapeList();
             for (Shape shape: shapesThis)
                 for (Shape otherShape: shapes)
                     if (shape.intersects(otherShape, translate, xMod, yMod))
@@ -119,11 +119,11 @@ public class CollisionMap<T extends Collidable<T>>
         });
     }
     
-    @Override public @NotNull List<Shape> shapes() {
+    @Override public @NotNull List<Shape> shapeList() {
         return FX.forbidFX(() -> {
             final ArrayList<Shape> shapes = new ArrayList<>();
             for (CollisionArea<T> area: collisionAreasCopy())
-                shapes.addAll(area.shapes());
+                shapes.addAll(area.shapeList());
             return shapes;
         });
     }

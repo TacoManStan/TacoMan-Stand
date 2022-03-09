@@ -1,9 +1,7 @@
 package com.taco.suit_lady.game.objects.collision;
 
 import com.taco.suit_lady.game.ui.GameViewContent;
-import com.taco.suit_lady.util.values.enums.Axis;
 import com.taco.suit_lady.util.values.shapes.Box;
-import com.taco.suit_lady.util.values.enums.LocType;
 import com.taco.suit_lady.util.values.shapes.Shape;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.Calc;
@@ -73,20 +71,7 @@ public class CollisionArea<T extends Collidable<T>>
     //<editor-fold desc="> Collision Check Methods">
     
     public final boolean collidesWithArea(@NotNull CollisionArea<?> other, boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
-        return sync(() -> {
-            for (Shape included: includedShapes())
-                for (Shape otherIncluded: other.includedShapes())
-                    if (included.intersects(otherIncluded, translate, xMod, yMod))
-                        return true;
-            //                for (NumberValuePair borderPoint: included.getBorderPoints(translate, xMod, yMod))
-            //                    if (other.containsPoint(borderPoint))
-            //                        return true;
-            //            for (Shape otherIncluded: other.includedShapes())
-            //                for (NumberValuePair borderPoint: otherIncluded.getBorderPoints(xMod, yMod))
-            //                    if (contains(borderPoint))
-            //                        return true;
-            return false;
-        });
+        return sync(() -> collidesWith(translate, xMod, yMod, other.shapes()));
     }
     public final boolean collidesWithArea(@NotNull CollisionArea<?> other, boolean translate) { return collidesWithArea(other, translate, 0, 0); }
     
@@ -113,11 +98,11 @@ public class CollisionArea<T extends Collidable<T>>
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override public @NotNull CollisionMap<T> collisionMap() { return collisionMap; }
-    @Override public @NotNull List<Shape> shapes() { return sync(() -> Collections.unmodifiableList(includedShapes())); }
+    @Override public @NotNull List<Shape> shapeList() { return sync(() -> Collections.unmodifiableList(includedShapes())); }
     
     @Override public boolean collidesWith(boolean translate, @NotNull Number xMod, @NotNull Number yMod, @NotNull Shape... shapes) {
         return syncForbidFX(() -> {
-            for (Shape included: shapes())
+            for (Shape included: shapeList())
                 for (Shape otherIncluded: shapes)
                     if (included.intersects(otherIncluded, translate, xMod, yMod))
                         return true;

@@ -18,9 +18,13 @@ public interface Collidable<T extends Collidable<T>>
         extends SpringableWrapper, Lockable, GameComponent {
     
     @NotNull CollisionMap<T> collisionMap();
-    default @NotNull List<Shape> shapes() { return collisionMap().shapes(); }
     
     //<editor-fold desc="--- DEFAULT METHODS ---">
+    
+    default @NotNull List<Shape> shapeList() { return collisionMap().shapeList(); }
+    default @NotNull Shape[] shapes() { return shapeList().toArray(new Shape[0]); }
+    
+    //
     
     default boolean collidesWith(@NotNull Collidable<?> other, boolean translate, @NotNull Number xMod, @NotNull Number yMod) { return collisionMap().collidesWith(other.collisionMap(), translate, xMod, yMod); }
     default boolean collidesWith(@NotNull Collidable<?> other, boolean translate) { return collidesWith(other, translate, 0, 0); }
