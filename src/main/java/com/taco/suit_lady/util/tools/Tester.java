@@ -12,6 +12,8 @@ public class Tester {
                 new Num2D(-10, 0),
                 new Num2D(10, 0),
                 new Num2D(10, 10),
+                new Num2D(-10, 10),
+                new Num2D(10, -10),
                 new Num2D(-10, -10)
         };
         
@@ -19,8 +21,8 @@ public class Tester {
         final double coneSize = 10;
         
         
-        final double minAngle = 350;
-        final double maxAngle = 10;
+        final double minAngle = 10;
+        final double maxAngle = 89;
         final double radius = 20;
         
         System.out.println("Center: " + center);
