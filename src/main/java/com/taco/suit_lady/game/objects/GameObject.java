@@ -402,6 +402,16 @@ public class GameObject
     
     //<editor-fold desc="--- LOGIC ---">
     
+    public final boolean addToMap() {
+        return sync(() -> {
+            if (getGameMap().gameObjects().contains(this))
+                return true;
+            return getGameMap().addGameObject(this);
+        });
+    }
+    
+    //
+    
     private @NotNull GameTile[][] calculateOccupiedTiles() {
         final int adjustedMinX = (int) Math.floor(getLocationX(false) / getGameMap().getTileSize());
         final int adjustedMinY = (int) Math.floor(getLocationY(false) / getGameMap().getTileSize());
