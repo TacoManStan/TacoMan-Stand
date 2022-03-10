@@ -855,6 +855,10 @@ public class Calc {
         return testAng >= minAng && testAng <= maxAng;
     }
     
+    public static boolean isInCone(@NotNull NumExpr2D<?> center, @NotNull NumExpr2D<?> testPoint, @NotNull Number radius, @NotNull NumExpr2D<?> angleBounds) {
+        return isInCone(center, testPoint, radius, angleBounds.a(), angleBounds.b());
+    }
+    
     public static boolean isInCone(@NotNull NumExpr2D<?> center, @NotNull NumExpr2D<?> testPoint, @NotNull NumExpr2D<?> limitPoint, @NotNull Number coneSize) {
         if (coneSize.doubleValue() <= 0)
             throw Exc.unsupported("Cone Size must be greater than 0.");
@@ -877,14 +881,13 @@ public class Calc {
         //        Printer.print("Cone Size: " + coneSize);
         
         final double targetAngle = Calc.angle(center, targetPoint);
-        final double minAng = normalizeAngle(targetAngle - (coneSize.doubleValue() / 2));
-        final double maxAng = normalizeAngle(targetAngle + (coneSize.doubleValue() / 2));
+        final Num2D angleBounds = normalizeAngleBounds(targetAngle - (coneSize.doubleValue() / 2), targetAngle + (coneSize.doubleValue() / 2));
         
         //        Printer.print("Target Angle (Calc): " + targetAngle);
         //        Printer.print("Min Ang (Calc): " + minAng);
         //        Printer.print("Max Ang (Calc): " + maxAng);
         
-        return isInCone(center, testPoint, radius, minAng, maxAng);
+        return isInCone(center, testPoint, radius, angleBounds);
     }
     
     //</editor-fold>
