@@ -955,6 +955,14 @@ public class Calc {
         }
     }
     
+    /**
+     * <p>Returns a new {@link Num2D} instance representing {@link #normalizeAngle(Number) normalized} {@code min} and {@code max} angle values.</p>
+     *
+     * @param minAngle The raw minimum angle value.
+     * @param maxAngle The raw maximum angle value.
+     *
+     * @return A new {@link Num2D} instance representing {@link #normalizeAngle(Number) normalized} {@code min} and {@code max} angle values.
+     */
     public static @NotNull Num2D normalizeAngleBounds(@NotNull Number minAngle, @NotNull Number maxAngle) {
         final double minAng = normalizeAngle(minAngle);
         final double maxAng = normalizeAngle(maxAngle);
@@ -966,6 +974,13 @@ public class Calc {
             throw Exc.unsupported("Normalized Min & Max Angles cannot be equal: " + new Num2D(minAng, maxAng));
     }
     
+    /**
+     * <p>Converts the specified {@code angle} into an equivalent {@code angle} between 0 and 360 degrees.</p>
+     *
+     * @param angle The {@code angle} to be normalized.
+     *
+     * @return The converted representation of the specified {@code angle}.
+     */
     public static double normalizeAngle(@NotNull Number angle) {
         //        Printer.print("Normalizing Angle: " + angle);
         final double ang = angle.doubleValue();
