@@ -289,9 +289,9 @@ public class N {
     /**
      * <p>Calculates and then returns a {@link Num2D} containing the minimum or maximum {@link Num2D#a() x} and {@link Num2D#b() y} values of any of the {@link Num2D} objects contained within the specified {@code array}.</p>
      *
-     * @param minX    True if the minimum x value should be returned, false if the maximum x value should be returned.
-     * @param minY    True if the minimum y value should be returned, false if the maximum y value should be returned.
-     * @param inputs  The {@code array} of {@link NumExpr2D} objects to be compared.
+     * @param minX   True if the minimum x value should be returned, false if the maximum x value should be returned.
+     * @param minY   True if the minimum y value should be returned, false if the maximum y value should be returned.
+     * @param inputs The {@code array} of {@link NumExpr2D} objects to be compared.
      *
      * @return A {@link Num2D} containing the minimum or maximum {@link Num2D#a() x} and {@link Num2D#b() y} values of the {@link Num2D} objects contained within the specified {@code array}.
      */
@@ -310,7 +310,7 @@ public class N {
     /**
      * <p>Calculates and then returns a {@link Num2D} containing the minimum {@link Num2D#a() x} and {@link Num2D#b() y} values of any of the {@link Num2D} objects contained within the specified {@code array}.</p>
      *
-     * @param inputs  The {@code array} of {@link NumExpr2D} objects to be compared.
+     * @param inputs The {@code array} of {@link NumExpr2D} objects to be compared.
      *
      * @return A {@link Num2D} containing the minimum {@link Num2D#a() x} and {@link Num2D#b() y} values of the {@link Num2D} objects contained within the specified {@code array}.
      */
@@ -329,7 +329,7 @@ public class N {
     /**
      * <p>Calculates and then returns a {@link Num2D} containing the maximum {@link Num2D#a() x} and {@link Num2D#b() y} values of any of the {@link Num2D} objects contained within the specified {@code array}.</p>
      *
-     * @param inputs  The {@code array} of {@link NumExpr2D} objects to be compared.
+     * @param inputs The {@code array} of {@link NumExpr2D} objects to be compared.
      *
      * @return A {@link Num2D} containing the maximum {@link Num2D#a() x} and {@link Num2D#b() y} values of the {@link Num2D} objects contained within the specified {@code array}.
      */
@@ -341,19 +341,81 @@ public class N {
     
     //<editor-fold desc="--- PRIMITIVE CONVERSION METHODS ---">
     
+    /**
+     * <p>Returns the specified {@link Number} as an {@link Integer int} primitive.</p>
+     *
+     * @param num The {@link Number} to be converted to a primitive.
+     *
+     * @return The specified {@link Number} as an {@link Integer int} primitive.
+     */
     public static int i(@NotNull Number num) { return num.intValue(); }
+    
+    /**
+     * <p>Returns the specified {@link Number} as an {@link Long long} primitive.</p>
+     *
+     * @param num The {@link Number} to be converted to a primitive.
+     *
+     * @return The specified {@link Number} as an {@link Long long} primitive.
+     */
     public static long l(@NotNull Number num) { return num.longValue(); }
     
+    
+    /**
+     * <p>Returns the specified {@link Number} as an {@link Float float} primitive.</p>
+     *
+     * @param num The {@link Number} to be converted to a primitive.
+     *
+     * @return The specified {@link Number} as an {@link Float float} primitive.
+     */
     public static float f(@NotNull Number num) { return num.floatValue(); }
+    
+    /**
+     * <p>Returns the specified {@link Number} as an {@link Double double} primitive.</p>
+     *
+     * @param num The {@link Number} to be converted to a primitive.
+     *
+     * @return The specified {@link Number} as an {@link Double double} primitive.
+     */
     public static double d(@NotNull Number num) { return num.doubleValue(); }
     
     //</editor-fold>
     
     //<editor-fold desc="--- DIMENSIONS OF METHODS ---">
     
+    /**
+     * <p>Returns the dimensions of the specified {@link Region} as a {@link Num2D} object.</p>
+     *
+     * @param region The {@link Region}.
+     *
+     * @return The dimensions of the specified {@link Region} as a {@link Num2D} object.
+     */
     public static @NotNull Num2D dimensionsOf(@NotNull Region region) { return new Num2D(region.getWidth(), region.getHeight()); }
+    
+    /**
+     * <p>Returns the preferred dimensions of the specified {@link Region} as a {@link Num2D} object.</p>
+     *
+     * @param region The {@link Region}.
+     *
+     * @return The preferred dimensions of the specified {@link Region} as a {@link Num2D} object.
+     */
     public static @NotNull Num2D dimensionsOfPref(@NotNull Region region) { return new Num2D(region.getPrefWidth(), region.getPrefHeight()); }
+    
+    /**
+     * <p>Returns the minimum dimensions of the specified {@link Region} as a {@link Num2D} object.</p>
+     *
+     * @param region The {@link Region}.
+     *
+     * @return The minimum dimensions of the specified {@link Region} as a {@link Num2D} object.
+     */
     public static @NotNull Num2D dimensionsOfMin(@NotNull Region region) { return new Num2D(region.getMinWidth(), region.getMinHeight()); }
+    
+    /**
+     * <p>Returns the maximum dimensions of the specified {@link Region} as a {@link Num2D} object.</p>
+     *
+     * @param region The {@link Region}.
+     *
+     * @return The maximum dimensions of the specified {@link Region} as a {@link Num2D} object.
+     */
     public static @NotNull Num2D dimensionsOfMax(@NotNull Region region) { return new Num2D(region.getMaxWidth(), region.getMaxHeight()); }
     
     //</editor-fold>
