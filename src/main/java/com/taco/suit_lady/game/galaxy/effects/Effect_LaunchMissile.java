@@ -81,7 +81,7 @@ public class Effect_LaunchMissile extends Effect_Targeted {
             p.print("Source Location: " + sourceLocation);
             p.print("Target Location: " + targetLocation);
 //            final double targetAngle = getSource().getLocation(true).angle(target);
-            final double targetAngle = sourceLocation.angle(targetLocation, Calc.AngleType.ACTUAL);
+            final double targetAngle = sourceLocation.angle(targetLocation);
             printer().get("heheXD").print("Target Angle: " + targetAngle);
             final Num2D nearestPathable = getGameMap().nearestPathablePoint(missile, 1, 200, targetAngle);
             printer().get("heheXD").print("Missile Location: " + nearestPathable);

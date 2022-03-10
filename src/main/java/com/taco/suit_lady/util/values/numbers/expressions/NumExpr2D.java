@@ -91,9 +91,9 @@ public interface NumExpr2D<T extends NumExpr2D<T>>
     default double distance(@NotNull Number x, @NotNull Number y) { return Calc.distance(a(), b(), x, y); }
     default double distance(@NotNull NumExpr2D<?> other) { return Calc.distance(this, other); }
     
-    default double angle(@NotNull Point2D other, @NotNull AngleType angleType) { return Calc.angle(this, other, angleType); }
-    default double angle(@NotNull Number x, @NotNull Number y, @NotNull AngleType angleType) { return Calc.angle(this, x, y, angleType); }
-    default double angle(@NotNull NumExpr2D<?> other, @NotNull AngleType angleType) { return Calc.angle(this, other, angleType); }
+    default double angle(@NotNull Point2D other) { return Calc.angle(this, other); }
+    default double angle(@NotNull Number x, @NotNull Number y) { return Calc.angle(this, x, y); }
+    default double angle(@NotNull NumExpr2D<?> other) { return Calc.angle(this, other); }
     
     //<editor-fold desc=">> Interpolation Methods">
     

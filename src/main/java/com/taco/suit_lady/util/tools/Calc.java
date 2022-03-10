@@ -848,14 +848,9 @@ public class Calc {
         final double minAng = angleBounds.aD();
         final double maxAng = angleBounds.bD();
         
-        Printer.print("Min/Max Angles: " + angleBounds);
-        
-        if (minAng >= maxAng)
-            throw Exc.unsupported("Normalized min angle must be less than normalized max angle [" + minAng + ", " + maxAng + "]");
-        
         final double testAng = angle(center, testPoint);
         
-        Printer.print("Test Angle: " + testAng);
+//        Printer.print("Test Angle: " + testAng);
         
         return testAng >= minAng && testAng <= maxAng;
     }
@@ -865,29 +860,29 @@ public class Calc {
             throw Exc.unsupported("Cone Size must be greater than 0.");
         
         final double limitRadius = center.distance(limitPoint);
-        final double limitAngle = center.angle(limitPoint, AngleType.ACTUAL);
+        final double limitAngle = center.angle(limitPoint);
         
-        Printer.print("Limit Radius: " + limitRadius);
-        Printer.print("Limit Angle: " + limitAngle);
+//        Printer.print("Limit Radius: " + limitRadius);
+//        Printer.print("Limit Angle: " + limitAngle);
         
         return isInCone(center, testPoint, limitRadius, limitAngle - (coneSize.doubleValue() / 2), limitAngle + (coneSize.doubleValue() / 2));
     }
     
     public static boolean isInCone(@NotNull NumExpr2D<?> center, @NotNull NumExpr2D<?> testPoint, @NotNull Number radius, @NotNull NumExpr2D<?> targetPoint, @NotNull Number coneSize) {
-        Printer.print("Checking Cone:");
-        Printer.print("Center: " + center);
-        Printer.print("Test Point: " + testPoint);
-        Printer.print("Radius: " + radius);
-        Printer.print("Target Point: " + targetPoint);
-        Printer.print("Cone Size: " + coneSize);
+//        Printer.print("Checking Cone:");
+//        Printer.print("Center: " + center);
+//        Printer.print("Test Point: " + testPoint);
+//        Printer.print("Radius: " + radius);
+//        Printer.print("Target Point: " + targetPoint);
+//        Printer.print("Cone Size: " + coneSize);
         
-        final double targetAngle = center.angle(targetPoint, AngleType.ACTUAL);
+        final double targetAngle = Calc.angle(center, targetPoint);
         final double minAng = normalizeAngle(targetAngle - (coneSize.doubleValue() / 2));
         final double maxAng = normalizeAngle(targetAngle + (coneSize.doubleValue() / 2));
         
-        Printer.print("Target Angle (Calc): " + targetAngle);
-        Printer.print("Min Ang (Calc): " + minAng);
-        Printer.print("Max Ang (Calc): " + maxAng);
+//        Printer.print("Target Angle (Calc): " + targetAngle);
+//        Printer.print("Min Ang (Calc): " + minAng);
+//        Printer.print("Max Ang (Calc): " + maxAng);
         
         return isInCone(center, testPoint, radius, minAng, maxAng);
     }
@@ -905,56 +900,6 @@ public class Calc {
     
     //</editor-fold>
     
-    public static void main(String[] args) {
-        final Num2D[] p1s = new Num2D[]{
-                new Num2D(0, 0)
-        };
-        final Num2D[] p2s = new Num2D[]{
-                new Num2D(0, 0),
-                new Num2D(10, 0),
-                new Num2D(0, 10),
-                new Num2D(10, 10),
-                new Num2D(-10, 0),
-                new Num2D(300, 0)
-        };
-        
-        for (int i = 0; i < p1s.length; i++) {
-            for (int j = 0; j < p2s.length; j++) {
-                final Num2D p1 = p1s[i];
-                final Num2D p2 = p2s[j];
-                
-                //                final String prefix = "[" + i + "::" + p1 + ", " + j + "::" + p2 + "] ";
-                final String prefix = "[ " + p1 + " , " + p2 + " ]  -  ";
-                
-                //                System.out.println(prefix + "Angle [" + p1 + " ," + p2 + "]");
-                
-                System.out.println(prefix + "Point2D Native: " + p1.asPoint().angle(p2.asPoint()));
-                System.out.println(prefix + "Point2D Native Rev: " + p2.asPoint().angle(p1.asPoint()));
-                
-                System.out.println();
-                
-                System.out.println(prefix + "Num2D " + AngleType.ACTUAL + ": " + p1.angle(p2, AngleType.ACTUAL));
-                System.out.println(prefix + "Num2D Rev " + AngleType.ACTUAL + ": " + p2.angle(p1, AngleType.ACTUAL));
-                System.out.println("----------");
-                System.out.println(prefix + "Num2D " + AngleType.MIN_ARC + ": " + p1.angle(p2, AngleType.MIN_ARC));
-                System.out.println(prefix + "Num2D Rev " + AngleType.MIN_ARC + ": " + p2.angle(p1, AngleType.MIN_ARC));
-                System.out.println("----------");
-                System.out.println(prefix + "Num2D " + AngleType.MAX_ARC + ": " + p1.angle(p2, AngleType.MAX_ARC));
-                System.out.println(prefix + "Num2D Rev " + AngleType.MAX_ARC + ": " + p2.angle(p1, AngleType.MAX_ARC));
-                
-                
-                System.out.println();
-                
-                System.out.println(prefix + "Calc " + ": " + angle(p1, p2));
-                System.out.println(prefix + "Calc Rev " + ": " + angle(p2, p1));
-                
-                System.out.println();
-                System.out.println("--------------------------------------------------");
-                System.out.println();
-            }
-        }
-    }
-    
     /**
      * <p>Returns a new {@link Num2D} instance representing {@link #normalizeAngle(Number) normalized} {@code min} and {@code max} angle values.</p>
      *
@@ -964,14 +909,20 @@ public class Calc {
      * @return A new {@link Num2D} instance representing {@link #normalizeAngle(Number) normalized} {@code min} and {@code max} angle values.
      */
     public static @NotNull Num2D normalizeAngleBounds(@NotNull Number minAngle, @NotNull Number maxAngle) {
-        final double minAng = normalizeAngle(minAngle);
-        final double maxAng = normalizeAngle(maxAngle);
-        if (minAng > maxAng)
-            return new Num2D(maxAng, minAng);
-        else if (minAng < maxAng)
-            return new Num2D(minAng, maxAng);
-        else
-            throw Exc.unsupported("Normalized Min & Max Angles cannot be equal: " + new Num2D(minAng, maxAng));
+        double minAng = normalizeAngle(minAngle);
+        double maxAng = normalizeAngle(maxAngle);
+        
+        if (minAng >= maxAng && minAng > 0)
+            minAng -= 360;
+        
+        return new Num2D(minAng, maxAng);
+        
+//        if (minAng > maxAng)
+//            return new Num2D(maxAng, minAng);
+//        else if (minAng < maxAng)
+//            return new Num2D(minAng, maxAng);
+//        else
+//            throw Exc.unsupported("Normalized Min & Max Angles cannot be equal: " + new Num2D(minAng, maxAng));
     }
     
     /**

@@ -29,7 +29,7 @@ public class Effect_Cleave extends Effect {
         final double cleaveRange = (double) params.get("cleave_range");
         
         final Num2D center = N.num2D(getSource().getLocation(true));
-        final double angleToTarget = Calc.angle(center, target, Calc.AngleType.ACTUAL);
+        final double angleToTarget = Calc.angle(center, target);
         
         final ArrayList<GameObject> filtered = getGameMap().scan(
                 gameObject -> Calc.isInCone(
