@@ -850,7 +850,7 @@ public class Calc {
         
         final double testAng = angle(center, testPoint);
         
-//        Printer.print("Test Angle: " + testAng);
+        //        Printer.print("Test Angle: " + testAng);
         
         return testAng >= minAng && testAng <= maxAng;
     }
@@ -862,27 +862,27 @@ public class Calc {
         final double limitRadius = center.distance(limitPoint);
         final double limitAngle = center.angle(limitPoint);
         
-//        Printer.print("Limit Radius: " + limitRadius);
-//        Printer.print("Limit Angle: " + limitAngle);
+        //        Printer.print("Limit Radius: " + limitRadius);
+        //        Printer.print("Limit Angle: " + limitAngle);
         
         return isInCone(center, testPoint, limitRadius, limitAngle - (coneSize.doubleValue() / 2), limitAngle + (coneSize.doubleValue() / 2));
     }
     
     public static boolean isInCone(@NotNull NumExpr2D<?> center, @NotNull NumExpr2D<?> testPoint, @NotNull Number radius, @NotNull NumExpr2D<?> targetPoint, @NotNull Number coneSize) {
-//        Printer.print("Checking Cone:");
-//        Printer.print("Center: " + center);
-//        Printer.print("Test Point: " + testPoint);
-//        Printer.print("Radius: " + radius);
-//        Printer.print("Target Point: " + targetPoint);
-//        Printer.print("Cone Size: " + coneSize);
+        //        Printer.print("Checking Cone:");
+        //        Printer.print("Center: " + center);
+        //        Printer.print("Test Point: " + testPoint);
+        //        Printer.print("Radius: " + radius);
+        //        Printer.print("Target Point: " + targetPoint);
+        //        Printer.print("Cone Size: " + coneSize);
         
         final double targetAngle = Calc.angle(center, targetPoint);
         final double minAng = normalizeAngle(targetAngle - (coneSize.doubleValue() / 2));
         final double maxAng = normalizeAngle(targetAngle + (coneSize.doubleValue() / 2));
         
-//        Printer.print("Target Angle (Calc): " + targetAngle);
-//        Printer.print("Min Ang (Calc): " + minAng);
-//        Printer.print("Max Ang (Calc): " + maxAng);
+        //        Printer.print("Target Angle (Calc): " + targetAngle);
+        //        Printer.print("Min Ang (Calc): " + minAng);
+        //        Printer.print("Max Ang (Calc): " + maxAng);
         
         return isInCone(center, testPoint, radius, minAng, maxAng);
     }
@@ -902,6 +902,11 @@ public class Calc {
     
     /**
      * <p>Returns a new {@link Num2D} instance representing {@link #normalizeAngle(Number) normalized} {@code min} and {@code max} angle values.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>Prior to any additional operations, both of the specified {@code angles} are {@link #normalizeAngle(Number) normalized}.</li>
+     *     <li>If the normalized {@code minimum angle} is greater than the normalized {@code maximum angle}, the {@code minimum angle} is converted into a negative value by subtracting {@code 360}.</li>
+     * </ol>
      *
      * @param minAngle The raw minimum angle value.
      * @param maxAngle The raw maximum angle value.
@@ -916,24 +921,17 @@ public class Calc {
             minAng -= 360;
         
         return new Num2D(minAng, maxAng);
-        
-//        if (minAng > maxAng)
-//            return new Num2D(maxAng, minAng);
-//        else if (minAng < maxAng)
-//            return new Num2D(minAng, maxAng);
-//        else
-//            throw Exc.unsupported("Normalized Min & Max Angles cannot be equal: " + new Num2D(minAng, maxAng));
     }
     
     /**
      * <p>Converts the specified {@code angle} into an equivalent {@code angle} between 0 and 360 degrees.</p>
      *
-     * @param angle The {@code angle} to be normalized.
+     * @param angle  The {@code angle} to be normalized.
+     * @param invert True if the returned value should be represented via a negative angle value (counter-clockwise), false if it should be represented as a positive angle value (clockwise).
      *
      * @return The converted representation of the specified {@code angle}.
      */
-    public static double normalizeAngle(@NotNull Number angle) {
-        //        Printer.print("Normalizing Angle: " + angle);
+    public static double normalizeAngle(@NotNull Number angle, boolean invert) {
         final double ang = angle.doubleValue();
         double retAng = ang;
         if (isNormalAngle(retAng))
@@ -947,12 +945,22 @@ public class Calc {
         } else {
             throw Exc.ex("Wut.");
         }
-        return retAng;
+        return invert ? retAng - 360 : retAng;
     }
     
-    public static boolean isNormalAngle(@NotNull Number angle) {
-        return angle.doubleValue() >= 0 && angle.doubleValue() < 360;
-    }
+    /**
+     * <p>Converts the specified {@code angle} into an equivalent {@code angle} between 0 and 360 degrees.</p>
+     *
+     * @param angle The {@code angle} to be normalized.
+     *
+     * @return The converted representation of the specified {@code angle}.
+     *
+     * @see #normalizeAngle(Number, boolean)
+     */
+    public static double normalizeAngle(@NotNull Number angle) { return normalizeAngle(angle, false); }
+    
+    public static boolean isNormalAngle(@NotNull Number angle, boolean allowInverted) { return angle.doubleValue() >= (allowInverted ? -360 : 0) && angle.doubleValue() < 360; }
+    public static boolean isNormalAngle(@NotNull Number angle) { return isNormalAngle(angle, false); }
     
     
     //
