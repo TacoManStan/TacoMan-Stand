@@ -22,6 +22,21 @@ public enum LocType
     
     //<editor-fold desc="--- STATIC ---">
     
+    /**
+     * <p>Translates the specified {@link Number location} based on the specified {@link Number dimension}, {@link LocType Source LocType} and {@link LocType Target LocType} and then returns the result.</p>
+     *
+     * @param lock          The {@link Lock} instance used to synchronize calculations performed by this method, or {@code null} to perform calculations without synchronization.
+     *                      If {@code allowNullLock} is set to {@code false}, a {@link RuntimeException} is thrown.
+     * @param allowNullLock True if the specified {@link Lock} is permitted to be {@code null}, false if a {@link RuntimeException} should be thrown if the specified {@link Lock} is {@code null}.
+     * @param loc           The x or y location to be translated.
+     *                      Note that the location value must match the axis of the specified dimension value.
+     * @param dim           The width or height dimension value to be used to perform translation.
+     *                      Note that the dimension value must match the axis of the specified location value.
+     * @param sourceLocType The {@link LocType} defining where the specified {@link Number location} value is located relative to the specified {@link Number dimension} value.
+     * @param targetLocType The {@link LocType} defining where the returned {@link Number location} value is located relative to the specified {@link Number dimension} value.
+     *
+     * @return The translated value of the specified {@link Number location} based on the specified {@link Number dimension}, {@link LocType Source LocType} and {@link LocType Target LocType}.
+     */
     public static double translate(@Nullable Lock lock, boolean allowNullLock, @NotNull Number loc, @NotNull Number dim, @NotNull LocType sourceLocType, @NotNull LocType targetLocType) {
         return runLocked(lock, allowNullLock, () -> {
             final double locD = loc.doubleValue();
@@ -57,13 +72,52 @@ public enum LocType
             };
         });
     }
+    
+    /**
+     * <p>Translates the specified {@link Number location} based on the specified {@link Number dimension} and {@link LocType} and then returns the result.</p>
+     *
+     * @param lock          The {@link Lock} instance used to synchronize calculations performed by this method, or {@code null} to perform calculations without synchronization.
+     *                      If {@code allowNullLock} is set to {@code false}, a {@link RuntimeException} is thrown.
+     * @param allowNullLock True if the specified {@link Lock} is permitted to be {@code null}, false if a {@link RuntimeException} should be thrown if the specified {@link Lock} is {@code null}.
+     * @param loc           The x or y location to be translated.
+     *                      Note that the location value must match the axis of the specified dimension value.
+     * @param dim           The width or height dimension value to be used to perform translation.
+     *                      Note that the dimension value must match the axis of the specified location value.
+     * @param locType       The {@link LocType} defining where the specified and translated {@link Number location} values are located relative to the specified {@link Number dimension} value.
+     *
+     * @return The translated value of the specified {@link Number location} based on the specified {@link Number dimension} and {@link LocType}.
+     */
     public static double translate(@Nullable Lock lock, boolean allowNullLock, @NotNull Number loc, @NotNull Number dim, @NotNull LocType locType) {
         return translate(lock, allowNullLock, loc, dim, locType, locType);
     }
     
+    /**
+     * <p>Translates the specified {@link Number location} based on the specified {@link Number dimension}, {@link LocType Source LocType} and {@link LocType Target LocType} and then returns the result.</p>
+     *
+     * @param loc           The x or y location to be translated.
+     *                      Note that the location value must match the axis of the specified dimension value.
+     * @param dim           The width or height dimension value to be used to perform translation.
+     *                      Note that the dimension value must match the axis of the specified location value.
+     * @param sourceLocType The {@link LocType} defining where the specified {@link Number location} value is located relative to the specified {@link Number dimension} value.
+     * @param targetLocType The {@link LocType} defining where the returned {@link Number location} value is located relative to the specified {@link Number dimension} value.
+     *
+     * @return The translated value of the specified {@link Number location} based on the specified {@link Number dimension}, {@link LocType Source LocType} and {@link LocType Target LocType}.
+     */
     public static double translate(@NotNull Number loc, @NotNull Number dim, @NotNull LocType sourceLocType, @NotNull LocType targetLocType) {
         return translate(null, true, loc, dim, sourceLocType, targetLocType);
     }
+    
+    /**
+     * <p>Translates the specified {@link Number location} based on the specified {@link Number dimension} and {@link LocType} and then returns the result.</p>
+     *
+     * @param loc     The x or y location to be translated.
+     *                Note that the location value must match the axis of the specified dimension value.
+     * @param dim     The width or height dimension value to be used to perform translation.
+     *                Note that the dimension value must match the axis of the specified location value.
+     * @param locType The {@link LocType} defining where the specified and translated {@link Number location} values are located relative to the specified {@link Number dimension} value.
+     *
+     * @return The translated value of the specified {@link Number location} based on the specified {@link Number dimension} and {@link LocType}.
+     */
     public static double translate(@NotNull Number loc, @NotNull Number dim, @NotNull LocType locType) {
         return translate(loc, dim, locType, locType);
     }
