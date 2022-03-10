@@ -1,11 +1,16 @@
 package com.taco.suit_lady.util.values.numbers;
 
 import com.taco.suit_lady.util.tools.list_tools.A;
+import com.taco.suit_lady.util.values.ValueExpr;
+import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
 import javafx.geometry.Point2D;
 import javafx.scene.layout.Region;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class N {
     private N() { } //No Instance
@@ -115,6 +120,20 @@ public class N {
     }
     public static double minD(boolean exact, @NotNull Number... numbers) { return minMaxD(true, numbers); }
     public static double maxD(boolean exact, @NotNull Number... numbers) { return minMaxD(false, numbers); }
+    
+    //
+    
+    public static @NotNull Num2D minMaxP(boolean minX, boolean minY, boolean intOnly, @NotNull NumExpr2D<?>... inputs) {
+        return new Num2D(minMaxD(minX, Arrays.stream(inputs).map(intOnly ? NumExpr2D::aI : NumExpr2D::a).toArray(Number[]::new)),
+                         minMaxD(minY, Arrays.stream(inputs).map(intOnly ? NumExpr2D::bI : NumExpr2D::b).toArray(Number[]::new)));
+    }
+    public static @NotNull Num2D minMaxP(boolean minX, boolean minY, @NotNull NumExpr2D<?>... inputs) { return minMaxP(minX, minY, false, inputs); }
+    
+    public static @NotNull Num2D minP(boolean intOnly, @NotNull NumExpr2D<?>... inputs) { return minMaxP(true, true, intOnly, inputs); }
+    public static @NotNull Num2D minP(@NotNull NumExpr2D<?>... inputs) { return minP(false, inputs); }
+    
+    public static @NotNull Num2D maxP(boolean intOnly, @NotNull NumExpr2D<?>... inputs) { return minMaxP(false, false, intOnly, inputs); }
+    public static @NotNull Num2D maxP(@NotNull NumExpr2D<?>... inputs) { return maxP(false, inputs); }
     
     //</editor-fold>
     
