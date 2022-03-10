@@ -84,6 +84,40 @@ public class N {
     
     //</editor-fold>
     
+    //<editor-fold desc="> Min/Max">
+    
+    public static int minMaxI(boolean min, boolean exact, @NotNull Number... numbers) {
+        double result = min ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+        for (Number num: numbers)
+            if (min ? ((exact ? num.doubleValue() : num.intValue()) < result) : ((exact ? num.doubleValue() : num.intValue()) > result))
+                result = exact ? num.doubleValue() : num.intValue();
+        return (int) result;
+    }
+    public static int minI(boolean exact, @NotNull Number... numbers) { return minMaxI(true, exact, numbers); }
+    public static int maxI(boolean exact, @NotNull Number... numbers) { return minMaxI(false, exact, numbers); }
+    
+    public static long minMaxL(boolean min, @NotNull Number... numbers) {
+        long result = min ? Long.MAX_VALUE : Long.MIN_VALUE;
+        for (Number num: numbers)
+            if (min ? num.longValue() < result : num.longValue() > result)
+                result = num.longValue();
+        return result;
+    }
+    public static long minL(boolean exact, @NotNull Number... numbers) { return minMaxL(true, numbers); }
+    public static long maxL(boolean exact, @NotNull Number... numbers) { return minMaxL(false, numbers); }
+    
+    public static double minMaxD(boolean min, @NotNull Number... numbers) {
+        double result = min ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+        for (Number num: numbers)
+            if (min ? num.doubleValue() < result : num.doubleValue() > result)
+                result = num.doubleValue();
+        return result;
+    }
+    public static double minD(boolean exact, @NotNull Number... numbers) { return minMaxD(true, numbers); }
+    public static double maxD(boolean exact, @NotNull Number... numbers) { return minMaxD(false, numbers); }
+    
+    //</editor-fold>
+    
     //</editor-fold>
     
     //<editor-fold desc="--- PRIMITIVE CONVERSION METHODS ---">
