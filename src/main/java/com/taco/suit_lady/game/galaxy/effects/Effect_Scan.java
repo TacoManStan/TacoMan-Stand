@@ -57,18 +57,14 @@ public class Effect_Scan extends Effect_Targeted {
         final Circle scanZone = new Circle(this, getLock());
         scanZone.setLocation(impactLocation);
         scanZone.setRadius(radius);
-    
+        
         Printer.print("Scanning: " + impactLocation + "  |  " + radius);
         
-        final ArrayList<GameObject> scannedObjs = getGameMap().scan(gameObject -> {
-            return !gameObject.equals(getSource()) && !gameObject.equals(missile) &&
-                   gameObject.collidesWith(scanZone);
-        });
+        final ArrayList<GameObject> scannedObjs = getGameMap().scan(
+                gameObject -> !gameObject.equals(getSource()) &&
+                              !gameObject.equals(missile) &&
+                              gameObject.collidesWith(scanZone));
         scannedObjs.forEach(gameObject -> getScanEffect().trigger(L.map(new Value2D<>("target", gameObject))));
-        
-        getGameMap().scan(missile.getLocation(true), radius)
-                    .forEach(gameObject -> getScanEffect().trigger(
-                            L.map(new Value2D<>("target", gameObject))));
         
         return true;
     }

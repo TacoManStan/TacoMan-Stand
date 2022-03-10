@@ -19,6 +19,7 @@ import com.taco.suit_lady.util.values.ValueExpr2D;
 import com.taco.suit_lady.util.values.enums.LocType;
 import com.taco.suit_lady.util.values.numbers.N;
 import com.taco.suit_lady.util.values.numbers.Num2D;
+import com.taco.suit_lady.util.values.shapes.Shape;
 import com.taco.tacository.json.*;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.ObjectBinding;
@@ -241,18 +242,22 @@ public class GameMap
     
     //</editor-fold>
     
-    //<editor-fold desc="> GameObject Accessors">
+    //<editor-fold desc="> GameObject Accessors"> \
     
     @Contract("_ -> new")
     public final @NotNull ArrayList<GameObject> getObjectsAtPoint(@NotNull Point2D point) { return new ArrayList<>(getTileAtPoint(point).getOccupyingObjects()); }
     
     //
     
-    @SafeVarargs public final @NotNull ArrayList<GameObject> scan(@NotNull FilterType filterType, @NotNull Predicate<GameObject>... filters) {
-        if (A.isEmpty(filters))
+    @SafeVarargs public final @NotNull ArrayList<GameObject> scan(@NotNull FilterType filterType, @Nullable List<Predicate<GameObject>> filterList, @NotNull Predicate<GameObject>... filters) {
+        final ArrayList<Predicate<GameObject>> filterListImpl = filterList != null ? new ArrayList<>(filterList) : new ArrayList<>();
+        filterListImpl.addAll(Arrays.asList(filters));
+        if (filterListImpl.isEmpty())
             return new ArrayList<>();
         return syncForbidFX(() -> filterType.filter(gameObjects(), filters));
     }
+    
+    @SafeVarargs public final @NotNull ArrayList<GameObject> scan(@NotNull FilterType filterType, @NotNull Predicate<GameObject>... filters) { return scan(filterType, null, filters); }
     @SafeVarargs public final @NotNull ArrayList<GameObject> scan(@NotNull Predicate<GameObject>... filters) { return scan(Enu.get(FilterType.class), filters); }
     
     @SafeVarargs public final @NotNull ArrayList<GameObject> scan(@NotNull Point2D target, double radius, @NotNull FilterType filterType, @NotNull Predicate<GameObject>... filters) {
@@ -260,9 +265,14 @@ public class GameMap
         filterList.add(gameObject -> gameObject.getLocation(true).distance(target) <= radius);
         return scan(filterType, filterList.toArray(new Predicate[0]));
     }
-    @SafeVarargs public final @NotNull ArrayList<GameObject> scan(@NotNull Point2D target, double radius, @NotNull Predicate<GameObject>... filters) {
-        return scan(target, radius, Enu.get(FilterType.class), filters);
+    @SafeVarargs public final @NotNull ArrayList<GameObject> scan(@NotNull Point2D target, double radius, @NotNull Predicate<GameObject>... filters) { return scan(target, radius, Enu.get(FilterType.class), filters); }
+    
+    @SafeVarargs public final @NotNull ArrayList<GameObject> scan(@NotNull List<Shape> included, @NotNull List<Shape> excluded, @NotNull FilterType filterType, @NotNull Predicate<GameObject>... filters) {
+        final Predicate<GameObject> includedFilter = gameObject -> included.isEmpty() || gameObject.collidesWith(included);
+        final Predicate<GameObject> excludedFilter = gameObject -> excluded.isEmpty() || !gameObject.collidesWith(excluded);
+        return scan(filterType, A.asList(includedFilter, excludedFilter), filters);
     }
+    @SafeVarargs public final @NotNull ArrayList<GameObject> scan(@NotNull List<Shape> shapes, @NotNull FilterType filterType, @NotNull Predicate<GameObject>... filters) { return scan(shapes, null, filterType, filters); }
     
     //</editor-fold>
     

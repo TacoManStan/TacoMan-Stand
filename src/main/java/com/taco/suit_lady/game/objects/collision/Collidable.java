@@ -33,6 +33,7 @@ public interface Collidable<T extends Collidable<T>>
     
     default boolean collidesWith(boolean translate, @NotNull Number xMod, @NotNull Number yMod, @NotNull Shape... shapes) { return collisionMap().collidesWith(translate, xMod, yMod, shapes); }
     default boolean collidesWith(@NotNull Shape... shapes) { return collidesWith(true, 0, 0, shapes); }
+    default boolean collidesWith(@NotNull List<Shape> shapes) { return collidesWith(shapes.toArray(new Shape[0])); }
     
     //
     

@@ -21,6 +21,11 @@ import java.util.stream.Stream;
 
 public class A {
     
+    @Contract("_ -> new")
+    @SafeVarargs public static <E> @NotNull ArrayList<E> asList(@NotNull E... elements) {
+        return new ArrayList<>(Arrays.asList(elements));
+    }
+    
     //<editor-fold desc="--- MATRIX METHODS ---">
     
     @Contract("_, _ -> param2")
