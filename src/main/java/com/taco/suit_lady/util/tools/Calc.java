@@ -887,17 +887,6 @@ public class Calc {
         return isInCone(center, testPoint, radius, minAng, maxAng);
     }
     
-    //
-    
-    public enum AngleType {
-        ACTUAL,
-        INVERSE,
-        MIN_ARC,
-        MAX_ARC;
-        
-        AngleType() { }
-    }
-    
     //</editor-fold>
     
     /**

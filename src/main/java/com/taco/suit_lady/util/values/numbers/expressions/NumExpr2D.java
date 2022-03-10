@@ -1,8 +1,6 @@
 package com.taco.suit_lady.util.values.numbers.expressions;
 
 import com.taco.suit_lady.util.tools.Calc;
-import com.taco.suit_lady.util.tools.Calc.AngleType;
-import com.taco.suit_lady.util.tools.printing.Printer;
 import com.taco.suit_lady.util.values.ValueExpr2D;
 import com.taco.suit_lady.util.values.enums.CardinalDirection;
 import com.taco.suit_lady.util.values.enums.OpResultType;
