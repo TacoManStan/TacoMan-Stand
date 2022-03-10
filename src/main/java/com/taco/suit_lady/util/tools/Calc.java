@@ -710,36 +710,80 @@ public class Calc {
     
     //<editor-fold desc="> Point Calculations">
     
+    
+    /**
+     * <p><b>Passthrough Definition</b></p>
+     * <blockquote><i><code>
+     * <u>origin</u><b>.</b>{@link Point2D#distance(Point2D) distance}<b>(</b><u>other</u><b>)</b>
+     * </code></i></blockquote>
+     */
     public static double distance(@NotNull Point2D origin, @NotNull Point2D other) { return origin.distance(other); }
+    
+    /**
+     * <p><b>Passthrough Definition</b></p>
+     * <blockquote><i><code>
+     * {@link #distance(Point2D, Point2D) distance}<b>(</b>{@link Calc}<b>.</b>{@link #point2D(Number, Number) point2D}<b>(</b><u>x</u>, <u>y</u><b>)</b>, {@link Calc}<b>.</b>{@link #point2D(Number, Number) point2D}<b>(</b><u>oX</u>, <u>oY</u><b>))</b>
+     * </code></i></blockquote>
+     */
     public static double distance(@NotNull Number x, @NotNull Number y, @NotNull Number oX, @NotNull Number oY) { return distance(Calc.point2D(x, y), Calc.point2D(oX, oY)); }
+    
+    /**
+     * <p><b>Passthrough Definition</b></p>
+     * <blockquote><i><code>
+     * {@link #distance(Point2D, Point2D) distance}<b>(</b><u>origin</u><b>.</b>{@link NumExpr2D#asPoint() asPoint}<b>()</b>, <u>other</u><b>.</b>{@link NumExpr2D#asPoint() asPoint}<b>())</b>
+     * </code></i></blockquote>
+     */
     public static double distance(@NotNull NumExpr2D<?> origin, @NotNull NumExpr2D<?> other) { return distance(origin.asPoint(), other.asPoint()); }
     
     //
     
-    public static double angle(@NotNull Number p1X, @NotNull Number p1Y, @NotNull Number p2X, @NotNull Number p2Y, @NotNull AngleType angleType) {
-        final double angle1 = normalizeAngle(Calc.radsToDegrees(Math.atan2(p1Y.doubleValue() - p2Y.doubleValue(), p1X.doubleValue() - p2X.doubleValue()), true) - 90);
-        if (angleType.equals(AngleType.ACTUAL))
-            return angle1;
-        final double angle2 = normalizeAngle(-angle1);
-        return switch (angleType) {
-            case ACTUAL -> angle1;
-            case INVERSE -> angle2;
-            case MIN_ARC -> Math.min(angle1, angle2);
-            case MAX_ARC -> Math.max(angle1, angle2);
-            
-            default -> throw Exc.typeMismatch("Unknown AngleType: " + angleType);
-        };
+    /**
+     * <p>Returns the arc distance as an angle between the two points represented by the specified x and y point values.</p>
+     *
+     * @param p1X The x value of the first point.
+     * @param p1Y The y value of the first point.
+     * @param p2X The x value of the second point.
+     * @param p2Y The y value of the second point.
+     *
+     * @return The arc distance as an angle between the two points represented by the specified x and y point values.
+     */
+    public static double angle(@NotNull Number p1X, @NotNull Number p1Y, @NotNull Number p2X, @NotNull Number p2Y) {
+        return normalizeAngle(Calc.radsToDegrees(Math.atan2(p1Y.doubleValue() - p2Y.doubleValue(), p1X.doubleValue() - p2X.doubleValue()), true) - 90);
     }
     
-    public static double angle(@NotNull NumExpr2D<?> p1, @NotNull NumExpr2D<?> p2, @NotNull AngleType angleType) { return angle(p1.a(), p1.b(), p2.a(), p2.b(), angleType); }
-    public static double angle(@NotNull Point2D p1, @NotNull Point2D p2, @NotNull AngleType angleType) { return angle(N.num2D(p1), N.num2D(p2), angleType); }
-    public static double angle(@NotNull NumExpr2D<?> p1, @NotNull Point2D p2, @NotNull AngleType angleType) { return angle(p1, N.num2D(p2), angleType); }
-    public static double angle(@NotNull Point2D p1, @NotNull NumExpr2D<?> p2, @NotNull AngleType angleType) { return angle(N.num2D(p1), p2, angleType); }
+    /**
+     * <p><i>See {@link #angle(Number, Number, Number, Number)}</i></p>
+     */
+    public static double angle(@NotNull NumExpr2D<?> p1, @NotNull NumExpr2D<?> p2) { return angle(p1.a(), p1.b(), p2.a(), p2.b()); }
+    /**
+     * <p><i>See {@link #angle(Number, Number, Number, Number)}</i></p>
+     */
+    public static double angle(@NotNull Point2D p1, @NotNull Point2D p2) { return angle(N.num2D(p1), N.num2D(p2)); }
+    /**
+     * <p><i>See {@link #angle(Number, Number, Number, Number)}</i></p>
+     */
+    public static double angle(@NotNull NumExpr2D<?> p1, @NotNull Point2D p2) { return angle(p1, N.num2D(p2)); }
+    /**
+     * <p><i>See {@link #angle(Number, Number, Number, Number)}</i></p>
+     */
+    public static double angle(@NotNull Point2D p1, @NotNull NumExpr2D<?> p2) { return angle(N.num2D(p1), p2); }
     
-    public static double angle(@NotNull NumExpr2D<?> p1, @NotNull Number p2X, @NotNull Number p2Y, @NotNull AngleType angleType) { return angle(p1, new Num2D(p2X, p2Y), angleType); }
-    public static double angle(@NotNull Point2D p1, @NotNull Number p2X, @NotNull Number p2Y, @NotNull AngleType angleType) { return angle(p1, new Num2D(p2X, p2Y), angleType); }
-    public static double angle(@NotNull Number p1X, @NotNull Number p1Y, @NotNull NumExpr2D<?> p2, @NotNull AngleType angleType) { return angle(new Num2D(p1X, p1Y), p2, angleType); }
-    public static double angle(@NotNull Number p1X, @NotNull Number p1Y, @NotNull Point2D p2, @NotNull AngleType angleType) { return angle(new Num2D(p1X, p1Y), p2, angleType); }
+    /**
+     * <p><i>See {@link #angle(Number, Number, Number, Number)}</i></p>
+     */
+    public static double angle(@NotNull NumExpr2D<?> p1, @NotNull Number p2X, @NotNull Number p2Y) { return angle(p1, new Num2D(p2X, p2Y)); }
+    /**
+     * <p><i>See {@link #angle(Number, Number, Number, Number)}</i></p>
+     */
+    public static double angle(@NotNull Point2D p1, @NotNull Number p2X, @NotNull Number p2Y) { return angle(p1, new Num2D(p2X, p2Y)); }
+    /**
+     * <p><i>See {@link #angle(Number, Number, Number, Number)}</i></p>
+     */
+    public static double angle(@NotNull Number p1X, @NotNull Number p1Y, @NotNull NumExpr2D<?> p2) { return angle(new Num2D(p1X, p1Y), p2); }
+    /**
+     * <p><i>See {@link #angle(Number, Number, Number, Number)}</i></p>
+     */
+    public static double angle(@NotNull Number p1X, @NotNull Number p1Y, @NotNull Point2D p2) { return angle(new Num2D(p1X, p1Y), p2); }
     
     //
     
@@ -749,7 +793,7 @@ public class Calc {
     
     //
     
-    public static @NotNull Num2D interpolateTowards(@NotNull Point2D origin, @NotNull Point2D other, @NotNull Number distance) { return interpolateTowards(origin, Calc.degreesToRads(Calc.angle(origin, other, AngleType.ACTUAL)), distance); }
+    public static @NotNull Num2D interpolateTowards(@NotNull Point2D origin, @NotNull Point2D other, @NotNull Number distance) { return interpolateTowards(origin, Calc.degreesToRads(Calc.angle(origin, other)), distance); }
     public static @NotNull Num2D interpolateTowards(@NotNull Number x, @NotNull Number y, @NotNull Number oX, @NotNull Number oY, @NotNull Number distance) { return interpolateTowards(Calc.point2D(x, y), Calc.point2D(oX, oY), distance); }
     public static @NotNull Num2D interpolateTowards(@NotNull NumExpr2D<?> origin, @NotNull NumExpr2D<?> other, @NotNull Number distance) { return interpolateTowards(origin.asPoint(), other.asPoint(), distance); }
     
@@ -766,7 +810,7 @@ public class Calc {
         Num2D bestPoint = null;
         double bestAngle = Double.NaN;
         for (NumExpr2D<?> testPoint: testPoints) {
-            final double testAngle = angle(center, testPoint, AngleType.ACTUAL);
+            final double testAngle = angle(center, testPoint);
             
             if (bestPoint == null || Double.isNaN(bestAngle) || isCloserTo(bestAngle, testAngle, targetAngle)) {
                 bestPoint = testPoint.asNum2D();
@@ -809,7 +853,7 @@ public class Calc {
         if (minAng >= maxAng)
             throw Exc.unsupported("Normalized min angle must be less than normalized max angle [" + minAng + ", " + maxAng + "]");
         
-        final double testAng = angle(center, testPoint, AngleType.ACTUAL);
+        final double testAng = angle(center, testPoint);
         
         Printer.print("Test Angle: " + testAng);
         
@@ -901,14 +945,8 @@ public class Calc {
                 
                 System.out.println();
                 
-                System.out.println(prefix + "Calc " + AngleType.ACTUAL + ": " + angle(p1, p2, AngleType.ACTUAL));
-                System.out.println(prefix + "Calc Rev " + AngleType.ACTUAL + ": " + angle(p2, p1, AngleType.ACTUAL));
-                System.out.println("----------");
-                System.out.println(prefix + "Calc " + AngleType.MIN_ARC + ": " + angle(p1, p2, AngleType.MIN_ARC));
-                System.out.println(prefix + "Calc Rev " + AngleType.MIN_ARC + ": " + angle(p2, p1, AngleType.MIN_ARC));
-                System.out.println("----------");
-                System.out.println(prefix + "Calc " + AngleType.MAX_ARC + ": " + angle(p1, p2, AngleType.MAX_ARC));
-                System.out.println(prefix + "Calc Rev " + AngleType.MAX_ARC + ": " + angle(p2, p1, AngleType.MAX_ARC));
+                System.out.println(prefix + "Calc " + ": " + angle(p1, p2));
+                System.out.println(prefix + "Calc Rev " + ": " + angle(p2, p1));
                 
                 System.out.println();
                 System.out.println("--------------------------------------------------");
