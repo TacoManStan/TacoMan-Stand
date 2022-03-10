@@ -26,6 +26,7 @@ public interface BoundsExpr {
     default @NotNull Number getDimension(@NotNull Axis axis) { return axis.getFor(w(), h()); }
     
     
+    default @NotNull Num2D getLocation() { return getLocation(locType()); }
     default @NotNull Num2D getLocation(@NotNull LocType locType) { return LocType.translate(x(), y(), w(), h(), locType(), locType); }
     default @NotNull Number getLocation(@NotNull Axis axis) { return axis.getFor(x(), y()); }
     default @NotNull Number getLocation(@NotNull Axis axis, @NotNull LocType locType) {
