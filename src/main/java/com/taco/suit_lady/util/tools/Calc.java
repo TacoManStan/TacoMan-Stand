@@ -804,6 +804,39 @@ public class Calc {
     
     //
     
+    /**
+     * <p>Returns a {@link List} of {@link Num2D} values representing a line defined by the specified {@link NumExpr2D origin} and {@link NumExpr2D target} as end points.</p>
+     *
+     * @param origin     A {@link NumExpr2D} defining the first {@link Num2D} on the line. The first point in the returned {@link List} will always be equal to this value.
+     * @param target     A {@link NumExpr2D} defining the last {@link Num2D} on the line. The last point in the returned {@link List} will always be equal to this value.
+     * @param pointCount The {@link Number} of {@link Num2D points} to be interpolated. Note that the size of the returned {@link List} will always be equal to {@code pointCount + 2} due to the {@code origin} and {@code target} points.
+     *
+     * @return A {@link List} of {@link Num2D} values representing a line defined by the specified {@link NumExpr2D origin} and {@link NumExpr2D target} as end points.
+     */
+    public static @NotNull List<Num2D> line(@NotNull NumExpr2D<?> origin, @NotNull NumExpr2D<?> target, @NotNull Number pointCount) {
+        return IntStream.rangeClosed(0, pointCount.intValue())
+                        .mapToObj(i -> interpolate(origin, target, i / pointCount.doubleValue()))
+                        .collect(Collectors.toCollection(ArrayList::new));
+    }
+    
+    /**
+     * <p>Returns a {@link List} of {@link Num2D} values representing a line defined by the specified {@link NumExpr2D origin} and {@link NumExpr2D target} as end points.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>The number of interpolated {@link Num2D points} in the returned {@link List} is determined by the {@link #distance(NumExpr2D, NumExpr2D) distance} between the specified {@link Num2D values}.</li>
+     * </ol>
+     *
+     * @param origin A {@link NumExpr2D} defining the first {@link Num2D} on the line. The first point in the returned {@link List} will always be equal to this value.
+     * @param target A {@link NumExpr2D} defining the last {@link Num2D} on the line. The last point in the returned {@link List} will always be equal to this value.
+     *
+     * @return A {@link List} of {@link Num2D} values representing a line defined by the specified {@link NumExpr2D origin} and {@link NumExpr2D target} as end points.
+     */
+    public static @NotNull List<Num2D> line(@NotNull NumExpr2D<?> origin, @NotNull NumExpr2D<?> target) {
+        return line(origin, target, (int) distance(origin, target));
+    }
+    
+    //
+    
     public static boolean minMaxAngleTest = false;
     
     public static @Nullable Num2D closestAngleTo(@NotNull NumExpr2D<?> center, @NotNull Number targetAngle, @NotNull NumExpr2D<?> @NotNull ... testPoints) {
