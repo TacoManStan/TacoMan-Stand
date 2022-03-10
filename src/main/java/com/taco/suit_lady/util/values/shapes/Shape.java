@@ -34,7 +34,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.BiFunction;
 
 public abstract class Shape
-        implements SpringableWrapper, Lockable, GFXObject<Shape> {
+        implements SpringableWrapper, Lockable, GFXObject<Shape>, Cloneable {
     
     private final StrictSpringable springable;
     private final Lock lock;
@@ -297,7 +297,7 @@ public abstract class Shape
         return sync(() -> {
             final Shape copy = copyTo(translate, xMod, yMod);
             return copy.getBorderPoints().stream().anyMatch(point -> other.containsPoint(point));
-//            other.getBorderPoints().stream().anyMatch(oPoint -> copy.containsPoint(oPoint));
+            //            other.getBorderPoints().stream().anyMatch(oPoint -> copy.containsPoint(oPoint));
         });
     }
     
@@ -342,6 +342,7 @@ public abstract class Shape
                '}';
     }
     
+    @Override protected abstract Object clone() throws CloneNotSupportedException;
     
     //</editor-fold>
     

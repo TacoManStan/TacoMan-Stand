@@ -219,7 +219,7 @@ public class MandelbrotContentController extends ContentController<MandelbrotCon
         public final @NotNull Bounds getBounds() {
             final Point2D topLeft = getTopLeft();
             final Point2D dim = getDimensions();
-            return Bounds.create(topLeft.getX(), topLeft.getY(), dim.getX(), dim.getY());
+            return Bounds.newInstance(topLeft.getX(), topLeft.getY(), dim.getX(), dim.getY());
         }
         
         public final boolean isValid() {

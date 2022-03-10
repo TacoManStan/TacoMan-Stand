@@ -87,9 +87,9 @@ public interface NumExpr2D<T extends NumExpr2D<T>>
     
     //<editor-fold desc="> Calculation Methods">
     
-    default double distance(@NotNull Point2D other) { return asPoint().distance(other); }
-    default double distance(@NotNull Number x, @NotNull Number y) { return asPoint().distance(Calc.point2D(x, y)); }
-    default double distance(@NotNull NumExpr2D<?> other) { return asPoint().distance(other.asPoint()); }
+    default double distance(@NotNull Point2D other) { return Calc.distance(asPoint(), other); }
+    default double distance(@NotNull Number x, @NotNull Number y) { return Calc.distance(a(), b(), x, y); }
+    default double distance(@NotNull NumExpr2D<?> other) { return Calc.distance(this, other); }
     
     default double angle(@NotNull Point2D other, @NotNull AngleType angleType) { return Calc.angle(this, other, angleType); }
     default double angle(@NotNull Number x, @NotNull Number y, @NotNull AngleType angleType) { return Calc.angle(this, x, y, angleType); }
@@ -97,21 +97,17 @@ public interface NumExpr2D<T extends NumExpr2D<T>>
     
     //<editor-fold desc=">> Interpolation Methods">
     
-    default @NotNull T interpolate(@NotNull Point2D other, @NotNull Number percentage) { return copyOf(asPoint().interpolate(other, percentage.doubleValue())); }
-    default @NotNull T interpolate(@NotNull Number oX, @NotNull Number oY, @NotNull Number percentage) { return interpolate(Calc.point2D(oX, oY), percentage); }
-    default @NotNull T interpolate(@NotNull NumExpr2D<?> other, @NotNull Number percentage) { return interpolate(other.asPoint(), percentage); }
+    default @NotNull T interpolate(@NotNull Point2D other, @NotNull Number percentage) { return copyOf(Calc.interpolate(asPoint(), other, percentage)); }
+    default @NotNull T interpolate(@NotNull Number oX, @NotNull Number oY, @NotNull Number percentage) { return copyOf(Calc.interpolate(a(), b(), oX, oY, percentage)); }
+    default @NotNull T interpolate(@NotNull NumExpr2D<?> other, @NotNull Number percentage) { return copyOf(Calc.interpolate(this, other, percentage)); }
     
     //
     
-    default @NotNull T interpolateTowards(@NotNull Point2D other, @NotNull Number distance) { return interpolateTowards(Calc.degreesToRads(angle(other, AngleType.ACTUAL)), distance); }
-    default @NotNull T interpolateTowards(@NotNull Number oX, @NotNull Number oY, @NotNull Number distance) { return interpolateTowards(Calc.point2D(oX, oY), distance); }
-    default @NotNull T interpolateTowards(@NotNull NumExpr2D<?> other, @NotNull Number distance) { return interpolateTowards(other.asPoint(), distance); }
+    default @NotNull T interpolateTowards(@NotNull Point2D other, @NotNull Number distance) { return copyOf(Calc.interpolateTowards(asPoint(), other, distance)); }
+    default @NotNull T interpolateTowards(@NotNull Number oX, @NotNull Number oY, @NotNull Number distance) { return copyOf(Calc.interpolateTowards(a(), b(), oX, oY, distance)); }
+    default @NotNull T interpolateTowards(@NotNull NumExpr2D<?> other, @NotNull Number distance) { return copyOf(Calc.interpolateTowards(this, other, distance)); }
     
-    default @NotNull T interpolateTowards(@NotNull Number angle, @NotNull Number distance) {
-        final double retX = (distance.doubleValue() * Math.cos(angle.doubleValue())) + aD();
-        final double retY = (distance.doubleValue() * Math.sin(angle.doubleValue())) + bD();
-        return copyOf(retX, retY);
-    }
+    default @NotNull T interpolateTowards(@NotNull Number angle, @NotNull Number distance) { return copyOf(Calc.interpolateTowards(this, angle, distance)); }
     
     //</editor-fold>
     

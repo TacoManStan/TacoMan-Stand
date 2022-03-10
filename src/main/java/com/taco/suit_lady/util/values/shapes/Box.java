@@ -18,13 +18,19 @@ public class Box extends Shape {
     
     //<editor-fold desc="--- CONSTRUCTORS ---">
     
-    public Box(@NotNull Springable springable,
-               @Nullable Lock lock,
+    public Box(@NotNull Springable springable, @Nullable Lock lock,
                @NotNull Number locX, @NotNull Number locY,
                @NotNull Number dimX, @NotNull Number dimY,
                @Nullable LocType locType,
                @Nullable BiFunction<NumExpr2D<?>, NumExpr2D<?>, Color> pixelGenerator) {
         super(springable, lock, locX, locY, dimX, dimY, locType, pixelGenerator);
+    }
+    
+    public Box(@NotNull Springable springable, @Nullable Lock lock,
+               @NotNull NumExpr2D<?> loc, @NotNull NumExpr2D<?> dims,
+               @Nullable LocType locType,
+               @Nullable BiFunction<NumExpr2D<?>, NumExpr2D<?>, Color> pixelGenerator) {
+        this(springable, lock, loc.a(), loc.b(), dims.a(), dims.b(), locType, pixelGenerator);
     }
     
     public Box(@NotNull Springable springable, @Nullable Lock lock, @Nullable LocType locType, @Nullable BiFunction<NumExpr2D<?>, NumExpr2D<?>, Color> pixelGenerator) {
@@ -87,6 +93,9 @@ public class Box extends Shape {
             copy.setDimensions(getDimensions());
             return copy;
         });
+    }
+    @Override protected Object clone() {
+        return sync(() -> new Box(this, getLock(), getLocation(LocType.MIN), getDimensions(), LocType.MIN, getPixelGenerator()));
     }
     
     //</editor-fold>

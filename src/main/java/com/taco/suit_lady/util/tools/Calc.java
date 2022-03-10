@@ -708,7 +708,13 @@ public class Calc {
         return nearestMatching(pos, dims, locType, locType, testLocType, 1, maxRange, targetAngle, filter);
     }
     
-    //<editor-fold desc="> Angle Calculations">
+    //<editor-fold desc="> Point Calculations">
+    
+    public static double distance(@NotNull Point2D origin, @NotNull Point2D other) { return origin.distance(other); }
+    public static double distance(@NotNull Number x, @NotNull Number y, @NotNull Number oX, @NotNull Number oY) { return distance(Calc.point2D(x, y), Calc.point2D(oX, oY)); }
+    public static double distance(@NotNull NumExpr2D<?> origin, @NotNull NumExpr2D<?> other) { return distance(origin.asPoint(), other.asPoint()); }
+    
+    //
     
     public static double angle(@NotNull Number p1X, @NotNull Number p1Y, @NotNull Number p2X, @NotNull Number p2Y, @NotNull AngleType angleType) {
         final double angle1 = normalizeAngle(Calc.radsToDegrees(Math.atan2(p1Y.doubleValue() - p2Y.doubleValue(), p1X.doubleValue() - p2X.doubleValue()), true) - 90);
@@ -734,6 +740,23 @@ public class Calc {
     public static double angle(@NotNull Point2D p1, @NotNull Number p2X, @NotNull Number p2Y, @NotNull AngleType angleType) { return angle(p1, new Num2D(p2X, p2Y), angleType); }
     public static double angle(@NotNull Number p1X, @NotNull Number p1Y, @NotNull NumExpr2D<?> p2, @NotNull AngleType angleType) { return angle(new Num2D(p1X, p1Y), p2, angleType); }
     public static double angle(@NotNull Number p1X, @NotNull Number p1Y, @NotNull Point2D p2, @NotNull AngleType angleType) { return angle(new Num2D(p1X, p1Y), p2, angleType); }
+    
+    //
+    
+    public static @NotNull Num2D interpolate(@NotNull Point2D origin, @NotNull Point2D other, @NotNull Number percentage) { return N.num2D(origin.interpolate(other, percentage.doubleValue())); }
+    public static @NotNull Num2D interpolate(@NotNull Number x, @NotNull Number y, @NotNull Number oX, @NotNull Number oY, @NotNull Number percentage) { return interpolate(point2D(x, y), point2D(oX, oY), percentage); }
+    public static @NotNull Num2D interpolate(@NotNull NumExpr2D<?> origin, @NotNull NumExpr2D<?> other, @NotNull Number percentage) { return interpolate(origin.asPoint(), other.asPoint(), percentage); }
+    
+    //
+    
+    public static @NotNull Num2D interpolateTowards(@NotNull Point2D origin, @NotNull Point2D other, @NotNull Number distance) { return interpolateTowards(origin, Calc.degreesToRads(Calc.angle(origin, other, AngleType.ACTUAL)), distance); }
+    public static @NotNull Num2D interpolateTowards(@NotNull Number x, @NotNull Number y, @NotNull Number oX, @NotNull Number oY, @NotNull Number distance) { return interpolateTowards(Calc.point2D(x, y), Calc.point2D(oX, oY), distance); }
+    public static @NotNull Num2D interpolateTowards(@NotNull NumExpr2D<?> origin, @NotNull NumExpr2D<?> other, @NotNull Number distance) { return interpolateTowards(origin.asPoint(), other.asPoint(), distance); }
+    
+    public static @NotNull Num2D interpolateTowards(@NotNull Point2D origin, @NotNull Number angle, @NotNull Number distance) {
+        return new Num2D((distance.doubleValue() * Math.cos(angle.doubleValue())) + origin.getX(), (distance.doubleValue() * Math.sin(angle.doubleValue())) + origin.getY());
+    }
+    public static @NotNull Num2D interpolateTowards(@NotNull NumExpr2D<?> origin, @NotNull Number angle, @NotNull Number distance) { return interpolateTowards(origin.asPoint(), angle, distance); }
     
     //
     

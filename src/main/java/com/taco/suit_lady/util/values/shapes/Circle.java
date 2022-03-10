@@ -31,14 +31,27 @@ public class Circle extends Shape {
     private final ReadOnlyDoubleWrapper diameterProperty;
     private final DoubleBinding radiusBinding;
     
-    public Circle(@NotNull Springable springable,
-                  @Nullable Lock lock,
+    public Circle(@NotNull Springable springable, @Nullable Lock lock,
+                  @NotNull Number x, @NotNull Number y, @NotNull Number radius,
                   @Nullable BiFunction<NumExpr2D<?>, NumExpr2D<?>, Color> pixelGenerator) {
         super(springable, lock, LocType.CENTER, pixelGenerator);
         
-        this.diameterProperty = new ReadOnlyDoubleWrapper();
+        this.setLocation(x, y);
+        
+        this.diameterProperty = new ReadOnlyDoubleWrapper(radius.doubleValue() * 2);
         this.radiusBinding = Bind.doubleBinding(() -> getDiameter() / 2, diameterProperty);
     }
+    
+    public Circle(@NotNull Springable springable, @Nullable Lock lock,
+                  @NotNull NumExpr2D<?> location, @NotNull Number radius,
+                  @Nullable BiFunction<NumExpr2D<?>, NumExpr2D<?>, Color> pixelGenerator) {
+        this(springable, lock, location.a(), location.b(), radius, pixelGenerator);
+    }
+    public Circle(@NotNull Springable springable, @Nullable Lock lock,
+                  @Nullable BiFunction<NumExpr2D<?>, NumExpr2D<?>, Color> pixelGenerator) {
+        this(springable, lock, 0, 0, 0, pixelGenerator);
+    }
+    
     public Circle(@NotNull Springable springable, @Nullable Lock lock) { this(springable, lock, null); }
     public Circle(@NotNull Springable springable, @Nullable BiFunction<NumExpr2D<?>, NumExpr2D<?>, Color> pixelGenerator) { this(springable, null, pixelGenerator); }
     public Circle(@NotNull Springable springable) { this(springable, null, null); }
@@ -70,22 +83,22 @@ public class Circle extends Shape {
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-        @Override public boolean intersects(@NotNull Shape other, boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
+    @Override public boolean intersects(@NotNull Shape other, boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
+        return sync(() -> {
+            final Circle circleImpl = generateCircle(translate, xMod, yMod);
+            final Number xImpl = translate ? xMod : 0;
+            final Number yImpl = translate ? yMod : 0;
             return sync(() -> {
-                final Circle circleImpl = generateCircle(translate, xMod, yMod);
-                final Number xImpl = translate ? xMod : 0;
-                final Number yImpl = translate ? yMod : 0;
-                return sync(() -> {
-                    final Point2D center = circleImpl.getLocation(LocType.CENTER).applyEach(xImpl, yImpl).asPoint();
-                    if (other instanceof Circle otherCircle)
-                        return center.distance(other.getLocation(LocType.CENTER).asPoint()) < getRadius() + otherCircle.getRadius();
-                    else if (other instanceof Box otherBox)
-                        return other.getBorderPoints(true, 0, 0).stream().anyMatch(otherBorderPoint -> center.distance(otherBorderPoint.asPoint()) < getRadius());
-                    else
-                        return super.intersects(other, translate, xMod, yMod);
-                });
+                final Point2D center = circleImpl.getLocation(LocType.CENTER).applyEach(xImpl, yImpl).asPoint();
+                if (other instanceof Circle otherCircle)
+                    return center.distance(other.getLocation(LocType.CENTER).asPoint()) < getRadius() + otherCircle.getRadius();
+                else if (other instanceof Box otherBox)
+                    return other.getBorderPoints(true, 0, 0).stream().anyMatch(otherBorderPoint -> center.distance(otherBorderPoint.asPoint()) < getRadius());
+                else
+                    return super.intersects(other, translate, xMod, yMod);
             });
-        }
+        });
+    }
     
     @Override public boolean containsPoint(@NotNull Number x, @NotNull Number y) {
         return sync(() -> getLocation(LocType.CENTER).asPoint().distance(x.doubleValue(), y.doubleValue()) < getRadius());
@@ -137,7 +150,9 @@ public class Circle extends Shape {
                ", borderPoints=" + getBorderPoints() +
                '}';
     }
-    
+    @Override protected Object clone() {
+        return sync(() -> new Circle(this, getLock(), getLocation(), getRadius(), getPixelGenerator()));
+    }
     
     //</editor-fold>
     
