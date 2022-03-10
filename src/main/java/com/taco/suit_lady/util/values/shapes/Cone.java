@@ -20,9 +20,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
 public class Cone extends Shape {
     
@@ -147,7 +149,13 @@ public class Cone extends Shape {
     }
     
     @Override protected @NotNull List<Num2D> regenerateBorderPoints(boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
-        throw Exc.nyi(); //TODO
+        throw Exc.nyi();
+//        final ArrayList<Num2D> borderPoints = new ArrayList<>();
+//        final Num2D originPoint = getOrigin();
+//        final Num2D minAnglePoint = getMinAnglePoint();
+//        final Num2D maxAnglePoint = getMaxAnglePoint();
+//        borderPoints.addAll(Calc.line(originPoint, minAnglePoint).stream().distinct().collect(Collectors.toCollection(ArrayList::new)));
+//        borderPoints.addAll(Calc.line(originPoint, minAnglePoint).stream().distinct().collect(Collectors.toCollection(ArrayList::new)));
     }
     
     @Override protected @NotNull Cone copyTo(boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
