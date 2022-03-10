@@ -147,7 +147,7 @@ public class Cone extends Shape {
     }
     
     @Override protected @NotNull List<Num2D> regenerateBorderPoints(boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
-        throw Exc.nyi();
+        throw Exc.nyi(); //TODO
     }
     
     @Override protected @NotNull Cone copyTo(boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
