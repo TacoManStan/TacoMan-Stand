@@ -17,6 +17,8 @@ import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -32,13 +34,18 @@ public class Effect_SpawnGameObject extends Effect_Targeted {
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public boolean trigger(@NotNull Map<String, Object> params) {
+    @Override public boolean onTrigger(@NotNull Map<String, Object> params) {
         final Point2D target = (Point2D) params.get("target");
         final Supplier<GameObject> factory = (Supplier<GameObject>) params.get("factory");
         final GameObject spawnedObj = factory.get().init();
         spawnedObj.setLocation(target, true);
         spawnedObj.addToMap();
         return true;
+    }
+    
+    @Override public @NotNull List<Value2D<String, Class<?>>> requiredParams() {
+        return Arrays.asList(new Value2D<>("target", Point2D.class),
+                             new Value2D<>("factory", Supplier.class));
     }
     
     //</editor-fold>

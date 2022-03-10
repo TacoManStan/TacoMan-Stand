@@ -4,7 +4,6 @@ import com.taco.suit_lady.game.galaxy.effects.specific.Effect_MissileImpact;
 import com.taco.suit_lady.game.objects.Mover;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.logic.triggers.Galaxy;
-import com.taco.suit_lady.util.tools.Calc;
 import com.taco.suit_lady.util.tools.printing.PrintData;
 import com.taco.suit_lady.util.tools.printing.Printer;
 import com.taco.suit_lady.util.tools.list_tools.L;
@@ -18,6 +17,8 @@ import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 public class Effect_LaunchMissile extends Effect_Targeted {
@@ -49,10 +50,14 @@ public class Effect_LaunchMissile extends Effect_Targeted {
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public boolean trigger(@NotNull Map<String, Object> params) {
+    @Override public boolean onTrigger(@NotNull Map<String, Object> params) {
         final Point2D target = (Point2D) params.get("target");
         launchMissileTest(target);
         return true;
+    }
+    
+    @Override public @NotNull List<Value2D<String, Class<?>>> requiredParams() {
+        return Arrays.asList(new Value2D<>("target", Point2D.class));
     }
     
     //</editor-fold>

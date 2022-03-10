@@ -9,11 +9,13 @@ import com.taco.suit_lady.util.values.numbers.Num2D;
 import com.taco.suit_lady.util.values.shapes.Circle;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import org.jetbrains.annotations.Contract;
+import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 public class Effect_Scan extends Effect_Targeted {
@@ -32,24 +34,14 @@ public class Effect_Scan extends Effect_Targeted {
     public final ReadOnlyObjectProperty<Effect_Targeted> readOnlyScanEffectProperty() { return scanEffectProperty.getReadOnlyProperty(); }
     public final Effect_Targeted getScanEffect() { return scanEffectProperty.get(); }
     
-    @Contract("_ -> new")
-    public final @NotNull Effect_Targeted getScanEffectTest(@NotNull GameObject missile) {
-        return new Effect_Targeted(missile) {
-            @Override public boolean trigger(@NotNull Map<String, Object> params) {
-                final GameObject target = (GameObject) params.get("target");
-                target.taskManager().shutdown();
-                return true;
-            }
-        };
-    }
-    
     public final Effect_Targeted setScanEffect(@Nullable Effect_Targeted newValue) { return Props.setProperty(scanEffectProperty, newValue); }
     
     //</editor-fold>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public boolean trigger(@NotNull Map<String, Object> params) {
+    @Override public boolean onTrigger(@NotNull Map<String, Object> params) {
+        //TODO: Remove test implementation & make generic
         final GameObject missile = (GameObject) params.get("missile");
         final double radius = (double) params.get("radius");
         final Num2D impactLocation = (Num2D) params.get("impact_location");
@@ -67,6 +59,13 @@ public class Effect_Scan extends Effect_Targeted {
         scannedObjs.forEach(gameObject -> getScanEffect().trigger(L.map(new Value2D<>("target", gameObject))));
         
         return true;
+    }
+    
+    @Override public @NotNull List<Value2D<String, Class<?>>> requiredParams() {
+        return Arrays.asList(new Value2D<>("target", Point2D.class),
+                             new Value2D<>("missile", GameObject.class),
+                             new Value2D<>("radius", Number.class),
+                             new Value2D<>("impact_location", Num2D.class));
     }
     
     //</editor-fold>

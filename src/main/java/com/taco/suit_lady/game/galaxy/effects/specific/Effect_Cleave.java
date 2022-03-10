@@ -6,6 +6,7 @@ import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.util.enums.FilterType;
 import com.taco.suit_lady.util.tools.Calc;
 import com.taco.suit_lady.util.tools.printing.Printer;
+import com.taco.suit_lady.util.values.Value2D;
 import com.taco.suit_lady.util.values.numbers.N;
 import com.taco.suit_lady.util.values.numbers.Num2D;
 import javafx.geometry.Point2D;
@@ -13,6 +14,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 public class Effect_Cleave extends Effect {
@@ -23,10 +26,10 @@ public class Effect_Cleave extends Effect {
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public boolean trigger(@NotNull Map<String, Object> params) {
+    @Override public boolean onTrigger(@NotNull Map<String, Object> params) {
         final Point2D target = (Point2D) params.get("target");
-        final double cleaveSize = (double) params.get("cleave_size");
-        final double cleaveRange = (double) params.get("cleave_range");
+        final double cleaveSize = ((Number) params.get("cleave_size")).doubleValue();
+        final double cleaveRange = ((Number) params.get("cleave_range")).doubleValue();
         
         final Num2D center = N.num2D(getSource().getLocation(true));
         final double angleToTarget = Calc.angle(center, target);
@@ -46,6 +49,12 @@ public class Effect_Cleave extends Effect {
         filtered.forEach(gameObject -> gameObject.taskManager().shutdown());
         
         return true;
+    }
+    
+    @Override public @NotNull List<Value2D<String, Class<?>>> requiredParams() {
+        return Arrays.asList(new Value2D<>("target", Point2D.class),
+                             new Value2D<>("cleave_size", Number.class),
+                             new Value2D<>("cleave_range", Number.class));
     }
     
     //</editor-fold>

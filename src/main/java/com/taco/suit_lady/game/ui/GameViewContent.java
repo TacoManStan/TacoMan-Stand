@@ -230,7 +230,9 @@ public class GameViewContent
         switch (abilityNum) {
             case 1 -> new Ability_LaunchMissile(testObject).use(new Value2D<>("target", getController().getMouseOnMapSafe()));
             case 2 -> blinkTest().use(new Value2D<>("target", getController().getMouseOnMapSafe()));
-            case 3 -> new Ability_Cleave(testObject).use(new Value2D<>("target", getController().getMouseOnMapSafe()));
+            case 3 -> new Ability_Cleave(testObject).use(new Value2D<>("target", getController().getMouseOnMapSafe()),
+                                                         new Value2D<>("cleave_size", 45),
+                                                         new Value2D<>("cleave_range", 50));
         }
     }
     

@@ -4,6 +4,7 @@ import com.taco.suit_lady.util.tools.Exc;
 import com.taco.suit_lady.util.tools.Exe;
 import com.taco.suit_lady.util.tools.list_tools.Op.OperationType;
 import com.taco.suit_lady.util.tools.list_tools.Op.TriggerType;
+import com.taco.suit_lady.util.tools.printing.Printer;
 import com.taco.suit_lady.util.values.Value2D;
 import com.taco.tacository.collections.ReadOnlySelectionList;
 import com.taco.tacository.collections.SelectionList;
@@ -432,6 +433,57 @@ public final class L {
     
     public static <K, V> @Nullable V get(@NotNull K key, @NotNull Class<V> returnType, @NotNull Map<K, Object> map) { return (V) map.get(key); }
     public static <K, V> @Nullable V get(@NotNull K key, @NotNull Map<K, Object> map) { return (V) map.get(key); }
+    
+    /**
+     * <p>Checks the specified {@link Map} instance to ensure it contains {@code key-value pairs} matching the specified {@code validator array}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>If the specified {@code validator array} is {@link A#isEmpty(Object[]) empty}, return {@code true}.</li>
+     *     <li>If the specified {@link Map} does not contain one or more of the {@code keys} defined by the specified {@code validator array}, return {@code false}.</li>
+     *     <li>If the {@link Object value} mapped to the validator {@code key} in the specified {@link Map} is {@code null} for any of the specified {@code validators}, return {@code false}.</li>
+     *     <li>If the {@link Object value} mapped to the validator {@code key} in the specified {@link Map} cannot be {@code cast} to the validator {@link Class} type for any of the specified {@code validators}, return {@code false}.</li>
+     * </ol>
+     *
+     * @param map         The {@link Map} object being validated.
+     * @param printOnFail {@code True} if a detailed {@link Printer#err(Object) Error Message} should be printed upon validation failure.
+     * @param validators  The {@code array} of {@link Value2D} objects each defining a {@code key} that must be present in the specified {@link Map} and the corresponding {@code value} type requirement.
+     * @param <K>         The type of {@code key} for the specified {@link Map}.
+     *
+     * @return {@code True} if the specified {@link Map} is valid given the specified {@code constraints}, {@code false} if it is not.
+     */
+    @SafeVarargs public static boolean validateMap(@NotNull Map<?, ?> map, boolean printOnFail, @NotNull Value2D<?, Class<?>>... validators) {
+        if (A.isEmpty(validators))
+            return true;
+        for (Value2D<?, Class<?>> validator: validators) {
+            final Object key = validator.a();
+            final Class<?> classReq = validator.b();
+            
+            if (!map.containsKey(key)) {
+                if (printOnFail)
+                    Printer.err("ERROR: Map does not contain key: " + key);
+                return false;
+            }
+            final Object value = map.get(validator.a());
+            if (value == null) {
+                if (printOnFail)
+                    Printer.err("ERROR: Value matching key \"" + key + "\" is null.");
+                return false;
+            }
+            if (!classReq.isInstance(value)) {
+                if (printOnFail)
+                    Printer.err("ERROR: Value matching key \"" + key + "\" is of invalid type [Req:" + classReq + "  Actual: " + value.getClass() + "]");
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    /**
+     * <p><i>See {@link #validateMap(Map, boolean, Value2D[])}</i></p>
+     */
+    public static boolean validateMap(@NotNull Map<?, ?> map, boolean printOnFail, @NotNull List<Value2D<?, Class<?>>> validatorList) {
+        return validateMap(map, printOnFail, validatorList.toArray(new Value2D[0]));
+    }
     
     //</editor-fold>
     

@@ -7,14 +7,18 @@ import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.list_tools.L;
 import com.taco.suit_lady.util.values.Value2D;
+import com.taco.suit_lady.util.values.params.Paramable;
+import com.taco.suit_lady.util.values.params.Params;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
 
 public abstract class Ability
-        implements Validatable<Ability> {
+        implements Validatable<Ability>, Paramable<String> {
     
     private Lock lock;
     private final GameObject source;
@@ -46,7 +50,11 @@ public abstract class Ability
     //<editor-fold desc="--- LOGIC ---">
     
     @SafeVarargs public final boolean use(@NotNull Value2D<String, Object>... params) { return use(L.map(params)); }
-    public final boolean use(@NotNull Map<String, Object> params) { return sync(() -> revalidate(params) && execute(params)); }
+    public final boolean use(@NotNull Map<String, Object> params) {
+        return sync(() -> {
+            return Params.validateParams(this, params, true) && revalidate(params) && execute(params);
+        });
+    }
     
     //</editor-fold>
     
