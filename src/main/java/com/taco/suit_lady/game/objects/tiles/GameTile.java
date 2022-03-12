@@ -67,7 +67,6 @@ public class GameTile
         
         
         this.model = new TileModel(this);
-//        this.initCollisionMap();
     }
     
     private Box collisionBox;

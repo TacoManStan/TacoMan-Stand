@@ -3,12 +3,14 @@ package com.taco.suit_lady.util.values.numbers.shapes;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.values.enums.Axis;
 import com.taco.suit_lady.util.values.enums.LocType;
+import com.taco.suit_lady.util.values.numbers.Bounds;
 import com.taco.suit_lady.util.values.numbers.Num2D;
 import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
 import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
@@ -107,6 +109,15 @@ public class Box extends Shape {
             return getLocation(LocType.MIN).applyEach(x, y);
         return new Num2D(x, y);
     }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- STATIC ---">
+    
+    public static @NotNull Box newInstance(@NotNull Springable springable, @Nullable Lock lock, @NotNull Bounds bounds, @Nullable BiFunction<NumExpr2D<?>, NumExpr2D<?>, Color> pixelGenerator) {
+        return new Box(springable, lock, bounds.getLocation(), bounds.getDimensions(), bounds.locType(), pixelGenerator);
+    }
+    public static @NotNull Box newInstance(@NotNull Springable springable, @Nullable Lock lock, @NotNull Bounds bounds) { return newInstance(springable, lock, bounds, null); }
     
     //</editor-fold>
 }

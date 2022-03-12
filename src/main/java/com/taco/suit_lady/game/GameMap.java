@@ -233,6 +233,8 @@ public class GameMap
     
     //
     
+    //<editor-fold desc="> Scan Methods">
+    
     @SafeVarargs public final @NotNull ArrayList<GameObject> scan(@NotNull FilterType filterType, @Nullable List<Predicate<GameObject>> filterList, @NotNull Predicate<GameObject>... filters) {
         final ArrayList<Predicate<GameObject>> filterListImpl = filterList != null ? new ArrayList<>(filterList) : new ArrayList<>();
         filterListImpl.addAll(Arrays.asList(filters));
@@ -257,6 +259,8 @@ public class GameMap
         return scan(filterType, A.asList(includedFilter, excludedFilter), filters);
     }
     @SafeVarargs public final @NotNull ArrayList<GameObject> scan(@NotNull List<Shape> shapes, @NotNull FilterType filterType, @NotNull Predicate<GameObject>... filters) { return scan(shapes, null, filterType, filters); }
+    
+    //</editor-fold>
     
     //</editor-fold>
     

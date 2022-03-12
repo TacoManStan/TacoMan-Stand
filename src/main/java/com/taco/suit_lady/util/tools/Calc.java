@@ -1,6 +1,7 @@
 package com.taco.suit_lady.util.tools;
 
 import com.taco.suit_lady.util.values.enums.Axis;
+import com.taco.suit_lady.util.values.numbers.Bounds;
 import com.taco.suit_lady.util.values.numbers.N;
 import com.taco.suit_lady.util.values.numbers.Num2D;
 import com.taco.suit_lady.util.values.numbers.shapes.Box;
@@ -1028,13 +1029,18 @@ public class Calc {
     
     //<editor-fold desc="--- SHAPES ---">
     
-    public static @NotNull Box boundsBox(@NotNull Springable springable, @Nullable Lock lock,
-                                         @Nullable BiFunction<NumExpr2D<?>, NumExpr2D<?>, javafx.scene.paint.Color> pixelGenerator,
-                                         @NotNull List<Shape> inputs) {
+    public static @NotNull Box boundsBox(@NotNull Springable springable, @Nullable Lock lock, @Nullable BiFunction<NumExpr2D<?>, NumExpr2D<?>, javafx.scene.paint.Color> pixelGenerator, @NotNull List<Shape> inputs) {
+        return Box.newInstance(springable, lock, bounds(inputs), pixelGenerator);
+    }
+    public static @NotNull Box boundsBox(@NotNull Springable springable, @Nullable Lock lock, @NotNull List<Shape> inputs) {
+        return Box.newInstance(springable, lock, bounds(inputs), null);
+    }
+    
+    public static @NotNull Bounds bounds(@NotNull List<Shape> inputs) {
         final ArrayList<Shape> shapes = new ArrayList<>(inputs);
         
         if (inputs.isEmpty())
-            return new Box(springable);
+            return Bounds.newInstance();
         
         double minLocX = Integer.MAX_VALUE;
         double maxLocX = Integer.MIN_VALUE;
@@ -1063,7 +1069,7 @@ public class Calc {
         final double width = maxLocX - minLocX;
         final double height = maxLocY - minLocY;
         
-        return new Box(springable, lock, minLocX, minLocY, width, height, LocType.MIN, pixelGenerator);
+        return Bounds.newInstanceFrom(minLocX, minLocY, maxLocX, maxLocY);
     }
     
     //</editor-fold>
