@@ -399,7 +399,7 @@ public class GameMap
     
     @Override public JElement[] jFields() {
         final ArrayList<GameObject> gameObjectsImpl = new ArrayList<>(gameObjects);
-        gameObjectsImpl.remove(getGame().getTestObject());
+        gameObjectsImpl.remove(getGame().getTestObject1());
         gameObjectsImpl.remove(getGame().getTestObject2());
         return new JElement[]{
                 JUtil.create("tile-size", getTileSize()),

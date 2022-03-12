@@ -15,7 +15,6 @@ import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.fxml.FXML;
-import javafx.geometry.Point2D;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -98,8 +97,8 @@ public class GameViewContentController
             @Override protected void tick() {
                 final Num2D mouseOnContent = getMouseOnContent();
                 final Num2D viewToMap = getContent().getCamera().viewToMap(mouseOnContent);
-                final int xOffset = (int) Math.ceil(getContent().getTestObject().getWidth() / 2D);
-                final int yOffset = (int) Math.ceil(getContent().getTestObject().getHeight() / 2D);
+                final int xOffset = (int) Math.ceil(getContent().getTestObject1().getWidth() / 2D);
+                final int yOffset = (int) Math.ceil(getContent().getTestObject1().getHeight() / 2D);
                 final Num2D minBounds = new Num2D(xOffset, yOffset);
                 final Num2D maxBounds = new Num2D(getGameMap().getPixelWidth() - xOffset, getGameMap().getPixelHeight() - yOffset);
             

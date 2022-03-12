@@ -69,7 +69,7 @@ public class GameViewPageController extends UIPageController<GameViewPage>
         
         testButton3.setOnAction(event -> {
             ArrayList<GameTile> tiles = new ArrayList<>();
-            List<GameTile> tileMatrix = getGame().getTestObject().getOccupiedTiles();
+            List<GameTile> tileMatrix = getGame().getTestObject1().getOccupiedTiles();
             for (GameTile tile: tileMatrix)
                 System.out.println("Tile [" + tile.getTileLocationX() + ", " + tile.getTileLocationY() + "]: " + tile);
         });
@@ -82,24 +82,24 @@ public class GameViewPageController extends UIPageController<GameViewPage>
             System.out.println("Map Aggregate X: " + getCamera().getAggregateX());
             System.out.println("Map Aggregate Y: " + getCamera().getAggregateY());
             
-            System.out.println("Movement Target X: " + getGame().getTestObject().mover().getTargetX());
-            System.out.println("Movement Target Y: " + getGame().getTestObject().mover().getTargetY());
+            System.out.println("Movement Target X: " + getGame().getTestObject1().mover().getTargetX());
+            System.out.println("Movement Target Y: " + getGame().getTestObject1().mover().getTargetY());
             
             
-            System.out.println("Test Object Width: " + getGame().getTestObject().getWidth());
-            System.out.println("Test Object Height: " + getGame().getTestObject().getHeight());
+            System.out.println("Test Object Width: " + getGame().getTestObject1().getWidth());
+            System.out.println("Test Object Height: " + getGame().getTestObject1().getHeight());
             
             
-            System.out.println("Test Object Location X: " + getGame().getTestObject().getLocationX(false));
-            System.out.println("Test Object Location Y: " + getGame().getTestObject().getLocationY(false));
+            System.out.println("Test Object Location X: " + getGame().getTestObject1().getLocationX(false));
+            System.out.println("Test Object Location Y: " + getGame().getTestObject1().getLocationY(false));
             
-            System.out.println("Test Object Location X (Center): " + getGame().getTestObject().getLocationX(true));
-            System.out.println("Test Object Location Y (Center): " + getGame().getTestObject().getLocationY(true));
+            System.out.println("Test Object Location X (Center): " + getGame().getTestObject1().getLocationX(true));
+            System.out.println("Test Object Location Y (Center): " + getGame().getTestObject1().getLocationY(true));
             
             
-            System.out.println("Test Object Bounds Box:" + getGame().getTestObject().boundsBox());
+            System.out.println("Test Object Bounds Box:" + getGame().getTestObject1().boundsBox());
             
-            System.out.println("Test Object Model Definition Bounds: " + getGame().getTestObject().getModel().getDefinition().getBounds());
+            System.out.println("Test Object Model Definition Bounds: " + getGame().getTestObject1().getModel().getDefinition().getBounds());
         });
         testButton4.setText("Print Movement Data");
         

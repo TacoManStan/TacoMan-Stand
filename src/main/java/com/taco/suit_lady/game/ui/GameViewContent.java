@@ -22,7 +22,6 @@ import com.taco.suit_lady.util.tools.*;
 import com.taco.suit_lady.util.tools.list_tools.L;
 import com.taco.suit_lady.util.tools.printing.Printer;
 import com.taco.suit_lady.util.values.Value2D;
-import com.taco.suit_lady.util.values.numbers.Num;
 import com.taco.suit_lady.util.values.numbers.Num2D;
 import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
 import javafx.beans.binding.ObjectBinding;
@@ -51,7 +50,7 @@ public class GameViewContent
     
     private final ObjectProperty<GameMap> gameMapProperty;
     
-    private final GameObject testObject; //Move to Player class
+    private final GameObject testObject1; //Move to Player class
     private final GameObject testObject2;
     private final GameObject testObjectTree;
     
@@ -65,13 +64,27 @@ public class GameViewContent
         
         this.gameMapProperty = new SimpleObjectProperty<>();
         
-        this.testObject = new GameObject(this, "test_obj1");
+        this.testObject1 = new GameObject(this, "test_obj1");
         this.testObject2 = new GameObject(this, "test_obj2");
         this.testObjectTree = new GameObject(this, "tree1_obj", "tree1");
     }
     
-    public final GameObject getTestObject() { return testObject; }
+    //<editor-fold desc="--- TEST OBJ ACCESSORS ---">
+    
+    public final GameObject getTestObject(int indexId) {
+        return switch (indexId) {
+            case 1 -> testObject1;
+            case 2 -> testObject2;
+            case 3 -> testObjectTree;
+            
+            default -> throw Exc.unsupported("No Test Object Matches ID: " + indexId);
+        };
+    }
+    public final GameObject getTestObject(boolean obj1) { return getTestObject(obj1 ? 1 : 2); }
+    public final GameObject getTestObject1() { return testObject1; }
     public final GameObject getTestObject2() { return testObject2; }
+    
+    //</editor-fold>
     
     //<editor-fold desc="--- INITIALIZATION ---">
     
@@ -138,10 +151,10 @@ public class GameViewContent
     }
     
     private void initTestObjects() {
-        testObject.init();
-        testObject.setTileLocationX(20, false);
-        testObject.setTileLocationY(20, false);
-        testObject.addToMap();
+        testObject1.init();
+        testObject1.setTileLocationX(20, false);
+        testObject1.setTileLocationY(20, false);
+        testObject1.addToMap();
         //        getGameMap().addGameObject(testObject);
         //        getGameMap().gameObjects().add(testObject);
         
@@ -159,7 +172,7 @@ public class GameViewContent
         //        getGameMap().addGameObject(testObjectTree);
         //        getGameMap().gameObjects().add(testObjectTree);
         
-        getCamera().bindViewTo(testObject);
+        getCamera().bindViewTo(testObject1);
     }
     
     //</editor-fold>
@@ -202,7 +215,7 @@ public class GameViewContent
                 else
                     getCamera().moveTileX(1);
             }, fx);
-            case Q -> keyInputAction(() -> getCamera().toggleViewBinding(getTestObject()), !fx);
+            case Q -> keyInputAction(() -> getCamera().toggleViewBinding(getTestObject1()), !fx);
             
             //                case UP -> keyInputAction(() -> testObject.moveY(-1), fx);
             //                case LEFT -> keyInputAction(() -> testObject.moveX(-1), fx);
@@ -231,9 +244,9 @@ public class GameViewContent
     private void abilityTest(int abilityNum) {
         Printer.print("Ability Used: " + abilityNum);
         switch (abilityNum) {
-            case 1 -> new Ability_LaunchMissile(testObject).use(new Value2D<>("target", getController().getMouseOnMapSafe()));
+            case 1 -> new Ability_LaunchMissile(testObject1).use(new Value2D<>("target", getController().getMouseOnMapSafe()));
             case 2 -> blinkTest().use(new Value2D<>("target", getController().getMouseOnMapSafe()));
-            case 3 -> new Ability_Cleave(testObject).use(
+            case 3 -> new Ability_Cleave(testObject1).use(
                     new Value2D<>("target", getController().getMouseOnMapSafe()),
                     new Value2D<>("cleave_size", 45),
                     new Value2D<>("cleave_range", 75));
@@ -241,7 +254,7 @@ public class GameViewContent
     }
     
     private @NotNull Ability_Blink blinkTest() {
-        final Ability_Blink ability = new Ability_Blink(testObject);
+        final Ability_Blink ability = new Ability_Blink(testObject1);
         ability.validator().addValidator(Galaxy.newValidator(
                 ability, params -> getGameMap().isPathable(ability.getSource(), false, L.get("target", Num2D.class, params))));
         return ability;
@@ -254,7 +267,7 @@ public class GameViewContent
                 selectTileAtMouse();
         } else if (event.getButton().equals(MouseButton.SECONDARY)) {
             if (!fx)
-                getTestObject().mover().moveAndBind(getController().mouseOnMapBindingSafeX(), getController().mouseOnMapBindingSafeY());
+                getTestObject(!event.isShiftDown()).mover().moveAndBind(getController().mouseOnMapBindingSafeX(), getController().mouseOnMapBindingSafeY());
         } else if (event.getButton().equals(MouseButton.MIDDLE)) {
             if (!fx)
                 abilityTest(4);
@@ -271,7 +284,7 @@ public class GameViewContent
     @Override protected boolean handleMouseReleaseEvent(@NotNull MouseEvent event, boolean fx) {
         if (event.getButton().equals(MouseButton.SECONDARY)) {
             if (!fx)
-                getTestObject().mover().unbindAndMove(getController().getMouseOnMapSafe());
+                getTestObject(!event.isShiftDown()).mover().unbindAndMove(getController().getMouseOnMapSafe());
         }
         
         return true;
@@ -280,7 +293,7 @@ public class GameViewContent
     @Override protected boolean handleMouseDragEvent(@NotNull MouseEvent event, boolean fx) {
         if (event.getButton() == MouseButton.SECONDARY) {
             if (!fx)
-                getTestObject().mover().moveAndBind(getController().mouseOnMapBindingSafeX(), getController().mouseOnMapBindingSafeY());
+                getTestObject(!event.isShiftDown()).mover().moveAndBind(getController().mouseOnMapBindingSafeX(), getController().mouseOnMapBindingSafeY());
         }
         
         return true;
@@ -312,7 +325,7 @@ public class GameViewContent
             case NUMPAD3 -> shiftTile(1, 1);
             case NUMPAD4 -> shiftTile(-1, 0);
             
-            case NUMPAD5 -> getCamera().setLocation(getTestObject(), true);
+            case NUMPAD5 -> getCamera().setLocation(getTestObject1(), true);
             
             case NUMPAD6 -> shiftTile(1, 0);
             case NUMPAD7 -> shiftTile(-1, -1);

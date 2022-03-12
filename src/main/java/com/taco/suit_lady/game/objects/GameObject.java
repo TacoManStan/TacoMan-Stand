@@ -19,7 +19,6 @@ import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Obj;
 import com.taco.suit_lady.util.tools.Props;
-import com.taco.suit_lady.util.tools.list_tools.A;
 import com.taco.suit_lady.util.values.enums.LocType;
 import com.taco.suit_lady.util.values.numbers.Num2D;
 import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
@@ -42,7 +41,6 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.io.ObjectStreamException;
 import java.io.Serial;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 
@@ -446,7 +444,7 @@ public class GameObject
     //<editor-fold desc="--- TESTING ---">
     
     public final boolean isTestObjectAny() { return isTestObject1() || isTestObject2(); }
-    public final boolean isTestObject1() { return this.equals(getGame().getTestObject()); }
+    public final boolean isTestObject1() { return this.equals(getGame().getTestObject1()); }
     public final boolean isTestObject2() { return this.equals(getGame().getTestObject2()); }
     
     //</editor-fold>

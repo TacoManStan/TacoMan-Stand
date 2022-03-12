@@ -48,7 +48,7 @@ public class AttributePageController extends UIPageController<AttributePage>
                                 listView.hashCode()))));
         
         testButton.setOnAction(event -> FX.requireFX(() -> {
-            addTestAttributes(getGame().getTestObject().attributes());
+            addTestAttributes(getGame().getTestObject1().attributes());
         }));
     }
     
