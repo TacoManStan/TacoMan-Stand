@@ -1,12 +1,12 @@
 package com.taco.suit_lady.game.objects.collision;
 
 import com.taco.suit_lady.game.GameComponent;
-import com.taco.suit_lady.util.values.shapes.Box;
+import com.taco.suit_lady.util.values.numbers.shapes.Box;
 import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.Obj;
 import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
-import com.taco.suit_lady.util.values.shapes.Shape;
+import com.taco.suit_lady.util.values.numbers.shapes.Shape;
 import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

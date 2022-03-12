@@ -1,13 +1,11 @@
 package com.taco.suit_lady.util.tools;
 
-import com.taco.suit_lady.util.tools.printing.Printer;
 import com.taco.suit_lady.util.values.enums.Axis;
 import com.taco.suit_lady.util.values.numbers.N;
-import com.taco.suit_lady.util.values.numbers.Num;
 import com.taco.suit_lady.util.values.numbers.Num2D;
-import com.taco.suit_lady.util.values.shapes.Box;
+import com.taco.suit_lady.util.values.numbers.shapes.Box;
 import com.taco.suit_lady.util.values.enums.LocType;
-import com.taco.suit_lady.util.values.shapes.Shape;
+import com.taco.suit_lady.util.values.numbers.shapes.Shape;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.timing.Timing;
 import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
@@ -615,8 +613,8 @@ public class Calc {
     }
     
     
-    public static @NotNull Point2D getPointInBounds(
-            @NotNull Point2D origin,
+    public static @NotNull Num2D getPointInBounds(
+            @NotNull NumExpr2D<?> origin,
             @Nullable ValueExpr2D<? extends Number, ? extends Number> minBounds,
             @NotNull ValueExpr2D<? extends Number, ? extends Number> maxBounds) {
         minBounds = minBounds != null ? minBounds : new Value2D<>(0, 0);
@@ -626,8 +624,8 @@ public class Calc {
         if (minBounds.b().doubleValue() >= maxBounds.b().doubleValue())
             throw Exc.unsupported("Min Y Bounds (" + minBounds.b().doubleValue() + ") must be less than Max Y Bounds (" + maxBounds.b().doubleValue());
         
-        double x = origin.getX();
-        double y = origin.getY();
+        double x = origin.aD();
+        double y = origin.bD();
         
         if (x >= maxBounds.a().doubleValue())
             x = maxBounds.a().doubleValue();
@@ -639,18 +637,18 @@ public class Calc {
         if (y <= minBounds.b().doubleValue())
             y = minBounds.b().doubleValue();
         
-        return new Point2D(x, y);
+        return new Num2D(x, y);
     }
-    public static @NotNull Point2D getPointInBounds(@NotNull Point2D origin, @NotNull ValueExpr2D<? extends Number, ? extends Number> maxBounds) { return getPointInBounds(origin, null, maxBounds); }
+    public static @NotNull Num2D getPointInBounds(@NotNull NumExpr2D<?> origin, @NotNull NumExpr2D<?> maxBounds) { return getPointInBounds(origin, null, maxBounds); }
     
-    public static @NotNull ObjectBinding<Point2D> getPointInBoundsBinding(
-            @NotNull ObservableValue<Point2D> originProperty,
+    public static @NotNull ObjectBinding<Num2D> getPointInBoundsBinding(
+            @NotNull ObservableValue<NumExpr2D<?>> originProperty,
             @Nullable ValueExpr2D<? extends Number, ? extends Number> minBounds,
             @NotNull ValueExpr2D<? extends Number, ? extends Number> maxBounds) {
         return Bind.objBinding(() -> getPointInBounds(originProperty.getValue(), minBounds, maxBounds), originProperty);
     }
-    public static @NotNull ObjectBinding<Point2D> getPointInBoundsBinding(
-            @NotNull ObservableValue<Point2D> originProperty,
+    public static @NotNull ObjectBinding<Num2D> getPointInBoundsBinding(
+            @NotNull ObservableValue<NumExpr2D<?>> originProperty,
             @NotNull ValueExpr2D<? extends Number, ? extends Number> maxBounds) {
         return getPointInBoundsBinding(originProperty, null, maxBounds);
     }

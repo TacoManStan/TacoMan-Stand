@@ -5,7 +5,9 @@ import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.tools.Props;
 import com.taco.suit_lady.util.tools.fx_tools.FX;
 import com.taco.suit_lady.util.tools.printing.Printer;
+import com.taco.suit_lady.util.values.numbers.N;
 import com.taco.suit_lady.util.values.numbers.Num2D;
+import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.geometry.Point2D;
@@ -43,9 +45,9 @@ public class AppUI
     
     private Robot robot;
     
-    private final ReadOnlyObjectWrapper<Point2D> mouseOnScreenProperty;
+    private final ReadOnlyObjectWrapper<Num2D> mouseOnScreenProperty;
     private final ListProperty<Region> trackedRegions;
-    private final MapProperty<Region, Point2D> mouseMap;
+    private final MapProperty<Region, Num2D> mouseMap;
     
     /**
      * <p>Constructs a new {@link AppUI} instance.</p>
@@ -124,13 +126,13 @@ public class AppUI
     
     private Robot robot() { return FX.requireFX(() -> robot); }
     
-    private ReadOnlyObjectWrapper<Point2D> mouseOnScreenProperty() { return sync(() -> mouseOnScreenProperty); }
-    public final ReadOnlyObjectProperty<Point2D> readOnlyMouseOnScreenProperty() { return mouseOnScreenProperty().getReadOnlyProperty(); }
-    public final Point2D getMouseOnScreen() { return mouseOnScreenProperty().get(); }
-    private Point2D setMouseOnScreen(@NotNull Point2D newValue) { return Props.setProperty(mouseOnScreenProperty(), newValue); }
+    private ReadOnlyObjectWrapper<Num2D> mouseOnScreenProperty() { return sync(() -> mouseOnScreenProperty); }
+    public final ReadOnlyObjectProperty<Num2D> readOnlyMouseOnScreenProperty() { return mouseOnScreenProperty().getReadOnlyProperty(); }
+    public final Num2D getMouseOnScreen() { return mouseOnScreenProperty().get(); }
+    private Num2D setMouseOnScreen(@NotNull NumExpr2D<?> newValue) { return Props.setProperty(mouseOnScreenProperty(), newValue.asNum2D()); }
     
     private ListProperty<Region> trackedRegions() { return sync(() -> trackedRegions); }
-    private MapProperty<Region, Point2D> mouseMap() { return sync(() -> mouseMap); }
+    private MapProperty<Region, Num2D> mouseMap() { return sync(() -> mouseMap); }
     
     public final boolean trackRegion(@NotNull Region region) {
         if (printTrackingDetails)
@@ -144,16 +146,16 @@ public class AppUI
     }
     
     public final void refreshMouseTracking() {
-        FX.requireFX(() -> { setMouseOnScreen(robot.getMousePosition()); });
+        FX.requireFX(() -> { setMouseOnScreen(N.num2D(robot.getMousePosition())); });
     }
     
-    public final @NotNull Point2D getMouseOnRegion(@NotNull Region region) {
-        final Point2D regionLocation = mouseMap().get(region);
+    public final @NotNull Num2D getMouseOnRegion(@NotNull Region region) {
+        final Num2D regionLocation = mouseMap().get(region);
         if (regionLocation == null)
             Printer.err("WARNING: Attempting to retrieve mouse location for untracked Region [" + region + "]");
         return regionLocation;
     }
-    public final @NotNull Point2D getMouseOnRegionSafe(@NotNull Region region) { return getSafe(getMouseOnRegion(region), region); }
+    public final @NotNull Num2D getMouseOnRegionSafe(@NotNull Region region) { return getSafe(getMouseOnRegion(region), region); }
     
     //</editor-fold>
     
@@ -176,36 +178,36 @@ public class AppUI
     
     private static final boolean printTrackingDetails = false;
     
-    private @NotNull Point2D getMouseLocationFor(@NotNull Region region) { return region.screenToLocal(getMouseOnScreen()); }
+    private @NotNull Point2D getMouseLocationFor(@NotNull Region region) { return region.screenToLocal(getMouseOnScreen().asPoint()); }
     
-    private void refreshRegionTracking(@Nullable Point2D oldMouseOnScreen, @Nullable Point2D newMouseOnScreen) {
+    private void refreshRegionTracking(@Nullable NumExpr2D<?> oldMouseOnScreen, @Nullable NumExpr2D<?> newMouseOnScreen) {
         sync(() -> {
             if (newMouseOnScreen == null || (newMouseOnScreen != null && !Objects.equals(oldMouseOnScreen, newMouseOnScreen))) {
                 mouseMap.clear();
                 trackedRegions.forEach(region -> {
-                    final Point2D screenToLocalOld = oldMouseOnScreen != null ? region.screenToLocal(oldMouseOnScreen) : null;
-                    final Point2D screenToLocalNew = region.screenToLocal(newMouseOnScreen);
+                    final Num2D screenToLocalOld = oldMouseOnScreen != null ? N.num2D(region.screenToLocal(oldMouseOnScreen.asPoint())) : null;
+                    final Num2D screenToLocalNew = N.num2D(region.screenToLocal(newMouseOnScreen.asPoint()));
                     if (printTrackingDetails)
                         Printer.print("Updating Mouse Tracking for Region \"" + region + "\":  " + "["
                                       + screenToLocalOld + "::" + getSafe(screenToLocalOld, region)
                                       + " --> " +
                                       screenToLocalNew + "::" + getSafe(screenToLocalNew, region)
                                       + "]", false);
-                    mouseMap.put(region, region.screenToLocal(newMouseOnScreen));
+                    mouseMap.put(region, N.num2D(region.screenToLocal(newMouseOnScreen.asPoint())));
                 });
             }
         });
     }
     
-    private @NotNull Point2D getSafe(@NotNull Point2D source, @NotNull Num2D dimensions) {
+    private @NotNull Num2D getSafe(@NotNull NumExpr2D<?> source, @NotNull NumExpr2D<?> dimensions) {
         return sync(() -> {
-            double safeX = Math.min(Math.max(0, source.getX()), dimensions.aD());
-            double safeY = Math.min(Math.max(0, source.getY()), dimensions.bD());
-            return new Point2D(safeX, safeY);
+            double safeX = Math.min(Math.max(0, source.aD()), dimensions.aD());
+            double safeY = Math.min(Math.max(0, source.bD()), dimensions.bD());
+            return new Num2D(safeX, safeY);
         });
     }
-    private @Nullable Point2D getSafe(@Nullable Region region) { return region != null ? getSafe(region.screenToLocal(getMouseOnScreen()), FX.dimensionsOf(region)) : null; }
-    private @Nullable Point2D getSafe(@Nullable Point2D source, @Nullable Region region) { return source != null && region != null ? getSafe(source, FX.dimensionsOf(region)) : null; }
+    private @Nullable Num2D getSafe(@Nullable Region region) { return region != null ? getSafe(N.num2D(region.screenToLocal(getMouseOnScreen().asPoint())), FX.dimensionsOf(region)) : null; }
+    private @Nullable Num2D getSafe(@Nullable NumExpr2D<?> source, @Nullable Region region) { return source != null && region != null ? getSafe(source, FX.dimensionsOf(region)) : null; }
     
     //</editor-fold>
 }

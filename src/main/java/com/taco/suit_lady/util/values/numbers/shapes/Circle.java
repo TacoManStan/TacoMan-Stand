@@ -1,4 +1,4 @@
-package com.taco.suit_lady.util.values.shapes;
+package com.taco.suit_lady.util.values.numbers.shapes;
 
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.Bind;
@@ -19,12 +19,9 @@ import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.function.BiFunction;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class Circle extends Shape {
     

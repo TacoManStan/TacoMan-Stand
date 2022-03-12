@@ -447,7 +447,6 @@ public final class L {
      * @param map         The {@link Map} object being validated.
      * @param printOnFail {@code True} if a detailed {@link Printer#err(Object) Error Message} should be printed upon validation failure.
      * @param validators  The {@code array} of {@link Value2D} objects each defining a {@code key} that must be present in the specified {@link Map} and the corresponding {@code value} type requirement.
-     * @param <K>         The type of {@code key} for the specified {@link Map}.
      *
      * @return {@code True} if the specified {@link Map} is valid given the specified {@code constraints}, {@code false} if it is not.
      */
@@ -459,19 +458,25 @@ public final class L {
             final Class<?> classReq = validator.b();
             
             if (!map.containsKey(key)) {
-                if (printOnFail)
+                if (printOnFail) {
                     Printer.err("ERROR: Map does not contain key: " + key);
+                    Thread.dumpStack();
+                }
                 return false;
             }
             final Object value = map.get(validator.a());
             if (value == null) {
-                if (printOnFail)
+                if (printOnFail) {
                     Printer.err("ERROR: Value matching key \"" + key + "\" is null.");
+                    Thread.dumpStack();
+                }
                 return false;
             }
             if (!classReq.isInstance(value)) {
-                if (printOnFail)
+                if (printOnFail) {
                     Printer.err("ERROR: Value matching key \"" + key + "\" is of invalid type [Req:" + classReq + "  Actual: " + value.getClass() + "]");
+                    Thread.dumpStack();
+                }
                 return false;
             }
         }

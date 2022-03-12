@@ -4,6 +4,7 @@ import com.taco.suit_lady.game.galaxy.abilities.Ability_TargetEffect;
 import com.taco.suit_lady.game.galaxy.effects.Effect_LaunchMissile;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.util.values.Value2D;
+import com.taco.suit_lady.util.values.numbers.Num2D;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,7 +22,7 @@ public class Ability_LaunchMissile extends Ability_TargetEffect<Effect_LaunchMis
     
     @Override public boolean execute(@NotNull Map<String, Object> params) { return new Effect_LaunchMissile(getSource()).trigger(params); }
     @Override public @NotNull List<Value2D<String, Class<?>>> requiredParams() {
-        return Arrays.asList(new Value2D<>("target", Point2D.class));
+        return Arrays.asList(new Value2D<>("target", Num2D.class));
     }
     
     //</editor-fold>

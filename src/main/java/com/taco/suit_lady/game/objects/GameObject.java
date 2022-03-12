@@ -22,9 +22,9 @@ import com.taco.suit_lady.util.tools.Props;
 import com.taco.suit_lady.util.tools.list_tools.A;
 import com.taco.suit_lady.util.values.numbers.Num2D;
 import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
-import com.taco.suit_lady.util.values.shapes.Box;
-import com.taco.suit_lady.util.values.shapes.Circle;
-import com.taco.suit_lady.util.values.shapes.Shape;
+import com.taco.suit_lady.util.values.numbers.shapes.Box;
+import com.taco.suit_lady.util.values.numbers.shapes.Circle;
+import com.taco.suit_lady.util.values.numbers.shapes.Shape;
 import com.taco.tacository.json.JElement;
 import com.taco.tacository.json.JLoadable;
 import com.taco.tacository.json.JObject;
@@ -71,8 +71,8 @@ public class GameObject
     private final DoubleBinding xLocationCenteredBinding;
     private final DoubleBinding yLocationCenteredBinding;
     
-    private final ObjectBinding<Point2D> locationBinding;
-    private final ObjectBinding<Point2D> locationCenteredBinding;
+    private final ObjectBinding<Num2D> locationBinding;
+    private final ObjectBinding<Num2D> locationCenteredBinding;
     
     private final ObjectBinding<Num2D> dimensionsBinding;
     
@@ -103,8 +103,8 @@ public class GameObject
         this.xLocationCenteredBinding = Bind.doubleBinding(() -> getLocationX(false) + (getWidth() / 2D), xLocationProperty, widthProperty);
         this.yLocationCenteredBinding = Bind.doubleBinding(() -> getLocationY(false) + (getHeight() / 2D), yLocationProperty, heightProperty);
         
-        this.locationBinding = Bind.objBinding(() -> new Point2D(getLocationX(false), getLocationY(false)), xLocationProperty, yLocationProperty);
-        this.locationCenteredBinding = Bind.objBinding(() -> new Point2D(getLocationX(true), getLocationY(true)), xLocationProperty, yLocationProperty);
+        this.locationBinding = Bind.objBinding(() -> new Num2D(getLocationX(false), getLocationY(false)), xLocationProperty, yLocationProperty);
+        this.locationCenteredBinding = Bind.objBinding(() -> new Num2D(getLocationX(true), getLocationY(true)), xLocationProperty, yLocationProperty);
         
         this.dimensionsBinding = Bind.objBinding(() -> new Num2D(getWidth(), getHeight()), widthProperty, heightProperty);
         
@@ -263,35 +263,35 @@ public class GameObject
     
     //<editor-fold desc="> Location Bindings">
     
-    public final ObjectBinding<Point2D> locationBinding(boolean center) { return center ? locationCenteredBinding : locationBinding; }
+    public final ObjectBinding<Num2D> locationBinding(boolean center) { return center ? locationCenteredBinding : locationBinding; }
     
     //TODO: Change boolean param to instead accept a LocType enum
-    public final Point2D getLocation(boolean center) { return locationBinding(center).get(); }
-    public final Point2D setLocation(@NotNull Point2D newValue, boolean center) {
+    public final Num2D getLocation(boolean center) { return locationBinding(center).get(); }
+    public final Num2D setLocation(@NotNull NumExpr2D<?> newValue, boolean center) {
         return sync(() -> {
-            return new Point2D(setLocationX(newValue.getX(), center), setLocationY(newValue.getY(), center));
+            return new Num2D(setLocationX(newValue.a(), center), setLocationY(newValue.b(), center));
         });
     }
     
-    public final Point2D translateLocation(@NotNull Number x, @NotNull Number y) {
+    public final Num2D translateLocation(@NotNull Number x, @NotNull Number y) {
         return sync(() -> {
-            return new Point2D(translateX(x), translateY(y));
+            return new Num2D(translateX(x), translateY(y));
         });
     }
-    public final Point2D translateLocation(@NotNull Point2D amount) { return translateLocation(amount.getX(), amount.getY()); }
-    public final Point2D translateLocation(@NotNull NumExpr2D<?> amount) { return translateLocation(amount.asPoint()); }
+    public final Num2D translateLocation(@NotNull Point2D amount) { return translateLocation(amount.getX(), amount.getY()); }
+    public final Num2D translateLocation(@NotNull NumExpr2D<?> amount) { return translateLocation(amount.asPoint()); }
     
     // Tile Location
     
-    public final Point2D getTileLocation(boolean center) { return new Point2D(getTileLocationX(center), getTileLocationY(center)); }
-    public final Point2D setTileLocation(@NotNull Point2D newValue, boolean center) {
-        return new Point2D(setTileLocationX(newValue.getX(), center), setTileLocationY(newValue.getY(), center));
+    public final Num2D getTileLocation(boolean center) { return new Num2D(getTileLocationX(center), getTileLocationY(center)); }
+    public final Num2D setTileLocation(@NotNull Point2D newValue, boolean center) {
+        return new Num2D(setTileLocationX(newValue.getX(), center), setTileLocationY(newValue.getY(), center));
     }
     
     
-    public final Point2D translateTileLocation(@NotNull Number x, @NotNull Number y) { return new Point2D(translateTileX(x), translateTileY(y)); }
-    public final Point2D translateTileLocation(@NotNull Point2D amount) { return translateTileLocation(amount.getX(), amount.getY()); }
-    public final Point2D translateTileLocation(@NotNull NumExpr2D<?> amount) { return translateTileLocation(amount.asPoint()); }
+    public final Num2D translateTileLocation(@NotNull Number x, @NotNull Number y) { return new Num2D(translateTileX(x), translateTileY(y)); }
+    public final Num2D translateTileLocation(@NotNull Point2D amount) { return translateTileLocation(amount.getX(), amount.getY()); }
+    public final Num2D translateTileLocation(@NotNull NumExpr2D<?> amount) { return translateTileLocation(amount.asPoint()); }
     
     //</editor-fold>
     
@@ -428,10 +428,10 @@ public class GameObject
     }
     
     
-    public final boolean isAtPoint(@NotNull Point2D point) { return isAtPoint(point, true); }
-    public final boolean isAtPoint(@NotNull Point2D point, boolean center) {
-        final double v1 = Math.round((getLocationX(center))) - Math.round(point.getX());
-        final double v2 = Math.round(getLocationY(center)) - Math.round(point.getY());
+    public final boolean isAtPoint(@NotNull NumExpr2D<?> point) { return isAtPoint(point, true); }
+    public final boolean isAtPoint(@NotNull NumExpr2D<?> point, boolean center) {
+        final double v1 = Math.round((getLocationX(center))) - Math.round(point.aD());
+        final double v2 = Math.round(getLocationY(center)) - Math.round(point.bD());
         return Math.abs(v1) == 0 && Math.abs(v2) == 0;
     }
     

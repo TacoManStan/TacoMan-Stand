@@ -22,6 +22,9 @@ import com.taco.suit_lady.util.tools.*;
 import com.taco.suit_lady.util.tools.list_tools.L;
 import com.taco.suit_lady.util.tools.printing.Printer;
 import com.taco.suit_lady.util.values.Value2D;
+import com.taco.suit_lady.util.values.numbers.Num;
+import com.taco.suit_lady.util.values.numbers.Num2D;
+import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -139,22 +142,22 @@ public class GameViewContent
         testObject.setTileLocationX(20, false);
         testObject.setTileLocationY(20, false);
         testObject.addToMap();
-//        getGameMap().addGameObject(testObject);
-//        getGameMap().gameObjects().add(testObject);
+        //        getGameMap().addGameObject(testObject);
+        //        getGameMap().gameObjects().add(testObject);
         
         testObject2.init();
         testObject2.setTileLocationX(30, false);
         testObject2.setTileLocationY(20, false);
         testObject2.addToMap();
-//        getGameMap().addGameObject(testObject2);
-//        getGameMap().gameObjects().add(testObject2);
+        //        getGameMap().addGameObject(testObject2);
+        //        getGameMap().gameObjects().add(testObject2);
         
         testObjectTree.init();
         testObjectTree.setTileLocationX(40, false);
         testObjectTree.setTileLocationY(10, false);
         testObjectTree.addToMap();
-//        getGameMap().addGameObject(testObjectTree);
-//        getGameMap().gameObjects().add(testObjectTree);
+        //        getGameMap().addGameObject(testObjectTree);
+        //        getGameMap().gameObjects().add(testObjectTree);
         
         getCamera().bindViewTo(testObject);
     }
@@ -230,16 +233,17 @@ public class GameViewContent
         switch (abilityNum) {
             case 1 -> new Ability_LaunchMissile(testObject).use(new Value2D<>("target", getController().getMouseOnMapSafe()));
             case 2 -> blinkTest().use(new Value2D<>("target", getController().getMouseOnMapSafe()));
-            case 3 -> new Ability_Cleave(testObject).use(new Value2D<>("target", getController().getMouseOnMapSafe()),
-                                                         new Value2D<>("cleave_size", 45),
-                                                         new Value2D<>("cleave_range", 50));
+            case 3 -> new Ability_Cleave(testObject).use(
+                    new Value2D<>("target", getController().getMouseOnMapSafe()),
+                    new Value2D<>("cleave_size", 45),
+                    new Value2D<>("cleave_range", 75));
         }
     }
     
     private @NotNull Ability_Blink blinkTest() {
         final Ability_Blink ability = new Ability_Blink(testObject);
         ability.validator().addValidator(Galaxy.newValidator(
-                ability, params -> getGameMap().isPathable(ability.getSource(), false, L.get("target", Point2D.class, params))));
+                ability, params -> getGameMap().isPathable(ability.getSource(), false, L.get("target", Num2D.class, params))));
         return ability;
     }
     
@@ -284,18 +288,18 @@ public class GameViewContent
     
     private void printTileInformation(@NotNull MouseEvent event) {
         //        final Point2D viewToMap = getCamera().viewToMap(event.getX(), event.getY());
-        final Point2D viewToMap = getController().getMouseOnMap();
+        final Num2D viewToMap = getController().getMouseOnMap();
         
         GameTile tile = getGameMap().getTileAtTileIndex(viewToMap);
-        System.out.println("Tile At Point [" + viewToMap.getX() + ", " + viewToMap.getY() + "]: " + tile);
+        System.out.println("Tile At Point [" + viewToMap.a() + ", " + viewToMap.b() + "]: " + tile);
         debugger().printList(tile.getOccupyingObjects(), "Occupying Objects for Tile [" + tile.getLocationX() + ", " + tile.getLocationY() + "]");
     }
     
     //
     
     private void selectTileAtMouse() { selectTileAtPoint(getController().getMouseOnMap()); }
-    private void selectTileRoot() { selectTileAtPoint(new Point2D(1.0, 1.0)); }
-    private void selectTileAtPoint(@NotNull Point2D targetPoint) {
+    private void selectTileRoot() { selectTileAtPoint(new Num2D(1.0, 1.0)); }
+    private void selectTileAtPoint(@NotNull NumExpr2D<?> targetPoint) {
         final GameTile tile = getGameMap().getTileAtPoint(targetPoint);
         if (tile != null)
             getUIData().setSelectedTile(tile);

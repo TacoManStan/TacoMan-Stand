@@ -28,6 +28,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.Lock;
@@ -177,7 +178,7 @@ public class LogiCore
     
     private List<Tickable<?>> tickablesCopy() {
         if (needsCopyRefresh)
-            tickablesCopy = Exe.sync(tickableLock, () -> new ArrayList<>(tickables));
+            tickablesCopy = Exe.sync(tickableLock, () -> new ArrayList<>(Collections.unmodifiableList(tickables)));
         needsCopyRefresh = false;
         return tickablesCopy;
     }

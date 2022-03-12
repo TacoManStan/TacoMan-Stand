@@ -6,6 +6,7 @@ import com.taco.suit_lady.logic.triggers.Galaxy;
 import com.taco.suit_lady.ui.ui_internal.controllers.Controller;
 import com.taco.suit_lady.util.tools.Exc;
 import com.taco.suit_lady.util.tools.Exe;
+import com.taco.suit_lady.util.values.numbers.Num2D;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -106,8 +107,8 @@ public abstract class ContentController<T extends Content<T, TD, TC, F, FC>, TD 
     public final T getContent() { return content; }
     public final TD getData() { return getContent().getData(); }
     
-    public final @NotNull Point2D getMouseOnContent() { return ui().getMouseOnRegion(root()); }
-    public final @NotNull Point2D getMouseOnContentSafe() { return ui().getMouseOnRegionSafe(root()); }
+    public final @NotNull Num2D getMouseOnContent() { return ui().getMouseOnRegion(root()); }
+    public final @NotNull Num2D getMouseOnContentSafe() { return ui().getMouseOnRegionSafe(root()); }
     
     //</editor-fold>
     

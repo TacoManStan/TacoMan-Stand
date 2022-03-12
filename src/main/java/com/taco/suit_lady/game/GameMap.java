@@ -19,7 +19,8 @@ import com.taco.suit_lady.util.values.ValueExpr2D;
 import com.taco.suit_lady.util.values.enums.LocType;
 import com.taco.suit_lady.util.values.numbers.N;
 import com.taco.suit_lady.util.values.numbers.Num2D;
-import com.taco.suit_lady.util.values.shapes.Shape;
+import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
+import com.taco.suit_lady.util.values.numbers.shapes.Shape;
 import com.taco.tacository.json.*;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.ObjectBinding;
@@ -35,7 +36,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class GameMap
         implements SpringableWrapper, Lockable, GameComponent, JObject, JLoadableObject {
@@ -159,7 +159,7 @@ public class GameMap
     //TODO: Limit accessors to synchronized add/remove methods & copy accessor
     public final List<GameObject> gameObjects() { return sync(() -> Collections.unmodifiableList(gameObjects)); }
     
-    public final boolean addGameObject(@NotNull GameObject obj) { return sync(() -> gameObjects.add(obj)); }
+    public final boolean  addGameObject(@NotNull GameObject obj) { return sync(() -> gameObjects.add(obj)); }
     public final boolean addGameObjects(@NotNull List<GameObject> objs) { return sync(() -> gameObjects.addAll(objs)); }
     public final boolean addGameObjects(@NotNull GameObject... objs) { return removeGameObjects(Arrays.asList(objs)); }
     
@@ -192,22 +192,6 @@ public class GameMap
         return getTileMatrix()[xTemp][yTemp];
     }
     
-    public final @NotNull GameTile[][] getNeighbors(@NotNull GameTile gameTile, int xReach, int yReach) {
-        // Reach parameters define how many tiles in each direction should be returned, excluding the host tile.
-        // Therefore, the reach value must be doubled to account for opposite directions and then 1 must be added to account for the host tile.
-        final GameTile[][] neighbors = new GameTile[(xReach * 2) + 1][(yReach * 2) + 1];
-        
-        for (int i = -xReach; i < xReach; i++)
-            for (int j = -yReach; j < yReach; j++) {
-                int xLoc = gameTile.getLocationX() + i;
-                int yLoc = gameTile.getLocationY() + j;
-                if (A.isInMatrixBounds(getTileMatrix(), xLoc, yLoc))
-                    neighbors[i][j] = getTileMatrix()[gameTile.getLocationX() + i][gameTile.getLocationY() + j];
-            }
-        
-        return neighbors;
-    }
-    
     
     /**
      * <p>Returns a {@link List} of {@link GameTile tiles} partially or entirely visible in the specified {@link Camera Camera's} bounds.</p>
@@ -235,17 +219,17 @@ public class GameMap
         return returnTiles;
     }
     
-    public final @NotNull GameTile getTileAtTileIndex(@NotNull Number x, @NotNull Number y) { return getTileAtTileIndex(new Point2D(x.doubleValue(), y.doubleValue())); }
-    public final @NotNull GameTile getTileAtTileIndex(@NotNull Point2D point) { return getTileMatrix()[(int) Math.floor(point.getX())][(int) Math.floor(point.getY())]; }
-    public final @NotNull GameTile getTileAtPoint(@NotNull Number x, @NotNull Number y) { return getTileAtPoint(new Point2D(x.doubleValue(), y.doubleValue())); }
-    public final @NotNull GameTile getTileAtPoint(@NotNull Point2D point) { return getTileAtTileIndex(point.getX() / getTileSize(), point.getY() / getTileSize()); }
+    public final @NotNull GameTile getTileAtTileIndex(@NotNull Number x, @NotNull Number y) { return getTileAtTileIndex(new Num2D(x.doubleValue(), y.doubleValue())); }
+    public final @NotNull GameTile getTileAtTileIndex(@NotNull NumExpr2D<?> point) { return getTileMatrix()[(int) Math.floor(point.aD())][(int) Math.floor(point.bD())]; }
+    public final @NotNull GameTile getTileAtPoint(@NotNull Number x, @NotNull Number y) { return getTileAtPoint(new Num2D(x.doubleValue(), y.doubleValue())); }
+    public final @NotNull GameTile getTileAtPoint(@NotNull NumExpr2D<?> point) { return getTileAtTileIndex(point.aD() / getTileSize(), point.bD() / getTileSize()); }
     
     //</editor-fold>
     
     //<editor-fold desc="> GameObject Accessors"> \
     
     @Contract("_ -> new")
-    public final @NotNull ArrayList<GameObject> getObjectsAtPoint(@NotNull Point2D point) { return new ArrayList<>(getTileAtPoint(point).getOccupyingObjects()); }
+    public final @NotNull ArrayList<GameObject> getObjectsAtPoint(@NotNull NumExpr2D<?> point) { return new ArrayList<>(getTileAtPoint(point).getOccupyingObjects()); }
     
     //
     
@@ -322,7 +306,7 @@ public class GameMap
         //TODO: Also allow a min and max angle to be specified to indicate a direction in which the pathable point has to be
         //TODO: ALso allow a target point & max distance the returned value is allowed to be from the specified point
         return sync(() -> {
-            final Num2D pos = N.num2D(obj.getLocation(true));
+            final Num2D pos = obj.getLocation(true);
             return Calc.nearestMatching(pos, obj.getDimensions(), LocType.CENTER, LocType.CENTER, LocType.CENTER, step, maxRange, targetAngle, p -> {
                 boolean pathable = isPathable(obj, false, p);
                 //                Printer.print("Checking Pathability of Point: " + p + "  (" + pathable + ")");

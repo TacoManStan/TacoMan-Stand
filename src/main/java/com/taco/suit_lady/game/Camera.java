@@ -10,6 +10,10 @@ import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Exc;
 import com.taco.suit_lady.util.tools.printing.Printer;
 import com.taco.suit_lady.util.tools.Props;
+import com.taco.suit_lady.util.values.enums.LocType;
+import com.taco.suit_lady.util.values.numbers.Num2D;
+import com.taco.suit_lady.util.values.numbers.expressions.BoundsExpr;
+import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.ObjectBinding;
@@ -39,7 +43,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * </ol>
  */
 public class Camera
-        implements SpringableWrapper, Lockable, GameComponent {
+        implements SpringableWrapper, Lockable, GameComponent, BoundsExpr {
     
     private final StrictSpringable springable;
     private final ReentrantLock lock;
@@ -51,14 +55,16 @@ public class Camera
     private final IntegerProperty xOffsetProperty;
     private final IntegerProperty yOffsetProperty;
     
-    private final ObjectBinding<Point2D> locationBinding;
-    private final ObjectBinding<Point2D> offsetsBinding;
+    private final ObjectBinding<Num2D> locationBinding;
+    private final ObjectBinding<Num2D> offsetsBinding;
     
-    private final ObjectBinding<Point2D> tileLocationBinding;
+    private final ObjectBinding<Num2D> tileLocationBinding;
     
     
     private final GameViewContent content;
     private final ObjectBinding<GameMap> mapBinding;
+    
+    private final LocType locType;
     
     //<editor-fold desc="--- BINDING FIELDS ---">
     
@@ -99,12 +105,15 @@ public class Camera
         this.yOffsetProperty = new SimpleIntegerProperty(0);
         
         
-        this.locationBinding = Bind.objBinding(() -> new Point2D(getLocationX(), getLocationY()), xLocationProperty, yLocationProperty);
-        this.offsetsBinding = Bind.objBinding(() -> new Point2D(getOffsetX(), getOffsetY()), xOffsetProperty, yOffsetProperty);
+        this.locationBinding = Bind.objBinding(() -> new Num2D(getLocationX(), getLocationY()), xLocationProperty, yLocationProperty);
+        this.offsetsBinding = Bind.objBinding(() -> new Num2D(getOffsetX(), getOffsetY()), xOffsetProperty, yOffsetProperty);
         
         this.tileLocationBinding = Bind.objBinding(
-                () -> new Point2D(getLocationX() * getGameMap().getTileSize(), getLocationY() * getGameMap().getTileSize()),
+                () -> new Num2D(getLocationX() * getGameMap().getTileSize(), getLocationY() * getGameMap().getTileSize()),
                 xLocationProperty, yLocationProperty);
+        
+        
+        this.locType = LocType.MIN;
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">
@@ -125,8 +134,8 @@ public class Camera
         
         this.mapImageBinding = Bind.directObjBinding(getGameMap().getModel().mapImageProperty());
         
-        this.mapImageWidthBinding = Bind.recursiveIntBinding(lock, image -> image.widthProperty(), mapImageBinding);
-        this.mapImageHeightBinding = Bind.recursiveIntBinding(lock, image -> image.heightProperty(), mapImageBinding);
+        this.mapImageWidthBinding = Bind.recursiveIntBinding(lock, Image::widthProperty, mapImageBinding);
+        this.mapImageHeightBinding = Bind.recursiveIntBinding(lock, Image::heightProperty, mapImageBinding);
         
         
         this.xMultiplierBinding = Bind.doubleBinding(() -> ((double) getMapImageWidth() / (double) getMapWidth()), mapImageWidthBinding);
@@ -149,7 +158,7 @@ public class Camera
      */
     public final IntegerProperty xLocationProperty() { return xLocationProperty; }
     public final int getLocationX() { return xLocationProperty.get(); }
-    public final int setLocationX(int newValue) {
+    public final int setLocationX(@NotNull Number newValue) {
         Printer.print("Changing Camera Location X: " + newValue);
         if (!isViewBound())
             return Props.setProperty(xLocationProperty, newValue);
@@ -168,7 +177,7 @@ public class Camera
      */
     public final IntegerProperty yLocationProperty() { return yLocationProperty; }
     public final int getLocationY() { return yLocationProperty.get(); }
-    public final int setLocationY(int newValue) {
+    public final int setLocationY(@NotNull Number newValue) {
         if (!isViewBound())
             return Props.setProperty(yLocationProperty, newValue);
         
@@ -188,7 +197,7 @@ public class Camera
      */
     public final IntegerProperty xOffsetProperty() { return xOffsetProperty; }
     public final int getOffsetX() { return xOffsetProperty.get(); }
-    public final int setOffsetX(int newValue) { return Props.setProperty(xOffsetProperty, newValue); }
+    public final int setOffsetX(@NotNull Number newValue) { return Props.setProperty(xOffsetProperty, newValue); }
     
     /**
      * <p>Represents the number of units (pixels, not tiles) this camera's view is shifted on the {@code x} plane.</p>
@@ -200,35 +209,36 @@ public class Camera
      */
     public final IntegerProperty yOffsetProperty() { return yOffsetProperty; }
     public final int getOffsetY() { return yOffsetProperty.get(); }
-    public final int setOffsetY(int newValue) { return Props.setProperty(yOffsetProperty, newValue); }
+    public final int setOffsetY(@NotNull Number newValue) { return Props.setProperty(yOffsetProperty, newValue); }
     
     //
     
-    public final ObjectBinding<Point2D> locationBinding() { return locationBinding; }
-    public final Point2D getLocation() { return locationBinding.get(); }
-    public final Point2D setLocation(@NotNull Point2D newValue) {
-        final Point2D oldValue = getLocation();
-        setLocationX((int) newValue.getX());
-        setLocationY((int) newValue.getY());
+    public final ObjectBinding<Num2D> locationBinding() { return locationBinding; }
+
+    @Override public final Num2D getLocation() { return locationBinding.get(); }
+    public final Num2D setLocation(@NotNull NumExpr2D<?> newValue) {
+        final Num2D oldValue = getLocation();
+        setLocationX(newValue.a());
+        setLocationY(newValue.b());
         return oldValue;
     }
-    public final Point2D setLocation(@NotNull GameObject gameObject, boolean center) { return setLocation(gameObject.getLocation(center)); }
+    public final Num2D setLocation(@NotNull GameObject gameObject, boolean center) { return setLocation(gameObject.getLocation(center)); }
     
-    public final ObjectBinding<Point2D> offsetsBinding() { return offsetsBinding; }
-    public final Point2D getOffsets() { return offsetsBinding.get(); }
-    public final Point2D setOffsets(@NotNull Point2D newValue) {
-        final Point2D oldValue = getOffsets();
-        setOffsetX((int) newValue.getX());
-        setOffsetY((int) newValue.getY());
+    public final ObjectBinding<Num2D> offsetsBinding() { return offsetsBinding; }
+    public final Num2D getOffsets() { return offsetsBinding.get(); }
+    public final Num2D setOffsets(@NotNull NumExpr2D<?> newValue) {
+        final Num2D oldValue = getOffsets();
+        setOffsetX(newValue.a());
+        setOffsetY(newValue.b());
         return oldValue;
     }
     
     
-    public final ObjectBinding<Point2D> tileLocationBinding() { return tileLocationBinding; }
-    public final Point2D getTileLocation() { return tileLocationBinding.get(); }
-    public final Point2D setTileLocation(@NotNull Point2D newValue) {
-        final Point2D oldValue = getTileLocation();
-        setLocation(new Point2D(newValue.getX() * getGameMap().getTileSize(), newValue.getY() * getGameMap().getTileSize()));
+    public final ObjectBinding<Num2D> tileLocationBinding() { return tileLocationBinding; }
+    public final Num2D getTileLocation() { return tileLocationBinding.get(); }
+    public final Num2D setTileLocation(@NotNull NumExpr2D<?> newValue) {
+        final Num2D oldValue = getTileLocation();
+        setLocation(new Num2D(newValue.aD() * getGameMap().getTileSize(), newValue.bD() * getGameMap().getTileSize()));
         return oldValue;
     }
     
@@ -241,17 +251,17 @@ public class Camera
     public final int moveTileY(@NotNull Number amount) { return setLocationY(getLocationY() + (int) (amount.doubleValue() * getGameMap().getTileSize())); }
     
     
-    public final Point2D move(@NotNull Point2D amounts) {
-        final Point2D oldValue = getLocation();
-        moveX(amounts.getX());
-        moveY(amounts.getY());
+    public final Num2D move(@NotNull NumExpr2D<?> amounts) {
+        final Num2D oldValue = getLocation();
+        moveX(amounts.a());
+        moveY(amounts.b());
         return oldValue;
     }
     
-    public final Point2D moveTile(@NotNull Point2D amounts) {
-        final Point2D oldValue = getTileLocation();
-        moveTileX(amounts.getX());
-        moveTileY(amounts.getY());
+    public final Num2D moveTile(@NotNull NumExpr2D<?> amounts) {
+        final Num2D oldValue = getTileLocation();
+        moveTileX(amounts.a());
+        moveTileY(amounts.b());
         return oldValue;
     }
     
@@ -366,18 +376,36 @@ public class Camera
     
     //
     
+    @Override public @NotNull Number x() {
+        return null;
+    }
+    @Override public @NotNull Number y() {
+        return null;
+    }
+    @Override public @NotNull Number w() {
+        return null;
+    }
+    @Override public @NotNull Number h() {
+        return null;
+    }
+    @Override public @NotNull LocType locType() {
+        return null;
+    }
+    
+    //
+    
     @Override public @NotNull Springable springable() { return springable; }
     @Override public @NotNull ReentrantLock getLock() { return lock; }
     
     //</editor-fold>
     
-    public final @NotNull Point2D viewToMap(double x, double y) {
-        return viewToMap(new Point2D(x, y));
+    public final @NotNull Num2D viewToMap(double x, double y) {
+        return viewToMap(new Num2D(x, y));
     }
     
     @Contract("_ -> new")
-    public final @NotNull Point2D viewToMap(@NotNull Point2D pointOnView) {
-        return new Point2D(pointOnView.getX() + getAggregateX(), pointOnView.getY() + getAggregateY());
+    public final @NotNull Num2D viewToMap(@NotNull NumExpr2D<?> pointOnView) {
+        return new Num2D(pointOnView.aD() + getAggregateX(), pointOnView.bD() + getAggregateY());
     }
     
     public final void print() {

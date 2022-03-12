@@ -55,8 +55,8 @@ public class GameViewContentController
     
     private DragAndDropHandler<GameObject> testDDHandler;
     
-    private final ReadOnlyObjectWrapper<Point2D> mouseOnMapProperty;
-    private final ReadOnlyObjectWrapper<Point2D> mouseOnMapPropertySafe;
+    private final ReadOnlyObjectWrapper<Num2D> mouseOnMapProperty;
+    private final ReadOnlyObjectWrapper<Num2D> mouseOnMapPropertySafe;
     
     private DoubleBinding mouseOnMapBindingX;
     private DoubleBinding mouseOnMapBindingY;
@@ -86,18 +86,18 @@ public class GameViewContentController
     }
     
     private void initMouseTracking() {
-        this.mouseOnMapBindingX = Bind.doubleBinding(() -> getMouseOnMap().getX(), mouseOnMapProperty());
-        this.mouseOnMapBindingY = Bind.doubleBinding(() -> getMouseOnMap().getY(), mouseOnMapProperty());
+        this.mouseOnMapBindingX = Bind.doubleBinding(() -> getMouseOnMap().a(), mouseOnMapProperty());
+        this.mouseOnMapBindingY = Bind.doubleBinding(() -> getMouseOnMap().b(), mouseOnMapProperty());
         
-        this.mouseOnMapBindingSafeX = Bind.doubleBinding(() -> getMouseOnMapSafe().getX(), mouseOnMapPropertySafe());
-        this.mouseOnMapBindingSafeY = Bind.doubleBinding(() -> getMouseOnMapSafe().getY(), mouseOnMapPropertySafe());
+        this.mouseOnMapBindingSafeX = Bind.doubleBinding(() -> getMouseOnMapSafe().a(), mouseOnMapPropertySafe());
+        this.mouseOnMapBindingSafeY = Bind.doubleBinding(() -> getMouseOnMapSafe().b(), mouseOnMapPropertySafe());
     }
     
     private void initUpdateTask() {
         this.updateTask = new GameTask<>(this) {
             @Override protected void tick() {
-                final Point2D mouseOnContent = getMouseOnContent();
-                final Point2D viewToMap = getContent().getCamera().viewToMap(mouseOnContent);
+                final Num2D mouseOnContent = getMouseOnContent();
+                final Num2D viewToMap = getContent().getCamera().viewToMap(mouseOnContent);
                 final int xOffset = (int) Math.ceil(getContent().getTestObject().getWidth() / 2D);
                 final int yOffset = (int) Math.ceil(getContent().getTestObject().getHeight() / 2D);
                 final Num2D minBounds = new Num2D(xOffset, yOffset);
@@ -141,13 +141,13 @@ public class GameViewContentController
     
     //<editor-fold desc="> Mouse Properties">
     
-    private @NotNull ReadOnlyObjectWrapper<Point2D> mouseOnMapProperty() { return mouseOnMapProperty; }
-    public final @NotNull ReadOnlyObjectProperty<Point2D> readOnlyMouseOnMapProperty() { return mouseOnMapProperty().getReadOnlyProperty(); }
-    public final @Nullable Point2D getMouseOnMap() { return mouseOnMapProperty().get(); }
+    private @NotNull ReadOnlyObjectWrapper<Num2D> mouseOnMapProperty() { return mouseOnMapProperty; }
+    public final @NotNull ReadOnlyObjectProperty<Num2D> readOnlyMouseOnMapProperty() { return mouseOnMapProperty().getReadOnlyProperty(); }
+    public final @Nullable Num2D getMouseOnMap() { return mouseOnMapProperty().get(); }
     
-    private @NotNull ReadOnlyObjectWrapper<Point2D> mouseOnMapPropertySafe() { return mouseOnMapPropertySafe; }
-    public final @NotNull ReadOnlyObjectProperty<Point2D> readOnlyMouseOnMapPropertySafe() { return mouseOnMapPropertySafe().getReadOnlyProperty(); }
-    public final @Nullable Point2D getMouseOnMapSafe() { return mouseOnMapPropertySafe().get(); }
+    private @NotNull ReadOnlyObjectWrapper<Num2D> mouseOnMapPropertySafe() { return mouseOnMapPropertySafe; }
+    public final @NotNull ReadOnlyObjectProperty<Num2D> readOnlyMouseOnMapPropertySafe() { return mouseOnMapPropertySafe().getReadOnlyProperty(); }
+    public final @Nullable Num2D getMouseOnMapSafe() { return mouseOnMapPropertySafe().get(); }
     
     //
     

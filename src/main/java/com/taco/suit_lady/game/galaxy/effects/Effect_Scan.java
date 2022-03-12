@@ -6,7 +6,7 @@ import com.taco.suit_lady.util.tools.list_tools.L;
 import com.taco.suit_lady.util.tools.printing.Printer;
 import com.taco.suit_lady.util.values.Value2D;
 import com.taco.suit_lady.util.values.numbers.Num2D;
-import com.taco.suit_lady.util.values.shapes.Circle;
+import com.taco.suit_lady.util.values.numbers.shapes.Circle;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.geometry.Point2D;
@@ -56,13 +56,13 @@ public class Effect_Scan extends Effect_Targeted {
                 gameObject -> !gameObject.equals(getSource()) &&
                               !gameObject.equals(missile) &&
                               gameObject.collidesWith(scanZone));
-        scannedObjs.forEach(gameObject -> getScanEffect().trigger(L.map(new Value2D<>("target", gameObject))));
+        scannedObjs.forEach(gameObject -> getScanEffect().trigger(L.map(new Value2D<>("target_obj", gameObject))));
         
         return true;
     }
     
     @Override public @NotNull List<Value2D<String, Class<?>>> requiredParams() {
-        return Arrays.asList(new Value2D<>("target", Point2D.class),
+        return Arrays.asList(new Value2D<>("target", Num2D.class),
                              new Value2D<>("missile", GameObject.class),
                              new Value2D<>("radius", Number.class),
                              new Value2D<>("impact_location", Num2D.class));

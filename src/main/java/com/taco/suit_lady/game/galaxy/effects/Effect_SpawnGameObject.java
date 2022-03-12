@@ -35,7 +35,7 @@ public class Effect_SpawnGameObject extends Effect_Targeted {
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override public boolean onTrigger(@NotNull Map<String, Object> params) {
-        final Point2D target = (Point2D) params.get("target");
+        final Num2D target = (Num2D) params.get("target");
         final Supplier<GameObject> factory = (Supplier<GameObject>) params.get("factory");
         final GameObject spawnedObj = factory.get().init();
         spawnedObj.setLocation(target, true);
@@ -44,7 +44,7 @@ public class Effect_SpawnGameObject extends Effect_Targeted {
     }
     
     @Override public @NotNull List<Value2D<String, Class<?>>> requiredParams() {
-        return Arrays.asList(new Value2D<>("target", Point2D.class),
+        return Arrays.asList(new Value2D<>("target", Num2D.class),
                              new Value2D<>("factory", Supplier.class));
     }
     

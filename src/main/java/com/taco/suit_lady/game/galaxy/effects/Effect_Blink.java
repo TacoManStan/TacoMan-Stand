@@ -2,6 +2,7 @@ package com.taco.suit_lady.game.galaxy.effects;
 
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.util.values.Value2D;
+import com.taco.suit_lady.util.values.numbers.Num2D;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.geometry.Point2D;
@@ -31,13 +32,13 @@ public class Effect_Blink extends Effect_Targeted {
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override public boolean onTrigger(@NotNull Map<String, Object> params) {
-        final Point2D target = (Point2D) params.get("target");
+        final Num2D target = (Num2D) params.get("target");
         getSource().setLocation(target, true);
         return true;
     }
     
     @Override public @NotNull List<Value2D<String, Class<?>>> requiredParams() {
-        return Arrays.asList(new Value2D<>("target", Point2D.class));
+        return Arrays.asList(new Value2D<>("target", Num2D.class));
     }
     
     //</editor-fold>

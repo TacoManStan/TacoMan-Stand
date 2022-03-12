@@ -1,4 +1,4 @@
-package com.taco.suit_lady.util.values.shapes;
+package com.taco.suit_lady.util.values.numbers.shapes;
 
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.values.enums.Axis;

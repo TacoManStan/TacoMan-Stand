@@ -27,19 +27,19 @@ public class Effect_Cleave extends Effect {
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override public boolean onTrigger(@NotNull Map<String, Object> params) {
-        final Point2D target = (Point2D) params.get("target");
+        final Num2D target = (Num2D) params.get("target");
         final double cleaveSize = ((Number) params.get("cleave_size")).doubleValue();
         final double cleaveRange = ((Number) params.get("cleave_range")).doubleValue();
         
-        final Num2D center = N.num2D(getSource().getLocation(true));
+        final Num2D center = getSource().getLocation(true);
         final double angleToTarget = Calc.angle(center, target);
         
         final ArrayList<GameObject> filtered = getGameMap().scan(
                 gameObject -> Calc.isInCone(
                         center,
-                        N.num2D(gameObject.getLocation(true)),
+                        gameObject.getLocation(true),
                         cleaveRange,
-                        N.num2D(target),
+                        target,
                         cleaveSize),
                 gameObject -> !gameObject.equals(getSource()));
     
@@ -52,7 +52,7 @@ public class Effect_Cleave extends Effect {
     }
     
     @Override public @NotNull List<Value2D<String, Class<?>>> requiredParams() {
-        return Arrays.asList(new Value2D<>("target", Point2D.class),
+        return Arrays.asList(new Value2D<>("target", Num2D.class),
                              new Value2D<>("cleave_size", Number.class),
                              new Value2D<>("cleave_range", Number.class));
     }

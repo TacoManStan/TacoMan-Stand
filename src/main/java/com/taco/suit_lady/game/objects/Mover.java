@@ -12,6 +12,7 @@ import com.taco.suit_lady.util.tools.printing.Printer;
 import com.taco.suit_lady.util.tools.Props;
 import com.taco.suit_lady.util.values.numbers.Num2D;
 import com.taco.suit_lady.util.values.Value2D;
+import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
@@ -87,8 +88,8 @@ public class Mover
     public final double getTargetY() { return sync(yTargetProperty::get); }
     public final double setTargetY(@NotNull Number newValue) { return sync(() -> Props.setProperty(yTargetProperty, newValue)); }
     
-    @Contract(" -> new") public final @NotNull Point2D getTarget() { return sync(() -> new Point2D(getTargetX(), getTargetY())); }
-    public final @NotNull Point2D setTarget(@Nullable Point2D newValue) { return sync(() -> new Point2D(setTargetX(newValue.getX()), setTargetY(newValue.getY()))); }
+    @Contract(" -> new") public final @NotNull Num2D getTarget() { return sync(() -> new Num2D(getTargetX(), getTargetY())); }
+    public final @NotNull Num2D setTarget(@Nullable NumExpr2D<?> newValue) { return sync(() -> new Num2D(setTargetX(newValue.a()), setTargetY(newValue.b()))); }
     
     // Observable Target
     
@@ -146,16 +147,16 @@ public class Mover
     
     //<editor-fold desc="> Move Methods">
     
-    public final @NotNull Point2D move(@NotNull Point2D targetPoint) {
+    public final @NotNull Num2D move(@NotNull NumExpr2D<?> targetPoint) {
         return sync(() -> {
-            final Point2D oldValue = setTarget(targetPoint);
+            final Num2D oldValue = setTarget(targetPoint);
             setPaused(false);
             
             return oldValue;
         });
     }
     
-    public final @NotNull Point2D unbindAndMove(@NotNull Point2D targetPoint) {
+    public final @NotNull Num2D unbindAndMove(@NotNull NumExpr2D<?> targetPoint) {
         return sync(() -> {
             setObservableTargetX(null);
             setObservableTargetY(null);
@@ -164,12 +165,12 @@ public class Mover
         });
     }
     
-    public final @NotNull Point2D moveAndBind(@NotNull ObservableValue<? extends Number> observableTargetX, @NotNull ObservableValue<? extends Number> observableTargetY) {
+    public final @NotNull Num2D moveAndBind(@NotNull ObservableValue<? extends Number> observableTargetX, @NotNull ObservableValue<? extends Number> observableTargetY) {
         return sync(() -> {
             if (isDebugEnabled())
                 Printer.err("Move and Bind:  [" + observableTargetX.getValue() + ", " + observableTargetY.getValue() + "]", false);
             
-            final Point2D oldValue = getTarget();
+            final Num2D oldValue = getTarget();
             
             setObservableTargetX(observableTargetX);
             setObservableTargetY(observableTargetY);
@@ -191,13 +192,13 @@ public class Mover
     
     @Override protected void tick() {
         sync(() -> {
-            final Point2D target = syncTarget().asPoint();
-            final double targetX = target.getX();
-            final double targetY = target.getY();
+            final Num2D target = syncTarget();
+            final double targetX = target.aD();
+            final double targetY = target.bD();
             
-            final Point2D loc = getOwner().getLocation(true);
-            final double locX = loc.getX();
-            final double locY = loc.getY();
+            final Num2D loc = getOwner().getLocation(true);
+            final double locX = loc.aD();
+            final double locY = loc.bD();
             
             if (!isPaused()) {
                 final double acceleration = getOwner().attributes().getDoubleValue(Mover.ACCELERATION_ID, () -> 1D);
@@ -244,7 +245,7 @@ public class Mover
                     }
                 }
                 
-                final Point2D newLoc = new Point2D(getOwner().getLocationX(true), getOwner().getLocationY(true));
+                final Num2D newLoc = new Num2D(getOwner().getLocationX(true), getOwner().getLocationY(true));
                 if (getOwner().isAtPoint(getTarget(), true)) {
                     logiCore().triggers().submit(new UnitArrivedEvent(getOwner(), loc, newLoc, "done"));
                     setPaused(true);
@@ -272,7 +273,7 @@ public class Mover
             Number x = obsX != null ? obsX.getValue() : getTargetX();
             Number y = obsY != null ? obsY.getValue() : getTargetY();
             
-            setTarget(new Point2D(x.doubleValue(), y.doubleValue()));
+            setTarget(new Num2D(x.doubleValue(), y.doubleValue()));
             return new Num2D(x, y);
         });
     }
