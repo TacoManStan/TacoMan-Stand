@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @FxmlView("/fxml/game/pages/game_view_page.fxml")
@@ -68,10 +69,9 @@ public class GameViewPageController extends UIPageController<GameViewPage>
         
         testButton3.setOnAction(event -> {
             ArrayList<GameTile> tiles = new ArrayList<>();
-            GameTile[][] tileMatrix = getGame().getTestObject().getOccupiedTiles();
-            for (int i = 0; i < tileMatrix.length; i++)
-                for (int j = 0; j < tileMatrix[i].length; j++)
-                    System.out.println("Tile [" + i + ", " + j + "]: " + tileMatrix[i][j]);
+            List<GameTile> tileMatrix = getGame().getTestObject().getOccupiedTiles();
+            for (GameTile tile: tileMatrix)
+                System.out.println("Tile [" + tile.getTileLocationX() + ", " + tile.getTileLocationY() + "]: " + tile);
         });
         testButton3.setText("Print Occupying Tiles");
         

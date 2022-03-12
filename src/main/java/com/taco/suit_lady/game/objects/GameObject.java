@@ -20,6 +20,7 @@ import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Obj;
 import com.taco.suit_lady.util.tools.Props;
 import com.taco.suit_lady.util.tools.list_tools.A;
+import com.taco.suit_lady.util.values.enums.LocType;
 import com.taco.suit_lady.util.values.numbers.Num2D;
 import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
 import com.taco.suit_lady.util.values.numbers.shapes.Box;
@@ -42,6 +43,7 @@ import java.io.IOException;
 import java.io.ObjectStreamException;
 import java.io.Serial;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.locks.Lock;
 
 public class GameObject
@@ -76,7 +78,7 @@ public class GameObject
     
     private final ObjectBinding<Num2D> dimensionsBinding;
     
-    private ObjectBinding<GameTile[][]> occupiedTilesBinding = null;
+    private ObjectBinding<List<GameTile>> occupiedTilesBinding = null;
     private final ListProperty<GameTile> occupiedTilesList;
     
     //<editor-fold desc="--- CONSTRUCTORS ---">
@@ -144,14 +146,10 @@ public class GameObject
         this.occupiedTilesBinding = Bind.objBinding(this::calculateOccupiedTiles, xLocationProperty, yLocationProperty, widthProperty, heightProperty, gameMapProperty());
         //TODO: This is more efficient than before but still comically inefficient - not a problem now but will quickly become one as more GameObjects are added to the map (and moving at the same time)
         this.occupiedTilesBinding.addListener((observable, oldValue, newValue) -> {
-            final ArrayList<GameTile> oldTiles = new ArrayList<>();
-            final ArrayList<GameTile> newTiles = new ArrayList<>();
-            
-            A.iterateMatrix(tile -> oldTiles.add(tile), oldValue);
-            A.iterateMatrix(tile -> newTiles.add(tile), newValue);
-            
-            oldTiles.forEach(tile -> Obj.doIf(() -> tile, t -> !newTiles.contains(t), t -> t.getOccupyingObjects().remove(this)));
-            newTiles.forEach(tile -> Obj.doIf(() -> tile, t -> !t.getOccupyingObjects().contains(this), t -> t.getOccupyingObjects().add(this)));
+            if (oldValue != null)
+                oldValue.forEach(tile -> Obj.doIf(() -> tile, t -> newValue == null || !newValue.contains(t), t -> t.getOccupyingObjects().remove(this)));
+            if (newValue != null)
+                newValue.forEach(tile -> Obj.doIf(() -> tile, t -> !t.getOccupyingObjects().contains(this), t -> t.getOccupyingObjects().add(this)));
         });
         
         initTriggerEvents();
@@ -180,7 +178,8 @@ public class GameObject
         taskManager().addShutdownOperation(() -> getGameMap().removeGameObject(this));
         taskManager().addGfxShutdownOperation(() -> getModel().shutdown());
         taskManager().addGfxShutdownOperation(() -> getGameMap().getModel().refreshMapImage());
-        taskManager().addShutdownOperation(() -> A.iterateMatrix(tile -> tile.getOccupyingObjects().remove(this), getOccupiedTiles()));
+        taskManager().addShutdownOperation(() -> getOccupiedTiles().forEach(tile -> tile.getOccupyingObjects().remove(this)));
+//        taskManager().addShutdownOperation(() -> A.iterateMatrix(tile -> tile.getOccupyingObjects().remove(this), getOccupiedTiles()));
     }
     
     private final boolean useCollisionBox = false;
@@ -297,8 +296,8 @@ public class GameObject
     
     //
     
-    public final ObjectBinding<GameTile[][]> occupiedTilesBinding() { return occupiedTilesBinding; }
-    public final GameTile[][] getOccupiedTiles() { return occupiedTilesBinding.get(); }
+    public final ObjectBinding<List<GameTile>> occupiedTilesBinding() { return occupiedTilesBinding; }
+    public final List<GameTile> getOccupiedTiles() { return occupiedTilesBinding.get(); }
     
     
     //</editor-fold>
@@ -412,20 +411,27 @@ public class GameObject
     
     //
     
-    private @NotNull GameTile[][] calculateOccupiedTiles() {
-        final int adjustedMinX = (int) Math.floor(getLocationX(false) / getGameMap().getTileSize());
-        final int adjustedMinY = (int) Math.floor(getLocationY(false) / getGameMap().getTileSize());
-        final int adjustedMaxX = (int) Math.floor((getWidth() - 1 + getLocationX(false)) / getGameMap().getTileSize());
-        final int adjustedMaxY = (int) Math.floor((getHeight() - 1 + getLocationY(false)) / getGameMap().getTileSize());
-        
-        
-        final GameTile[][] occupyingGameTiles = new GameTile[(adjustedMaxX - adjustedMinX) + 1][(adjustedMaxY - adjustedMinY) + 1];
-        for (int i = 0; i < occupyingGameTiles.length; i++)
-            for (int j = 0; j < occupyingGameTiles[i].length; j++)
-                occupyingGameTiles[i][j] = getGameMap().getTileMatrix()[i + adjustedMinX][j + adjustedMinY];
-        
-        return occupyingGameTiles;
+    private @NotNull List<GameTile> calculateOccupiedTiles() {
+        return sync(() -> {
+            final Box boundsBox = boundsBox();
+            return getGameMap().getTilesInBounds(boundsBox.getLocation(LocType.MIN), boundsBox.getLocation(LocType.MAX));
+        });
     }
+    
+    //    private @NotNull GameTile[][] calculateOccupiedTiles() {
+    //        final int adjustedMinX = (int) Math.floor(getLocationX(false) / getGameMap().getTileSize());
+    //        final int adjustedMinY = (int) Math.floor(getLocationY(false) / getGameMap().getTileSize());
+    //        final int adjustedMaxX = (int) Math.floor((getWidth() - 1 + getLocationX(false)) / getGameMap().getTileSize());
+    //        final int adjustedMaxY = (int) Math.floor((getHeight() - 1 + getLocationY(false)) / getGameMap().getTileSize());
+    //
+    //
+    //        final GameTile[][] occupyingGameTiles = new GameTile[(adjustedMaxX - adjustedMinX) + 1][(adjustedMaxY - adjustedMinY) + 1];
+    //        for (int i = 0; i < occupyingGameTiles.length; i++)
+    //            for (int j = 0; j < occupyingGameTiles[i].length; j++)
+    //                occupyingGameTiles[i][j] = getGameMap().getTileMatrix()[i + adjustedMinX][j + adjustedMinY];
+    //
+    //        return occupyingGameTiles;
+    //    }
     
     
     public final boolean isAtPoint(@NotNull NumExpr2D<?> point) { return isAtPoint(point, true); }
