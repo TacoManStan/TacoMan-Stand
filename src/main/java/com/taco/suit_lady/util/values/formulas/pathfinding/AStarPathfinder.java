@@ -9,6 +9,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class AStarPathfinder {
     
@@ -96,33 +98,54 @@ public class AStarPathfinder {
         return direction.getNeighbor(origin, nodeMatrix);
     }
     
+    private static final boolean PRINT_INDEX = false;
+    
     public static void main(String[] args) {
         final AStarPathfinder pathfinder = new AStarPathfinder();
         final List<AStarNode> path = pathfinder.aStar(new Num2D(30, 5), new Num2D(30, 98));
         //        System.out.println(path);
-        for (int j = pathfinder.nodeMatrix[0].length - 1; j >= 0; j--) {
+        final Runnable vGapPrinter = () -> {
             System.out.println();
+            if (PRINT_INDEX)
+                System.out.println();
+        };
+        final Runnable hGapPrinter = () -> System.out.print(PRINT_INDEX ? "     " : "  ");
+        final Runnable startPrinter = () -> System.out.print(PRINT_INDEX ? "[ S ]" : "S");
+        final Runnable goalPrinter = () -> System.out.print(PRINT_INDEX ? "[ G ]" : "G");
+        final Runnable pathablePrinter = () -> System.out.print(PRINT_INDEX ? "[   ]" : "-");
+        final Runnable unpathablePrinter = () -> System.out.print(PRINT_INDEX ? "[XXX]" : "X");
+        final BiConsumer<Num2D, Integer> occupiedPrinter = (matrixIndex, pathIndex) -> {
+            if (PRINT_INDEX) {
+                if (pathIndex < 10)
+                    System.out.print("[00" + pathIndex + "]");
+                else if (pathIndex < 100)
+                    System.out.print("[0" + pathIndex + "]");
+                else
+                    System.out.print("[" + pathIndex + "]");
+            } else {
+                System.out.print("#");
+            }
+        };
+        
+        
+        for (int j = pathfinder.nodeMatrix[0].length - 1; j >= 0; j--) {
+            vGapPrinter.run();
             for (int i = 0; i < pathfinder.nodeMatrix.length; i++) {
                 AStarNode current = pathfinder.nodeMatrix[i][j];
-                System.out.print(" ");
+                Num2D matrixIndex = new Num2D(i, j);
+                hGapPrinter.run();
                 if (current.equals(pathfinder.getStart())) {
-                    System.out.print("S");
+                    startPrinter.run();
                 } else if (current.equals(pathfinder.getGoal())) {
-                    System.out.print("G");
+                    goalPrinter.run();
                 } else {
                     if (path.contains(current)) {
-                        int index = path.indexOf(current);
-                        if (index < 10)
-                            System.out.print("00" + index);
-                        else if (index < 100)
-                            System.out.print("0" + index);
-                        else
-                            System.out.print(index);
+                        occupiedPrinter.accept(matrixIndex, path.indexOf(current));
                     } else {
                         if (current.isPathable())
-                            System.out.print(" - ");
+                            pathablePrinter.run();
                         else
-                            System.out.print(" X ");
+                            unpathablePrinter.run();
                     }
                 }
             }
