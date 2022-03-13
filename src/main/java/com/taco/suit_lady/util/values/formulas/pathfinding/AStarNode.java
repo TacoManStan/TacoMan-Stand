@@ -60,11 +60,13 @@ implements Comparable<AStarNode>{
     }
     
     public final double hCost() {
-        return Math.abs(getData().distance(getOwner().getGoal().getData()));
+        return getData().distance(getOwner().getGoal().getData());
     }
     
     public final double gCost() {
-        return Math.abs(getOwner().getStart().getData().distance(getData()));
+//        return Math.abs(getOwner().getStart().getData().distance(getData()));
+//        System.out.println("Previous: " + getPrevious());
+        return getPrevious() != null ? (cost(getPrevious()) + getPrevious().gCost()) : 0;
     }
     
     public final double gCost(@NotNull AStarNode other) {
@@ -78,7 +80,11 @@ implements Comparable<AStarNode>{
     public final double cost(@NotNull AStarNode other) {
 //        if (!isNeighbor(other))
 //            throw Exc.unsupported("Input Node is not a Neighbor [" + this + "  |  " + other + "]");
-        return other.isPathable() ? 10 : 10000000; //TODO
+        return other.isPathable() ? getData().distance(other.getData()) : 1000000;
+//        double xDiff = other.getData().aI() - getData().aI();
+//        double yDiff = other.getData().bI() - getData().bI();
+//        return xDiff != 0 && yDiff != 0 ? 1.4 : 1;
+//        return other.isPathable() ? 10 : 10000000; //TODO
     }
     
     public final boolean isStart() { return getData().equalTo(getOwner().getStart().getData()); }

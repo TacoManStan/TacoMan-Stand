@@ -31,9 +31,8 @@ public class AStarPathfinder {
         for (int i = 10; i < 90; i++)
             for (int j = 40; j < 43; j++)
                 matrix[i][j].setPathable(false);
-        for (int i = 20; i < 22; i++)
-            for (int j = 20; j < 40; j++)
-                matrix[i][j].setPathable(false);
+        for (int j = 2; j < 40; j++)
+            matrix[20][j].setPathable(false);
         return matrix;
     }
     
@@ -56,21 +55,22 @@ public class AStarPathfinder {
             if (current.isGoal())
                 return formPath();
             
-            for (CardinalDirection direction: CardinalDirection.valuesUnidirectional()) {
+            for (CardinalDirection direction: CardinalDirection.valuesNoC()) {
                 AStarNode neighbor = current.getNeighbor(direction);
                 if (neighbor != null && !closedSet.contains(neighbor))
                     if (!openSet.contains(neighbor)) {
                         if (neighbor.isPathable()) {
                             neighbor.setPrevious(current);
                             neighbor.hCost = neighbor.hCost();
-                            neighbor.gCost = neighbor.gCost(current);
+                            neighbor.gCost = current.gCost(neighbor);
                             openSet.add(neighbor);
                         }
                     } else {
-                        double gCostCalc = neighbor.gCost(current);
-                        if (neighbor.gCost > gCostCalc) {
+                        double gCostCalc = current.gCost(neighbor);
+                        if (neighbor.gCost >= gCostCalc) {
                             neighbor.setPrevious(current);
                             neighbor.gCost = gCostCalc;
+                            openSet.remove(neighbor);
                         }
                     }
             }
@@ -98,26 +98,31 @@ public class AStarPathfinder {
     
     public static void main(String[] args) {
         final AStarPathfinder pathfinder = new AStarPathfinder();
-        final List<AStarNode> path = pathfinder.aStar(new Num2D(30, 1), new Num2D(30, 98));
+        final List<AStarNode> path = pathfinder.aStar(new Num2D(30, 5), new Num2D(30, 98));
         //        System.out.println(path);
         for (int j = pathfinder.nodeMatrix[0].length - 1; j >= 0; j--) {
             System.out.println();
             for (int i = 0; i < pathfinder.nodeMatrix.length; i++) {
                 AStarNode current = pathfinder.nodeMatrix[i][j];
-                    System.out.print(" ");
+                System.out.print(" ");
                 if (current.equals(pathfinder.getStart())) {
                     System.out.print("S");
                 } else if (current.equals(pathfinder.getGoal())) {
                     System.out.print("G");
-                }
-                else {
-                    if (path.contains(current))
-                        System.out.print("*");
-                    else {
-                        if (current.isPathable())
-                            System.out.print(" ");
+                } else {
+                    if (path.contains(current)) {
+                        int index = path.indexOf(current);
+                        if (index < 10)
+                            System.out.print("00" + index);
+                        else if (index < 100)
+                            System.out.print("0" + index);
                         else
-                            System.out.print("X");
+                            System.out.print(index);
+                    } else {
+                        if (current.isPathable())
+                            System.out.print(" - ");
+                        else
+                            System.out.print(" X ");
                     }
                 }
             }
