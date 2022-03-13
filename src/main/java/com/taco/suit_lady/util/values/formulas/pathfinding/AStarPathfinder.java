@@ -123,7 +123,7 @@ public class AStarPathfinder {
                 else
                     System.out.print("[" + pathIndex + "]");
             } else {
-                System.out.print("#");
+                System.out.print("O");
             }
         };
         
