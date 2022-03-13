@@ -9,6 +9,7 @@ import com.taco.suit_lady.util.values.numbers.N;
 import com.taco.suit_lady.util.values.numbers.Num2D;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 
@@ -18,6 +19,13 @@ public interface NumExpr2D<T extends NumExpr2D<T>>
     @NotNull T modify(Function<Number, Number> aFunction, Function<Number, Number> bFunction);
     
     //<editor-fold desc="--- DEFAULT METHODS ---">
+    
+    //<editor-fold desc="--- EQUALITY METHODS ---">
+    
+    default boolean equalTo(@Nullable NumExpr2D<?> other) { return other != null && aI() == other.aI() && bI() == other.bI(); }
+    default boolean equalToExact(@Nullable NumExpr2D<?> other) { return other != null && aD() == other.aD() && bD() == other.bD(); }
+    
+    //</editor-fold>
     
     //<editor-fold desc="> Converter Methods">
     

@@ -3,6 +3,7 @@ package com.taco.suit_lady.util.tools.list_tools;
 import com.taco.suit_lady.util.tools.Exc;
 import com.taco.suit_lady.util.tools.TB;
 import com.taco.suit_lady.util.values.numbers.Num2D;
+import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
 import org.checkerframework.checker.index.qual.NonNegative;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -271,6 +272,16 @@ public class A {
      */
     public static boolean isInMatrixBounds(Object[][] array, int i, int j) {
         return i >= 0 && j >= 0 && i < array.length && j < array[i].length;
+    }
+    
+    public static boolean isInMatrixBounds(Object[][] matrix, NumExpr2D<?> coordinates) {
+        return isInMatrixBounds(matrix, coordinates.aI(), coordinates.bI());
+    }
+    
+    public static <T> T getMatrixElement(T[][] matrix, NumExpr2D<?> coordiantes, Supplier<T> onFailSupplier) {
+        if (!isInMatrixBounds(matrix, coordiantes))
+            return onFailSupplier.get();
+        return matrix[coordiantes.aI()][coordiantes.bI()];
     }
     
     /**

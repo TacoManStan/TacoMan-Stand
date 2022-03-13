@@ -26,4 +26,5 @@ public record Num2D(Number a, Number b)
     //
     
     public static <T extends NumExpr2D<T>> @NotNull Function<Number, Number> emptyModifier() { return number -> number; }
+    
 }
