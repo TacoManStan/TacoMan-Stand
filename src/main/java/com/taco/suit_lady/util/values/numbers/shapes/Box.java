@@ -106,7 +106,7 @@ public class Box extends Shape {
     
     protected @NotNull Num2D point(boolean translate, @NotNull Number x, @NotNull Number y) {
         if (translate)
-            return getLocation(LocType.MIN).applyEach(x, y);
+            return getLocation(LocType.MIN).applyEach(x, y).asNum2D();
         return new Num2D(x, y);
     }
     

@@ -10,7 +10,9 @@ import java.util.function.Function;
 public interface NumExpr<T extends NumExpr<T>>
         extends ValueExpr<Number> {
     
-    @NotNull T modify(Function<Number, Number> aFunction);
+    default @NotNull NumExpr<?> modify(Function<Number, Number> aFunction) {
+        return new Num(aFunction.apply(a()));
+    }
     
     //<editor-fold desc="--- DEFAULT METHODS ---">
     

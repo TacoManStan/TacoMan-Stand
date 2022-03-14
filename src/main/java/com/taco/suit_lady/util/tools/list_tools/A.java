@@ -2,6 +2,9 @@ package com.taco.suit_lady.util.tools.list_tools;
 
 import com.taco.suit_lady.util.tools.Exc;
 import com.taco.suit_lady.util.tools.TB;
+import com.taco.suit_lady.util.values.enums.CardinalDirection;
+import com.taco.suit_lady.util.values.enums.CardinalDirectionType;
+import com.taco.suit_lady.util.values.numbers.N;
 import com.taco.suit_lady.util.values.numbers.Num2D;
 import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
 import org.checkerframework.checker.index.qual.NonNegative;
@@ -29,6 +32,54 @@ public class A {
     
     //<editor-fold desc="--- MATRIX METHODS ---">
     
+    @Contract("_, _ -> new") public static @NotNull Num2D matrixDimensionsDifference(@NotNull Object[][] matrix1, @NotNull Object[][] matrix2) {
+        if (matrix1.length == 0 || matrix2.length == 0)
+            throw Exc.unsupported("Matrix dimension widths must be non-zero.");
+        else if (matrix1[0].length == 0 || matrix2[0].length == 0)
+            throw Exc.unsupported("Matrix dimension heights must be non-zero.");
+        else
+            return new Num2D(matrix1.length - matrix2.length, matrix1[0].length - matrix2[0].length);
+    }
+    
+    public static boolean dimensionsEqual(@NotNull Object[][] matrix1, @NotNull Object[][] matrix2) {
+        return N.equalsNum2D(matrixDimensionsDifference(matrix1, matrix2), 0, 0, false);
+    }
+    
+    public static @NotNull Num2D matrixDimensions(@NotNull Object[][] matrix) {
+        if (matrix.length == 0)
+            throw Exc.unsupported("Matrix dimension width must be non-zero.");
+        else if (matrix[0].length == 0)
+            throw Exc.unsupported("Matrix dimension height must be non-zero.");
+        else
+            return new Num2D(matrix.length, matrix[0].length);
+    }
+    
+    public static <E> @Nullable E grab(@NotNull NumExpr2D<?> matrixIndex, @NotNull E[][] matrix) {
+        if (!isInMatrixBounds(matrix, matrixIndex))
+            return null;
+        else {
+            return matrix[matrixIndex.aI()][matrixIndex.bI()];
+        }
+    }
+    
+    public static <E> @Nullable E grabNeighbor(@NotNull NumExpr2D<?> matrixIndex, @NotNull CardinalDirection direction, @NotNull E[][] matrix) {
+        return grab(direction.getTranslated(matrixIndex), matrix);
+    }
+    
+    public static <E> @NotNull List<E> grabNeighbors(@NotNull NumExpr2D<?> matrixIndex, @NotNull CardinalDirectionType directionType, @NotNull E[][] matrix) {
+        return grabNeighbors(matrixIndex, directionType, null, matrix);
+    }
+    
+    public static <E> @NotNull List<E> grabNeighbors(@NotNull NumExpr2D<?> matrixIndex, @NotNull CardinalDirectionType directionType, @Nullable Predicate<E> filter, @NotNull E[][] matrix) {
+        final ArrayList<E> retList = new ArrayList<>();
+        Arrays.stream(directionType.directions())
+              .map(direction -> grabNeighbor(matrixIndex, direction, matrix))
+              .filter(Objects::nonNull)
+              .filter(filter != null ? filter : e -> true)
+              .forEach(retList::add);
+        return retList;
+    }
+    
     @Contract("_, _ -> param2")
     public static <E> E[][] fillMatrix(@NotNull Function<Num2D, E> elementFactory, @Nullable E[][] matrix) {
         if (matrix == null)
@@ -39,6 +90,19 @@ public class A {
                 matrix[i][j] = elementFactory.apply(new Num2D(i, j));
         
         return matrix;
+    }
+    
+    public static <E, R> R[][] fillMatrix(@NotNull BiFunction<Num2D, E, R> elementFactory, @Nullable E[][] inputMatrix, @Nullable R[][] outputMatrix) {
+        if (inputMatrix == null || outputMatrix == null)
+            return null;
+        else if (!dimensionsEqual(inputMatrix, outputMatrix))
+            throw Exc.inputMismatch("Input & Output Matrices must have the same dimensions:  [" + matrixDimensions(inputMatrix) + "  |  " + matrixDimensions(outputMatrix) + " ]");
+        
+        for (int i = 0; i < inputMatrix.length; i++)
+            for (int j = 0; j < inputMatrix[i].length; j++)
+                outputMatrix[i][j] = elementFactory.apply(new Num2D(i, j), inputMatrix[i][j]);
+        
+        return outputMatrix;
     }
     
     //

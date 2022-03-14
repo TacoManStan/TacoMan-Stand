@@ -1,7 +1,9 @@
 package com.taco.suit_lady.util.values.formulas.pathfinding;
 
+import com.taco.suit_lady.util.tools.Exc;
 import com.taco.suit_lady.util.tools.list_tools.A;
 import com.taco.suit_lady.util.values.enums.CardinalDirection;
+import com.taco.suit_lady.util.values.enums.CardinalDirectionType;
 import com.taco.suit_lady.util.values.numbers.Num2D;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -47,6 +49,9 @@ public class AStarPathfinder {
     protected final @NotNull AStarNode getStart() { return start; }
     protected final @NotNull AStarNode getGoal() { return goal; }
     
+    protected final @NotNull Num2D startLocation() { throw Exc.nyi(); }
+    protected final @NotNull Num2D goalLocation() { throw Exc.nyi(); }
+    
     public @NotNull List<AStarNode> aStar(@NotNull Num2D start, @NotNull Num2D goal) {
         this.start = getNodeAt(start);
         this.goal = getNodeAt(goal);
@@ -59,7 +64,7 @@ public class AStarPathfinder {
             if (current.isGoal())
                 return formPath();
             
-            for (CardinalDirection direction: CardinalDirection.valuesNoC()) {
+            for (CardinalDirection direction: CardinalDirection.values(CardinalDirectionType.ALL_BUT_CENTER)) {
                 AStarNode neighbor = current.getNeighbor(direction);
                 if (neighbor != null && !closedSet.contains(neighbor))
                     if (!openSet.contains(neighbor)) {

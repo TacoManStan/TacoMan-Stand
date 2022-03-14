@@ -14,11 +14,6 @@ public record Num2D(Number a, Number b)
         return new Num2D(aFunction.apply(a()), b());
     }
     
-    @Contract("_, _ -> new")
-    @Override public @NotNull Num2D modify(@NotNull Function<Number, Number> aFunction, @NotNull Function<Number, Number> bFunction) {
-        return new Num2D(aFunction.apply(a()), bFunction.apply(b()));
-    }
-    
     @Override public String toString() {
         return getString(false);
     }

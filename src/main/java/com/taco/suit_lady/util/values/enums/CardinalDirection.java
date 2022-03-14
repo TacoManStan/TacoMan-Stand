@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.List;
 
 public enum CardinalDirection {
     
@@ -36,13 +37,8 @@ public enum CardinalDirection {
     
     //<editor-fold desc="--- STATIC ---">
     
-    public static CardinalDirection[] valuesUnidirectional() { return new CardinalDirection[]{NORTH, SOUTH, EAST, WEST}; }
-    public static CardinalDirection[] valuesUnidirectionalC() { return A.concat(valuesUnidirectional(), CENTER); }
-    
-    public static CardinalDirection[] valuesMultiDirectional() { return new CardinalDirection[]{NORTH_EAST, NORTH_WEST, SOUTH_EAST, SOUTH_WEST}; }
-    public static CardinalDirection[] valuesMultiDirectionalC() { return A.concat(valuesMultiDirectional(), CENTER); }
-    
-    public static CardinalDirection[] valuesNoC() { return A.concatMulti(valuesUnidirectional(), valuesMultiDirectional()); }
+    public static @NotNull List<CardinalDirection> valueList(@NotNull CardinalDirectionType directionType) { return directionType.directionList(); }
+    public static @NotNull CardinalDirection[] values(@NotNull CardinalDirectionType directionType) { return directionType.directions(); }
     
     //
     
