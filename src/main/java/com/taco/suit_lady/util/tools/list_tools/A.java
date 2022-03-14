@@ -1,5 +1,7 @@
 package com.taco.suit_lady.util.tools.list_tools;
 
+import com.taco.suit_lady.util.enums.FilterType;
+import com.taco.suit_lady.util.tools.Enu;
 import com.taco.suit_lady.util.tools.Exc;
 import com.taco.suit_lady.util.tools.TB;
 import com.taco.suit_lady.util.values.enums.CardinalDirection;
@@ -67,15 +69,15 @@ public class A {
     }
     
     public static <E> @NotNull List<E> grabNeighbors(@NotNull NumExpr2D<?> matrixIndex, @NotNull CardinalDirectionType directionType, @NotNull E[][] matrix) {
-        return grabNeighbors(matrixIndex, directionType, null, matrix);
+        return grabNeighbors(matrixIndex, directionType, matrix, null);
     }
     
-    public static <E> @NotNull List<E> grabNeighbors(@NotNull NumExpr2D<?> matrixIndex, @NotNull CardinalDirectionType directionType, @Nullable Predicate<E> filter, @NotNull E[][] matrix) {
+    @SafeVarargs public static <E> @NotNull List<E> grabNeighbors(@NotNull NumExpr2D<?> matrixIndex, @NotNull CardinalDirectionType directionType, @NotNull E[][] matrix, @Nullable FilterType filterType, @NotNull Predicate<E>... filters) {
         final ArrayList<E> retList = new ArrayList<>();
         Arrays.stream(directionType.directions())
               .map(direction -> grabNeighbor(matrixIndex, direction, matrix))
               .filter(Objects::nonNull)
-              .filter(filter != null ? filter : e -> true)
+              .filter(Enu.get(filterType, FilterType.class).getFilter(filters))
               .forEach(retList::add);
         return retList;
     }
