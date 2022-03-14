@@ -13,15 +13,7 @@ public class PathfindingTest {
     private PathfindingTest() { } //No Instance
     
     public static void main(String[] args) {
-        final AStarPathfinder<DummyElement> pathfinder = new AStarPathfinder<>((matrixIndex, rawElement) -> new AStarNode<>(rawElement) {
-            
-            private ArrayList<AStarNode<DummyElement>> pathableNeighbors;
-            
-            @Override protected @NotNull List<AStarNode<@NotNull DummyElement>> pathableNeighbors() { return pathableNeighbors; }
-            
-            @Override protected void onInit(@NotNull AStarPathfinder<DummyElement> pathfinder) {
-                this.pathableNeighbors = new ArrayList<>(pathfinder.getNeighbors(true, this));
-            }
+        final AStarPathfinder<DummyElement> pathfinder = new AStarPathfinder<>((matrixIndex, rawElement) -> new CachedAStarNode<>(rawElement) {
             
             @Override protected @NotNull Num2D matrixIndex() { return data().getMatrixIndex(); }
             @Override protected boolean pathableFrom(@NotNull AStarNode<DummyElement> other) { return data().isPathable(); }
