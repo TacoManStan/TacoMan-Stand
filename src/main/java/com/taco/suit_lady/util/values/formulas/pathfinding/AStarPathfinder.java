@@ -4,6 +4,7 @@ import com.taco.suit_lady.util.enums.FilterType;
 import com.taco.suit_lady.util.timing.Timer;
 import com.taco.suit_lady.util.timing.Timers;
 import com.taco.suit_lady.util.tools.list_tools.A;
+import com.taco.suit_lady.util.tools.list_tools.L;
 import com.taco.suit_lady.util.values.enums.CardinalDirectionType;
 import com.taco.suit_lady.util.values.numbers.Num2D;
 import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
@@ -109,7 +110,7 @@ public class AStarPathfinder<T> {
                 System.out.println();
                 System.out.println("Leniency: " + leniency);
                 System.out.println("Path Size: " + path.size());
-                System.out.println("Path Cost: " + path.get(0).gCost());
+                System.out.println("Path Cost: " + L.last(path).gCost());
                 System.out.println("Time: " + timer.getElapsedTime());
                 System.out.println();
                 return path;
@@ -151,6 +152,6 @@ public class AStarPathfinder<T> {
             path.add(current);
             current = current.previousNode();
         }
-        return path;
+        return L.reversed(path);
     }
 }
