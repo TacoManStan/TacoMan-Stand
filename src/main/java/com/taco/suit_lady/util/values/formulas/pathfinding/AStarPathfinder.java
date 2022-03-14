@@ -35,6 +35,8 @@ public class AStarPathfinder {
                 matrix[i][j].setPathable(false);
         for (int j = 2; j < 40; j++)
             matrix[20][j].setPathable(false);
+        for (int i = 20; i < 80; i++)
+            matrix[i][2].setPathable(false);
         return matrix;
     }
     
@@ -61,12 +63,12 @@ public class AStarPathfinder {
                 AStarNode neighbor = current.getNeighbor(direction);
                 if (neighbor != null && !closedSet.contains(neighbor))
                     if (!openSet.contains(neighbor)) {
-                        if (neighbor.isPathable()) {
+//                        if (neighbor.isPathable()) {
                             neighbor.setPrevious(current);
                             neighbor.hCost = neighbor.hCost();
                             neighbor.gCost = current.gCost(neighbor);
                             openSet.add(neighbor);
-                        }
+//                        }
                     } else {
                         double gCostCalc = current.gCost(neighbor);
                         if (neighbor.gCost >= gCostCalc) {
@@ -109,7 +111,7 @@ public class AStarPathfinder {
             if (PRINT_INDEX)
                 System.out.println();
         };
-        final Runnable hGapPrinter = () -> System.out.print(PRINT_INDEX ? "     " : "  ");
+        final Runnable hGapPrinter = () -> System.out.print(PRINT_INDEX ? "     " : "   ");
         final Runnable startPrinter = () -> System.out.print(PRINT_INDEX ? "[ S ]" : "S");
         final Runnable goalPrinter = () -> System.out.print(PRINT_INDEX ? "[ G ]" : "G");
         final Runnable pathablePrinter = () -> System.out.print(PRINT_INDEX ? "[   ]" : "-");
