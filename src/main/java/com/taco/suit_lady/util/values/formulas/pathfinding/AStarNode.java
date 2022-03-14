@@ -62,7 +62,8 @@ public abstract class AStarNode<T>
     
     
     protected abstract @NotNull List<AStarNode<T>> pathableNeighbors();
-    protected abstract boolean isPathable();
+    protected abstract boolean pathableFrom(@NotNull AStarNode<T> other);
+    protected abstract boolean pathable();
     
     protected abstract void onInit(@NotNull AStarPathfinder<T> pathfinder);
     protected final void init(@NotNull AStarPathfinder<T> pathfinder) {
@@ -89,6 +90,12 @@ public abstract class AStarNode<T>
     
     protected boolean isStart() { return matrixIndex().equalTo(pathfinder().start()); }
     protected boolean isGoal() { return matrixIndex().equalTo(pathfinder().goal()); }
+    
+    //
+    
+    final boolean isPathableFrom(@NotNull AStarNode<T> other) {
+        return pathable() && other.pathable() && pathableFrom(other);
+    }
     
     //</editor-fold>
     

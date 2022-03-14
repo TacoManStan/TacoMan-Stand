@@ -11,7 +11,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
-import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
@@ -59,17 +58,22 @@ public class AStarPathfinder<T> {
     
     private @NotNull AStarNode<T>[][] matrix() { return nodeMatrix; }
     
-    protected final @NotNull Num2D mapSize() { return A.matrixDimensions(matrix()); }
-    protected final @Nullable AStarNode<T> getNodeAt(@NotNull NumExpr2D<?> matrixIndex) { return A.grab(matrixIndex, matrix()); }
+    protected final @NotNull Num2D getMapSize() { return A.matrixDimensions(matrix()); }
+    
+    protected final @Nullable AStarNode<T> getNodeAt(@NotNull NumExpr2D<?> matrixIndex) { return matrixIndex instanceof AStarNode indexNode ? indexNode : A.grab(matrixIndex, matrix()); }
     protected final @Nullable AStarNode<T> getNodeAt(@NotNull Number indexX, @NotNull Number indexY) { return getNodeAt(new Num2D(indexX, indexY)); }
     
-    protected final @NotNull List<AStarNode<T>> neighbors(@NotNull NumExpr2D<?> matrixIndex) {
-        return A.grabNeighbors(matrixIndex, getDirectionType(), matrix());
+    //<editor-fold desc="> Node Neighbor Methods">
+    
+    @SafeVarargs protected final @NotNull List<AStarNode<T>> getNeighbors(boolean checkPathing, @NotNull NumExpr2D<?> matrixIndex, @Nullable FilterType filterType, @NotNull Predicate<AStarNode<T>>... filters) {
+        return A.grabNeighbors(matrixIndex, getDirectionType(), matrix(), filterType,
+                               checkPathing ? A.concat(filters, neighbor -> neighbor.isPathableFrom(getNodeAt(matrixIndex))) : filters);
     }
     
-    @SafeVarargs protected final @NotNull List<AStarNode<T>> neighbors(@NotNull NumExpr2D<?> matrixIndex, @Nullable FilterType filterType, @NotNull Predicate<AStarNode<T>>... filters) {
-        return A.grabNeighbors(matrixIndex, getDirectionType(), matrix(), filterType, filters);
-    }
+    protected final @NotNull List<AStarNode<T>> getNeighbors(boolean checkPathing, @NotNull NumExpr2D<?> matrixIndex) { return getNeighbors(checkPathing, matrixIndex, null, new Predicate[0]); }
+    @SafeVarargs protected final @NotNull List<AStarNode<T>> getNeighbors(boolean checkPathing, @NotNull NumExpr2D<?> matrixIndex, @NotNull Predicate<AStarNode<T>>... filters) { return getNeighbors(checkPathing, matrixIndex, null, filters); }
+    
+    //</editor-fold>
     
     
     public final @NotNull CardinalDirectionType getDirectionType() { return directionType; }

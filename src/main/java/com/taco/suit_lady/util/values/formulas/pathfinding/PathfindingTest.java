@@ -13,33 +13,27 @@ public class PathfindingTest {
     private PathfindingTest() { } //No Instance
     
     public static void main(String[] args) {
-        final AStarPathfinder<DummyElement> pathfinder = new AStarPathfinder<>((matrixIndex, rawElement) -> {
-            return new AStarNode<>(rawElement) {
-                
-                private ArrayList<AStarNode<DummyElement>> pathableNeighbors;
-                
-                @Override protected @NotNull List<AStarNode<@NotNull DummyElement>> pathableNeighbors() { return pathableNeighbors; }
-                
-                @Override protected void onInit(@NotNull AStarPathfinder<DummyElement> pathfinder) {
-                    this.pathableNeighbors = new ArrayList<>(pathfinder.neighbors(this, FilterType.ALL, node -> node.isPathable()));
-//                    this.pathableNeighbors = new ArrayList<>(A.grabNeighbors(
-//                            this,
-//                            pathfinder.getDirectionType(),
-//                            dummyElementAStarNode -> dummyElementAStarNode.isPathable(),
-//                            pathfinder.matrix()));
-                }
-                
-                @Override protected @NotNull Num2D matrixIndex() { return data().getMatrixIndex(); }
-                @Override protected boolean isPathable() {
-                    return data().isPathable();
-                }
-                @Override protected double edgeCost(@NotNull AStarNode<@NotNull DummyElement> other) { return super.edgeCost(other); }
-            };
+        final AStarPathfinder<DummyElement> pathfinder = new AStarPathfinder<>((matrixIndex, rawElement) -> new AStarNode<>(rawElement) {
+            
+            private ArrayList<AStarNode<DummyElement>> pathableNeighbors;
+            
+            @Override protected @NotNull List<AStarNode<@NotNull DummyElement>> pathableNeighbors() { return pathableNeighbors; }
+            
+            @Override protected void onInit(@NotNull AStarPathfinder<DummyElement> pathfinder) {
+                this.pathableNeighbors = new ArrayList<>(pathfinder.getNeighbors(true, this));
+            }
+            
+            @Override protected @NotNull Num2D matrixIndex() { return data().getMatrixIndex(); }
+            @Override protected boolean pathableFrom(@NotNull AStarNode<DummyElement> other) { return data().isPathable(); }
+            @Override protected boolean pathable() {
+                return data().isPathable();
+            }
+            @Override protected double edgeCost(@NotNull AStarNode<@NotNull DummyElement> other) { return super.edgeCost(other); }
+            
         }, generateTestMatrix()).init();
         
         
         final List<AStarNode<DummyElement>> path = pathfinder.aStar(new Num2D(30, 5), new Num2D(30, 98));
-        //        System.out.println(path);
         final Runnable vGapPrinter = () -> {
             System.out.println();
             if (PRINT_INDEX)
@@ -63,7 +57,7 @@ public class PathfindingTest {
             }
         };
         
-        final Num2D mapSize = pathfinder.mapSize();
+        final Num2D mapSize = pathfinder.getMapSize();
         final int mapWidth = mapSize.aI();
         final int mapHeight = mapSize.bI();
         
@@ -81,7 +75,7 @@ public class PathfindingTest {
                     if (path.contains(current)) {
                         occupiedPrinter.accept(matrixIndex, path.indexOf(current));
                     } else {
-                        if (current.isPathable())
+                        if (current.pathable())
                             pathablePrinter.run();
                         else
                             unpathablePrinter.run();
