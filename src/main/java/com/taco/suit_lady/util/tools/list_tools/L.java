@@ -21,7 +21,11 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * <p>The {@link L} utility class provides a wide variety of static factory methods for applying an {@link OpListener} implementation to an {@link ObservableList}.</p>
@@ -413,6 +417,25 @@ public final class L {
     
     //</editor-fold>
     
+    //<editor-fold desc="--- LIST OPERATIONS ---">
+    
+    //<editor-fold desc="> Reverse Methods">
+    
+    public static <E, L extends List<E>> @NotNull L reverseAndGet(@NotNull L list) {
+        Collections.reverse(list);
+        return list;
+    }
+    
+    public static <E> @NotNull ArrayList<E> reversed(@NotNull List<E> list, @NotNull Function<E, E> copier) { return revStream(list, copier).collect(Collectors.toCollection(ArrayList::new)); }
+    public static <E> @NotNull ArrayList<E> reversed(@NotNull List<E> list) { return reversed(list, e -> e); }
+    
+    public static <E> @NotNull Stream<E> revStream(@NotNull List<E> list, @NotNull Function<E, E> copier) { return IntStream.iterate(list.size() - 1, i -> i >= 0, i -> i - 1).mapToObj(list::get); }
+    public static <E> @NotNull Stream<E> revStream(@NotNull List<E> list) { return revStream(list, e -> e); }
+    
+    //</editor-fold>
+    
+    //</editor-fold>
+    
     //<editor-fold desc="--- MAP OPERATIONS ---">
     
     //<editor-fold desc="> Factory & Conversion Methods">
@@ -491,6 +514,8 @@ public final class L {
     }
     
     //</editor-fold>
+    
+    //
     
     //<editor-fold desc="--- CollectionsSL Ported Content ---">
     
