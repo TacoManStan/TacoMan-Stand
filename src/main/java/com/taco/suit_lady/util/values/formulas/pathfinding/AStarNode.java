@@ -80,7 +80,7 @@ implements Comparable<AStarNode>{
     public final double cost(@NotNull AStarNode other) {
 //        if (!isNeighbor(other))
 //            throw Exc.unsupported("Input Node is not a Neighbor [" + this + "  |  " + other + "]");
-        return isPathable() ? getData().distance(other.getData()) : 10000000;
+        return isPathable() ? getData().distance(other.getData()) : 100000;
 //        double xDiff = other.getData().aI() - getData().aI();
 //        double yDiff = other.getData().bI() - getData().bI();
 //        return xDiff != 0 && yDiff != 0 ? 1.4 : 1;
