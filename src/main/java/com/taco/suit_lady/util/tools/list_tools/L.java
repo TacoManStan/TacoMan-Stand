@@ -419,7 +419,22 @@ public final class L {
     
     //<editor-fold desc="--- LIST OPERATIONS ---">
     
-    //<editor-fold desc="> Reverse Methods">
+    //<editor-fold desc="> List Accessor Operations">
+    
+    public static <E> @NotNull E first(@NotNull List<E> list) {
+        if (list.isEmpty())
+            throw Exc.unsupported("Input List cannot be Empty.");
+        return list.get(0);
+    }
+    public static <E> @NotNull E last(@NotNull List<E> list) {
+        if (list.isEmpty())
+            throw Exc.unsupported("Input List cannot be Empty.");
+        return list.get(list.size() - 1);
+    }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="> Reversal Operations">
     
     public static <E, L extends List<E>> @NotNull L reverseAndGet(@NotNull L list) {
         Collections.reverse(list);
