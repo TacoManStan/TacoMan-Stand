@@ -2,6 +2,7 @@ package com.taco.suit_lady.util.values.formulas.pathfinding;
 
 import com.taco.suit_lady.util.tools.Exc;
 import com.taco.suit_lady.util.tools.Props;
+import com.taco.suit_lady.util.values.numbers.Num;
 import com.taco.suit_lady.util.values.numbers.Num2D;
 import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
 import javafx.beans.property.ReadOnlyBooleanProperty;
@@ -21,7 +22,6 @@ public abstract class AStarNodeV2<T>
     private final T wrappedData;
     
     private final ReadOnlyObjectWrapper<AStarNodeV2<T>> previousNodeProperty;
-    private final ReadOnlyBooleanWrapper pathableProperty;
     
     private double hCost;
     private double gCost;
@@ -30,7 +30,6 @@ public abstract class AStarNodeV2<T>
         this.wrappedData = wrappedData;
         
         this.previousNodeProperty = new ReadOnlyObjectWrapper<>();
-        this.pathableProperty = new ReadOnlyBooleanWrapper(true);
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
@@ -44,28 +43,19 @@ public abstract class AStarNodeV2<T>
     public final @Nullable AStarNodeV2<T> previousNode() { return previousNodeProperty.get(); }
     protected final @Nullable AStarNodeV2<T> setPreviousNode(@Nullable AStarNodeV2<T> newValue) { return Props.setProperty(previousNodeProperty, newValue); }
     
-    public final @NotNull ReadOnlyBooleanProperty readOnlyPathableProperty() { return pathableProperty.getReadOnlyProperty(); }
-    public final boolean isPathable() { return pathableProperty.get(); }
-    protected final boolean setPathable(boolean newValue) { return Props.setProperty(pathableProperty, newValue); }
-    
     //
     
     protected final double getCostH() { return hCost; }
-    protected final double refreshCostH() {
-        double oldValue = this.hCost;
-        this.hCost = hCost();
+    protected final double setCostH(@NotNull Number newValue) {
+        double oldValue = getCostH();
+        this.hCost = newValue.doubleValue();
         return oldValue;
     }
     
-    protected final double getCostG() { return hCost; }
+    protected final double getCostG() { return gCost; }
     protected final double setCostG(@NotNull Number newValue) {
-        double oldValue = this.gCost;
+        double oldValue = getCostG();
         this.gCost = newValue.doubleValue();
-        return oldValue;
-    }
-    protected final double refreshCostG(@NotNull AStarNodeV2<T> other) {
-        double oldValue = this.gCost;
-        this.gCost = gCost(other);
         return oldValue;
     }
     
@@ -77,6 +67,7 @@ public abstract class AStarNodeV2<T>
     
     
     protected abstract @NotNull List<AStarNodeV2<T>> pathableNeighbors();
+    protected abstract boolean isPathable();
     
     protected abstract void onInit(@NotNull AStarPathfinderV2<T> pathfinder);
     protected final void init(@NotNull AStarPathfinderV2<T> pathfinder) {
@@ -84,7 +75,7 @@ public abstract class AStarNodeV2<T>
         onInit(pathfinder);
     }
     
-    protected abstract @NotNull Num2D matrixIndex(@NotNull T wrappedData);
+    protected abstract @NotNull Num2D matrixIndex();
     
     //<editor-fold desc="> Default Abstract Methods">
     
@@ -101,8 +92,8 @@ public abstract class AStarNodeV2<T>
     
     protected double fCost() { return hCost() + gCost(); }
     
-    protected boolean isStart() { throw Exc.nyi(); }
-    protected boolean isGoal() { throw Exc.nyi(); }
+    protected boolean isStart() { return matrixIndex().equalTo(pathfinder().start()); }
+    protected boolean isGoal() { return matrixIndex().equalTo(pathfinder().goal()); }
     
     //</editor-fold>
     
@@ -110,8 +101,8 @@ public abstract class AStarNodeV2<T>
     
     //<editor-fold desc="> Foundational">
     
-    @Override public final @Nullable Number a() { return matrixIndex(data()).a(); }
-    @Override public final @Nullable Number b() { return matrixIndex(data()).b(); }
+    @Override public final @Nullable Number a() { return matrixIndex().a(); }
+    @Override public final @Nullable Number b() { return matrixIndex().b(); }
     
     //
     

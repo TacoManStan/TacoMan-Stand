@@ -87,14 +87,14 @@ public class AStarPathfinderV2<T> {
             for (AStarNodeV2<T> neighbor: current.pathableNeighbors()) {
                 if (neighbor != null && !closedSet.contains(neighbor))
                     if (!openSet.contains(neighbor)) {
-                        //                        if (neighbor.isPathable()) {
-                        neighbor.setPreviousNode(current);
-                        neighbor.refreshCostH();
-                        current.refreshCostG(neighbor);
-                        //                            neighbor.hCost = neighbor.hCost();
-                        //                            neighbor.gCost = current.gCost(neighbor);
-                        openSet.add(neighbor);
-                        //                        }
+//                        if (neighbor.isPathable()) {
+                            neighbor.setPreviousNode(current);
+                            neighbor.setCostH(neighbor.hCost());
+                            neighbor.setCostG(current.gCost(neighbor));
+                            //                            neighbor.hCost = neighbor.hCost();
+                            //                            neighbor.gCost = current.gCost(neighbor);
+                            openSet.add(neighbor);
+//                        }
                     } else {
                         double gCostCalc = current.gCost(neighbor);
                         if (neighbor.getCostG() >= gCostCalc) {
@@ -128,6 +128,13 @@ public class AStarPathfinderV2<T> {
         final DummyElement[][] matrix = A.fillMatrix(matrixIndex -> {
             return new DummyElement(matrixIndex, true);
         }, new DummyElement[100][100]);
+        
+        for (int i = 10; i < 90; i++)
+            for (int j = 40; j < 43; j++)
+                matrix[i][j].setPathable(false);
+        for (int j = 2; j < 40; j++)
+            matrix[20][j].setPathable(false);
+        
         return matrix;
     }
     
@@ -147,8 +154,10 @@ public class AStarPathfinderV2<T> {
                             pathfinder.matrix()));
                 }
                 
-                @Override protected @NotNull Num2D matrixIndex(@NotNull DummyElement wrappedData) { return wrappedData.getMatrixIndex(); }
-    
+                @Override protected @NotNull Num2D matrixIndex() { return data().getMatrixIndex(); }
+                @Override protected boolean isPathable() {
+                    return data().isPathable();
+                }
                 @Override protected double edgeCost(@NotNull AStarNodeV2<@NotNull DummyElement> other) { return super.edgeCost(other); }
             };
         }, generateTestMatrix()).init();
