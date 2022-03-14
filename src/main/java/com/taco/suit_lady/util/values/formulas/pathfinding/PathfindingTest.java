@@ -1,11 +1,9 @@
 package com.taco.suit_lady.util.values.formulas.pathfinding;
 
-import com.taco.suit_lady.util.enums.FilterType;
 import com.taco.suit_lady.util.tools.list_tools.A;
 import com.taco.suit_lady.util.values.numbers.Num2D;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 
