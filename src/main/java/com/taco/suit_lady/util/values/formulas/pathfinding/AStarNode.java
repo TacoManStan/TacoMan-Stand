@@ -1,109 +1,109 @@
 package com.taco.suit_lady.util.values.formulas.pathfinding;
 
-import com.taco.suit_lady.util.tools.Exc;
-import com.taco.suit_lady.util.values.enums.CardinalDirection;
+import com.taco.suit_lady.util.tools.Props;
 import com.taco.suit_lady.util.values.numbers.Num2D;
+import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class AStarNode
-        implements Comparable<AStarNode> {
+public abstract class AStarNode<T>
+        implements Comparable<AStarNode<T>>, NumExpr2D<AStarNode<T>> {
     
-    private final AStarPathfinder owner;
-    private final Num2D matrixIndex;
+    private AStarPathfinder<T> pathfinder;
+    private final T wrappedData;
     
-    private AStarNode previous;
+    private final ReadOnlyObjectWrapper<AStarNode<T>> previousNodeProperty;
     
-    double hCost;
-    double gCost;
+    private double hCost;
+    private double gCost;
     
-    private boolean pathable;
-    
-    public AStarNode(@NotNull AStarPathfinder owner, @NotNull Num2D matrixIndex, boolean pathable) {
-        this.owner = owner;
-        this.matrixIndex = matrixIndex;
+    public AStarNode(@NotNull T wrappedData) {
+        this.wrappedData = wrappedData;
         
-        this.previous = null;
-        
-        this.pathable = pathable;
+        this.previousNodeProperty = new ReadOnlyObjectWrapper<>();
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final AStarPathfinder getOwner() { return owner; }
-    public final Num2D getMatrixIndex() { return matrixIndex; }
+    public final @NotNull AStarPathfinder<T> pathfinder() { return pathfinder; }
+    public final @NotNull T data() { return wrappedData; }
     
-    public final @Nullable AStarNode getPrevious() { return previous; }
-    public final @Nullable AStarNode setPrevious(@Nullable AStarNode newValue) {
-        AStarNode oldValue = getPrevious();
-        this.previous = newValue;
+    //
+    
+    public final @NotNull ReadOnlyObjectProperty<AStarNode<T>> readOnlyPreviousNodeProperty() { return previousNodeProperty.getReadOnlyProperty(); }
+    public final @Nullable AStarNode<T> previousNode() { return previousNodeProperty.get(); }
+    protected final @Nullable AStarNode<T> setPreviousNode(@Nullable AStarNode<T> newValue) { return Props.setProperty(previousNodeProperty, newValue); }
+    
+    //
+    
+    protected final double getCostH() { return hCost; }
+    protected final double setCostH(@NotNull Number newValue) {
+        double oldValue = getCostH();
+        this.hCost = newValue.doubleValue();
         return oldValue;
     }
     
-    public final boolean isPathable() { return pathable; }
-    public final boolean setPathable(boolean newValue) {
-        boolean oldValue = isPathable();
-        this.pathable = newValue;
+    protected final double getCostG() { return gCost; }
+    protected final double setCostG(@NotNull Number newValue) {
+        double oldValue = getCostG();
+        this.gCost = newValue.doubleValue();
         return oldValue;
     }
     
     //</editor-fold>
     
-    public final @Nullable AStarNode getNeighbor(@NotNull CardinalDirection direction) {
-        return getOwner().getNeighbor(getMatrixIndex(), direction);
+    //<editor-fold desc="--- ABSTRACT ---">
+    
+    protected double edgeCost(@NotNull AStarNode<T> other) { return distance(other); }
+    
+    
+    protected abstract @NotNull List<AStarNode<T>> pathableNeighbors();
+    protected abstract boolean isPathable();
+    
+    protected abstract void onInit(@NotNull AStarPathfinder<T> pathfinder);
+    protected final void init(@NotNull AStarPathfinder<T> pathfinder) {
+        this.pathfinder = pathfinder;
+        onInit(pathfinder);
     }
     
-    public final double hCost() {
-        return getMatrixIndex().distance(getOwner().getGoal().getMatrixIndex());
-    }
+    protected abstract @NotNull Num2D matrixIndex();
     
-    public final double gCost() {
-        //        return Math.abs(getOwner().getStart().getData().distance(getData()));
-        //        System.out.println("Previous: " + getPrevious());
-        return getPrevious() != null ? (cost(getPrevious()) + getPrevious().gCost()) : 0;
-    }
+    //<editor-fold desc="> Default Abstract Methods">
     
-    public final double gCost(@NotNull AStarNode other) {
-        return gCost() + cost(other);
-    }
+    protected double hCost() { return distance(pathfinder.goal()); }
     
-    public final double fCost() {
-        return gCost() + hCost();
-    }
+    //</editor-fold>
     
-    public final double cost(@NotNull AStarNode other) {
-        //        if (!isNeighbor(other))
-        //            throw Exc.unsupported("Input Node is not a Neighbor [" + this + "  |  " + other + "]");
-        return isPathable() ? getMatrixIndex().distance(other.getMatrixIndex()) : 100000;
-        //        double xDiff = other.getData().aI() - getData().aI();
-        //        double yDiff = other.getData().bI() - getData().bI();
-        //        return xDiff != 0 && yDiff != 0 ? 1.4 : 1;
-        //        return other.isPathable() ? 10 : 10000000; //TODO
-    }
+    //</editor-fold>
     
-    public final boolean isStart() { return getMatrixIndex().equalTo(getOwner().getStart().getMatrixIndex()); }
-    public final boolean isGoal() { return getMatrixIndex().equalTo(getOwner().getGoal().getMatrixIndex()); }
+    //<editor-fold desc="--- LOGIC ---">
+    
+    protected final double gCost() { return previousNode() != null ? (edgeCost(previousNode()) + previousNode().gCost()) : 0; }
+    protected final double gCost(@Nullable AStarNode<T> other) { return gCost() + edgeCost(other); }
+    
+    protected double fCost() { return hCost() + gCost(); }
+    
+    protected boolean isStart() { return matrixIndex().equalTo(pathfinder().start()); }
+    protected boolean isGoal() { return matrixIndex().equalTo(pathfinder().goal()); }
+    
+    //</editor-fold>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public int compareTo(@NotNull AStarNode o) {
-        final double fCost = fCost();
-        final double fCostOther = o.fCost();
-        if (fCost < fCostOther)
-            return -1;
-        else if (fCost > fCostOther)
-            return 1;
-        else
-            return 0;
-    }
-    @Override public String toString() {
-        return getMatrixIndex().a() + ", " + getMatrixIndex().b();
-    }
-    @Override public boolean equals(Object obj) {
-        return getMatrixIndex().equalTo(((AStarNode) obj).getMatrixIndex());
-    }
+    //<editor-fold desc="> Foundational">
+    
+    @Override public final @Nullable Number a() { return matrixIndex().a(); }
+    @Override public final @Nullable Number b() { return matrixIndex().b(); }
+    
+    //
+    
+    @Override public int compareTo(@NotNull AStarNode<T> o) { return Double.compare(fCost(), o.fCost()); }
+    
+    //</editor-fold>
     
     //</editor-fold>
 }

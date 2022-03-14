@@ -1,8 +1,6 @@
 package com.taco.suit_lady.util.values.formulas.pathfinding;
 
-import com.taco.suit_lady.util.tools.Exc;
 import com.taco.suit_lady.util.tools.list_tools.A;
-import com.taco.suit_lady.util.values.enums.CardinalDirection;
 import com.taco.suit_lady.util.values.enums.CardinalDirectionType;
 import com.taco.suit_lady.util.values.numbers.Num2D;
 import org.jetbrains.annotations.NotNull;
@@ -12,73 +10,94 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
+import java.util.function.BiFunction;
 
-public class AStarPathfinder {
+public class AStarPathfinder<T> {
     
-    private AStarNode start;
-    private AStarNode goal;
-    private final PriorityQueue<AStarNode> openSet;
-    private final PriorityQueue<AStarNode> closedSet;
+    private final CardinalDirectionType directionType;
     
-    private final AStarNode[][] nodeMatrix;
+    private Num2D start;
+    private Num2D goal;
     
-    public AStarPathfinder() {
+    private final PriorityQueue<AStarNode<T>> openSet;
+    private final PriorityQueue<AStarNode<T>> closedSet;
+    
+    private final AStarNode<T>[][] nodeMatrix;
+    
+    //<editor-fold desc="--- CONSTRUCTORS ---">
+    
+    public AStarPathfinder(@Nullable CardinalDirectionType directionType, @NotNull BiFunction<Num2D, T, AStarNode<T>> nodeFactory, @NotNull T[][] rawMatrix) {
+        this.directionType = directionType != null ? directionType : CardinalDirectionType.ALL_BUT_CENTER;
+        
         this.openSet = new PriorityQueue<>();
         this.closedSet = new PriorityQueue<>();
         
-        this.nodeMatrix = generateTestMatrix();
+        this.nodeMatrix = generateMatrix(nodeFactory, rawMatrix);
     }
     
-    private AStarNode[][] generateTestMatrix() {
-        final AStarNode[][] matrix = A.fillMatrix(num2D -> new AStarNode(this, num2D, true), new AStarNode[100][100]);
-        for (int i = 10; i < 90; i++)
-            for (int j = 40; j < 43; j++)
-                matrix[i][j].setPathable(false);
-        for (int j = 2; j < 40; j++)
-            matrix[20][j].setPathable(false);
-//        for (int i = 20; i < 80; i++)
-//            matrix[i][2].setPathable(false);
-        return matrix;
+    public AStarPathfinder(@NotNull BiFunction<Num2D, T, AStarNode<T>> nodeFactory, @NotNull T[][] rawMatrix) {
+        this(null, nodeFactory, rawMatrix);
     }
     
-    public @NotNull AStarNode getNodeAt(@NotNull Num2D location) {
-        return nodeMatrix[location.aI()][location.bI()];
+    //</editor-fold>
+    
+    //<editor-fold desc="--- INITIALIZATION ---">
+    
+    private @NotNull AStarPathfinder<T> init() {
+        A.iterateMatrix((matrixIndex, node) -> {
+            node.init(this);
+            return null;
+        }, matrix());
+        
+        return this;
     }
     
-    protected final @NotNull AStarNode getStart() { return start; }
-    protected final @NotNull AStarNode getGoal() { return goal; }
+    //</editor-fold>
     
-    protected final @NotNull Num2D startLocation() { throw Exc.nyi(); }
-    protected final @NotNull Num2D goalLocation() { throw Exc.nyi(); }
+    private @NotNull AStarNode<T>[][] matrix() { return nodeMatrix; }
     
-    public @NotNull List<AStarNode> aStar(@NotNull Num2D start, @NotNull Num2D goal) {
-        this.start = getNodeAt(start);
-        this.goal = getNodeAt(goal);
-        this.openSet.add(this.start);
+    public final @NotNull CardinalDirectionType getDirectionType() { return directionType; }
+    
+    public @NotNull AStarNode<T>[][] generateMatrix(@NotNull BiFunction<Num2D, T, AStarNode<T>> nodeFactory, @NotNull T[][] inputMap) {
+        final Num2D inputDimensions = A.matrixDimensions(inputMap);
+        final AStarNode<T>[][] outputMap = new AStarNode[inputDimensions.aI()][inputDimensions.bI()];
+        return A.fillMatrix(nodeFactory, inputMap, outputMap);
+    }
+    
+    protected final @NotNull AStarNode<T> startNode() { return A.grab(start(), matrix()); }
+    protected final @NotNull AStarNode<T> goalNode() { return A.grab(goal(), matrix()); }
+    
+    protected final @NotNull Num2D start() { return start; }
+    protected final @NotNull Num2D goal() { return goal; }
+    
+    public @NotNull List<AStarNode<T>> aStar(@NotNull Num2D start, @NotNull Num2D goal) {
+        this.start = start;
+        this.goal = goal;
+        this.openSet.add(startNode());
         
         while (!openSet.isEmpty()) {
-            AStarNode current = openSet.poll();
+            AStarNode<T> current = openSet.poll();
             closedSet.add(current);
             
             if (current.isGoal())
                 return formPath();
             
-            for (CardinalDirection direction: CardinalDirection.values(CardinalDirectionType.ALL_BUT_CENTER)) {
-                AStarNode neighbor = current.getNeighbor(direction);
+            for (AStarNode<T> neighbor: current.pathableNeighbors()) {
                 if (neighbor != null && !closedSet.contains(neighbor))
                     if (!openSet.contains(neighbor)) {
-                        if (neighbor.isPathable()) {
-                            neighbor.setPrevious(current);
-                            neighbor.hCost = neighbor.hCost();
-                            neighbor.gCost = current.gCost(neighbor);
+//                        if (neighbor.isPathable()) {
+                            neighbor.setPreviousNode(current);
+                            neighbor.setCostH(neighbor.hCost());
+                            neighbor.setCostG(current.gCost(neighbor));
+                            //                            neighbor.hCost = neighbor.hCost();
+                            //                            neighbor.gCost = current.gCost(neighbor);
                             openSet.add(neighbor);
-                        }
+//                        }
                     } else {
                         double gCostCalc = current.gCost(neighbor);
-                        if (neighbor.gCost >= gCostCalc) {
-                            neighbor.setPrevious(current);
-                            neighbor.gCost = gCostCalc;
+                        if (neighbor.getCostG() >= gCostCalc) {
+                            neighbor.setPreviousNode(current);
+                            neighbor.setCostG(gCostCalc);
                             openSet.remove(neighbor);
                         }
                     }
@@ -91,25 +110,58 @@ public class AStarPathfinder {
         return null;
     }
     
-    private @NotNull List<AStarNode> formPath() {
-        final ArrayList<AStarNode> path = new ArrayList<>();
-        AStarNode current = getGoal();
+    private @NotNull List<AStarNode<T>> formPath() {
+        final ArrayList<AStarNode<T>> path = new ArrayList<>();
+        AStarNode<T> current = goalNode();
         while (current != null) {
             path.add(current);
-            current = current.getPrevious();
+            current = current.previousNode();
         }
         return path;
     }
     
-    protected @Nullable AStarNode getNeighbor(@NotNull Num2D origin, @NotNull CardinalDirection direction) {
-        return direction.getNeighbor(origin, nodeMatrix);
-    }
-    
     private static final boolean PRINT_INDEX = false;
     
+    private static @NotNull DummyElement[][] generateTestMatrix() {
+        final DummyElement[][] matrix = A.fillMatrix(matrixIndex -> {
+            return new DummyElement(matrixIndex, true);
+        }, new DummyElement[100][100]);
+        
+        for (int i = 10; i < 90; i++)
+            for (int j = 40; j < 43; j++)
+                matrix[i][j].setPathable(false);
+        for (int j = 2; j < 40; j++)
+            matrix[20][j].setPathable(false);
+        
+        return matrix;
+    }
+    
     public static void main(String[] args) {
-        final AStarPathfinder pathfinder = new AStarPathfinder();
-        final List<AStarNode> path = pathfinder.aStar(new Num2D(30, 5), new Num2D(30, 98));
+        final AStarPathfinder<DummyElement> pathfinder = new AStarPathfinder<>((matrixIndex, rawElement) -> {
+            return new AStarNode<>(rawElement) {
+                
+                private ArrayList<AStarNode<DummyElement>> pathableNeighbors;
+                
+                @Override protected @NotNull List<AStarNode<@NotNull DummyElement>> pathableNeighbors() { return pathableNeighbors; }
+                
+                @Override protected void onInit(@NotNull AStarPathfinder<DummyElement> pathfinder) {
+                    this.pathableNeighbors = new ArrayList<>(A.grabNeighbors(
+                            this,
+                            pathfinder.getDirectionType(),
+                            AStarNode::isPathable,
+                            pathfinder.matrix()));
+                }
+                
+                @Override protected @NotNull Num2D matrixIndex() { return data().getMatrixIndex(); }
+                @Override protected boolean isPathable() {
+                    return data().isPathable();
+                }
+                @Override protected double edgeCost(@NotNull AStarNode<@NotNull DummyElement> other) { return super.edgeCost(other); }
+            };
+        }, generateTestMatrix()).init();
+        
+        
+        final List<AStarNode<DummyElement>> path = pathfinder.aStar(new Num2D(30, 5), new Num2D(30, 98));
         //        System.out.println(path);
         final Runnable vGapPrinter = () -> {
             System.out.println();
@@ -138,12 +190,12 @@ public class AStarPathfinder {
         for (int j = pathfinder.nodeMatrix[0].length - 1; j >= 0; j--) {
             vGapPrinter.run();
             for (int i = 0; i < pathfinder.nodeMatrix.length; i++) {
-                AStarNode current = pathfinder.nodeMatrix[i][j];
+                AStarNode<DummyElement> current = pathfinder.nodeMatrix[i][j];
                 Num2D matrixIndex = new Num2D(i, j);
                 hGapPrinter.run();
-                if (current.equals(pathfinder.getStart())) {
+                if (current.equals(pathfinder.startNode())) {
                     startPrinter.run();
-                } else if (current.equals(pathfinder.getGoal())) {
+                } else if (current.equals(pathfinder.goalNode())) {
                     goalPrinter.run();
                 } else {
                     if (path.contains(current)) {
