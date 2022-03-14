@@ -1,6 +1,8 @@
 package com.taco.suit_lady.util.values.formulas.pathfinding;
 
 import com.taco.suit_lady.util.enums.FilterType;
+import com.taco.suit_lady.util.timing.Timer;
+import com.taco.suit_lady.util.timing.Timers;
 import com.taco.suit_lady.util.tools.list_tools.A;
 import com.taco.suit_lady.util.values.enums.CardinalDirectionType;
 import com.taco.suit_lady.util.values.numbers.Num2D;
@@ -92,7 +94,8 @@ public class AStarPathfinder<T> {
     
     //
     
-    public @NotNull List<AStarNode<T>> aStar(@NotNull Num2D start, @NotNull Num2D goal) {
+    public @NotNull List<AStarNode<T>> aStar(@NotNull Num2D start, @NotNull Num2D goal, @NotNull Number leniency) {
+        Timer timer = Timers.newStopwatch().start();
         this.start = start;
         this.goal = goal;
         this.openSet.add(startNode());
@@ -101,8 +104,16 @@ public class AStarPathfinder<T> {
             AStarNode<T> current = openSet.poll();
             closedSet.add(current);
             
-            if (current.isGoal())
-                return formPath();
+            if (current.isGoal()) {
+                List<AStarNode<T>> path = formPath();
+                System.out.println();
+                System.out.println("Leniency: " + leniency);
+                System.out.println("Path Size: " + path.size());
+                System.out.println("Path Cost: " + path.get(0).gCost());
+                System.out.println("Time: " + timer.getElapsedTime());
+                System.out.println();
+                return path;
+            }
             
             for (AStarNode<T> neighbor: current.pathableNeighbors()) {
                 if (neighbor != null && !closedSet.contains(neighbor))
@@ -117,7 +128,7 @@ public class AStarPathfinder<T> {
                         //                        }
                     } else {
                         double gCostCalc = current.gCost(neighbor);
-                        if (neighbor.getCostG() >= gCostCalc) {
+                        if (neighbor.getCostG() >= gCostCalc + leniency.doubleValue()) {
                             neighbor.setPreviousNode(current);
                             neighbor.setCostG(gCostCalc);
                             openSet.remove(neighbor);
@@ -131,6 +142,7 @@ public class AStarPathfinder<T> {
         
         return null;
     }
+    public @NotNull List<AStarNode<T>> aStar(@NotNull Num2D start, @NotNull Num2D goal) { return aStar(start, goal, 0); }
     
     private @NotNull List<AStarNode<T>> formPath() {
         final ArrayList<AStarNode<T>> path = new ArrayList<>();
@@ -141,6 +153,4 @@ public class AStarPathfinder<T> {
         }
         return path;
     }
-    
-    
 }
