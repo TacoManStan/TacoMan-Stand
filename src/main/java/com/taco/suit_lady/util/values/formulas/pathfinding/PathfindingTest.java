@@ -70,7 +70,6 @@ public class PathfindingTest {
         for (int j = mapHeight - 1; j >= 0; j--) {
             vGapPrinter.run();
             for (int i = 0; i < mapWidth; i++) {
-//                AStarNode<DummyElement> current = pathfinder.nodeMatrix[i][j];
                 AStarNode<DummyElement> current = pathfinder.getNodeAt(i, j);
                 Num2D matrixIndex = new Num2D(i, j);
                 hGapPrinter.run();
