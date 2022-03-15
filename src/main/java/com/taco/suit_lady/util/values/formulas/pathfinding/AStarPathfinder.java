@@ -48,8 +48,6 @@ public class AStarPathfinder<T> {
     
     private final AStarNode<T>[][] nodeMatrix;
     
-    //<editor-fold desc="--- CONSTRUCTORS ---">
-    
     public AStarPathfinder(@Nullable CardinalDirectionType directionType, @NotNull BiFunction<Num2D, T, AStarNode<T>> nodeFactory, @NotNull T[][] rawMatrix) {
         this.directionType = directionType != null ? directionType : CardinalDirectionType.ALL_BUT_CENTER;
         
@@ -62,8 +60,6 @@ public class AStarPathfinder<T> {
     public AStarPathfinder(@NotNull BiFunction<Num2D, T, AStarNode<T>> nodeFactory, @NotNull T[][] rawMatrix) {
         this(null, nodeFactory, rawMatrix);
     }
-    
-    //</editor-fold>
     
     //<editor-fold desc="--- INITIALIZATION ---">
     
@@ -78,12 +74,26 @@ public class AStarPathfinder<T> {
     
     //</editor-fold>
     
+    //<editor-fold desc="--- PROPERTIES ---">
+    
     private @NotNull AStarNode<T>[][] matrix() { return nodeMatrix; }
     
     protected final @NotNull Num2D getMapSize() { return A.matrixDimensions(matrix()); }
+    public final @NotNull CardinalDirectionType getDirectionType() { return directionType; }
+    
+    
+    protected final @NotNull Num2D start() { return start; }
+    protected final @NotNull Num2D goal() { return goal; }
+    
+    protected final @NotNull AStarNode<T> startNode() { return A.grab(start(), matrix()); }
+    protected final @NotNull AStarNode<T> goalNode() { return A.grab(goal(), matrix()); }
     
     protected final @Nullable AStarNode<T> getNodeAt(@NotNull NumExpr2D<?> matrixIndex) { return matrixIndex instanceof AStarNode indexNode ? indexNode : A.grab(matrixIndex, matrix()); }
     protected final @Nullable AStarNode<T> getNodeAt(@NotNull Number indexX, @NotNull Number indexY) { return getNodeAt(new Num2D(indexX, indexY)); }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- LOGIC ---">
     
     //<editor-fold desc="> Node Neighbor Methods">
     
@@ -97,22 +107,7 @@ public class AStarPathfinder<T> {
     
     //</editor-fold>
     
-    
-    public final @NotNull CardinalDirectionType getDirectionType() { return directionType; }
-    
-    public @NotNull AStarNode<T>[][] generateMatrix(@NotNull BiFunction<Num2D, T, AStarNode<T>> nodeFactory, @NotNull T[][] inputMap) {
-        final Num2D inputDimensions = A.matrixDimensions(inputMap);
-        final AStarNode<T>[][] outputMap = new AStarNode[inputDimensions.aI()][inputDimensions.bI()];
-        return A.fillMatrix(nodeFactory, inputMap, outputMap);
-    }
-    
-    protected final @NotNull AStarNode<T> startNode() { return A.grab(start(), matrix()); }
-    protected final @NotNull AStarNode<T> goalNode() { return A.grab(goal(), matrix()); }
-    
-    protected final @NotNull Num2D start() { return start; }
-    protected final @NotNull Num2D goal() { return goal; }
-    
-    //
+    //<editor-fold desc="> Pathfinding Methods">
     
     public @NotNull List<AStarNode<T>> aStar(@NotNull Num2D start, @NotNull Num2D goal, @NotNull Number leniency) {
         Timer timer = Timers.newStopwatch().start();
@@ -178,6 +173,10 @@ public class AStarPathfinder<T> {
         return path.contains(node);
     }
     
+    //</editor-fold>
+    
+    //<editor-fold desc="> Image Generation Methods">
+    
     public final @NotNull Image generateImage(@NotNull List<AStarNode<T>> path, @NotNull Number tileSize,
                                               @NotNull Function<AStarNode<T>, Image> emptyTileGenerator,
                                               @NotNull Function<AStarNode<T>, Image> blockedTileGenerator,
@@ -226,4 +225,18 @@ public class AStarPathfinder<T> {
                 return emptyTileGenerator.apply(node);
         };
     }
+    
+    //</editor-fold>
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="--- INTERNAL ---">
+    
+    private @NotNull AStarNode<T>[][] generateMatrix(@NotNull BiFunction<Num2D, T, AStarNode<T>> nodeFactory, @NotNull T[][] inputMap) {
+        final Num2D inputDimensions = A.matrixDimensions(inputMap);
+        final AStarNode<T>[][] outputMap = new AStarNode[inputDimensions.aI()][inputDimensions.bI()];
+        return A.fillMatrix(nodeFactory, inputMap, outputMap);
+    }
+    
+    //</editor-fold>
 }
