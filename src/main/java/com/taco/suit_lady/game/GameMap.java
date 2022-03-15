@@ -5,6 +5,7 @@ import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.game.objects.collision.Collidable;
 import com.taco.suit_lady.game.objects.tiles.GameTile;
 import com.taco.suit_lady.game.ui.GameViewContent;
+import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.ImagePaintCommand;
 import com.taco.suit_lady.util.enums.FilterType;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
@@ -29,6 +30,7 @@ import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.geometry.Point2D;
+import javafx.scene.image.Image;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -62,6 +64,7 @@ public class GameMap
     
     
     private GameMapModel model;
+    private final ImagePaintCommand testPaintCommand;
     
     
     private String mapID;
@@ -100,6 +103,8 @@ public class GameMap
         
         //
         
+        this.testPaintCommand = new ImagePaintCommand(this, null);
+        
         p = printer().get("print-data-1");
         p.setEnabled(false);
     }
@@ -114,12 +119,32 @@ public class GameMap
         //        ArraysSL.iterateMatrix(GameTile::init, getTileMatrix());
         this.model.refreshMapImage();
         
+        this.testPaintCommand.init();
+        this.testPaintCommand.setPaintPriority(0);
+        this.getModel().getCanvas().addPaintable(testPaintCommand);
+    
+        this.getModel().getCanvas().widthBinding().addListener((observable, oldValue, newValue) -> refreshTestImage());
+        this.getModel().getCanvas().heightBinding().addListener((observable, oldValue, newValue) -> refreshTestImage());
+        
         return this;
     }
     
     //</editor-fold>
     
     //<editor-fold desc="--- PROPERTIES ---">
+    
+    public final void setTestImage(@NotNull Image newImage) {
+        testPaintCommand.setImage(newImage);
+        refreshTestImage();
+    }
+    
+    public final void refreshTestImage() {
+        testPaintCommand.boundsBinding().setWidth(getModel().getCanvas().getWidth());
+        testPaintCommand.boundsBinding().setHeight(getModel().getCanvas().getHeight());
+        testPaintCommand.boundsBinding().setX(0);
+        testPaintCommand.boundsBinding().setY(0);
+        getModel().getCanvas().repaint();
+    }
     
     //<editor-fold desc="> Dimensions Properties">
     

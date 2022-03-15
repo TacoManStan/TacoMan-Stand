@@ -93,8 +93,8 @@ public abstract class AStarNode<T>
     
     //
     
-    final boolean isPathableFrom(@NotNull AStarNode<T> other) {
-        return pathable() && other.pathable() && pathableFrom(other);
+    final boolean isPathableFrom(@Nullable AStarNode<T> other) {
+        return pathable() && (other == null || (other.pathable() && pathableFrom(other)));
     }
     
     //</editor-fold>

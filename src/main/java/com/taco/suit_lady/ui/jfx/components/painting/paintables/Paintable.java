@@ -118,7 +118,7 @@ public interface Paintable<P extends Paintable<P, S>, S extends Surface<P, S>>
     
     //
     
-    default @Override int compareTo(@NotNull P o) { return Integer.compare((Math.abs(self().getPaintPriority())), Math.abs(o.getPaintPriority())); }
+    default @Override int compareTo(@NotNull P o) { return Integer.compare((Math.abs(getPaintPriority())), Math.abs(o.getPaintPriority())); }
     
     //</editor-fold>
     

@@ -3,11 +3,15 @@ package com.taco.suit_lady.util.values.formulas.pathfinding;
 import com.taco.suit_lady.util.enums.FilterType;
 import com.taco.suit_lady.util.timing.Timer;
 import com.taco.suit_lady.util.timing.Timers;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import com.taco.suit_lady.util.tools.list_tools.A;
 import com.taco.suit_lady.util.tools.list_tools.L;
 import com.taco.suit_lady.util.values.enums.CardinalDirectionType;
 import com.taco.suit_lady.util.values.numbers.Num2D;
 import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
+import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
+import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,8 +19,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
+/**
+ * <p>Used to construct a {@code matrix} of {@link AStarNode nodes}.</p>
+ * <p><b>Details</b></p>
+ * <ol>
+ *     <li>The {@code matrix} of {@link AStarNode nodes} can then be used to calculate the {@link AStarNode#fCost() best} path from {@link #start() start} and {@link #goal() goal} coordinates.</li>
+ * </ol>
+ * <hr>
+ * <p><b>How to Use</b></p>
+ * <ol>
+ *     <li></li>
+ * </ol>
+ *
+ * @param <T>
+ */
 public class AStarPathfinder<T> {
     
     private final CardinalDirectionType directionType;
@@ -153,5 +172,58 @@ public class AStarPathfinder<T> {
             current = current.previousNode();
         }
         return L.reversed(path);
+    }
+    
+    public final boolean isOnPath(@NotNull AStarNode<T> node, @NotNull List<AStarNode<T>> path) {
+        return path.contains(node);
+    }
+    
+    public final @NotNull Image generateImage(@NotNull List<AStarNode<T>> path, @NotNull Number tileSize,
+                                              @NotNull Function<AStarNode<T>, Image> emptyTileGenerator,
+                                              @NotNull Function<AStarNode<T>, Image> blockedTileGenerator,
+                                              @NotNull Function<AStarNode<T>, Image> pathTileGenerator,
+                                              @NotNull Function<AStarNode<T>, Image> startTileGenerator,
+                                              @NotNull Function<AStarNode<T>, Image> goalTileGenerator) {
+        return FX.generateTiledImage(tileSize.intValue(), matrix(), constructAggregateFunction(
+                path,
+                emptyTileGenerator,
+                blockedTileGenerator,
+                pathTileGenerator,
+                startTileGenerator,
+                goalTileGenerator), 3);
+    }
+    
+    public final @NotNull Image generateDefaultImage(@NotNull List<AStarNode<T>> path, @NotNull Number tileSize) {
+        return generateDefaultImage(path, tileSize, Color.WHITE, Color.BLACK, Color.BLUE, Color.GREEN, Color.RED);
+    }
+    
+    public final @NotNull Image generateDefaultImage(@NotNull List<AStarNode<T>> path, @NotNull Number tileSize,
+                                                     @NotNull Color emptyTileColor, @NotNull Color blockedTileColor, @NotNull Color pathTileColor, @NotNull Color startTileColor, @NotNull Color goalTileColor) {
+        return generateImage(path, tileSize,
+                             node -> FX.generateFilledImage(tileSize, emptyTileColor),
+                             node -> FX.generateFilledImage(tileSize, blockedTileColor),
+                             node -> FX.generateFilledImage(tileSize, pathTileColor),
+                             node -> FX.generateFilledImage(tileSize, startTileColor),
+                             node -> FX.generateFilledImage(tileSize, goalTileColor));
+    }
+    
+    private @NotNull Function<AStarNode<T>, Image> constructAggregateFunction(@NotNull List<AStarNode<T>> path,
+                                                                              @NotNull Function<AStarNode<T>, Image> emptyTileGenerator,
+                                                                              @NotNull Function<AStarNode<T>, Image> blockedTileGenerator,
+                                                                              @NotNull Function<AStarNode<T>, Image> pathTileGenerator,
+                                                                              @NotNull Function<AStarNode<T>, Image> startTileGenerator,
+                                                                              @NotNull Function<AStarNode<T>, Image> goalTileGenerator) {
+        return node -> {
+            if (node.isStart())
+                return startTileGenerator.apply(node);
+            else if (node.isGoal())
+                return goalTileGenerator.apply(node);
+            else if (isOnPath(node, path))
+                return pathTileGenerator.apply(node);
+            else if (!node.isPathableFrom(null))
+                return blockedTileGenerator.apply(node);
+            else
+                return emptyTileGenerator.apply(node);
+        };
     }
 }

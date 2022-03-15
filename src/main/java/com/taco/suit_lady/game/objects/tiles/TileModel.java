@@ -83,7 +83,7 @@ public class TileModel
             for (TileTerrainObject terrainObj: terrainTileObjects)
                 resultList.add(Stuff.getGameImage("tiles/", terrainObj.getAggregateTextureId()));
         if (listType.equals(ImageListType.ALL) && isBorderShowing())
-            resultList.add(FX.generateSelectionBorder(getGameMap().getTileSize(), getGameMap().getTileSize(), 2, null));
+            resultList.add(FX.generateBorderImage(getGameMap().getTileSize(), getGameMap().getTileSize(), 2));
         return resultList;
     }
     

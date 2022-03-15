@@ -25,12 +25,16 @@ public class PathfindingTest {
                  .forEach(PathfindingTest::printPath);
     }
     
-    private static @NotNull List<AStarNode<DummyElement>> aStar(@NotNull AStarPathfinder<DummyElement> pathfinder, double leniency) {
-        return pathfinder.aStar(new Num2D(30, 5), new Num2D(30, 98), leniency);
-    }
+    public static @NotNull List<AStarNode<DummyElement>> aStar(double leniency) { return aStar(newPathfinder(), leniency); }
+    public static @NotNull List<AStarNode<DummyElement>> aStar() { return aStar(newPathfinder(), 0); }
+    
+    public static @NotNull List<AStarNode<DummyElement>> aStar(@NotNull AStarPathfinder<DummyElement> pathfinder, double leniency) { return pathfinder.aStar(START, GOAL, leniency); }
+    public static @NotNull List<AStarNode<DummyElement>> aStar(@NotNull AStarPathfinder<DummyElement> pathfinder) { return pathfinder.aStar(START, GOAL, 0); }
+    
+    //
     
     @Contract(" -> new")
-    private static @NotNull AStarPathfinder<DummyElement> newPathfinder() {
+    public static @NotNull AStarPathfinder<DummyElement> newPathfinder() {
         return new AStarPathfinder<>((matrixIndex, rawElement) -> new CachedAStarNode<>(rawElement) {
             
             @Override protected @NotNull Num2D matrixIndex() { return data().getMatrixIndex(); }
@@ -40,13 +44,13 @@ public class PathfindingTest {
             }
             @Override protected double edgeCost(@NotNull AStarNode<@NotNull DummyElement> other) { return super.edgeCost(other); }
             
-        }, generateTestMatrix());
+        }, generateTestMatrix()).init();
     }
     
     private static final boolean PRINT_INDEX = false;
     private static final boolean PRINT_PATH = false;
     
-    private static @NotNull DummyElement[][] generateTestMatrix() {
+    public static @NotNull DummyElement[][] generateTestMatrix() {
         final DummyElement[][] matrix = A.fillMatrix(matrixIndex -> {
             return new DummyElement(matrixIndex, true);
         }, new DummyElement[100][100]);
@@ -60,11 +64,11 @@ public class PathfindingTest {
         return matrix;
     }
     
-    private static void printPath(double leniency) {
-        printPath(newPathfinder().init(), leniency);
+    public static void printPath(double leniency) {
+        printPath(newPathfinder(), leniency);
     }
     
-    private static void printPath(@NotNull AStarPathfinder<DummyElement> pathfinder, double leniency) {
+    public static void printPath(@NotNull AStarPathfinder<DummyElement> pathfinder, double leniency) {
         final List<AStarNode<DummyElement>> path = pathfinder.aStar(START, GOAL, leniency);
         
         if (PRINT_PATH) {
