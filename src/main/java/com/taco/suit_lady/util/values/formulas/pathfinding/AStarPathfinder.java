@@ -28,19 +28,112 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * <p>Used to construct a {@code matrix} of {@link AStarNode nodes}.</p>
+ * <p>Used to construct a {@code matrix} of {@link AStarNode Nodes}.</p>
  * <p><b>Details</b></p>
  * <ol>
- *     <li>The {@code matrix} of {@link AStarNode nodes} can then be used to calculate the {@link AStarNode#fCost() best} path from {@link #getStartIndex() start} and {@link #getGoalIndex() goal} coordinates.</li>
+ *     <li>See the {@link Pathfinding} static utility class for a variety of {@code <i>Utility</i>, <i>Helper</i>, <i>Convenience</i>, and <i>Factory</i> Pathfinding Operations}.</li>
+ *     <li>Each {@link AStarNode} contained within the {@link #readOnlyMapMatrixProperty() Map Matrix} is constructed using the {@link #readOnlyNodeFactoryProperty() Node Factory} assigned to this {@link AStarPathfinder}.</li>
+ *     <li>The {@link #readOnlyNodeFactoryProperty() Node Factory} tells the {@link #aStar() Pathfinding Algorithm} how to retrieve {@link AStarNode#pathableFrom(AStarNode) Pathability Data} from a {@link #readOnlyRawMatrixProperty() Raw Tile Element}.</li>
  * </ol>
- * <hr>
+ * <br><hr><br>
  * <p><b>How to Use</b></p>
  * <ol>
- *     <li>Construct a new {@link AStarPathfinder} instance using any of the available {@code constructors}.</li>
- *     <li></li>
+ *     <li>Construct an empty {@link AStarPathfinder} instance using the {@link AStarPathfinder#AStarPathfinder() Default Constructor}.</li>
+ *     <li>
+ *         Assign values to the following properties:
+ *         <ol>
+ *             <li>
+ *                 {@link #readOnlyValidDirectionsProperty() Valid Directions}
+ *                 <ul>
+ *                     <li><i>If not defined, the {@link #init()} will set the {@link #readOnlyValidDirectionsProperty() Valid Directions} to {@link CardinalDirectionType#ALL_BUT_CENTER ALL_BUT_CENTER}.</i></li>
+ *                     <li><i>If the {@link #readOnlyValidDirectionsProperty() Valid Directions} <u>have</u> been defined, the {@link #init()} method uses the defined {@link CardinalDirectionType value}.</i></li>
+ *                 </ul>
+ *             </li>
+ *             <li>{@link #readOnlyRawMatrixProperty() Raw Map Matrix}</li>
+ *             <li>{@link #readOnlyStartIndexProperty() Start Map Index}</li>
+ *             <li>{@link #readOnlyGoalIndexProperty() Goal Map Index}</li>
+ *         </ol>
+ *     </li>
+ *     <li>
+ *         Configure the {@link #readOnlyNodeFactoryProperty() Node Factory} for this {@link AStarPathfinder} using any of the following:
+ *         <ol>
+ *             <li>Use any of the simplified {@link Pathfinding#newNodeFactory(Function) Factory Methods} located in the static {@link Pathfinding} utility class.</li>
+ *             <li>
+ *                 Define a fully-custom {@link #readOnlyNodeFactoryProperty() Node Factory Function} to construct a new {@link AStarNode} instance for each {@link T Raw Tile}.<br>
+ *                 The {@link AStarNode} object constructed by the {@link #readOnlyNodeFactoryProperty() Node Factory} must provide {@code definitions} for the following {@code methods}:
+ *                 <ol>
+ *                     <li>
+ *                         {@link AStarNode#edgeCost(AStarNode)}
+ *                         <ul>
+ *                             <li><i>Default implementation defines the {@link AStarNode#edgeCost(AStarNode) Edge Cost} as the {@link AStarNode#distance(NumExpr2D) Distance} between the calling {@link AStarNode} and specified {@link NumExpr2D} parameter.</i></li>
+ *                         </ul>
+ *                     </li>
+ *                     <li>{@link AStarNode#pathableNeighbors()}</li>
+ *                     <li>
+ *                         {@link AStarNode#pathableFrom(AStarNode)}
+ *                         <ul>
+ *                             <li><i>By default, {@link AStarNode#pathableFrom(AStarNode)} checks the {@link AStarNode#pathable() Generic Pathing} for both the calling {@link AStarNode} and the specified {@link AStarNode} parameter.</i></li>
+ *                             <li><i>If the {@link #readOnlyRawMatrixProperty() Raw Matrix} assigned to this {@link AStarPathfinder} uses {@code Orientation-Dependent} pathing — i.e., pathing is clear from Tile A to Tile B but blocked from Tile B to Tile A — then a more specific implementation is required.</i></li>
+ *                         </ul>
+ *                     </li>
+ *                     <li>{@link AStarNode#pathable()}</li>
+ *                     <li>
+ *                         {@link AStarNode#onInit(AStarPathfinder)}
+ *                         <ul>
+ *                             <li><i>In most cases, the default implementation of {@link AStarNode#onInit(AStarPathfinder)} is sufficient.</i></li>
+ *                             <li><i>If the {@link AStarNode#onInit(AStarPathfinder)} is defined, a call to {@code super.onInit()} is necessary for this {@link AStarPathfinder} to function properly.</i></li>
+ *                         </ul>
+ *                     </li>
+ *                     <li>
+ *                         {@link AStarNode#matrixIndex()}
+ *                         <ul>
+ *                             <li><i>In all but every case, the default implementation of {@link AStarNode#matrixIndex()} is sufficient.</i></li>
+ *                             <li><i>If {@link AStarNode#matrixIndex()} is overwritten, the {@link Num2D value} it returns must match the actual {@code matrix index} of the {@link AStarNode} for this {@link AStarPathfinder} to function properly.</i></li>
+ *                             <li><i>If the {@link Pathfinding#newNodeFactory(Function) Factory Method} or {@link AStarNode} implementation does not define a default implementation for {@link AStarNode#matrixIndex()}, the {@link Num2D Matrix Index} parameter of the {@link #readOnlyNodeFactoryProperty() Node Factory} should be used to ensure index synchronization, consistency, and ease of use.</i></li>
+ *                         </ul>
+ *                     </li>
+ *                 </ol>
+ *                 <i>{@link CachedAStarNode} handles several of the above methods internally.</i>
+ *             </li>
+ *         </ol>
+ *     </li>
+ *     <li>Use the {@link #isReady()} method to confirm that all of the required properties for this {@link AStarPathfinder} have been set.</li>
+ *     <li>
+ *         Once all required properties have been defined, call the {@link #init()} method on this {@link AStarPathfinder} to generate and cache a new {@link #readOnlyMapMatrixProperty() AStarNode Matrix Map}.
+ *         <ul>
+ *             <li><i>Note that {@link #init()} prepares this {@link AStarPathfinder} for {@link #aStar() Path Generation}, but does not execute any {@code pathfinding logic} itself.</i></li>
+ *         </ul>
+ *     </li>
+ *     <li>Execute the {@link #aStar()} method to use the {@code A* Pathfinding Algorithm} to generate the best {@code path} from the {@link #readOnlyStartIndexProperty() Start Index} to the {@link #readOnlyGoalIndexProperty() Goal Index}.</li>
+ *     <li>
+ *         Upon completion, the {@link #aStar()} method returns an ordered {@link List} containing the {@link AStarNode Nodes} defining the {@link #aStar() Generated} {@link #readOnlyPathProperty() Path} from the {@link #readOnlyStartIndexProperty() Start Index} to the {@link #readOnlyGoalIndexProperty() Goal Index}.
+ *         <ul>
+ *             <li><i>The {@link #aStar() Generated} {@link #readOnlyPathProperty() Path} {@link List} can be accessed again at any time by calling the {@link #getPath()} method.</i></li>
+ *             <li><i>The {@link #readOnlyPathProperty() Path Property} is reset automatically upon calling the {@link #reset()}, {@link #resetAll()}, or {@link #aStar()} method.</i></li>
+ *             <li><i>Calls to {@link #readOnlyPathProperty()} or {@link #getPath()} return a {@code cached} {@link List} instance.</i></li>
+ *             <li><i>If the {@link #aStar()} method has not yet been called or this {@link AStarPathfinder} has been {@link #resetAll() reset}, {@link #getPath()} will return {@code null}.</i></li>
+ *             <li><i>Alternatively, the {@link #getOrRegenPath()} method can be used to conveniently retrieve a {@code non-null} {@link List Path List} - If the {@link #getPath() Cached Path} is {@code null}, {@link #aStar()} is automatically called to refresh the cache.</i></li>
+ *         </ul>
+ *     </li>
+ * </ol>
+ * <p><b>Other Instructions</b></p>
+ * <ol>
+ *     <li>
+ *         To reset this {@link AStarPathfinder} so it can be again used to generate a path, call either the {@link #reset()} or {@link #resetAll()} method.
+ *         <ul>
+ *             <li>
+ *                 <i>{@link #reset()} wipes all but the following data from this {@link AStarPathfinder} instance:</i>
+ *                 <ul>
+ *                     <li><i>{@link #readOnlyValidDirectionsProperty() Valid Directions}</i></li>
+ *                     <li><i>{@link #readOnlyNodeFactoryProperty() Node Factory}</i></li>
+ *                 </ul>
+ *             </li>
+ *             <li><i>{@link #resetAll()} sets all values for this {@link AStarPathfinder} instance back to the values defined by the {@link AStarPathfinder#AStarPathfinder() Default Constructor} (typically {@code null}).</i></li>
+ *         </ul>
+ *     </li>
  * </ol>
  *
- * @param <T>
+ * @param <T> The {@code type} of {@link #readOnlyRawMatrixProperty() Raw Map Data} contained within this {@link AStarPathfinder} instance.
  */
 public class AStarPathfinder<T> {
     
@@ -61,6 +154,9 @@ public class AStarPathfinder<T> {
     private final PriorityQueue<AStarNode<T>> openSet;
     private final PriorityQueue<AStarNode<T>> closedSet;
     
+    
+    private final ReadOnlyObjectWrapper<List<AStarNode<T>>> aStarPathProperty;
+    
     public AStarPathfinder() {
         this.validDirectionsProperty = new ReadOnlyObjectWrapper<>();
         this.rawMatrixProperty = new ReadOnlyObjectWrapper<>();
@@ -75,11 +171,16 @@ public class AStarPathfinder<T> {
         
         this.openSet = new PriorityQueue<>();
         this.closedSet = new PriorityQueue<>();
+        
+        this.aStarPathProperty = new ReadOnlyObjectWrapper<>();
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">
     
     public @NotNull AStarPathfinder<T> init() {
+        if (getValidDirections() == null)
+            setValidDirections(CardinalDirectionType.ALL_BUT_CENTER);
+        
         readyCheckPathPoints();
         
         this.startNodeBinding = Bind.objBinding(() -> getNodeAt(getStartIndex()), startIndexProperty);
@@ -92,35 +193,34 @@ public class AStarPathfinder<T> {
         return this;
     }
     
-    public @NotNull AStarPathfinder<T> initDefaults() {
-        setValidDirections(CardinalDirectionType.ALL_BUT_CENTER);
-        return init();
-    }
+    //
+    
+    //<editor-fold desc="> Reset Methods">
     
     public @NotNull AStarPathfinder<T> reset() {
-        setValidDirections(null);
-        setNodeFactory(null);
-        
         setRawMatrix(null);
         setMapMatrix(null);
         
-        setStartIndex(null);
-        setGoalIndex(null);
+        resetEndPoints();
+        resetSetLists();
         
-        this.startNodeBinding = null;
-        this.goalNodeBinding = null;
-        
-        this.openSet.clear();
-        this.closedSet.clear();
+        setPath(null);
         
         return this;
     }
     
+    public @NotNull AStarPathfinder<T> resetAll() {
+        setValidDirections(null);
+        setNodeFactory(null);
+        return reset();
+    }
+    
     //</editor-fold>
     
-    public final boolean isReady(boolean checkGeneratedMatrix) {
-        return (!checkGeneratedMatrix || getMapMatrix() != null) &&
-               getValidDirections() != null &&
+    //</editor-fold>
+    
+    public final boolean isReady() {
+        return getValidDirections() != null &&
                getRawMatrix() != null &&
                getStartIndex() != null &&
                getGoalIndex() != null &&
@@ -149,6 +249,18 @@ public class AStarPathfinder<T> {
     protected final @Nullable BiFunction<Num2D, T, AStarNode<T>> getNodeFactory() { return nodeFactoryProperty.get(); }
     protected final @Nullable BiFunction<Num2D, T, AStarNode<T>> setNodeFactory(@Nullable BiFunction<Num2D, T, AStarNode<T>> newValue) { return Props.setProperty(nodeFactoryProperty, newValue); }
     
+    //
+    
+    protected final @NotNull ReadOnlyObjectProperty<List<AStarNode<T>>> readOnlyPathProperty() { return aStarPathProperty.getReadOnlyProperty(); }
+    protected final @Nullable List<AStarNode<T>> getPath() { return aStarPathProperty.get(); }
+    protected final @NotNull List<AStarNode<T>> getOrRegenPath() {
+        final List<AStarNode<T>> cachedPath = getPath();
+        if (cachedPath != null)
+            return cachedPath;
+        return aStar();
+    }
+    private @Nullable List<AStarNode<T>> setPath(@Nullable List<AStarNode<T>> newValue) { return Props.setProperty(aStarPathProperty, newValue); }
+    
     //<editor-fold desc="> Start/Goal Properties">
     
     protected final @NotNull ReadOnlyObjectProperty<Num2D> readOnlyStartIndexProperty() { return startIndexProperty.getReadOnlyProperty(); }
@@ -168,11 +280,6 @@ public class AStarPathfinder<T> {
     
     //</editor-fold>
     
-    //
-    
-    protected final @Nullable AStarNode<T> getNodeAt(@NotNull NumExpr2D<?> matrixIndex) { return matrixIndex instanceof AStarNode indexNode ? indexNode : A.grab(matrixIndex, getMapMatrix()); }
-    protected final @Nullable AStarNode<T> getNodeAt(@NotNull Number indexX, @NotNull Number indexY) { return getNodeAt(new Num2D(indexX, indexY)); }
-    
     //</editor-fold>
     
     //<editor-fold desc="--- LOGIC ---">
@@ -183,6 +290,11 @@ public class AStarPathfinder<T> {
             return A.matrixDimensions(rawMatrix);
         return null;
     }
+    
+    //
+    
+    protected final @Nullable AStarNode<T> getNodeAt(@NotNull NumExpr2D<?> matrixIndex) { return matrixIndex instanceof AStarNode indexNode ? indexNode : A.grab(matrixIndex, getMapMatrix()); }
+    protected final @Nullable AStarNode<T> getNodeAt(@NotNull Number indexX, @NotNull Number indexY) { return getNodeAt(new Num2D(indexX, indexY)); }
     
     //<editor-fold desc="> Node Neighbor Methods">
     
@@ -215,20 +327,17 @@ public class AStarPathfinder<T> {
                 System.out.println("Path Cost: " + L.last(path).gCost());
                 System.out.println("Time: " + timer.getElapsedTime());
                 System.out.println();
-                return path;
+                setPath(path);
+                return getPath();
             }
             
             for (AStarNode<T> neighbor: current.pathableNeighbors()) {
                 if (neighbor != null && !closedSet.contains(neighbor))
                     if (!openSet.contains(neighbor)) {
-                        //                        if (neighbor.isPathable()) {
                         neighbor.setPreviousNode(current);
                         neighbor.setCostH(neighbor.hCost());
                         neighbor.setCostG(current.gCost(neighbor));
-                        //                            neighbor.hCost = neighbor.hCost();
-                        //                            neighbor.gCost = current.gCost(neighbor);
                         openSet.add(neighbor);
-                        //                        }
                     } else {
                         double gCostCalc = current.gCost(neighbor);
                         if (neighbor.getCostG() >= gCostCalc) {
@@ -239,11 +348,14 @@ public class AStarPathfinder<T> {
                     }
             }
             
-            if (openSet.isEmpty())
-                return new ArrayList<>();
+            if (openSet.isEmpty()) {
+                setPath(new ArrayList<>());
+                return getPath();
+            }
         }
         
-        return null;
+        setPath(null);
+        return getPath();
     }
     
     private @NotNull List<AStarNode<T>> formPath() {
@@ -368,6 +480,21 @@ public class AStarPathfinder<T> {
     private void readyCheckRawMatrix() {
         if (getRawMatrix() == null)
             throw Exc.ex("AStarPathfinder Raw Matrix has not been set.");
+    }
+    
+    //
+    
+    private void resetSetLists() {
+        openSet.clear();
+        closedSet.clear();
+    }
+    
+    private void resetEndPoints() {
+        startNodeBinding = null;
+        goalNodeBinding = null;
+        
+        setStartIndex(null);
+        setGoalIndex(null);
     }
     
     //</editor-fold>

@@ -60,9 +60,8 @@ public abstract class AStarNode<T>
     
     protected double edgeCost(@NotNull AStarNode<T> other) { return distance(other); }
     
-    
     protected abstract @NotNull List<AStarNode<T>> pathableNeighbors();
-    protected abstract boolean pathableFrom(@NotNull AStarNode<T> other);
+    protected boolean pathableFrom(@NotNull AStarNode<T> other) { return pathable() && other.pathable(); }
     protected abstract boolean pathable();
     
     protected abstract void onInit(@NotNull AStarPathfinder<T> pathfinder);

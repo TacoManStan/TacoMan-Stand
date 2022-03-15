@@ -8,6 +8,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.IntStream;
 
 public class PathfindingTest {
@@ -45,14 +47,14 @@ public class PathfindingTest {
         pathfinder.setStartIndex(START);
         pathfinder.setGoalIndex(GOAL);
         pathfinder.setNodeFactory((matrixIndex, rawElement) -> new CachedAStarNode<>(rawElement) {
-            @Override protected @NotNull Num2D matrixIndex() { return data().getMatrixIndex(); }
+            @Override protected @NotNull Num2D matrixIndex() { return matrixIndex; }
             @Override protected boolean pathableFrom(@NotNull AStarNode<DummyElement> other) { return data().isPathable(); }
             @Override protected boolean pathable() {
                 return data().isPathable();
             }
             @Override protected double edgeCost(@NotNull AStarNode<@NotNull DummyElement> other) { return super.edgeCost(other); }
         });
-        return pathfinder.initDefaults();
+        return pathfinder.init();
     }
     
     private static final boolean PRINT_INDEX = false;
