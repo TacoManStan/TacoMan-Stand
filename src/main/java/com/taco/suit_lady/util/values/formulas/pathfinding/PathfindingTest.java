@@ -17,38 +17,46 @@ public class PathfindingTest {
     private static final Num2D GOAL = new Num2D(30, 98);
     
     public static void main(String[] args) {
-        Arrays.stream(new double[]{0, 1, 2, 100, 1000})
-              .forEach(PathfindingTest::printPath);
-        
-        IntStream.rangeClosed(1, 20)
-                 .mapToDouble(i -> i * 5)
-                 .forEach(PathfindingTest::printPath);
+        test2();
     }
     
-    public static @NotNull List<AStarNode<DummyElement>> aStar(double leniency) { return aStar(newPathfinder(), leniency); }
-    public static @NotNull List<AStarNode<DummyElement>> aStar() { return aStar(newPathfinder(), 0); }
+//    private static void test1() {
+//        Arrays.stream(new double[]{0, 1, 2, 100, 1000})
+//              .forEach(PathfindingTest::printPath);
+//
+//        IntStream.rangeClosed(1, 20)
+//                 .mapToDouble(i -> i * 5)
+//                 .forEach(PathfindingTest::printPath);
+//    }
     
-    public static @NotNull List<AStarNode<DummyElement>> aStar(@NotNull AStarPathfinder<DummyElement> pathfinder, double leniency) { return pathfinder.aStar(START, GOAL, leniency); }
-    public static @NotNull List<AStarNode<DummyElement>> aStar(@NotNull AStarPathfinder<DummyElement> pathfinder) { return pathfinder.aStar(START, GOAL, 0); }
+    private static void test2() {
+        printPath(newPathfinder());
+    }
+    
+    public static @NotNull List<AStarNode<DummyElement>> aStar() { return aStar(newPathfinder()); }
+    public static @NotNull List<AStarNode<DummyElement>> aStar(@NotNull AStarPathfinder<DummyElement> pathfinder) { return pathfinder.aStar(); }
     
     //
     
     @Contract(" -> new")
     public static @NotNull AStarPathfinder<DummyElement> newPathfinder() {
-        return new AStarPathfinder<>((matrixIndex, rawElement) -> new CachedAStarNode<>(rawElement) {
-            
+        final AStarPathfinder<DummyElement> pathfinder = new AStarPathfinder<>();
+        pathfinder.setRawMatrix(generateTestMatrix());
+        pathfinder.setStartIndex(START);
+        pathfinder.setGoalIndex(GOAL);
+        pathfinder.setNodeFactory((matrixIndex, rawElement) -> new CachedAStarNode<>(rawElement) {
             @Override protected @NotNull Num2D matrixIndex() { return data().getMatrixIndex(); }
             @Override protected boolean pathableFrom(@NotNull AStarNode<DummyElement> other) { return data().isPathable(); }
             @Override protected boolean pathable() {
                 return data().isPathable();
             }
             @Override protected double edgeCost(@NotNull AStarNode<@NotNull DummyElement> other) { return super.edgeCost(other); }
-            
-        }, generateTestMatrix()).init();
+        });
+        return pathfinder.initDefaults();
     }
     
     private static final boolean PRINT_INDEX = false;
-    private static final boolean PRINT_PATH = false;
+    private static final boolean PRINT_PATH = true;
     
     public static @NotNull DummyElement[][] generateTestMatrix() {
         final DummyElement[][] matrix = A.fillMatrix(matrixIndex -> {
@@ -64,12 +72,8 @@ public class PathfindingTest {
         return matrix;
     }
     
-    public static void printPath(double leniency) {
-        printPath(newPathfinder(), leniency);
-    }
-    
-    public static void printPath(@NotNull AStarPathfinder<DummyElement> pathfinder, double leniency) {
-        final List<AStarNode<DummyElement>> path = pathfinder.aStar(START, GOAL, leniency);
+    public static void printPath(@NotNull AStarPathfinder<DummyElement> pathfinder) {
+        final List<AStarNode<DummyElement>> path = pathfinder.aStar();
         
         if (PRINT_PATH) {
             final Runnable vGapPrinter = () -> {
@@ -95,7 +99,7 @@ public class PathfindingTest {
                 }
             };
             
-            final Num2D mapSize = pathfinder.getMapSize();
+            final Num2D mapSize = pathfinder.getDimensions();
             final int mapWidth = mapSize.aI();
             final int mapHeight = mapSize.bI();
             
@@ -105,9 +109,9 @@ public class PathfindingTest {
                     AStarNode<DummyElement> current = pathfinder.getNodeAt(i, j);
                     Num2D matrixIndex = new Num2D(i, j);
                     hGapPrinter.run();
-                    if (current.equals(pathfinder.startNode())) {
+                    if (current.equals(pathfinder.getStartNode())) {
                         startPrinter.run();
-                    } else if (current.equals(pathfinder.goalNode())) {
+                    } else if (current.equals(pathfinder.getGoalNode())) {
                         goalPrinter.run();
                     } else {
                         if (path.contains(current)) {

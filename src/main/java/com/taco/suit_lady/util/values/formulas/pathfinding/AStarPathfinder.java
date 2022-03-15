@@ -3,14 +3,19 @@ package com.taco.suit_lady.util.values.formulas.pathfinding;
 import com.taco.suit_lady.util.enums.FilterType;
 import com.taco.suit_lady.util.timing.Timer;
 import com.taco.suit_lady.util.timing.Timers;
+import com.taco.suit_lady.util.tools.Bind;
+import com.taco.suit_lady.util.tools.Exc;
+import com.taco.suit_lady.util.tools.Props;
 import com.taco.suit_lady.util.tools.fx_tools.FX;
 import com.taco.suit_lady.util.tools.list_tools.A;
 import com.taco.suit_lady.util.tools.list_tools.L;
 import com.taco.suit_lady.util.values.enums.CardinalDirectionType;
 import com.taco.suit_lady.util.values.numbers.Num2D;
 import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
+import javafx.beans.binding.ObjectBinding;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.image.Image;
-import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,11 +31,12 @@ import java.util.function.Predicate;
  * <p>Used to construct a {@code matrix} of {@link AStarNode nodes}.</p>
  * <p><b>Details</b></p>
  * <ol>
- *     <li>The {@code matrix} of {@link AStarNode nodes} can then be used to calculate the {@link AStarNode#fCost() best} path from {@link #start() start} and {@link #goal() goal} coordinates.</li>
+ *     <li>The {@code matrix} of {@link AStarNode nodes} can then be used to calculate the {@link AStarNode#fCost() best} path from {@link #getStartIndex() start} and {@link #getGoalIndex() goal} coordinates.</li>
  * </ol>
  * <hr>
  * <p><b>How to Use</b></p>
  * <ol>
+ *     <li>Construct a new {@link AStarPathfinder} instance using any of the available {@code constructors}.</li>
  *     <li></li>
  * </ol>
  *
@@ -38,67 +44,150 @@ import java.util.function.Predicate;
  */
 public class AStarPathfinder<T> {
     
-    private final CardinalDirectionType directionType;
+    private final ReadOnlyObjectWrapper<CardinalDirectionType> validDirectionsProperty;
+    private final ReadOnlyObjectWrapper<T[][]> rawMatrixProperty;
+    private final ReadOnlyObjectWrapper<BiFunction<Num2D, T, AStarNode<T>>> nodeFactoryProperty;
     
-    private Num2D start;
-    private Num2D goal;
+    private final ReadOnlyObjectWrapper<Num2D> startIndexProperty;
+    private final ReadOnlyObjectWrapper<Num2D> goalIndexProperty;
+    
+    private ObjectBinding<AStarNode<T>> startNodeBinding;
+    private ObjectBinding<AStarNode<T>> goalNodeBinding;
+    
+    //
+    
+    private final ReadOnlyObjectWrapper<AStarNode<T>[][]> mapMatrixProperty;
     
     private final PriorityQueue<AStarNode<T>> openSet;
     private final PriorityQueue<AStarNode<T>> closedSet;
     
-    private final AStarNode<T>[][] nodeMatrix;
-    
-    public AStarPathfinder(@Nullable CardinalDirectionType directionType, @NotNull BiFunction<Num2D, T, AStarNode<T>> nodeFactory, @NotNull T[][] rawMatrix) {
-        this.directionType = directionType != null ? directionType : CardinalDirectionType.ALL_BUT_CENTER;
+    public AStarPathfinder() {
+        this.validDirectionsProperty = new ReadOnlyObjectWrapper<>();
+        this.rawMatrixProperty = new ReadOnlyObjectWrapper<>();
+        this.nodeFactoryProperty = new ReadOnlyObjectWrapper<>();
+        
+        this.startIndexProperty = new ReadOnlyObjectWrapper<>();
+        this.goalIndexProperty = new ReadOnlyObjectWrapper<>();
+        
+        this.mapMatrixProperty = new ReadOnlyObjectWrapper<>();
+        
+        //
         
         this.openSet = new PriorityQueue<>();
         this.closedSet = new PriorityQueue<>();
-        
-        this.nodeMatrix = generateMatrix(nodeFactory, rawMatrix);
-    }
-    
-    public AStarPathfinder(@NotNull BiFunction<Num2D, T, AStarNode<T>> nodeFactory, @NotNull T[][] rawMatrix) {
-        this(null, nodeFactory, rawMatrix);
     }
     
     //<editor-fold desc="--- INITIALIZATION ---">
     
-    protected @NotNull AStarPathfinder<T> init() {
-        A.iterateMatrix((matrixIndex, node) -> {
-            node.init(this);
-            return null;
-        }, matrix());
+    public @NotNull AStarPathfinder<T> init() {
+        readyCheckPathPoints();
+        
+        this.startNodeBinding = Bind.objBinding(() -> getNodeAt(getStartIndex()), startIndexProperty);
+        this.goalNodeBinding = Bind.objBinding(() -> getNodeAt(getGoalIndex()), goalIndexProperty);
+        
+        readyCheck(false);
+        
+        regenerateMapMatrix();
+        
+        return this;
+    }
+    
+    public @NotNull AStarPathfinder<T> initDefaults() {
+        setValidDirections(CardinalDirectionType.ALL_BUT_CENTER);
+        return init();
+    }
+    
+    public @NotNull AStarPathfinder<T> reset() {
+        setValidDirections(null);
+        setNodeFactory(null);
+        
+        setRawMatrix(null);
+        setMapMatrix(null);
+        
+        setStartIndex(null);
+        setGoalIndex(null);
+        
+        this.startNodeBinding = null;
+        this.goalNodeBinding = null;
+        
+        this.openSet.clear();
+        this.closedSet.clear();
         
         return this;
     }
     
     //</editor-fold>
     
+    public final boolean isReady(boolean checkGeneratedMatrix) {
+        return (!checkGeneratedMatrix || getMapMatrix() != null) &&
+               getValidDirections() != null &&
+               getRawMatrix() != null &&
+               getStartIndex() != null &&
+               getGoalIndex() != null &&
+               getStartNode() != null &&
+               getGoalNode() != null &&
+               getNodeFactory() != null;
+    }
+    
     //<editor-fold desc="--- PROPERTIES ---">
     
-    private @NotNull AStarNode<T>[][] matrix() { return nodeMatrix; }
+    protected @NotNull ReadOnlyObjectProperty<CardinalDirectionType> readOnlyValidDirectionsProperty() { return validDirectionsProperty.getReadOnlyProperty(); }
+    protected @Nullable CardinalDirectionType getValidDirections() { return validDirectionsProperty.get(); }
+    protected @Nullable CardinalDirectionType setValidDirections(@Nullable CardinalDirectionType newValue) { return Props.setProperty(validDirectionsProperty, newValue); }
     
-    protected final @NotNull Num2D getMapSize() { return A.matrixDimensions(matrix()); }
-    public final @NotNull CardinalDirectionType getDirectionType() { return directionType; }
+    
+    private @NotNull ReadOnlyObjectProperty<AStarNode<T>[][]> readOnlyMapMatrixProperty() { return mapMatrixProperty.getReadOnlyProperty(); }
+    protected final @Nullable AStarNode<T>[][] getMapMatrix() { return mapMatrixProperty.get(); }
+    private @Nullable AStarNode<T>[][] setMapMatrix(@Nullable AStarNode<T>[][] newValue) { return Props.setProperty(mapMatrixProperty, newValue); }
+    
+    protected final @NotNull ReadOnlyObjectProperty<T[][]> readOnlyRawMatrixProperty() { return rawMatrixProperty.getReadOnlyProperty(); }
+    protected final @Nullable T[][] getRawMatrix() { return rawMatrixProperty.get(); }
+    protected final @Nullable T[][] setRawMatrix(@Nullable T[][] newValue) { return Props.setProperty(rawMatrixProperty, newValue); }
     
     
-    protected final @NotNull Num2D start() { return start; }
-    protected final @NotNull Num2D goal() { return goal; }
+    protected final @NotNull ReadOnlyObjectProperty<BiFunction<Num2D, T, AStarNode<T>>> readOnlyNodeFactoryProperty() { return nodeFactoryProperty.getReadOnlyProperty(); }
+    protected final @Nullable BiFunction<Num2D, T, AStarNode<T>> getNodeFactory() { return nodeFactoryProperty.get(); }
+    protected final @Nullable BiFunction<Num2D, T, AStarNode<T>> setNodeFactory(@Nullable BiFunction<Num2D, T, AStarNode<T>> newValue) { return Props.setProperty(nodeFactoryProperty, newValue); }
     
-    protected final @NotNull AStarNode<T> startNode() { return A.grab(start(), matrix()); }
-    protected final @NotNull AStarNode<T> goalNode() { return A.grab(goal(), matrix()); }
+    //<editor-fold desc="> Start/Goal Properties">
     
-    protected final @Nullable AStarNode<T> getNodeAt(@NotNull NumExpr2D<?> matrixIndex) { return matrixIndex instanceof AStarNode indexNode ? indexNode : A.grab(matrixIndex, matrix()); }
+    protected final @NotNull ReadOnlyObjectProperty<Num2D> readOnlyStartIndexProperty() { return startIndexProperty.getReadOnlyProperty(); }
+    protected final @Nullable Num2D getStartIndex() { return startIndexProperty.get(); }
+    protected final @Nullable Num2D setStartIndex(@Nullable Num2D newValue) { return Props.setProperty(startIndexProperty, newValue); }
+    
+    protected final @NotNull ReadOnlyObjectProperty<Num2D> readOnlyGoalIndexProperty() { return goalIndexProperty.getReadOnlyProperty(); }
+    protected final @Nullable Num2D getGoalIndex() { return goalIndexProperty.get(); }
+    protected final @Nullable Num2D setGoalIndex(@Nullable Num2D newValue) { return Props.setProperty(goalIndexProperty, newValue); }
+    
+    
+    protected final @Nullable ObjectBinding<AStarNode<T>> startNodeBinding() { return startNodeBinding; }
+    protected final @Nullable AStarNode<T> getStartNode() { return startNodeBinding != null ? startNodeBinding.get() : null; }
+    
+    protected final @Nullable ObjectBinding<AStarNode<T>> goalNodeBinding() { return goalNodeBinding; }
+    protected final @Nullable AStarNode<T> getGoalNode() { return goalNodeBinding != null ? goalNodeBinding.get() : null; }
+    
+    //</editor-fold>
+    
+    //
+    
+    protected final @Nullable AStarNode<T> getNodeAt(@NotNull NumExpr2D<?> matrixIndex) { return matrixIndex instanceof AStarNode indexNode ? indexNode : A.grab(matrixIndex, getMapMatrix()); }
     protected final @Nullable AStarNode<T> getNodeAt(@NotNull Number indexX, @NotNull Number indexY) { return getNodeAt(new Num2D(indexX, indexY)); }
     
     //</editor-fold>
     
     //<editor-fold desc="--- LOGIC ---">
     
+    public final @Nullable Num2D getDimensions() {
+        final T[][] rawMatrix = getRawMatrix();
+        if (rawMatrix != null)
+            return A.matrixDimensions(rawMatrix);
+        return null;
+    }
+    
     //<editor-fold desc="> Node Neighbor Methods">
     
     @SafeVarargs protected final @NotNull List<AStarNode<T>> getNeighbors(boolean checkPathing, @NotNull NumExpr2D<?> matrixIndex, @Nullable FilterType filterType, @NotNull Predicate<AStarNode<T>>... filters) {
-        return A.grabNeighbors(matrixIndex, getDirectionType(), matrix(), filterType,
+        return A.grabNeighbors(matrixIndex, getValidDirections(), getMapMatrix(), filterType,
                                checkPathing ? A.concat(filters, neighbor -> neighbor.isPathableFrom(getNodeAt(matrixIndex))) : filters);
     }
     
@@ -109,11 +198,11 @@ public class AStarPathfinder<T> {
     
     //<editor-fold desc="> Pathfinding Methods">
     
-    public @NotNull List<AStarNode<T>> aStar(@NotNull Num2D start, @NotNull Num2D goal, @NotNull Number leniency) {
+    public @NotNull List<AStarNode<T>> aStar() {
+        readyCheck(true);
+        
         Timer timer = Timers.newStopwatch().start();
-        this.start = start;
-        this.goal = goal;
-        this.openSet.add(startNode());
+        this.openSet.add(getStartNode());
         
         while (!openSet.isEmpty()) {
             AStarNode<T> current = openSet.poll();
@@ -122,7 +211,6 @@ public class AStarPathfinder<T> {
             if (current.isGoal()) {
                 List<AStarNode<T>> path = formPath();
                 System.out.println();
-                System.out.println("Leniency: " + leniency);
                 System.out.println("Path Size: " + path.size());
                 System.out.println("Path Cost: " + L.last(path).gCost());
                 System.out.println("Time: " + timer.getElapsedTime());
@@ -143,7 +231,7 @@ public class AStarPathfinder<T> {
                         //                        }
                     } else {
                         double gCostCalc = current.gCost(neighbor);
-                        if (neighbor.getCostG() >= gCostCalc + leniency.doubleValue()) {
+                        if (neighbor.getCostG() >= gCostCalc) {
                             neighbor.setPreviousNode(current);
                             neighbor.setCostG(gCostCalc);
                             openSet.remove(neighbor);
@@ -157,11 +245,10 @@ public class AStarPathfinder<T> {
         
         return null;
     }
-    public @NotNull List<AStarNode<T>> aStar(@NotNull Num2D start, @NotNull Num2D goal) { return aStar(start, goal, 0); }
     
     private @NotNull List<AStarNode<T>> formPath() {
         final ArrayList<AStarNode<T>> path = new ArrayList<>();
-        AStarNode<T> current = goalNode();
+        AStarNode<T> current = getGoalNode();
         while (current != null) {
             path.add(current);
             current = current.previousNode();
@@ -183,7 +270,7 @@ public class AStarPathfinder<T> {
                                               @NotNull Function<AStarNode<T>, Image> pathTileGenerator,
                                               @NotNull Function<AStarNode<T>, Image> startTileGenerator,
                                               @NotNull Function<AStarNode<T>, Image> goalTileGenerator) {
-        return FX.generateTiledImage(tileSize.intValue(), matrix(), constructAggregateFunction(
+        return FX.generateTiledImage(tileSize.intValue(), getMapMatrix(), constructAggregateFunction(
                 path,
                 emptyTileGenerator,
                 blockedTileGenerator,
@@ -232,10 +319,55 @@ public class AStarPathfinder<T> {
     
     //<editor-fold desc="--- INTERNAL ---">
     
-    private @NotNull AStarNode<T>[][] generateMatrix(@NotNull BiFunction<Num2D, T, AStarNode<T>> nodeFactory, @NotNull T[][] inputMap) {
-        final Num2D inputDimensions = A.matrixDimensions(inputMap);
-        final AStarNode<T>[][] outputMap = new AStarNode[inputDimensions.aI()][inputDimensions.bI()];
-        return A.fillMatrix(nodeFactory, inputMap, outputMap);
+    private void regenerateMapMatrix() {
+        readyCheck(false);
+        
+        final Num2D inputDimensions = A.matrixDimensions(getRawMatrix());
+        setMapMatrix(A.fillMatrix(getNodeFactory(), getRawMatrix(), new AStarNode[inputDimensions.aI()][inputDimensions.bI()]));
+        A.iterateMatrix((matrixIndex, node) -> {
+            node.init(this);
+            return null;
+        }, getMapMatrix());
+    }
+    
+    //
+    
+    private void readyCheck(boolean checkGeneratedMatrix) {
+        readyCheckPathPoints();
+        readyCheckNodeFactory();
+        readyCheckValidDirections();
+        readyCheckRawMatrix();
+        if (checkGeneratedMatrix)
+            readyCheckGenMatrix();
+    }
+    
+    private void readyCheckPathPoints() {
+        if (getStartIndex() == null && getGoalIndex() == null)
+            throw Exc.ex("AStarPathfinder start & goal indexes have not been set.");
+        else if (getStartIndex() == null)
+            throw Exc.ex("AStarPathfinder start index has not been set.");
+        else if (getGoalIndex() == null)
+            throw Exc.ex("AStarPathfinder goal index has not been set.");
+    }
+    
+    private void readyCheckNodeFactory() {
+        if (getNodeFactory() == null)
+            throw Exc.ex("AStarPathfinder Node Factory has not been set.");
+    }
+    
+    private void readyCheckValidDirections() {
+        if (getValidDirections() == null)
+            throw Exc.ex("AStarPathfinder Valid Directions has not been set.");
+    }
+    
+    private void readyCheckGenMatrix() {
+        if (getMapMatrix() == null)
+            throw Exc.ex("AStarPathfinder Generated Map Matrix has not been processed - call to AStarPathfinder.init() likely missing.");
+    }
+    
+    private void readyCheckRawMatrix() {
+        if (getRawMatrix() == null)
+            throw Exc.ex("AStarPathfinder Raw Matrix has not been set.");
     }
     
     //</editor-fold>

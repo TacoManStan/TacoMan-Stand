@@ -75,7 +75,7 @@ public abstract class AStarNode<T>
     
     //<editor-fold desc="> Default Abstract Methods">
     
-    protected double hCost() { return distance(pathfinder.goal()); }
+    protected double hCost() { return distance(pathfinder.getGoalIndex()); }
     
     //</editor-fold>
     
@@ -88,8 +88,8 @@ public abstract class AStarNode<T>
     
     protected double fCost() { return hCost() + gCost(); }
     
-    protected boolean isStart() { return matrixIndex().equalTo(pathfinder().start()); }
-    protected boolean isGoal() { return matrixIndex().equalTo(pathfinder().goal()); }
+    protected boolean isStart() { return matrixIndex().equalTo(pathfinder().getStartIndex()); }
+    protected boolean isGoal() { return matrixIndex().equalTo(pathfinder().getGoalIndex()); }
     
     //
     
