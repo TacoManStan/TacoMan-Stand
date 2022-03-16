@@ -32,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.locks.Lock;
 
 public class GameTile
-        implements SpringableWrapper, Entity, MapObject, JObject, JLoadable, Collidable<GameTile> {
+        implements SpringableWrapper, Entity, MapObject, Collidable<GameTile>, JObject, JLoadable {
     
     private final GameMap owner;
     private TileModel model;
