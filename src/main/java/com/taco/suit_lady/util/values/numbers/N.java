@@ -3,11 +3,14 @@ package com.taco.suit_lady.util.values.numbers;
 import com.taco.suit_lady.util.tools.list_tools.A;
 import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
 import com.taco.tacository.numbers.Numbers;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Point2D;
 import javafx.scene.layout.Region;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.function.Supplier;
 
 public class N {
     private N() { } //No Instance
@@ -384,6 +387,35 @@ public class N {
      * @return The specified {@link Number} as an {@link Double double} primitive.
      */
     public static double d(@NotNull Number num) { return num.doubleValue(); }
+    
+    //
+    
+    public static int iOf(@Nullable ObservableValue<? extends Number> observableValue, @Nullable Supplier<Number> fallbackSupplier) { return of(observableValue, fallbackSupplier).intValue(); }
+    public static int iOf(@Nullable ObservableValue<? extends Number> observableValue) { return iOf(observableValue, null); }
+    
+    public static long lOf(@Nullable ObservableValue<? extends Number> observableValue, @Nullable Supplier<Number> fallbackSupplier) { return of(observableValue, fallbackSupplier).longValue(); }
+    public static long lOf(@Nullable ObservableValue<? extends Number> observableValue) { return lOf(observableValue, null); }
+    
+    public static float fOf(@Nullable ObservableValue<? extends Number> observableValue, @Nullable Supplier<Number> fallbackSupplier) { return of(observableValue, fallbackSupplier).floatValue(); }
+    public static float fOf(@Nullable ObservableValue<? extends Number> observableValue) { return fOf(observableValue, null); }
+    
+    public static double dOf(@Nullable ObservableValue<? extends Number> observableValue, @Nullable Supplier<Number> fallbackSupplier) { return of(observableValue, fallbackSupplier).doubleValue(); }
+    public static double dOf(@Nullable ObservableValue<? extends Number> observableValue) { return dOf(observableValue, null); }
+    
+    public static @NotNull Number of(@Nullable ObservableValue<? extends Number> observableValue, @Nullable Supplier<? extends Number> fallbackSupplier) {
+        if (observableValue != null) {
+            final Number value = observableValue.getValue();
+            if (value != null)
+                return value;
+        } else if (fallbackSupplier != null) {
+            final Number fallbackValue = fallbackSupplier.get();
+            if (fallbackValue != null)
+                return fallbackValue;
+        }
+        
+        return 0;
+    }
+    public static @NotNull Number of(@Nullable ObservableValue<? extends Number> observableValue) { return of(observableValue, null); }
     
     //</editor-fold>
     
