@@ -8,9 +8,37 @@ import javafx.beans.property.ReadOnlyBooleanWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 
+/**
+ * <p>Defines the {@link Initializer#init(Object...) initialization} process for an {@link Initializable} object of type <{@link T}></p>
+ * <p><b>Details</b></p>
+ * <ol>
+ *     <li>An {@link Initializer} defines two {@link Consumer} functions: {@link #getInitOperation() Init Operations} and {@link #getShutdownOperation() Shtdown Operations}.</li>
+ *     <li>The {@link Consumer} objects accept an {@code array} of {@link Object Objects} containing the {@code data} required to {@link #init(Object...) Initialize} and {@link #shutdown(Object...) Shutdown} this {@link Initializer} and wrapped {@link Initializable} object it contains.</li>
+ *     <li>
+ *         An {@link Initializer} can only be {@link #init(Object...) initialized} and {@link #shutdown(Object...) shutdown} once each.
+ *         <ul>
+ *             <li><i>Upon calling {@link #init(Object...)}, the value of {@link #initializedProperty()} is updated accordingly.</i></li>
+ *             <li><i>Upon calling {@link #shutdown(Object...)}, the value of {@link #shutdownProperty()} is updated accordingly.</i></li>
+ *             <li><i>Subsequent calls to {@link #init(Object...)} will throw a {@link RuntimeException} if {@link #isInitialized()} is {@code true}.</i></li>
+ *             <li><i>Subsequent calls to {@link #shutdown(Object...)} will throw a {@link RuntimeException} if {@link #isShutdown()} is {@code true}.</i></li>
+ *         </ul>
+ *     </li>
+ *     <li>
+ *         The internal {@link Lock#lock() synchronization} logic used by this {@link Initializer} can be customized by specifying a {@link LockMode}.
+ *         <ul>
+ *             <li><i>Note that the {@link #getLockMode() Lock Mode} is {@code final} and can only be set by an {@link Initializer} {@link Initializer#Initializer(Initializable, Consumer, Consumer, LockMode) Constructor}.</i></li>
+ *         </ul>
+ *     </li>
+ * </ol>
+ *
+ * @param <T> The {@link Initializable} implementation assigned to this {@link Initializer} instance.
+ *
+ * @see Initializable
+ */
 public final class Initializer<T extends Initializable<T>> {
     
     private final T owner;
