@@ -3,12 +3,14 @@ package com.taco.suit_lady.game.objects;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.taco.suit_lady.game.Entity;
 import com.taco.suit_lady.game.GameComponent;
+import com.taco.suit_lady.game.GameMap;
 import com.taco.suit_lady.game.attributes.AttributeManager;
 import com.taco.suit_lady.game.objects.collision.Collidable;
 import com.taco.suit_lady.game.objects.collision.CollisionArea;
 import com.taco.suit_lady.game.objects.collision.CollisionMap;
 import com.taco.suit_lady.game.objects.tiles.GameTile;
 import com.taco.suit_lady.game.ui.GameViewContent;
+import com.taco.suit_lady.logic.GameTask;
 import com.taco.suit_lady.logic.TaskManager;
 import com.taco.suit_lady.logic.Tickable;
 import com.taco.suit_lady.logic.triggers.Galaxy;
@@ -44,6 +46,14 @@ import java.io.Serial;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 
+/**
+ * <p>Defines an {@code object} that can be {@link #addToMap() Added To}, visually represented, and utilized by a {@link GameMap} object.</p>
+ * <p><b>Movement</b></p>
+ * <ol>
+ *     <li>{@link GameObject Game Objects} are {@link Mover#move(NumExpr2D) moved} using the {@link #mover() Mover} instance it has been assigned.</li>
+ *     <li>{@code Movement} commands are processed and handled internally by submitting the {@link Mover} as a {@link GameTask}.</li>
+ * </ol>
+ */
 public class GameObject
         implements Entity, MapObject, JObject, JLoadable, UIDProcessable, Tickable<GameObject>, Collidable<GameObject>, Movable {
     
@@ -53,7 +63,7 @@ public class GameObject
     private String objID;
     
     private final TaskManager<GameObject> taskManager;
-    private final Mover mover;
+    private Mover mover;
     
     private final GameObjectModel model;
     private final AttributeManager attributes;
@@ -110,12 +120,6 @@ public class GameObject
         
         //
         
-        initAttributes();
-        
-        taskManager().addTask(this.mover = new Mover(this));
-        
-        //
-        
         this.occupiedTilesList = new SimpleListProperty<>(FXCollections.observableArrayList());
     }
     
@@ -135,6 +139,9 @@ public class GameObject
     }
     
     public final GameObject init(@NotNull Runnable postInitOperation) {
+        initAttributes();
+        taskManager().addTask(this.mover = new Mover(this));
+        
         setWidth(getGameMap().getTileSize());
         setHeight(getGameMap().getTileSize());
         

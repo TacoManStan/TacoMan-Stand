@@ -15,7 +15,7 @@ import java.io.Serializable;
  * <ol>
  *     <li>{@link GameObject}</li>
  *     <li>{@link GameTile}</li>
- *     <li>{@link GameItem}.</li>
+ *     <li>{@link GameItem}</li>
  * </ol>
  */
 public interface Entity
