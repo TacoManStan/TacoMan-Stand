@@ -46,6 +46,7 @@ import java.util.function.Consumer;
  *     <li>Once implemented, a {@link Tickable} object can define its {@link TaskManager}, which can be used to manage and organize the {@link Tickable#execute(Runnable) Execution Logic} for that particular {@link Tickable} type.</li>
  * </ol>
  */
+//TO-EXPAND
 @Component
 public class LogiCore
         implements Springable, Lockable, GameComponent, Initializable<LogiCore> {
@@ -59,6 +60,8 @@ public class LogiCore
     private final Initializer<LogiCore> initializer;
     
     private final ReadOnlyObjectWrapper<GameViewContent> gameProperty;
+    
+    //
     
     private final ScheduledThreadPoolExecutor gameLoopExecutor;
     private final ListProperty<Tickable<?>> tickables; //Absolutely NO blocking calls to FX thread can be made here. None.
@@ -77,7 +80,7 @@ public class LogiCore
     
     private final TriggerEventManager triggers;
     
-    public LogiCore(FxWeaver weaver, ConfigurableApplicationContext ctx) {
+    private LogiCore(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         this.weaver = weaver;
         this.ctx = ctx;
         
