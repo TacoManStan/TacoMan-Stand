@@ -8,7 +8,6 @@ import com.taco.suit_lady.game.attributes.Attribute;
 import com.taco.suit_lady.game.attributes.AttributeManager;
 import com.taco.suit_lady.game.objects.collision.Collidable;
 import com.taco.suit_lady.game.objects.collision.CollisionArea;
-import com.taco.suit_lady.game.objects.collision.CollisionHandler;
 import com.taco.suit_lady.game.objects.collision.CollisionMap;
 import com.taco.suit_lady.game.objects.tiles.GameTile;
 import com.taco.suit_lady.game.ui.GFXObject;
@@ -61,27 +60,29 @@ import java.util.concurrent.locks.Lock;
  *         Consequently, any calls to {@link #mover()} made prior to {@link #init() Initialization} will result in a {@link NullPointerException}.
  *     </li>
  * </ol>
+ * <p><i>See {@link Mover} for additional information.</i></p>
  * <br>
  * <p><b>Graphics</b></p>
  * <ol>
  *     <li>{@link GameObject} {@code graphics data} is, <u>loaded</u>, <u>processed</u>, <u>stored</u>, and <u>displayed</u> by the {@link GameObjectModel} instance assigned to this {@link GameObject}.</li>
- *     <li><i>See {@link GameObjectModel} for additional information.</i></li>
  * </ol>
+ * <p><i>See {@link GameObjectModel} for additional information.</i></p>
  * <br>
  * <p><b>Attributes</b></p>
  * <ol>
  *     <li>All {@link Attribute Attributes} that have been assigned to this {@link GameObject} are <u>stored</u> and <u>handled</u> by the {@link AttributeManager} instance assigned to this {@link GameObject}.</li>
  *     <li>{@link Attribute Attributes} are dynamic {@link Property Properties} that can be easily {@link AttributeManager#getAttribute(String, Class) Accessed} using a variety of methods available in the {@link AttributeManager} class.</li>
  *     <li>Note that {@link Attribute attributes} are designed to be used only for {@code game data} and should not be used for any {@link Property} that cannot be tangibly defined from within the {@link GameViewContent Game}.</li>
- *     <li><i>See {@link AttributeManager} and {@link Attribute} for additional information.</i></li>
  * </ol>
+ * <p><i>See {@link AttributeManager} and {@link Attribute} for additional information.</i></p>
  * <br>
  * <p><b>Collision Handling</b></p>
  * <ol>
- *     <li>Collisions are handled automatically by the {@link CollisionHandler} instance assigned to this {@link GameObject}.</li>
- *     <li>Multiple {@link CollisionArea} objects can be added to the {@link CollisionHandler} to define increasingly complex {@code pathing} and subsequent {@code collision} definitions.</li>
+ *     <li>Collisions are handled automatically by the {@link CollisionMap} instance assigned to this {@link GameObject}.</li>
+ *     <li>Multiple {@link CollisionArea} objects can be added to the {@link CollisionMap} to define increasingly complex {@code pathing} and subsequent {@code collision} definitions.</li>
  *     <li>{@link GameObject Game Objects} are {@link Collidable} as well, meaning they can be easily compared to other {@link Collidable} implementations or used by any system that accepts {@link Collidable} objects as input.</li>
  * </ol>
+ * <p><i>See {@link CollisionMap}, {@link CollisionArea}, and {@link Collidable} for additional information.</i></p>
  * <br>
  * <p><b>Execution</b></p>
  * <ol>
@@ -93,10 +94,10 @@ import java.util.concurrent.locks.Lock;
  *         <ul>
  *             <li><i>Note that {@link FX#runFX(Runnable, boolean) JavaFX Operations} are an exception, as they must be executed {@code asynchronously} on the {@link Platform#isFxApplicationThread() JavaFX Application Thread}.</i></li>
  *             <li><i>To ensure {@code thread-safe} {@code JavaFX Operations}, the {@link GameObjectModel} is a {@link GFXObject}.</i></li>
- *             <li><i>See {@link GFXObject} and {@link GameObjectModel} for additional information.</i></li>
  *         </ul>
  *     </li>
  * </ol>
+ * <p><i>See {@link GFXObject} and {@link GameObjectModel} for additional information.</i></p>
  * <br>
  * <p><b>Initialization</b></p>
  * <ol>
@@ -114,12 +115,13 @@ import java.util.concurrent.locks.Lock;
  *         </ul>
  *     </li>
  * </ol>
+ * <p><i>See {@link #init(Runnable)} for additional information.</i></p>
  * <br>
  * <p><b>Json Persistence</b></p>
  * <ol>
  *     <li>Currently, all information defining a {@link GameObject} and its properties is {@link JFiles#save(JObject) Saved} and {@link JFiles#load(JLoadable) Loaded} using the {@link JUtil JSON Framework}.</li>
- *     <li><i>See {@link JUtil}, {@link JFiles}, {@link JObject}, {@link JLoadable}, and {@link JLoadableObject} for additional information on the {@link JUtil JSON Framework}.</i></li>
  * </ol>
+ * <p><i>See {@link JUtil}, {@link JFiles}, {@link JObject}, {@link JLoadable}, and {@link JLoadableObject} for additional information.</i></p>
  */
 public class GameObject
         implements Entity, MapObject, JObject, JLoadable, UIDProcessable, Tickable<GameObject>, Collidable<GameObject>, Movable {
