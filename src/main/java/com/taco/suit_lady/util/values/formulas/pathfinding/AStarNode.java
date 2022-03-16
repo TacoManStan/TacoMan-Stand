@@ -138,7 +138,19 @@ public abstract class AStarNode<T>
     
     //
     
-    @Override public int compareTo(@NotNull AStarNode<T> o) { return Double.compare(fCost(), o.fCost()); }
+    /**
+     * <p>Compares this {@link AStarNode} to the specified {@link AStarNode} parameter.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>Internally, this method returns the value of <i>{@link Double#compare(double, double)}.</i></li>
+     *     <li>Specifically, the {@link Double#compare(double, double) Compared} value of <i>{@link #fCost() this.fCost()}</i> and <i>{@link #fCost() ((AStarNode) o).fCost()} is used as the {@code result} of {@link #compareTo(AStarNode) this method}.</i></li>
+     * </ol>
+     *
+     * @param o
+     *
+     * @return
+     */
+    @Override public final int compareTo(@NotNull AStarNode<T> o) { return Double.compare(fCost(), o.fCost()); }
     
     //</editor-fold>
     
