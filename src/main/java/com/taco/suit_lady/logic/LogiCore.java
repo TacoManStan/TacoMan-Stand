@@ -7,6 +7,7 @@ import com.taco.suit_lady.game.ui.GFXObject;
 import com.taco.suit_lady.logic.triggers.TriggerEventManager;
 import com.taco.suit_lady.game.GameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
+import com.taco.suit_lady.ui.Content;
 import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.timing.Timer;
@@ -21,9 +22,11 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import net.rgielen.fxweaver.core.FxWeaver;
+import org.apache.juli.logging.Log;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -35,6 +38,14 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 
+/**
+ * <p>A {@link SpringApplication Spring-Managed} {@code singleton} {@link Component} used to handle the {@link #execute(Runnable) Execution Logic} for {@link Content} implementations.</p>
+ * <p><b>Details</b></p>
+ * <ol>
+ *     <li>In most cases, the best way to use the {@link LogiCore} is to implement the {@link Tickable} interface on any executable {@link Object} type.</li>
+ *     <li>Once implemented, a {@link Tickable} object can define its {@link TaskManager}, which can be used to manage and organize the {@link Tickable#execute(Runnable) Execution Logic} for that particular {@link Tickable} type.</li>
+ * </ol>
+ */
 @Component
 public class LogiCore
         implements Springable, Lockable, GameComponent, Initializable<LogiCore> {
@@ -44,6 +55,8 @@ public class LogiCore
     
     private final ReentrantLock tickableLock;
     private final ReentrantLock gfxLock;
+    
+    private final Initializer<LogiCore> initializer;
     
     private final ReadOnlyObjectWrapper<GameViewContent> gameProperty;
     
@@ -71,6 +84,11 @@ public class LogiCore
         this.tickableLock = new ReentrantLock();
         this.gfxLock = new ReentrantLock();
         
+        this.initializer = new Initializer<>(
+                this,
+                this::startup,
+                null,
+                LockMode.OWNER_OR_NEW_LOCK);
         
         this.gameProperty = new ReadOnlyObjectWrapper<>();
         
@@ -238,7 +256,8 @@ public class LogiCore
         gameLoopExecutor.shutdown();
     }
     
-    @Contract("_ -> param1") private @NotNull Tickable<?> shutdown(@NotNull Tickable<?> tickable) {
+    @Contract("_ -> param1")
+    private @NotNull Tickable<?> shutdown(@NotNull Tickable<?> tickable) {
         tickable.taskManager().shutdownOperations();
         tickable.taskManager().gfxShutdownOperations();
         return tickable;
@@ -248,29 +267,14 @@ public class LogiCore
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    private Initializer<LogiCore> initializer;
-    @Override public final @NotNull Initializer<LogiCore> initializer() {
-        if (initializer == null)
-            initializer = new Initializer<>(
-                    this,
-                    this::startup,
-                    null,
-                    LockMode.OWNER_OR_NEW_LOCK);
-        return initializer;
-    }
-    
-    //
-    
     @Override public @NotNull FxWeaver weaver() { return weaver; }
     @Override public @NotNull ConfigurableApplicationContext ctx() { return ctx; }
     
-    @Override public @Nullable Lock getLock() {
-        return gameProperty.get() != null ? gameProperty.get().getLock() : null;
-    }
+    @Override public @Nullable Lock getLock() { return gameProperty.get() != null ? gameProperty.get().getLock() : null; }
+    
+    @Override public final @NotNull Initializer<LogiCore> initializer() { return initializer; }
     
     //</editor-fold>
     
-    public double secondsToTicks(@NotNull Number input) {
-        return input.doubleValue() / getTargetUPS();
-    }
+    public double secondsToTicks(@NotNull Number input) { return input.doubleValue() / getTargetUPS(); }
 }
