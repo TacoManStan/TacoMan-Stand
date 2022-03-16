@@ -4,13 +4,17 @@ import com.github.cliftonlabs.json_simple.JsonObject;
 import com.taco.suit_lady.game.Entity;
 import com.taco.suit_lady.game.GameComponent;
 import com.taco.suit_lady.game.GameMap;
+import com.taco.suit_lady.game.attributes.Attribute;
 import com.taco.suit_lady.game.attributes.AttributeManager;
 import com.taco.suit_lady.game.objects.collision.Collidable;
 import com.taco.suit_lady.game.objects.collision.CollisionArea;
+import com.taco.suit_lady.game.objects.collision.CollisionHandler;
 import com.taco.suit_lady.game.objects.collision.CollisionMap;
 import com.taco.suit_lady.game.objects.tiles.GameTile;
+import com.taco.suit_lady.game.ui.GFXObject;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.logic.GameTask;
+import com.taco.suit_lady.logic.LogiCore;
 import com.taco.suit_lady.logic.TaskManager;
 import com.taco.suit_lady.logic.Tickable;
 import com.taco.suit_lady.logic.triggers.Galaxy;
@@ -21,16 +25,15 @@ import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Obj;
 import com.taco.suit_lady.util.tools.Props;
+import com.taco.suit_lady.util.tools.fx_tools.FX;
 import com.taco.suit_lady.util.values.enums.LocType;
 import com.taco.suit_lady.util.values.numbers.Num2D;
 import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
 import com.taco.suit_lady.util.values.numbers.shapes.Box;
 import com.taco.suit_lady.util.values.numbers.shapes.Circle;
 import com.taco.suit_lady.util.values.numbers.shapes.Shape;
-import com.taco.tacository.json.JElement;
-import com.taco.tacository.json.JLoadable;
-import com.taco.tacository.json.JObject;
-import com.taco.tacository.json.JUtil;
+import com.taco.tacository.json.*;
+import javafx.application.Platform;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;
@@ -48,10 +51,74 @@ import java.util.concurrent.locks.Lock;
 
 /**
  * <p>Defines an {@code object} that can be {@link #addToMap() Added To}, visually represented, and utilized by a {@link GameMap} object.</p>
+ * <br>
  * <p><b>Movement</b></p>
  * <ol>
  *     <li>{@link GameObject Game Objects} are {@link Mover#move(NumExpr2D) moved} using the {@link #mover() Mover} instance it has been assigned.</li>
  *     <li>{@code Movement} commands are processed and handled internally by submitting the {@link Mover} as a {@link GameTask}.</li>
+ *     <li>
+ *         Note that the {@link Mover} is constructed by the {@link #init()} method, not the {@link GameObject#GameObject(Lock, GameComponent, String, String) Constructor}.<br>
+ *         Consequently, any calls to {@link #mover()} made prior to {@link #init() Initialization} will result in a {@link NullPointerException}.
+ *     </li>
+ * </ol>
+ * <br>
+ * <p><b>Graphics</b></p>
+ * <ol>
+ *     <li>{@link GameObject} {@code graphics data} is, <u>loaded</u>, <u>processed</u>, <u>stored</u>, and <u>displayed</u> by the {@link GameObjectModel} instance assigned to this {@link GameObject}.</li>
+ *     <li><i>See {@link GameObjectModel} for additional information.</i></li>
+ * </ol>
+ * <br>
+ * <p><b>Attributes</b></p>
+ * <ol>
+ *     <li>All {@link Attribute Attributes} that have been assigned to this {@link GameObject} are <u>stored</u> and <u>handled</u> by the {@link AttributeManager} instance assigned to this {@link GameObject}.</li>
+ *     <li>{@link Attribute Attributes} are dynamic {@link Property Properties} that can be easily {@link AttributeManager#getAttribute(String, Class) Accessed} using a variety of methods available in the {@link AttributeManager} class.</li>
+ *     <li>Note that {@link Attribute attributes} are designed to be used only for {@code game data} and should not be used for any {@link Property} that cannot be tangibly defined from within the {@link GameViewContent Game}.</li>
+ *     <li><i>See {@link AttributeManager} and {@link Attribute} for additional information.</i></li>
+ * </ol>
+ * <br>
+ * <p><b>Collision Handling</b></p>
+ * <ol>
+ *     <li>Collisions are handled automatically by the {@link CollisionHandler} instance assigned to this {@link GameObject}.</li>
+ *     <li>Multiple {@link CollisionArea} objects can be added to the {@link CollisionHandler} to define increasingly complex {@code pathing} and subsequent {@code collision} definitions.</li>
+ *     <li>{@link GameObject Game Objects} are {@link Collidable} as well, meaning they can be easily compared to other {@link Collidable} implementations or used by any system that accepts {@link Collidable} objects as input.</li>
+ * </ol>
+ * <br>
+ * <p><b>Execution</b></p>
+ * <ol>
+ *     <li>Operations are executed by the {@link TaskManager} assigned to this {@link GameObject}.</li>
+ *     <li>Internally, the {@link TaskManager} defines the {@code operations} that are executed with each {@link LogiCore#tick() Game Tick}.</li>
+ *     <li>{@link GameObject Game Objects} are {@link Tickable}, meaning they are processed automatically by the {@code Game Loop}, which is defined and operated by the singleton {@link LogiCore} instance.</li>
+ *     <li>
+ *         Tasks submitted to the {@link TaskManager} are guaranteed to execute {@code sequentially} on the {@code Game Loop}, resulting in no need for {@link Lock#lock() synchronization} when configured properly.
+ *         <ul>
+ *             <li><i>Note that {@link FX#runFX(Runnable, boolean) JavaFX Operations} are an exception, as they must be executed {@code asynchronously} on the {@link Platform#isFxApplicationThread() JavaFX Application Thread}.</i></li>
+ *             <li><i>To ensure {@code thread-safe} {@code JavaFX Operations}, the {@link GameObjectModel} is a {@link GFXObject}.</i></li>
+ *             <li><i>See {@link GFXObject} and {@link GameObjectModel} for additional information.</i></li>
+ *         </ul>
+ *     </li>
+ * </ol>
+ * <br>
+ * <p><b>Initialization</b></p>
+ * <ol>
+ *     <li>First, construct a new {@link GameObject} instance using any of the available {@link GameObject#GameObject(Lock, GameComponent, String, String) GameObject Constructors}.</li>
+ *     <li>After {@code construction}, most {@link GameObject} properties are still {@code undefined}, and the new {@link GameObject} instance is not yet ready to be used.</li>
+ *     <li>
+ *         To define the remaining {@link GameObject} properties and finish preparing the new instance to be used by the {@link GameViewContent Game}, call either of the available {@link #init(Runnable) init} methods.
+ *         <ul>
+ *             <li><i>If additional {@code initialization} operations are required for a {@link GameObject}, those operations can be injected automatically by wrapping them in the {@link Runnable} function passed to the overloaded {@link #init(Runnable)} method.</i></li>
+ *             <li><i>Note that {@link #init()} method simply passes an empty {@link Runnable} to the {@link #init(Runnable)} method and returns the {@code result}.</i></li>
+ *             <li><i>
+ *                 The {@link Runnable} object passed to the {@link #init(Runnable)} method is guaranteed to executed <u>after</u> the default {@link #init() initialization} process.<br>
+ *                 i.e., calls to foundational property accessors — {@link #getModel()}, {@link #taskManager()}, {@link #mover()}, etc. — are guaranteed a {@code non-null} result.
+ *             </i></li>
+ *         </ul>
+ *     </li>
+ * </ol>
+ * <br>
+ * <p><b>Json Persistence</b></p>
+ * <ol>
+ *     <li>Currently, all information defining a {@link GameObject} and its properties is {@link JFiles#save(JObject) Saved} and {@link JFiles#load(JLoadable) Loaded} using the {@link JUtil JSON Framework}.</li>
+ *     <li><i>See {@link JUtil}, {@link JFiles}, {@link JObject}, {@link JLoadable}, and {@link JLoadableObject} for additional information on the {@link JUtil JSON Framework}.</i></li>
  * </ol>
  */
 public class GameObject
@@ -184,7 +251,7 @@ public class GameObject
         taskManager().addGfxShutdownOperation(() -> getModel().shutdown());
         taskManager().addGfxShutdownOperation(() -> getGameMap().getModel().refreshMapImage());
         taskManager().addShutdownOperation(() -> getOccupiedTiles().forEach(tile -> tile.getOccupyingObjects().remove(this)));
-//        taskManager().addShutdownOperation(() -> A.iterateMatrix(tile -> tile.getOccupyingObjects().remove(this), getOccupiedTiles()));
+        //        taskManager().addShutdownOperation(() -> A.iterateMatrix(tile -> tile.getOccupyingObjects().remove(this), getOccupiedTiles()));
     }
     
     private final boolean useCollisionBox = false;
