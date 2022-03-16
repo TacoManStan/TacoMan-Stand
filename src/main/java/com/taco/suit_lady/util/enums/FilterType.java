@@ -63,6 +63,8 @@ public enum FilterType
     
     @SafeVarargs public final @NotNull <T> Predicate<T> getFilter(@NotNull Predicate<T>... filters) {
         return t -> {
+            if (filters.length == 0)
+                return true;
             int passedCount = 0;
             for (Predicate<T> filter: filters) {
                 final boolean passed = t != null && filter.test(t);
@@ -71,18 +73,27 @@ public enum FilterType
                 
                 if (passed && equals(FilterType.ANY))
                     return true;
+                if (passed && filters.length == 1 && equalsAny(FilterType.ONE, FilterType.ALL))
+                    return true;
                 if (passed && equals(FilterType.NONE))
                     return false;
                 if (!passed && equals(FilterType.ALL))
                     return false;
-                if (passedCount > 1 && (equals(FilterType.ONE)))
+                if (passedCount > 1 && equals(FilterType.ONE))
                     return false;
             }
-            return passedCount != 0 || (!equals(FilterType.ALL) &&
-                                        !equals(FilterType.ONE) &&
-                                        !equals(FilterType.ANY));
+            return passedCount != 0 || equals(FilterType.NONE);
         };
     }
     
     //</editor-fold>
+    
+    public final boolean equalsAny(@NotNull FilterType... filterTypes) {
+        if (A.isEmpty(filterTypes))
+            return false;
+        for (FilterType filterType: filterTypes)
+            if (equals(filterType))
+                return true;
+        return false;
+    }
 }

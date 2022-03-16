@@ -670,7 +670,7 @@ public class Calc {
     
     public static @NotNull ArrayList<Num2D> formCircle(@NotNull Num2D center, @NotNull Number radius, @NotNull Number precision) {
         return IntStream.iterate(0, i -> i < 360, i -> i + precision.intValue())
-                        .mapToObj(i -> center.interpolateTowards(i, radius))
+                        .mapToObj(i -> center.interpolateTowards(i, radius).asNum2D())
                         .collect(Collectors.toCollection(ArrayList::new));
     }
     public static @NotNull ArrayList<Num2D> formCircle(@NotNull Num2D center, @NotNull Number radius) {

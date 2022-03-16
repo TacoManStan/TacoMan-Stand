@@ -13,6 +13,7 @@ import com.taco.suit_lady.util.tools.fx_tools.FX;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -153,6 +154,8 @@ public class GameMapModel
     }
     
     //</editor-fold>
+    
+    public final void refreshMapImage(@Nullable Image newValue) { mapImageProperty.set(newValue); }
     
     public final void refreshMapImage() {
         mapImageProperty.set(generateMapImage());

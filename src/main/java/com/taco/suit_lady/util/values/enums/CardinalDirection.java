@@ -2,10 +2,13 @@ package com.taco.suit_lady.util.values.enums;
 
 import com.taco.suit_lady.util.tools.list_tools.A;
 import com.taco.suit_lady.util.tools.Exc;
+import com.taco.suit_lady.util.values.numbers.Num2D;
 import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.List;
 
 public enum CardinalDirection {
     
@@ -26,17 +29,16 @@ public enum CardinalDirection {
     public final int xMod() { return xMod; }
     public final int yMod() { return yMod; }
     
+    public final @NotNull Num2D getTranslated(@NotNull NumExpr2D<?> input) {
+        return new Num2D(input.aD() + xMod(), input.bD() + yMod());
+    }
+    
     //</editor-fold>
     
     //<editor-fold desc="--- STATIC ---">
     
-    public static CardinalDirection[] valuesUnidirectional() { return new CardinalDirection[]{NORTH, SOUTH, EAST, WEST}; }
-    public static CardinalDirection[] valuesUnidirectionalC() { return A.concat(valuesUnidirectional(), CENTER); }
-    
-    public static CardinalDirection[] valuesMultiDirectional() { return new CardinalDirection[]{NORTH_EAST, NORTH_WEST, SOUTH_EAST, SOUTH_WEST}; }
-    public static CardinalDirection[] valuesMultiDirectionalC() { return A.concat(valuesMultiDirectional(), CENTER); }
-    
-    public static CardinalDirection[] valuesNoC() { return A.concatMulti(valuesUnidirectional(), valuesMultiDirectional()); }
+    public static @NotNull List<CardinalDirection> valueList(@NotNull CardinalDirectionType directionType) { return directionType.directionList(); }
+    public static @NotNull CardinalDirection[] values(@NotNull CardinalDirectionType directionType) { return directionType.directions(); }
     
     //
     
@@ -44,6 +46,19 @@ public enum CardinalDirection {
         if (input.aI() < -1 || input.aI() > 1 || input.bI() < -1 || input.bI() > 1)
             throw Exc.unsupported("Input Values Must be in Range [-1,1]:  " + input);
         return Arrays.stream(values()).filter(direction -> direction.xMod() == input.aI() && direction.yMod() == input.bI()).findFirst().orElse(null);
+    }
+    
+    public <T> @Nullable T getNeighbor(@NotNull Num2D origin, @NotNull T[][] matrix) {
+        final int matrixWidth = matrix.length;
+        if (matrixWidth == 0)
+            throw Exc.unsupported("Matrix width cannot be 0.");
+        final int matrixHeight = matrix[0].length;
+        if (matrixHeight == 0)
+            throw Exc.unsupported("Matrix height cannot be 0.");
+        
+        final Num2D translated = getTranslated(origin);
+        
+        return A.getMatrixElement(matrix, translated, () -> null);
     }
     
     //</editor-fold>

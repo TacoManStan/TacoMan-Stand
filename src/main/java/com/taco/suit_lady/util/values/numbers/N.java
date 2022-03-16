@@ -21,6 +21,13 @@ public class N {
      */
     public static @NotNull Num2D num2D(@NotNull Point2D input) { return new Num2D(input.getX(), input.getY()); }
     
+    public static boolean equalsNum2D(@NotNull NumExpr2D<?> input, @NotNull Number a, @NotNull Number b, boolean exact) {
+        if (exact)
+            return input.aD() == a.doubleValue() && input.bD() == b.doubleValue();
+        else
+            return input.aI() == a.intValue() && input.bI() == b.intValue();
+    }
+    
     //<editor-fold desc="--- MATH ---">
     
     //<editor-fold desc="> Addition">

@@ -9,15 +9,25 @@ import com.taco.suit_lady.util.values.numbers.N;
 import com.taco.suit_lady.util.values.numbers.Num2D;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 
 public interface NumExpr2D<T extends NumExpr2D<T>>
         extends ValueExpr2D<Number, Number>, NumExpr<T> {
     
-    @NotNull T modify(Function<Number, Number> aFunction, Function<Number, Number> bFunction);
+    default @NotNull NumExpr2D<?> modify(Function<Number, Number> aFunction, Function<Number, Number> bFunction) {
+            return new Num2D(aFunction.apply(a()), bFunction.apply(b()));
+    }
     
     //<editor-fold desc="--- DEFAULT METHODS ---">
+    
+    //<editor-fold desc="--- EQUALITY METHODS ---">
+    
+    default boolean equalTo(@Nullable NumExpr2D<?> other) { return other != null && aI() == other.aI() && bI() == other.bI(); }
+    default boolean equalToExact(@Nullable NumExpr2D<?> other) { return other != null && aD() == other.aD() && bD() == other.bD(); }
+    
+    //</editor-fold>
     
     //<editor-fold desc="> Converter Methods">
     
@@ -34,10 +44,10 @@ public interface NumExpr2D<T extends NumExpr2D<T>>
     
     //<editor-fold desc="> Modify Methods">
     
-    default T modify(@NotNull CardinalDirection direction) { return modify(direction, 1, 1); }
-    default T modify(@NotNull CardinalDirection direction, @NotNull Number magnitude) { return modify(direction, magnitude, magnitude); }
-    default T modify(@NotNull CardinalDirection direction, @NotNull NumExpr2D<?> magnitude) { return modify(direction, magnitude.a(), magnitude.b()); }
-    default T modify(@NotNull CardinalDirection direction, @NotNull Number xMagnitude, @NotNull Number yMagnitude) {
+    default NumExpr2D<?> modify(@NotNull CardinalDirection direction) { return modify(direction, 1, 1); }
+    default NumExpr2D<?> modify(@NotNull CardinalDirection direction, @NotNull Number magnitude) { return modify(direction, magnitude, magnitude); }
+    default NumExpr2D<?> modify(@NotNull CardinalDirection direction, @NotNull NumExpr2D<?> magnitude) { return modify(direction, magnitude.a(), magnitude.b()); }
+    default NumExpr2D<?> modify(@NotNull CardinalDirection direction, @NotNull Number xMagnitude, @NotNull Number yMagnitude) {
         return modify(numA -> numA.doubleValue() + (direction.xMod() * xMagnitude.doubleValue()),
                       numB -> numB.doubleValue() + (direction.yMod() * yMagnitude.doubleValue()));
     }
@@ -51,23 +61,23 @@ public interface NumExpr2D<T extends NumExpr2D<T>>
     
     //
     
-    default @NotNull T applyEach(@NotNull Number aModifier, @NotNull Number bModifier,
+    default @NotNull NumExpr2D<?> applyEach(@NotNull Number aModifier, @NotNull Number bModifier,
                                  @NotNull OpType aOpType, @NotNull OpType bOpType,
                                  @NotNull OpResultType resultType) {
         return modify(numA -> aOpType.apply(a(), aModifier, resultType),
                       numB -> bOpType.apply(b(), bModifier, resultType));
     }
     
-    default @NotNull T applyEach(@NotNull Number aModifier, @NotNull Number bModifier, @NotNull OpType aOpType, @NotNull OpType bOpType) {
+    default @NotNull NumExpr2D<?> applyEach(@NotNull Number aModifier, @NotNull Number bModifier, @NotNull OpType aOpType, @NotNull OpType bOpType) {
         return applyEach(aModifier, bModifier, aOpType, bOpType, OpResultType.EXACT);
     }
-    default @NotNull T applyEach(@NotNull Number aModifier, @NotNull Number bModifier, @NotNull OpType opType, @NotNull OpResultType resultType) {
+    default @NotNull NumExpr2D<?> applyEach(@NotNull Number aModifier, @NotNull Number bModifier, @NotNull OpType opType, @NotNull OpResultType resultType) {
         return applyEach(aModifier, bModifier, opType, opType, resultType);
     }
-    default @NotNull T applyEach(@NotNull Number aModifier, @NotNull Number bModifier, @NotNull OpType opType) {
+    default @NotNull NumExpr2D<?> applyEach(@NotNull Number aModifier, @NotNull Number bModifier, @NotNull OpType opType) {
         return applyEach(aModifier, bModifier, opType, opType);
     }
-    default @NotNull T applyEach(@NotNull Number aModifier, @NotNull Number bModifier) {
+    default @NotNull NumExpr2D<?> applyEach(@NotNull Number aModifier, @NotNull Number bModifier) {
         return applyEach(aModifier, bModifier, OpType.ADD);
     }
     
@@ -75,11 +85,11 @@ public interface NumExpr2D<T extends NumExpr2D<T>>
     
     //<editor-fold desc="> Copy Methods">
     
-    default @NotNull T copyOf(@NotNull Number x, @NotNull Number y) { return modify(numX -> x, numY -> y); }
+    default @NotNull NumExpr2D<?> copyOf(@NotNull Number x, @NotNull Number y) { return modify(numX -> x, numY -> y); }
     
-    default @NotNull T copyOf(@NotNull NumExpr2D<?> point) { return copyOf(point.a(), point.b()); }
-    default @NotNull T copyOf(@NotNull Point2D point) { return copyOf(point.getX(), point.getY()); }
-    default @NotNull T copyOf() { return copyOf(a(), b()); }
+    default @NotNull NumExpr2D<?> copyOf(@NotNull NumExpr2D<?> point) { return copyOf(point.a(), point.b()); }
+    default @NotNull NumExpr2D<?> copyOf(@NotNull Point2D point) { return copyOf(point.getX(), point.getY()); }
+    default @NotNull NumExpr2D<?> copyOf() { return copyOf(a(), b()); }
     
     //</editor-fold>
     
@@ -95,17 +105,17 @@ public interface NumExpr2D<T extends NumExpr2D<T>>
     
     //<editor-fold desc=">> Interpolation Methods">
     
-    default @NotNull T interpolate(@NotNull Point2D other, @NotNull Number percentage) { return copyOf(Calc.interpolate(asPoint(), other, percentage)); }
-    default @NotNull T interpolate(@NotNull Number oX, @NotNull Number oY, @NotNull Number percentage) { return copyOf(Calc.interpolate(a(), b(), oX, oY, percentage)); }
-    default @NotNull T interpolate(@NotNull NumExpr2D<?> other, @NotNull Number percentage) { return copyOf(Calc.interpolate(this, other, percentage)); }
+    default @NotNull NumExpr2D<?> interpolate(@NotNull Point2D other, @NotNull Number percentage) { return copyOf(Calc.interpolate(asPoint(), other, percentage)); }
+    default @NotNull NumExpr2D<?> interpolate(@NotNull Number oX, @NotNull Number oY, @NotNull Number percentage) { return copyOf(Calc.interpolate(a(), b(), oX, oY, percentage)); }
+    default @NotNull NumExpr2D<?> interpolate(@NotNull NumExpr2D<?> other, @NotNull Number percentage) { return copyOf(Calc.interpolate(this, other, percentage)); }
     
     //
     
-    default @NotNull T interpolateTowards(@NotNull Point2D other, @NotNull Number distance) { return copyOf(Calc.interpolateTowards(asPoint(), other, distance)); }
-    default @NotNull T interpolateTowards(@NotNull Number oX, @NotNull Number oY, @NotNull Number distance) { return copyOf(Calc.interpolateTowards(a(), b(), oX, oY, distance)); }
-    default @NotNull T interpolateTowards(@NotNull NumExpr2D<?> other, @NotNull Number distance) { return copyOf(Calc.interpolateTowards(this, other, distance)); }
+    default @NotNull NumExpr2D<?> interpolateTowards(@NotNull Point2D other, @NotNull Number distance) { return copyOf(Calc.interpolateTowards(asPoint(), other, distance)); }
+    default @NotNull NumExpr2D<?> interpolateTowards(@NotNull Number oX, @NotNull Number oY, @NotNull Number distance) { return copyOf(Calc.interpolateTowards(a(), b(), oX, oY, distance)); }
+    default @NotNull NumExpr2D<?> interpolateTowards(@NotNull NumExpr2D<?> other, @NotNull Number distance) { return copyOf(Calc.interpolateTowards(this, other, distance)); }
     
-    default @NotNull T interpolateTowards(@NotNull Number angle, @NotNull Number distance) { return copyOf(Calc.interpolateTowards(this, angle, distance)); }
+    default @NotNull NumExpr2D<?> interpolateTowards(@NotNull Number angle, @NotNull Number distance) { return copyOf(Calc.interpolateTowards(this, angle, distance)); }
     
     //</editor-fold>
     

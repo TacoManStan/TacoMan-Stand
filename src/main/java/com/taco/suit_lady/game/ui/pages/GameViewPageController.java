@@ -4,6 +4,10 @@ import com.taco.suit_lady.game.objects.tiles.GameTile;
 import com.taco.suit_lady.game.GameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.ui.UIPageController;
+import com.taco.suit_lady.util.values.formulas.pathfinding.AStarNode;
+import com.taco.suit_lady.util.values.formulas.pathfinding.AStarPathfinder;
+import com.taco.suit_lady.util.values.formulas.pathfinding.DummyElement;
+import com.taco.suit_lady.util.values.formulas.pathfinding.PathfindingTest;
 import com.taco.tacository.json.JFiles;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -123,7 +127,12 @@ public class GameViewPageController extends UIPageController<GameViewPage>
         }));
         testButton7.setText("Model Definition Save Test");
         
-        testButton8.setOnAction(event -> { });
+        testButton8.setOnAction(event -> {
+            final AStarPathfinder<DummyElement> pathfinder = PathfindingTest.newPathfinder();
+            final List<AStarNode<DummyElement>> path = PathfindingTest.aStar(pathfinder);
+            getGameMap().setTestImage(pathfinder.generateDefaultImage(path, 30));
+        });
+        testButton8.setText("A* Pathfinding Test");
     }
     
     //</editor-fold>

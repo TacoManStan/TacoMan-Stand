@@ -1099,24 +1099,32 @@ public class FX {
     
     //<editor-fold desc=">> Speciality Image Generation">
     
-    public static <T> @NotNull Image generateTiledImage(int tileSize, @NotNull T[] @NotNull [] sourceMatrix, @NotNull Function<T, Image> factory) {
+    public static @NotNull WritableImage writable(@NotNull Image input, boolean forceCopy) {
+        return (input instanceof WritableImage writableInput) && !forceCopy
+               ? writableInput
+               : new WritableImage(input.getPixelReader(), (int) input.getWidth(), (int) input.getHeight());
+    }
+    public static @NotNull WritableImage writable(@NotNull Image input) { return writable(input, false); }
+    
+    public static <T> @NotNull WritableImage generateTiledImage(@NotNull Number tileSize, @NotNull T @NotNull [] @NotNull [] sourceMatrix, @NotNull Function<T, Image> factory, @NotNull Number borderThickness) {
         if (sourceMatrix.length == 0)
             throw Exc.ex("Source matrix width must be greater than 0.");
         else if (sourceMatrix[0].length == 0)
             throw Exc.ex("Source matrix height must be greater than 0.");
         
-        final WritableImage aggregateImage = new WritableImage(tileSize * sourceMatrix.length, tileSize * sourceMatrix[0].length);
+        final WritableImage aggregateImage = new WritableImage(tileSize.intValue() * sourceMatrix.length, tileSize.intValue() * sourceMatrix[0].length);
         
         A.iterateMatrix((dimensions, tile) -> {
             final T t = sourceMatrix[dimensions.aI()][dimensions.bI()];
             if (t != null) {
-                final Image image = factory.apply(t);
-                if (image != null)
+                final WritableImage image = writable(generateBorderOn(factory.apply(t), borderThickness));
+                if (image != null) {
                     aggregateImage.getPixelWriter().setPixels(
-                            tileSize * dimensions.aI(), tileSize * dimensions.bI(),
-                            tileSize, tileSize,
+                            tileSize.intValue() * dimensions.aI(), tileSize.intValue() * dimensions.bI(),
+                            tileSize.intValue(), tileSize.intValue(),
                             image.getPixelReader(),
                             0, 0);
+                }
             }
             return null;
         }, sourceMatrix);
@@ -1124,10 +1132,23 @@ public class FX {
         return aggregateImage;
     }
     
-    public static @NotNull Image generateCompositeImage(int width, int height, @NotNull Image... images) {
-        final WritableImage compositeImage = new WritableImage(width, height);
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
+    public static <T> @NotNull Image generateTiledImage(@NotNull Number tileSize, @NotNull T[] @NotNull [] sourceMatrix, @NotNull Function<T, Image> factory) {
+        return generateTiledImage(tileSize, sourceMatrix, factory, 0);
+    }
+    
+    public static @NotNull WritableImage generateFilledImage(@NotNull Number width, @NotNull Number height, @NotNull Color color) {
+        final WritableImage image = new WritableImage(width.intValue(), height.intValue());
+        for (int i = 0; i < width.intValue(); i++)
+            for (int j = 0; j < height.intValue(); j++)
+                image.getPixelWriter().setColor(i, j, color);
+        return image;
+    }
+    public static @NotNull WritableImage generateFilledImage(@NotNull Number tileDim, @NotNull Color color) { return generateFilledImage(tileDim, tileDim, color); }
+    
+    public static @NotNull WritableImage generateCompositeImage(@NotNull Number width, @NotNull Number height, @NotNull Image... images) {
+        final WritableImage compositeImage = new WritableImage(width.intValue(), height.intValue());
+        for (int i = 0; i < width.intValue(); i++) {
+            for (int j = 0; j < height.intValue(); j++) {
                 Color color = null;
                 for (int q = 0; q < images.length; q++) {
                     color = blendPixels(color, images[q].getPixelReader().getColor(i, j));
@@ -1138,23 +1159,67 @@ public class FX {
         return compositeImage;
     }
     
-    public static @NotNull Image generateSelectionBorder(int width, int height, int thickness, @Nullable BiFunction<Integer, Integer, Color> pixelColorFactory) {
-        pixelColorFactory = pixelColorFactory != null ? pixelColorFactory : (integer, integer2) -> Color.DIMGRAY;
-        final WritableImage borderImage = new WritableImage(width, height);
+    //<editor-fold desc=">>> Image Generation: Borders">
+    
+    private static final int BORDER_THICKNESS_FALLBACK = 1;
+    private static final Color BORDER_COLOR_FALLBACK = Color.DIMGRAY;
+    
+    public static @NotNull WritableImage generateBorderImage(@NotNull Number width, @NotNull Number height, @NotNull Number thickness, @Nullable BiFunction<Integer, Integer, Color> pixelColorFactory) {
+        return generateBorderOn(new WritableImage(width.intValue(), height.intValue()), thickness, pixelColorFactory);
+    }
+    
+    public static @NotNull WritableImage generateBorderImage(@NotNull Number width, @NotNull Number height, @NotNull Number thickness, @Nullable Color borderColor) {
+        return generateBorderImage(width, height, thickness, (x, y) -> borderColor);
+    }
+    public static @NotNull WritableImage generateBorderImage(@NotNull Number width, @NotNull Number height, @NotNull Number thickness) { return generateBorderImage(width, height, thickness, borderColor()); }
+    public static @NotNull WritableImage generateBorderImage(@NotNull Number width, @NotNull Number height, @Nullable Color borderColor) { return generateBorderImage(width, height, BORDER_THICKNESS_FALLBACK, borderColor); }
+    public static @NotNull WritableImage generateBorderImage(@NotNull Number width, @NotNull Number height) { return generateBorderImage(width, height, BORDER_THICKNESS_FALLBACK, borderColor()); }
+    
+    
+    public static @NotNull WritableImage generateBorderImage(@NotNull NumExpr2D<?> dimensions, @NotNull Number thickness, @Nullable BiFunction<Integer, Integer, Color> pixelColorFactory) {
+        return generateBorderOn(new WritableImage(dimensions.aI(), dimensions.bI()), thickness, pixelColorFactory);
+    }
+    
+    public static @NotNull WritableImage generateBorderImage(@NotNull NumExpr2D<?> dimensions, @NotNull Number thickness, @Nullable Color borderColor) {
+        return generateBorderImage(dimensions, thickness, (x, y) -> borderColor);
+    }
+    public static @NotNull WritableImage generateBorderImage(@NotNull NumExpr2D<?> dimensions, @NotNull Number thickness) { return generateBorderImage(dimensions, thickness, borderColor()); }
+    public static @NotNull WritableImage generateBorderImage(@NotNull NumExpr2D<?> dimensions, @Nullable Color borderColor) { return generateBorderImage(dimensions, BORDER_THICKNESS_FALLBACK, borderColor); }
+    public static @NotNull WritableImage generateBorderImage(@NotNull NumExpr2D<?> dimensions) { return generateBorderImage(dimensions, BORDER_THICKNESS_FALLBACK, borderColor()); }
+    
+    //
+    
+    public static @NotNull WritableImage generateBorderOn(@NotNull Image image, @NotNull Number thickness, @Nullable BiFunction<Integer, Integer, Color> pixelColorFactory) {
+        if (thickness.intValue() == 0)
+            return writable(image);
+        
+        pixelColorFactory = pixelColorFactory != null ? pixelColorFactory : (integer, integer2) -> borderColor();
+        final WritableImage writeableImage = writable(image);
+        final int width = (int) writeableImage.getWidth();
+        final int height = (int) writeableImage.getHeight();
+//        System.out.println("Generating Borders w/ Dimensions " + new Num2D(width, height) + " and a thickness of " + thickness);
         for (int x = 0; x < width; x++) {
-            for (int t = 0; t < thickness; t++) {
-                borderImage.getPixelWriter().setColor(x, t, pixelColorFactory.apply(x, 0));
-                borderImage.getPixelWriter().setColor(x, height - (t + 1), pixelColorFactory.apply(x, height - 1));
+            for (int t = 0; t < thickness.intValue(); t++) {
+//                System.out.println("Setting Pixel Color " + new Num2D(x, t) + "  w/ Color: " + pixelColorFactory.apply(x, 0));
+                writeableImage.getPixelWriter().setColor(x, t, pixelColorFactory.apply(x, 0));
+                writeableImage.getPixelWriter().setColor(x, height - (t + 1), pixelColorFactory.apply(x, height - 1));
             }
         }
         for (int y = 0; y < height; y++) {
-            for (int t = 0; t < thickness; t++) {
-                borderImage.getPixelWriter().setColor(t, y, pixelColorFactory.apply(0, y));
-                borderImage.getPixelWriter().setColor(width - (t + 1), y, pixelColorFactory.apply(width - 1, y));
+            for (int t = 0; t < thickness.intValue(); t++) {
+                writeableImage.getPixelWriter().setColor(t, y, pixelColorFactory.apply(0, y));
+                writeableImage.getPixelWriter().setColor(width - (t + 1), y, pixelColorFactory.apply(width - 1, y));
             }
         }
-        return borderImage;
+        return writeableImage;
     }
+    
+    public static @NotNull WritableImage generateBorderOn(@NotNull Image image, @NotNull Number thickness, @Nullable Color borderColor) { return generateBorderOn(image, thickness, (x, y) -> borderColor(borderColor)); }
+    public static @NotNull WritableImage generateBorderOn(@NotNull Image image, @NotNull Number thickness) { return generateBorderOn(image, thickness, borderColor()); }
+    public static @NotNull WritableImage generateBorderOn(@NotNull Image image, @Nullable Color borderColor) { return generateBorderOn(image, BORDER_THICKNESS_FALLBACK, borderColor); }
+    public static @NotNull WritableImage generateBorderOn(@NotNull Image image) { return generateBorderOn(image, BORDER_THICKNESS_FALLBACK, borderColor()); }
+    
+    //</editor-fold>
     
     //</editor-fold>
     
@@ -1186,6 +1251,11 @@ public class FX {
             return new Color(rOut / 255D, gOut / 255D, bOut / 255D, aOut / 255D);
         }
     }
+    
+    //
+    
+    private static @NotNull Color borderColor(@Nullable Color color) { return color != null ? color : BORDER_COLOR_FALLBACK; }
+    private static @NotNull Color borderColor() { return borderColor(null); }
     
     //</editor-fold>
     
