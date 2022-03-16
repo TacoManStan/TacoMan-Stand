@@ -47,13 +47,6 @@ public class LogiCore
     
     private final ReadOnlyObjectWrapper<GameViewContent> gameProperty;
     
-    //
-    
-    //    private final ThreadPoolExecutor sequentialExecutor; // TODO - Implement both asynchronous and synchronous executor options
-    //    private final ScheduledThreadPoolExecutor scheduledExecutor;
-    
-    //
-    
     private final ScheduledThreadPoolExecutor gameLoopExecutor;
     private final ListProperty<Tickable<?>> tickables; //Absolutely NO blocking calls to FX thread can be made here. None.
     private ArrayList<Tickable<?>> tickablesCopy;
@@ -214,20 +207,12 @@ public class LogiCore
                     else {
                         tickable.taskManager().execute();
                         FX.runFX(() -> tickable.taskManager().executeGfx());
-                        //                        if (tickable instanceof GFXObject gfxObject)
-                        //                            gfxObjects.add(gfxObject);
                     }
                 }))
                     return;
             });
             toRemove.forEach(tickables::remove);
-            //        checkSpringClosure(() -> TasksSL.sync(gfxLock, () -> ToolsFX.runFX(() -> gfxObjects.forEach(GFXObject::execute))));
         });
-        //        tickableCopy.forEach(tickable -> ToolsFX.runFX(() -> tickable.taskManager().executeGfx()));
-        //        TasksSL.sync(gfxLock, () -> {
-        //            //                ToolsFX.runFX(() -> gfxObjects.forEach(GFXObject::execute));
-        //            gfxObjects.forEach(gfxObject -> ToolsFX.runFX(gfxObject::update));
-        //        });
         toRemove.forEach(this::shutdown);
         
     }
@@ -251,8 +236,6 @@ public class LogiCore
     private void shutdown() {
         Printer.err("Shutting Down LogiCore");
         gameLoopExecutor.shutdown();
-        //        sequentialExecutor.shutdown();
-        //        scheduledExecutor.shutdown();
     }
     
     @Contract("_ -> param1") private @NotNull Tickable<?> shutdown(@NotNull Tickable<?> tickable) {
@@ -284,9 +267,6 @@ public class LogiCore
     @Override public @Nullable Lock getLock() {
         return gameProperty.get() != null ? gameProperty.get().getLock() : null;
     }
-    
-    
-    //    @Override public boolean isNullableLock() { return true; }
     
     //</editor-fold>
     
