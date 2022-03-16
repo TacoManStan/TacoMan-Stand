@@ -390,18 +390,74 @@ public class N {
     
     //
     
+    /**
+     * <p>Returns the {@link ObservableValue#getValue() value} of the specified {@link ObservableValue} as a primitive {@link Integer}.</p>
+     * <blockquote><p><i>See {@link #of(ObservableValue, Supplier)} for details.</i></p></blockquote>
+     */
     public static int iOf(@Nullable ObservableValue<? extends Number> observableValue, @Nullable Supplier<Number> fallbackSupplier) { return of(observableValue, fallbackSupplier).intValue(); }
+    
+    /**
+     * <p>Returns the {@link ObservableValue#getValue() value} of the specified {@link ObservableValue} as a primitive {@link Integer} with no {@link Supplier Fallback Supplier} provided.</p>
+     * <blockquote><p><i>See {@link #of(ObservableValue)} for details.</i></p></blockquote>
+     */
     public static int iOf(@Nullable ObservableValue<? extends Number> observableValue) { return iOf(observableValue, null); }
     
+    /**
+     * <p>Returns the {@link ObservableValue#getValue() value} of the specified {@link ObservableValue} as a primitive {@link Long}.</p>
+     * <blockquote><p><i>See {@link #of(ObservableValue, Supplier)} for details.</i></p></blockquote>
+     */
     public static long lOf(@Nullable ObservableValue<? extends Number> observableValue, @Nullable Supplier<Number> fallbackSupplier) { return of(observableValue, fallbackSupplier).longValue(); }
+    
+    /**
+     * <p>Returns the {@link ObservableValue#getValue() value} of the specified {@link ObservableValue} as a primitive {@link Long} with no {@link Supplier Fallback Supplier} provided.</p>
+     * <blockquote><p><i>See {@link #of(ObservableValue)} for details.</i></p></blockquote>
+     */
     public static long lOf(@Nullable ObservableValue<? extends Number> observableValue) { return lOf(observableValue, null); }
     
+    /**
+     * <p>Returns the {@link ObservableValue#getValue() value} of the specified {@link ObservableValue} as a primitive {@link Float}.</p>
+     * <blockquote><p><i>See {@link #of(ObservableValue, Supplier)} for details.</i></p></blockquote>
+     */
     public static float fOf(@Nullable ObservableValue<? extends Number> observableValue, @Nullable Supplier<Number> fallbackSupplier) { return of(observableValue, fallbackSupplier).floatValue(); }
+    
+    /**
+     * <p>Returns the {@link ObservableValue#getValue() value} of the specified {@link ObservableValue} as a primitive {@link Float} with no {@link Supplier Fallback Supplier} provided.</p>
+     * <blockquote><p><i>See {@link #of(ObservableValue)} for details.</i></p></blockquote>
+     */
     public static float fOf(@Nullable ObservableValue<? extends Number> observableValue) { return fOf(observableValue, null); }
     
+    /**
+     * <p>Returns the {@link ObservableValue#getValue() value} of the specified {@link ObservableValue} as a primitive {@link Double}.</p>
+     * <blockquote><p><i>See {@link #of(ObservableValue, Supplier)} for details.</i></p></blockquote>
+     */
     public static double dOf(@Nullable ObservableValue<? extends Number> observableValue, @Nullable Supplier<Number> fallbackSupplier) { return of(observableValue, fallbackSupplier).doubleValue(); }
+    
+    /**
+     * <p>Returns the {@link ObservableValue#getValue() value} of the specified {@link ObservableValue} as a primitive {@link Double} with no {@link Supplier Fallback Supplier} provided.</p>
+     * <blockquote><p><i>See {@link #of(ObservableValue)} for details.</i></p></blockquote>
+     */
     public static double dOf(@Nullable ObservableValue<? extends Number> observableValue) { return dOf(observableValue, null); }
     
+    
+    /**
+     * <p>Returns the {@link ObservableValue#getValue() value} of the specified {@link ObservableValue} as a {@link Number} object.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>
+     *         If the specified {@link ObservableValue} or the {@link ObservableValue#getValue() value} it contains is {@code null} and the specified {@link Supplier Fallback Supplier} is {@code non-null},
+     *         return the {@link Supplier#get() Fallback Value}.
+     *     </li>
+     *     <li>
+     *         If the specified {@link ObservableValue} or the {@link ObservableValue#getValue() value} it contains is {@code null} and the specified {@link Supplier Fallback Supplier} is also {@code null},
+     *         return {@code 0}.
+     *     </li>
+     * </ol>
+     *
+     * @param observableValue  The {@link ObservableValue} instance containing the {@link ObservableValue#getValue() value} to be {@code returned}.
+     * @param fallbackSupplier The {@link Supplier} used to provide a {@code return value} if the specified {@link ObservableValue} or the {@link ObservableValue#getValue() value} it contains is {@code null}.
+     *
+     * @return The {@link ObservableValue#getValue() value} of the specified {@link ObservableValue} as a {@link Number} object.
+     */
     public static @NotNull Number of(@Nullable ObservableValue<? extends Number> observableValue, @Nullable Supplier<? extends Number> fallbackSupplier) {
         if (observableValue != null) {
             final Number value = observableValue.getValue();
@@ -415,6 +471,15 @@ public class N {
         
         return 0;
     }
+    
+    /**
+     * <p>Returns the {@link ObservableValue#getValue() value} of the specified {@link ObservableValue} as a {@link Number} object with no {@link Supplier Fallback Supplier} provided.</p>
+     * <blockquote><p><i>See {@link #of(ObservableValue, Supplier)} for details.</i></p></blockquote>
+     *
+     * @param observableValue The {@link ObservableValue} instance containing the {@link ObservableValue#getValue() value} to be {@code returned}.
+     *
+     * @return The {@link ObservableValue#getValue() value} of the specified {@link ObservableValue} as a {@link Number} object with no {@link Supplier Fallback Supplier} provided.
+     */
     public static @NotNull Number of(@Nullable ObservableValue<? extends Number> observableValue) { return of(observableValue, null); }
     
     //</editor-fold>
