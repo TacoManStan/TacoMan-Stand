@@ -57,7 +57,7 @@ import java.util.function.Predicate;
  *     <li>
  *         Configure the {@link #readOnlyNodeFactoryProperty() Node Factory} for this {@link AStarPathfinder} using any of the following:
  *         <ol>
- *             <li>Use any of the simplified {@link Pathfinding#newNodeFactory(Function) Factory Methods} located in the static {@link Pathfinding} utility class.</li>
+ *             <li>Use any of the simplified {@link Pathfinding#factory(Function) Factory Methods} located in the static {@link Pathfinding} utility class.</li>
  *             <li>
  *                 Define a fully-custom {@link #readOnlyNodeFactoryProperty() Node Factory Function} to construct a new {@link AStarNode} instance for each {@link T Raw Tile}.<br>
  *                 The {@link AStarNode} object constructed by the {@link #readOnlyNodeFactoryProperty() Node Factory} must provide {@code definitions} for the following {@code methods}:
@@ -89,7 +89,7 @@ import java.util.function.Predicate;
  *                         <ul>
  *                             <li><i>In all but every case, the default implementation of {@link AStarNode#matrixIndex()} is sufficient.</i></li>
  *                             <li><i>If {@link AStarNode#matrixIndex()} is overwritten, the {@link Num2D value} it returns must match the actual {@code matrix index} of the {@link AStarNode} for this {@link AStarPathfinder} to function properly.</i></li>
- *                             <li><i>If the {@link Pathfinding#newNodeFactory(Function) Factory Method} or {@link AStarNode} implementation does not define a default implementation for {@link AStarNode#matrixIndex()}, the {@link Num2D Matrix Index} parameter of the {@link #readOnlyNodeFactoryProperty() Node Factory} should be used to ensure index synchronization, consistency, and ease of use.</i></li>
+ *                             <li><i>If the {@link Pathfinding#factory(Function) Factory Method} or {@link AStarNode} implementation does not define a default implementation for {@link AStarNode#matrixIndex()}, the {@link Num2D Matrix Index} parameter of the {@link #readOnlyNodeFactoryProperty() Node Factory} should be used to ensure index synchronization, consistency, and ease of use.</i></li>
  *                         </ul>
  *                     </li>
  *                 </ol>

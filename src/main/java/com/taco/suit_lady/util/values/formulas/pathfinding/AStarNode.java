@@ -1,5 +1,6 @@
 package com.taco.suit_lady.util.values.formulas.pathfinding;
 
+import com.taco.suit_lady.util.tools.Obj;
 import com.taco.suit_lady.util.tools.Props;
 import com.taco.suit_lady.util.values.numbers.Num2D;
 import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
@@ -10,6 +11,31 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+/**
+ * <p>An {@code abstract} class used by {@link AStarPathfinder} to define and construct a {@link AStarPathfinder#aStar() traversable} {@link AStarPathfinder#readOnlyMapMatrixProperty() Node Map} representation of a specified {@code matrix} of type <{@link T}>.</p>
+ * <p><b>Details</b></p>
+ * <ol>
+ *     <li>{@link AStarNode} instances are constructed by a {@link AStarPathfinder#readOnlyNodeFactoryProperty() Node Factory} within an {@link AStarPathfinder} instance.</li>
+ *     <li>The primary purpose of an {@link AStarNode} is to wrap and process an object of type <{@link T}> into an object that is readable by an {@link AStarPathfinder}.</li>
+ *     <li>
+ *         To customize the {@code heuristic} function used to calculate the {@code pathing cost} between two {@link AStarNode} objects, overwrite the default implementation of {@link #hCost()}.
+ *         <ul>
+ *             <li><i>The default {@code heuristic} function is defined as the {@link #distance(NumExpr2D) distance} between the calling {@link AStarNode} and the {@link AStarPathfinder#readOnlyGoalIndexProperty() Goal Index} of the {@link #pathfinder() Pathfinder} object for this {@link AStarNode}.</i></li>
+ *         </ul>
+ *     </li>
+ *     <li>
+ *         To customize the {@code cost} function used to calculate the cost of crossing the {@code edge} between this {@link AStarNode} and one of its {@link #pathableNeighbors() neighbors}, overwrite the default implementation of {@link #edgeCost(AStarNode)}.
+ *         <ul>
+ *             <li><i>The default {@code cost} function is defined as the {@link #distance(NumExpr2D) distance} between the calling {@link AStarNode} and the specified {@link AStarNode} {@code parameter}.</i></li>
+ *             <li><i>In most cases, the value returned by {@link #hCost()} should follow the same logic pattern as {@link #edgeCost(AStarNode)}.</i></li>
+ *             <li><i>Typically, unless the {@link AStarPathfinder#readOnlyMapMatrixProperty() Map Matrix} defined by the {@link AStarPathfinder} containing this {@link AStarNode} uses {@code orientation-dependent pathing data}, both {@link #hCost()} and {@link #edgeCost(AStarNode)} methods can be left as default.</i></li>
+ *         </ul>
+ *     </li>
+ *     <li>The {@link CachedAStarNode} implementation of {@link AStarNode} offers an internally-cached {@link #pathableNeighbors()} {@link List}, eliminating the need to repeatedly re-calculate the value for {@link #pathableNeighbors()}.</li>
+ * </ol>
+ *
+ * @param <T>
+ */
 public abstract class AStarNode<T>
         implements Comparable<AStarNode<T>>, NumExpr2D<AStarNode<T>> {
     
@@ -95,6 +121,11 @@ public abstract class AStarNode<T>
     final boolean isPathableFrom(@Nullable AStarNode<T> other) {
         return pathable() && (other == null || (other.pathable() && pathableFrom(other)));
     }
+    
+    //
+    
+    public final boolean isInMap(@Nullable AStarPathfinder<?> other) { return Obj.equalsExcludeNull(pathfinder(), other); }
+    public final boolean sharesMapWith(@Nullable AStarNode<?> other) { return other != null && Obj.equalsExcludeNull(pathfinder(), other.pathfinder()); }
     
     //</editor-fold>
     
