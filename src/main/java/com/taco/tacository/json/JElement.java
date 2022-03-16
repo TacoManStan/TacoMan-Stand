@@ -5,6 +5,8 @@ import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsonable;
 import javafx.scene.paint.Color;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.function.Function;
 
 /**
@@ -31,9 +33,29 @@ public interface JElement {
      * <p>Returns an {@link Object} that can be {@code processed} by the {@link JUtil JSON Framework}.</p>
      * <p><b>Details</b></p>
      * <ol>
-     *     <li>In most contexts, the {@link Object} returned by {@link #getJValue() this method} will be a {@link Jsonable} object, most commonly {@link JsonObject} or {@link JsonArray}.</li>
      *     <li>
-     *         In other contexts, the {@link Object} returned by {@link #getJValue() this method} can be processed by specifying a {@link Function Processor Function}, such as with the following static utility functions:
+     *         The following {@code Data Types} are permissible in {@code Basic Contexts}:
+     *         <ul>
+     *             <li>
+     *                 Most Implementations of {@link Number}:
+     *                 <ul>
+     *                     <li>{@link Integer}</li>
+     *                     <li>{@link Long}</li>
+     *                     <li>{@link Float}</li>
+     *                     <li>{@link Double}</li>
+     *                     <li>{@link BigInteger}</li>
+     *                     <li>{@link BigDecimal}</li>
+     *                 </ul>
+     *                 <p><i>Note that many {@link Number} variations not listed above are also permissible, but this is not guaranteed.</i></p>
+     *             </li>
+     *             <li>{@link Boolean}</li>
+     *             <li>{@link String}</li>
+     *         </ul>
+     *         <p><i>All of the {@code Data Types} listed above are saved as {@code Raw Values}.</i></p>
+     *     </li>
+     *     <li>In complex contexts, the {@link Object} returned by {@link #getJValue() this method} will be a {@link Jsonable} object, most commonly {@link JsonObject} or {@link JsonArray}.</li>
+     *     <li>
+     *         Alternatively, a complex {@link Object} returned by {@link #getJValue() this method} can be processed by specifying a {@link Function Processor Function}, such as with the following static utility functions:
      *         <ul>
      *             <li><i>{@link JUtil#createArray(String, Function, Object[])}</i></li>
      *             <li><i>{@link JUtil#createMatrix(String, Function, Object[][])}</i></li>
