@@ -1,6 +1,7 @@
 package com.taco.suit_lady.game.objects.tiles;
 
 import com.github.cliftonlabs.json_simple.JsonObject;
+import com.taco.suit_lady.game.Entity;
 import com.taco.suit_lady.game.GameComponent;
 import com.taco.suit_lady.game.GameMap;
 import com.taco.suit_lady.game.objects.GameObject;
@@ -31,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.locks.Lock;
 
 public class GameTile
-        implements SpringableWrapper, Lockable, GameComponent, MapObject, JObject, JLoadable, Collidable<GameTile> {
+        implements SpringableWrapper, Entity, MapObject, JObject, JLoadable, Collidable<GameTile> {
     
     private final GameMap owner;
     private TileModel model;
