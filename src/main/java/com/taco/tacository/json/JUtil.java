@@ -109,7 +109,7 @@ public final class JUtil {
         return loadObject(root, jLoadable.getJID(), jLoadable);
     }
     
-    private static int loadInt(Object o) {
+    public static int loadInt(Object o) {
         if (o instanceof BigInteger)
             return ((BigInteger) o).intValue();
         else if (o instanceof BigDecimal)

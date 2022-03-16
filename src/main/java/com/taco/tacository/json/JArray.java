@@ -12,7 +12,7 @@ public interface JArray<T> extends JElement {
     Object convertElement(T jArrayElement);
     
     @Override
-    default Object getJValue() {
+    default JsonArray getJValue() {
         final JsonArray jsonArray = new JsonArray();
         for (T t: jArrayElements())
             jsonArray.add(convertElement(t));
