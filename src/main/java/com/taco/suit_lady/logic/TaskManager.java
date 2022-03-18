@@ -26,7 +26,7 @@ import java.util.function.Supplier;
  * <p><b>How to Use</b></p>
  * <ol>
  *     <li>
- *         <b>Custom {@link GameTask} Object</b>
+ *         <b>Custom {@link GameTask} Objects</b>
  *         <ul>
  *             <li>Fully-custom {@link GameTask} implementations can be added or removed using the <i>{@link #addTask(GameTask)}</i> or <i>{@link #removeTask(GameTask)}</i> methods.</li>
  *             <li>The <i>{@link #addTaskAndGet(GameTask)}</i> and <i>{@link #removeTaskAndGet(GameTask)}</i> methods can be used to access the {@link GameTask} object itself.</li>
@@ -39,7 +39,7 @@ import java.util.function.Supplier;
  *             <li>Convenience {@link #execute(Runnable, Runnable, Supplier) Execute} methods can be used to easily configure a new {@link GameTask}.</li>
  *             <li>{@link GameTask} instances constructed by a {@link TaskManager} {@link #execute(Runnable, Runnable, Supplier) Execute} method are typically constructed as temporary {@link GameTask tasks}, oftentimes instances of {@link OneTimeTask}.</li>
  *             <li>
- *                 <b><i>{@link #execute(Runnable, Runnable, Supplier) Execution Method}</i> Examples:</b>
+ *                 <b>Examples:</b>
  *                 <ul>
  *                     <li>
  *                         <b>Persistent Execution: {@link #executeAndGet(Runnable, Runnable, Supplier) Execute and Get}</b>
