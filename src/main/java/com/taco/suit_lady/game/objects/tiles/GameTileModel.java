@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 
-public class TileModel
+public class GameTileModel
         implements SpringableWrapper, Lockable, GameComponent, JObject, JLoadable {
     
     private final GameTile owner;
@@ -45,7 +45,7 @@ public class TileModel
     private final ObjectBinding<Image> borderlessImageBinding;
     private final ObjectBinding<Image> textureOnlyImageBinding;
     
-    public TileModel(@NotNull GameTile owner) {
+    public GameTileModel(@NotNull GameTile owner) {
         this.owner = owner;
         
         this.manualRefreshProperty = new ReadOnlyIntegerWrapper(0);

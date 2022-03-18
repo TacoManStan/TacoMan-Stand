@@ -23,7 +23,7 @@ import java.io.Serializable;
 public class TileTerrainObject
         implements SpringableWrapper, Serializable, GameComponent, UIDProcessable, JObject, JLoadable {
     
-    private final TileModel owner;
+    private final GameTileModel owner;
     
     
     private final ObjectProperty<TileTerrainObjectID> idProperty;
@@ -32,7 +32,7 @@ public class TileTerrainObject
     private final StringBinding aggregateTextureIdBinding;
     private final ObjectBinding<Image> imageBinding;
     
-    public TileTerrainObject(@NotNull TileModel owner) {
+    public TileTerrainObject(@NotNull GameTileModel owner) {
         this.owner = owner;
         
         this.idProperty = new SimpleObjectProperty<>(TileTerrainObjectID.defaultInstance());
@@ -48,7 +48,7 @@ public class TileTerrainObject
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final @NotNull TileModel getOwner() { return owner; }
+    public final @NotNull GameTileModel getOwner() { return owner; }
     
     
     public final @NotNull ObjectProperty<TileTerrainObjectID> idProperty() { return idProperty; }

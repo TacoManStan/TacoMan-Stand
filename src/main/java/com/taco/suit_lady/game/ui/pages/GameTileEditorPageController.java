@@ -3,7 +3,7 @@ package com.taco.suit_lady.game.ui.pages;
 import com.taco.suit_lady.game.GameComponent;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.game.objects.tiles.GameTile;
-import com.taco.suit_lady.game.objects.tiles.TileModel;
+import com.taco.suit_lady.game.objects.tiles.GameTileModel;
 import com.taco.suit_lady.game.objects.tiles.TileTerrainObject;
 import com.taco.suit_lady.game.ui.pages.elements.GameTileContentElementController;
 import com.taco.suit_lady.game.ui.GameViewContent;
@@ -155,7 +155,7 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
         
         texturePreviewImageBinding = Bind.recursiveObjBinding(getLock(), tile -> {
             if (tile != null) {
-                final TileModel model = tile.getModel();
+                final GameTileModel model = tile.getModel();
                 if (model != null)
                     return model.textureOnlyImageBinding();
             }

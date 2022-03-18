@@ -5,14 +5,15 @@ import com.taco.suit_lady.game.Entity;
 import com.taco.suit_lady.game.GameComponent;
 import com.taco.suit_lady.game.GameMap;
 import com.taco.suit_lady.game.objects.GameObject;
+import com.taco.suit_lady.game.objects.GameObjectModel;
 import com.taco.suit_lady.game.objects.MapObject;
+import com.taco.suit_lady.game.objects.Mover;
 import com.taco.suit_lady.game.objects.collision.Collidable;
 import com.taco.suit_lady.game.objects.collision.CollisionArea;
 import com.taco.suit_lady.game.objects.collision.CollisionMap;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
-import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Props;
 import com.taco.suit_lady.util.values.numbers.Num2D;
@@ -31,11 +32,39 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.locks.Lock;
 
+/**
+ * <p>A {@link GameComponent} {@link Entity} defining a particular {@link GameTile} defined by a {@link #getLocation() Matrix Index} value contained within and managed by a {@link GameMap} instance.</p>
+ * <p><b>Occupying Game Objects</b></p>
+ * <ol>
+ *     <li>The {@link GameObject} instances currently occupying this {@link GameTile} are stored within the {@link #getOccupyingObjects() Occupying Objects} {@link ListProperty}.</li>
+ *     <li>
+ *         The values contained within the {@link #getOccupyingObjects() Occupying Objects} {@link ListProperty List} are automatically-updated when a {@link GameObject} instance is...
+ *         <ul>
+ *             <li><i>{@link GameMap#addGameObjects(GameObject...) added to} or {@link GameMap#removeGameObjects(GameObject...) removed from} a {@link GameMap},</i></li>
+ *             <li><i>{@link GameObject#mover() moved} from one {@link GameObject#locationBinding(boolean) location} to another,</i></li>
+ *             <li><i>or if any other relevant {@link GameObject}, {@link GameTile}, or {@link GameMap} property is changed.</i></li>
+ *         </ul>
+ *     </li>
+ *     <li>{@link GameObject Game Objects} are not added directly to {@link GameTile Game Tiles}, but rather to a {@link GameMap} which then manages the {@link #getOccupyingObjects() contents} of each {@link GameTile} accordingly.</li>
+ * </ol>
+ * <br>
+ * <p><b>Graphics</b></p>
+ * <ol>
+ *     <li>{@link GameTile} {@code graphics data} is, <u>loaded</u>, <u>processed</u>, <u>stored</u>, and <u>displayed</u> by the {@link GameTileModel} instance assigned to this {@link GameTile}.</li>
+ * </ol>
+ * <p><i>See {@link GameTileModel} for additional information.</i></p>
+ * <br>
+ * <p><b>Collision Handling</b></p>
+ * <ol>
+ *     <li>Unlike with cases such as seen with {@link GameObject}, the {@link GameTile} {@link #collisionMap() Collision Map} is used primarily to detect the {@link #getOccupyingObjects() Occupying Objects} for each {@link GameTile}.</li>
+ *     <li>i.e., {@code Collision Data} for a {@link GameTile} is <i>not</i> used in {@link Mover movement} {@link Mover#collisionMap() collision detection}.</li>
+ * </ol>
+ */
 public class GameTile
         implements SpringableWrapper, Entity, MapObject, Collidable<GameTile>, JObject, JLoadable {
     
     private final GameMap owner;
-    private TileModel model;
+    private GameTileModel model;
     private final CollisionMap<GameTile> collisionMap;
     
     private final ReadOnlyIntegerWrapper xTileLocationProperty;
@@ -67,7 +96,7 @@ public class GameTile
         this.occupyingObjects = new SimpleListProperty<>(FXCollections.observableArrayList());
         
         
-        this.model = new TileModel(this);
+        this.model = new GameTileModel(this);
     }
     
     private Box collisionBox;
@@ -98,12 +127,11 @@ public class GameTile
     public final int getTileLocationY() { return yTileLocationProperty.get(); }
     
     
-    
     public final @NotNull GameMap getOwner() { return owner; }
     public final ListProperty<GameObject> getOccupyingObjects() { return occupyingObjects; }
     
-    public final TileModel getModel() { return model; }
-    private void setModel(@NotNull TileModel model) { this.model = model; }
+    public final GameTileModel getModel() { return model; }
+    private void setModel(@NotNull GameTileModel model) { this.model = model; }
     
     //</editor-fold>
     
@@ -131,7 +159,7 @@ public class GameTile
     
     @Override public String getJID() { return "map-tile"; }
     @Override public void load(JsonObject parent) {
-        setModel(JUtil.loadObject(parent, new TileModel(this)));
+        setModel(JUtil.loadObject(parent, new GameTileModel(this)));
         setTileLocationX(JUtil.loadInt(parent, "x-loc"));
         setTileLocationY(JUtil.loadInt(parent, "y-loc"));
     }

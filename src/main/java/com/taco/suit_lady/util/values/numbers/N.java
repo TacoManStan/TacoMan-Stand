@@ -12,6 +12,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.function.Supplier;
 
+/**
+ * <p>A static utility class containing methods for working with {@link Number Numbers} and {@link NumExpr2D 2D Number Expressions} (e.g., {@link Num2D}).</p>
+ */
+//To-EXPAND
 public class N {
     private N() { } //No Instance
     
