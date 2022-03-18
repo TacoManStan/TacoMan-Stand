@@ -1,6 +1,8 @@
 package com.taco.suit_lady.logic;
 
+import com.taco.suit_lady.game.GameComponent;
 import com.taco.suit_lady.game.ui.GFXObject;
+import com.taco.suit_lady.logic.triggers.Galaxy;
 import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
@@ -19,6 +21,68 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+/**
+ * <p>The primary component used in {@link Tickable} implementations.</p>
+ * <p><b>How to Use</b></p>
+ * <ol>
+ *     <li>
+ *         <b>Custom {@link GameTask} Object</b>
+ *         <ul>
+ *             <li>Fully-custom {@link GameTask} implementations can be added or removed using the <i>{@link #addTask(GameTask)}</i> or <i>{@link #removeTask(GameTask)}</i> methods.</li>
+ *             <li>The <i>{@link #addTaskAndGet(GameTask)}</i> and <i>{@link #removeTaskAndGet(GameTask)}</i> methods can be used to access the {@link GameTask} object itself.</li>
+ *             <li>New {@link GameTask} instances can be constructed using either a {@link Galaxy} {@link Galaxy#newOneTimeTask(GameComponent, Tickable, Runnable) Factory Method} or by using any of the available {@link GameTask} {@link GameTask#GameTask(GameComponent, Tickable) Constructors}.</li>
+ *         </ul>
+ *     </li>
+ *     <li>
+ *         <b>Auto-Constructed {@link GameTask} Objects</b>
+ *         <ul>
+ *             <li>Convenience {@link #execute(Runnable, Runnable, Supplier) Execute} methods can be used to easily configure a new {@link GameTask}.</li>
+ *             <li>{@link GameTask} instances constructed by a {@link TaskManager} {@link #execute(Runnable, Runnable, Supplier) Execute} method are typically constructed as temporary {@link GameTask tasks}, oftentimes instances of {@link OneTimeTask}.</li>
+ *             <li>
+ *                 <b><i>{@link #execute(Runnable, Runnable, Supplier) Execution Method}</i> Examples:</b>
+ *                 <ul>
+ *                     <li>
+ *                         <b>Persistent Execution: {@link #executeAndGet(Runnable, Runnable, Supplier) Execute and Get}</b>
+ *                         <ul>
+ *                             <li><i>{@link #executeAndGet(Runnable, Runnable, Supplier)}</i></li>
+ *                             <li><i>{@link #executeAndGet(Runnable, Runnable)}</i></li>
+ *                             <li><i>{@link #executeAndGet(Runnable, Supplier)}</i></li>
+ *                             <li><i>{@link #executeAndGet(Runnable)}</i></li>
+ *                         </ul>
+ *                     </li>
+ *                     <li>
+ *                         <b>Persistent Execution: {@link #execute(Runnable, Runnable, Supplier) Execute}</b>
+ *                         <ul>
+ *                             <li><i>{@link #execute(Runnable, Runnable, Supplier)}</i></li>
+ *                             <li><i>{@link #execute(Runnable, Runnable)}</i></li>
+ *                             <li><i>{@link #execute(Runnable, Supplier)}</i></li>
+ *                             <li><i>{@link #execute(Runnable)}</i></li>
+ *                         </ul>
+ *                     </li>
+ *                     <li>
+ *                         <b>One-Time Execution: {@link #executeOnceAndGet(Supplier, Consumer) Execute Once and Get}</b>
+ *                         <ul>
+ *                             <li><i>{@link #executeOnceAndGet(Supplier, Consumer)}</i></li>
+ *                             <li><i>{@link #executeOnceAndGet(Runnable, Runnable)}</i></li>
+ *                             <li><i>{@link #executeOnceAndGet(Runnable)}</i></li>
+ *                         </ul>
+ *                     </li>
+ *                     <li>
+ *                         <b>One-Time Execution: {@link #executeOnce(Supplier, Consumer) Execute Once}</b>
+ *                         <ul>
+ *                             <li><i>{@link #executeOnce(Supplier, Consumer)}</i></li>
+ *                             <li><i>{@link #executeOnce(Runnable, Runnable)}</i></li>
+ *                             <li><i>{@link #executeOnce(Runnable)}</i></li>
+ *                         </ul>
+ *                     </li>
+ *                 </ul>
+ *             </li>
+ *         </ul>
+ *     </li>
+ * </ol>
+ *
+ * @param <E>
+ */
 public class TaskManager<E extends Tickable<E>>
         implements SpringableWrapper, Lockable, Tickable<E> {
     

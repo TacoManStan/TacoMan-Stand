@@ -2,6 +2,7 @@ package com.taco.suit_lady.logic;
 
 import com.taco.suit_lady.game.GameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
+import com.taco.suit_lady.logic.triggers.Galaxy;
 import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
@@ -14,6 +15,16 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * <p>Defines an {@link #execute() executable} {@code task} designed to be executed by a {@link TaskManager} object, typically contained by the {@link Tickable} {@link E Type} for this {@link GameTask}.</p>
+ * <p><b>Details</b></p>
+ * <ol>
+ *     <li>To construct a new {@link GameTask}, use any of the available {@link GameTask#GameTask(GameComponent, Tickable) Constructors} or {@link Galaxy#newOneTimeTask(GameComponent, Tickable, Runnable) Factory Methods} located in the static {@link Galaxy} utility class.</li>
+ * </ol>
+ *
+ * @param <E> The type of {@link Tickable} this {@link GameTask} is a part of.
+ */
+//TO-EXPAND
 public abstract class GameTask<E extends Tickable<E>>
         implements SpringableWrapper, Lockable, GameComponent {
     
@@ -23,7 +34,7 @@ public abstract class GameTask<E extends Tickable<E>>
     private final ReadOnlyLongWrapper tickCountProperty;
     private final ReadOnlyBooleanWrapper synchronizationEnabledProperty;
     
-    private final ReadOnlyObjectWrapper<TaskState> stateProperty;
+    private final ReadOnlyObjectWrapper<TaskState> stateProperty; //TODO (nyi)
     
     public GameTask(@NotNull E owner) { this(null, owner); }
     
