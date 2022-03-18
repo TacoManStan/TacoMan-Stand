@@ -4,6 +4,7 @@ import com.github.cliftonlabs.json_simple.JsonObject;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.game.objects.collision.Collidable;
 import com.taco.suit_lady.game.objects.tiles.GameTile;
+import com.taco.suit_lady.game.objects.tiles.GameTileModel;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.ui.jfx.components.painting.paintables.canvas.ImagePaintCommand;
 import com.taco.suit_lady.util.enums.FilterType;
@@ -39,6 +40,68 @@ import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 
+/**
+ * <p>Contains and manages a {@code Matrix} of {@link GameTile} objects that together form a {@link GameMap}.</p>
+ * <br>
+ * <p><b>{@link GameObject GameObjects}</b></p>
+ * <ol>
+ *     <li>
+ *         The <i>{@link #gameObjects()}</i> {@link List} contains all of the {@link GameObject GameObjects} currently present on this {@link GameMap}.
+ *         <ul>
+ *             <li><i>Note that the {@link #gameObjects()} method returns an {@link Collections#unmodifiableList(List) Unmodifiable Shallow Copy} — consequently, modifications made to the {@link List} returned by {@link #gameObjects()} will have no effect.</i></li>
+ *             <li>Instead, see the {@code methods} outlined below.</li>
+ *         </ul>
+ *     </li>
+ *     <li>
+ *         Use any {@code method} listed below to {@code ADD} a {@link GameObject} to a {@link GameMap}:
+ *         <ul>
+ *             <li><i>{@link #addGameObject(GameObject)}</i></li>
+ *             <li><i>{@link #addGameObjects(GameObject...)}</i></li>
+ *             <li><i>{@link #addGameObjects(List)}</i></li>
+ *         </ul>
+ *     </li>
+ *     <li>
+ *         Use any {@code method} listed below to {@code REMOVE} a {@link GameObject} from a {@link GameMap}:
+ *         <ul>
+ *             <li><i>{@link #removeGameObject(GameObject)}</i></li>
+ *             <li><i>{@link #removeGameObjects(GameObject...)}</i></li>
+ *             <li><i>{@link #removeGameObjects(List)}</i></li>
+ *         </ul>
+ *     </li>
+ * </ol>
+ * <br>
+ * <p><b>{@link #readOnlyTileMatrixProperty() Tile Matrix}</b></p>
+ * <ol>
+ *     <li>Each {@link GameMap} instance contains a {@link #readOnlyTileMatrixProperty() Tile Matrix} of {@link GameTile} objects.</li>
+ *     <li>The {@link #readOnlyTileMatrixProperty() Tile Matrix} defines the virtual {@link GameMap} data used to construct a virtual {@code 2-Dimensional} world.</li>
+ *     <p><i>See {@link GameTile} and the {@link GameMap} {@link #readOnlyTileMatrixProperty() Tile Matrix Property} for additional information.</i></p>
+ * </ol>
+ * <br>
+ * <p><b>{@link GameMapModel Graphics}</b></p>
+ * <ol>
+ *     <li>{@link GameMap} {@code graphics data} is, <u>loaded</u>, <u>processed</u>, <u>stored</u>, and <u>displayed</u> by the {@link GameMapModel} instance assigned to this {@link GameMap}.</li>
+ * </ol>
+ * <p><i>See {@link GameMapModel} for additional information.</i></p>
+ * <br>
+ * <p><b>Logic</b></p>
+ * <ol>
+ *     <li>The {@link GameMap} class also contains many useful {@code logic-oriented} methods used to help navigate the virtual {@link #readOnlyTileMatrixProperty() Tile Matrix}.</li>
+ *     <li>
+ *         Examples Include (but are not limited to):
+ *         <ul>
+ *             <li><i>{@link #scan(Point2D, double, Predicate[])}</i></li>
+ *             <li><i>{@link #isPathable(Collidable, boolean, ValueExpr2D)}</i></li>
+ *             <li><i>{@link #getTileAtPoint(NumExpr2D)}</i></li>
+ *             <li><i>{@link #getTileAtTileIndex(NumExpr2D)}</i></li>
+ *             <li><i>{@link #getTilesInBounds(NumExpr2D, NumExpr2D)}</i></li>
+ *             <li><i>{@link #getNeighbor(GameTile, int, int)}</i></li>
+ *             <li><i>{@link #nearestPathablePoint(GameObject, Number, Number, Number)}</i></li>
+ *             <li><i>{@link #getObjectsAtPoint(NumExpr2D)}</i></li>
+ *             <li><i>{@link #getTilesInView(Camera)}</i></li>
+ *         </ul>
+ *     </li>
+ * </ol>
+ */
 public class GameMap
         implements SpringableWrapper, Lockable, GameComponent, JObject, JLoadableObject {
     
@@ -122,7 +185,7 @@ public class GameMap
         this.testPaintCommand.init();
         this.testPaintCommand.setPaintPriority(0);
         this.getModel().getCanvas().addPaintable(testPaintCommand);
-    
+        
         this.getModel().getCanvas().widthBinding().addListener((observable, oldValue, newValue) -> refreshTestImage());
         this.getModel().getCanvas().heightBinding().addListener((observable, oldValue, newValue) -> refreshTestImage());
         
@@ -184,7 +247,7 @@ public class GameMap
     //TODO: Limit accessors to synchronized add/remove methods & copy accessor
     public final List<GameObject> gameObjects() { return sync(() -> Collections.unmodifiableList(gameObjects)); }
     
-    public final boolean  addGameObject(@NotNull GameObject obj) { return sync(() -> gameObjects.add(obj)); }
+    public final boolean addGameObject(@NotNull GameObject obj) { return sync(() -> gameObjects.add(obj)); }
     public final boolean addGameObjects(@NotNull List<GameObject> objs) { return sync(() -> gameObjects.addAll(objs)); }
     public final boolean addGameObjects(@NotNull GameObject... objs) { return removeGameObjects(Arrays.asList(objs)); }
     
@@ -382,26 +445,6 @@ public class GameMap
     //</editor-fold>
     
     //</editor-fold>
-    
-    //
-    
-    
-    //    public final @NotNull ArrayList<MapObject> scanMap(@NotNull GameObject target, double radius) {
-    //        final ArrayList<MapObject> scannedObjects = new ArrayList<>();
-    //        ArraysSL.iterateMatrix(tile -> scannedObjects.addAll(scanMap(tile, gameObject -> tile.inRange(gameObject, radius))), target.getOccupiedTiles());
-    //        return scannedObjects;
-    //    }
-    //
-    //    //TODO: Add support for different scan types - e.g., "any point on object", "center point", etc.
-    //    private @NotNull ArrayList<MapObject> scanMap(@NotNull GameTile tile, @NotNull Predicate<GameObject> filter) {
-    //        final ArrayList<MapObject> scannedObjects = new ArrayList<>();
-    //        tile.getOccupyingObjects()
-    //            .stream()
-    //            .filter(filter)
-    //            .forEach(scannedObjects::add);
-    //        scannedObjects.add(tile);
-    //        return scannedObjects;
-    //    }
     
     public boolean shutdown() {
         //TODO

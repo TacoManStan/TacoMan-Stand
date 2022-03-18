@@ -34,7 +34,8 @@ import java.util.concurrent.locks.Lock;
 
 /**
  * <p>A {@link GameComponent} {@link Entity} defining a particular {@link GameTile} defined by a {@link #getLocation() Matrix Index} value contained within and managed by a {@link GameMap} instance.</p>
- * <p><b>Occupying Game Objects</b></p>
+ * <br>
+ * <p><b>{@link #getOccupyingObjects() Occupying Game Objects}</b></p>
  * <ol>
  *     <li>The {@link GameObject} instances currently occupying this {@link GameTile} are stored within the {@link #getOccupyingObjects() Occupying Objects} {@link ListProperty}.</li>
  *     <li>
@@ -48,13 +49,13 @@ import java.util.concurrent.locks.Lock;
  *     <li>{@link GameObject Game Objects} are not added directly to {@link GameTile Game Tiles}, but rather to a {@link GameMap} which then manages the {@link #getOccupyingObjects() contents} of each {@link GameTile} accordingly.</li>
  * </ol>
  * <br>
- * <p><b>Graphics</b></p>
+ * <p><b>{@link GameTileModel Graphics}</b></p>
  * <ol>
  *     <li>{@link GameTile} {@code graphics data} is, <u>loaded</u>, <u>processed</u>, <u>stored</u>, and <u>displayed</u> by the {@link GameTileModel} instance assigned to this {@link GameTile}.</li>
  * </ol>
  * <p><i>See {@link GameTileModel} for additional information.</i></p>
  * <br>
- * <p><b>Collision Handling</b></p>
+ * <p><b>{@link #collisionMap() Collision Handling}</b></p>
  * <ol>
  *     <li>Unlike with cases such as seen with {@link GameObject}, the {@link GameTile} {@link #collisionMap() Collision Map} is used primarily to detect the {@link #getOccupyingObjects() Occupying Objects} for each {@link GameTile}.</li>
  *     <li>i.e., {@code Collision Data} for a {@link GameTile} is <i>not</i> used in {@link Mover movement} {@link Mover#collisionMap() collision detection}.</li>
