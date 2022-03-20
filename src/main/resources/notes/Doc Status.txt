@@ -62,7 +62,7 @@ GAME
 
 GALAXY
 
-	[ ] Ability
+	[/] Ability
 	[ ] Ability_InstantEffect
 	[ ] Ability_TargetEffect
 	[ ] Ability_Blink
@@ -70,7 +70,7 @@ GALAXY
 	[ ] Ability_LaunchMissile
 	[ ] Ability_SpawnGameObject
 
-	[ ] Effect
+	[/] Effect
 	[ ] Effect_ApplyBehavior
 	[ ] Effect_ApplyPersistent
 	[ ] Effect_Blink
@@ -85,9 +85,9 @@ GALAXY
 	[ ] Effect_Cleave
 	[ ] Effect_MissileImpact
 
-	[ ] Validatable
+	[/] Validatable
+	[/] Validator
 	[ ] ValidationFilter
-	[ ] Validator
 
 	-----
 
