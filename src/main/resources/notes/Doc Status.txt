@@ -9,8 +9,10 @@ KEY
     [C]: Class Level Documentation Complete
     [B]: Class Body Documentations Complete
 
---------------------
---------------------
+
+------------------------------------------------------------
+------------------------------------------------------------
+
 
 GENERAL
 
@@ -43,6 +45,7 @@ GENERAL
 
 -----
 
+
 CONTENT
 
     [ ] ContentManager
@@ -52,115 +55,185 @@ CONTENT
 
 -----
 
+
 GAME
 
-	[C] GameTile
-	[ ] GameTileModel
-	[ ] TileTerrainObject
-	[ ] TileTerrainObjectID
-	[ ] TileTerrainObjectOrientation
+    [C] Entity
+    [C] Camera
 
-	[C] GameObject
-	[ ] GameObjectModel
-	[ ] GameObjectModelDefinition
-	[ ] GameObjectModelDefinitions
+    [C] GameMap
+    [ ] GameMapModel
 
-	[ ] GameItem
+    [ ] GameComponent
+    [ ] GameObjectComponent
 
-	[ ] MapObject
+    GAME: ATTRIBUTES
 
-	[ ] Movable
-	[ ] Mover
+    	[ ] AttributeManager
+    	[ ] Attribute
 
-	[C] Camera
-	[C] Entity
-	[ ] GameComponent
-	[C] GameMap
-	[/] GameMapModel
-	[ ] GameObjectComponent
+    	[ ] AttributeModel
+    	[ ] DefaultAttributeModel
 
-    .....
+    	[ ] AttributePage
+    	[ ] AttributePageController
+    	[ ] AttributeElementController
 
-	[/] Collidable
-	[/] CollisionMap
-	[/] CollisionArea
+    GAME: COMMANDS
 
-    .....
+        [-] Behavior
+        [-] Command
+        [-] CommandHub
+        [-] MoveBehavior
 
-	[ ] Attribute
-	[ ] AttributeElementController
-	[ ] AttributeManager
-	[ ] AttributeModel
-	[ ] AttributePage
-	[ ] AttributePageController
-	[ ] DefaultAttributeModel
+    GAME: GALAXY
 
-    -----
+        GAME: GALAXY: ABILITIES
 
-	[ ] GameFooter
-	[ ] GameFooterController
-	[ ] GameUIData
-	[ ] GameViewContent
-	[ ] GameViewContentController
-	[ ] GameViewContentData
+        	[/] Ability
+        	[ ] Ability_InstantEffect
+        	[ ] Ability_TargetEffect
 
-	[C] GFXObject
+            GAME: GALAXY: ABILITIES: SPECIFIC
 
-	[ ] GameObjectEditorPage
-	[ ] GameObjectEditorPageController
-	[ ] GameTileEditorPage
-	[ ] GameTileEditorPageController
-	[ ] GameViewPage
-	[ ] GameViewPageController
-	[ ] GameTileContentElementController
-	[ ] TerrainTileContentElementController
+            	[ ] Ability_Blink
+            	[ ] Ability_Cleave
+            	[ ] Ability_LaunchMissile
+            	[ ] Ability_SpawnGameObject
+
+        GAME: GALAXY: EFFECTS
+
+        	[C] Effect
+        	[ ] Effect_Targeted
+        	[ ] EffectGroup
+
+        	[ ] Effect_ApplyBehavior
+        	[ ] Effect_ApplyPersistent
+        	[ ] Effect_IssueOrder
+        	[ ] Effect_LaunchMissile
+        	[ ] Effect_ModifyPlayer
+        	[ ] Effect_ModifyUnit
+        	[ ] Effect_Scan
+        	[ ] Effect_SpawnGameObject
+
+        	GAME: GALAXY: EFFECTS: SPECIFIC
+
+        	    [ ] Effect_Blink
+        	    [ ] Effect_Cleave
+        	    [ ] Effect_MissileImpact
+
+        GAME: GALAXY: VALIDATORS
+
+        	[C] Validatable
+        	[C] Validator
+        	[C] ValidationFilter
+
+    GAME: ITEMS
+
+        [-] GameItem
+
+    GAME: OBJECTS
+
+        [C] GameObject
+        [ ] GameObjectModel
+        [ ] GameObjectModelDefinition
+        [ ] GameObjectModelDefinitions
+
+        [ ] MapObject
+
+        [ ] Mover
+        [ ] Movable
+
+        [-] Structure
+
+        GAME: OBJECTS: COLLISIONS
+
+            [/] Collidable
+            [/] CollisionMap
+            [/] CollisionArea
+
+            [-] CollisionHandler
+            [-] Collisions
+
+        GAME: OBJECTS: TILES
+
+            [C] GameTile
+            [ ] GameTileModel
+
+            [ ] TileTerrainObject
+            [ ] TileTerrainObjectID
+            [ ] TileTerrainObjectOrientationID
+
+        GAME: OBJECTS: UNITS
+
+            [-] UNIT
+
+    GAME: SERVER
+
+        [-] GameSever
+        [-] DummyGameServer
+
+    GAME: UI
+
+        [ ] GameViewContent
+        [ ] GameViewContentController
+        [ ] GameViewContentData
+
+        [ ] GameFooter
+        [ ] GameFooterController
+
+        [C] GFXObject
+        [ ] GameUIData
+
+        GAME: UI: PAGES
+
+            [ ] GameViewPage
+            [ ] GameViewPageController
+
+            [ ] GameObjectEditorPage
+            [ ] GameObjectEditorPageController
+
+            [ ] GameTileEditorPage
+            [ ] GameTileEditorPageController
+
+            GAME: UI: PAGES: ELEMENTS
+
+                [ ] GameTileContentElementController
+                [ ] TerrainTileContentElementController
 
 -----
 
-GALAXY
 
-	[/] Ability
-	[ ] Ability_InstantEffect
-	[ ] Ability_TargetEffect
-	[ ] Ability_Blink
-	[ ] Ability_Cleave
-	[ ] Ability_LaunchMissile
-	[ ] Ability_SpawnGameObject
+LOGIC
 
-	[/] Effect
-	[ ] Effect_ApplyBehavior
-	[ ] Effect_ApplyPersistent
-	[ ] Effect_Blink
-	[ ] Effect_IssueOrder
-	[ ] Effect_LaunchMissile
-	[ ] Effect_ModifyPlayer
-	[ ] Effect_ModifyUnit
-	[ ] Effect_Scan
-	[ ] Effect_SpawnGameObject
-	[ ] Effect_Targeted
-	[ ] EffectGroup
-	[ ] Effect_Cleave
-	[ ] Effect_MissileImpact
+    [/] LogiCore
+    [ ] Tickable
 
-	[C] Validatable
-	[C] Validator
-	[C] ValidationFilter
+    [C] TaskManager
+    [C] GameTask
+    [ ] OneTimeTask
+    [ ] TaskState
 
-	-----
+    LOGIC: TRIGGERS
 
-	[C] Galaxy
-	[C] Trigger
-	[C] TriggerCondition
-	[C] TriggerEvent
-	[C] TriggerEventManager
-	[/] TriggerGroup
+        LOGIC: TRIGGERS: IMPLEMENTATIONS
 
-	[ ] UnitArrivedEvent
-	[ ] UnitArrivedTrigger
-	[ ] UnitMovedEvent
-	[ ] UnitMovedTrigger
+            [ ] UnitArrivedEvent
+            [ ] UnitMovedEvent
+
+            [ ] UnitArrivedTrigger
+            [ ] UnitMovedTrigger
+
+        [C] Galaxy
+
+        [C] TriggerEventManager
+        [C] TriggerEvent
+        [C] Trigger
+        [/] TriggerCondition
+        [C] TriggerGroup
 
 -----
+
 
 UTIL
 
@@ -326,7 +399,13 @@ UTIL
                 [ ] Circle
                 [ ] Cone
 
+        UTIL: VALUES: PARAMS
+
+            [ ] Paramable
+            [ ] Params
+
 -----
+
 
 UI
 
@@ -498,6 +577,7 @@ UI
 
 -----
 
+
 TACOSITORY
 
     TACOSITORY: COLLECTIONS
@@ -538,6 +618,7 @@ TACOSITORY
             [ ] Textable
 
 -----
+
 
 TO SORT: NEW
 
