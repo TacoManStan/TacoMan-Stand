@@ -183,28 +183,6 @@ public abstract class Trigger<T extends TriggerEvent<T>>
     public Trigger(@NotNull Entity owner, @Nullable TriggerCondition<T> condition) {
         this.owner = owner;
         this.conditionProperty = new ReadOnlyObjectWrapper<>(condition);
-        
-        
-        Predicate<UnitArrivedEvent> condition2 = event -> {
-            //condition logic
-        };
-        
-        Consumer<UnitArrivedEvent> action = event -> {
-            //event response logic
-        };
-        
-        UnitArrivedTrigger trigger2 = Galaxy.newUnitArrivedTrigger(gameObject, condition2, action);
-        
-        UnitArrivedTrigger trigger3 = Galaxy.newUnitArrivedTrigger(
-                gameObject, event -> {
-                    //condition logic
-                }, event -> {
-                    //event response
-                });
-        
-        triggers().submit(new TriggerEventImpl(source));
-        
-        triggers().submit(new UnitArrivedEvent(source, movedFromNum2D, movedToNum2D, "event-type"));
     }
     
     //<editor-fold desc="--- LOGIC ---">
@@ -238,10 +216,4 @@ public abstract class Trigger<T extends TriggerEvent<T>>
     @Override public @Nullable Lock getLock() { return getOwner().getLock(); }
     
     //</editor-fold>
-    
-    public static class TriggerEventImpl extends TriggerEvent<TriggerEventImpl> {
-        public TriggerEventImpl(@NotNull GameComponent source) {
-            super(source);
-        }
-    }
 }
