@@ -1,0 +1,104 @@
+GENERAL
+
+    [ ] AppController
+    [ ] MainApplication
+
+
+GAME
+
+	[X] GameTile
+	[ ] GameTileModel
+	[ ] TileTerrainObject
+	[ ] TileTerrainObjectID
+	[ ] TileTerrainObjectOrientation
+
+	[X] GameObject
+	[ ] GameObjectModel
+	[ ] GameObjectModelDefinition
+	[ ] GameObjectModelDefinitions
+	[ ] MapObject
+	[ ] Movable
+	[ ] Mover
+
+	[/] Camera
+	[/] Entity
+	[ ] GameComponent
+	[X] GameMap
+	[/] GameMapModel
+	[ ] GameObjectComponent
+
+	[/] Collidable
+	[/] CollisionMap
+	[/] CollisionArea
+
+	[ ] Attribute
+	[ ] AttributeElementController
+	[ ] AttributeManager
+	[ ] AttributeModel
+	[ ] AttributePage
+	[ ] AttributePageController
+	[ ] DefaultAttributeModel
+
+    -----
+
+	[ ] GameFooter
+	[ ] GameFooterController
+	[ ] GameUIData
+	[ ] GameViewContent
+	[ ] GameViewContentController
+	[ ] GameViewContentData
+	[ ] GFXObject
+
+	[ ] GameObjectEditorPage
+	[ ] GameObjectEditorPageController
+	[ ] GameTileEditorPage
+	[ ] GameTileEditorPageController
+	[ ] GameViewPage
+	[ ] GameViewPageController
+	[ ] GameTileContentElementController
+	[ ] TerrainTileContentElementController
+
+-----
+
+GALAXY
+
+	[ ] Ability
+	[ ] Ability_InstantEffect
+	[ ] Ability_TargetEffect
+	[ ] Ability_Blink
+	[ ] Ability_Cleave
+	[ ] Ability_LaunchMissile
+	[ ] Ability_SpawnGameObject
+
+	[ ] Effect
+	[ ] Effect_ApplyBehavior
+	[ ] Effect_ApplyPersistent
+	[ ] Effect_Blink
+	[ ] Effect_IssueOrder
+	[ ] Effect_LaunchMissile
+	[ ] Effect_ModifyPlayer
+	[ ] Effect_ModifyUnit
+	[ ] Effect_Scan
+	[ ] Effect_SpawnGameObject
+	[ ] Effect_Targeted
+	[ ] EffectGroup
+	[ ] Effect_Cleave
+	[ ] Effect_MissileImpact
+
+	[ ] Validatable
+	[ ] ValidationFilter
+	[ ] Validator
+
+	-----
+
+	[/] Galaxy
+	[ ] Trigger
+	[ ] TriggerCondition
+	[ ] TriggerEvent
+	[ ] TriggerEventManager
+	[ ] TriggerGroup
+
+	[ ] UnitArrivedEvent
+	[ ] UnitArrivedTrigger
+	[ ] UnitMovedEvent
+	[ ] UnitMovedTrigger
