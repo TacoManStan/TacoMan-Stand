@@ -1,11 +1,12 @@
-package com.taco.suit_lady.game.galaxy.effects;
+package com.taco.suit_lady.game.galaxy.effects.specific;
 
+import com.taco.suit_lady.game.galaxy.effects.Effect;
+import com.taco.suit_lady.game.galaxy.effects.Effect_Targeted;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.util.values.Value2D;
 import com.taco.suit_lady.util.values.numbers.Num2D;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

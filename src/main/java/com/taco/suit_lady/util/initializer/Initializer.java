@@ -13,8 +13,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
 
-public final class Initializer<T> extends ReadOnlyInitializer<T>
-{
+public final class Initializer<T> extends ReadOnlyInitializer<T> {
     
     private ReadOnlyInitializer<T> readOnlyInitializer;
     
@@ -24,23 +23,19 @@ public final class Initializer<T> extends ReadOnlyInitializer<T>
     private final ChangeListener<T> propertyUpdateBlock;
     private final ReadOnlyListWrapper<ObservableValue<T>> blockedProperties;
     
-    public Initializer()
-    {
+    public Initializer() {
         this(new ReentrantLock(), () -> { });
     }
     
-    public Initializer(Runnable onInitializeAction)
-    {
+    public Initializer(Runnable onInitializeAction) {
         this(new ReentrantLock(), onInitializeAction);
     }
     
-    public Initializer(Lock lock)
-    {
+    public Initializer(Lock lock) {
         this(lock, () -> { });
     }
     
-    public Initializer(Lock lock, Runnable onInitializeAction)
-    {
+    public Initializer(Lock lock, Runnable onInitializeAction) {
         this.readOnlyInitializer = null;
         
         this.initializedProperty = new ReadOnlyBooleanWrapper(false);
@@ -52,27 +47,23 @@ public final class Initializer<T> extends ReadOnlyInitializer<T>
     
     //<editor-fold desc="Properties">
     
-    public ReadOnlyBooleanProperty initializedProperty()
-    {
+    public ReadOnlyBooleanProperty initializedProperty() {
         return initializedProperty.getReadOnlyProperty();
     }
     
-    public boolean isInitialized()
-    {
+    public boolean isInitialized() {
         return initializedProperty.get();
     }
     
     //
     
-    public ReadOnlyListProperty<ObservableValue<T>> blockedProperties()
-    {
+    public ReadOnlyListProperty<ObservableValue<T>> blockedProperties() {
         return blockedProperties.getReadOnlyProperty();
     }
     
     //
     
-    public ReadOnlyInitializer<T> getReadOnlyInitializer()
-    {
+    public ReadOnlyInitializer<T> getReadOnlyInitializer() {
         if (readOnlyInitializer == null) // Lazy initialization
             readOnlyInitializer = new ReadOnlyInitializerImpl();
         return readOnlyInitializer;
@@ -82,14 +73,12 @@ public final class Initializer<T> extends ReadOnlyInitializer<T>
     
     //
     
-    public void initialize()
-    {
+    public void initialize() {
         checkNotInitialized();
         initializeUnchecked();
     }
     
-    public void initializeUnchecked()
-    {
+    public void initializeUnchecked() {
         initializedProperty.set(true);
         if (onInitializeAction != null)
             onInitializeAction.run();
@@ -98,28 +87,24 @@ public final class Initializer<T> extends ReadOnlyInitializer<T>
     //
     
     @Override
-    public void checkInitialized()
-    {
+    public void checkInitialized() {
         checkInitialized(() -> null);
     }
     
     @Override
-    public T checkInitialized(Supplier<T> supplier)
-    {
+    public T checkInitialized(Supplier<T> supplier) {
         if (!isInitialized())
             throw new IllegalStateException("The initializer has not yet been initialized.");
         return supplier == null ? null : supplier.get();
     }
     
     @Override
-    public void checkNotInitialized()
-    {
+    public void checkNotInitialized() {
         checkNotInitialized(() -> null);
     }
     
     @Override
-    public T checkNotInitialized(Supplier<T> supplier)
-    {
+    public T checkNotInitialized(Supplier<T> supplier) {
         if (isInitialized())
             throw new IllegalStateException("The initializer has already been initialized.");
         return supplier == null ? null : supplier.get();
@@ -129,81 +114,64 @@ public final class Initializer<T> extends ReadOnlyInitializer<T>
     
     @SafeVarargs
     @Override
-    public final void blockUpdates(ObservableValue<T>... observableValues)
-    {
+    public final void blockUpdates(ObservableValue<T>... observableValues) {
         for (ObservableValue<T> observableValue: observableValues)
-            if (observableValue != null)
-            {
-                if (!blockedProperties.contains(observableValue))
-                {
+            if (observableValue != null) {
+                if (!blockedProperties.contains(observableValue)) {
                     blockedProperties.add(observableValue);
                     observableValue.addListener(propertyUpdateBlock);
-                }
-                else
+                } else
                     ConsoleBB.CONSOLE.dev("WARNING: Observable Value has already been added to this Initializer."); // TODO - Change to printDev
-            }
-            else
+            } else
                 ConsoleBB.CONSOLE.dev("WARNING: Observable Value is null.");
     }
     
     @SafeVarargs
     @Override
-    public final void unblockUpdates(ObservableValue<T>... observableValues)
-    {
+    public final void unblockUpdates(ObservableValue<T>... observableValues) {
         for (ObservableValue<T> observableValue: observableValues)
-            if (observableValue != null)
-            {
-                if (blockedProperties.contains(observableValue))
-                {
+            if (observableValue != null) {
+                if (blockedProperties.contains(observableValue)) {
                     observableValue.removeListener(propertyUpdateBlock);
                     blockedProperties.remove(observableValue);
-                }
-                else
+                } else
                     ConsoleBB.CONSOLE.dev("WARNING: Attempting to remove Observable Value not in list.");
-            }
-            else
+            } else
                 ConsoleBB.CONSOLE.dev("WARNING: Observable Value is null.");
     }
     
     //
     
-    private class ReadOnlyInitializerImpl extends ReadOnlyInitializer<T>
-    {
+    private class ReadOnlyInitializerImpl extends ReadOnlyInitializer<T> {
         @Override
-        public void checkInitialized()
-        {
+        public void checkInitialized() {
             Initializer.this.checkInitialized();
         }
         
         @Override
-        public T checkInitialized(Supplier<T> supplier)
-        {
+        public T checkInitialized(Supplier<T> supplier) {
             return Initializer.this.checkInitialized(supplier);
         }
         
         @Override
-        public void checkNotInitialized()
-        {
+        public void checkNotInitialized() {
             Initializer.this.checkNotInitialized();
         }
         
         @Override
-        public T checkNotInitialized(Supplier<T> supplier)
-        {
+        public T checkNotInitialized(Supplier<T> supplier) {
             return Initializer.this.checkNotInitialized(supplier);
         }
         
         @SafeVarargs
         @Override
-        public final void blockUpdates(ObservableValue<T>... observableValues)
-        {
+        public final void blockUpdates(ObservableValue<T>... observableValues) {
             Initializer.this.blockUpdates(observableValues);
         }
         
         @SafeVarargs
         @Override
-        public final void unblockUpdates(ObservableValue<T>... observableValues)
-        {
+        public final void unblockUpdates(ObservableValue<T>... observableValues) {
             Initializer.this.blockUpdates(observableValues);
         }
     }

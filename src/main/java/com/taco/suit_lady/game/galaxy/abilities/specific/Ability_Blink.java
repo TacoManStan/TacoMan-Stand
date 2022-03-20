@@ -1,12 +1,11 @@
 package com.taco.suit_lady.game.galaxy.abilities.specific;
 
 import com.taco.suit_lady.game.galaxy.abilities.Ability_TargetEffect;
-import com.taco.suit_lady.game.galaxy.effects.Effect_Blink;
+import com.taco.suit_lady.game.galaxy.effects.specific.Effect_Blink;
 import com.taco.suit_lady.game.galaxy.effects.Effect_LaunchMissile;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.util.values.Value2D;
 import com.taco.suit_lady.util.values.numbers.Num2D;
-import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;

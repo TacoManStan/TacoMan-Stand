@@ -4,8 +4,7 @@ import javafx.beans.value.ObservableValue;
 
 import java.util.function.Supplier;
 
-public abstract class ReadOnlyInitializer<T>
-{
+public abstract class ReadOnlyInitializer<T> {
     
     protected ReadOnlyInitializer() { }
     
@@ -15,8 +14,7 @@ public abstract class ReadOnlyInitializer<T>
     
     public abstract T checkInitialized(Supplier<T> supplier);
     
-    public final T checkInitialized(T obj)
-    {
+    public final T checkInitialized(T obj) {
         return checkInitialized(() -> checkInitialized(obj));
     }
     
@@ -26,8 +24,7 @@ public abstract class ReadOnlyInitializer<T>
     
     public abstract T checkNotInitialized(Supplier<T> supplier);
     
-    public final T checkNotInitialized(T obj)
-    {
+    public final T checkNotInitialized(T obj) {
         return checkInitialized(() -> checkNotInitialized(obj));
     }
     
