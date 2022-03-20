@@ -58,20 +58,20 @@ CONTENT
 
 GAME
 
-    [C] Entity
-    [C] Camera
-
-    [C] GameMap
-    [ ] GameMapModel
-
     [ ] GameComponent
     [ ] GameObjectComponent
+
+    [C] Entity
+
+    [C] Camera
+    [C] GameMap
+    [ ] GameMapModel
 
     GAME: ATTRIBUTES
 
     	[ ] AttributeManager
-    	[ ] Attribute
 
+    	[ ] Attribute
     	[ ] AttributeModel
     	[ ] DefaultAttributeModel
 
@@ -82,15 +82,17 @@ GAME
     GAME: COMMANDS
 
         [-] Behavior
+        [-] MoveBehavior
+
         [-] Command
         [-] CommandHub
-        [-] MoveBehavior
 
     GAME: GALAXY
 
         GAME: GALAXY: ABILITIES
 
         	[/] Ability
+
         	[ ] Ability_InstantEffect
         	[ ] Ability_TargetEffect
 
@@ -104,8 +106,10 @@ GAME
         GAME: GALAXY: EFFECTS
 
         	[C] Effect
-        	[ ] Effect_Targeted
         	[ ] EffectGroup
+
+        	[ ] Effect_Targeted
+        	[ ] Effect_Scan
 
         	[ ] Effect_ApplyBehavior
         	[ ] Effect_ApplyPersistent
@@ -113,7 +117,6 @@ GAME
         	[ ] Effect_LaunchMissile
         	[ ] Effect_ModifyPlayer
         	[ ] Effect_ModifyUnit
-        	[ ] Effect_Scan
         	[ ] Effect_SpawnGameObject
 
         	GAME: GALAXY: EFFECTS: SPECIFIC
@@ -134,17 +137,19 @@ GAME
 
     GAME: OBJECTS
 
+        [ ] MapObject
+
         [C] GameObject
+        [-] Structure
+
         [ ] GameObjectModel
         [ ] GameObjectModelDefinition
         [ ] GameObjectModelDefinitions
 
-        [ ] MapObject
+        -----
 
         [ ] Mover
         [ ] Movable
-
-        [-] Structure
 
         GAME: OBJECTS: COLLISIONS
 
@@ -152,8 +157,8 @@ GAME
             [/] CollisionMap
             [/] CollisionArea
 
-            [-] CollisionHandler
             [-] Collisions
+            [-] CollisionHandler
 
         GAME: OBJECTS: TILES
 
@@ -166,7 +171,7 @@ GAME
 
         GAME: OBJECTS: UNITS
 
-            [-] UNIT
+            [-] GameUnit
 
     GAME: SERVER
 
@@ -175,6 +180,11 @@ GAME
 
     GAME: UI
 
+        [C] GFXObject
+        [ ] GameUIData
+
+        -----
+
         [ ] GameViewContent
         [ ] GameViewContentController
         [ ] GameViewContentData
@@ -182,19 +192,16 @@ GAME
         [ ] GameFooter
         [ ] GameFooterController
 
-        [C] GFXObject
-        [ ] GameUIData
-
         GAME: UI: PAGES
 
             [ ] GameViewPage
             [ ] GameViewPageController
 
-            [ ] GameObjectEditorPage
-            [ ] GameObjectEditorPageController
-
             [ ] GameTileEditorPage
             [ ] GameTileEditorPageController
+
+            [ ] GameObjectEditorPage
+            [ ] GameObjectEditorPageController
 
             GAME: UI: PAGES: ELEMENTS
 
@@ -207,9 +214,10 @@ GAME
 LOGIC
 
     [/] LogiCore
-    [ ] Tickable
 
+    [ ] Tickable
     [C] TaskManager
+
     [C] GameTask
     [ ] OneTimeTask
     [ ] TaskState
@@ -218,26 +226,31 @@ LOGIC
 
         LOGIC: TRIGGERS: IMPLEMENTATIONS
 
-            [ ] UnitArrivedEvent
-            [ ] UnitMovedEvent
+            LOGIC: TRIGGERS: IMPLEMENTATIONS: EVENTS
 
-            [ ] UnitArrivedTrigger
-            [ ] UnitMovedTrigger
+                [ ] UnitArrivedEvent
+                [ ] UnitMovedEvent
+
+            LOGIC: TRIGGERS: IMPLEMENTATIONS: TRIGGERS
+
+                [ ] UnitArrivedTrigger
+                [ ] UnitMovedTrigger
 
         [C] Galaxy
 
         [C] TriggerEventManager
-        [C] TriggerEvent
-        [C] Trigger
-        [/] TriggerCondition
         [C] TriggerGroup
+
+        [C] Trigger
+        [C] TriggerEvent
+        [/] TriggerCondition
 
 -----
 
 
 UTIL
 
-    [ ] Controllable
+    [-] Controllable
 
     [ ] SimplePredicate
     [B] Validatable
@@ -246,19 +259,20 @@ UTIL
     [B] UIDProcessable
     [X] UIDProcessor
 
-    [ ] InternalException
-    [ ] UndefinedRuntimeException
+    [-] InternalException
+    [-] UndefinedRuntimeException
 
     UTIL: ENUMS
 
         [ ] DefaultableEnum
         [ ] Enumable
+
         [ ] FilterType
 
     UTIL: EXCEPTIONS
 
-        [ ] NYIException
-        [ ] ReadOnlyViolationException
+        [-] NYIException
+        [-] ReadOnlyViolationException
 
     UTIL: INITIALIZER
 
@@ -279,24 +293,24 @@ UTIL
 
     UTIL: TIMING
 
-        [/] Timers
         [B] Timing
+        [/] Timers
 
-        [ ] Duration
-        [ ] DurationProperty
+        [/] Timer
+        [ ] DebugTimer
+
+        [ ] Timeable
+        [ ] ReadOnlyTimeable
 
         [ ] Timerable
         [ ] ReadOnlyTimerable
         [ ] ReactiveTimerable
         [ ] ReadOnlyReactiveTimerable
 
-        [ ] Timeable
-        [ ] ReadOnlyTimeable
+        [ ] Duration
+        [ ] DurationProperty
 
-        [/] Timer
-        [ ] DebugTimer
-
-        [ ] TimerException
+        [-] TimerException
 
     UTIL: TOOLS
 
@@ -315,10 +329,10 @@ UTIL
 
         UTIL: TOOLS: FX TOOLS
 
-            [ ] BindFX
-            [/] DialogsFX
             [/] FX
             [/] GraphicsFX
+            [/] DialogsFX
+            [ ] BindFX
 
         UTIL: TOOLS: LIST TOOLS
 
@@ -338,22 +352,21 @@ UTIL
 
     UTIL: VALUES
 
-        [ ] Value
-        [ ] Value2D
-        [ ] Value3D
-
         [ ] ValueExpr
         [ ] ValueExpr2D
         [ ] ValueExpr3D
 
+        [ ] Value
+        [ ] Value2D
+        [ ] Value3D
+
         UTIL: VALUES: ENUMS
 
             [ ] Axis
+            [ ] LocType
 
             [ ] CardinalDirection
             [ ] CardinalDirectionType
-
-            [ ] LocType
 
             [ ] OpResultType
             [ ] OpType
@@ -363,12 +376,15 @@ UTIL
             VALUES: FORMULAS: PATHFINDING
 
                 [ ] Pathfinding
+
                 [C] AStarPathfinder
                 [ ] AStarMatrix
 
                 [ ] AStarNodeable
                 [C] AStarNode
                 [ ] CachedAStarNode
+
+                -----
 
                 [-] DummyElement
                 [-] PathfindingTest
@@ -378,6 +394,12 @@ UTIL
             [/] N
             [ ] NumFilter
 
+            -----
+
+            [ ] NumExpr
+            [ ] NumExpr2D
+            [ ] BoundsExpr
+
             [ ] Num
             [ ] Num2D
             [ ] Bounds
@@ -385,12 +407,6 @@ UTIL
             UTIL: VALUES: NUMBERS: BINDINGS
 
                 [ ] BoundsBinding
-
-            UTIL: VALUES: NUMBERS: EXPRESSIONS
-
-                [ ] NumExpr
-                [ ] NumExpr2D
-                [ ] BoundsExpr
 
             UTIL: VALUES: NUMBERS: SHAPES
 
@@ -411,6 +427,10 @@ UI
 
     UI: CONSOLE
 
+        [-] ConsoleBB
+
+        -----
+
         [-] Console
         [-] ConsoleInterpreter
 
@@ -418,11 +438,10 @@ UI
         [-] ConsoleMessageable
         [-] SimpleConsoleMessage
 
-        [-] ConsoleBB
-
     UI: CONTENT
 
         [B] ContentView
+
         [ ] GroupContentView
         [ ] PaintableContentView
         [ ] SimpleContentView
@@ -480,6 +499,7 @@ UI
 
                         [ ] PaintNode
                         [ ] CompoundPaintNode
+
                         [ ] ImagePaintNode
                         [ ] ShapePaintNode
                         [ ] BoxPaintNode
@@ -500,8 +520,8 @@ UI
 
         UI: JAVAFX: DIALOG
 
-            [/] DialogCallback
             [B] DialogController
+            [/] DialogCallback
 
         UI: JAVAFX: HYPERLINK
 
@@ -533,6 +553,7 @@ UI
         UI: JAVAFX: SETTINGS
 
             [ ] SettingNode
+
             [ ] CheckBoxSettingNode
             [ ] TextFieldSettingNode
 
@@ -544,22 +565,23 @@ UI
 
         UI: UI INTERNAL: CONSOLE
 
-            [ ] ConsolePage
             [ ] ConsoleUIDataContainer
+            [ ] ConsolePage
 
         UI: UI INTERNAL: CONTROLLERS
 
             [ ] Controller
             [ ] CellController
 
-            [ ] SettingGroupController
             [ ] SettingsController
+            [ ] SettingGroupController
+            [-] TestSettingGroupController
 
             [ ] ConsoleController
             [ ] ConsoleElementController
 
             [ ] SidebarNodeGroupController
-            [ ] TestSettingGroupController
+
 
         UI: UI INTERNAL: DRAG AND DROP
 
@@ -592,6 +614,8 @@ TACOSITORY
         [ ] JUtil
         [ ] JFiles
 
+        -----
+
         [ ] JElement
         [ ] JObject
         [ ] JArray
@@ -602,6 +626,8 @@ TACOSITORY
 
         [ ] JLoadable
         [ ] JLoadableObject
+
+        -----
 
         [-] TestData
         [-] TestData2
@@ -622,13 +648,18 @@ TACOSITORY
 
 TO SORT: NEW
 
-    [ ] CompareType
+    [-] Self
+
     [ ] Debugger
+
     [ ] MatrixIterator
-    [ ] ObservablePropertyContainer
+    [ ] CompareType
+
     [ ] ReadOnlyObservableList
     [ ] ReadOnlyObservableListWrapper
-    [ ] Self
+
+    [ ] ObservablePropertyContainer
+
     [ ] ValueGroup
     [ ] ValuePair
 
@@ -636,17 +667,21 @@ TO SORT: NEW
 
         [ ] Initializable
         [ ] Initializer
+
         [ ] LockMode
 
     TO SORT: NEW: INTERFACES
 
         [ ] NameableProperty
-        [ ] ObservablePropertyContainable
         [ ] ReadOnlyNameableProperty
+
+        [ ] ObservablePropertyContainable
 
         TO SORT: NEW: INTERFACES: FUNCTIONAL
 
             [ ] SelfValidatable
+
+            -----
 
             [ ] TriConsumer
             [ ] TriFunction
