@@ -11,9 +11,12 @@ import com.taco.suit_lady.util.tools.printing.Printer;
 import com.taco.suit_lady.util.tools.Props;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
+import net.rgielen.fxweaver.core.FxWeaver;
+import org.apache.juli.logging.Log;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.ArrayList;
 import java.util.concurrent.locks.Lock;
@@ -80,8 +83,93 @@ import java.util.function.Supplier;
  *         </ul>
  *     </li>
  * </ol>
+ * <hr><br>
+ * <p><b>Example Implementation</b></p>
+ * <br>
+ * <pre>{@code
+ * public static class TickableImpl
+ *         implements Tickable<TickableImpl> {
  *
- * @param <E>
+ *     private final ConfigurableApplicationContext ctx;
+ *     private final FxWeaver weaver;
+ *
+ *     private final TaskManager<TickableImpl> taskManager;
+ *
+ *     public TickableImpl(@NotNull ConfigurableApplicationContext ctx, @NotNull FxWeaver weaver) {
+ *         this.ctx = ctx;
+ *         this.weaver = weaver;
+ *
+ *         this.taskManager = new TaskManager<>(this);
+ *     }
+ *
+ *     @Override
+ *     public @NotNull TaskManager<TickableImpl> taskManager() {
+ *         return taskManager;
+ *     }
+ *
+ *     @Override
+ *     public @NotNull FxWeaver weaver() {
+ *         return weaver;
+ *     }
+ *
+ *     @Override
+ *     public @NotNull ConfigurableApplicationContext ctx() {
+ *         return ctx;
+ *     }
+ * }
+ *
+ *
+ * public static class GameTaskImpl extends GameTask<TickableImpl> {
+ *
+ *     public GameTaskImpl(@NotNull TickableImpl owner) {
+ *         super(owner);
+ *     }
+ *
+ *     public GameTaskImpl(@Nullable GameComponent gameComponent, @NotNull TickableImpl owner) {
+ *         super(gameComponent, owner);
+ *     }
+ *
+ *
+ *     @Override protected void tick() {
+ *         //task execution logic
+ *     }
+ *
+ *     @Override protected void shutdown() {
+ *         //shutdown logic, executed automatically when isDone() returns true
+ *     }
+ *
+ *     @Override protected boolean isDone() {
+ *         //task completion check logic
+ *         //when true, the shutdown() method is executed
+ *         //when the shutdown() method has finished execution, the GameTask is automatically removed from the TaskManager
+ *     }
+ * }
+ *
+ *
+ * //construct or retrieve the Tickable instance
+ * TickableImpl tickable = new TickableImpl(ctx, weaver);
+ *
+ * //submit the Tickable to the LogiCore
+ * //the LogiCore will automatically manage the TaskManager assigned to all submitted Tickable objects
+ * logiCore().submit(tickable);
+ *
+ *
+ * //add a new applicable GameTask instance to the Tickable
+ * tickable.addTask(new GameTaskImpl(tickable));
+ *
+ * //add another applicable GameTask instance to the Tickable using a Galaxy factory method
+ * tickable.addTask(Galaxy.newOneTimeTask(tickable, () -> {
+ *     //task execution logic
+ * }));
+ *
+ *
+ * }</pre>
+ *
+ * @param <E> The {@link Tickable} implementation this {@link TaskManager} is {@link Tickable#taskManager() assigned to}.
+ *
+ * @see Tickable
+ * @see GameTask
+ * @see LogiCore#submit(Tickable)
  */
 public class TaskManager<E extends Tickable<E>>
         implements SpringableWrapper, Lockable, Tickable<E> {
