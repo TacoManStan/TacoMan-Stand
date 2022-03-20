@@ -287,6 +287,8 @@ UTILITY
         VALUES: NUMBERS
 
             [ ] N
+            [ ] NumFilter
+
             [ ] Num
             [ ] Num2D
             [ ] Bounds
@@ -462,18 +464,14 @@ JAVAFX
 
 TACOSITORY
 
-    [ ] Util
+    [-] Util
 
     TACOSITORY: COLLECTIONS
 
-        [ ] ObservableLinkedList
+        [-] ObservableLinkedList
 
-        [ ] SelectionList
-        [ ] ReadOnlySelectionList
-
-    TACOSITORY: FUNCTIONS
-
-        [ ] CallbackTC
+        [-] SelectionList
+        [-] ReadOnlySelectionList
 
     TACOSITORY: JSON
 
@@ -491,13 +489,12 @@ TACOSITORY
         [ ] JLoadable
         [ ] JLoadableObject
 
-        [ ] TestData
-        [ ] TestData2
-        [ ] TestSubData
+        [-] TestData
+        [-] TestData2
+        [-] TestSubData
 
     TACOSITORY: NUMBERS
 
-        [ ] Numbers
         [ ] Filter
 
     TACOSITORY: OBJ TRAITS
