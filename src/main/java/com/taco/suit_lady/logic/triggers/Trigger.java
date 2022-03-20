@@ -151,9 +151,9 @@ import java.util.function.Predicate;
  * <br>
  * <p><b>Submitting and Triggering a TriggerEvent</b></p>
  * <ol>
- *     <li>First, submit a new {@link TriggerEvent} implementation to the {@link LogiCore#triggers() TriggerEventManager}.</li>
+ *     <li>First, {@link TriggerEventManager#submit(TriggerEvent) submit} a new {@link TriggerEvent} implementation to the {@link LogiCore#triggers() TriggerEventManager}.</li>
  *     <li>
- *         Upon submitting a {@link TriggerEvent}, all {@link Trigger Triggers} {@link TriggerEventManager#register(Trigger) registered} to that particular {@link TriggerEvent} will be {@link Trigger#trigger(TriggerEvent) triggered}.
+ *         Upon {@link TriggerEventManager#submit(TriggerEvent) submitting} a {@link TriggerEvent}, all {@link Trigger Triggers} {@link TriggerEventManager#register(Trigger) registered} to that particular {@link TriggerEvent} will be {@link Trigger#trigger(TriggerEvent) triggered}.
  *         <ul>
  *             <li><i>Note that the {@link Trigger#readOnlyConditionProperty() Trigger Condition} must also be {@link TriggerCondition#test(Object) passed} for the {@link Trigger} to be {@link Trigger#trigger(TriggerEvent) triggered}.</i></li>
  *         </ul>
@@ -164,10 +164,10 @@ import java.util.function.Predicate;
  * ...
  *
  * //submit a custom TriggerEvent implementation
- * triggers().submit(new TriggerEventImpl(source));
+ * triggers().submit(new TriggerEventImpl(sourceGameObject));
  *
  * //submit a pre-defined TriggerEvent implementation
- * triggers().submit(new UnitArrivedEvent(source, movedFrom, movedTo, eventTypeId));
+ * triggers().submit(new UnitArrivedEvent(sourceGameObject, movedFrom, movedTo, eventTypeId));
  *
  * ...
  * }</pre>
