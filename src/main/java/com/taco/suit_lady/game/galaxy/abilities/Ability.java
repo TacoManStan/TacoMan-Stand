@@ -17,6 +17,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
 
+/**
+ * <p>Defines an {@link Ability} for a specific {@link GameObject} source.</p>
+ * <p><b>Details</b></p>
+ * <ol>
+ *     <li>Override <i>{@link #execute(Map)}</i> to define the {@code execution logic} for this {@link Ability}.</li>
+ *     <li>Use <i>{@link #validator()}</i> to access the {@link Validator} for this {@link Ability}.</li>
+ *     <li>Once defined, an {@link Ability} implementation is {@link #execute(Map) executed} by calling the <i>{@link #use(Map)}</i> method.</li>
+ *     <li><i>See {@link Ability_InstantEffect} and {@link Ability_TargetEffect} for commonly-used {@link Ability} implementation examples.</i></li>
+ * </ol>
+ */
+//TO-EXPAND
 public abstract class Ability
         implements Validatable<Ability>, Paramable<String> {
     

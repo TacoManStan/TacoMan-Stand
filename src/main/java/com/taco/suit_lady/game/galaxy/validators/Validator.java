@@ -1,6 +1,7 @@
 package com.taco.suit_lady.game.galaxy.validators;
 
 import com.taco.suit_lady.game.GameComponent;
+import com.taco.suit_lady.game.galaxy.abilities.Ability;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
@@ -18,6 +19,21 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
 
+/**
+ * <p>Defines the {@link Validator} for a {@link Validatable} implementation.</p>
+ * <p><b>Details</b></p>
+ * <ol>
+ *     <li>{@link Validator Validators} contain a {@link ListProperty List} of {@link ValidationFilter Validation Filters} that together define the {@link #revalidate(Map) validation logic} for the {@link Validatable} this {@link Validator} is assigned to.</li>
+ *     <p><i>See {@link Ability} for a {@link Validatable} implementation example.</i></p>
+ * </ol>
+ *
+ * @param <T> The type of {@link Validatable} implementation this {@link Validator} is assigned to.
+ *
+ * @see ValidationFilter
+ * @see Validatable
+ * @see Ability
+ */
+//TO-EXPAND
 public class Validator<T extends Validatable<T>>
         implements SpringableWrapper, Lockable, GameComponent {
     
