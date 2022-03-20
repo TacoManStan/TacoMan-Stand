@@ -13,6 +13,7 @@ import java.util.function.Predicate;
 
 /**
  * <p>Assigned to a {@link Trigger} to define the {@link #test(Object) condition} that must be met for the {@link Trigger} to be {@link Trigger#trigger(TriggerEvent) triggered}.</p>
+ * <p><i>See {@link Trigger} for additional information.</i></p>
  *
  * @param <T> The type of {@link TriggerEvent} this {@link TriggerCondition} {@link #test(Object) filters}.
  */

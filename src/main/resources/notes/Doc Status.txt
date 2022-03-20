@@ -91,11 +91,11 @@ GALAXY
 
 	-----
 
-	[/] Galaxy
-	[ ] Trigger
-	[ ] TriggerCondition
-	[ ] TriggerEvent
-	[ ] TriggerEventManager
+	[X] Galaxy
+	[X] Trigger
+	[X] TriggerCondition
+	[X] TriggerEvent
+	[X] TriggerEventManager
 	[ ] TriggerGroup
 
 	[ ] UnitArrivedEvent
