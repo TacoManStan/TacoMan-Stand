@@ -28,7 +28,7 @@ import java.util.Map;
  *
  * @param <T> The {@link Class type} of this {@link Validatable} instance.
  */
-//TO-EXPAND
+//TO-EXPAND - Examples
 @SuppressWarnings("unchecked")
 public interface Validatable<T extends Validatable<T>>
         extends SpringableWrapper, Lockable, GameComponent {

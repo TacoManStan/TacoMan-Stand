@@ -33,7 +33,7 @@ import java.util.concurrent.locks.Lock;
  * @see Validatable
  * @see Ability
  */
-//TO-EXPAND
+//TO-EXPAND - Examples
 public class Validator<T extends Validatable<T>>
         implements SpringableWrapper, Lockable, GameComponent {
     

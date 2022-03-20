@@ -27,7 +27,7 @@ import java.util.concurrent.locks.Lock;
  *     <li>Once defined in the {@link Effect} implementation, <i>{@link Paramable#requiredParams()}</i> can be again called to confirm all required {@code parameters} have been provided.</li>
  * </ol>
  */
-//TO-EXPAND
+//TO-EXPAND - Examples
 public abstract class Effect
         implements SpringableWrapper, Lockable, GameComponent, Paramable<String> {
     

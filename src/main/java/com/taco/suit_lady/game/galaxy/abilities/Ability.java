@@ -27,7 +27,7 @@ import java.util.concurrent.locks.Lock;
  *     <li><i>See {@link Ability_InstantEffect} and {@link Ability_TargetEffect} for commonly-used {@link Ability} implementation examples.</i></li>
  * </ol>
  */
-//TO-EXPAND
+//TO-EXPAND - Examples
 public abstract class Ability
         implements Validatable<Ability>, Paramable<String> {
     
