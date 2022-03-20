@@ -87,7 +87,7 @@ GALAXY
 
 	[/] Validatable
 	[/] Validator
-	[ ] ValidationFilter
+	[/] ValidationFilter
 
 	-----
 
