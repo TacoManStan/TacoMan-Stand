@@ -1,31 +1,43 @@
+KEY
+
+    [ ] No Documentation
+
+    [X] Documentation Complete
+    [/] Documentation Incomplete
+    [-] Documentation is Low-Priority
+
+    [C] Class Level Documentation Complete
+    [B] Class Body Documentations Complete
+
+
 GENERAL
 
-    [ ] MainApplication
-    [ ] FxApplication
-    [ ] FxMainController
+    [B] MainApplication
+    [X] FxApplication
+    [X] FxMainController
 
-    [ ] AppController
-    [ ] AppUI
+    [/] AppController
+    [B] AppUI
 
-    [ ] FxWeaverInitializer
+    [X] FxWeaverInitializer
 
     -----
 
-    [ ] Displayable
-    [ ] Displayer
+    [X] Displayable
+    [X] Displayer
 
     [ ] Footer
     [ ] FooterController
 
     -----
 
-    [ ] Sidebar
-    [ ] SidebarBookshelf
-    [ ] UIBook
-    [ ] UIBookshelf
-    [ ] UIPage
-    [ ] UIPageController
-    [ ] UIPageHandler
+    [B] Sidebar
+    [B] SidebarBookshelf
+    [B] UIBook
+    [B] UIBookshelf
+    [B] UIPage
+    [B] UIPageController
+    [B] UIPageHandler
 
 -----
 
@@ -36,36 +48,32 @@ CONTENT
     [ ] ContentController
     [ ] ContentData
 
-    -----
-
-    [ ] ContentView
-    [ ] GroupContentView
-    [ ] PaintableContentView
-    [ ] SimpleContentView
-    [ ] TransitionContentView
-
 -----
 
 GAME
 
-	[X] GameTile
+	[C] GameTile
 	[ ] GameTileModel
 	[ ] TileTerrainObject
 	[ ] TileTerrainObjectID
 	[ ] TileTerrainObjectOrientation
 
-	[X] GameObject
+	[C] GameObject
 	[ ] GameObjectModel
 	[ ] GameObjectModelDefinition
 	[ ] GameObjectModelDefinitions
+
+	[ ] GameItem
+
 	[ ] MapObject
+
 	[ ] Movable
 	[ ] Mover
 
-	[/] Camera
-	[/] Entity
+	[C] Camera
+	[C] Entity
 	[ ] GameComponent
-	[X] GameMap
+	[C] GameMap
 	[/] GameMapModel
 	[ ] GameObjectComponent
 
@@ -93,7 +101,8 @@ GAME
 	[ ] GameViewContent
 	[ ] GameViewContentController
 	[ ] GameViewContentData
-	[ ] GFXObject
+
+	[C] GFXObject
 
 	[ ] GameObjectEditorPage
 	[ ] GameObjectEditorPageController
@@ -131,17 +140,17 @@ GALAXY
 	[ ] Effect_Cleave
 	[ ] Effect_MissileImpact
 
-	[/] Validatable
-	[/] Validator
-	[/] ValidationFilter
+	[C] Validatable
+	[C] Validator
+	[C] ValidationFilter
 
 	-----
 
-	[X] Galaxy
-	[X] Trigger
-	[X] TriggerCondition
-	[X] TriggerEvent
-	[X] TriggerEventManager
+	[C] Galaxy
+	[C] Trigger
+	[C] TriggerCondition
+	[C] TriggerEvent
+	[C] TriggerEventManager
 	[/] TriggerGroup
 
 	[ ] UnitArrivedEvent
@@ -151,103 +160,108 @@ GALAXY
 
 -----
 
-UTILITY
+UTIL
 
     [ ] Controllable
 
     [ ] SimplePredicate
-    [ ] Validatable
+    [B] Validatable
 
-    [ ] UID
-    [ ] UIDProcessable
-    [ ] UIDProcessor
+    [B] UID
+    [B] UIDProcessable
+    [X] UIDProcessor
 
     [ ] InternalException
     [ ] UndefinedRuntimeException
 
-    ENUMS
+    UTIL: ENUMS
 
         [ ] DefaultableEnum
         [ ] Enumable
         [ ] FilterType
 
-    EXCEPTIONS
+    UTIL: EXCEPTIONS
 
         [ ] NYIException
         [ ] ReadOnlyViolationException
 
-    INITIALIZER
+    UTIL: INITIALIZER
 
         [ ] Initializer
         [ ] ReadOnlyInitializer
 
-    SPRINGABLE
+    UTIL: SPRINGABLE
 
-        [ ] Springable
-        [ ] SpringableWrapper
+        [X] Springable
+        [X] SpringableWrapper
 
-        [ ] SimpleSpringable
-        [ ] StrictSpringable
+        [X] SimpleSpringable
+        [X] StrictSpringable
 
-    SYNCHRONIZATION
+    UTIL: SYNCHRONIZATION
 
-        [ ] Lockable
+        [/] Lockable
 
-    TIMING
+    UTIL: TIMING
 
-        [ ] DebugTimer
+        [/] Timers
+        [B] Timing
+
         [ ] Duration
         [ ] DurationProperty
+
+        [ ] Timerable
+        [ ] ReadOnlyTimerable
         [ ] ReactiveTimerable
         [ ] ReadOnlyReactiveTimerable
-        [ ] ReadOnlyTimeable
-        [ ] ReadOnlyTimerable
+
         [ ] Timeable
-        [ ] Timer
-        [ ] Timerable
+        [ ] ReadOnlyTimeable
+
+        [/] Timer
+        [ ] DebugTimer
+
         [ ] TimerException
-        [ ] Timers
-        [ ] Timing
 
-    TOOLS
+    UTIL: TOOLS
 
-        [ ] Bind
-        [ ] Calc
-        [ ] Enu
-        [ ] Exc
-        [ ] Exe
-        [ ] Obj
-        [ ] Props
-        [ ] Rand
-        [ ] Str
-        [ ] Stuff
-        [ ] TB
-        [ ] Web
+        [/] Bind
+        [/] Calc
+        [/] Enu
+        [/] Exc
+        [/] Exe
+        [/] Obj
+        [/] Props
+        [/] Rand
+        [/] Str
+        [/] Stuff
+        [/] TB
+        [/] Web
 
-        FX TOOLS
+        UTIL: TOOLS: FX TOOLS
 
             [ ] BindFX
-            [ ] DialogsFX
-            [ ] FX
-            [ ] GraphicsFX
+            [/] DialogsFX
+            [/] FX
+            [/] GraphicsFX
 
-        LIST TOOLS
+        UTIL: TOOLS: LIST TOOLS
 
-            [ ] A
-            [ ] L
+            [/] A
+            [/] L
 
             [ ] Op
-            [ ] OpHandler
-            [ ] OpListener
+            [X] OpHandler
+            [X] OpListener
 
-        PRINTING TOOLS
+        UTIL: TOOLS: PRINTING TOOLS
 
             [ ] Printer
             [ ] PrintData
 
             [ ] AbsentDef
 
-    VALUES
+    UTIL: VALUES
 
         [ ] Value
         [ ] Value2D
@@ -257,7 +271,7 @@ UTILITY
         [ ] ValueExpr2D
         [ ] ValueExpr3D
 
-        VALUES: ENUMS
+        UTIL: VALUES: ENUMS
 
             [ ] Axis
 
@@ -269,41 +283,41 @@ UTILITY
             [ ] OpResultType
             [ ] OpType
 
-        VALUES: FORMULAS
+        UTIL: VALUES: FORMULAS
 
             VALUES: FORMULAS: PATHFINDING
 
                 [ ] Pathfinding
-                [ ] AStarPathfinder
+                [C] AStarPathfinder
                 [ ] AStarMatrix
 
                 [ ] AStarNodeable
-                [ ] AStarNode
+                [C] AStarNode
                 [ ] CachedAStarNode
 
                 [ ] DummyElement
-                [ ] PathfindingTest
+                [-] PathfindingTest
 
-        VALUES: NUMBERS
+        UTIL: VALUES: NUMBERS
 
-            [ ] N
+            [/] N
             [ ] NumFilter
 
             [ ] Num
             [ ] Num2D
             [ ] Bounds
 
-            VALUES: NUMBERS: BINDINGS
+            UTIL: VALUES: NUMBERS: BINDINGS
 
                 [ ] BoundsBinding
 
-            VALUES: NUMBERS: EXPRESSIONS
+            UTIL: VALUES: NUMBERS: EXPRESSIONS
 
                 [ ] NumExpr
                 [ ] NumExpr2D
                 [ ] BoundsExpr
 
-            VALUES: NUMBERS: SHAPES
+            UTIL: VALUES: NUMBERS: SHAPES
 
                 [ ] Shape
 
@@ -313,129 +327,147 @@ UTILITY
 
 -----
 
-JAVAFX
+UI
 
-    [ ] Colorable
+    UI: CONSOLE
 
-    JAVAFX: COMPONENTS
+        [-] Console
+        [-] ConsoleInterpreter
 
-        [ ] ContentPane
-        [ ] ImagePane
+        [-] ConsoleMessage
+        [-] ConsoleMessageable
+        [-] SimpleConsoleMessage
 
-        JAVAFX: COMPONENTS: BUTTON
+        [-] ConsoleBB
 
-            [ ] ButtonViewable
-            [ ] ImageButton
+    UI: CONTENT
 
-            [ ] ImageButtonGroup
-            [ ] SimpleImageButtonGroup
-            [ ] BoundImageButtonGroup
+        [B] ContentView
+        [ ] GroupContentView
+        [ ] PaintableContentView
+        [ ] SimpleContentView
+        [ ] TransitionContentView
 
-        JAVAFX: COMPONENTS: FORMATTED CONTROLS
+    UI: JAVAFX
 
-            [ ] IntField
-            [ ] DoubleField
+        [-] Colorable
 
-            [ ] IntegerFormatter
-            [ ] DecimalFormatter
+        UI: JAVAFX: COMPONENTS
 
-        JAVAFX: COMPONENTS: PAINTING
+            [ ] ContentPane
+            [X] ImagePane
 
-            JAVAFX: COMPONENTS: PAINTING: PAINTABLES
+            UI: JAVAFX: COMPONENTS: BUTTON
 
-                [ ] Paintable
-                [ ] PaintableData
+                [ ] ButtonViewable
+                [X] ImageButton
 
-                JAVAFX: COMPONENTS: PAINTING: PAINTABLES: CANVAS
+                [X] ImageButtonGroup
+                [ ] SimpleImageButtonGroup
+                [B] BoundImageButtonGroup
 
-                    [ ] PaintCommand
+            UI: JAVAFX: COMPONENTS: FORMATTED CONTROLS
 
-                    [ ] ShapePaintCommand
-                    [ ] BoxPaintCommand
-                    [ ] OvalPaintCommand
-                    [ ] ArcPaintCommand
-                    [ ] TextPaintCommand
+                [ ] IntField
+                [ ] DoubleField
 
-                    [ ] ImagePaintCommandBase
-                    [ ] ImagePaintCommand
-                    [ ] CroppedImagePaintCommand
-                    [ ] AggregateImagePaintCommand
+                [ ] IntegerFormatter
+                [ ] DecimalFormatter
 
-                JAVAFX: COMPONENTS: PAINTING: PAINTABLES: OVERLAY
+            UI: JAVAFX: COMPONENTS: PAINTING
 
-                    [ ] PaintNode
-                    [ ] CompoundPaintNode
-                    [ ] ImagePaintNode
-                    [ ] ShapePaintNode
-                    [ ] BoxPaintNode
+                UI: JAVAFX: COMPONENTS: PAINTING: PAINTABLES
 
-            JAVAFX: COMPONENTS: PAINTING: SURFACES
+                    [ ] Paintable
+                    [ ] PaintableData
 
-                [ ] Surface
-                [ ] SurfaceData
+                    UI: JAVAFX: COMPONENTS: PAINTING: PAINTABLES: CANVAS
 
-                [ ] OverlayHandler
-                [ ] OverlaySurface
+                        [ ] PaintCommand
 
-                JAVAFX: COMPONENTS: PAINTING: SURFACES: CANVAS
+                        [ ] ShapePaintCommand
+                        [ ] BoxPaintCommand
+                        [ ] OvalPaintCommand
+                        [ ] ArcPaintCommand
+                        [ ] TextPaintCommand
 
-                    [ ] CanvasSurface
-                    [ ] CanvasPane
-                    [ ] CanvasContentPane
+                        [ ] ImagePaintCommandBase
+                        [ ] ImagePaintCommand
+                        [ ] CroppedImagePaintCommand
+                        [ ] AggregateImagePaintCommand
 
-    JAVAFX: DIALOG
+                    UI: JAVAFX: COMPONENTS: PAINTING: PAINTABLES: OVERLAY
 
-        [ ] DialogCallback
-        [ ] DialogController
+                        [ ] PaintNode
+                        [ ] CompoundPaintNode
+                        [ ] ImagePaintNode
+                        [ ] ShapePaintNode
+                        [ ] BoxPaintNode
 
-    JAVAFX: HYPERLINK
+                UI: JAVAFX: COMPONENTS: PAINTING: SURFACES
 
-        [ ] HyperlinkFX
-        [ ] HyperlinkNodeFX
+                    [ ] Surface
+                    [ ] SurfaceData
 
-    JAVAFX: LISTS
+                    [B] OverlayHandler
+                    [B] OverlaySurface
 
-        [ ] CellControlManager
-        [ ] Listable
+                    UI: JAVAFX: COMPONENTS: PAINTING: SURFACES: CANVAS
 
-        [ ] ListCellFX
-        [ ] TreeCellFX
+                        [/] CanvasSurface
+                        [ ] CanvasPane
+                        [ ] CanvasContentPane
 
-        JAVAFX: LISTS: TREE HANDLER
+        UI: JAVAFX: DIALOG
 
-            [ ] TreeLoader
-            [ ] WrappingTreeLoader
+            [/] DialogCallback
+            [B] DialogController
 
-            [ ] TreeCellData
-            [ ] WrappingTreeCellData
+        UI: JAVAFX: HYPERLINK
 
-            [ ] CreationTreeHandler
-            [ ] CreationTreeCellData
+            [B] HyperlinkFX
+            [B] HyperlinkNodeFX
 
-            [ ] IndexedCellFXable
-            [ ] TreeItemFX
+        UI: JAVAFX: LISTS
 
-    JAVAFX: SETTINGS
+            [X] CellControlManager
+            [ ] Listable
 
-        [ ] SettingNode
-        [ ] CheckBoxSettingNode
-        [ ] TextFieldSettingNode
+            [ ] ListCellFX
+            [X] TreeCellFX
 
-    JAVAFX: UTIL
+            UI: JAVAFX: LISTS: TREE HANDLER
 
-        [ ] FXTimer
+                [X] TreeLoader
+                [ ] WrappingTreeLoader
 
-    JAVAFX: UI INTERNAL
+                [/] TreeCellData
+                [/] WrappingTreeCellData
 
-        JAVAFX: UI INTERNAL: CONSOLE
+                [/] CreationTreeHandler
+                [/] CreationTreeCellData
+
+                [ ] IndexedCellFXable
+                [ ] TreeItemFX
+
+        UI: JAVAFX: SETTINGS
+
+            [ ] SettingNode
+            [ ] CheckBoxSettingNode
+            [ ] TextFieldSettingNode
+
+        UI: JAVAFX: UTIL
+
+            [/] FXTimer
+
+    UI: UI INTERNAL
+
+        UI: UI INTERNAL: CONSOLE
 
             [ ] ConsolePage
             [ ] ConsoleUIDataContainer
 
-            [ ] ConsoleController
-            [ ] ConsoleElementController
-
-        JAVAFX: UI INTERNAL: CONTROLLERS
+        UI: UI INTERNAL: CONTROLLERS
 
             [ ] Controller
             [ ] CellController
@@ -443,10 +475,13 @@ JAVAFX
             [ ] SettingGroupController
             [ ] SettingsController
 
+            [ ] ConsoleController
+            [ ] ConsoleElementController
+
             [ ] SidebarNodeGroupController
             [ ] TestSettingGroupController
 
-        JAVAFX: UI INTERNAL: DRAG AND DROP
+        UI: UI INTERNAL: DRAG AND DROP
 
             [ ] DragAndDropHandler
             [ ] DragAndDropManager
@@ -454,7 +489,7 @@ JAVAFX
             [ ] DragEventData
             [ ] DragEventType
 
-        JAVAFX: UI INTERNAL: SETTINGS
+        UI: UI INTERNAL: SETTINGS
 
             [ ] SettingContainer
             [ ] SettingGroup
@@ -463,8 +498,6 @@ JAVAFX
 -----
 
 TACOSITORY
-
-    [-] Util
 
     TACOSITORY: COLLECTIONS
 
@@ -493,10 +526,6 @@ TACOSITORY
         [-] TestData2
         [-] TestSubData
 
-    TACOSITORY: NUMBERS
-
-        [ ] Filter
-
     TACOSITORY: OBJ TRAITS
 
         TACOSITORY: OBJ TRAITS: COMMON
@@ -506,11 +535,6 @@ TACOSITORY
 
             [ ] Testable
             [ ] Textable
-
-    TACOSITORY: QUICK
-
-        [ ] Quick
-        [ ] ConsoleBB
 
 -----
 
