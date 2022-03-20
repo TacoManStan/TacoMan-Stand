@@ -19,8 +19,8 @@ import com.taco.suit_lady.util.tools.fx_tools.FX;
  *         <ul>
  *             <li>By {@code default}, <i>{@link #updateGfx()}</i> executes <i>{@link #onGfxUpdateAlways()}</i>, checks the value returned by <i>{@link #needsGfxUpdate()}</i>, and then executes <i>{@link #onGfxUpdate()}</i> if <i>{@link #needsGfxUpdate()}</i> returns {@code true}.</li>
  *             <li>In the majority of cases, the {@code default} implementation of <i>{@link #updateGfx()}</i> is sufficient.</li>
+ *             <li><i>See {@link ContentController#updateGfx()} for an {@link #updateGfx()} implementation example.</i></li>
  *         </ul>
- *         <p><i>See {@link ContentController#updateGfx()} for a {@link #updateGfx()} implementation example.</i></p>
  *     </li>
  * </ol>
  *
