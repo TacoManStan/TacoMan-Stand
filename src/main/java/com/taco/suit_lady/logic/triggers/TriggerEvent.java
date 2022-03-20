@@ -31,6 +31,12 @@ public abstract class TriggerEvent<T extends TriggerEvent<T>>
     
     //</editor-fold>
     
+    //<editor-fold desc="--- LOGIC ---">
+    
+    public final void submit() { triggers().submit((T) this); }
+    
+    //</editor-fold>
+    
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
     @Override public final @NotNull GameViewContent getGame() { return source.getGame(); }

@@ -24,6 +24,7 @@ import java.util.function.Predicate;
 
 /**
  * <p>Used to define the response to a {@link T specific} {@link TriggerEvent}.</p>
+ * <br><hr><br>
  * <p><b>Details</b></p>
  * <ol>
  *     <li>A {@link Trigger} functions as a {@link #trigger(TriggerEvent) response} to a {@link T particular} {@link TriggerEvent}.</li>
@@ -49,7 +50,7 @@ import java.util.function.Predicate;
  *         </ul>
  *     </li>
  * </ol>
- * <br>
+ * <br><hr><br>
  * <p><b>Example Implementation 1</b></p>
  * <br>
  * <pre>{@code
@@ -94,8 +95,6 @@ import java.util.function.Predicate;
  * }</pre>
  * <br>
  * <pre>{@code
- * ...
- *
  * //construct a new TriggerCondition
  * //use any GameComponent as constructor parameter
  * TriggerConditionImpl condition = new TriggerConditionImpl(gameComponent);
@@ -106,15 +105,11 @@ import java.util.function.Predicate;
  *
  * //register the Trigger with the TriggerEventManager
  * triggers().register(trigger);
- *
- * ...
  * }</pre>
- * <br>
- * <p><b>Example Implementation 2</b></p>
+ * <br><br>
+ * <p><b>Example Implementation 2A</b></p>
  * <br>
  * <pre>{@code
- * ...
- *
  * //the predicate function to be automatically converted to a TriggerCondition
  * Predicate<UnitArrivedEvent> condition = event -> {
  *     //condition logic
@@ -131,11 +126,9 @@ import java.util.function.Predicate;
  *
  * //register the Trigger
  * triggers().register(trigger);
- *
- * ...
  * }</pre>
  * <br>
- * <p><i>Or specify in-line lambda functions:</i></p>
+ * <p><b>Example Implementation 2B</b></p>
  * <br>
  * <pre>{@code
  * UnitArrivedTrigger trigger = Galaxy.newUnitArrivedTrigger(
@@ -149,27 +142,24 @@ import java.util.function.Predicate;
  * triggers().register(trigger);
  * }</pre>
  * <br>
- * <p><b>Submitting and Triggering a TriggerEvent</b></p>
+ * <br><hr><br>
+ * <p><b>TriggerEvent Submission</b></p>
  * <ol>
  *     <li>First, {@link TriggerEventManager#submit(TriggerEvent) submit} a new {@link TriggerEvent} implementation to the {@link LogiCore#triggers() TriggerEventManager}.</li>
- *     <li>
- *         Upon {@link TriggerEventManager#submit(TriggerEvent) submitting} a {@link TriggerEvent}, all {@link Trigger Triggers} {@link TriggerEventManager#register(Trigger) registered} to that particular {@link TriggerEvent} will be {@link Trigger#trigger(TriggerEvent) triggered}.
- *         <ul>
- *             <li><i>Note that the {@link Trigger#readOnlyConditionProperty() Trigger Condition} must also be {@link TriggerCondition#test(Object) passed} for the {@link Trigger} to be {@link Trigger#trigger(TriggerEvent) triggered}.</i></li>
- *         </ul>
- *     </li>
+ *     <li>Upon {@link TriggerEventManager#submit(TriggerEvent) submitting} a {@link TriggerEvent}, all {@link Trigger Triggers} {@link TriggerEventManager#register(Trigger) registered} to that particular {@link TriggerEvent} will be {@link Trigger#trigger(TriggerEvent) triggered}.</li>
+ *     <li>Note that the {@link Trigger#readOnlyConditionProperty() Trigger Condition} must also be {@link TriggerCondition#test(Object) passed} for the {@link Trigger} to be {@link Trigger#trigger(TriggerEvent) triggered}.</li>
  * </ol>
+ * <p><b>Example Implementations</b></p>
+ * <br>
  * <pre>{@code
- *
- * ...
- *
  * //submit a custom TriggerEvent implementation
  * triggers().submit(new TriggerEventImpl(sourceGameObject));
  *
  * //submit a pre-defined TriggerEvent implementation
  * triggers().submit(new UnitArrivedEvent(sourceGameObject, movedFrom, movedTo, eventTypeId));
  *
- * ...
+ * //submit a TriggerEvent from the event directly
+ * new UnitArrivedEvent(sourceGameObject, movedFrom, movedTo, eventTypeId).submit();
  * }</pre>
  *
  * @param <T> The type of {@link TriggerEvent} that this {@link Trigger} responds to.
