@@ -1,13 +1,12 @@
 package com.taco.suit_lady.ui.ui_internal.controllers;
 
-import com.taco.suit_lady.ui.ui_internal.controllers.CellController;
 import com.taco.suit_lady.util.timing.Timing;
 import com.taco.suit_lady.ui.console.ConsoleMessageable;
 import com.taco.suit_lady.ui.jfx.components.button.ImageButton;
 import com.taco.suit_lady.util.tools.fx_tools.FX;
 import com.taco.suit_lady.ui.jfx.components.ImagePane;
 import com.taco.suit_lady.ui.jfx.lists.treehandler.WrappingTreeCellData;
-import com.taco.tacository.ConsoleBB;
+import com.taco.suit_lady.ui.console.ConsoleBB;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;

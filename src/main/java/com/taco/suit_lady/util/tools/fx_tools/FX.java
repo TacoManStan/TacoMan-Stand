@@ -16,7 +16,7 @@ import com.taco.suit_lady.util.values.enums.OpType;
 import com.taco.suit_lady.util.values.numbers.Num2D;
 import com.taco.suit_lady.util.values.numbers.expressions.NumExpr;
 import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
-import com.taco.tacository.ConsoleBB;
+import com.taco.suit_lady.ui.console.ConsoleBB;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;

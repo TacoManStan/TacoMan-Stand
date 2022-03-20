@@ -1,6 +1,6 @@
 package com.taco.suit_lady.util.initializer;
 
-import com.taco.tacository.ConsoleBB;
+import com.taco.suit_lady.ui.console.ConsoleBB;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyListProperty;

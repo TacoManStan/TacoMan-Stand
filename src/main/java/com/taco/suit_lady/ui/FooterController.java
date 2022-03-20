@@ -22,10 +22,10 @@ public abstract class FooterController<F extends Footer<F, FC, T, TD, TC>, FC ex
     public @NotNull F getFooter() { return footer; }
     
     //</editor-fold>
+    
     @Override public void initialize() {
         FX.setAnchors(root());
     }
-    
     
     //<editor-fold desc="--- INTERNAL ---">
     

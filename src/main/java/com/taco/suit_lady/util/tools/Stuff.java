@@ -2,7 +2,7 @@ package com.taco.suit_lady.util.tools;
 
 import com.taco.suit_lady.util.UID;
 import com.taco.suit_lady.util.tools.list_tools.A;
-import com.taco.tacository.ConsoleBB;
+import com.taco.suit_lady.ui.console.ConsoleBB;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

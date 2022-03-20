@@ -2,6 +2,9 @@ package com.taco.suit_lady.util.tools;
 
 import com.taco.suit_lady.util.tools.list_tools.A;
 import com.taco.tacository.obj_traits.common.Nameable;
+import com.taco.tacository.obj_traits.common.Textable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.math.RoundingMode;
@@ -708,6 +711,35 @@ public class Str {
         //		return GeneralTools.get().getSimpleName(obj.getClass());
     }
     
+    //
+    
+    /**
+     * <p>Converts the specified {@link Object} into a {@link String}.</p>
+     * <p><b>Details</b></p>
+     * <ol>
+     *     <li>The {@link String} returned by {@link #asText(Object) this method} can never be {@code null}.</li>
+     *     <li>If the specified {@link Object} is {@code null}, return "null".</li>
+     *     <li>If the specified {@link Object} is a {@link String}, cast the specified {@link Object} to a {@link String} and return the result.</li>
+     *     <li>If the specified {@link Object} is {@link Textable}, cast the specified {@link Object} to a {@link Textable} then return the value of <i>{@link Textable#toText()}</i>.</li>
+     *     <li>If the specified {@link Object} is not an instance of any recognized class, return the value of <i>{@link Object#toString()}</i>.</li>
+     * </ol>
+     *
+     * @param obj The {@link Object} to be converted to {@link String text}.
+     *
+     * @return The specified {@link Object} represented as {@link String text}.
+     */
+    public static @NotNull String asText(@Nullable Object obj) {
+        if (obj == null)
+            return "null";
+        else if (obj instanceof String)
+            return (String) obj;
+        else if (obj instanceof Textable)
+            return ((Textable) obj).toText();
+        return obj.toString();
+    }
+    
+    //
+    
     //<editor-fold desc="Classes/Enums">
     
     /**
@@ -725,6 +757,4 @@ public class Str {
     }
     
     //</editor-fold>
-    
-    //
 }

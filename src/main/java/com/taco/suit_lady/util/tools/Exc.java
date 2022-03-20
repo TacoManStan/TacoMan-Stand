@@ -4,7 +4,7 @@ import com.taco.suit_lady.util.InternalException;
 import com.taco.suit_lady.util.exceptions.NYIException;
 import com.taco.suit_lady.util.exceptions.ReadOnlyViolationException;
 import com.taco.suit_lady.util.tools.printing.Printer;
-import com.taco.tacository.ConsoleBB;
+import com.taco.suit_lady.ui.console.ConsoleBB;
 import org.hibernate.TypeMismatchException;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
