@@ -1,8 +1,50 @@
 GENERAL
 
-    [ ] AppController
     [ ] MainApplication
+    [ ] FxApplication
+    [ ] FxMainController
 
+    [ ] AppController
+    [ ] AppUI
+
+    [ ] FxWeaverInitializer
+
+    -----
+
+    [ ] Displayable
+    [ ] Displayer
+
+    [ ] Footer
+    [ ] FooterController
+
+    -----
+
+    [ ] Sidebar
+    [ ] SidebarBookshelf
+    [ ] UIBook
+    [ ] UIBookshelf
+    [ ] UIPage
+    [ ] UIPageController
+    [ ] UIPageHandler
+
+-----
+
+CONTENT
+
+    [ ] ContentManager
+    [ ] Content
+    [ ] ContentController
+    [ ] ContentData
+
+    -----
+
+    [ ] ContentView
+    [ ] GroupContentView
+    [ ] PaintableContentView
+    [ ] SimpleContentView
+    [ ] TransitionContentView
+
+-----
 
 GAME
 
@@ -27,9 +69,13 @@ GAME
 	[/] GameMapModel
 	[ ] GameObjectComponent
 
+    .....
+
 	[/] Collidable
 	[/] CollisionMap
 	[/] CollisionArea
+
+    .....
 
 	[ ] Attribute
 	[ ] AttributeElementController
@@ -102,3 +148,409 @@ GALAXY
 	[ ] UnitArrivedTrigger
 	[ ] UnitMovedEvent
 	[ ] UnitMovedTrigger
+
+-----
+
+UTILITY
+
+    [ ] Controllable
+
+    [ ] SimplePredicate
+    [ ] Validatable
+
+    [ ] UID
+    [ ] UIDProcessable
+    [ ] UIDProcessor
+
+    [ ] InternalException
+    [ ] UndefinedRuntimeException
+
+    ENUMS
+
+        [ ] DefaultableEnum
+        [ ] Enumable
+        [ ] FilterType
+
+    EXCEPTIONS
+
+        [ ] NYIException
+        [ ] ReadOnlyViolationException
+
+    INITIALIZER
+
+        [ ] Initializer
+        [ ] ReadOnlyInitializer
+
+    SPRINGABLE
+
+        [ ] Springable
+        [ ] SpringableWrapper
+
+        [ ] SimpleSpringable
+        [ ] StrictSpringable
+
+    SYNCHRONIZATION
+
+        [ ] Lockable
+
+    TIMING
+
+        [ ] DebugTimer
+        [ ] Duration
+        [ ] DurationProperty
+        [ ] ReactiveTimerable
+        [ ] ReadOnlyReactiveTimerable
+        [ ] ReadOnlyTimeable
+        [ ] ReadOnlyTimerable
+        [ ] Timeable
+        [ ] Timer
+        [ ] Timerable
+        [ ] TimerException
+        [ ] Timers
+        [ ] Timing
+
+    TOOLS
+
+        [ ] Bind
+        [ ] Calc
+        [ ] Enu
+        [ ] Exc
+        [ ] Exe
+        [ ] Obj
+        [ ] Props
+        [ ] Rand
+        [ ] Str
+        [ ] Stuff
+        [ ] TB
+        [ ] Web
+
+        FX TOOLS
+
+            [ ] BindFX
+            [ ] DialogsFX
+            [ ] FX
+            [ ] GraphicsFX
+
+        LIST TOOLS
+
+            [ ] A
+            [ ] L
+
+            [ ] Op
+            [ ] OpHandler
+            [ ] OpListener
+
+        PRINTING TOOLS
+
+            [ ] Printer
+            [ ] PrintData
+
+            [ ] AbsentDef
+
+    VALUES
+
+        [ ] Value
+        [ ] Value2D
+        [ ] Value3D
+
+        [ ] ValueExpr
+        [ ] ValueExpr2D
+        [ ] ValueExpr3D
+
+        VALUES: ENUMS
+
+            [ ] Axis
+
+            [ ] CardinalDirection
+            [ ] CardinalDirectionType
+
+            [ ] LocType
+
+            [ ] OpResultType
+            [ ] OpType
+
+        VALUES: FORMULAS
+
+            VALUES: FORMULAS: PATHFINDING
+
+                [ ] Pathfinding
+                [ ] AStarPathfinder
+                [ ] AStarMatrix
+
+                [ ] AStarNodeable
+                [ ] AStarNode
+                [ ] CachedAStarNode
+
+                [ ] DummyElement
+                [ ] PathfindingTest
+
+        VALUES: NUMBERS
+
+            [ ] N
+            [ ] Num
+            [ ] Num2D
+            [ ] Bounds
+
+            VALUES: NUMBERS: BINDINGS
+
+                [ ] BoundsBinding
+
+            VALUES: NUMBERS: EXPRESSIONS
+
+                [ ] NumExpr
+                [ ] NumExpr2D
+                [ ] BoundsExpr
+
+            VALUES: NUMBERS: SHAPES
+
+                [ ] Shape
+
+                [ ] Box
+                [ ] Circle
+                [ ] Cone
+
+-----
+
+JAVAFX
+
+    [ ] Colorable
+
+    JAVAFX: COMPONENTS
+
+        [ ] ContentPane
+        [ ] ImagePane
+
+        JAVAFX: COMPONENTS: BUTTON
+
+            [ ] ButtonViewable
+            [ ] ImageButton
+
+            [ ] ImageButtonGroup
+            [ ] SimpleImageButtonGroup
+            [ ] BoundImageButtonGroup
+
+        JAVAFX: COMPONENTS: FORMATTED CONTROLS
+
+            [ ] IntField
+            [ ] DoubleField
+
+            [ ] IntegerFormatter
+            [ ] DecimalFormatter
+
+        JAVAFX: COMPONENTS: PAINTING
+
+            JAVAFX: COMPONENTS: PAINTING: PAINTABLES
+
+                [ ] Paintable
+                [ ] PaintableData
+
+                JAVAFX: COMPONENTS: PAINTING: PAINTABLES: CANVAS
+
+                    [ ] PaintCommand
+
+                    [ ] ShapePaintCommand
+                    [ ] BoxPaintCommand
+                    [ ] OvalPaintCommand
+                    [ ] ArcPaintCommand
+                    [ ] TextPaintCommand
+
+                    [ ] ImagePaintCommandBase
+                    [ ] ImagePaintCommand
+                    [ ] CroppedImagePaintCommand
+                    [ ] AggregateImagePaintCommand
+
+                JAVAFX: COMPONENTS: PAINTING: PAINTABLES: OVERLAY
+
+                    [ ] PaintNode
+                    [ ] CompoundPaintNode
+                    [ ] ImagePaintNode
+                    [ ] ShapePaintNode
+                    [ ] BoxPaintNode
+
+            JAVAFX: COMPONENTS: PAINTING: SURFACES
+
+                [ ] Surface
+                [ ] SurfaceData
+
+                [ ] OverlayHandler
+                [ ] OverlaySurface
+
+                JAVAFX: COMPONENTS: PAINTING: SURFACES: CANVAS
+
+                    [ ] CanvasSurface
+                    [ ] CanvasPane
+                    [ ] CanvasContentPane
+
+    JAVAFX: DIALOG
+
+        [ ] DialogCallback
+        [ ] DialogController
+
+    JAVAFX: HYPERLINK
+
+        [ ] HyperlinkFX
+        [ ] HyperlinkNodeFX
+
+    JAVAFX: LISTS
+
+        [ ] CellControlManager
+        [ ] Listable
+
+        [ ] ListCellFX
+        [ ] TreeCellFX
+
+        JAVAFX: LISTS: TREE HANDLER
+
+            [ ] TreeLoader
+            [ ] WrappingTreeLoader
+
+            [ ] TreeCellData
+            [ ] WrappingTreeCellData
+
+            [ ] CreationTreeHandler
+            [ ] CreationTreeCellData
+
+            [ ] IndexedCellFXable
+            [ ] TreeItemFX
+
+    JAVAFX: SETTINGS
+
+        [ ] SettingNode
+        [ ] CheckBoxSettingNode
+        [ ] TextFieldSettingNode
+
+    JAVAFX: UTIL
+
+        [ ] FXTimer
+
+    JAVAFX: UI INTERNAL
+
+        JAVAFX: UI INTERNAL: CONSOLE
+
+            [ ] ConsolePage
+            [ ] ConsoleUIDataContainer
+
+            [ ] ConsoleController
+            [ ] ConsoleElementController
+
+        JAVAFX: UI INTERNAL: CONTROLLERS
+
+            [ ] Controller
+            [ ] CellController
+
+            [ ] SettingGroupController
+            [ ] SettingsController
+
+            [ ] SidebarNodeGroupController
+            [ ] TestSettingGroupController
+
+        JAVAFX: UI INTERNAL: DRAG AND DROP
+
+            [ ] DragAndDropHandler
+            [ ] DragAndDropManager
+
+            [ ] DragEventData
+            [ ] DragEventType
+
+        JAVAFX: UI INTERNAL: SETTINGS
+
+            [ ] SettingContainer
+            [ ] SettingGroup
+            [ ] SettingsTitledPane
+
+-----
+
+TACOSITORY
+
+    [ ] Util
+
+    TACOSITORY: COLLECTIONS
+
+        [ ] ObservableLinkedList
+
+        [ ] SelectionList
+        [ ] ReadOnlySelectionList
+
+    TACOSITORY: FUNCTIONS
+
+        [ ] CallbackTC
+
+    TACOSITORY: JSON
+
+        [ ] JUtil
+        [ ] JFiles
+
+        [ ] JElement
+        [ ] JObject
+        [ ] JArray
+        [ ] JMatrix
+
+        [ ] NonJObjectFieldWrapper
+        [ ] ColorJObjectWrapper
+
+        [ ] JLoadable
+        [ ] JLoadableObject
+
+        [ ] TestData
+        [ ] TestData2
+        [ ] TestSubData
+
+    TACOSITORY: NUMBERS
+
+        [ ] Numbers
+        [ ] Filter
+
+    TACOSITORY: OBJ TRAITS
+
+        TACOSITORY: OBJ TRAITS: COMMON
+
+            [ ] Nameable
+            [ ] ModifiableNameable
+
+            [ ] Testable
+            [ ] Textable
+
+    TACOSITORY: QUICK
+
+        [ ] Quick
+        [ ] ConsoleBB
+
+-----
+
+TO SORT: NEW
+
+    [ ] CompareType
+    [ ] Debugger
+    [ ] MatrixIterator
+    [ ] ObservablePropertyContainer
+    [ ] ReadOnlyObservableList
+    [ ] ReadOnlyObservableListWrapper
+    [ ] Self
+    [ ] ValueGroup
+    [ ] ValuePair
+
+    TO SORT: NEW: INITIALIZATION
+
+        [ ] Initializable
+        [ ] Initializer
+        [ ] LockMode
+
+    TO SORT: NEW: INTERFACES
+
+        [ ] NameableProperty
+        [ ] ObservablePropertyContainable
+        [ ] ReadOnlyNameableProperty
+
+        TO SORT: NEW: INTERFACES: FUNCTIONAL
+
+            [ ] SelfValidatable
+
+            [ ] TriConsumer
+            [ ] TriFunction
+
+            [ ] QuadConsumer
+            [ ] QuadFunction
+
+            TO SORT: NEW: INTERFACES: FUNCTIONAL: FILTER
+
+                [ ] CompoundFilter
