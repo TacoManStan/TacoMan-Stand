@@ -1,10 +1,11 @@
-package com.taco.suit_lady.ui.ui_internal.controllers;
+package com.taco.suit_lady.ui.ui_internal.console;
 
 import com.taco.suit_lady.ui.console.Console;
 import com.taco.suit_lady.ui.console.ConsoleMessageable;
 import com.taco.suit_lady.ui.jfx.lists.treehandler.WrappingTreeCellData;
 import com.taco.suit_lady.ui.ui_internal.console.ConsolePage;
 import com.taco.suit_lady.ui.ui_internal.console.ConsoleUIDataContainer;
+import com.taco.suit_lady.ui.ui_internal.controllers.SidebarNodeGroupController;
 import javafx.fxml.FXML;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;

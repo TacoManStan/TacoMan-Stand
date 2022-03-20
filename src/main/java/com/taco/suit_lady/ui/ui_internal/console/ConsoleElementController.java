@@ -1,5 +1,6 @@
-package com.taco.suit_lady.ui.ui_internal.controllers;
+package com.taco.suit_lady.ui.ui_internal.console;
 
+import com.taco.suit_lady.ui.ui_internal.controllers.CellController;
 import com.taco.suit_lady.util.timing.Timing;
 import com.taco.suit_lady.ui.console.ConsoleMessageable;
 import com.taco.suit_lady.ui.jfx.components.button.ImageButton;
