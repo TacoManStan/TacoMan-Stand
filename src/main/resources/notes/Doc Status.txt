@@ -96,7 +96,7 @@ GALAXY
 	[X] TriggerCondition
 	[X] TriggerEvent
 	[X] TriggerEventManager
-	[ ] TriggerGroup
+	[/] TriggerGroup
 
 	[ ] UnitArrivedEvent
 	[ ] UnitArrivedTrigger
