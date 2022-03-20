@@ -1,7 +1,7 @@
 package com.taco.suit_lady._to_sort._new.interfaces.functional.filter;
 
 import com.taco.suit_lady._to_sort._new.CompareType;
-import com.taco.tacository.numbers.Numbers;
+import com.taco.suit_lady.util.values.numbers.N;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 
@@ -119,7 +119,7 @@ public class CompoundFilter<T>
                     
                     case HALF -> {
                         // If the total number of sub-filters is ODD, a parent CF of type 'HALF' is guaranteed to FAIL.
-                        if (Numbers.isOdd(countTotal) ||
+                        if (N.isOdd(countTotal) ||
                             // If more than half of the sub-filters have FAILED, a parent CF of type 'HALF' is guaranteed to FAIL.
                             countFailed > countTotal / 2)
                             return false;
@@ -135,7 +135,7 @@ public class CompoundFilter<T>
             case ALL_BUT_ONE -> { return countFailed == 1; }
             case HALF_OR_LESS -> { return countFailed <= countTotal / 2; }
             case HALF_OR_MORE -> { return countPassed >= countTotal / 2; }
-            case HALF -> { return Numbers.isEven(countTotal) && countPassed == countTotal / 2; }
+            case HALF -> { return N.isEven(countTotal) && countPassed == countTotal / 2; }
             
             default -> throw new RuntimeException("This... What... Getting here shouldn't be... this shouldn't be possible, what the actual fuck did you do to trigger this error?");
         }

@@ -2,6 +2,7 @@ package com.taco.suit_lady.ui.ui_internal.console;
 
 import com.taco.suit_lady.ui.UIBook;
 import com.taco.suit_lady.ui.UIPage;
+import com.taco.suit_lady.ui.ui_internal.controllers.ConsoleController;
 import org.jetbrains.annotations.NotNull;
 
 public class ConsolePage extends UIPage<ConsoleController>

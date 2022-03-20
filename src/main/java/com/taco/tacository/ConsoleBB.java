@@ -1,7 +1,6 @@
-package com.taco.tacository.quick;
+package com.taco.tacository;
 
-import com.taco.tacository.Util;
-import com.taco.tacository.numbers.Numbers;
+import com.taco.suit_lady.util.values.numbers.N;
 
 public class ConsoleBB
 {
@@ -86,7 +85,7 @@ public class ConsoleBB
         int divWidth = Math.max((((text.length() / 2) + (titleBorderCharCount + titleSpacing)) * 2), (consoleWidth * 2));
         String div = divider(divWidth, dvChar);
         
-        if (Numbers.isOdd(text.length()))
+        if (N.isOdd(text.length()))
             div += dvChar;
         
         int fTextSpaces = (((divWidth / 2) - titleBorderCharCount) - (text.length() / 2));

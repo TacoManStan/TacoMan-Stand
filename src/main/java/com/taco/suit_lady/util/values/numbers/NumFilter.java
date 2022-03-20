@@ -1,10 +1,13 @@
-package com.taco.tacository.numbers;
+package com.taco.suit_lady.util.values.numbers;
+
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
 
-public enum Filter
-{
+public enum NumFilter {
+    
     THROW_NPE("Throw NullPointerException"),
     THROW_NFE("Throw NumberFormatException"),
     ALLOW_INFINITY("Allow Infinity"),
@@ -15,29 +18,23 @@ public enum Filter
     
     private final String key;
     
-    Filter(String key)
-    {
+    NumFilter(String key) {
         this.key = key;
     }
     
-    //
-    
-    public final String key()
-    {
+    @Contract(pure = true)
+    public final @NotNull String key() {
         return this.key.toLowerCase();
     }
     
-    public boolean matches(String[] args)
-    {
+    public boolean matches(String[] args) {
         final List<String> argsList = Arrays.asList(args);
         return matches(argsList);
     }
     
-    public boolean matches(List<String> argsList)
-    {
+    public boolean matches(@NotNull List<String> argsList) {
         for (int i = 0; i < argsList.size(); i++)
             argsList.set(i, argsList.get(i).toLowerCase());
-        
         return argsList.contains(key());
     }
 }

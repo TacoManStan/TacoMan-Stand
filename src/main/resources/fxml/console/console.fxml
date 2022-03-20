@@ -6,7 +6,7 @@
 
 <BorderPane fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="465.0" prefWidth="241.0"
             xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.taco.suit_lady.ui.ui_internal.console.ConsoleController">
+            fx:controller="com.taco.suit_lady.ui.ui_internal.controllers.ConsoleController">
     <center>
         <TreeView fx:id="consoleTree" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" BorderPane.alignment="CENTER">
             <BorderPane.margin>

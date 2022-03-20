@@ -1,4 +1,4 @@
-package com.taco.suit_lady.ui.ui_internal.console;
+package com.taco.suit_lady.ui.ui_internal.controllers;
 
 import com.taco.suit_lady.ui.console.Console;
 import com.taco.suit_lady.ui.console.ConsoleMessageable;

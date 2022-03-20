@@ -6,7 +6,7 @@ import com.taco.suit_lady.ui.jfx.lists.treehandler.TreeLoader;
 import com.taco.suit_lady.ui.jfx.lists.treehandler.WrappingTreeLoader;
 import com.taco.suit_lady.ui.ui_internal.console.ConsolePage;
 import com.taco.suit_lady.ui.ui_internal.console.ConsoleUIDataContainer;
-import com.taco.suit_lady.ui.ui_internal.console.ConsoleElementController;
+import com.taco.suit_lady.ui.ui_internal.controllers.ConsoleElementController;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Exc;

@@ -1,4 +1,4 @@
-package com.taco.tacository.quick;
+package com.taco.tacository;
 
 public class Quick
 {

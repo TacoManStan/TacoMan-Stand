@@ -11,15 +11,14 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-public class MainApplication
-{
+public class MainApplication {
+    
     /**
      * <p><b>The entry point for the <i>{@link FXApplication Application}</i> and corresponding functionalities (e.g., Spring).</b></p>
      * <br>
      * <hr>
      */
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         System.out.println(Font.loadFont(MainApplication.class.getResourceAsStream("/fonts/Menlo-Regular.ttf"), 10));
         Application.launch(FXApplication.class, args);
     }
@@ -41,11 +40,11 @@ public class MainApplication
      * <br>
      *
      * @param ctx The {@link ConfigurableApplicationContext ApplicationContext} passed to the {@link SpringFxWeaver} upon its construction.
+     *
      * @return A new {@link SpringFxWeaver} instance, loaded and managed as a {@code singleton} by {@code Spring}.
      */
     @Bean
-    public FxWeaver fxweaver(ConfigurableApplicationContext ctx)
-    {
+    public FxWeaver fxweaver(ConfigurableApplicationContext ctx) {
         return new SpringFxWeaver(ctx);
     }
 }

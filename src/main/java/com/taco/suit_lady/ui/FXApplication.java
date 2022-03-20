@@ -13,6 +13,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.Arrays;
+
 /**
  * <p><b>The <i>{@link Application JFX Application}</i> instance implemented and executed by the <i>{@link MainApplication Parent Application}</i>.</b></p>
  * <br>
@@ -37,8 +39,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * </ul>
  * <hr>
  */
-public class FXApplication extends Application
-{
+public class FXApplication extends Application {
+    
     private ConfigurableApplicationContext ctx;
     
     /**
@@ -75,15 +77,17 @@ public class FXApplication extends Application
      * <hr>
      */
     @Override
-    public void init()
-    {
+    public void init() {
         // TODO - Update JavaDoc for this method to accurately reflect ApplicationContext initialization process.
-        ctx = new SpringApplicationBuilder() // Constructs a new SpringApplicationBuilder instance to handle the ApplicationContext initialization
-                .sources(MainApplication.class) // Defines all global-scope class-based configurations
-                .parent(new ClassPathXmlApplicationContext(StartupUtil.ROOT.XML.ctx_config())) // Gives global scope access to applicable XML Configurations
-                .run(getParameters().getRaw().toArray(new String[0])); // Executes the application builder using no arguments
+        
+        // Constructs a new SpringApplicationBuilder instance to handle the ApplicationContext initialization
+        System.out.println("Params: " + getParameters().getRaw());
+        System.out.println("XML Config: " + Arrays.asList(StartupUtil.ROOT.XML.ctx_config()));
+        ctx = new SpringApplicationBuilder().sources(MainApplication.class) // Defines all global-scope class-based configurations
+                                            .parent(new ClassPathXmlApplicationContext(StartupUtil.ROOT.XML.ctx_config())) // Gives global scope access to applicable XML Configurations
+                                            .run(getParameters().getRaw().toArray(new String[0])); // Executes the application builder using no arguments
         ctx.registerShutdownHook(); // Enables automatic/internal shutdown support
-    
+        
         ctx.getBean(BeansDemo.class).demo();
     }
     
@@ -104,8 +108,7 @@ public class FXApplication extends Application
      * @param primaryStage The fully initialized {@link Stage JavaFX Stage} instance serving as the {@code View Module} of the main {@link MainApplication Application}.
      */
     @Override
-    public void start(Stage primaryStage)
-    {
+    public void start(Stage primaryStage) {
         ctx.publishEvent(new FxWeaverInitializer.StageReadyEvent(primaryStage));
     }
     
@@ -134,8 +137,7 @@ public class FXApplication extends Application
      * <hr>
      */
     @Override
-    public void stop()
-    {
+    public void stop() {
         Platform.exit();
         System.exit(0);
     }
