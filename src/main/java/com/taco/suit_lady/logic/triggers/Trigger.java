@@ -163,6 +163,12 @@ import java.util.function.Predicate;
  * }</pre>
  *
  * @param <T> The type of {@link TriggerEvent} that this {@link Trigger} responds to.
+ *
+ * @see Galaxy
+ * @see Springable#triggers()
+ * @see TriggerEventManager
+ * @see TriggerEvent
+ * @see TriggerCondition
  */
 public abstract class Trigger<T extends TriggerEvent<T>>
         implements SpringableWrapper, Lockable, GameComponent {
