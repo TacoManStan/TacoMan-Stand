@@ -1,11 +1,18 @@
 package com.taco.suit_lady.logic.triggers;
 
 import com.taco.suit_lady.game.GameComponent;
+import com.taco.suit_lady.game.galaxy.abilities.Ability;
+import com.taco.suit_lady.game.galaxy.abilities.Ability_InstantEffect;
+import com.taco.suit_lady.game.galaxy.abilities.Ability_TargetEffect;
+import com.taco.suit_lady.game.galaxy.effects.Effect;
+import com.taco.suit_lady.game.galaxy.effects.EffectGroup;
+import com.taco.suit_lady.game.galaxy.effects.Effect_Scan;
+import com.taco.suit_lady.game.galaxy.effects.Effect_Targeted;
 import com.taco.suit_lady.game.galaxy.validators.Validatable;
 import com.taco.suit_lady.game.galaxy.validators.ValidationFilter;
+import com.taco.suit_lady.game.galaxy.validators.Validator;
 import com.taco.suit_lady.game.objects.GameObject;
-import com.taco.suit_lady.logic.OneTimeTask;
-import com.taco.suit_lady.logic.Tickable;
+import com.taco.suit_lady.logic.*;
 import com.taco.suit_lady.logic.triggers.implementations.UnitArrivedEvent;
 import com.taco.suit_lady.logic.triggers.implementations.UnitArrivedTrigger;
 import com.taco.suit_lady.logic.triggers.implementations.UnitMovedEvent;
@@ -21,7 +28,61 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
- * <p>Contains static utility methods for streamlined {@link Trigger}-related operations (e.g., {@link Trigger} factory methods).</p>
+ * <p>Contains static utility methods for {@link Galaxy} Objects.</p>
+ * <p><b>Example {@link Galaxy} Objects</b></p>
+ * <ul>
+ *     <li>
+ *         <b>Triggers</b>
+ *         <ol>
+ *             <li>{@link Trigger}</li>
+ *             <li>{@link TriggerEvent}</li>
+ *             <li>{@link TriggerEventManager}</li>
+ *         </ol>
+ *     </li>
+ *     <li>
+ *         <b>Validators</b>
+ *         <ol>
+ *             <li>{@link Validator}</li>
+ *             <li>{@link Validatable}</li>
+ *             <li>{@link ValidationFilter}</li>
+ *         </ol>
+ *     </li>
+ *     <li>
+ *         <b>Abilities</b>
+ *         <ol>
+ *             <li>{@link Ability}</li>
+ *             <li>{@link Ability_TargetEffect}</li>
+ *             <li>{@link Ability_InstantEffect}</li>
+ *         </ol>
+ *     </li>
+ *     <li>
+ *         <b>Effects</b>
+ *         <ol>
+ *             <li>{@link Effect}</li>
+ *             <li>{@link Effect_Targeted}</li>
+ *             <li>{@link Effect_Scan}</li>
+ *             <li><i>{@link EffectGroup} - nyi</i></li>
+ *         </ol>
+ *     </li>
+ *     <li>
+ *         <b>Tickables and GameTasks</b>
+ *         <ol>
+ *             <li>{@link Tickable}</li>
+ *             <li>{@link TaskManager}</li>
+ *             <li>{@link GameTask}</li>
+ *             <li>{@link LogiCore}</li>
+ *         </ol>
+ *     </li>
+ * </ul>
+ * <br><hr><br>
+ * <p><b>See the Following for Additional Information</b></p>
+ * <ul>
+ *     <li>{@link Trigger}</li>
+ *     <li>{@link TaskManager}</li>
+ *     <li>{@link Ability}</li>
+ *     <li>{@link Effect}</li>
+ *     <li>{@link Validator}</li>
+ * </ul>
  */
 public final class Galaxy {
     Galaxy() { } //No Instance

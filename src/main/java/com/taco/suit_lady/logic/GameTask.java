@@ -20,7 +20,9 @@ import java.util.concurrent.locks.ReentrantLock;
  * <p><b>Details</b></p>
  * <ol>
  *     <li>To construct a new {@link GameTask}, use any of the available {@link GameTask#GameTask(GameComponent, Tickable) Constructors} or {@link Galaxy#newOneTimeTask(GameComponent, Tickable, Runnable) Factory Methods} located in the static {@link Galaxy} utility class.</li>
+ *     <li>Most commonly, {@link GameTask GameTasks} are added to a {@link Tickable} implementation to be processed by the {@link Tickable Tickables} {@link Tickable#taskManager() TaskManager}.</li>
  * </ol>
+ * <p><i>See {@link TaskManager} for additional information.</i></p>
  *
  * @param <E> The type of {@link Tickable} this {@link GameTask} is a part of.
  */
