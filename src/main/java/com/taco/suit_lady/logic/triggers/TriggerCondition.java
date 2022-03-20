@@ -11,6 +11,11 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.locks.Lock;
 import java.util.function.Predicate;
 
+/**
+ * <p>Assigned to a {@link Trigger} to define the {@link #test(Object) condition} that must be met for the {@link Trigger} to be {@link Trigger#trigger(TriggerEvent) triggered}.</p>
+ *
+ * @param <T> The type of {@link TriggerEvent} this {@link TriggerCondition} {@link #test(Object) filters}.
+ */
 public abstract class TriggerCondition<T extends TriggerEvent<T>>
         implements SpringableWrapper, Lockable, GameComponent, Predicate<T> {
     

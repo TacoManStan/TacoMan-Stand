@@ -13,6 +13,18 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.locks.Lock;
 
+/**
+ * <p>The abstract parent of all {@link TriggerEvent Trigger Events}.</p>
+ * <p><b>Details</b></p>
+ * <ol>
+ *     <li>Once implemented, a {@link TriggerEvent} must be {@link TriggerEventManager#submit(TriggerEvent) submitted} to the {@link TriggerEventManager}.</li>
+ *     <li>Upon {@link TriggerEventManager#submit(TriggerEvent) submission}, all {@link Trigger Triggers} {@link TriggerEventManager#register(Trigger) registered} to the {@link TriggerEvent} are {@link Trigger#trigger(TriggerEvent) triggered}.</li>
+ *     <p><i>For additional information, refer to {@link Trigger}.</i></p>
+ * </ol>
+ *
+ * @param <T> The type of {@link TriggerEvent} implementation.
+ *            Should be the same as this {@link TriggerEvent} implementation.
+ */
 public abstract class TriggerEvent<T extends TriggerEvent<T>>
         implements SpringableWrapper, Lockable, GameComponent {
     

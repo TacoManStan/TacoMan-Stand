@@ -11,6 +11,21 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.concurrent.locks.Lock;
 
+/**
+ * <p>Handles all {@link TriggerEvent TriggerEvents} and {@link Trigger Triggers}.</p>
+ * <p><b>Details</b></p>
+ * <ol>
+ *     <li>Use <i>{@link Springable#triggers()}</i> to access the {@link TriggerEventManager}.</li>
+ *     <li>Use <i>{@link #register(Trigger)}</i> to define the {@link Trigger} response to a {@link TriggerEvent} implementation.</li>
+ *     <li>
+ *         Use <i>{@link #submit(TriggerEvent)}</i> to tell the {@link TriggerEventManager} that a {@link TriggerEvent} has occurred.
+ *         <ul>
+ *             <li>Upon {@link #submit(TriggerEvent) submission}, all {@link Trigger Triggers} {@link #register(Trigger) registered} to the {@link #submit(TriggerEvent) submitted} {@link TriggerEvent} are {@link Trigger#trigger(TriggerEvent) triggered}.</li>
+ *         </ul>
+ *     </li>
+ * </ol>
+ * <p><i>See {@link Trigger} for additional information.</i></p>
+ */
 public class TriggerEventManager
         implements SpringableWrapper, Lockable, GameComponent {
     
