@@ -1,14 +1,16 @@
 KEY
 
-    [ ] No Documentation
+    [ ]: No Documentation
 
-    [X] Documentation Complete
-    [/] Documentation Incomplete
-    [-] Documentation is Low-Priority
+    [X]: Documentation Complete
+    [/]: Documentation Incomplete
+    [-]: Documentation is Low-Priority
 
-    [C] Class Level Documentation Complete
-    [B] Class Body Documentations Complete
+    [C]: Class Level Documentation Complete
+    [B]: Class Body Documentations Complete
 
+--------------------
+--------------------
 
 GENERAL
 
@@ -295,7 +297,7 @@ UTIL
                 [C] AStarNode
                 [ ] CachedAStarNode
 
-                [ ] DummyElement
+                [-] DummyElement
                 [-] PathfindingTest
 
         UTIL: VALUES: NUMBERS
@@ -320,7 +322,6 @@ UTIL
             UTIL: VALUES: NUMBERS: SHAPES
 
                 [ ] Shape
-
                 [ ] Box
                 [ ] Circle
                 [ ] Cone
