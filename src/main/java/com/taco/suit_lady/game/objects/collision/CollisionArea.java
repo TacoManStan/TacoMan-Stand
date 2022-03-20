@@ -21,6 +21,11 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.BiFunction;
 
+/**
+ * <p>Contains a {@link ListProperty List} of {@link Shape Shapes} that together define the {@link Collidable Collision Data} for this {@link CollisionArea}.</p>
+ * @param <T>
+ */
+//TO-EXPAND
 public class CollisionArea<T extends Collidable<T>>
         implements Collidable<T> {
     
@@ -29,7 +34,7 @@ public class CollisionArea<T extends Collidable<T>>
     private final CollisionMap<T> collisionMap;
     
     private final ListProperty<Shape> includedShapes;
-    private final ListProperty<Shape> excludedShapes;
+    private final ListProperty<Shape> excludedShapes; //TODO: nyi
     
     public CollisionArea(@NotNull CollisionMap<T> collisionMap) {
         this.lock = new ReentrantLock();

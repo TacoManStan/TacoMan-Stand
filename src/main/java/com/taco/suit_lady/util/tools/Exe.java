@@ -287,10 +287,9 @@ public class Exe {
      * <p>If this method returns true, {@link Lock#unlock()} <i>must</i> be called afterwards.</p>
      * <hr>
      * <p><b>Example Usage</b></p>
-     * <blockquote><pre>
-     * <code>//If lock is null and allowNull is false, this will throw a {@link NullPointerException}.
+     * <pre>{@code //If lock is null and allowNull is false, this will throw a {@link NullPointerException}.
      * if (ThreadTools.lock(lock, allowNull)) {
-     *      //Use a try-finally block to ensure that the {@link ReentrantLock} is always unlocked}.
+     *      //Use a try-finally block to ensure that the {@link ReentrantLock} is always unlocked.
      *      try {
      *          //Synchronized code
      *      } finally {
@@ -299,8 +298,7 @@ public class Exe {
      * //Only executed when allowNull is true (a {@link NullPointerException} will have already been thrown).
      * } else {
      *      //On-fail code - executed when lock is null.
-     * }
-     * </code></pre></blockquote>
+     * }}</pre>
      * <i>Generally speaking, it is a good idea to use a {@link #sync(Lock, Function, Supplier, boolean, Consumer...) sync} method instead of manually locking and unlocking.</i>
      *
      * @param lock      The {@link ReentrantLock} being locked.

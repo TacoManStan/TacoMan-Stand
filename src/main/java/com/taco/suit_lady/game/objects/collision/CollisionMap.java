@@ -25,6 +25,11 @@ import java.util.concurrent.locks.Lock;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
+/**
+ * <p>Defines a {@link ListProperty List} of {@link CollisionArea Collision Areas} that together comprise the {@code collision data} for this {@link CollisionMap}.</p>
+ * @param <T>
+ */
+//TO-EXPAND
 public class CollisionMap<T extends Collidable<T>>
         implements SpringableWrapper, Lockable, Collidable<T> {
     

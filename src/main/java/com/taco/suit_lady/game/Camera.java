@@ -42,6 +42,7 @@ import java.util.concurrent.locks.ReentrantLock;
  *     <li>The location of the {@link Camera} represents the <i>top left</i> of the {@link Camera camera's} view region, <i>not</i> the center.</li>
  * </ol>
  */
+//TO-EXPAND
 public class Camera
         implements SpringableWrapper, Lockable, GameComponent, BoundsExpr {
     

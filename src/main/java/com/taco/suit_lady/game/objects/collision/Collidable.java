@@ -14,6 +14,11 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.function.BiFunction;
 
+/**
+ * <p>Defines implementing classes as {@link Collidable}, providing a {@link CollisionMap} for each implementation.</p>
+ * @param <T>
+ */
+//TO-EXPAND
 public interface Collidable<T extends Collidable<T>>
         extends SpringableWrapper, Lockable, GameComponent {
     
