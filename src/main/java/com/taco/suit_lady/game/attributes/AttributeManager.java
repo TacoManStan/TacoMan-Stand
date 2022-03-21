@@ -1,6 +1,7 @@
 package com.taco.suit_lady.game.attributes;
 
 import com.taco.suit_lady.game.GameComponent;
+import com.taco.suit_lady.game.GameObjectComponent;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.util.synchronization.Lockable;
@@ -14,6 +15,7 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.collections.FXCollections;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -26,8 +28,93 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+/**
+ * <p>A {@link GameObjectComponent} defining the {@link Attribute Attributes} of a {@link GameObject} {@link #getOwner() owner}.</p>
+ * <br>
+ * <p><b>Adding {@link Attribute Attributes}</b></p>
+ * <ol>
+ *     <li>To add an {@link Attribute} to this {@link AttributeManager}, use the <i>{@link #addAttribute(Attribute)}</i> method.</li>
+ *     <li>
+ *         Alternatively, an {@link Attribute} can be added by specifying the {@link Attribute} {@link Attribute#getId() ID} and {@link Attribute#getValue() Value} using any of the following methods:
+ *         <ul>
+ *             <li><i>{@link #addAttribute(String, Object)}</i></li>
+ *             <li><i>{@link #addBooleanAttribute(String, boolean)}</i></li>
+ *             <li><i>{@link #addIntegerAttribute(String, int)}</i></li>
+ *             <li><i>{@link #addLongAttribute(String, long)}</i></li>
+ *             <li><i>{@link #addFloatAttribute(String, float)}</i></li>
+ *             <li><i>{@link #addDoubleAttribute(String, double)}</i></li>
+ *             <li><i>{@link #addCharacterAttribute(String, char)}</i></li>
+ *             <li><i>{@link #addStringAttribute(String, String)}</i></li>
+ *         </ul>
+ *     </li>
+ * </ol>
+ * <br>
+ * <p><b>Accessing {@link Attribute Attributes}</b></p>
+ * <ol>
+ *     <li>
+ *         To access an {@link Attribute} object located in this {@link AttributeManager}, use any of the following {@code methods}:
+ *         <ul>
+ *             <li><i>{@link #getAttribute(String, Class)}</i></li>
+ *             <li><i>{@link #getBooleanAttribute(String)}</i></li>
+ *             <li><i>{@link #getIntegerAttribute(String)}</i></li>
+ *             <li><i>{@link #getLongAttribute(String)}</i></li>
+ *             <li><i>{@link #getFloatAttribute(String)}</i></li>
+ *             <li><i>{@link #getDoubleAttribute(String)}</i></li>
+ *             <li><i>{@link #getCharacterAttribute(String)}</i></li>
+ *             <li><i>{@link #getStringAttribute(String)}</i></li>
+ *         </ul>
+ *     </li>
+ *     <li>
+ *         To access the {@link Attribute#valueProperty() Value Property} of an {@link Attribute} located in this {@link AttributeManager}, use any of the following {@code methods}:
+ *         <ul>
+ *             <li><i>{@link #getProperty(String, Class)}</i></li>
+ *             <li><i>{@link #getBooleanProperty(String)}</i></li>
+ *             <li><i>{@link #getIntegerProperty(String)}</i></li>
+ *             <li><i>{@link #getLongProperty(String)}</i></li>
+ *             <li><i>{@link #getFloatProperty(String)}</i></li>
+ *             <li><i>{@link #getDoubleProperty(String)}</i></li>
+ *             <li><i>{@link #getCharacterProperty(String)}</i></li>
+ *             <li><i>{@link #getStringProperty(String)}</i></li>
+ *         </ul>
+ *     </li>
+ *     <li>
+ *         To access the {@link Attribute#getValue() Value} of an {@link Attribute} located in this {@link AttributeManager}, use <i>{@link #getValue(String, Class, Supplier)}</i> or any of the following overloaded {@code methods}:
+ *         <ul>
+ *             <li>
+ *                 Standard {@link Attribute} {@link Attribute#getValue() Value} Accessor Methods
+ *                 <ul>
+ *                     <li><i>{@link #getBooleanValue(String)}</i></li>
+ *                     <li><i>{@link #getIntegerValue(String)}</i></li>
+ *                     <li><i>{@link #getLongValue(String)}</i></li>
+ *                     <li><i>{@link #getFloatValue(String)}</i></li>
+ *                     <li><i>{@link #getDoubleValue(String)}</i></li>
+ *                     <li><i>{@link #getCharacterValue(String)}</i></li>
+ *                     <li><i>{@link #getStringValue(String)}</i></li>
+ *                 </ul>
+ *             </li>
+ *             <li>
+ *                 Default Value Fallback {@link Attribute} {@link Attribute#getValue() Value} Accessor Methods
+ *                 <ul>
+ *                     <li><i>{@link #getBooleanValue(String, Supplier)}</i></li>
+ *                     <li><i>{@link #getIntegerValue(String, Supplier)}</i></li>
+ *                     <li><i>{@link #getLongValue(String, Supplier)}</i></li>
+ *                     <li><i>{@link #getFloatValue(String, Supplier)}</i></li>
+ *                     <li><i>{@link #getDoubleValue(String, Supplier)}</i></li>
+ *                     <li><i>{@link #getCharacterValue(String, Supplier)}</i></li>
+ *                     <li><i>{@link #getStringValue(String, Supplier)}</i></li>
+ *                 </ul>
+ *             </li>
+ *         </ul>
+ *     </li>
+ * </ol>
+ * <br>
+ * <p><b>Other Details</b></p>
+ * <ol>
+ *     <li>Use <i>{@link #getValuePaneFactory()}</i> to access a {@link Pane JavaFX Pane} instance containing the {@link Attribute Attributes} contained within this {@link AttributeManager}.</li>
+ * </ol>
+ */
 public class AttributeManager
-        implements SpringableWrapper, Lockable, GameComponent {
+        implements SpringableWrapper, Lockable, GameObjectComponent {
     
     private final ReentrantLock internalLock;
     
@@ -42,8 +129,6 @@ public class AttributeManager
     }
     
     //<editor-fold desc="--- PROPERTIES ---">
-    
-    public final GameObject getOwner() { return owner; }
     
     //<editor-fold desc="> Attributes">
     
@@ -170,6 +255,7 @@ public class AttributeManager
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
+    @Override public final @NotNull GameObject getOwner() { return owner; }
     @Override public @NotNull GameViewContent getGame() { return owner.getGame(); }
     
     @Override public @NotNull Springable springable() { return getOwner(); }

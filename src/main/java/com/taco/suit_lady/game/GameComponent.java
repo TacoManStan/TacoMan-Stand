@@ -57,6 +57,7 @@ import org.jetbrains.annotations.NotNull;
  *     <li>The {@link GameObjectComponent} implementation of {@link GameComponent} defines an {@link Object} as being a member/property of a {@link GameObject}.</li>
  * </ol>
  */
+//TO-DO: Examples?
 public interface GameComponent {
     
     @NotNull GameViewContent getGame();
