@@ -3,7 +3,12 @@ package com.taco.suit_lady.util.values;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@SuppressWarnings("SpellCheckingInspection")
+/**
+ * <p>Defines all implementing {@link Object Objects} as containing a {@link #a() Value} of type {@link A}.</p>
+ *
+ * @param <A> The type of {@link #a() Value} contained by this {@link ValueExpr}.
+ */
+//TO-EXPAND
 public interface ValueExpr<A> {
     
     @Nullable A a();
