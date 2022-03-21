@@ -21,9 +21,26 @@ import java.io.Serializable;
 import java.util.concurrent.locks.Lock;
 
 /**
- * <p>i</p>
- * @param <T>
+ * <p>Contains a {@link #valueProperty() Property} and its {@link #getValue() Value} for a {@link GameObject} {@link #getOwner() owner}.</p>
+ * <p><b>Details</b></p>
+ * <ol>
+ *     <li>To construct a new {@link Attribute}, use any of the available {@link Attribute#Attribute(AttributeManager, String, Object, Class) Constructors} or {@link AttributeManager} {@link AttributeManager#addAttribute(String, Object) Factory Method}.</li>
+ *     <li>
+ *         Each {@link Attribute} is a member of an {@link #getManager() AttributeManager} instance.
+ *         <ul>
+ *             <li>Use <i>{@link #getManager()}</i> to access the {@link AttributeManager} parent this {@link Attribute} is a member of.</li>
+ *             <li>The {@link #getManager() AttributeManager} for this {@link Attribute} is always the same as the {@link GameObject#attributes() AttributeManager} assigned to this {@link Attribute Attributes} {@link #getOwner() owner}.</li>
+ *         </ul>
+ *     </li>
+ *     <li>The {@link #getAttributeType() Attribute Type} of an {@link Attribute} defines the {@link T Type} of {@link #getValue() Value} this {@link Attribute} contains.</li>
+ *     <li>The {@link #readOnlyIdProperty() Attribute ID} defines the {@link AttributeManager#containsKey(String) key value} used to {@link AttributeManager#getAttribute(String, Class) access} this {@link Attribute} from its {@link AttributeManager} parent.</li>
+ *     <li>The {@link #getModel() AttributeModel} of an {@link Attribute} defines how the {@link Attribute} displays its {@link #getValue() Value} on its {@link AttributeManager} parents {@link AttributeManager#getValuePaneFactory() Value Pane}.</li>
+ * </ol>
+ * <p><i>See {@link AttributeManager} for additional information.</i></p>
+ *
+ * @param <T> The type of {@link #getValue() Value} the {@link #valueProperty() Value Property} of this {@link Attribute} contains.
  */
+//TO-EXPAND: Examples
 public class Attribute<T>
         implements SpringableWrapper, Lockable, GameObjectComponent, Serializable, UIDProcessable {
     
