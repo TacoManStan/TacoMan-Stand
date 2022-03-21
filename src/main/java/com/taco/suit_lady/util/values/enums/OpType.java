@@ -3,6 +3,14 @@ package com.taco.suit_lady.util.values.enums;
 import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * <p>An {@link Enum} defining the {@code operation} to perform.</p>
+ * <p><b>Details</b></p>
+ * <ol>
+ *     <li>Use the <i>{@link #apply(NumExpr2D, OpResultType)}</i> method to {@code execute} the {@link OpType Operation Logic} defined by this {@link OpType} constant on the specified {@code parameter values}.</li>
+ * </ol>
+ */
+//TO-EXPAND
 public enum OpType {
     
     //<editor-fold desc="--- ENUM VALUE DEFINITIONS ---">

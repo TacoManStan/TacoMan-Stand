@@ -17,6 +17,10 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+/**
+ * <p>Defines the location of a {@link Num2D Point} on a {@code 2D Object}.</p>
+ */
+//TO-EXPAND
 public enum LocType
         implements Enumable<LocType> {
     

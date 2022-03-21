@@ -9,6 +9,10 @@ import java.util.List;
 
 import static com.taco.suit_lady.util.values.enums.CardinalDirection.*;
 
+/**
+ * <p>Defines the types of {@link CardinalDirection} constants matching a {@link CardinalDirectionType} constant.</p>
+ */
+//TO-EXPAND
 public enum CardinalDirectionType
         implements DefaultableEnum<CardinalDirectionType> {
     

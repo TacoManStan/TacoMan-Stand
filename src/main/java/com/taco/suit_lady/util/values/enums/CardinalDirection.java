@@ -10,6 +10,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * <p>An {@link Enum} defining the {@link CardinalDirection} of an {@code operation}.</p>
+ */
+//TO-EXPAND
 public enum CardinalDirection {
     
     CENTER(0, 0),

@@ -4,6 +4,10 @@ import com.taco.suit_lady.util.enums.Enumable;
 import com.taco.suit_lady.util.tools.Exc;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * <p>An {@link Enum} defining an {@link Axis} for an {@code operation}.</p>
+ */
+//TO-EXPAND
 public enum Axis
         implements Enumable<Axis> {
     
