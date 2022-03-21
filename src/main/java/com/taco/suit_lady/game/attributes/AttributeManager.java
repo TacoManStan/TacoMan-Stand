@@ -9,6 +9,7 @@ import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Exe;
+import com.taco.suit_lady.util.tools.Obj;
 import com.taco.suit_lady.util.tools.printing.Printer;
 import javafx.beans.property.MapProperty;
 import javafx.beans.property.Property;
@@ -22,6 +23,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -246,8 +249,16 @@ public class AttributeManager
     //</editor-fold>
     
     public final List<Attribute<?>> attributeList() {
-        return Exe.sync(internalLock, () -> new ArrayList<>(attributeMap.values()));
+        return Exe.sync(internalLock, () -> new ArrayList<>(Collections.unmodifiableCollection(attributeMap.values())));
     }
+    
+    //</editor-fold>
+    
+    //<editor-fold desc="> Contains Methods">
+    
+    public final boolean containsKey(@Nullable String key) { return key != null && Exe.sync(internalLock, () -> attributeMap.containsKey(key)); }
+    public final boolean containsValue(@Nullable Object value) { return value != null && Exe.sync(internalLock, () -> attributeList().stream().anyMatch(attribute -> Obj.equals(value, attribute.getValue()))); }
+    public final boolean containsAttribute(@Nullable Attribute<?> attribute) { return attribute != null && Exe.sync(internalLock, () -> attributeMap.containsValue(attribute)); }
     
     //</editor-fold>
     
