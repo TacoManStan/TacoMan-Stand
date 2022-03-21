@@ -1,15 +1,53 @@
 package com.taco.suit_lady.ui;
 
+import com.taco.suit_lady.ui.content.ContentView;
+import com.taco.suit_lady.ui.ui_internal.controllers.Controller;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.Exc;
 import com.taco.suit_lady.util.tools.printing.Printer;
+import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
 import net.rgielen.fxweaver.core.FxWeaver;
+import net.rgielen.fxweaver.core.FxmlView;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.context.ConfigurableApplicationContext;
 
-// TO-DOC
+/**
+ * <p>Defines the {@link Footer} of a {@link Content} implementation (of type {@link T}).</p>
+ * <p><b>Details</b></p>
+ * <ol>
+ *     <li>The {@link Footer} is the large area south of the {@link ContentView#getContent() Primary Content Pane} and {@link Sidebar}.</li>
+ *     <li>Override <i>{@link #onContentChange(boolean)}</i> to define all logic required to transition to and from the {@link Content} associated with this {@link Footer}.</li>
+ *     <li>
+ *         Override <i>{@link #initializeFooter(Object[])}</i> to define the {@code initialization} logic for this {@link Footer} instance.
+ *         <ul>
+ *             <li>Use the {@code Object Array} parameter to specify any {@code parameters} needed to {@link #initializeFooter(Object[]) initialize} the {@link Footer}.</li>
+ *         </ul>
+ *     </li>
+ *     <li>
+ *         The {@code Graphics} for a {@link Footer} implementation is defined by a {@link FooterController} implementation of type {@link FC}.
+ *         <ul>
+ *             <li>Override <i>{@link #controllerDefinition()}</i> to define the {@link FooterController} implementation.</li>
+ *             <li>Be sure that both {@link FXML FXML File} and {@link FooterController} are linked to one another via {@link FxmlView} annotation and {@link Controller} class path.</li>
+ *         </ul>
+ *     </li>
+ *     <li>Use <i>{@link #getContentPane()}</i> to access the {@link Pane JavaFX Pane} containing the {@code Graphics Content} of this {@link Footer} instance.</li>
+ *     <li>Unlike the similar {@link Sidebar} UI area, the {@link Footer} area cannot be hidden, making {@link Footer Footers} the ideal location to place information that should always be visible to the user.</li>
+ * </ol>
+ *
+ * @param <F>  The {@link Footer} type of this {@link Footer} implementation.
+ * @param <FC> The type of {@link FooterController} implementation defining the {@code JavaFX Graphics} for this {@link Footer} implementation.
+ * @param <T>  The type of {@link Content} implementation this {@link Footer} implementation is assigned to.
+ * @param <TD> The type of {@link ContentData} implementation for the {@link Content} implementation this {@link Footer} implementation is assigned to.
+ * @param <TC> The type of {@link ContentController} implementation defining the {@code JavaFX Graphics} for the {@link Content} implementation this {@link Footer} implementation is assigned to.
+ *
+ * @see FooterController
+ * @see Content
+ * @see ContentData
+ * @see ContentController
+ */
+//TO-EXPAND - Examples
 public abstract class Footer<F extends Footer<F, FC, T, TD, TC>, FC extends FooterController<F, FC, T, TD, TC>,
         T extends Content<T, TD, TC, F, FC>, TD extends ContentData<T, TD, TC, F, FC>, TC extends ContentController<T, TD, TC, F, FC>>
         implements Displayable, Springable {
