@@ -6,7 +6,7 @@ import com.taco.suit_lady.util.values.numbers.shapes.Shape;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.tools.Calc;
 import com.taco.suit_lady.util.values.numbers.Num2D;
-import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
+import com.taco.suit_lady.util.values.numbers.NumExpr2D;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;

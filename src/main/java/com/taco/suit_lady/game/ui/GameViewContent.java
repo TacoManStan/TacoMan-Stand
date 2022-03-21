@@ -23,12 +23,11 @@ import com.taco.suit_lady.util.tools.list_tools.L;
 import com.taco.suit_lady.util.tools.printing.Printer;
 import com.taco.suit_lady.util.values.Value2D;
 import com.taco.suit_lady.util.values.numbers.Num2D;
-import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
+import com.taco.suit_lady.util.values.numbers.NumExpr2D;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
-import javafx.geometry.Side;
 import javafx.scene.input.*;
 import org.jetbrains.annotations.NotNull;
 

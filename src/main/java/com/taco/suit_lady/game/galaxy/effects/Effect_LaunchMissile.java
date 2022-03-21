@@ -8,14 +8,12 @@ import com.taco.suit_lady.util.tools.printing.PrintData;
 import com.taco.suit_lady.util.tools.printing.Printer;
 import com.taco.suit_lady.util.tools.list_tools.L;
 import com.taco.suit_lady.util.values.Value2D;
-import com.taco.suit_lady.util.values.numbers.N;
 import com.taco.suit_lady.util.values.numbers.Num2D;
-import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
+import com.taco.suit_lady.util.values.numbers.NumExpr2D;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;

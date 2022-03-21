@@ -4,17 +4,13 @@ import com.taco.suit_lady.util.enums.Enumable;
 import com.taco.suit_lady.util.tools.Enu;
 import com.taco.suit_lady.util.tools.Exc;
 import com.taco.suit_lady.util.tools.Exe;
-import com.taco.suit_lady.util.values.numbers.Num;
 import com.taco.suit_lady.util.values.numbers.Num2D;
-import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
-import javafx.scene.control.TreeItem;
+import com.taco.suit_lady.util.values.numbers.NumExpr2D;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**

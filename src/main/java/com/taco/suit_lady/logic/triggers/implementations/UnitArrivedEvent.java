@@ -3,8 +3,7 @@ package com.taco.suit_lady.logic.triggers.implementations;
 import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.logic.triggers.TriggerEvent;
 import com.taco.suit_lady.util.values.numbers.Num2D;
-import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
-import javafx.geometry.Point2D;
+import com.taco.suit_lady.util.values.numbers.NumExpr2D;
 import org.jetbrains.annotations.NotNull;
 
 public class UnitArrivedEvent extends TriggerEvent<UnitArrivedEvent> {

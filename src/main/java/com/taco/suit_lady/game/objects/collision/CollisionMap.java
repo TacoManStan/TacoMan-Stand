@@ -9,7 +9,7 @@ import com.taco.suit_lady.util.springable.SpringableWrapper;
 import com.taco.suit_lady.util.tools.Calc;
 import com.taco.suit_lady.util.tools.Exc;
 import com.taco.suit_lady.util.tools.fx_tools.FX;
-import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
+import com.taco.suit_lady.util.values.numbers.NumExpr2D;
 import com.taco.suit_lady.util.values.ValueExpr2D;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;

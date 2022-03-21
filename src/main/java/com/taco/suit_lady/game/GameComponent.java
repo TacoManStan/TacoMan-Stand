@@ -5,7 +5,7 @@ import com.taco.suit_lady.game.ui.GameUIData;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.game.ui.GameViewContentData;
 import com.taco.suit_lady.util.values.numbers.Num2D;
-import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
+import com.taco.suit_lady.util.values.numbers.NumExpr2D;
 import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;

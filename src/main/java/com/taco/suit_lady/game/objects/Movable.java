@@ -2,7 +2,7 @@ package com.taco.suit_lady.game.objects;
 
 import com.taco.suit_lady.game.GameComponent;
 import com.taco.suit_lady.game.GameMap;
-import com.taco.suit_lady.util.values.numbers.expressions.NumExpr2D;
+import com.taco.suit_lady.util.values.numbers.NumExpr2D;
 import org.jetbrains.annotations.NotNull;
 
 /**
