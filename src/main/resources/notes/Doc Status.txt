@@ -352,24 +352,24 @@ UTIL
 
     UTIL: VALUES
 
-        [ ] ValueExpr
-        [ ] ValueExpr2D
-        [ ] ValueExpr3D
+        [/] ValueExpr
+        [/] ValueExpr2D
+        [-] ValueExpr3D
 
-        [ ] Value
-        [ ] Value2D
-        [ ] Value3D
+        [/] Value
+        [/] Value2D
+        [-] Value3D
 
         UTIL: VALUES: ENUMS
 
-            [ ] Axis
-            [ ] LocType
+            [/] Axis
+            [/] LocType
 
-            [ ] CardinalDirection
-            [ ] CardinalDirectionType
+            [/] CardinalDirection
+            [/] CardinalDirectionType
 
-            [ ] OpResultType
-            [ ] OpType
+            [/] OpResultType
+            [/] OpType
 
         UTIL: VALUES: FORMULAS
 
