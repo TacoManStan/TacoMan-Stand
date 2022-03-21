@@ -7,6 +7,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * <p>A static utility class defining utility methods pertaining to a {@link Paramable} implementation.</p>
+ *
+ * @see Paramable
+ */
+//TO-EXPAND
 @SuppressWarnings("rawtypes")
 public class Params {
     private Params() { } //No Instance

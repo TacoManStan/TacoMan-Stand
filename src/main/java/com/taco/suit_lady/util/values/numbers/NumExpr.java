@@ -5,6 +5,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 
+/**
+ * <p>Defines a {@link ValueExpr} implementation containing only {@link Number} values.</p>
+ *
+ * @param <T> The {@link Class} type of this {@link NumExpr} implementation.
+ */
+//TO-EXPAND
 public interface NumExpr<T extends NumExpr<T>>
         extends ValueExpr<Number> {
     
