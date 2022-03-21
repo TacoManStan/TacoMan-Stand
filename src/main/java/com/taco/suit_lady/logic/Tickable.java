@@ -9,6 +9,69 @@ import java.util.concurrent.locks.Lock;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+/**
+ * <p>Defines implementing {@link Object Objects} as being {@link #execute(Runnable) Executable} by the {@link LogiCore}.</p>
+ * <p><b>Details</b></p>
+ * <ol>
+ *     <li>The {@code logic} for a {@link Tickable} is defined by the {@link TaskManager} returned by the abstract <i>{@link #taskManager()}</i> method.</li>
+ *     <li>
+ *         {@link Tickable} implementations contain a variety of convenient {@code passthrough} methods to the {@link #taskManager() Task Manager}:
+ *         <ul>
+ *             <li>
+ *                 <p><b>Add/Remove {@link GameTask} Methods</b></p>
+ *                 <ul>
+ *                     <li><i>{@link #addTask(GameTask)}</i></li>
+ *                     <li><i>{@link #addTaskAndGet(GameTask)}</i></li>
+ *                     <li><i>{@link #removeTask(GameTask)}</i></li>
+ *                     <li><i>{@link #removeTaskAndGet(GameTask)}</i></li>
+ *                 </ul>
+ *             </li>
+ *             <li>
+ *                 <p><b>Execution Methods</b></p>
+ *                 <ul>
+ *                     <li>
+ *                         <p><b>Execute Once Methods</b></p>
+ *                         <ul>
+ *                             <li><i>{@link #executeOnce(Supplier, Consumer)}</i></li>
+ *                             <li><i>{@link #executeOnce(Runnable, Runnable)}</i></li>
+ *                             <li><i>{@link #executeOnce(Runnable)}</i></li>
+ *                         </ul>
+ *                     </li>
+ *                     <li>
+ *                         <p><b>Execute Once and Get Methods</b></p>
+ *                         <ul>
+ *                             <li><i>{@link #executeOnceAndGet(Supplier, Consumer)}</i></li>
+ *                             <li><i>{@link #executeOnceAndGet(Runnable, Runnable)}</i></li>
+ *                             <li><i>{@link #executeOnceAndGet(Runnable)}</i></li>
+ *                         </ul>
+ *                     </li>
+ *                     <li>
+ *                         <p><b>Execute Persistent Methods</b></p>
+ *                         <ul>
+ *                             <li><i>{@link #execute(Runnable, Runnable, Supplier)}</i></li>
+ *                             <li><i>{@link #execute(Runnable, Supplier)}</i></li>
+ *                             <li><i>{@link #execute(Runnable, Runnable)}</i></li>
+ *                             <li><i>{@link #execute(Runnable)}</i></li>
+ *                         </ul>
+ *                     </li>
+ *                     <li>
+ *                         <p><b>Execute and Get Persistent Methods</b></p>
+ *                         <ul>
+ *                             <li><i>{@link #executeAndGet(Runnable, Runnable, Supplier)}</i></li>
+ *                             <li><i>{@link #executeAndGet(Runnable, Supplier)}</i></li>
+ *                             <li><i>{@link #executeAndGet(Runnable, Runnable)}</i></li>
+ *                             <li><i>{@link #executeAndGet(Runnable)}</i></li>
+ *                         </ul>
+ *                     </li>
+ *                 </ul>
+ *             </li>
+ *         </ul>
+ *     </li>
+ * </ol>
+ * <p><i>See {@link TaskManager} for additional information.</i></p>
+ *
+ * @param <E> The {@link Class} type of this {@link Tickable} implementation.
+ */
 public interface Tickable<E extends Tickable<E>>
         extends Springable {
     
@@ -46,15 +109,15 @@ public interface Tickable<E extends Tickable<E>>
     
     //<editor-fold desc=">> Execute Persistent Methods">
     
-//    default @NotNull GameTask<E> executeAndGet(@Nullable Lock lock, @NotNull Runnable action, @Nullable Runnable onTerminateAction, @Nullable Supplier<Boolean> terminateCondition) { return taskManager().executeAndGet(action, onTerminateAction, terminateCondition); }
-//    default @NotNull GameTask<E> executeAndGet(@Nullable Lock lock, @NotNull Runnable action, @Nullable Runnable onTerminateAction) { return taskManager().executeAndGet(action, onTerminateAction); }
-//    default @NotNull GameTask<E> executeAndGet(@Nullable Lock lock, @NotNull Runnable action, @Nullable Supplier<Boolean> terminateCondition) { return taskManager().executeAndGet(action, terminateCondition); }
-//    default @NotNull GameTask<E> executeAndGet(@Nullable Lock lock, @NotNull Runnable action) { return taskManager().executeAndGet(action); }
-//
-//    default boolean execute(@Nullable Lock lock, @NotNull Runnable action, @Nullable Runnable onTerminateAction, @Nullable Supplier<Boolean> terminateCondition) { return taskManager().execute(action, onTerminateAction, terminateCondition); }
-//    default boolean execute(@Nullable Lock lock, @NotNull Runnable action, @Nullable Runnable onTerminateAction) { return taskManager().execute(action, onTerminateAction); }
-//    default boolean execute(@Nullable Lock lock, @NotNull Runnable action, @Nullable Supplier<Boolean> terminateCondition) { return taskManager().execute(action, terminateCondition); }
-//    default boolean execute(@Nullable Lock lock, @NotNull Runnable action) { return taskManager().execute(action); }
+    //    default @NotNull GameTask<E> executeAndGet(@Nullable Lock lock, @NotNull Runnable action, @Nullable Runnable onTerminateAction, @Nullable Supplier<Boolean> terminateCondition) { return taskManager().executeAndGet(action, onTerminateAction, terminateCondition); }
+    //    default @NotNull GameTask<E> executeAndGet(@Nullable Lock lock, @NotNull Runnable action, @Nullable Runnable onTerminateAction) { return taskManager().executeAndGet(action, onTerminateAction); }
+    //    default @NotNull GameTask<E> executeAndGet(@Nullable Lock lock, @NotNull Runnable action, @Nullable Supplier<Boolean> terminateCondition) { return taskManager().executeAndGet(action, terminateCondition); }
+    //    default @NotNull GameTask<E> executeAndGet(@Nullable Lock lock, @NotNull Runnable action) { return taskManager().executeAndGet(action); }
+    //
+    //    default boolean execute(@Nullable Lock lock, @NotNull Runnable action, @Nullable Runnable onTerminateAction, @Nullable Supplier<Boolean> terminateCondition) { return taskManager().execute(action, onTerminateAction, terminateCondition); }
+    //    default boolean execute(@Nullable Lock lock, @NotNull Runnable action, @Nullable Runnable onTerminateAction) { return taskManager().execute(action, onTerminateAction); }
+    //    default boolean execute(@Nullable Lock lock, @NotNull Runnable action, @Nullable Supplier<Boolean> terminateCondition) { return taskManager().execute(action, terminateCondition); }
+    //    default boolean execute(@Nullable Lock lock, @NotNull Runnable action) { return taskManager().execute(action); }
     
     //
     
