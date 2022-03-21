@@ -1,10 +1,11 @@
 KEY
 
-    [ ]: No Documentation
+    [ ]: No Documentation; Normal Priority
+    [-]: No Documentation: Low-Priority
+    [*]: No Documentation: High-Priority
 
     [X]: Documentation Complete
     [/]: Documentation Incomplete
-    [-]: Documentation is Low-Priority
 
     [C]: Class Level Documentation Complete
     [B]: Class Body Documentations Complete
@@ -31,7 +32,7 @@ GENERAL
     [X] Displayer
 
     [C] Footer
-    [ ] FooterController
+    [/] FooterController
 
     -----
 
@@ -48,10 +49,11 @@ GENERAL
 
 CONTENT
 
-    [ ] ContentManager
-    [ ] Content
-    [ ] ContentController
-    [ ] ContentData
+    [*] ContentManager
+
+    [*] Content
+    [*] ContentController
+    [*] ContentData
 
 -----
 
@@ -65,17 +67,17 @@ GAME
 
     [C] Camera
     [C] GameMap
-    [ ] GameMapModel
+    [*] GameMapModel
 
     GAME: ATTRIBUTES
 
     	[C] AttributeManager
 
     	[C] Attribute
-    	[ ] AttributeModel
+    	[*] AttributeModel
     	[ ] DefaultAttributeModel
 
-    	[ ] AttributePage
+    	[*] AttributePage
     	[ ] AttributePageController
     	[ ] AttributeElementController
 
@@ -93,8 +95,8 @@ GAME
 
         	[/] Ability
 
-        	[ ] Ability_InstantEffect
-        	[ ] Ability_TargetEffect
+        	[*] Ability_InstantEffect
+        	[*] Ability_TargetEffect
 
             GAME: GALAXY: ABILITIES: SPECIFIC
 
@@ -106,10 +108,10 @@ GAME
         GAME: GALAXY: EFFECTS
 
         	[C] Effect
-        	[ ] EffectGroup
+        	[*] EffectGroup
 
-        	[ ] Effect_Targeted
-        	[ ] Effect_Scan
+        	[*] Effect_Targeted
+        	[*] Effect_Scan
 
         	[ ] Effect_ApplyBehavior
         	[ ] Effect_ApplyPersistent
@@ -163,9 +165,9 @@ GAME
         GAME: OBJECTS: TILES
 
             [C] GameTile
-            [ ] GameTileModel
+            [*] GameTileModel
 
-            [ ] TileTerrainObject
+            [*] TileTerrainObject
             [ ] TileTerrainObjectID
             [ ] TileTerrainObjectOrientationID
 
@@ -186,21 +188,21 @@ GAME
         -----
 
         [C] GameViewContent
-        [ ] GameViewContentController
-        [ ] GameViewContentData
+        [*] GameViewContentController
+        [*] GameViewContentData
 
-        [ ] GameFooter
+        [*] GameFooter
         [ ] GameFooterController
 
         GAME: UI: PAGES
 
-            [ ] GameViewPage
+            [*] GameViewPage
             [ ] GameViewPageController
 
-            [ ] GameTileEditorPage
+            [*] GameTileEditorPage
             [ ] GameTileEditorPageController
 
-            [ ] GameObjectEditorPage
+            [*] GameObjectEditorPage
             [ ] GameObjectEditorPageController
 
             GAME: UI: PAGES: ELEMENTS
@@ -215,12 +217,12 @@ LOGIC
 
     [/] LogiCore
 
-    [ ] Tickable
+    [C] Tickable
     [C] TaskManager
 
     [C] GameTask
-    [ ] OneTimeTask
-    [ ] TaskState
+    [C] OneTimeTask
+    [/] TaskState
 
     LOGIC: TRIGGERS
 
@@ -264,8 +266,8 @@ UTIL
 
     UTIL: ENUMS
 
-        [ ] DefaultableEnum
-        [ ] Enumable
+        [*] DefaultableEnum
+        [*] Enumable
 
         [ ] FilterType
 
@@ -276,7 +278,7 @@ UTIL
 
     UTIL: INITIALIZER
 
-        [ ] Initializer
+        [*] Initializer
         [ ] ReadOnlyInitializer
 
     UTIL: SPRINGABLE
@@ -297,18 +299,18 @@ UTIL
         [/] Timers
 
         [/] Timer
-        [ ] DebugTimer
+        [*] DebugTimer
 
-        [ ] Timeable
+        [*] Timeable
         [ ] ReadOnlyTimeable
 
-        [ ] Timerable
+        [*] Timerable
         [ ] ReadOnlyTimerable
         [ ] ReactiveTimerable
         [ ] ReadOnlyReactiveTimerable
 
-        [ ] Duration
-        [ ] DurationProperty
+        [*] Duration
+        [*] DurationProperty
 
         [-] TimerException
 
@@ -332,23 +334,23 @@ UTIL
             [/] FX
             [/] GraphicsFX
             [/] DialogsFX
-            [ ] BindFX
+            [*] BindFX
 
         UTIL: TOOLS: LIST TOOLS
 
             [/] A
             [/] L
 
-            [ ] Op
+            [*] Op
             [X] OpHandler
             [X] OpListener
 
         UTIL: TOOLS: PRINTING TOOLS
 
-            [ ] Printer
-            [ ] PrintData
+            [*] Printer
+            [*] PrintData
 
-            [ ] AbsentDef
+            [-] AbsentDef
 
     UTIL: VALUES
 
@@ -375,14 +377,14 @@ UTIL
 
             VALUES: FORMULAS: PATHFINDING
 
-                [ ] Pathfinding
+                [*] Pathfinding
 
                 [C] AStarPathfinder
-                [ ] AStarMatrix
+                [*] AStarMatrix
 
                 [ ] AStarNodeable
                 [C] AStarNode
-                [ ] CachedAStarNode
+                [*] CachedAStarNode
 
                 -----
 
@@ -392,33 +394,33 @@ UTIL
         UTIL: VALUES: NUMBERS
 
             [/] N
-            [ ] NumFilter
+            [*] NumFilter
 
             -----
 
-            [ ] NumExpr
-            [ ] NumExpr2D
-            [ ] BoundsExpr
+            [/] NumExpr
+            [/] NumExpr2D
+            [C] BoundsExpr
 
-            [ ] Num
-            [ ] Num2D
-            [ ] Bounds
+            [/] Num
+            [/] Num2D
+            [C] Bounds
 
             UTIL: VALUES: NUMBERS: BINDINGS
 
-                [ ] BoundsBinding
+                [/] BoundsBinding
 
             UTIL: VALUES: NUMBERS: SHAPES
 
-                [ ] Shape
-                [ ] Box
-                [ ] Circle
+                [C] Shape
+                [*] Box
+                [*] Circle
                 [ ] Cone
 
         UTIL: VALUES: PARAMS
 
-            [ ] Paramable
-            [ ] Params
+            [/] Paramable
+            [/] Params
 
 -----
 
@@ -427,7 +429,7 @@ UI
 
     UI: CONSOLE
 
-        [-] ConsoleBB
+        [?] ConsoleBB
 
         -----
 
@@ -449,26 +451,26 @@ UI
 
     UI: JAVAFX
 
-        [-] Colorable
+        [?] Colorable
 
         UI: JAVAFX: COMPONENTS
 
-            [ ] ContentPane
+            [*] ContentPane
             [X] ImagePane
 
             UI: JAVAFX: COMPONENTS: BUTTON
 
-                [ ] ButtonViewable
+                [*] ButtonViewable
                 [X] ImageButton
 
                 [X] ImageButtonGroup
-                [ ] SimpleImageButtonGroup
+                [?] SimpleImageButtonGroup
                 [B] BoundImageButtonGroup
 
             UI: JAVAFX: COMPONENTS: FORMATTED CONTROLS
 
-                [ ] IntField
-                [ ] DoubleField
+                [*] IntField
+                [*] DoubleField
 
                 [ ] IntegerFormatter
                 [ ] DecimalFormatter
@@ -477,37 +479,38 @@ UI
 
                 UI: JAVAFX: COMPONENTS: PAINTING: PAINTABLES
 
-                    [ ] Paintable
-                    [ ] PaintableData
+                    [*] Paintable
+                    [*] PaintableData
 
                     UI: JAVAFX: COMPONENTS: PAINTING: PAINTABLES: CANVAS
 
-                        [ ] PaintCommand
+                        [*] PaintCommand
 
-                        [ ] ShapePaintCommand
+                        [*] ShapePaintCommand
                         [ ] BoxPaintCommand
                         [ ] OvalPaintCommand
                         [ ] ArcPaintCommand
                         [ ] TextPaintCommand
 
-                        [ ] ImagePaintCommandBase
-                        [ ] ImagePaintCommand
-                        [ ] CroppedImagePaintCommand
-                        [ ] AggregateImagePaintCommand
+                        [*] ImagePaintCommandBase
+                        [*] ImagePaintCommand
+                        [?] CroppedImagePaintCommand
+                        [?] AggregateImagePaintCommand
 
                     UI: JAVAFX: COMPONENTS: PAINTING: PAINTABLES: OVERLAY
 
-                        [ ] PaintNode
-                        [ ] CompoundPaintNode
+                        [*] PaintNode
+                        [?] CompoundPaintNode
 
-                        [ ] ImagePaintNode
-                        [ ] ShapePaintNode
+                        [*] ImagePaintNode
+
+                        [*] ShapePaintNode
                         [ ] BoxPaintNode
 
                 UI: JAVAFX: COMPONENTS: PAINTING: SURFACES
 
-                    [ ] Surface
-                    [ ] SurfaceData
+                    [*] Surface
+                    [*] SurfaceData
 
                     [B] OverlayHandler
                     [B] OverlaySurface
@@ -515,8 +518,8 @@ UI
                     UI: JAVAFX: COMPONENTS: PAINTING: SURFACES: CANVAS
 
                         [/] CanvasSurface
-                        [ ] CanvasPane
-                        [ ] CanvasContentPane
+                        [*] CanvasPane
+                        [*] CanvasContentPane
 
         UI: JAVAFX: DIALOG
 
@@ -531,9 +534,9 @@ UI
         UI: JAVAFX: LISTS
 
             [X] CellControlManager
-            [ ] Listable
+            [*] Listable
 
-            [ ] ListCellFX
+            [*] ListCellFX
             [X] TreeCellFX
 
             UI: JAVAFX: LISTS: TREE HANDLER
@@ -552,10 +555,10 @@ UI
 
         UI: JAVAFX: SETTINGS
 
-            [ ] SettingNode
+            [-] SettingNode
 
-            [ ] CheckBoxSettingNode
-            [ ] TextFieldSettingNode
+            [-] CheckBoxSettingNode
+            [-] TextFieldSettingNode
 
         UI: JAVAFX: UTIL
 
@@ -565,37 +568,37 @@ UI
 
         UI: UI INTERNAL: CONSOLE
 
-            [ ] ConsoleUIDataContainer
-            [ ] ConsolePage
+            [-] ConsoleUIDataContainer
+            [-] ConsolePage
 
         UI: UI INTERNAL: CONTROLLERS
 
-            [ ] Controller
-            [ ] CellController
+            [*] Controller
+            [*] CellController
 
-            [ ] SettingsController
-            [ ] SettingGroupController
+            [-] SettingsController
+            [-] SettingGroupController
             [-] TestSettingGroupController
 
-            [ ] ConsoleController
-            [ ] ConsoleElementController
+            [-] ConsoleController
+            [-] ConsoleElementController
 
-            [ ] SidebarNodeGroupController
+            [?] SidebarNodeGroupController
 
 
         UI: UI INTERNAL: DRAG AND DROP
 
-            [ ] DragAndDropHandler
-            [ ] DragAndDropManager
+            [*] DragAndDropHandler
+            [*] DragAndDropManager
 
-            [ ] DragEventData
-            [ ] DragEventType
+            [*] DragEventData
+            [*] DragEventType
 
         UI: UI INTERNAL: SETTINGS
 
-            [ ] SettingContainer
-            [ ] SettingGroup
-            [ ] SettingsTitledPane
+            [-] SettingContainer
+            [-] SettingGroup
+            [-] SettingsTitledPane
 
 -----
 
@@ -611,21 +614,21 @@ TACOSITORY
 
     TACOSITORY: JSON
 
-        [ ] JUtil
-        [ ] JFiles
+        [*] JUtil
+        [*] JFiles
 
         -----
 
-        [ ] JElement
-        [ ] JObject
-        [ ] JArray
-        [ ] JMatrix
+        [*] JElement
+        [*] JObject
+        [*] JArray
+        [*] JMatrix
 
-        [ ] NonJObjectFieldWrapper
-        [ ] ColorJObjectWrapper
+        [*] NonJObjectFieldWrapper
+        [*] ColorJObjectWrapper
 
-        [ ] JLoadable
-        [ ] JLoadableObject
+        [C] JLoadable
+        [C] JLoadableObject
 
         -----
 
@@ -637,11 +640,11 @@ TACOSITORY
 
         TACOSITORY: OBJ TRAITS: COMMON
 
-            [ ] Nameable
-            [ ] ModifiableNameable
+            [-] Nameable
+            [-] ModifiableNameable
 
-            [ ] Testable
-            [ ] Textable
+            [?] Testable
+            [?] Textable
 
 -----
 
@@ -650,45 +653,45 @@ TO SORT: NEW
 
     [-] Self
 
-    [ ] Debugger
+    [*] Debugger
 
-    [ ] MatrixIterator
+    [*] MatrixIterator
     [ ] CompareType
 
-    [ ] ReadOnlyObservableList
-    [ ] ReadOnlyObservableListWrapper
+    [?] ReadOnlyObservableList
+    [?] ReadOnlyObservableListWrapper
 
-    [ ] ObservablePropertyContainer
+    [*] ObservablePropertyContainer
 
-    [ ] ValueGroup
-    [ ] ValuePair
+    [-] ValueGroup
+    [-] ValuePair
 
     TO SORT: NEW: INITIALIZATION
 
-        [ ] Initializable
-        [ ] Initializer
+        [*] Initializable
+        [*] Initializer
 
         [ ] LockMode
 
     TO SORT: NEW: INTERFACES
 
-        [ ] NameableProperty
-        [ ] ReadOnlyNameableProperty
+        [-] NameableProperty
+        [-] ReadOnlyNameableProperty
 
-        [ ] ObservablePropertyContainable
+        [*] ObservablePropertyContainable
 
         TO SORT: NEW: INTERFACES: FUNCTIONAL
 
-            [ ] SelfValidatable
+            [-] SelfValidatable
 
             -----
 
-            [ ] TriConsumer
-            [ ] TriFunction
+            [*] TriConsumer
+            [*] TriFunction
 
-            [ ] QuadConsumer
-            [ ] QuadFunction
+            [*] QuadConsumer
+            [*] QuadFunction
 
             TO SORT: NEW: INTERFACES: FUNCTIONAL: FILTER
 
-                [ ] CompoundFilter
+                [?] CompoundFilter
