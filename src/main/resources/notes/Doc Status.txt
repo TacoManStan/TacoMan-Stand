@@ -30,7 +30,7 @@ GENERAL
     [X] Displayable
     [X] Displayer
 
-    [ ] Footer
+    [C] Footer
     [ ] FooterController
 
     -----
@@ -58,8 +58,8 @@ CONTENT
 
 GAME
 
-    [ ] GameComponent
-    [ ] GameObjectComponent
+    [C] GameComponent
+    [C] GameObjectComponent
 
     [C] Entity
 
@@ -69,9 +69,9 @@ GAME
 
     GAME: ATTRIBUTES
 
-    	[ ] AttributeManager
+    	[C] AttributeManager
 
-    	[ ] Attribute
+    	[C] Attribute
     	[ ] AttributeModel
     	[ ] DefaultAttributeModel
 
@@ -137,7 +137,7 @@ GAME
 
     GAME: OBJECTS
 
-        [ ] MapObject
+        [C] MapObject
 
         [C] GameObject
         [-] Structure
@@ -148,8 +148,8 @@ GAME
 
         -----
 
-        [ ] Mover
-        [ ] Movable
+        [/] Mover
+        [/] Movable
 
         GAME: OBJECTS: COLLISIONS
 
@@ -181,11 +181,11 @@ GAME
     GAME: UI
 
         [C] GFXObject
-        [ ] GameUIData
+        [C] GameUIData
 
         -----
 
-        [ ] GameViewContent
+        [C] GameViewContent
         [ ] GameViewContentController
         [ ] GameViewContentData
 
