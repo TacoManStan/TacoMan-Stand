@@ -44,6 +44,7 @@ import java.util.function.Function;
  *     </li>
  * </ol>
  */
+//TO-EXPAND: Examples
 public interface JLoadable {
     
     String getJID();
