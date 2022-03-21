@@ -4,6 +4,7 @@ import com.taco.suit_lady.util.tools.Enu;
 import com.taco.suit_lady.util.values.enums.Axis;
 import com.taco.suit_lady.util.values.enums.LocType;
 import com.taco.suit_lady.util.tools.Calc;
+import javafx.beans.Observable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,10 +15,11 @@ import org.jetbrains.annotations.Nullable;
  *     <li>The {@link #getLocation() Location} of a {@link BoundsExpr} is defined by the {@link #x() X} and {@link #y() Y} coordinate values.</li>
  *     <li>The {@link #getDimensions() Dimensions} of a {@link BoundsExpr} is defined by the {@link #w() Width} and {@link #h() Height} coordinate values.</li>
  *     <li>The {@link #locType() Type} of the {@link #getLocation() Location Coordinates} for this {@link BoundsExpr} is defined by the abstract <i>{@link #locType()}</i> method.</li>
- *     <li><i>See {@link Bounds} for the {@code immutable}, {@code default} implementation of {@link BoundsExpr}.</i></li>
  * </ol>
+ * <p><i>See {@link Bounds} for the {@code immutable} {@code default} implementation of {@link BoundsExpr}.</i></p>
+ * <p><i>See {@link BoundsBinding} for an {@link Observable observable} implementation of {@link BoundsExpr}.</i></p>
  * <br><hr><br>
- * <p>{@link BoundsExpr} provides a variety of convenient {@code default} methods:</p>
+ * <p>{@link BoundsExpr} also provides a variety of convenient {@code default} methods:</p>
  * <table style="border:1px solid; border-collapse:collapse; border-spacing:3px; rules:all">
  *     <caption style="font-size:16px; border:1px solid; border-collapse:collapse"><b>Min/Max Accessor Methods</b></caption>
  *     <tr>
@@ -75,6 +77,9 @@ import org.jetbrains.annotations.Nullable;
  *         <td style="padding-right:5px">{@link #yMidD()}</td>
  *     </tr>
  * </table>
+ *
+ * @see Bounds
+ * @see BoundsBinding
  */
 //TO-EXPAND
 public interface BoundsExpr {

@@ -10,6 +10,8 @@ import java.util.function.Function;
  *
  * @param a The {@link #a() First} {@link Number Number Value} contained within this {@link NumExpr2D} instance.
  * @param b The {@link #b() Second} {@link Number Number Value} contained within this {@link NumExpr2D} instance.
+ *
+ * @see NumExpr2D
  */
 public record Num2D(Number a, Number b)
         implements NumExpr2D<Num2D> {

@@ -15,6 +15,8 @@ import java.util.function.Function;
  * <p>Defines a {@link ValueExpr2D} implementation containing only {@link Number} values.</p>
  *
  * @param <T> The {@link Class} type of this {@link NumExpr2D} implementation.
+ *
+ * @see Num2D
  */
 //TO-EXPAND: A lot.
 public interface NumExpr2D<T extends NumExpr2D<T>>

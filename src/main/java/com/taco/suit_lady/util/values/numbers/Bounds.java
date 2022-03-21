@@ -2,6 +2,7 @@ package com.taco.suit_lady.util.values.numbers;
 
 import com.taco.suit_lady.util.tools.Enu;
 import com.taco.suit_lady.util.tools.Exc;
+import com.taco.suit_lady.util.values.enums.Axis;
 import com.taco.suit_lady.util.values.enums.LocType;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.Contract;
@@ -10,6 +11,77 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 
+/**
+ * <p>Defines an {@code immutable}, {@code default} implementation of {@link BoundsExpr}.</p>
+ * <p><b>Details</b></p>
+ * <ol>
+ *     <li>All {@link Bounds} objects are {@link Serializable}.</li>
+ *     <li>
+ *         {@link Bounds} overrides <i>{@link Object#equals(Object)}</i> such that two {@link Bounds} instances are {@code equal} if the {@code values} of the following {@code members} for each {@link Bounds} object are {@link #equals(Object) equal}:
+ *         <ul>
+ *             <li><i>{@link #x()}</i></li>
+ *             <li><i>{@link #y()}</i></li>
+ *
+ *             <li><i>{@link #w()}</i></li>
+ *             <li><i>{@link #h()}</i></li>
+ *
+ *             <li><i>{@link #locType()}</i></li>
+ *         </ul>
+ *     </li>
+ *     <li>
+ *         {@link Bounds} is {@link Cloneable}, overriding <i>{@link Object#clone()}</i> such that <i>{@link #clone() Bounds.clone()}</i> returns a {@code new} {@link Bounds} instance with {@code members} equal to the {@code values} of the {@link Bounds} instance being {@link #clone() cloned}.
+ *         <ul>
+ *             <li><i>The {@link #clone() cloned} {@code members} are the same as the {@code values} listed above for {@link #equals(Object) Equality Checks}.</i></li>
+ *         </ul>
+ *     </li>
+ * </ol>
+ * <hr><br>
+ * <p><b>Static Factory Methods</b></p>
+ * <p><i>
+ *     A new {@link Bounds} instance can be constructed either using the {@link Bounds} {@link Bounds#Bounds(Number, Number, Number, Number, LocType) Constructor}<br>
+ *     or any of the following {@link #newInstance() Factory Methods}:
+ * </i></p>
+ * <ol>
+ *     <li>
+ *         <b>New Instance Factory Methods</b>
+ *         <ul>
+ *             <li><i>{@link #newInstance(Num2D, Num2D, LocType)}</i></li>
+ *             <li><i>{@link #newInstance(BoundsExpr, LocType)}</i></li>
+ *             <li><i>{@link #newInstance(Number, Number, Number, Number)}</i></li>
+ *             <li><i>{@link #newInstance(BoundsExpr)}</i></li>
+ *             <li><i>{@link #newInstance(LocType)}</i></li>
+ *         </ul>
+ *     </li>
+ *     <li>
+ *         <b>New Instance From Factory Methods</b>
+ *         <ul>
+ *             <li><i>{@link #newInstanceFrom(Number, Number, Number, Number, LocType)}</i></li>
+ *             <li><i>{@link #newInstanceFrom(NumExpr2D, NumExpr2D, LocType)}</i></li>
+ *             <li><i>{@link #newInstanceFrom(Point2D, Point2D, LocType)}</i></li>
+ *
+ *             <li><i>{@link #newInstanceFrom(Number, Number, Number, Number)}</i></li>
+ *             <li><i>{@link #newInstanceFrom(NumExpr2D, NumExpr2D)}</i></li>
+ *             <li><i>{@link #newInstanceFrom(Point2D, Point2D)}</i></li>
+ *         </ul>
+ *     </li>
+ *     <li>
+ *         <b>Specialty Factory Methods</b>
+ *         <ul>
+ *             <li><i>{@link #boundsMin(LocType)}</i></li>
+ *             <li><i>{@link #boundsMin()}</i></li>
+ *
+ *             <li><i>{@link #boundsMax(LocType)}</i></li>
+ *             <li><i>{@link #boundsMax()}</i></li>
+ *         </ul>
+ *     </li>
+ * </ol>
+ *
+ * @param x       The {@link #x() X} value of the {@link #getLocation() Location Coordinates} of this {@link Bounds} instance.
+ * @param y       The {@link #y() Y} value of the {@link #getLocation() Location Coordinates} of this {@link Bounds} instance.
+ * @param w       The {@link #w() Width} value of the {@link #getDimensions() Dimensions} of this {@link Bounds} instance.
+ * @param h       The {@link #h() Height} value of the {@link #getDimensions() Dimensions} of this {@link Bounds} instance.
+ * @param locType The {@link LocType} of the {@link #getLocation() Location} of this {@link Bounds} instance.
+ */
 public record Bounds(@NotNull Number x, @NotNull Number y, @NotNull Number w, @NotNull Number h, @NotNull LocType locType)
         implements BoundsExpr, Cloneable, Serializable {
     
@@ -60,7 +132,9 @@ public record Bounds(@NotNull Number x, @NotNull Number y, @NotNull Number w, @N
     
     //<editor-fold desc="--- STATIC ---">
     
-    //<editor-fold desc="> Factory Construction Methods">
+    //<editor-fold desc="> Factory Methods">
+    
+    //<editor-fold desc=">> New Instance Factory Methods">
     
     /**
      * <p>Returns a new {@link Bounds} object with {@link BoundsExpr#getLocation() location} and {@link BoundsExpr#getDimensions() dimensions} set to {@code 0} and a {@link Enu#get(Class) default} {@link LocType}.</p>
@@ -122,7 +196,9 @@ public record Bounds(@NotNull Number x, @NotNull Number y, @NotNull Number w, @N
      */
     public static @NotNull Bounds newInstance(@NotNull BoundsExpr from, @Nullable LocType locType) { return newInstance(from.getLocation(locType), from.getDimensions(), locType); }
     
-    //
+    //</editor-fold>
+    
+    //<editor-fold desc=">> New Instance From Factory Methods">
     
     /**
      * <p>Returns a new {@link Bounds} object based on the specified minimum and maximum point values and {@link LocType}.</p>
@@ -202,7 +278,8 @@ public record Bounds(@NotNull Number x, @NotNull Number y, @NotNull Number w, @N
     
     //</editor-fold>
     
-    //<editor-fold desc="> Specialty Factory Methods">
+    
+    //<editor-fold desc=">> Specialty Factory Methods">
     
     /**
      * <p>Returns a new {@link Bounds} object with {@link BoundsExpr#getLocation() location} and {@link BoundsExpr#getDimensions() dimensions} set to {@link Integer#MAX_VALUE} and {@link LocType} set to the specified value.</p>
@@ -236,6 +313,8 @@ public record Bounds(@NotNull Number x, @NotNull Number y, @NotNull Number w, @N
      * @return A new {@link Bounds} object with {@link BoundsExpr#getLocation() location} and {@link BoundsExpr#getDimensions() dimensions} set to {@link Integer#MIN_VALUE} and a {@link Enu#get(Class) default} {@link LocType}.
      */
     public static @NotNull Bounds boundsMin() { return boundsMin(null); }
+    
+    //</editor-fold>
     
     //</editor-fold>
     
