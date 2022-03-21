@@ -1,6 +1,7 @@
 package com.taco.suit_lady.game.attributes;
 
-import com.taco.suit_lady.game.GameComponent;
+import com.taco.suit_lady.game.GameObjectComponent;
+import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.UIDProcessable;
@@ -19,10 +20,14 @@ import org.jetbrains.annotations.Nullable;
 import java.io.Serializable;
 import java.util.concurrent.locks.Lock;
 
+/**
+ * <p>i</p>
+ * @param <T>
+ */
 public class Attribute<T>
-        implements SpringableWrapper, Lockable, GameComponent, Serializable, UIDProcessable {
+        implements SpringableWrapper, Lockable, GameObjectComponent, Serializable, UIDProcessable {
     
-    private final AttributeManager owner;
+    private final AttributeManager manager;
     
     private final ReadOnlyStringWrapper idProperty;
     private final ObjectProperty<T> valueProperty;
@@ -31,19 +36,19 @@ public class Attribute<T>
     
     private final DefaultAttributeModel<T> model;
     
-    public Attribute(@NotNull AttributeManager owner, @NotNull String id, @NotNull Class<T> attributeType) {
-        this(owner, id, null, attributeType);
+    public Attribute(@NotNull AttributeManager manager, @NotNull String id, @NotNull Class<T> attributeType) {
+        this(manager, id, null, attributeType);
     }
     
-    public Attribute(@NotNull AttributeManager owner, @NotNull String id, @NotNull T value) {
-        this(owner, id, value, null);
+    public Attribute(@NotNull AttributeManager manager, @NotNull String id, @NotNull T value) {
+        this(manager, id, value, null);
     }
     
-    public Attribute(@NotNull AttributeManager owner, @Nullable String id, @Nullable T value, @Nullable Class<T> attributeType) {
+    public Attribute(@NotNull AttributeManager manager, @Nullable String id, @Nullable T value, @Nullable Class<T> attributeType) {
         if (value == null && attributeType == null)
             throw Exc.unsupported("Value and Attribute Type parameters must not both be null.");
         
-        this.owner = owner;
+        this.manager = manager;
         
         this.attributeType = value != null ? (Class<T>) value.getClass() : attributeType;
         
@@ -55,7 +60,9 @@ public class Attribute<T>
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final AttributeManager getOwner() { return owner; }
+    
+    public final AttributeManager getManager() { return manager; }
+    @Override public final @NotNull GameObject getOwner() { return manager.getOwner(); }
     public final DefaultAttributeModel<T> getModel() { return model; }
     
     
@@ -74,7 +81,7 @@ public class Attribute<T>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull GameViewContent getGame() { return owner.getGame(); }
+    @Override public @NotNull GameViewContent getGame() { return manager.getGame(); }
     
     @Override public @NotNull Springable springable() { return getOwner(); }
     @Override public @Nullable Lock getLock() { return getOwner().getLock(); }
