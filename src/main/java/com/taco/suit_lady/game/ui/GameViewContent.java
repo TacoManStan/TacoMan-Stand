@@ -1,5 +1,7 @@
 package com.taco.suit_lady.game.ui;
 
+import com.taco.suit_lady.game.attributes.Attribute;
+import com.taco.suit_lady.game.attributes.AttributeManager;
 import com.taco.suit_lady.game.attributes.AttributePage;
 import com.taco.suit_lady.game.galaxy.abilities.specific.Ability_Blink;
 import com.taco.suit_lady.game.galaxy.abilities.specific.Ability_Cleave;
@@ -11,9 +13,7 @@ import com.taco.suit_lady.game.GameMap;
 import com.taco.suit_lady.game.ui.pages.GameTileEditorPage;
 import com.taco.suit_lady.game.ui.pages.GameViewPage;
 import com.taco.suit_lady.logic.triggers.Galaxy;
-import com.taco.suit_lady.ui.Content;
-import com.taco.suit_lady.ui.SidebarBookshelf;
-import com.taco.suit_lady.ui.UIBook;
+import com.taco.suit_lady.ui.*;
 import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.UIDProcessable;
 import com.taco.suit_lady.util.UIDProcessor;
@@ -28,11 +28,26 @@ import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
+import javafx.geometry.Side;
 import javafx.scene.input.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * <p>Defines the root {@link Content} implementation for all {@link GameViewContent Game Logic}.</p>
+ * <p><b>Details</b></p>
+ * <ol>
+ *     <li>The {@link GameViewContent} instance is {@link GameViewContent#GameViewContent(Springable) Constructed} automatically by the {@link AppController} class.</li>
+ *     <li>Once {@link GameViewContent#GameViewContent(Springable) Constructed}, a {@link GameViewContent} instance cannot be used until the <i>{@link #init()}</i> method is called.</li>
+ *     <li>The {@link GameViewContentController} implementation of {@link ContentController} contains all {@code JavaFX UI Information} for this {@link GameViewContent} object.</li>
+ *     <li>The {@link GameViewContentData} implementation of {@link ContentData} contains all {@code Internal Logic and Data} for this {@link GameViewContent} object.</li>
+ *     <li>The {@link GameViewPage} implementation of {@link UIPage} defines the {@link Sidebar} {@link #getCoverPage() CoverPage} for this {@link GameViewContent} object.</li>
+ *     <li>The {@link GameFooter} implementation of {@link Footer} defines the {@link Footer} content for this {@link GameViewContent} object.</li>
+ *     <li>The {@link AttributePage} implementation of {@link UIPage} defines a demo display of the {@link Attribute Attributes} contained within an {@link AttributeManager}.</li>
+ * </ol>
+ */
+//TO-EXPAND
 public class GameViewContent
         extends Content<GameViewContent, GameViewContentData, GameViewContentController, GameFooter, GameFooterController>
         implements UIDProcessable, Lockable, GameComponent {
