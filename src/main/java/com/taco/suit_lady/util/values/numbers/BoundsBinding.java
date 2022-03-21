@@ -1,4 +1,4 @@
-package com.taco.suit_lady.util.values.numbers.bindings;
+package com.taco.suit_lady.util.values.numbers;
 
 import com.taco.suit_lady.util.tools.Bind;
 import com.taco.suit_lady.util.tools.Enu;
@@ -6,7 +6,7 @@ import com.taco.suit_lady.util.tools.Obj;
 import com.taco.suit_lady.util.tools.Props;
 import com.taco.suit_lady.util.values.enums.LocType;
 import com.taco.suit_lady.util.values.numbers.Bounds;
-import com.taco.suit_lady.util.values.numbers.expressions.BoundsExpr;
+import com.taco.suit_lady.util.values.numbers.BoundsExpr;
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.*;
 import javafx.beans.property.*;

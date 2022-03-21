@@ -1,12 +1,10 @@
-package com.taco.suit_lady.util.values.numbers.expressions;
+package com.taco.suit_lady.util.values.numbers;
 
 import com.taco.suit_lady.util.tools.Calc;
 import com.taco.suit_lady.util.values.ValueExpr2D;
 import com.taco.suit_lady.util.values.enums.CardinalDirection;
 import com.taco.suit_lady.util.values.enums.OpResultType;
 import com.taco.suit_lady.util.values.enums.OpType;
-import com.taco.suit_lady.util.values.numbers.N;
-import com.taco.suit_lady.util.values.numbers.Num2D;
 import javafx.geometry.Point2D;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

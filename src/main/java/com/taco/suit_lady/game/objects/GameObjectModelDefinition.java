@@ -5,7 +5,7 @@ import com.taco.suit_lady.game.GameComponent;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.util.tools.printing.PrintData;
 import com.taco.suit_lady.util.values.numbers.Bounds;
-import com.taco.suit_lady.util.values.numbers.bindings.BoundsBinding;
+import com.taco.suit_lady.util.values.numbers.BoundsBinding;
 import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
 import com.taco.suit_lady.util.springable.SpringableWrapper;

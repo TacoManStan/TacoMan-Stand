@@ -1,8 +1,6 @@
-package com.taco.suit_lady.util.values.numbers.expressions;
+package com.taco.suit_lady.util.values.numbers;
 
 import com.taco.suit_lady.util.values.ValueExpr;
-import com.taco.suit_lady.util.values.numbers.N;
-import com.taco.suit_lady.util.values.numbers.Num;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
