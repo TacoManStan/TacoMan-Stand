@@ -24,6 +24,27 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 import java.util.concurrent.locks.Lock;
 
+/**
+ * <p>Defines the {@link #move(NumExpr2D) movement logic} for a {@link GameObject} instance.</p>
+ * <p><b>Details</b></p>
+ * <ol>
+ *     <li>
+ *         {@link Mover} implements {@link Collidable}:
+ *         <ul>
+ *             <li>All {@link Collidable} implementations of a {@link Mover} instance pass all logic directly to the {@link Collidable} implementations of the {@link GameObject} this {@link Mover} is assigned to.</li>
+ *         </ul>
+ *     </li>
+ *     <li>
+ *         {@link Mover} extends {@link GameTask}
+ *         <ul>
+ *             <li>The {@link GameObject} {@link GameObject#mover() Mover} is automatically added to the {@link GameObject} {@link GameObject#taskManager() TaskManager} as an {@link GameTask#execute() Executable} {@link GameTask}.</li>
+ *         </ul>
+ *     </li>
+ *     <li><i>{@link #pausedProperty()}</i> is used to stop the {@link GameObject} instances {@link #move(NumExpr2D) Movement}</li>
+ *     <li><i>{@link #getTarget()}</i> is used to access the {@code Target} of a {@link Mover}, defining the {@link GameObject#getLocation() GameMap Location} this {@link Mover} is {@link #move(NumExpr2D) moving} its {@link GameObject} to.</li>
+ *     <li><i>{@link #debugEnabledProperty()}</i> is used to either {@code enable} or {@code disable} debug/status console output as this {@link Mover} is {@link #tick() Executed}.</li>
+ * </ol>
+ */
 public class Mover
         extends GameTask<GameObject>
         implements Collidable<GameObject> {
