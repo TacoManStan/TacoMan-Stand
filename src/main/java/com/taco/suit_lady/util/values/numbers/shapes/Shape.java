@@ -14,6 +14,7 @@ import com.taco.suit_lady.util.values.enums.Axis;
 import com.taco.suit_lady.util.values.enums.LocType;
 import com.taco.suit_lady.util.values.numbers.Num2D;
 import com.taco.suit_lady.util.values.numbers.NumExpr2D;
+import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.ObjectBinding;
@@ -25,14 +26,106 @@ import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.BiFunction;
 
+/**
+ * <p>Defines the logic pertaining to all {@link Shape} implementations.</p>
+ * <br><hr><br>
+ * <p><b>Implementation</b></p>
+ * <ol>
+ *     <li>
+ *         <b>Example {@link Shape} Implementations</b>
+ *         <ul>
+ *             <li><i>{@link Box}</i></li>
+ *             <li><i>{@link Circle}</i></li>
+ *             <li><i>{@link Cone}</i></li>
+ *         </ul>
+ *     </li>
+ *     <li>
+ *         <b>Abstract Methods</b>
+ *         <ul>
+ *             <li>
+ *                 {@link #observables()}
+ *                 <ul>
+ *                     <li><i>Defines the {@link Observable} values that {@link #regenerateBorderPoints(boolean, Number, Number) Regenerate} this {@link Shape} instance upon {@link Observable#addListener(InvalidationListener) Invalidation}.</i></li>
+ *                     <li><i>In most contexts, the default {@link Observable} values that are automatically set by each {@link Shape} instance are sufficient.</i></li>
+ *                 </ul>
+ *             </li>
+ *             <li>
+ *                 {@link #regenerateBorderPoints(boolean, Number, Number)}
+ *                 <ul>
+ *                     <li><i>Defines a {@link List} of {@link Num2D Points} that, when connected sequentially, form the {@code border} of this {@link Shape} instance.</i></li>
+ *                 </ul>
+ *             </li>
+ *             <li>
+ *                 {@link #containsPoint(Number, Number)}
+ *                 <ul>
+ *                     <li><i>Defines the logic for determining if this {@link Shape} implementation contains the {@link Num2D Point} defined by the {@code X} and {@code Y} parameters.</i></li>
+ *                     <li><i>{@link #containsPoint(NumExpr2D)} and {@link #containsPoint(Point2D)} methods call {@link #containsPoint(Number, Number)}.</i></li>
+ *                 </ul>
+ *             </li>
+ *             <li>
+ *                 {@link #copyTo(boolean, Number, Number)}
+ *                 <ul>
+ *                     <li><i>Translates the {@link #getLocation() Location} of this {@link Shape} using the {@code X} and {@code Y} parameters passed to the {@link #copyTo(boolean, Number, Number)} method.</i></li>
+ *                     <li><i>If the {@code translate} {@link Boolean} parameter is {@code true}, the specified {@code X} and {@code Y} values are {@code added} to the existing {@link #getLocation() Location} of this {@link Shape} object.</i></li>
+ *                     <li><i>If the {@code translate} {@link Boolean} parameter is {@code false}, the specified {@code X} and {@code Y} values are {@code set} as the new {@link #getLocation() Location} of this {@link Shape} object.</i></li>
+ *                 </ul>
+ *             </li>
+ *         </ul>
+ *     </li>
+ * </ol>
+ * <p><b>Logic</b></p>
+ * <ol>
+ *     <li>
+ *         <b>{@link #locationMap() Location Map}</b>
+ *         <ul>
+ *             <li>Contains a {@link Map} of {@link DoubleBinding DoubleBindings}.</li>
+ *             <li>Each {@link DoubleBinding} is {@code mapped} by an {@link Axis} and {@link LocType} defining the {@link #getLocation() Location Value} of that {@link DoubleBinding}.</li>
+ *             <li>
+ *                 The values contained within the {@link #locationMap() Location Map} are {@code cached}.
+ *                 <ul>
+ *                     <li>In other words, the {@link #locationMap() Location Map} is {@link Map#isEmpty() Empty} upon {@link Shape} construction.</li>
+ *                     <li>When the {@link #locationMap() Location Map} is {@link #locationBinding(Axis, LocType) Accessed}, a new {@link DoubleBinding} reflecting the {@link #getLocation(Axis, LocType) Location} defined by the specified {@link Axis} and {@link LocType} is created.</li>
+ *                     <li>Once constructed, the {@link DoubleBinding} is then added to the {@link #locationMap() Location Map} with the {@link Axis} and {@link LocType} parameters as the {@code key}.</li>
+ *                     <li>Use <i>{@link #clearCache()}</i> to clear the {@link #locationMap() Location Map Cache}.</li>
+ *                 </ul>
+ *             </li>
+ *         </ul>
+ *     </li>
+ *     <li>
+ *         <b>{@link #taskManager() Task Manager}</b>
+ *         <ul>
+ *             <li>Every {@link Shape} defines a {@link TaskManager} to handle the {@code Execution Logic} for this {@link Shape} object.</li>
+ *             <li>The primary use of the {@link TaskManager} is to execute the {@code JavaFX Graphics Logic} for representing a {@link Shape} visually.</li>
+ *         </ul>
+ *     </li>
+ *     <li>
+ *         <b>{@link #readOnlyImageProperty() Shape Image}</b>
+ *         <ul>
+ *             <li>
+ *                 <i>{@link #readOnlyImageEnabledProperty()}</i> contains the {@code boolean} value indicating whether this {@link Shape} should store a <i>{@link #readOnlyImageProperty() Image Representation} of the {@link Shape}.</i>
+ *                 <ul>
+ *                     <li><i>{@link #readOnlyImageEnabledProperty()}</i> is {@code false} by {@code default}.</li>
+ *                     <li>If <i>{@link #readOnlyImageProperty()}</i> is {@code false}, <i>{@link #getImage()}</i> will always return {@code null}.</li>
+ *                 </ul>
+ *             </li>
+ *             <li>The value of <i>{@link #readOnlyImageProperty()}</i> is automatically updated when the {@link Shape} defined by this {@link Shape} instance is changed.</li>
+ *             <li>
+ *                 The {@link Image} set to <i>{@link #readOnlyImageProperty()}</i> is defined by the {@link #readOnlyPixelGeneratorProperty() Pixel Generator} assigned to this {@link Shape} instance.
+ *                 <ul>
+ *                     <li>If left undefined, the {@link #readOnlyPixelGeneratorProperty() Pixel Generator} for a {@link Shape} is set to the value of <i>{@link #defaultPixelGenerator()}</i>.</li>
+ *                     <li>Use <i>{@link #setPixelGenerator(BiFunction)}</i> to define the {@link #readOnlyPixelGeneratorProperty() Pixel Generator} for this {@link Shape} instance.</li>
+ *                 </ul>
+ *             </li>
+ *         </ul>
+ *     </li>
+ * </ol>
+ */
+//TO-EXPAND: Examples
 public abstract class Shape
         implements SpringableWrapper, Lockable, GFXObject<Shape>, Cloneable {
     
@@ -68,7 +161,6 @@ public abstract class Shape
     private final ReadOnlyObjectWrapper<Image> imageProperty;
     
     private boolean needsGfxUpdate;
-    private boolean needsBorderPointsUpdate;
     
     public Shape(@NotNull Springable springable, @Nullable Lock lock,
                  @Nullable LocType locType,
@@ -112,7 +204,6 @@ public abstract class Shape
         this.imageProperty = new ReadOnlyObjectWrapper<>();
         
         this.needsGfxUpdate = false;
-        this.needsBorderPointsUpdate = false;
         
         //
         
@@ -137,6 +228,8 @@ public abstract class Shape
     //</editor-fold>
     
     //<editor-fold desc="--- PROPERTIES ---">
+    
+    protected final MapProperty<String, DoubleBinding> locationMap() { return locationMap; }
     
     //<editor-fold desc="> Location & Dimensions">
     
@@ -301,9 +394,12 @@ public abstract class Shape
         });
     }
     
-    public boolean intersectsLegacy(@NotNull Shape other, boolean translate, @NotNull Number xMod, @NotNull Number yMod) {
+    //
+    
+    public @NotNull Shape clearCache() {
         return sync(() -> {
-            return getBorderPoints(translate, xMod, yMod).stream().anyMatch(other::containsPoint);
+            locationMap.clear();
+            return this;
         });
     }
     
