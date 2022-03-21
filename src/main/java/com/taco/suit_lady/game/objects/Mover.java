@@ -45,6 +45,7 @@ import java.util.concurrent.locks.Lock;
  *     <li><i>{@link #debugEnabledProperty()}</i> is used to either {@code enable} or {@code disable} debug/status console output as this {@link Mover} is {@link #tick() Executed}.</li>
  * </ol>
  */
+//TO-EXPAND
 public class Mover
         extends GameTask<GameObject>
         implements Collidable<GameObject> {
