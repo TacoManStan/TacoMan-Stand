@@ -7,6 +7,76 @@ import com.taco.suit_lady.util.tools.Calc;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * <p>Defines implementing {@link Object Objects} as having a {@link #getBounds() Bounds} definition.</p>
+ * <p><b>Details</b></p>
+ * <ol>
+ *     <li>The {@link #getLocation() Location} of a {@link BoundsExpr} is defined by the {@link #x() X} and {@link #y() Y} coordinate values.</li>
+ *     <li>The {@link #getDimensions() Dimensions} of a {@link BoundsExpr} is defined by the {@link #w() Width} and {@link #h() Height} coordinate values.</li>
+ *     <li>The {@link #locType() Type} of the {@link #getLocation() Location Coordinates} for this {@link BoundsExpr} is defined by the abstract <i>{@link #locType()}</i> method.</li>
+ *     <li><i>See {@link Bounds} for the {@code immutable}, {@code default} implementation of {@link BoundsExpr}.</i></li>
+ * </ol>
+ * <br><hr><br>
+ * <p>{@link BoundsExpr} provides a variety of convenient {@code default} methods:</p>
+ * <table style="border:1px solid; border-collapse:collapse; border-spacing:3px; rules:all">
+ *     <caption style="font-size:16px; border:1px solid; border-collapse:collapse"><b>Min/Max Accessor Methods</b></caption>
+ *     <tr>
+ *         <th></th>
+ *         <th>Min X</th>
+ *         <th>Max X</th>
+ *         <th>Mid X</th>
+ *         <th>Min Y</th>
+ *         <th>Max Y</th>
+ *         <th>Mid Y</th>
+ *     </tr>
+ *     <tr>
+ *         <th style="padding-right:15px">Generic</th>
+ *         <td style="padding-right:5px">{@link #xMin()}</td>
+ *         <td style="padding-right:5px">{@link #xMax()}</td>
+ *         <td style="padding-right:15px">{@link #xMid()}</td>
+ *         <td style="padding-right:5px">{@link #yMin()}</td>
+ *         <td style="padding-right:5px">{@link #yMax()}</td>
+ *         <td style="padding-right:5px">{@link #yMid()}</td>
+ *     </tr>
+ *     <tr>
+ *         <th style="padding-right:15px">Integer</th>
+ *         <td style="padding-right:5px">{@link #xMinI()}</td>
+ *         <td style="padding-right:5px">{@link #xMaxI()}</td>
+ *         <td style="padding-right:15px">{@link #xMidI()}</td>
+ *         <td style="padding-right:5px">{@link #yMinI()}</td>
+ *         <td style="padding-right:5px">{@link #yMaxI()}</td>
+ *         <td style="padding-right:5px">{@link #yMidI()}</td>
+ *     </tr>
+ *     <tr>
+ *         <th style="padding-right:15px">Long</th>
+ *         <td style="padding-right:5px">{@link #xMinL()}</td>
+ *         <td style="padding-right:5px">{@link #xMaxL()}</td>
+ *         <td style="padding-right:15px">{@link #xMidL()}</td>
+ *         <td style="padding-right:5px">{@link #yMinL()}</td>
+ *         <td style="padding-right:5px">{@link #yMaxL()}</td>
+ *         <td style="padding-right:5px">{@link #yMidL()}</td>
+ *     </tr>
+ *     <tr>
+ *         <th style="padding-right:15px">Float</th>
+ *         <td style="padding-right:5px">{@link #xMinF()}</td>
+ *         <td style="padding-right:5px">{@link #xMaxF()}</td>
+ *         <td style="padding-right:15px">{@link #xMidF()}</td>
+ *         <td style="padding-right:5px">{@link #yMinF()}</td>
+ *         <td style="padding-right:5px">{@link #yMaxF()}</td>
+ *         <td style="padding-right:5px">{@link #yMidF()}</td>
+ *     </tr>
+ *     <tr>
+ *         <th style="padding-right:15px">Double</th>
+ *         <td style="padding-right:5px">{@link #xMinD()}</td>
+ *         <td style="padding-right:5px">{@link #xMaxD()}</td>
+ *         <td style="padding-right:15px">{@link #xMidD()}</td>
+ *         <td style="padding-right:5px">{@link #yMinD()}</td>
+ *         <td style="padding-right:5px">{@link #yMaxD()}</td>
+ *         <td style="padding-right:5px">{@link #yMidD()}</td>
+ *     </tr>
+ * </table>
+ */
+//TO-EXPAND
 public interface BoundsExpr {
     
     @NotNull Number x();

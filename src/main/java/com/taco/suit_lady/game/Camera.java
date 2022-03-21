@@ -215,7 +215,7 @@ public class Camera
     
     public final ObjectBinding<Num2D> locationBinding() { return locationBinding; }
 
-    @Override public final Num2D getLocation() { return locationBinding.get(); }
+    @Override public final @NotNull Num2D getLocation() { return locationBinding.get(); }
     public final Num2D setLocation(@NotNull NumExpr2D<?> newValue) {
         final Num2D oldValue = getLocation();
         setLocationX(newValue.a());

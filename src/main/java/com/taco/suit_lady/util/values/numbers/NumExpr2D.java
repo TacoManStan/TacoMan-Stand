@@ -11,16 +11,22 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 
+/**
+ * <p>Defines a {@link ValueExpr2D} implementation containing only {@link Number} values.</p>
+ *
+ * @param <T> The {@link Class} type of this {@link NumExpr2D} implementation.
+ */
+//TO-EXPAND: A lot.
 public interface NumExpr2D<T extends NumExpr2D<T>>
         extends ValueExpr2D<Number, Number>, NumExpr<T> {
     
-    default @NotNull NumExpr2D<?> modify(Function<Number, Number> aFunction, Function<Number, Number> bFunction) {
-            return new Num2D(aFunction.apply(a()), bFunction.apply(b()));
+    default @NotNull NumExpr2D<?> modify(@NotNull Function<Number, Number> aFunction, @NotNull Function<Number, Number> bFunction) {
+        return new Num2D(aFunction.apply(a()), bFunction.apply(b()));
     }
     
     //<editor-fold desc="--- DEFAULT METHODS ---">
     
-    //<editor-fold desc="--- EQUALITY METHODS ---">
+    //<editor-fold desc="> Equality Methods">
     
     default boolean equalTo(@Nullable NumExpr2D<?> other) { return other != null && aI() == other.aI() && bI() == other.bI(); }
     default boolean equalToExact(@Nullable NumExpr2D<?> other) { return other != null && aD() == other.aD() && bD() == other.bD(); }
@@ -60,8 +66,8 @@ public interface NumExpr2D<T extends NumExpr2D<T>>
     //
     
     default @NotNull NumExpr2D<?> applyEach(@NotNull Number aModifier, @NotNull Number bModifier,
-                                 @NotNull OpType aOpType, @NotNull OpType bOpType,
-                                 @NotNull OpResultType resultType) {
+                                            @NotNull OpType aOpType, @NotNull OpType bOpType,
+                                            @NotNull OpResultType resultType) {
         return modify(numA -> aOpType.apply(a(), aModifier, resultType),
                       numB -> bOpType.apply(b(), bModifier, resultType));
     }
