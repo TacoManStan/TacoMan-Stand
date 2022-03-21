@@ -8,6 +8,7 @@ import com.taco.suit_lady.util.values.enums.LocType;
 import com.taco.suit_lady.util.values.numbers.Bounds;
 import com.taco.suit_lady.util.values.numbers.BoundsExpr;
 import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.beans.binding.*;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
@@ -16,6 +17,27 @@ import javafx.collections.ObservableList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * <p>An {@link Observable} {@link Binding} implementation of {@link BoundsExpr}.</p>
+ * <ol>
+ *     <li>{@link BoundsBinding} wraps an {@link ObjectBinding} set to contain the {@link Bounds} instance defined by this {@link BoundsBinding}.</li>
+ *     <li>
+ *         The <i>{@link #boundsBinding()}</i> is updated automatically when any of the following {@link DoubleProperty Properties} are changed:
+ *         <ul>
+ *             <li><i>{@link #xProperty()}</i></li>
+ *             <li><i>{@link #yProperty()}</i></li>
+ *
+ *             <li><i>{@link #widthProperty()}</i></li>
+ *             <li><i>{@link #heightProperty()}</i></li>
+ *
+ *             <li><i>{@link #locTypeProperty()}</i></li>
+ *         </ul>
+ *     </li>
+ *     <li>All {@link Binding} method implementations are passed through to the <i>{@link #boundsBinding()}</i> member of this {@link BoundsBinding} object.</li>
+ *     <li>To construct a new {@link BoundsBinding} instance, use any of the available {@link BoundsBinding#BoundsBinding(ObservableValue, ObservableValue, ObservableValue, ObservableValue, ObservableValue, boolean) Constructors}.</li>
+ * </ol>
+ */
+//TO-EXPAND: Examples & Constructor Definitions
 public class BoundsBinding
         implements BoundsExpr, Binding<Bounds> {
     
@@ -59,7 +81,7 @@ public class BoundsBinding
         }
         
         //
-    
+        
         this.boundsBinding = Bindings.createObjectBinding(() -> new Bounds(x(), y(), w(), h(), locType()), xProperty, yProperty, widthProperty, heightProperty, locTypeProperty);
     }
     
