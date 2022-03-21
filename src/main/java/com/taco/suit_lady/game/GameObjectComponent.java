@@ -10,6 +10,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.locks.Lock;
 
+/**
+ * <p>An implementation of {@link GameComponent} defining all implementations as being members/properties of a {@link GameObject} instance.</p>
+ * <p><i>See {@link GameComponent} for additional information.</i></p>
+ */
 public interface GameObjectComponent
         extends SpringableWrapper, Lockable, GameComponent {
     
