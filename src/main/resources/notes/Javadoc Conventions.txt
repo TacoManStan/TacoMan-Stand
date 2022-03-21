@@ -45,3 +45,4 @@ COPY/PASTE
 USEFUL EXAMPLES
     > UIDProcessable.getUIDProcessor() :  Formatted Javadoc code blocks
     > ArrayTools.sort(List<E> list) :  Formatted Javadoc passthrough definition styling options
+    > BoundsExpr : Formatted Javadoc Table
