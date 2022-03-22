@@ -11,10 +11,55 @@ import com.taco.suit_lady.util.tools.fx_tools.FX;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * <p>Manages the currently {@link #getContent() Selected} {@link Content} as well as {@link Content} {@link #onChange(Content, Content) Transitions}.</p>
+ * <p><b>Details</b></p>
+ * <ol>
+ *     <li>{@link ContentManager} is stored as a {@code singleton member} of the {@link AppUI} class.</li>
+ *     <li>The {@code singleton} {@link ContentManager} instance is accessed with <i>{@link AppUI#getContentManager()}</i>.</li>
+ *     <li>
+ *         {@link ContentManager} contains a variety of {@link Pane} instances, each serving a different purpose:
+ *         <ul>
+ *             <li>
+ *                 <b>Internal Base Pane</b>
+ *                 <ul>
+ *                     <li><i>{@link #getContentBasePane() Content Base Pane}</i></li>
+ *                 </ul>
+ *             </li>
+ *             <li>
+ *                 <b>Internal Canvas Pane Accessors</b>
+ *                 <ul>
+ *                     <li><i>{@link #getInternalContentBasePane() Internal Content Pane}</i></li>
+ *                     <li><i>{@link #getInternalForegroundBasePane() Internal Foreground Canvas Pane}</i></li>
+ *                     <li><i>{@link #getInternalBackgroundBasePane() Internal Background Canvas Pane}</i></li>
+ *                 </ul>
+ *             </li>
+ *             <li>
+ *                 <b>Content Stack Pane Accessors</b>
+ *                 <ul>
+ *                     <li><i>{@link #getContentPrimaryPane() Primary Content Pane}</i></li>
+ *                     <li><i>{@link #getContentForegroundPane() Foreground Content Pane}</i></li>
+ *                     <li><i>{@link #getContentBackgroundPane() Background Content Pane}</i></li>
+ *                 </ul>
+ *             </li>
+ *             <li>
+ *                 <b>Canvas Content Accessors</b>
+ *                 <ul>
+ *                     <li><i>{@link #getContentOverlayCanvas() Overlay Canvas Pane}</i></li>
+ *                     <li><i>{@link #getContentBackdropCanvas() Backdrop Canvas Pane}</i></li>
+ *                 </ul>
+ *             </li>
+ *         </ul>
+ *     </li>
+ *     <li>Additionally, the {@link ContentManager} handles all {@link KeyEvent Key Events} via the <i>{@link #submitKeyEvent(KeyEvent, boolean)}</i> method.</li>
+ * </ol>
+ */
+//TO-EXPAND: Examples?
 public class ContentManager
         implements SpringableWrapper {
     
@@ -152,7 +197,7 @@ public class ContentManager
             if (newContent != null) {
                 FX.bindToParent(newContent.getController().root(), getContentPrimaryPane(), true);
                 FX.bindToParent(newContent.getOverlayHandler().root(), getContentPrimaryPane(), true);
-    
+                
                 if (newContent.getController().hasFooter()) {
                     ui().getController().footerPane().getChildren().add(newContent.getFooter().getController().root());
                     newContent.getFooter().onContentChange(true);

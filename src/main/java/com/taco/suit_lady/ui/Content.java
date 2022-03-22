@@ -17,6 +17,17 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.concurrent.ThreadPoolExecutor;
 
+/**
+ * <p>The primary backbone of a specific type of {@link Content}.</p>
+ * <p><b>Details</b></p>
+ *
+ * @param <T>
+ * @param <TD>
+ * @param <TC>
+ * @param <F>
+ * @param <FC>
+ */
+//TO-EXPAND: A lot. Like, a lot a lot.
 public abstract class Content<T extends Content<T, TD, TC, F, FC>, TD extends ContentData<T, TD, TC, F, FC>, TC extends ContentController<T, TD, TC, F, FC>,
         F extends Footer<F, FC, T, TD, TC>, FC extends FooterController<F, FC, T, TD, TC>>
         implements Springable {
@@ -48,7 +59,7 @@ public abstract class Content<T extends Content<T, TD, TC, F, FC>, TD extends Co
     }
     
     public T init() {
-//        footer = constructFooter();
+        //        footer = constructFooter();
         getController().init((T) this);
         return (T) this;
     }
