@@ -1,14 +1,23 @@
 KEY
 
-    [ ]: No Documentation; Normal Priority
-    [-]: No Documentation: Low-Priority
-    [*]: No Documentation: High-Priority
+    [-]: Low-Priority Documentation
+    [ ]: Normal Priority Documentation
+    [*]: High-Priority Documentation
+    [!]: Highest-Priority Documentation
 
     [X]: Documentation Complete
-    [/]: Documentation Incomplete
+    [/]: Documentation Incomplete but Sufficient
+    [|]: Documentation Incomplete and Insufficient
 
     [C]: Class Level Documentation Complete
     [B]: Class Body Documentations Complete
+    [I]: Class Documentation Incomplete
+
+    [N]: Class Logic Not Yet Implemented
+    [L]: Legacy/Currently-Unused Class
+    [P]: Class Logic In Progress
+
+    [?]: Unknown; Requires Review
 
 
 ------------------------------------------------------------
@@ -49,11 +58,11 @@ GENERAL
 
 CONTENT
 
-    [*] ContentManager
+    [!] ContentManager
 
-    [*] Content
-    [*] ContentController
-    [*] ContentData
+    [!] Content
+    [!] ContentController
+    [!] ContentData
 
 -----
 
@@ -83,11 +92,11 @@ GAME
 
     GAME: COMMANDS
 
-        [-] Behavior
-        [-] MoveBehavior
+        [N] Behavior
+        [N] MoveBehavior
 
-        [-] Command
-        [-] CommandHub
+        [N] Command
+        [N] CommandHub
 
     GAME: GALAXY
 
@@ -100,32 +109,32 @@ GAME
 
             GAME: GALAXY: ABILITIES: SPECIFIC
 
-            	[ ] Ability_Blink
-            	[ ] Ability_Cleave
-            	[ ] Ability_LaunchMissile
-            	[ ] Ability_SpawnGameObject
+            	[-] Ability_Blink
+            	[-] Ability_Cleave
+            	[-] Ability_LaunchMissile
+            	[-] Ability_SpawnGameObject
 
         GAME: GALAXY: EFFECTS
 
         	[C] Effect
-        	[*] EffectGroup
+        	[N] EffectGroup
 
         	[*] Effect_Targeted
         	[*] Effect_Scan
 
-        	[ ] Effect_ApplyBehavior
-        	[ ] Effect_ApplyPersistent
-        	[ ] Effect_IssueOrder
-        	[ ] Effect_LaunchMissile
-        	[ ] Effect_ModifyPlayer
-        	[ ] Effect_ModifyUnit
-        	[ ] Effect_SpawnGameObject
+        	[N] Effect_ApplyBehavior
+        	[N] Effect_ApplyPersistent
+        	[N] Effect_IssueOrder
+        	[-] Effect_LaunchMissile
+        	[N] Effect_ModifyPlayer
+        	[N] Effect_ModifyUnit
+        	[-] Effect_SpawnGameObject
 
         	GAME: GALAXY: EFFECTS: SPECIFIC
 
-        	    [ ] Effect_Blink
-        	    [ ] Effect_Cleave
-        	    [ ] Effect_MissileImpact
+        	    [-] Effect_Blink
+        	    [-] Effect_Cleave
+        	    [-] Effect_MissileImpact
 
         GAME: GALAXY: VALIDATORS
 
@@ -135,16 +144,16 @@ GAME
 
     GAME: ITEMS
 
-        [-] GameItem
+        [N] GameItem
 
     GAME: OBJECTS
 
         [C] MapObject
 
-        [C] GameObject
-        [-] Structure
+        [|] GameObject
+        [N] Structure
 
-        [ ] GameObjectModel
+        [|] GameObjectModel
         [ ] GameObjectModelDefinition
         [ ] GameObjectModelDefinitions
 
@@ -159,26 +168,26 @@ GAME
             [/] CollisionMap
             [/] CollisionArea
 
-            [-] Collisions
-            [-] CollisionHandler
+            [N] Collisions
+            [N] CollisionHandler
 
         GAME: OBJECTS: TILES
 
             [C] GameTile
-            [*] GameTileModel
+            [|] GameTileModel
 
             [*] TileTerrainObject
-            [ ] TileTerrainObjectID
-            [ ] TileTerrainObjectOrientationID
+            [*] TileTerrainObjectID
+            [*] TileTerrainObjectOrientationID
 
         GAME: OBJECTS: UNITS
 
-            [-] GameUnit
+            [N] GameUnit
 
     GAME: SERVER
 
-        [-] GameSever
-        [-] DummyGameServer
+        [N] GameSever
+        [N] DummyGameServer
 
     GAME: UI
 
@@ -191,18 +200,18 @@ GAME
         [*] GameViewContentController
         [*] GameViewContentData
 
-        [*] GameFooter
+        [/] GameFooter
         [ ] GameFooterController
 
         GAME: UI: PAGES
 
-            [*] GameViewPage
+            [/] GameViewPage
             [ ] GameViewPageController
 
-            [*] GameTileEditorPage
+            [/] GameTileEditorPage
             [ ] GameTileEditorPageController
 
-            [*] GameObjectEditorPage
+            [/] GameObjectEditorPage
             [ ] GameObjectEditorPageController
 
             GAME: UI: PAGES: ELEMENTS
@@ -252,9 +261,7 @@ LOGIC
 
 UTIL
 
-    [-] Controllable
-
-    [ ] SimplePredicate
+    [X] SimplePredicate
     [B] Validatable
 
     [B] UID
@@ -266,20 +273,15 @@ UTIL
 
     UTIL: ENUMS
 
-        [*] DefaultableEnum
-        [*] Enumable
+        [C] DefaultableEnum
+        [C] Enumable
 
-        [ ] FilterType
+        [-] FilterType
 
     UTIL: EXCEPTIONS
 
         [-] NYIException
         [-] ReadOnlyViolationException
-
-    UTIL: INITIALIZER
-
-        [*] Initializer
-        [ ] ReadOnlyInitializer
 
     UTIL: SPRINGABLE
 
@@ -299,18 +301,18 @@ UTIL
         [/] Timers
 
         [/] Timer
-        [*] DebugTimer
+        [C] DebugTimer
 
-        [*] Timeable
-        [ ] ReadOnlyTimeable
+        [C] Timeable
+        [C] ReadOnlyTimeable
 
-        [*] Timerable
-        [ ] ReadOnlyTimerable
-        [ ] ReactiveTimerable
-        [ ] ReadOnlyReactiveTimerable
+        [C] Timerable
+        [C] ReadOnlyTimerable
+        [/] ReactiveTimerable
+        [/] ReadOnlyReactiveTimerable
 
-        [*] Duration
-        [*] DurationProperty
+        [|] Duration
+        [|] DurationProperty
 
         [-] TimerException
 
@@ -341,7 +343,7 @@ UTIL
             [/] A
             [/] L
 
-            [*] Op
+            [C] Op
             [X] OpHandler
             [X] OpListener
 
@@ -356,11 +358,11 @@ UTIL
 
         [/] ValueExpr
         [/] ValueExpr2D
-        [-] ValueExpr3D
+        [N] ValueExpr3D
 
         [/] Value
         [/] Value2D
-        [-] Value3D
+        [N] Value3D
 
         UTIL: VALUES: ENUMS
 
@@ -382,7 +384,7 @@ UTIL
                 [C] AStarPathfinder
                 [*] AStarMatrix
 
-                [ ] AStarNodeable
+                [N] AStarNodeable
                 [C] AStarNode
                 [*] CachedAStarNode
 
@@ -429,29 +431,29 @@ UI
 
     UI: CONSOLE
 
-        [?] ConsoleBB
+        [|] ConsoleBB
 
         -----
 
-        [-] Console
-        [-] ConsoleInterpreter
+        [L] Console
+        [L] ConsoleInterpreter
 
-        [-] ConsoleMessage
-        [-] ConsoleMessageable
-        [-] SimpleConsoleMessage
+        [L] ConsoleMessage
+        [L] ConsoleMessageable
+        [L] SimpleConsoleMessage
 
     UI: CONTENT
 
         [B] ContentView
 
-        [ ] GroupContentView
-        [ ] PaintableContentView
-        [ ] SimpleContentView
-        [ ] TransitionContentView
+        [-] GroupContentView
+        [-] PaintableContentView
+        [-] SimpleContentView
+        [-] TransitionContentView
 
     UI: JAVAFX
 
-        [?] Colorable
+        [L] Colorable
 
         UI: JAVAFX: COMPONENTS
 
@@ -464,53 +466,52 @@ UI
                 [X] ImageButton
 
                 [X] ImageButtonGroup
-                [?] SimpleImageButtonGroup
                 [B] BoundImageButtonGroup
 
             UI: JAVAFX: COMPONENTS: FORMATTED CONTROLS
 
-                [*] IntField
-                [*] DoubleField
+                [C] IntField
+                [C] DoubleField
 
-                [ ] IntegerFormatter
-                [ ] DecimalFormatter
+                [C] IntegerFormatter
+                [C] DecimalFormatter
 
             UI: JAVAFX: COMPONENTS: PAINTING
 
                 UI: JAVAFX: COMPONENTS: PAINTING: PAINTABLES
 
-                    [*] Paintable
-                    [*] PaintableData
+                    [!] Paintable
+                    [!] PaintableData
 
                     UI: JAVAFX: COMPONENTS: PAINTING: PAINTABLES: CANVAS
 
-                        [*] PaintCommand
+                        [!] PaintCommand
 
-                        [*] ShapePaintCommand
+                        [!] ShapePaintCommand
                         [ ] BoxPaintCommand
                         [ ] OvalPaintCommand
                         [ ] ArcPaintCommand
                         [ ] TextPaintCommand
 
-                        [*] ImagePaintCommandBase
-                        [*] ImagePaintCommand
+                        [!] ImagePaintCommandBase
+                        [!] ImagePaintCommand
                         [?] CroppedImagePaintCommand
                         [?] AggregateImagePaintCommand
 
                     UI: JAVAFX: COMPONENTS: PAINTING: PAINTABLES: OVERLAY
 
-                        [*] PaintNode
-                        [?] CompoundPaintNode
+                        [!] PaintNode
+                        [N] CompoundPaintNode
 
-                        [*] ImagePaintNode
+                        [!] ImagePaintNode
 
-                        [*] ShapePaintNode
+                        [!] ShapePaintNode
                         [ ] BoxPaintNode
 
                 UI: JAVAFX: COMPONENTS: PAINTING: SURFACES
 
-                    [*] Surface
-                    [*] SurfaceData
+                    [!] Surface
+                    [!] SurfaceData
 
                     [B] OverlayHandler
                     [B] OverlaySurface
@@ -518,13 +519,13 @@ UI
                     UI: JAVAFX: COMPONENTS: PAINTING: SURFACES: CANVAS
 
                         [/] CanvasSurface
-                        [*] CanvasPane
-                        [*] CanvasContentPane
+                        [!] CanvasPane
+                        [!] CanvasContentPane
 
         UI: JAVAFX: DIALOG
 
             [B] DialogController
-            [/] DialogCallback
+            [L] DialogCallback
 
         UI: JAVAFX: HYPERLINK
 
@@ -534,9 +535,9 @@ UI
         UI: JAVAFX: LISTS
 
             [X] CellControlManager
-            [*] Listable
+            [!] Listable
 
-            [*] ListCellFX
+            [!] ListCellFX
             [X] TreeCellFX
 
             UI: JAVAFX: LISTS: TREE HANDLER
@@ -547,58 +548,58 @@ UI
                 [/] TreeCellData
                 [/] WrappingTreeCellData
 
-                [/] CreationTreeHandler
-                [/] CreationTreeCellData
+                [L] CreationTreeHandler
+                [L] CreationTreeCellData
 
                 [ ] IndexedCellFXable
                 [ ] TreeItemFX
 
         UI: JAVAFX: SETTINGS
 
-            [-] SettingNode
+            [L] SettingNode
 
-            [-] CheckBoxSettingNode
-            [-] TextFieldSettingNode
+            [L] CheckBoxSettingNode
+            [L] TextFieldSettingNode
 
         UI: JAVAFX: UTIL
 
-            [/] FXTimer
+            [L] FXTimer
 
     UI: UI INTERNAL
 
         UI: UI INTERNAL: CONSOLE
 
-            [-] ConsoleUIDataContainer
-            [-] ConsolePage
+            [L] ConsoleUIDataContainer
+            [L] ConsolePage
 
         UI: UI INTERNAL: CONTROLLERS
 
-            [*] Controller
+            [X] Controller
             [*] CellController
 
-            [-] SettingsController
-            [-] SettingGroupController
+            [ ] SettingsController
+            [ ] SettingGroupController
             [-] TestSettingGroupController
 
-            [-] ConsoleController
-            [-] ConsoleElementController
+            [L] ConsoleController
+            [L] ConsoleElementController
 
-            [?] SidebarNodeGroupController
+            [ ] SidebarNodeGroupController
 
 
         UI: UI INTERNAL: DRAG AND DROP
 
-            [*] DragAndDropHandler
-            [*] DragAndDropManager
+            [!] DragAndDropHandler
+            [!] DragAndDropManager
 
             [*] DragEventData
             [*] DragEventType
 
         UI: UI INTERNAL: SETTINGS
 
-            [-] SettingContainer
-            [-] SettingGroup
-            [-] SettingsTitledPane
+            [ ] SettingContainer
+            [ ] SettingGroup
+            [ ] SettingsTitledPane
 
 -----
 
@@ -607,28 +608,28 @@ TACOSITORY
 
     TACOSITORY: COLLECTIONS
 
-        [-] ObservableLinkedList
+        [X] ObservableLinkedList
 
-        [-] SelectionList
-        [-] ReadOnlySelectionList
+        [L] SelectionList
+        [L] ReadOnlySelectionList
 
     TACOSITORY: JSON
 
-        [*] JUtil
-        [*] JFiles
+        [!] JUtil
+        [!] JFiles
 
         -----
 
-        [*] JElement
-        [*] JObject
+        [!] JElement
+        [!] JObject
         [*] JArray
         [*] JMatrix
 
         [*] NonJObjectFieldWrapper
         [*] ColorJObjectWrapper
 
-        [C] JLoadable
-        [C] JLoadableObject
+        [!] JLoadable
+        [!] JLoadableObject
 
         -----
 
@@ -651,7 +652,7 @@ TACOSITORY
 
 TO SORT: NEW
 
-    [-] Self
+    [X] Self
 
     [*] Debugger
 
@@ -668,29 +669,29 @@ TO SORT: NEW
 
     TO SORT: NEW: INITIALIZATION
 
-        [*] Initializable
-        [*] Initializer
+        [C] Initializable
+        [C] Initializer
 
-        [ ] LockMode
+        [-] LockMode
 
     TO SORT: NEW: INTERFACES
 
         [-] NameableProperty
         [-] ReadOnlyNameableProperty
 
-        [*] ObservablePropertyContainable
+        [C] ObservablePropertyContainable
 
         TO SORT: NEW: INTERFACES: FUNCTIONAL
 
-            [-] SelfValidatable
+            [X] SelfValidatable
 
             -----
 
-            [*] TriConsumer
-            [*] TriFunction
+            [X] TriConsumer
+            [X] TriFunction
 
-            [*] QuadConsumer
-            [*] QuadFunction
+            [X] QuadConsumer
+            [X] QuadFunction
 
             TO SORT: NEW: INTERFACES: FUNCTIONAL: FILTER
 
