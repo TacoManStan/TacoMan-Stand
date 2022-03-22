@@ -1,6 +1,7 @@
 package com.taco.suit_lady._to_sort._new;
 
 import com.taco.suit_lady._to_sort._new.interfaces.ObservablePropertyContainable;
+import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -10,6 +11,30 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
+/**
+ * <p>Wraps and contains additional functionality for an {@link ObservablePropertyContainable} instance.</p>
+ * <p><b>{@link #valueProperties() Observable Value Array}</b></p>
+ * <p><i>{@link #valueProperties()}</i> contains an {@code array} of {@link ObservableValue ObservableValues}.</p>
+ * <ol>
+ *     <li>The {@link ObservableValue ObservableValues} contain all {@link ObservableValue} instances contained within the {@link #valueProperties() Value Properries} of the {@link ObservablePropertyContainable} assigned to this {@link ObservablePropertyContainer}.</li>
+ *     <li>The values contained within <i>{@link #valueProperties()}</i> are calculated from within and set by the {@link ObservablePropertyContainer} {@link ObservablePropertyContainer#ObservablePropertyContainer(ObservablePropertyContainable) Constructor}.</li>
+ *     <li>Therefore, the contents of <i>{@link #valueProperties()}</i> are <u>NOT</u> updated if the {@link ObservablePropertyContainable#properties() Containable Properties} of the {@link ObservablePropertyContainable} assigned to this {@link ObservablePropertyContainer} are changed.</li>
+ * </ol>
+ * <p><b>{@link ChangeListener Change Listening}</b></p>
+ * <ol>
+ *     <li>Use <i>{@link #addListener(ChangeListener)}</i> to {@code add} any number of {@link ChangeListener ChangeListeners} to this {@link ObservablePropertyContainer} instance.</li>
+ *     <li>Use <i>{@link #removeListener(ChangeListener)}</i> to {@code remove} an existing {@link ChangeListener} from this {@link ObservablePropertyContainer} instance.</li>
+ *     <li>Use <i>{@link #clearListeners()}</i> to {@code remove} all existing {@link ChangeListener ChangeListeners} from this {@link ObservablePropertyContainer} instance.</li>
+ *     Each {@link ChangeListener} {@link #addListener(ChangeListener) added} to this {@link ObservablePropertyContainer} is applied to every {@link ObservableValue} contained within the <i>{@link #valueProperties()}</i> {@code Array}.
+ *     <ul>
+ *         <li><i>Note that {@link ChangeListener ChangeListeners} added to a {@link ObservablePropertyContainer} are applied to the contents of {@link #valueProperties()}, NOT the contents of {@link ObservablePropertyContainable#properties()}.</i></li>
+ *     </ul>
+ * </ol>
+ * <p><b>Other Details</b></p>
+ * <ol>
+ *     <li>Use <i>{@link #forEachObservableValue(Consumer)}</i> to {@link Consumer#accept(Object) Execute} an {@link Consumer Operation} on each {@link ObservableValue} contained in the {@link #valueProperties() Value Properties Array}.</li>
+ * </ol>
+ */
 @SuppressWarnings("rawtypes")
 public class ObservablePropertyContainer {
     
