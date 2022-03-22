@@ -1,6 +1,7 @@
 package com.taco.suit_lady.game.ui.pages;
 
 import com.taco.suit_lady.game.GameComponent;
+import com.taco.suit_lady.game.objects.tiles.GameTile;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.ui.UIBook;
 import com.taco.suit_lady.ui.UIPage;
@@ -9,6 +10,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.locks.Lock;
 
+/**
+ * <p>Defines the {@link UIPage} displaying the currently-selected {@link GameTile} for a {@link GameViewContent} instance.</p>
+ *
+ * @see GameTileEditorPageController
+ */
 public class GameTileEditorPage extends UIPage<GameTileEditorPageController>
         implements Lockable, GameComponent {
     

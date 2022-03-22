@@ -6,6 +6,11 @@ import com.taco.suit_lady.ui.UIBook;
 import com.taco.suit_lady.ui.UIPage;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * <p>Defines the {@link GameViewContent#getCoverPage() Cover} {@link UIPage Page} for {@link GameViewContent}.</p>
+ *
+ * @see GameViewPageController
+ */
 public class GameViewPage extends UIPage<GameViewPageController>
         implements GameComponent {
     
@@ -15,12 +20,6 @@ public class GameViewPage extends UIPage<GameViewPageController>
         super(owner, constructorParams);
         this.content = content;
     }
-    
-    //<editor-fold desc="--- PROPERTIES ---">
-    
-    //
-    
-    //</editor-fold>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     

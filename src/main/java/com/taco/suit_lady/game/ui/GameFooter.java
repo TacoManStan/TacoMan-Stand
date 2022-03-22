@@ -1,8 +1,15 @@
 package com.taco.suit_lady.game.ui;
 
+import com.taco.suit_lady.ui.Content;
 import com.taco.suit_lady.ui.Footer;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * <p>Defines the {@link Footer} implementation assigned to the {@link GameViewContent Game} {@link Content}.</p>
+ *
+ * @see GameFooterController
+ */
+//TO-EXPAND
 public class GameFooter
         extends Footer<GameFooter, GameFooterController, GameViewContent, GameViewContentData, GameViewContentController> {
     
