@@ -3,9 +3,9 @@ package com.taco.suit_lady.util.timing;
 /**
  * <p>Defines a {@link ReadOnlyTimeable} implementation that offers additional control over the {@link Timeable} instance:</p>
  * <ul>
- *     <li>{@link #start()}: Starts this {@link Timeable} instance.</li>
- *     <li>{@link #reset()}: Resets this {@link Timeable} instance.</li>
- *     <li>{@link #stop()}: Stops this {@link Timeable} instance.</li>
+ *     <li><b>{@link #start()}:</b> Starts this {@link Timeable} instance.</li>
+ *     <li><b>{@link #reset()}:</b> Resets this {@link Timeable} instance.</li>
+ *     <li><b>{@link #stop()}:</b> Stops this {@link Timeable} instance.</li>
  * </ul>
  *
  * @see ReadOnlyTimeable

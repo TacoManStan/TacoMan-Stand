@@ -8,8 +8,7 @@ import javafx.util.Callback;
 
 import java.util.function.Supplier;
 
-public class DialogCallback<R>
-{
+public class DialogCallback<R> {
     
     private final Supplier<R> defaultSupplier;
     
@@ -23,21 +22,19 @@ public class DialogCallback<R>
      * Constructs a new {@link DialogCallback} object given the specified {@link Callback} function and optional data restrictions.
      * <br>
      * The default value is null.
-     * @param callback The {@link Callback}.
+     *
+     * @param callback       The {@link Callback}.
      * @param acceptableData An optional array of {@link ButtonBar.ButtonData ButtonData} values restricting the functionality of this {@link DialogCallback}.
      */
-    public DialogCallback(Callback<ButtonType, R> callback, ButtonBar.ButtonData... acceptableData)
-    {
+    public DialogCallback(Callback<ButtonType, R> callback, ButtonBar.ButtonData... acceptableData) {
         this((R) null, callback, acceptableData);
     }
     
-    public DialogCallback(R defaultValue, Callback<ButtonType, R> callback, ButtonBar.ButtonData... acceptableData)
-    {
+    public DialogCallback(R defaultValue, Callback<ButtonType, R> callback, ButtonBar.ButtonData... acceptableData) {
         this(() -> defaultValue, callback, acceptableData);
     }
     
-    public DialogCallback(Supplier<R> defaultSupplier, Callback<ButtonType, R> callback, ButtonBar.ButtonData... acceptableData)
-    {
+    public DialogCallback(Supplier<R> defaultSupplier, Callback<ButtonType, R> callback, ButtonBar.ButtonData... acceptableData) {
         assert defaultSupplier != null;
         
         this.defaultSupplier = defaultSupplier;
@@ -48,8 +45,7 @@ public class DialogCallback<R>
     /**
      * Initializes this {@link DialogCallback}.
      */
-    public void init()
-    {
+    public void init() {
         this.dialog = new Dialog<>();
         this.callback = this::callFX;
     }
@@ -59,8 +55,7 @@ public class DialogCallback<R>
      *
      * @return The {@link Dialog} for this {@link DialogCallback}.
      */
-    public Dialog<R> getDialog()
-    {
+    public Dialog<R> getDialog() {
         return dialog;
     }
     
@@ -69,8 +64,7 @@ public class DialogCallback<R>
      *
      * @return The {@link Callback} for this {@link DialogCallback}.
      */
-    public Callback<ButtonType, R> getCallback()
-    {
+    public Callback<ButtonType, R> getCallback() {
         return callback;
     }
     
@@ -78,12 +72,11 @@ public class DialogCallback<R>
      * Returns the value for this {@link DialogCallback}.
      *
      * @param param The {@link ButtonType} to be used.
+     *
      * @return The value for this {@link DialogCallback}.
      */
-    public R callFX(ButtonType param)
-    {
-        if (param != null)
-        {
+    public R callFX(ButtonType param) {
+        if (param != null) {
             ButtonBar.ButtonData[] data = acceptableData != null && acceptableData.length > 0 ? acceptableData : new ButtonBar.ButtonData[]{ButtonBar.ButtonData.OK_DONE, ButtonBar.ButtonData.YES};
             if (param.getButtonData() != null)
                 if (Obj.equalsAny(param.getButtonData(), (Object[]) data))

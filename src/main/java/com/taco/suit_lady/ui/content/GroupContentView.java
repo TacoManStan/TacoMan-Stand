@@ -11,16 +11,14 @@ import javafx.scene.layout.StackPane;
 /**
  * A {@link ContentView} that can display multiple pieces of content at the same time.
  */
-public class GroupContentView extends ContentView<StackPane>
-{
+public class GroupContentView extends ContentView<StackPane> {
     
     private final ListProperty<ContentView> children;
     
     /**
      * Constructs a new {@code GroupContentView} with a new {@link StackPane} as its content.
      */
-    public GroupContentView()
-    {
+    public GroupContentView() {
         this(new StackPane());
     }
     
@@ -28,26 +26,23 @@ public class GroupContentView extends ContentView<StackPane>
      * Constructs a new {@code GroupContentView} with the specified {@link StackPane} as its content.
      *
      * @param contentPane The {@code StackPane} to be used as this {@code GroupContentView's} content.
+     *
      * @throws NullPointerException If the specified {@code StackPane} is null.
      */
-    public GroupContentView(StackPane contentPane)
-    {
+    public GroupContentView(StackPane contentPane) {
         super(contentPane);
         this.children = new SimpleListProperty<>(FXCollections.observableArrayList());
         init();
     }
     
     @Override
-    protected void onContentChange(StackPane oldContent, StackPane newContent)
-    {
+    protected void onContentChange(StackPane oldContent, StackPane newContent) {
         throw new UndefinedRuntimeException("NYI");
     } // TODO
     
-    private void init()
-    {
+    private void init() {
         children.addListener((ListChangeListener<ContentView>) change -> {
-            while (change.next())
-            {
+            while (change.next()) {
                 change.getAddedSubList().forEach(this::onContentAdded);
                 change.getRemoved().forEach(this::onContentRemoved);
             }
@@ -61,8 +56,7 @@ public class GroupContentView extends ContentView<StackPane>
      *
      * @return All {@link ContentView ContentViews} children contained within this {@code GroupContentView}.
      */
-    public ListProperty<ContentView> getChildren()
-    {
+    public ListProperty<ContentView> getChildren() {
         return children;
     }
     
@@ -70,8 +64,7 @@ public class GroupContentView extends ContentView<StackPane>
     
     //
     
-    private void onContentAdded(ContentView content)
-    {
+    private void onContentAdded(ContentView content) {
         StackPane root_pane = getContent();
         Pane content_pane = content.getContent();
         
@@ -80,8 +73,7 @@ public class GroupContentView extends ContentView<StackPane>
         root_pane.getChildren().add(content_pane);
     }
     
-    private void onContentRemoved(ContentView content)
-    {
+    private void onContentRemoved(ContentView content) {
         StackPane root_pane = getContent();
         Pane content_pane = content.getContent();
         

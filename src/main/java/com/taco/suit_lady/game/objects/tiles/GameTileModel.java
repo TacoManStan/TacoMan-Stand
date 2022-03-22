@@ -4,6 +4,7 @@ import com.github.cliftonlabs.json_simple.JsonObject;
 import com.taco.suit_lady.game.GameMap;
 import com.taco.suit_lady.game.GameMapModel;
 import com.taco.suit_lady.game.GameComponent;
+import com.taco.suit_lady.game.objects.GameObject;
 import com.taco.suit_lady.game.ui.GameViewContent;
 import com.taco.suit_lady.util.synchronization.Lockable;
 import com.taco.suit_lady.util.springable.Springable;
@@ -27,6 +28,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 
+/**
+ * <p>Defines the {@code Graphics Definition} for a {@link GameTile} {@link #getOwner() Owner}.</p>
+ */
+//TO-EXPAND: Lots
 public class GameTileModel
         implements SpringableWrapper, Lockable, GameComponent, JObject, JLoadable {
     

@@ -16,6 +16,7 @@ import javafx.beans.property.ReadOnlyObjectProperty;
  * @see Timers
  * @see Timing
  */
+//TO-EXPAND: Elaborate
 public interface ReadOnlyReactiveTimerable {
     
     ReadOnlyObjectProperty<Runnable> onTimeoutProperty();

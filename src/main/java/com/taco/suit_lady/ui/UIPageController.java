@@ -10,6 +10,9 @@ public abstract class UIPageController<T extends UIPage<?>> extends Controller {
     
     private T page; // Functionally Final
     
+    /**
+     * {@inheritDoc}
+     */
     protected UIPageController(FxWeaver weaver, ConfigurableApplicationContext ctx) {
         super(weaver, ctx);
     }

@@ -60,17 +60,39 @@ import org.jetbrains.annotations.NotNull;
 //TO-DO: Examples?
 public interface GameComponent {
     
+    /**
+     * <p>Returns the {@link GameViewContent Game Instance} this {@link GameComponent} is a component of.</p>
+     *
+     * @return The {@link GameViewContent Game Instance} this {@link GameComponent} is a component of.
+     */
     @NotNull GameViewContent getGame();
     
     //
     
+    /**
+     * <p><b>Passthrough Definition</b></p>
+     * <blockquote><i>{@link #getGame()}<b>.</b>{@link GameViewContent#gameMapProperty() gameMapProperty()}</i></blockquote>
+     */
     default @NotNull ObjectProperty<GameMap> gameMapProperty() { return getGame().gameMapProperty(); }
     default GameMap getGameMap() { return getGame().getGameMap(); }
     default GameMap setGameMap(@NotNull GameMap newValue) { return getGame().setGameMap(newValue); }
     
+    /**
+     * <p><b>Passthrough Definition</b></p>
+     * <blockquote><i>{@link #getGame()}<b>.</b>{@link GameViewContent#getGameMap() getGameMap()}</i></blockquote>
+     */
     default GameViewContentData getData() { return getGame().getData(); }
+    
+    /**
+     * <p><b>Passthrough Definition:</b></p>
+     * <blockquote><i>{@link #getData()}<b>.</b>{@link GameViewContentData#getUIData() getUIDate()}</i></blockquote>
+     */
     default GameUIData getUIData() { return getData().getUIData(); }
     
+    /**
+     * <p><b>Passthrough Definition:</b></p>
+     * <blockquote><i>{@link #getGameMap()}<b>.</b>{@link GameMap#getModel() getModel()}<b>.</b>{@link GameMapModel#getCamera() getCamera()}</i></blockquote>
+     */
     default @NotNull Camera getCamera() { return getGameMap().getModel().getCamera(); }
     
     //
@@ -89,5 +111,9 @@ public interface GameComponent {
     
     //
     
+    /**
+     * <p><b>Passthrough Definition:</b></p>
+     * <blockquote><i>{@link #getGameMap()}<b>.</b>{@link GameMap#getTileSize() getTileSize()}</i></blockquote>
+     */
     default int getTileSize() { return getGameMap().getTileSize(); }
 }

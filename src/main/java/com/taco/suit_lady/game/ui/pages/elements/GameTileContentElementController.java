@@ -31,8 +31,6 @@ public class GameTileContentElementController extends CellController<GameObject>
     
     @Override public Pane root() { return root; }
     
-    @Override public void initialize() { super.initialize(); }
-    
     @Override protected void onContentChange(GameObject oldCellContents, GameObject newCellContents) {
         objectNameLabel.textProperty().unbind();
         objectImagePane.imageProperty().unbind();

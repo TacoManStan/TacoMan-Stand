@@ -13,6 +13,7 @@ package com.taco.suit_lady.util.timing;
  * @see Timers
  * @see Timing
  */
+//TO-EXPAND: Elaborate
 public interface ReactiveTimerable
         extends ReadOnlyReactiveTimerable {
     

@@ -10,6 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import org.jetbrains.annotations.Contract;
 
+import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -21,7 +22,7 @@ import java.util.concurrent.locks.ReentrantLock;
  *     <li>
  *         {@link OpListener OperationListeners} are used as the input to {@link OpHandler} static factory methods located in {@link L}
  *         <ul>
- *             <li>Root Factory Method: <i>{@link L#applyListener(ReentrantLock, ObservableList, OpListener) ListTools.applyListener(... OperationListener)}</i></li>
+ *             <li>Root Factory Method: <i>{@link L#applyListener(Lock, ObservableList, OpListener)  L.applyListener(..., OperationListener)}</i></li>
  *         </ul>
  *     </li>
  *     <li>Various interface extensions of {@link OpListener} exist to allow varying amounts and types of lambda factory input parameters.</li>
@@ -79,9 +80,9 @@ import java.util.concurrent.locks.ReentrantLock;
  * <ol>
  *     <li>The most concrete implementation of {@link OpListener} is the {@link OpHandler} class.</li>
  *     <li>
- *         However, the main purpose of the {@link OpListener} interface is to allow for anonymous implementations to be passed to the static {@link L#wrap(ReentrantLock, String, ObservableList, OpListener) wrap} factory method for use with a wrapping {@link OpHandler} instance.
+ *         However, the main purpose of the {@link OpListener} interface is to allow for anonymous implementations to be passed to the static {@link L#wrap(Lock, String, ObservableList, OpListener) wrap} factory method for use with a wrapping {@link OpHandler} instance.
  *         <ul>
- *             <li>The {@link L#wrap(ReentrantLock, String, ObservableList, OpListener) wrap} method is used by most other factory methods located in the {@link L} utility class.</li>
+ *             <li>The {@link L#wrap(Lock, String, ObservableList, OpListener) wrap} method is used by most other factory methods located in the {@link L} utility class.</li>
  *         </ul>
  *     </li>
  *     <li>

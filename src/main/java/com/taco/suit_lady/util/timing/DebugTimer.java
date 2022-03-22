@@ -1,22 +1,44 @@
 package com.taco.suit_lady.util.timing;
 
 import com.taco.suit_lady.util.tools.Calc;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 /**
- * User for debug timing.
+ * <p>An implementation of {@link Timeable} used specifically for {@code debugging}.</p>
+ * <p><b>Printing</b></p>
+ * The primary purpose of a {@link DebugTimer} is to provide {@code debug} {@link #print() Print Functions}:
+ * <ul>
+ *     <li><i>{@link #print(String, Supplier)}</i></li>
+ *     <li><i>{@link #print(String, boolean)}</i></li>
+ *     <li><i>{@link #print(Supplier)}</i></li>
+ *     <li><i>{@link #print(String)}</i></li>
+ *     <li><i>{@link #print(boolean)}</i></li>
+ *     <li><i>{@link #print()}</i></li>
+ * </ul>
+ * <p><b>Functionality Properties</b></p>
+ * {@link DebugTimer} also contains several {@link Property properties} that define specific functionalities of this {@link DebugTimer}:
+ * <ul>
+ *     <li><b>{@link #dispTimeUnitProperty()}:</b> The {@link TimeUnit} this {@link DebugTimer} {@link #print() prints} in.</li>
+ *     <li><b>{@link #dispDecimalProperty()}:</b> {@code True} if this {@link DebugTimer} {@link #print() prints} values as {@code decimals}, {@code false} if as {@link Integer ints}.</li>
+ *     <li><b>{@link #resetOnPrintProperty()}:</b> {@code True} if this {@link DebugTimer} should {@link #reset() reset} when any <i>{@link #print()}</i> operation is executed, {@code false} if it should not.</li>
+ * </ul>
  *
- * @author Spencer
+ * @see ReadOnlyTimeable
+ * @see ReadOnlyTimerable
+ * @see ReadOnlyReactiveTimerable
+ * @see Timeable
+ * @see Timerable
+ * @see ReactiveTimerable
+ * @see Timer
+ * @see Timers
+ * @see Timing
  */
 public class DebugTimer
-        implements Timeable
-{
+        implements Timeable {
     
     private long startTime;
     private long limit;
@@ -26,8 +48,7 @@ public class DebugTimer
     private final BooleanProperty dispDecimalProperty;
     private final BooleanProperty resetOnPrintProperty;
     
-    protected DebugTimer(String name, long limit)
-    {
+    protected DebugTimer(String name, long limit) {
         this.name = name;
         this.limit = limit;
         
@@ -39,52 +60,47 @@ public class DebugTimer
     
     //<editor-fold desc="Properties">
     
-    @Override public long getStartTime()
-    {
+    public final @NotNull ObjectProperty<TimeUnit> dispTimeUnitProperty() { return dispTimeUnitProperty; }
+    public final @NotNull BooleanProperty dispDecimalProperty() { return dispDecimalProperty; }
+    public final @NotNull BooleanProperty resetOnPrintProperty() { return resetOnPrintProperty; }
+    
+    @Override public long getStartTime() {
         return (long) getStartTimeDbl();
     }
     
-    public double getStartTimeDbl()
-    {
+    public double getStartTimeDbl() {
         return getStartTimeNanos() / 1000000D;
     }
     
-    public long getStartTimeNanos()
-    {
+    public long getStartTimeNanos() {
         return startTime;
     }
     
     //
     
-    @Override public final long getElapsedTime()
-    {
+    @Override public final long getElapsedTime() {
         return (long) getElapsedTimeDbl();
     }
     
-    public final double getElapsedTimeDbl()
-    {
+    public final double getElapsedTimeDbl() {
         return getElapsedTimeNanos() / 1000000D;
     }
     
-    public final long getElapsedTimeNanos()
-    {
+    public final long getElapsedTimeNanos() {
         return (System.nanoTime() - startTime);
     }
     
     //
     
-    public final void setLimit(long limit)
-    {
+    public final void setLimit(long limit) {
         this.limit = limit;
     }
     
-    public final long getLimit()
-    {
+    public final long getLimit() {
         return limit;
     }
     
-    public final boolean meetsLimit()
-    {
+    public final boolean meetsLimit() {
         return limit == -1 || getElapsedTime() >= limit;
     }
     
@@ -96,19 +112,16 @@ public class DebugTimer
      *                                                                             *
      * *************************************************************************** */
     
-    @Override public DebugTimer start()
-    {
+    @Override public DebugTimer start() {
         startTime = System.nanoTime();
         return this;
     }
     
-    @Override public DebugTimer reset()
-    {
+    @Override public DebugTimer reset() {
         return start();
     }
     
-    @Override public DebugTimer stop()
-    {
+    @Override public DebugTimer stop() {
         startTime = 0L;
         return this;
     }
@@ -119,23 +132,19 @@ public class DebugTimer
      *                                                                             *
      * *************************************************************************** */
     
-    public void print()
-    {
+    public void print() {
         print(null, true);
     }
     
-    public void print(String message)
-    {
+    public void print(String message) {
         print(message, true);
     }
     
-    public void print(boolean reset)
-    {
+    public void print(boolean reset) {
         print(null, reset);
     }
     
-    public void print(String message, boolean reset)
-    {
+    public void print(String message, boolean reset) {
         if (meetsLimit())
             if (reset)
                 reset();
@@ -143,13 +152,11 @@ public class DebugTimer
     
     //
     
-    public <T> T print(Supplier<T> supplier)
-    {
+    public <T> T print(Supplier<T> supplier) {
         return print(null, supplier);
     }
     
-    public <T> T print(String message, Supplier<T> supplier)
-    {
+    public <T> T print(String message, Supplier<T> supplier) {
         reset();
         T t = supplier.get();
         print(message);
@@ -158,8 +165,7 @@ public class DebugTimer
     
     //
     
-    private String hlpr_getText(String message)
-    {
+    private String hlpr_getText(String message) {
         return "[TIMER] " + (name == null ? "NONE" : name) + ":" + (message != null ? " " + message : "")
                + " (" + Calc.roundD(getElapsedTimeDbl(), 0, 2) + " ms)";
     }

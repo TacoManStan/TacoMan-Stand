@@ -7,25 +7,20 @@ import javafx.collections.ListChangeListener;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TitledPane;
 
-public class SettingsTitledPane extends TitledPane
-{
+public class SettingsTitledPane extends TitledPane {
     
     private final SettingContainer settingContainer;
     private ListView<SettingGroup<? extends SettingGroupController>> settingGroupListView;
     
-    public SettingsTitledPane(SettingContainer settingContainer)
-    {
+    public SettingsTitledPane(SettingContainer settingContainer) {
         this.settingContainer = settingContainer;
         
         //
         
-        settingContainer.settingGroups().addListener(new ListChangeListener<SettingGroup<? extends SettingGroupController>>()
-        {
-            @Override public void onChanged(Change<? extends SettingGroup<? extends SettingGroupController>> change)
-            {
+        settingContainer.settingGroups().addListener(new ListChangeListener<SettingGroup<? extends SettingGroupController>>() {
+            @Override public void onChanged(Change<? extends SettingGroup<? extends SettingGroupController>> change) {
                 FX.runFX(() -> {
-                    while (change.next())
-                    {
+                    while (change.next()) {
                         if (change.wasAdded())
                             change.getAddedSubList().forEach(settingGroup -> settingGroupListView.getItems().add(settingGroup));
                         if (change.wasRemoved())
@@ -40,8 +35,7 @@ public class SettingsTitledPane extends TitledPane
     
     //<editor-fold desc="Initialize">
     
-    protected void initializeFX()
-    {
+    protected void initializeFX() {
         this.settingGroupListView = new ListView<>();
         
         //
@@ -56,20 +50,17 @@ public class SettingsTitledPane extends TitledPane
     
     //<editor-fold desc="Properties">
     
-    public final SettingContainer getSettingContainer()
-    {
+    public final SettingContainer getSettingContainer() {
         return settingContainer;
     }
     
     //
     
-    public final ReadOnlyObjectProperty<SettingGroup<? extends SettingGroupController>> selectedGroupProperty()
-    {
+    public final ReadOnlyObjectProperty<SettingGroup<? extends SettingGroupController>> selectedGroupProperty() {
         return settingGroupListView.getSelectionModel().selectedItemProperty();
     }
     
-    public final SettingGroup<? extends SettingGroupController> getSelectedGroup()
-    {
+    public final SettingGroup<? extends SettingGroupController> getSelectedGroup() {
         return selectedGroupProperty().get();
     }
     

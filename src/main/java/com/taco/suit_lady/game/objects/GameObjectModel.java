@@ -21,6 +21,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.locks.Lock;
 
+/**
+ * <p>Defines the {@code Graphics Definition} for a {@link GameObject} {@link #getOwner() Owner}.</p>
+ */
+//TO-EXPAND: Lots.
 public class GameObjectModel
         implements SpringableWrapper, Lockable, GameComponent, GFXObject<GameObjectModel>, JObject, JLoadable {
     
@@ -64,8 +68,8 @@ public class GameObjectModel
         this.modelPaintCommand.init();
         
         getDefinition().boundsBinding().addListener((observable, oldValue, newValue) -> {
-//            if (getOwner().isTestObject1())
-//                printer().get().print("Model Def Bounds Changed: [" + oldValue + " --> " + newValue + "]");
+            //            if (getOwner().isTestObject1())
+            //                printer().get().print("Model Def Bounds Changed: [" + oldValue + " --> " + newValue + "]");
             needsUpdate = true;
         });
         imageBinding.addListener((observable, oldValue, newValue) -> {

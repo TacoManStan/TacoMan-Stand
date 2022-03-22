@@ -3,6 +3,10 @@ package com.taco.suit_lady.ui.console;
 import com.taco.suit_lady.util.tools.Str;
 import com.taco.suit_lady.util.values.numbers.N;
 
+/**
+ * <p>A utility class designed to {@link #print(PrintType, String...) Print} formatted information to the {@code Console}.</p>
+ */
+//TO-EXPAND
 public class ConsoleBB {
     
     public static final ConsoleBB CONSOLE;

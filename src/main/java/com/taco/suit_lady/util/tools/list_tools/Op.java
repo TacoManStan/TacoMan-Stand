@@ -3,6 +3,24 @@ package com.taco.suit_lady.util.tools.list_tools;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
+/**
+ * <p>A record containing information pertaining to an {@link OpListener} implementation.</p>
+ * <p><i>See {@link OpHandler} and {@link OpListener} for detailed information.</i></p>
+ *
+ * @param movedFromIndex An {@code int} value representing the {@link List#indexOf(Object) index} previously occupied by the {@link #contents() Contents} of this {@link Op} instance.
+ * @param movedToIndex   An {@code int} value representing the {@link List#indexOf(Object) index} currently occupied by the {@link #contents() Contents} of this {@link Op} instance.
+ * @param contents       The {@link #contents() Contents Element} pertaining to this {@link Op} instance.
+ * @param <E>            The {@link #contents() Content} {@link Class Type} of this {@link Op} instance.
+ *
+ * @see OpHandler
+ * @see OpListener
+ * @see L.SimpleOpListener
+ * @see L.OpResponder
+ * @see L.SimpleOpResponder
+ * @see L.UnlinkedOpResponder
+ */
 public record Op<E>(int movedFromIndex, int movedToIndex, E contents) {
     
     public InferredType infer() {

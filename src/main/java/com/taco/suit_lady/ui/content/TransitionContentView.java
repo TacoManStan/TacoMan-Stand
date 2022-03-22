@@ -15,8 +15,7 @@ import javafx.util.Duration;
  * A {@link ContentView} that only displays a single content at any given time.
  * The only time in which more than one content can ever be displayed is during a transition.
  */
-public class TransitionContentView<P extends Pane> extends ContentView<P>
-{
+public class TransitionContentView<P extends Pane> extends ContentView<P> {
     
     //<editor-fold desc="Static">
     
@@ -31,23 +30,19 @@ public class TransitionContentView<P extends Pane> extends ContentView<P>
     
     private final ReadOnlyBooleanWrapper animatedProperty;
     
-    public TransitionContentView(StackPane rootPane)
-    {
+    public TransitionContentView(StackPane rootPane) {
         this(rootPane, null, DEFAULT_TRANSITION_TIME);
     }
     
-    public TransitionContentView(StackPane rootPane, Number transitionTime)
-    {
+    public TransitionContentView(StackPane rootPane, Number transitionTime) {
         this(rootPane, null, transitionTime);
     }
     
-    public TransitionContentView(StackPane rootPane, P contentPane)
-    {
+    public TransitionContentView(StackPane rootPane, P contentPane) {
         this(rootPane, contentPane, DEFAULT_TRANSITION_TIME);
     }
     
-    public TransitionContentView(StackPane rootPane, P contentPane, Number transitionTime)
-    {
+    public TransitionContentView(StackPane rootPane, P contentPane, Number transitionTime) {
         super(contentPane);
         this.rootPane = rootPane;
         
@@ -59,25 +54,21 @@ public class TransitionContentView<P extends Pane> extends ContentView<P>
     
     //<editor-fold desc="Properties">
     
-    public final StackPane getRootPane()
-    {
+    public final StackPane getRootPane() {
         return rootPane;
     }
     
     //
     
-    public final LongProperty transitionTimeProperty()
-    {
+    public final LongProperty transitionTimeProperty() {
         return transitionTimeProperty;
     }
     
-    public final long getTransitionTime()
-    {
+    public final long getTransitionTime() {
         return transitionTimeProperty.get();
     }
     
-    public final void setTransitionTime(Number newDuration)
-    {
+    public final void setTransitionTime(Number newDuration) {
         long long_duration = newDuration.longValue();
         if (long_duration < 0)
             throw new IndexOutOfBoundsException("Transition time must be >= 0.");
@@ -86,35 +77,29 @@ public class TransitionContentView<P extends Pane> extends ContentView<P>
     
     //
     
-    public final ReadOnlyObjectProperty<EventHandler<ActionEvent>> onShownHandlerProperty()
-    {
+    public final ReadOnlyObjectProperty<EventHandler<ActionEvent>> onShownHandlerProperty() {
         return onShownHandlerProperty.getReadOnlyProperty();
     }
     
-    public final EventHandler<ActionEvent> getOnShownHandler()
-    {
+    public final EventHandler<ActionEvent> getOnShownHandler() {
         return onShownHandlerProperty.get();
     }
     
-    public final void setOnShownHandler(EventHandler<ActionEvent> onShownHandler)
-    {
+    public final void setOnShownHandler(EventHandler<ActionEvent> onShownHandler) {
         onShownHandlerProperty.set(onShownHandler);
     }
     
     //
     
-    public final ReadOnlyBooleanProperty animatedProperty()
-    {
+    public final ReadOnlyBooleanProperty animatedProperty() {
         return animatedProperty.getReadOnlyProperty();
     }
     
-    public final boolean isAnimated()
-    {
+    public final boolean isAnimated() {
         return animatedProperty.get();
     }
     
-    public final void setAnimated(boolean animated)
-    {
+    public final void setAnimated(boolean animated) {
         animatedProperty.set(animated);
     }
     
@@ -123,8 +108,7 @@ public class TransitionContentView<P extends Pane> extends ContentView<P>
     //
     
     @Override
-    protected final void onContentChange(P oldContent, P newContent)
-    {
+    protected final void onContentChange(P oldContent, P newContent) {
         if (isAnimated()) {
             Duration _transitionDuration = Duration.millis(getTransitionTime());
             EventHandler<ActionEvent> onShownHandler = getOnShownHandler();
