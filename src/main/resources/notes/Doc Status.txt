@@ -58,7 +58,7 @@ GENERAL
 
 CONTENT
 
-    [!] ContentManager
+    [C] ContentManager
 
     [!] Content
     [!] ContentController
@@ -401,7 +401,8 @@ UTIL
                 [*] Pathfinding
 
                 [C] AStarPathfinder
-                [*] AStarMatrix
+                [*] AStarMatrix+
+
 
                 [N] AStarNodeable
                 [C] AStarNode
