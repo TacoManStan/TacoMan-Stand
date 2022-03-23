@@ -6,6 +6,7 @@ KEY
     [!]: Highest-Priority Documentation
 
     [X]: Documentation Complete
+    [x]: Documentation Complete but Needs Revision
     [/]: Documentation Incomplete but Sufficient
     [|]: Documentation Incomplete and Insufficient
 
@@ -60,16 +61,16 @@ CONTENT
 
     [C] ContentManager
 
-    [!] Content
-    [!] ContentController
-    [!] ContentData
+    [X] Content
+    [C] ContentController
+    [N] ContentData
 
 -----
 
 
 GAME
 
-    [C] GameComponent
+    [X] GameComponent
     [C] GameObjectComponent
 
     [C] Entity
@@ -684,8 +685,8 @@ TO SORT: NEW
 
     [*] ObservablePropertyContainer
 
-    [-] ValueGroup
-    [-] ValuePair
+    [L] ValueGroup
+    [L] ValuePair
 
     TO SORT: NEW: INITIALIZATION
 
@@ -696,8 +697,8 @@ TO SORT: NEW
 
     TO SORT: NEW: INTERFACES
 
-        [-] NameableProperty
-        [-] ReadOnlyNameableProperty
+        [L] NameableProperty
+        [L] ReadOnlyNameableProperty
 
         [C] ObservablePropertyContainable
 
