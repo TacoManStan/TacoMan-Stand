@@ -375,6 +375,25 @@ UTIL
             [/] OpResultType
             [/] OpType
 
+        UTIL: SETTINGS
+
+            [-] Storable
+
+            [-] SavableSetting
+            [-] BooleanSetting
+
+            [-] NumberSetting
+            [-] IntegerSetting
+            [-] LongSetting
+            [-] FloatSetting
+            [-] DoubleSetting
+
+            [-] StringSetting
+            [-] XMLObjectSetting
+
+            [-] ColorSetting
+            [-] ColorWrapper
+
         UTIL: VALUES: FORMULAS
 
             VALUES: FORMULAS: PATHFINDING
