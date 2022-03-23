@@ -27,7 +27,7 @@ import org.springframework.boot.SpringApplication;
  * <ol>
  *     <li>The {@link Content} displayed by the {@link AppController} is automatically loaded and managed by the {@link ContentManager}.</li>
  *     <li>Use <i>{@link #setContent(Content)}</i> to change the active {@link Content} displayed by this {@link ContentManager}.</li>
- *     <li>The internal <i>{@link #onChange(Content, Content)}</i> method handles the transition from one {@link Content} to another.</li>
+ *     <li>The internal <i>{@link #onChange(Content, Content)}</i> method handles transitions from one {@link Content} to another.</li>
  * </ol>
  * <p>The {@link Content} is defined by {@code 5} core generic properties:</p>
  * <ol>

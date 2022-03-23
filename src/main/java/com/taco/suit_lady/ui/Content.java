@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
- * <p>The primary backbone of a specific type of {@link Content}.</p>
+ * <p>The primary backbone defining a {@link Content} module.</p>
  * <blockquote><i>See {@link ContentManager} for {@link Content} Framework details.</i></blockquote>
  * <br><hr><br>
  * <p><b>{@link Content} Basics</b></p>
@@ -68,7 +68,13 @@ import java.util.concurrent.ThreadPoolExecutor;
  *         <ul>
  *             <li><b>{@link #loadData()}:</b> Defines and returns the {@link ContentData} instance assigned to this {@link Content} implementation.</li>
  *             <li><b>{@link #controllerDefinition()}:</b> Defines and returns the {@link ContentController} instance assigned to handle the {@code JavaFX Components} of this {@link Content} implementation.</li>
- *             <li><b>{@link #constructFooter()}:</b> Defines and returns the {@link Footer} instance assigned to this {@link Content} implementation.</li>
+ *             <li>
+ *                 <b>{@link #constructFooter()}:</b> Defines and returns the {@link Footer} instance assigned to this {@link Content} implementation.
+ *                 <ul>
+ *                     <li>By default, {@link Content} implementations do not have a {@link Footer}, and the value of <i>{@link #constructFooter()}</i> is ignored.</li>
+ *                     <li>To enable the {@link Footer} for a {@link Content} implementation, the default <i>{@link ContentController#hasFooter()}</i> implementation for the {@link ContentController} assigned to this {@link Content} implementation must overridden to return {@code true}.</li>
+ *                 </ul>
+ *             </li>
  *         </ul>
  *     </li>
  *     <li>
