@@ -1,1 +1,1 @@
-typeSearchIndex = [{"l":"All Classes","u":"allclasses-index.html"},{"p":"com.taco.suit_lady.util.values.numbers","l":"BoundsExpr"}];updateSearchResults();
+typeSearchIndex = [{"l":"All Classes","u":"allclasses-index.html"},{"p":"com.taco.tacository.util.values.numbers","l":"BoundsExpr"}];updateSearchResults();

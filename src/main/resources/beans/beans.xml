@@ -3,7 +3,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-    <bean id="testBean" class="com.taco.suit_lady._to_sort._expr.spring.beans.demo.DEMO_XmlBean" factory-method="createInstance">
+    <bean id="testBean" class="com.taco.tacository._to_sort._expr.spring.beans.demo.DEMO_XmlBean" factory-method="createInstance">
         <property name="name" value="test value"/>
     </bean>
 

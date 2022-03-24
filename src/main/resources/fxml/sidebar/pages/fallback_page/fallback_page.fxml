@@ -5,4 +5,4 @@
 
 <BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.taco.suit_lady.ui.pages.fallback_page.FallbackPageController"/>
+            fx:controller="com.taco.tacository.ui.pages.fallback_page.FallbackPageController"/>

@@ -10,10 +10,10 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<?import com.taco.suit_lady.ui.jfx.components.ImagePane?>
+<?import com.taco.tacository.ui.jfx.components.ImagePane?>
 
 <BorderPane fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" xmlns="http://javafx.com/javafx/8.0.65"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.taco.suit_lady.ui.pages.impl.content_selector.ContentSelectorPageController">
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.taco.tacository.ui.pages.impl.content_selector.ContentSelectorPageController">
     <center>
         <BorderPane minHeight="0.0" minWidth="0.0" BorderPane.alignment="CENTER">
             <center>

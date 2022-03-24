@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="dc.created" content="2022-03-21">
-<meta name="description" content="declaration: package: com.taco.suit_lady.util.values.numbers, interface: BoundsExpr">
+<meta name="description" content="declaration: package: com.taco.tacository.util.values.numbers, interface: BoundsExpr">
 <meta name="generator" content="javadoc/ClassWriterImpl">
 <link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../../../../../../script-dir/jquery-ui.min.css" title="Style">
@@ -70,7 +70,7 @@ loadScripts(document, 'script');</script>
 <main role="main">
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">com.taco.suit_lady.util.values.numbers</a></div>
+<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">com.taco.tacository.util.values.numbers</a></div>
 <h1 title="Interface BoundsExpr" class="title">Interface BoundsExpr</h1>
 </div>
 <section class="description">
@@ -79,13 +79,13 @@ loadScripts(document, 'script');</script>
 <div class="block"><p>Defines implementing <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link"><code>Objects</code></a> as having a <a href="#getBounds()"><code>Bounds</code></a> definition.</p>
  <p><b>Details</b></p>
  <ol>
-     <li>The <a href="#getLocation()"><code>Location</code></a> of a <a href="BoundsExpr.html" title="interface in com.taco.suit_lady.util.values.numbers"><code>BoundsExpr</code></a> is defined by the <a href="#x()"><code>X</code></a> and <a href="#y()"><code>Y</code></a> coordinate values.</li>
-     <li>The <a href="#getDimensions()"><code>Dimensions</code></a> of a <a href="BoundsExpr.html" title="interface in com.taco.suit_lady.util.values.numbers"><code>BoundsExpr</code></a> is defined by the <a href="#w()"><code>Width</code></a> and <a href="#h()"><code>Height</code></a> coordinate values.</li>
-     <li>The <a href="#locType()"><code>Type</code></a> of the <a href="#getLocation()"><code>Location Coordinates</code></a> for this <a href="BoundsExpr.html" title="interface in com.taco.suit_lady.util.values.numbers"><code>BoundsExpr</code></a> is defined by the abstract <i><a href="#locType()"><code>locType()</code></a></i> method.</li>
-     <li><i>See <code>Bounds</code> for the <code>immutable</code>, <code>default</code> implementation of <a href="BoundsExpr.html" title="interface in com.taco.suit_lady.util.values.numbers"><code>BoundsExpr</code></a>.</i></li>
+     <li>The <a href="#getLocation()"><code>Location</code></a> of a <a href="BoundsExpr.html" title="interface in com.taco.tacository.util.values.numbers"><code>BoundsExpr</code></a> is defined by the <a href="#x()"><code>X</code></a> and <a href="#y()"><code>Y</code></a> coordinate values.</li>
+     <li>The <a href="#getDimensions()"><code>Dimensions</code></a> of a <a href="BoundsExpr.html" title="interface in com.taco.tacository.util.values.numbers"><code>BoundsExpr</code></a> is defined by the <a href="#w()"><code>Width</code></a> and <a href="#h()"><code>Height</code></a> coordinate values.</li>
+     <li>The <a href="#locType()"><code>Type</code></a> of the <a href="#getLocation()"><code>Location Coordinates</code></a> for this <a href="BoundsExpr.html" title="interface in com.taco.tacository.util.values.numbers"><code>BoundsExpr</code></a> is defined by the abstract <i><a href="#locType()"><code>locType()</code></a></i> method.</li>
+     <li><i>See <code>Bounds</code> for the <code>immutable</code>, <code>default</code> implementation of <a href="BoundsExpr.html" title="interface in com.taco.tacository.util.values.numbers"><code>BoundsExpr</code></a>.</i></li>
  </ol>
  <br><hr><br>
- <p><a href="BoundsExpr.html" title="interface in com.taco.suit_lady.util.values.numbers"><code>BoundsExpr</code></a> provides a variety of convenient <code>default</code> methods:</p>
+ <p><a href="BoundsExpr.html" title="interface in com.taco.tacository.util.values.numbers"><code>BoundsExpr</code></a> provides a variety of convenient <code>default</code> methods:</p>
  <br>
  <table style="border:1px solid; border-collapse:collapse; border-spacing:3px; rules:all">
      <caption style="font-size:16px; border:1px solid; border-collapse:collapse"><b>Min/Max Accessor Methods</b></caption>
@@ -161,29 +161,29 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default double</code></div>
 <div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#area()">area</a></span>()</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
-<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#bounds(com.taco.suit_lady.util.values.numbers.BoundsExpr,com.taco.suit_lady.util.values.numbers.BoundsExpr)">bounds</a></span>&#8203;(@NotNull <a href="BoundsExpr.html" title="interface in com.taco.suit_lady.util.values.numbers">BoundsExpr</a>&nbsp;min,
- @NotNull <a href="BoundsExpr.html" title="interface in com.taco.suit_lady.util.values.numbers">BoundsExpr</a>&nbsp;max)</code></div>
+<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
+<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#bounds(com.taco.suit_lady.util.values.numbers.BoundsExpr,com.taco.suit_lady.util.values.numbers.BoundsExpr)">bounds</a></span>&#8203;(@NotNull <a href="BoundsExpr.html" title="interface in com.taco.tacository.util.values.numbers">BoundsExpr</a>&nbsp;min,
+ @NotNull <a href="BoundsExpr.html" title="interface in com.taco.tacository.util.values.numbers">BoundsExpr</a>&nbsp;max)</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
-<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#bounds(com.taco.suit_lady.util.values.numbers.BoundsExpr,com.taco.suit_lady.util.values.numbers.BoundsExpr,com.taco.suit_lady.util.values.enums.LocType)">bounds</a></span>&#8203;(@NotNull <a href="BoundsExpr.html" title="interface in com.taco.suit_lady.util.values.numbers">BoundsExpr</a>&nbsp;min,
- @NotNull <a href="BoundsExpr.html" title="interface in com.taco.suit_lady.util.values.numbers">BoundsExpr</a>&nbsp;max,
- @Nullable com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</code></div>
+<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
+<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#bounds(com.taco.suit_lady.util.values.numbers.BoundsExpr,com.taco.suit_lady.util.values.numbers.BoundsExpr,com.taco.suit_lady.util.values.enums.LocType)">bounds</a></span>&#8203;(@NotNull <a href="BoundsExpr.html" title="interface in com.taco.tacository.util.values.numbers">BoundsExpr</a>&nbsp;min,
+ @NotNull <a href="BoundsExpr.html" title="interface in com.taco.tacository.util.values.numbers">BoundsExpr</a>&nbsp;max,
+ @Nullable com.taco.tacository.util.values.enums.LocType&nbsp;locType)</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
-<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#bounds(com.taco.suit_lady.util.values.numbers.NumExpr2D,com.taco.suit_lady.util.values.numbers.NumExpr2D,com.taco.suit_lady.util.values.numbers.NumExpr2D,com.taco.suit_lady.util.values.numbers.NumExpr2D)">bounds</a></span>&#8203;(@NotNull com.taco.suit_lady.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;minLoc,
- @NotNull com.taco.suit_lady.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;maxLoc,
- @NotNull com.taco.suit_lady.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;minDim,
- @NotNull com.taco.suit_lady.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;maxDim)</code></div>
+<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
+<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#bounds(com.taco.suit_lady.util.values.numbers.NumExpr2D,com.taco.suit_lady.util.values.numbers.NumExpr2D,com.taco.suit_lady.util.values.numbers.NumExpr2D,com.taco.suit_lady.util.values.numbers.NumExpr2D)">bounds</a></span>&#8203;(@NotNull com.taco.tacository.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;minLoc,
+ @NotNull com.taco.tacository.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;maxLoc,
+ @NotNull com.taco.tacository.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;minDim,
+ @NotNull com.taco.tacository.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;maxDim)</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
-<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#bounds(com.taco.suit_lady.util.values.numbers.NumExpr2D,com.taco.suit_lady.util.values.numbers.NumExpr2D,com.taco.suit_lady.util.values.numbers.NumExpr2D,com.taco.suit_lady.util.values.numbers.NumExpr2D,com.taco.suit_lady.util.values.enums.LocType)">bounds</a></span>&#8203;(@NotNull com.taco.suit_lady.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;minLoc,
- @NotNull com.taco.suit_lady.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;maxLoc,
- @NotNull com.taco.suit_lady.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;minDim,
- @NotNull com.taco.suit_lady.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;maxDim,
- @Nullable com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</code></div>
+<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
+<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#bounds(com.taco.suit_lady.util.values.numbers.NumExpr2D,com.taco.suit_lady.util.values.numbers.NumExpr2D,com.taco.suit_lady.util.values.numbers.NumExpr2D,com.taco.suit_lady.util.values.numbers.NumExpr2D,com.taco.suit_lady.util.values.enums.LocType)">bounds</a></span>&#8203;(@NotNull com.taco.tacository.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;minLoc,
+ @NotNull com.taco.tacository.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;maxLoc,
+ @NotNull com.taco.tacository.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;minDim,
+ @NotNull com.taco.tacository.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;maxDim,
+ @Nullable com.taco.tacository.util.values.enums.LocType&nbsp;locType)</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
+<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
 <div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#bounds(java.lang.Number,java.lang.Number,java.lang.Number,java.lang.Number,java.lang.Number,java.lang.Number,java.lang.Number,java.lang.Number,com.taco.suit_lady.util.values.enums.LocType)">bounds</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;minX,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;minY,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;minW,
@@ -192,151 +192,151 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;maxY,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;maxW,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;maxH,
- @Nullable com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</code></div>
+ @Nullable com.taco.tacository.util.values.enums.LocType&nbsp;locType)</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
+<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
 <div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsCeil(java.lang.Number,java.lang.Number,java.lang.Number,java.lang.Number)">boundsCeil</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;maxX,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;maxY,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;maxW,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;maxH)</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
+<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
 <div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsCeil(java.lang.Number,java.lang.Number,java.lang.Number,java.lang.Number,com.taco.suit_lady.util.values.enums.LocType)">boundsCeil</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;maxX,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;maxY,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;maxW,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;maxH,
- @Nullable com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</code></div>
+ @Nullable com.taco.tacository.util.values.enums.LocType&nbsp;locType)</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
+<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
 <div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsFloor(java.lang.Number,java.lang.Number,java.lang.Number,java.lang.Number)">boundsFloor</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;minX,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;minY,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;minW,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;minH)</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
+<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
 <div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsFloor(java.lang.Number,java.lang.Number,java.lang.Number,java.lang.Number,com.taco.suit_lady.util.values.enums.LocType)">boundsFloor</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;minX,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;minY,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;minW,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;minH,
- @Nullable com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</code></div>
+ @Nullable com.taco.tacository.util.values.enums.LocType&nbsp;locType)</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
+<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
 <div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsFloorDim()">boundsFloorDim</a></span>()</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
+<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
 <div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsFloorDim(java.lang.Number)">boundsFloorDim</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;min)</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
+<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
 <div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsFloorDim(java.lang.Number,java.lang.Number)">boundsFloorDim</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;minW,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;minH)</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
+<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
 <div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsFloorDim(java.lang.Number,java.lang.Number,com.taco.suit_lady.util.values.enums.LocType)">boundsFloorDim</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;minW,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;minH,
- @Nullable com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</code></div>
+ @Nullable com.taco.tacository.util.values.enums.LocType&nbsp;locType)</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
+<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
 <div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsFloorDimI()">boundsFloorDimI</a></span>()</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
+<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
 <div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsFloorLoc()">boundsFloorLoc</a></span>()</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
+<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
 <div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsFloorLoc(java.lang.Number)">boundsFloorLoc</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;min)</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
+<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
 <div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsFloorLoc(java.lang.Number,java.lang.Number)">boundsFloorLoc</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;minX,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;minY)</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
+<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
 <div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsFloorLoc(java.lang.Number,java.lang.Number,com.taco.suit_lady.util.values.enums.LocType)">boundsFloorLoc</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;minX,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;minY,
- @Nullable com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</code></div>
+ @Nullable com.taco.tacository.util.values.enums.LocType&nbsp;locType)</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
+<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
 <div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsFloorLocI()">boundsFloorLocI</a></span>()</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
+<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
 <div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsNeg()">boundsNeg</a></span>()</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
+<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
 <div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsNeg(boolean,boolean)">boundsNeg</a></span>&#8203;(boolean&nbsp;constrainLocation,
  boolean&nbsp;constrainDimensions)</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
+<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
 <div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsNeg(boolean,boolean,com.taco.suit_lady.util.values.enums.LocType)">boundsNeg</a></span>&#8203;(boolean&nbsp;constrainLocation,
  boolean&nbsp;constrainDimensions,
- @Nullable com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</code></div>
+ @Nullable com.taco.tacository.util.values.enums.LocType&nbsp;locType)</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
-<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsNeg(com.taco.suit_lady.util.values.enums.LocType)">boundsNeg</a></span>&#8203;(@Nullable com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</code></div>
+<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
+<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsNeg(com.taco.suit_lady.util.values.enums.LocType)">boundsNeg</a></span>&#8203;(@Nullable com.taco.tacository.util.values.enums.LocType&nbsp;locType)</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
+<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
 <div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsNegDim()">boundsNegDim</a></span>()</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
-<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsNegDim(com.taco.suit_lady.util.values.enums.LocType)">boundsNegDim</a></span>&#8203;(@Nullable com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</code></div>
+<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
+<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsNegDim(com.taco.suit_lady.util.values.enums.LocType)">boundsNegDim</a></span>&#8203;(@Nullable com.taco.tacository.util.values.enums.LocType&nbsp;locType)</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
+<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
 <div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsNegLoc()">boundsNegLoc</a></span>()</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
-<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsNegLoc(com.taco.suit_lady.util.values.enums.LocType)">boundsNegLoc</a></span>&#8203;(@Nullable com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</code></div>
+<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
+<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsNegLoc(com.taco.suit_lady.util.values.enums.LocType)">boundsNegLoc</a></span>&#8203;(@Nullable com.taco.tacository.util.values.enums.LocType&nbsp;locType)</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
+<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
 <div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsPos()">boundsPos</a></span>()</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
+<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
 <div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsPos(boolean,boolean)">boundsPos</a></span>&#8203;(boolean&nbsp;constrainLocation,
  boolean&nbsp;constrainDimensions)</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
+<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
 <div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsPos(boolean,boolean,com.taco.suit_lady.util.values.enums.LocType)">boundsPos</a></span>&#8203;(boolean&nbsp;constrainLocation,
  boolean&nbsp;constrainDimensions,
- @Nullable com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</code></div>
+ @Nullable com.taco.tacository.util.values.enums.LocType&nbsp;locType)</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
-<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsPos(com.taco.suit_lady.util.values.enums.LocType)">boundsPos</a></span>&#8203;(@Nullable com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</code></div>
+<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
+<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsPos(com.taco.suit_lady.util.values.enums.LocType)">boundsPos</a></span>&#8203;(@Nullable com.taco.tacository.util.values.enums.LocType&nbsp;locType)</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
+<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
 <div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsPosDim()">boundsPosDim</a></span>()</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
-<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsPosDim(com.taco.suit_lady.util.values.enums.LocType)">boundsPosDim</a></span>&#8203;(@Nullable com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</code></div>
+<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
+<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsPosDim(com.taco.suit_lady.util.values.enums.LocType)">boundsPosDim</a></span>&#8203;(@Nullable com.taco.tacository.util.values.enums.LocType&nbsp;locType)</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
+<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
 <div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsPosLoc()">boundsPosLoc</a></span>()</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
-<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsPosLoc(com.taco.suit_lady.util.values.enums.LocType)">boundsPosLoc</a></span>&#8203;(@Nullable com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</code></div>
+<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
+<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#boundsPosLoc(com.taco.suit_lady.util.values.enums.LocType)">boundsPosLoc</a></span>&#8203;(@Nullable com.taco.tacository.util.values.enums.LocType&nbsp;locType)</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Bounds</code></div>
+<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Bounds</code></div>
 <div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#getBounds()">getBounds</a></span>()</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a></code></div>
-<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#getDimension(com.taco.suit_lady.util.values.enums.Axis)">getDimension</a></span>&#8203;(@NotNull com.taco.suit_lady.util.values.enums.Axis&nbsp;axis)</code></div>
+<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#getDimension(com.taco.suit_lady.util.values.enums.Axis)">getDimension</a></span>&#8203;(@NotNull com.taco.tacository.util.values.enums.Axis&nbsp;axis)</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Num2D</code></div>
+<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Num2D</code></div>
 <div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#getDimensions()">getDimensions</a></span>()</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Num2D</code></div>
+<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Num2D</code></div>
 <div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#getLocation()">getLocation</a></span>()</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a></code></div>
-<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#getLocation(com.taco.suit_lady.util.values.enums.Axis)">getLocation</a></span>&#8203;(@NotNull com.taco.suit_lady.util.values.enums.Axis&nbsp;axis)</code></div>
+<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#getLocation(com.taco.suit_lady.util.values.enums.Axis)">getLocation</a></span>&#8203;(@NotNull com.taco.tacository.util.values.enums.Axis&nbsp;axis)</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a></code></div>
-<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#getLocation(com.taco.suit_lady.util.values.enums.Axis,com.taco.suit_lady.util.values.enums.LocType)">getLocation</a></span>&#8203;(@NotNull com.taco.suit_lady.util.values.enums.Axis&nbsp;axis,
- @NotNull com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</code></div>
+<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#getLocation(com.taco.suit_lady.util.values.enums.Axis,com.taco.suit_lady.util.values.enums.LocType)">getLocation</a></span>&#8203;(@NotNull com.taco.tacository.util.values.enums.Axis&nbsp;axis,
+ @NotNull com.taco.tacository.util.values.enums.LocType&nbsp;locType)</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.suit_lady.util.values.numbers.Num2D</code></div>
-<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#getLocation(com.taco.suit_lady.util.values.enums.LocType)">getLocation</a></span>&#8203;(@NotNull com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</code></div>
+<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull com.taco.tacository.util.values.numbers.Num2D</code></div>
+<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#getLocation(com.taco.suit_lady.util.values.enums.LocType)">getLocation</a></span>&#8203;(@NotNull com.taco.tacository.util.values.enums.LocType&nbsp;locType)</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a></code></div>
 <div class="col-second odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><span class="member-name-link"><a href="#h()">h</a></span>()</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a></code></div>
-<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#h(com.taco.suit_lady.util.values.numbers.NumExpr2D)">h</a></span>&#8203;(@NotNull com.taco.suit_lady.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;restraints)</code></div>
+<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#h(com.taco.suit_lady.util.values.numbers.NumExpr2D)">h</a></span>&#8203;(@NotNull com.taco.tacository.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;restraints)</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a></code></div>
 <div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#h(java.lang.Number,java.lang.Number)">h</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;min,
@@ -358,41 +358,41 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#hypot()">hypot</a></span>()</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default double</code></div>
-<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#locD(com.taco.suit_lady.util.values.enums.Axis)">locD</a></span>&#8203;(@NotNull com.taco.suit_lady.util.values.enums.Axis&nbsp;axis)</code></div>
+<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#locD(com.taco.suit_lady.util.values.enums.Axis)">locD</a></span>&#8203;(@NotNull com.taco.tacository.util.values.enums.Axis&nbsp;axis)</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default double</code></div>
-<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#locD(com.taco.suit_lady.util.values.enums.Axis,com.taco.suit_lady.util.values.enums.LocType)">locD</a></span>&#8203;(@NotNull com.taco.suit_lady.util.values.enums.Axis&nbsp;axis,
- @NotNull com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</code></div>
+<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#locD(com.taco.suit_lady.util.values.enums.Axis,com.taco.suit_lady.util.values.enums.LocType)">locD</a></span>&#8203;(@NotNull com.taco.tacository.util.values.enums.Axis&nbsp;axis,
+ @NotNull com.taco.tacository.util.values.enums.LocType&nbsp;locType)</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default float</code></div>
-<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#locF(com.taco.suit_lady.util.values.enums.Axis)">locF</a></span>&#8203;(@NotNull com.taco.suit_lady.util.values.enums.Axis&nbsp;axis)</code></div>
+<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#locF(com.taco.suit_lady.util.values.enums.Axis)">locF</a></span>&#8203;(@NotNull com.taco.tacository.util.values.enums.Axis&nbsp;axis)</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default float</code></div>
-<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#locF(com.taco.suit_lady.util.values.enums.Axis,com.taco.suit_lady.util.values.enums.LocType)">locF</a></span>&#8203;(@NotNull com.taco.suit_lady.util.values.enums.Axis&nbsp;axis,
- @NotNull com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</code></div>
+<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#locF(com.taco.suit_lady.util.values.enums.Axis,com.taco.suit_lady.util.values.enums.LocType)">locF</a></span>&#8203;(@NotNull com.taco.tacository.util.values.enums.Axis&nbsp;axis,
+ @NotNull com.taco.tacository.util.values.enums.LocType&nbsp;locType)</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default int</code></div>
-<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#locI(com.taco.suit_lady.util.values.enums.Axis)">locI</a></span>&#8203;(@NotNull com.taco.suit_lady.util.values.enums.Axis&nbsp;axis)</code></div>
+<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#locI(com.taco.suit_lady.util.values.enums.Axis)">locI</a></span>&#8203;(@NotNull com.taco.tacository.util.values.enums.Axis&nbsp;axis)</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default int</code></div>
-<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#locI(com.taco.suit_lady.util.values.enums.Axis,com.taco.suit_lady.util.values.enums.LocType)">locI</a></span>&#8203;(@NotNull com.taco.suit_lady.util.values.enums.Axis&nbsp;axis,
- @NotNull com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</code></div>
+<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#locI(com.taco.suit_lady.util.values.enums.Axis,com.taco.suit_lady.util.values.enums.LocType)">locI</a></span>&#8203;(@NotNull com.taco.tacository.util.values.enums.Axis&nbsp;axis,
+ @NotNull com.taco.tacository.util.values.enums.LocType&nbsp;locType)</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default long</code></div>
-<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#locL(com.taco.suit_lady.util.values.enums.Axis)">locL</a></span>&#8203;(@NotNull com.taco.suit_lady.util.values.enums.Axis&nbsp;axis)</code></div>
+<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#locL(com.taco.suit_lady.util.values.enums.Axis)">locL</a></span>&#8203;(@NotNull com.taco.tacository.util.values.enums.Axis&nbsp;axis)</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default long</code></div>
-<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#locL(com.taco.suit_lady.util.values.enums.Axis,com.taco.suit_lady.util.values.enums.LocType)">locL</a></span>&#8203;(@NotNull com.taco.suit_lady.util.values.enums.Axis&nbsp;axis,
- @NotNull com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</code></div>
+<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#locL(com.taco.suit_lady.util.values.enums.Axis,com.taco.suit_lady.util.values.enums.LocType)">locL</a></span>&#8203;(@NotNull com.taco.tacository.util.values.enums.Axis&nbsp;axis,
+ @NotNull com.taco.tacository.util.values.enums.LocType&nbsp;locType)</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code>@NotNull com.taco.suit_lady.util.values.enums.LocType</code></div>
+<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code>@NotNull com.taco.tacository.util.values.enums.LocType</code></div>
 <div class="col-second odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><span class="member-name-link"><a href="#locType()">locType</a></span>()</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a></code></div>
 <div class="col-second even-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><span class="member-name-link"><a href="#w()">w</a></span>()</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a></code></div>
-<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#w(com.taco.suit_lady.util.values.numbers.NumExpr2D)">w</a></span>&#8203;(@NotNull com.taco.suit_lady.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;restraints)</code></div>
+<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#w(com.taco.suit_lady.util.values.numbers.NumExpr2D)">w</a></span>&#8203;(@NotNull com.taco.tacository.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;restraints)</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a></code></div>
 <div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#w(java.lang.Number,java.lang.Number)">w</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;min,
@@ -414,7 +414,7 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><span class="member-name-link"><a href="#x()">x</a></span>()</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a></code></div>
-<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#x(com.taco.suit_lady.util.values.numbers.NumExpr2D)">x</a></span>&#8203;(@NotNull com.taco.suit_lady.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;restraints)</code></div>
+<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#x(com.taco.suit_lady.util.values.numbers.NumExpr2D)">x</a></span>&#8203;(@NotNull com.taco.tacository.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;restraints)</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a></code></div>
 <div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#x(java.lang.Number,java.lang.Number)">x</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;min,
@@ -481,7 +481,7 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><span class="member-name-link"><a href="#y()">y</a></span>()</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a></code></div>
-<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#y(com.taco.suit_lady.util.values.numbers.NumExpr2D)">y</a></span>&#8203;(@NotNull com.taco.suit_lady.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;restraints)</code></div>
+<div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#y(com.taco.suit_lady.util.values.numbers.NumExpr2D)">y</a></span>&#8203;(@NotNull com.taco.tacository.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;restraints)</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code>default @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a></code></div>
 <div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab5 method-summary-table"><code><span class="member-name-link"><a href="#y(java.lang.Number,java.lang.Number)">y</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;min,
@@ -590,21 +590,21 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="locType()">
 <h3>locType</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="return-type">@NotNull com.taco.suit_lady.util.values.enums.LocType</span>&nbsp;<span class="element-name">locType</span>()</div>
+</span><span class="return-type">@NotNull com.taco.tacository.util.values.enums.LocType</span>&nbsp;<span class="element-name">locType</span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="getBounds()">
 <h3>getBounds</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">getBounds</span>()</div>
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">getBounds</span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="getDimensions()">
 <h3>getDimensions</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Num2D</span>&nbsp;<span class="element-name">getDimensions</span>()</div>
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Num2D</span>&nbsp;<span class="element-name">getDimensions</span>()</div>
 </section>
 </li>
 <li>
@@ -612,22 +612,22 @@ loadScripts(document, 'script');</script>
 <h3>getDimension</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a></span>&nbsp;<span class="element-name">getDimension</span>&#8203;<span class="parameters">(@NotNull
- @NotNull com.taco.suit_lady.util.values.enums.Axis&nbsp;axis)</span></div>
+ @NotNull com.taco.tacository.util.values.enums.Axis&nbsp;axis)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="getLocation()">
 <h3>getLocation</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Num2D</span>&nbsp;<span class="element-name">getLocation</span>()</div>
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Num2D</span>&nbsp;<span class="element-name">getLocation</span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="getLocation(com.taco.suit_lady.util.values.enums.LocType)">
 <h3>getLocation</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Num2D</span>&nbsp;<span class="element-name">getLocation</span>&#8203;<span class="parameters">(@NotNull
- @NotNull com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</span></div>
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Num2D</span>&nbsp;<span class="element-name">getLocation</span>&#8203;<span class="parameters">(@NotNull
+ @NotNull com.taco.tacository.util.values.enums.LocType&nbsp;locType)</span></div>
 </section>
 </li>
 <li>
@@ -635,7 +635,7 @@ loadScripts(document, 'script');</script>
 <h3>getLocation</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a></span>&nbsp;<span class="element-name">getLocation</span>&#8203;<span class="parameters">(@NotNull
- @NotNull com.taco.suit_lady.util.values.enums.Axis&nbsp;axis)</span></div>
+ @NotNull com.taco.tacository.util.values.enums.Axis&nbsp;axis)</span></div>
 </section>
 </li>
 <li>
@@ -643,9 +643,9 @@ loadScripts(document, 'script');</script>
 <h3>getLocation</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a></span>&nbsp;<span class="element-name">getLocation</span>&#8203;<span class="parameters">(@NotNull
- @NotNull com.taco.suit_lady.util.values.enums.Axis&nbsp;axis,
+ @NotNull com.taco.tacository.util.values.enums.Axis&nbsp;axis,
  @NotNull
- @NotNull com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</span></div>
+ @NotNull com.taco.tacository.util.values.enums.LocType&nbsp;locType)</span></div>
 </section>
 </li>
 <li>
@@ -849,7 +849,7 @@ loadScripts(document, 'script');</script>
 <h3>x</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a></span>&nbsp;<span class="element-name">x</span>&#8203;<span class="parameters">(@NotNull
- @NotNull com.taco.suit_lady.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;restraints)</span></div>
+ @NotNull com.taco.tacository.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;restraints)</span></div>
 </section>
 </li>
 <li>
@@ -867,7 +867,7 @@ loadScripts(document, 'script');</script>
 <h3>y</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a></span>&nbsp;<span class="element-name">y</span>&#8203;<span class="parameters">(@NotNull
- @NotNull com.taco.suit_lady.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;restraints)</span></div>
+ @NotNull com.taco.tacository.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;restraints)</span></div>
 </section>
 </li>
 <li>
@@ -885,7 +885,7 @@ loadScripts(document, 'script');</script>
 <h3>w</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a></span>&nbsp;<span class="element-name">w</span>&#8203;<span class="parameters">(@NotNull
- @NotNull com.taco.suit_lady.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;restraints)</span></div>
+ @NotNull com.taco.tacository.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;restraints)</span></div>
 </section>
 </li>
 <li>
@@ -903,14 +903,14 @@ loadScripts(document, 'script');</script>
 <h3>h</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a></span>&nbsp;<span class="element-name">h</span>&#8203;<span class="parameters">(@NotNull
- @NotNull com.taco.suit_lady.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;restraints)</span></div>
+ @NotNull com.taco.tacository.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;restraints)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="bounds(java.lang.Number,java.lang.Number,java.lang.Number,java.lang.Number,java.lang.Number,java.lang.Number,java.lang.Number,java.lang.Number,com.taco.suit_lady.util.values.enums.LocType)">
 <h3>bounds</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">bounds</span>&#8203;<span class="parameters">(@NotNull
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">bounds</span>&#8203;<span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;minX,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;minY,
@@ -927,66 +927,66 @@ loadScripts(document, 'script');</script>
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;maxH,
  @Nullable
- @Nullable com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</span></div>
+ @Nullable com.taco.tacository.util.values.enums.LocType&nbsp;locType)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="bounds(com.taco.suit_lady.util.values.numbers.NumExpr2D,com.taco.suit_lady.util.values.numbers.NumExpr2D,com.taco.suit_lady.util.values.numbers.NumExpr2D,com.taco.suit_lady.util.values.numbers.NumExpr2D,com.taco.suit_lady.util.values.enums.LocType)">
 <h3>bounds</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">bounds</span>&#8203;<span class="parameters">(@NotNull
- @NotNull com.taco.suit_lady.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;minLoc,
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">bounds</span>&#8203;<span class="parameters">(@NotNull
+ @NotNull com.taco.tacository.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;minLoc,
  @NotNull
- @NotNull com.taco.suit_lady.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;maxLoc,
+ @NotNull com.taco.tacository.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;maxLoc,
  @NotNull
- @NotNull com.taco.suit_lady.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;minDim,
+ @NotNull com.taco.tacository.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;minDim,
  @NotNull
- @NotNull com.taco.suit_lady.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;maxDim,
+ @NotNull com.taco.tacository.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;maxDim,
  @Nullable
- @Nullable com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</span></div>
+ @Nullable com.taco.tacository.util.values.enums.LocType&nbsp;locType)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="bounds(com.taco.suit_lady.util.values.numbers.NumExpr2D,com.taco.suit_lady.util.values.numbers.NumExpr2D,com.taco.suit_lady.util.values.numbers.NumExpr2D,com.taco.suit_lady.util.values.numbers.NumExpr2D)">
 <h3>bounds</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">bounds</span>&#8203;<span class="parameters">(@NotNull
- @NotNull com.taco.suit_lady.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;minLoc,
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">bounds</span>&#8203;<span class="parameters">(@NotNull
+ @NotNull com.taco.tacository.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;minLoc,
  @NotNull
- @NotNull com.taco.suit_lady.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;maxLoc,
+ @NotNull com.taco.tacository.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;maxLoc,
  @NotNull
- @NotNull com.taco.suit_lady.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;minDim,
+ @NotNull com.taco.tacository.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;minDim,
  @NotNull
- @NotNull com.taco.suit_lady.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;maxDim)</span></div>
+ @NotNull com.taco.tacository.util.values.numbers.NumExpr2D&lt;?&gt;&nbsp;maxDim)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="bounds(com.taco.suit_lady.util.values.numbers.BoundsExpr,com.taco.suit_lady.util.values.numbers.BoundsExpr,com.taco.suit_lady.util.values.enums.LocType)">
 <h3>bounds</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">bounds</span>&#8203;<span class="parameters">(@NotNull
- @NotNull <a href="BoundsExpr.html" title="interface in com.taco.suit_lady.util.values.numbers">BoundsExpr</a>&nbsp;min,
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">bounds</span>&#8203;<span class="parameters">(@NotNull
+ @NotNull <a href="BoundsExpr.html" title="interface in com.taco.tacository.util.values.numbers">BoundsExpr</a>&nbsp;min,
  @NotNull
- @NotNull <a href="BoundsExpr.html" title="interface in com.taco.suit_lady.util.values.numbers">BoundsExpr</a>&nbsp;max,
+ @NotNull <a href="BoundsExpr.html" title="interface in com.taco.tacository.util.values.numbers">BoundsExpr</a>&nbsp;max,
  @Nullable
- @Nullable com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</span></div>
+ @Nullable com.taco.tacository.util.values.enums.LocType&nbsp;locType)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="bounds(com.taco.suit_lady.util.values.numbers.BoundsExpr,com.taco.suit_lady.util.values.numbers.BoundsExpr)">
 <h3>bounds</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">bounds</span>&#8203;<span class="parameters">(@NotNull
- @NotNull <a href="BoundsExpr.html" title="interface in com.taco.suit_lady.util.values.numbers">BoundsExpr</a>&nbsp;min,
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">bounds</span>&#8203;<span class="parameters">(@NotNull
+ @NotNull <a href="BoundsExpr.html" title="interface in com.taco.tacository.util.values.numbers">BoundsExpr</a>&nbsp;min,
  @NotNull
- @NotNull <a href="BoundsExpr.html" title="interface in com.taco.suit_lady.util.values.numbers">BoundsExpr</a>&nbsp;max)</span></div>
+ @NotNull <a href="BoundsExpr.html" title="interface in com.taco.tacository.util.values.numbers">BoundsExpr</a>&nbsp;max)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="boundsFloor(java.lang.Number,java.lang.Number,java.lang.Number,java.lang.Number,com.taco.suit_lady.util.values.enums.LocType)">
 <h3>boundsFloor</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsFloor</span>&#8203;<span class="parameters">(@NotNull
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsFloor</span>&#8203;<span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;minX,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;minY,
@@ -995,14 +995,14 @@ loadScripts(document, 'script');</script>
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;minH,
  @Nullable
- @Nullable com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</span></div>
+ @Nullable com.taco.tacository.util.values.enums.LocType&nbsp;locType)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="boundsFloor(java.lang.Number,java.lang.Number,java.lang.Number,java.lang.Number)">
 <h3>boundsFloor</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsFloor</span>&#8203;<span class="parameters">(@NotNull
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsFloor</span>&#8203;<span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;minX,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;minY,
@@ -1016,19 +1016,19 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="boundsFloorLoc(java.lang.Number,java.lang.Number,com.taco.suit_lady.util.values.enums.LocType)">
 <h3>boundsFloorLoc</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsFloorLoc</span>&#8203;<span class="parameters">(@NotNull
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsFloorLoc</span>&#8203;<span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;minX,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;minY,
  @Nullable
- @Nullable com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</span></div>
+ @Nullable com.taco.tacository.util.values.enums.LocType&nbsp;locType)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="boundsFloorLoc(java.lang.Number,java.lang.Number)">
 <h3>boundsFloorLoc</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsFloorLoc</span>&#8203;<span class="parameters">(@NotNull
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsFloorLoc</span>&#8203;<span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;minX,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;minY)</span></div>
@@ -1038,7 +1038,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="boundsFloorLoc(java.lang.Number)">
 <h3>boundsFloorLoc</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsFloorLoc</span>&#8203;<span class="parameters">(@NotNull
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsFloorLoc</span>&#8203;<span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;min)</span></div>
 </section>
 </li>
@@ -1046,33 +1046,33 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="boundsFloorLoc()">
 <h3>boundsFloorLoc</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsFloorLoc</span>()</div>
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsFloorLoc</span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="boundsFloorLocI()">
 <h3>boundsFloorLocI</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsFloorLocI</span>()</div>
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsFloorLocI</span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="boundsFloorDim(java.lang.Number,java.lang.Number,com.taco.suit_lady.util.values.enums.LocType)">
 <h3>boundsFloorDim</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsFloorDim</span>&#8203;<span class="parameters">(@NotNull
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsFloorDim</span>&#8203;<span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;minW,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;minH,
  @Nullable
- @Nullable com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</span></div>
+ @Nullable com.taco.tacository.util.values.enums.LocType&nbsp;locType)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="boundsFloorDim(java.lang.Number,java.lang.Number)">
 <h3>boundsFloorDim</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsFloorDim</span>&#8203;<span class="parameters">(@NotNull
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsFloorDim</span>&#8203;<span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;minW,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;minH)</span></div>
@@ -1082,7 +1082,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="boundsFloorDim(java.lang.Number)">
 <h3>boundsFloorDim</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsFloorDim</span>&#8203;<span class="parameters">(@NotNull
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsFloorDim</span>&#8203;<span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;min)</span></div>
 </section>
 </li>
@@ -1090,21 +1090,21 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="boundsFloorDim()">
 <h3>boundsFloorDim</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsFloorDim</span>()</div>
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsFloorDim</span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="boundsFloorDimI()">
 <h3>boundsFloorDimI</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsFloorDimI</span>()</div>
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsFloorDimI</span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="boundsCeil(java.lang.Number,java.lang.Number,java.lang.Number,java.lang.Number,com.taco.suit_lady.util.values.enums.LocType)">
 <h3>boundsCeil</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsCeil</span>&#8203;<span class="parameters">(@NotNull
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsCeil</span>&#8203;<span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;maxX,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;maxY,
@@ -1113,14 +1113,14 @@ loadScripts(document, 'script');</script>
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;maxH,
  @Nullable
- @Nullable com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</span></div>
+ @Nullable com.taco.tacository.util.values.enums.LocType&nbsp;locType)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="boundsCeil(java.lang.Number,java.lang.Number,java.lang.Number,java.lang.Number)">
 <h3>boundsCeil</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsCeil</span>&#8203;<span class="parameters">(@NotNull
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsCeil</span>&#8203;<span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;maxX,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;maxY,
@@ -1134,17 +1134,17 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="boundsPos(boolean,boolean,com.taco.suit_lady.util.values.enums.LocType)">
 <h3>boundsPos</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsPos</span>&#8203;<span class="parameters">(boolean&nbsp;constrainLocation,
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsPos</span>&#8203;<span class="parameters">(boolean&nbsp;constrainLocation,
  boolean&nbsp;constrainDimensions,
  @Nullable
- @Nullable com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</span></div>
+ @Nullable com.taco.tacository.util.values.enums.LocType&nbsp;locType)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="boundsPos(boolean,boolean)">
 <h3>boundsPos</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsPos</span>&#8203;<span class="parameters">(boolean&nbsp;constrainLocation,
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsPos</span>&#8203;<span class="parameters">(boolean&nbsp;constrainLocation,
  boolean&nbsp;constrainDimensions)</span></div>
 </section>
 </li>
@@ -1152,62 +1152,62 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="boundsPos(com.taco.suit_lady.util.values.enums.LocType)">
 <h3>boundsPos</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsPos</span>&#8203;<span class="parameters">(@Nullable
- @Nullable com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</span></div>
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsPos</span>&#8203;<span class="parameters">(@Nullable
+ @Nullable com.taco.tacository.util.values.enums.LocType&nbsp;locType)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="boundsPos()">
 <h3>boundsPos</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsPos</span>()</div>
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsPos</span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="boundsPosLoc(com.taco.suit_lady.util.values.enums.LocType)">
 <h3>boundsPosLoc</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsPosLoc</span>&#8203;<span class="parameters">(@Nullable
- @Nullable com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</span></div>
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsPosLoc</span>&#8203;<span class="parameters">(@Nullable
+ @Nullable com.taco.tacository.util.values.enums.LocType&nbsp;locType)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="boundsPosLoc()">
 <h3>boundsPosLoc</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsPosLoc</span>()</div>
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsPosLoc</span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="boundsPosDim(com.taco.suit_lady.util.values.enums.LocType)">
 <h3>boundsPosDim</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsPosDim</span>&#8203;<span class="parameters">(@Nullable
- @Nullable com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</span></div>
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsPosDim</span>&#8203;<span class="parameters">(@Nullable
+ @Nullable com.taco.tacository.util.values.enums.LocType&nbsp;locType)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="boundsPosDim()">
 <h3>boundsPosDim</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsPosDim</span>()</div>
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsPosDim</span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="boundsNeg(boolean,boolean,com.taco.suit_lady.util.values.enums.LocType)">
 <h3>boundsNeg</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsNeg</span>&#8203;<span class="parameters">(boolean&nbsp;constrainLocation,
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsNeg</span>&#8203;<span class="parameters">(boolean&nbsp;constrainLocation,
  boolean&nbsp;constrainDimensions,
  @Nullable
- @Nullable com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</span></div>
+ @Nullable com.taco.tacository.util.values.enums.LocType&nbsp;locType)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="boundsNeg(boolean,boolean)">
 <h3>boundsNeg</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsNeg</span>&#8203;<span class="parameters">(boolean&nbsp;constrainLocation,
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsNeg</span>&#8203;<span class="parameters">(boolean&nbsp;constrainLocation,
  boolean&nbsp;constrainDimensions)</span></div>
 </section>
 </li>
@@ -1215,45 +1215,45 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="boundsNeg(com.taco.suit_lady.util.values.enums.LocType)">
 <h3>boundsNeg</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsNeg</span>&#8203;<span class="parameters">(@Nullable
- @Nullable com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</span></div>
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsNeg</span>&#8203;<span class="parameters">(@Nullable
+ @Nullable com.taco.tacository.util.values.enums.LocType&nbsp;locType)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="boundsNeg()">
 <h3>boundsNeg</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsNeg</span>()</div>
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsNeg</span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="boundsNegLoc(com.taco.suit_lady.util.values.enums.LocType)">
 <h3>boundsNegLoc</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsNegLoc</span>&#8203;<span class="parameters">(@Nullable
- @Nullable com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</span></div>
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsNegLoc</span>&#8203;<span class="parameters">(@Nullable
+ @Nullable com.taco.tacository.util.values.enums.LocType&nbsp;locType)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="boundsNegLoc()">
 <h3>boundsNegLoc</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsNegLoc</span>()</div>
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsNegLoc</span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="boundsNegDim(com.taco.suit_lady.util.values.enums.LocType)">
 <h3>boundsNegDim</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsNegDim</span>&#8203;<span class="parameters">(@Nullable
- @Nullable com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</span></div>
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsNegDim</span>&#8203;<span class="parameters">(@Nullable
+ @Nullable com.taco.tacository.util.values.enums.LocType&nbsp;locType)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="boundsNegDim()">
 <h3>boundsNegDim</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.suit_lady.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsNegDim</span>()</div>
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull com.taco.tacository.util.values.numbers.Bounds</span>&nbsp;<span class="element-name">boundsNegDim</span>()</div>
 </section>
 </li>
 <li>
@@ -1356,64 +1356,64 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="locI(com.taco.suit_lady.util.values.enums.Axis)">
 <h3>locI</h3>
 <div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">locI</span>&#8203;<span class="parameters">(@NotNull
- @NotNull com.taco.suit_lady.util.values.enums.Axis&nbsp;axis)</span></div>
+ @NotNull com.taco.tacository.util.values.enums.Axis&nbsp;axis)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="locI(com.taco.suit_lady.util.values.enums.Axis,com.taco.suit_lady.util.values.enums.LocType)">
 <h3>locI</h3>
 <div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">locI</span>&#8203;<span class="parameters">(@NotNull
- @NotNull com.taco.suit_lady.util.values.enums.Axis&nbsp;axis,
+ @NotNull com.taco.tacository.util.values.enums.Axis&nbsp;axis,
  @NotNull
- @NotNull com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</span></div>
+ @NotNull com.taco.tacository.util.values.enums.LocType&nbsp;locType)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="locL(com.taco.suit_lady.util.values.enums.Axis)">
 <h3>locL</h3>
 <div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">locL</span>&#8203;<span class="parameters">(@NotNull
- @NotNull com.taco.suit_lady.util.values.enums.Axis&nbsp;axis)</span></div>
+ @NotNull com.taco.tacository.util.values.enums.Axis&nbsp;axis)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="locL(com.taco.suit_lady.util.values.enums.Axis,com.taco.suit_lady.util.values.enums.LocType)">
 <h3>locL</h3>
 <div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">locL</span>&#8203;<span class="parameters">(@NotNull
- @NotNull com.taco.suit_lady.util.values.enums.Axis&nbsp;axis,
+ @NotNull com.taco.tacository.util.values.enums.Axis&nbsp;axis,
  @NotNull
- @NotNull com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</span></div>
+ @NotNull com.taco.tacository.util.values.enums.LocType&nbsp;locType)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="locF(com.taco.suit_lady.util.values.enums.Axis)">
 <h3>locF</h3>
 <div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="element-name">locF</span>&#8203;<span class="parameters">(@NotNull
- @NotNull com.taco.suit_lady.util.values.enums.Axis&nbsp;axis)</span></div>
+ @NotNull com.taco.tacository.util.values.enums.Axis&nbsp;axis)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="locF(com.taco.suit_lady.util.values.enums.Axis,com.taco.suit_lady.util.values.enums.LocType)">
 <h3>locF</h3>
 <div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="element-name">locF</span>&#8203;<span class="parameters">(@NotNull
- @NotNull com.taco.suit_lady.util.values.enums.Axis&nbsp;axis,
+ @NotNull com.taco.tacository.util.values.enums.Axis&nbsp;axis,
  @NotNull
- @NotNull com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</span></div>
+ @NotNull com.taco.tacository.util.values.enums.LocType&nbsp;locType)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="locD(com.taco.suit_lady.util.values.enums.Axis)">
 <h3>locD</h3>
 <div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">locD</span>&#8203;<span class="parameters">(@NotNull
- @NotNull com.taco.suit_lady.util.values.enums.Axis&nbsp;axis)</span></div>
+ @NotNull com.taco.tacository.util.values.enums.Axis&nbsp;axis)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="locD(com.taco.suit_lady.util.values.enums.Axis,com.taco.suit_lady.util.values.enums.LocType)">
 <h3>locD</h3>
 <div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">locD</span>&#8203;<span class="parameters">(@NotNull
- @NotNull com.taco.suit_lady.util.values.enums.Axis&nbsp;axis,
+ @NotNull com.taco.tacository.util.values.enums.Axis&nbsp;axis,
  @NotNull
- @NotNull com.taco.suit_lady.util.values.enums.LocType&nbsp;locType)</span></div>
+ @NotNull com.taco.tacository.util.values.enums.LocType&nbsp;locType)</span></div>
 </section>
 </li>
 <li>

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="dc.created" content="2021-12-13">
-<meta name="description" content="declaration: package: com.taco.suit_lady.util.tools.list_tools, class: OperationHandler">
+<meta name="description" content="declaration: package: com.taco.tacository.util.tools.list_tools, class: OperationHandler">
 <meta name="generator" content="javadoc/ClassWriterImpl">
 <link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../../../../../../script-dir/jquery-ui.min.css" title="Style">
@@ -72,45 +72,45 @@ loadScripts(document, 'script');</script>
 <main role="main">
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">com.taco.suit_lady.util.tools.list_tools</a></div>
+<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">com.taco.tacository.util.tools.list_tools</a></div>
 <h1 title="Class OperationHandler" class="title">Class OperationHandler&lt;E&gt;</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">com.taco.suit_lady.util.tools.list_tools.OperationHandler&lt;E&gt;</div>
+<div class="inheritance">com.taco.tacository.util.tools.list_tools.OperationHandler&lt;E&gt;</div>
 </div>
 <section class="description">
 <dl class="notes">
 <dt>Type Parameters:</dt>
-<dd><code>E</code> - The type of element contained within the <code>list</code> that has been assigned to this <a href="OperationHandler.html" title="class in com.taco.suit_lady.util.tools.list_tools"><code>OperationHandler</code></a>.</dd>
+<dd><code>E</code> - The type of element contained within the <code>list</code> that has been assigned to this <a href="OperationHandler.html" title="class in com.taco.tacository.util.tools.list_tools"><code>OperationHandler</code></a>.</dd>
 </dl>
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../../Lockable.html" title="interface in com.taco.suit_lady.util">Lockable</a></code>, <code><a href="OperationListener.html" title="interface in com.taco.suit_lady.util.tools.list_tools">OperationListener</a>&lt;E&gt;</code>, <code><a href="../../UID.html" title="interface in com.taco.suit_lady.util">UID</a></code>, <code><a href="../../UIDProcessable.html" title="interface in com.taco.suit_lady.util">UIDProcessable</a></code>, <code>com.taco.tacository.obj_traits.common.Nameable</code>, <code><a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/util/concurrent/locks/Lock.html" title="class or interface in java.util.concurrent.locks" class="external-link">Lock</a></code>, <code>javafx.collections.ListChangeListener&lt;E&gt;</code></dd>
+<dd><code><a href="../../Lockable.html" title="interface in com.taco.tacository.util">Lockable</a></code>, <code><a href="OperationListener.html" title="interface in com.taco.tacository.util.tools.list_tools">OperationListener</a>&lt;E&gt;</code>, <code><a href="../../UID.html" title="interface in com.taco.tacository.util">UID</a></code>, <code><a href="../../UIDProcessable.html" title="interface in com.taco.tacository.util">UIDProcessable</a></code>, <code>com.taco.tacository._to_sort.obj_traits.common.Nameable</code>, <code><a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/util/concurrent/locks/Lock.html" title="class or interface in java.util.concurrent.locks" class="external-link">Lock</a></code>, <code>javafx.collections.ListChangeListener&lt;E&gt;</code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name type-name-label">OperationHandler&lt;E&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
-implements <a href="OperationListener.html" title="interface in com.taco.suit_lady.util.tools.list_tools">OperationListener</a>&lt;E&gt;, javafx.collections.ListChangeListener&lt;E&gt;, <a href="../../Lockable.html" title="interface in com.taco.suit_lady.util">Lockable</a>, com.taco.tacository.obj_traits.common.Nameable, <a href="../../UIDProcessable.html" title="interface in com.taco.suit_lady.util">UIDProcessable</a></span></div>
-<div class="block"><p>An abstract implementation of both <code>ListChangeListener</code> and <a href="OperationListener.html" title="interface in com.taco.suit_lady.util.tools.list_tools"><code>OperationListener</code></a>.</p>
+implements <a href="OperationListener.html" title="interface in com.taco.tacository.util.tools.list_tools">OperationListener</a>&lt;E&gt;, javafx.collections.ListChangeListener&lt;E&gt;, <a href="../../Lockable.html" title="interface in com.taco.tacository.util">Lockable</a>, com.taco.tacository._to_sort.obj_traits.common.Nameable, <a href="../../UIDProcessable.html" title="interface in com.taco.tacository.util">UIDProcessable</a></span></div>
+<div class="block"><p>An abstract implementation of both <code>ListChangeListener</code> and <a href="OperationListener.html" title="interface in com.taco.tacository.util.tools.list_tools"><code>OperationListener</code></a>.</p>
  <h2>Details</h2>
  <ol>
      <li>
-         <a href="OperationHandler.html" title="class in com.taco.suit_lady.util.tools.list_tools"><code>OperationHandler</code></a> objects are constructed by <i><a href="ListTools.html" title="class in com.taco.suit_lady.util.tools.list_tools"><code>ListTools</code></a><b>.</b><a href="ListTools.html#wrap(java.util.concurrent.locks.ReentrantLock,java.lang.String,javafx.collections.ObservableList,com.taco.suit_lady.util.tools.list_tools.OperationListener)"><code>wrap(...)</code></a></i> and other factory methods in the <a href="ListTools.html" title="class in com.taco.suit_lady.util.tools.list_tools"><code>ListTools</code></a> utility class.
+         <a href="OperationHandler.html" title="class in com.taco.tacository.util.tools.list_tools"><code>OperationHandler</code></a> objects are constructed by <i><a href="ListTools.html" title="class in com.taco.tacository.util.tools.list_tools"><code>ListTools</code></a><b>.</b><a href="ListTools.html#wrap(java.util.concurrent.locks.ReentrantLock,java.lang.String,javafx.collections.ObservableList,com.taco.suit_lady.util.tools.list_tools.OperationListener)"><code>wrap(...)</code></a></i> and other factory methods in the <a href="ListTools.html" title="class in com.taco.tacository.util.tools.list_tools"><code>ListTools</code></a> utility class.
          <ul>
-             <li>Most factory methods return a <a href="OperationHandler.html" title="class in com.taco.suit_lady.util.tools.list_tools"><code>OperationHandler</code></a> that was constructed using <i><a href="ListTools.html" title="class in com.taco.suit_lady.util.tools.list_tools"><code>ListTools</code></a><b>.</b><a href="ListTools.html#wrap(java.util.concurrent.locks.ReentrantLock,java.lang.String,javafx.collections.ObservableList,com.taco.suit_lady.util.tools.list_tools.OperationListener)"><code>wrap(...)</code></a></i>.</li>
+             <li>Most factory methods return a <a href="OperationHandler.html" title="class in com.taco.tacository.util.tools.list_tools"><code>OperationHandler</code></a> that was constructed using <i><a href="ListTools.html" title="class in com.taco.tacository.util.tools.list_tools"><code>ListTools</code></a><b>.</b><a href="ListTools.html#wrap(java.util.concurrent.locks.ReentrantLock,java.lang.String,javafx.collections.ObservableList,com.taco.suit_lady.util.tools.list_tools.OperationListener)"><code>wrap(...)</code></a></i>.</li>
          </ul>
      </li>
-     <li>The primary function of <a href="OperationHandler.html" title="class in com.taco.suit_lady.util.tools.list_tools"><code>OperationHandler</code></a> is to streamline the event data provided by <i><code>ListChangeListener#onChanged(Change)</code></i>.</li>
-     <li><a href="OperationHandler.html" title="class in com.taco.suit_lady.util.tools.list_tools"><code>OperationHandler</code></a> uses <a href="Operation.html" title="class in com.taco.suit_lady.util.tools.list_tools"><code>Operation</code></a> records to communicate a <code>Change Event</code>.</li>
+     <li>The primary function of <a href="OperationHandler.html" title="class in com.taco.tacository.util.tools.list_tools"><code>OperationHandler</code></a> is to streamline the event data provided by <i><code>ListChangeListener#onChanged(Change)</code></i>.</li>
+     <li><a href="OperationHandler.html" title="class in com.taco.tacository.util.tools.list_tools"><code>OperationHandler</code></a> uses <a href="Operation.html" title="class in com.taco.tacository.util.tools.list_tools"><code>Operation</code></a> records to communicate a <code>Change Event</code>.</li>
  </ol>
  <hr>
  <h2>Auto Conversion</h2>
  <p>
-     By default, an <a href="OperationHandler.html" title="class in com.taco.suit_lady.util.tools.list_tools"><code>OperationHandler</code></a> will attempt to detect <code>ObservableList</code> <a href="OperationListener.html#onAdd(com.taco.suit_lady.util.tools.list_tools.Operation)"><code>add</code></a> and <a href="OperationListener.html#onRemove(com.taco.suit_lady.util.tools.list_tools.Operation)"><code>remove</code></a> operations that are functionally <code>permutations</code>
+     By default, an <a href="OperationHandler.html" title="class in com.taco.tacository.util.tools.list_tools"><code>OperationHandler</code></a> will attempt to detect <code>ObservableList</code> <a href="OperationListener.html#onAdd(com.taco.suit_lady.util.tools.list_tools.Operation)"><code>add</code></a> and <a href="OperationListener.html#onRemove(com.taco.suit_lady.util.tools.list_tools.Operation)"><code>remove</code></a> operations that are functionally <code>permutations</code>
      â€” e.g. <i><a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/util/Collections.html" title="class or interface in java.util" class="external-link"><code>Collections</code></a><b>.</b><a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/util/Collections.html#shuffle(java.util.List)" title="class or interface in java.util" class="external-link"><code>shuffle</code></a><b>(</b><a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link"><code>List</code></a><b>)</b></i>.
  </p>
  <ol>
-     <li>If such an <a href="Operation.html" title="class in com.taco.suit_lady.util.tools.list_tools"><code>Operation</code></a> exists, the <code>add</code> and <code>remove</code> operations that comprise the inferred <code>permutation</code> are no longer triggered as <code>add</code> or <code>remove</code> events, but rather converted and submitted as a single <code>permutation</code> event.</li>
+     <li>If such an <a href="Operation.html" title="class in com.taco.tacository.util.tools.list_tools"><code>Operation</code></a> exists, the <code>add</code> and <code>remove</code> operations that comprise the inferred <code>permutation</code> are no longer triggered as <code>add</code> or <code>remove</code> events, but rather converted and submitted as a single <code>permutation</code> event.</li>
      <li>To disable automatic <code>permutation</code> conversions, set <i><a href="#isSmartConvertProperty()"><code>Smart Convert</code></a></i> to <code>false</code>.</li>
  </ol>
  <h3>Known Functions Behavior</h3>
@@ -128,7 +128,7 @@ implements <a href="OperationListener.html" title="interface in com.taco.suit_la
      <li><a href="../ArrayTools.html#sort(java.util.List)"><code>ArrayTools.sort(List)</code></a></li>
  </ol>
  <h3>Example Output</h3>
- <p>Refer to <a href="ListToolsDemo.html" title="class in com.taco.suit_lady.util.tools.list_tools"><code>ListToolsDemo</code></a>.</p></div>
+ <p>Refer to <a href="ListToolsDemo.html" title="class in com.taco.tacository.util.tools.list_tools"><code>ListToolsDemo</code></a>.</p></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -169,13 +169,13 @@ implements <a href="OperationListener.html" title="interface in com.taco.suit_la
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><a href="OperationHandler.html" title="class in com.taco.suit_lady.util.tools.list_tools">OperationHandler</a>&lt;<a href="OperationHandler.html" title="type parameter in OperationHandler">E</a>&gt;</code></div>
+<div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><a href="OperationHandler.html" title="class in com.taco.tacository.util.tools.list_tools">OperationHandler</a>&lt;<a href="OperationHandler.html" title="type parameter in OperationHandler">E</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#apply()">apply</a></span>()</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code>@Nullable <a href="Operation.html" title="class in com.taco.suit_lady.util.tools.list_tools">Operation</a>&lt;<a href="OperationHandler.html" title="type parameter in OperationHandler">E</a>&gt;</code></div>
+<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code>@Nullable <a href="Operation.html" title="class in com.taco.tacository.util.tools.list_tools">Operation</a>&lt;<a href="OperationHandler.html" title="type parameter in OperationHandler">E</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#getByIndex(int,boolean,java.util.List...)">getByIndex</a></span>&#8203;(int&nbsp;index,
  boolean&nbsp;to,
- <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Operation.html" title="class in com.taco.suit_lady.util.tools.list_tools">Operation</a>&lt;<a href="OperationHandler.html" title="type parameter in OperationHandler">E</a>&gt;&gt; @NotNull ...&nbsp;lists)</code></div>
+ <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Operation.html" title="class in com.taco.tacository.util.tools.list_tools">Operation</a>&lt;<a href="OperationHandler.html" title="type parameter in OperationHandler">E</a>&gt;&gt; @NotNull ...&nbsp;lists)</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code>javafx.collections.ObservableList&lt;<a href="OperationHandler.html" title="type parameter in OperationHandler">E</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#getList()">getList</a></span>()</code></div>
@@ -186,10 +186,10 @@ implements <a href="OperationListener.html" title="interface in com.taco.suit_la
 <div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#getName()">getName</a></span>()</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><a href="../../UIDProcessor.html" title="class in com.taco.suit_lady.util">UIDProcessor</a></code></div>
+<div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><a href="../../UIDProcessor.html" title="class in com.taco.tacository.util">UIDProcessor</a></code></div>
 <div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#getUIDProcessor()">getUIDProcessor</a></span>()</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table">
-<div class="block">Returns the <a href="../../UIDProcessor.html" title="class in com.taco.suit_lady.util"><code>UIDProcessor</code></a> instance for this <a href="../../UIDProcessable.html" title="interface in com.taco.suit_lady.util"><code>UIDProcessable</code></a> object.</div>
+<div class="block">Returns the <a href="../../UIDProcessor.html" title="class in com.taco.tacository.util"><code>UIDProcessor</code></a> instance for this <a href="../../UIDProcessable.html" title="interface in com.taco.tacository.util"><code>UIDProcessable</code></a> object.</div>
 </div>
 <div class="col-first even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#isSmartConvert()">isSmartConvert</a></span>()</code></div>
@@ -246,13 +246,13 @@ implements <a href="OperationListener.html" title="interface in com.taco.suit_la
 <h3 id="methods.inherited.from.class.java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
 <div class="inherited-list">
-<h3 id="methods.inherited.from.class.com.taco.suit_lady.util.Lockable">Methods inherited from interface&nbsp;com.taco.suit_lady.util.<a href="../../Lockable.html" title="interface in com.taco.suit_lady.util">Lockable</a></h3>
+<h3 id="methods.inherited.from.class.com.taco.suit_lady.util.Lockable">Methods inherited from interface&nbsp;com.taco.tacository.util.<a href="../../Lockable.html" title="interface in com.taco.tacository.util">Lockable</a></h3>
 <code><a href="../../Lockable.html#interrupted(java.lang.InterruptedException)">interrupted</a>, <a href="../../Lockable.html#isNullableLock()">isNullableLock</a>, <a href="../../Lockable.html#lock()">lock</a>, <a href="../../Lockable.html#lockInterruptibly()">lockInterruptibly</a>, <a href="../../Lockable.html#newCondition()">newCondition</a>, <a href="../../Lockable.html#sync(java.lang.Runnable,java.util.function.Consumer...)">sync</a>, <a href="../../Lockable.html#sync(java.util.function.Function,java.util.function.Supplier,java.util.function.Consumer...)">sync</a>, <a href="../../Lockable.html#sync(java.util.function.Supplier,java.util.function.Consumer...)">sync</a>, <a href="../../Lockable.html#tryLock()">tryLock</a>, <a href="../../Lockable.html#tryLock(long,java.util.concurrent.TimeUnit)">tryLock</a>, <a href="../../Lockable.html#unlock()">unlock</a></code></div>
 <div class="inherited-list">
-<h3 id="methods.inherited.from.class.com.taco.suit_lady.util.tools.list_tools.OperationListener">Methods inherited from interface&nbsp;com.taco.suit_lady.util.tools.list_tools.<a href="OperationListener.html" title="interface in com.taco.suit_lady.util.tools.list_tools">OperationListener</a></h3>
+<h3 id="methods.inherited.from.class.com.taco.suit_lady.util.tools.list_tools.OperationListener">Methods inherited from interface&nbsp;com.taco.tacository.util.tools.list_tools.<a href="OperationListener.html" title="interface in com.taco.tacository.util.tools.list_tools">OperationListener</a></h3>
 <code><a href="OperationListener.html#onAdd(com.taco.suit_lady.util.tools.list_tools.Operation)">onAdd</a>, <a href="OperationListener.html#onPermutate(com.taco.suit_lady.util.tools.list_tools.Operation,com.taco.suit_lady.util.tools.list_tools.Operation)">onPermutate</a>, <a href="OperationListener.html#onRemove(com.taco.suit_lady.util.tools.list_tools.Operation)">onRemove</a></code></div>
 <div class="inherited-list">
-<h3 id="methods.inherited.from.class.com.taco.suit_lady.util.UIDProcessable">Methods inherited from interface&nbsp;com.taco.suit_lady.util.<a href="../../UIDProcessable.html" title="interface in com.taco.suit_lady.util">UIDProcessable</a></h3>
+<h3 id="methods.inherited.from.class.com.taco.suit_lady.util.UIDProcessable">Methods inherited from interface&nbsp;com.taco.tacository.util.<a href="../../UIDProcessable.html" title="interface in com.taco.tacository.util">UIDProcessable</a></h3>
 <code><a href="../../UIDProcessable.html#getGroupID()">getGroupID</a>, <a href="../../UIDProcessable.html#getUID(java.lang.Object...)">getUID</a></code></div>
 </section>
 </li>
@@ -315,7 +315,7 @@ implements <a href="OperationListener.html" title="interface in com.taco.suit_la
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/util/concurrent/locks/Lock.html" title="class or interface in java.util.concurrent.locks" class="external-link">Lock</a></span>&nbsp;<span class="element-name">getLock</span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../Lockable.html#getLock()">getLock</a></code>&nbsp;in interface&nbsp;<code><a href="../../Lockable.html" title="interface in com.taco.suit_lady.util">Lockable</a></code></dd>
+<dd><code><a href="../../Lockable.html#getLock()">getLock</a></code>&nbsp;in interface&nbsp;<code><a href="../../Lockable.html" title="interface in com.taco.tacository.util">Lockable</a></code></dd>
 </dl>
 </section>
 </li>
@@ -341,7 +341,7 @@ implements <a href="OperationListener.html" title="interface in com.taco.suit_la
  </ul></div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="OperationListener.html#onPrePermutate()">onPrePermutate</a></code>&nbsp;in interface&nbsp;<code><a href="OperationListener.html" title="interface in com.taco.suit_lady.util.tools.list_tools">OperationListener</a>&lt;<a href="OperationHandler.html" title="type parameter in OperationHandler">E</a>&gt;</code></dd>
+<dd><code><a href="OperationListener.html#onPrePermutate()">onPrePermutate</a></code>&nbsp;in interface&nbsp;<code><a href="OperationListener.html" title="interface in com.taco.tacository.util.tools.list_tools">OperationListener</a>&lt;<a href="OperationHandler.html" title="type parameter in OperationHandler">E</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
@@ -357,7 +357,7 @@ implements <a href="OperationListener.html" title="interface in com.taco.suit_la
  </ul></div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="OperationListener.html#onPostPermutate()">onPostPermutate</a></code>&nbsp;in interface&nbsp;<code><a href="OperationListener.html" title="interface in com.taco.suit_lady.util.tools.list_tools">OperationListener</a>&lt;<a href="OperationHandler.html" title="type parameter in OperationHandler">E</a>&gt;</code></dd>
+<dd><code><a href="OperationListener.html#onPostPermutate()">onPostPermutate</a></code>&nbsp;in interface&nbsp;<code><a href="OperationListener.html" title="interface in com.taco.tacository.util.tools.list_tools">OperationListener</a>&lt;<a href="OperationHandler.html" title="type parameter in OperationHandler">E</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
@@ -373,7 +373,7 @@ implements <a href="OperationListener.html" title="interface in com.taco.suit_la
  </ul></div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="OperationListener.html#onPreAdd()">onPreAdd</a></code>&nbsp;in interface&nbsp;<code><a href="OperationListener.html" title="interface in com.taco.suit_lady.util.tools.list_tools">OperationListener</a>&lt;<a href="OperationHandler.html" title="type parameter in OperationHandler">E</a>&gt;</code></dd>
+<dd><code><a href="OperationListener.html#onPreAdd()">onPreAdd</a></code>&nbsp;in interface&nbsp;<code><a href="OperationListener.html" title="interface in com.taco.tacository.util.tools.list_tools">OperationListener</a>&lt;<a href="OperationHandler.html" title="type parameter in OperationHandler">E</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
@@ -389,7 +389,7 @@ implements <a href="OperationListener.html" title="interface in com.taco.suit_la
  </ul></div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="OperationListener.html#onPostAdd()">onPostAdd</a></code>&nbsp;in interface&nbsp;<code><a href="OperationListener.html" title="interface in com.taco.suit_lady.util.tools.list_tools">OperationListener</a>&lt;<a href="OperationHandler.html" title="type parameter in OperationHandler">E</a>&gt;</code></dd>
+<dd><code><a href="OperationListener.html#onPostAdd()">onPostAdd</a></code>&nbsp;in interface&nbsp;<code><a href="OperationListener.html" title="interface in com.taco.tacository.util.tools.list_tools">OperationListener</a>&lt;<a href="OperationHandler.html" title="type parameter in OperationHandler">E</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
@@ -405,7 +405,7 @@ implements <a href="OperationListener.html" title="interface in com.taco.suit_la
  </ul></div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="OperationListener.html#onPreRemove()">onPreRemove</a></code>&nbsp;in interface&nbsp;<code><a href="OperationListener.html" title="interface in com.taco.suit_lady.util.tools.list_tools">OperationListener</a>&lt;<a href="OperationHandler.html" title="type parameter in OperationHandler">E</a>&gt;</code></dd>
+<dd><code><a href="OperationListener.html#onPreRemove()">onPreRemove</a></code>&nbsp;in interface&nbsp;<code><a href="OperationListener.html" title="interface in com.taco.tacository.util.tools.list_tools">OperationListener</a>&lt;<a href="OperationHandler.html" title="type parameter in OperationHandler">E</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
@@ -421,7 +421,7 @@ implements <a href="OperationListener.html" title="interface in com.taco.suit_la
  </ul></div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="OperationListener.html#onPostRemove()">onPostRemove</a></code>&nbsp;in interface&nbsp;<code><a href="OperationListener.html" title="interface in com.taco.suit_lady.util.tools.list_tools">OperationListener</a>&lt;<a href="OperationHandler.html" title="type parameter in OperationHandler">E</a>&gt;</code></dd>
+<dd><code><a href="OperationListener.html#onPostRemove()">onPostRemove</a></code>&nbsp;in interface&nbsp;<code><a href="OperationListener.html" title="interface in com.taco.tacository.util.tools.list_tools">OperationListener</a>&lt;<a href="OperationHandler.html" title="type parameter in OperationHandler">E</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
@@ -438,7 +438,7 @@ implements <a href="OperationListener.html" title="interface in com.taco.suit_la
  </ul></div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="OperationListener.html#onUpdate(int,int)">onUpdate</a></code>&nbsp;in interface&nbsp;<code><a href="OperationListener.html" title="interface in com.taco.suit_lady.util.tools.list_tools">OperationListener</a>&lt;<a href="OperationHandler.html" title="type parameter in OperationHandler">E</a>&gt;</code></dd>
+<dd><code><a href="OperationListener.html#onUpdate(int,int)">onUpdate</a></code>&nbsp;in interface&nbsp;<code><a href="OperationListener.html" title="interface in com.taco.tacository.util.tools.list_tools">OperationListener</a>&lt;<a href="OperationHandler.html" title="type parameter in OperationHandler">E</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
@@ -448,16 +448,16 @@ implements <a href="OperationListener.html" title="interface in com.taco.suit_la
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getName</span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code>getName</code>&nbsp;in interface&nbsp;<code>com.taco.tacository.obj_traits.common.Nameable</code></dd>
+<dd><code>getName</code>&nbsp;in interface&nbsp;<code>com.taco.tacository._to_sort.obj_traits.common.Nameable</code></dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="getUIDProcessor()">
 <h3>getUIDProcessor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../UIDProcessor.html" title="class in com.taco.suit_lady.util">UIDProcessor</a></span>&nbsp;<span class="element-name">getUIDProcessor</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../UIDProcessor.html" title="class in com.taco.tacository.util">UIDProcessor</a></span>&nbsp;<span class="element-name">getUIDProcessor</span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../../UIDProcessable.html#getUIDProcessor()">UIDProcessable</a></code></span></div>
-<div class="block"><p>Returns the <a href="../../UIDProcessor.html" title="class in com.taco.suit_lady.util"><code>UIDProcessor</code></a> instance for this <a href="../../UIDProcessable.html" title="interface in com.taco.suit_lady.util"><code>UIDProcessable</code></a> object.</p>
+<div class="block"><p>Returns the <a href="../../UIDProcessor.html" title="class in com.taco.tacository.util"><code>UIDProcessor</code></a> instance for this <a href="../../UIDProcessable.html" title="interface in com.taco.tacository.util"><code>UIDProcessable</code></a> object.</p>
  <hr><br>
  <h4>Example Implementation</h4>
  <pre><code>private UIDProcessor uIDContainer;
@@ -474,13 +474,13 @@ implements <a href="OperationListener.html" title="interface in com.taco.suit_la
  <br>
  <h4>Details</h4>
  <ol>
-     <li>In most cases, it is recommended that <a href="../../UIDProcessor.html" title="class in com.taco.suit_lady.util"><code>UIDProcessor</code></a> objects are stored as lazy-initialized singleton field variables as shown in the example above.</li>
+     <li>In most cases, it is recommended that <a href="../../UIDProcessor.html" title="class in com.taco.tacository.util"><code>UIDProcessor</code></a> objects are stored as lazy-initialized singleton field variables as shown in the example above.</li>
  </ol></div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../UIDProcessable.html#getUIDProcessor()">getUIDProcessor</a></code>&nbsp;in interface&nbsp;<code><a href="../../UIDProcessable.html" title="interface in com.taco.suit_lady.util">UIDProcessable</a></code></dd>
+<dd><code><a href="../../UIDProcessable.html#getUIDProcessor()">getUIDProcessor</a></code>&nbsp;in interface&nbsp;<code><a href="../../UIDProcessable.html" title="interface in com.taco.tacository.util">UIDProcessable</a></code></dd>
 <dt>Returns:</dt>
-<dd>The <a href="../../UIDProcessor.html" title="class in com.taco.suit_lady.util"><code>UIDProcessor</code></a> instance for this <a href="../../UIDProcessable.html" title="interface in com.taco.suit_lady.util"><code>UIDProcessable</code></a> object.</dd>
+<dd>The <a href="../../UIDProcessor.html" title="class in com.taco.tacository.util"><code>UIDProcessor</code></a> instance for this <a href="../../UIDProcessable.html" title="interface in com.taco.tacository.util"><code>UIDProcessable</code></a> object.</dd>
 </dl>
 </section>
 </li>
@@ -489,15 +489,15 @@ implements <a href="OperationListener.html" title="interface in com.taco.suit_la
 <h3>getByIndex</h3>
 <div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/SafeVarargs.html" title="class or interface in java.lang" class="external-link">@SafeVarargs</a>
 @Nullable
-</span><span class="modifiers">public final</span>&nbsp;<span class="return-type">@Nullable <a href="Operation.html" title="class in com.taco.suit_lady.util.tools.list_tools">Operation</a>&lt;<a href="OperationHandler.html" title="type parameter in OperationHandler">E</a>&gt;</span>&nbsp;<span class="element-name">getByIndex</span>&#8203;<span class="parameters">(int&nbsp;index,
+</span><span class="modifiers">public final</span>&nbsp;<span class="return-type">@Nullable <a href="Operation.html" title="class in com.taco.tacository.util.tools.list_tools">Operation</a>&lt;<a href="OperationHandler.html" title="type parameter in OperationHandler">E</a>&gt;</span>&nbsp;<span class="element-name">getByIndex</span>&#8203;<span class="parameters">(int&nbsp;index,
  boolean&nbsp;to,
- <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Operation.html" title="class in com.taco.suit_lady.util.tools.list_tools">Operation</a>&lt;<a href="OperationHandler.html" title="type parameter in OperationHandler">E</a>&gt;&gt; @NotNull ...&nbsp;lists)</span></div>
+ <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Operation.html" title="class in com.taco.tacository.util.tools.list_tools">Operation</a>&lt;<a href="OperationHandler.html" title="type parameter in OperationHandler">E</a>&gt;&gt; @NotNull ...&nbsp;lists)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="apply()">
 <h3>apply</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="OperationHandler.html" title="class in com.taco.suit_lady.util.tools.list_tools">OperationHandler</a>&lt;<a href="OperationHandler.html" title="type parameter in OperationHandler">E</a>&gt;</span>&nbsp;<span class="element-name">apply</span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="OperationHandler.html" title="class in com.taco.tacository.util.tools.list_tools">OperationHandler</a>&lt;<a href="OperationHandler.html" title="type parameter in OperationHandler">E</a>&gt;</span>&nbsp;<span class="element-name">apply</span>()</div>
 </section>
 </li>
 </ul>

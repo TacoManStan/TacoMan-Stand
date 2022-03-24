@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.taco.suit_lady.ui.jfx.components.ImagePane?>
+<?import com.taco.tacository.ui.jfx.components.ImagePane?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="root" style="-fx-border-color: green; -fx-border-width: 0;" stylesheets="/css/main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.taco.suit_lady.ui.AppController">
+<StackPane fx:id="root" style="-fx-border-color: green; -fx-border-width: 0;" stylesheets="/css/main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.taco.tacository.ui.AppController">
     <children>
         <BorderPane>
             <center>

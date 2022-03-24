@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="dc.created" content="2021-12-13">
-<meta name="description" content="declaration: package: com.taco.suit_lady.util, class: UIDProcessor">
+<meta name="description" content="declaration: package: com.taco.tacository.util, class: UIDProcessor">
 <meta name="generator" content="javadoc/ClassWriterImpl">
 <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../../../../script-dir/jquery-ui.min.css" title="Style">
@@ -72,22 +72,22 @@ loadScripts(document, 'script');</script>
 <main role="main">
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">com.taco.suit_lady.util</a></div>
+<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">com.taco.tacository.util</a></div>
 <h1 title="Class UIDProcessor" class="title">Class UIDProcessor</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">com.taco.suit_lady.util.UIDProcessor</div>
+<div class="inheritance">com.taco.tacository.util.UIDProcessor</div>
 </div>
 <section class="description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="UID.html" title="interface in com.taco.suit_lady.util">UID</a></code></dd>
+<dd><code><a href="UID.html" title="interface in com.taco.tacository.util">UID</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">UIDProcessor</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
-implements <a href="UID.html" title="interface in com.taco.suit_lady.util">UID</a></span></div>
-<div class="block">A utility class designed to wrap the functionality of the <a href="UID.html" title="interface in com.taco.suit_lady.util"><code>UID</code></a> interface into its most common form, so that...
+implements <a href="UID.html" title="interface in com.taco.tacository.util">UID</a></span></div>
+<div class="block">A utility class designed to wrap the functionality of the <a href="UID.html" title="interface in com.taco.tacository.util"><code>UID</code></a> interface into its most common form, so that...
  <ol>
  <li><a href="UID.html#getUID(java.lang.Object...)"><code>UID.getUID(Object...)</code></a> returns a unique value for every new instance of <code>UIDProcessor</code> created.</li>
  <li>All objects passed into <a href="UID.html#getUID(java.lang.Object...)"><code>UID.getUID(Object...)</code></a> as parameters are appended to the UID (see method docs for details).</li>
@@ -130,7 +130,7 @@ implements <a href="UID.html" title="interface in com.taco.suit_lady.util">UID</
 <div class="col-first odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table"><code><span class="member-name-link"><a href="#getUID(java.lang.Object...)">getUID</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;params)</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table-tab4 method-summary-table">
-<div class="block">Returns a unique identification String for this <a href="UIDProcessor.html" title="class in com.taco.suit_lady.util"><code>UIDProcessor</code></a>.</div>
+<div class="block">Returns a unique identification String for this <a href="UIDProcessor.html" title="class in com.taco.tacository.util"><code>UIDProcessor</code></a>.</div>
 </div>
 </div>
 </div>
@@ -172,24 +172,24 @@ implements <a href="UID.html" title="interface in com.taco.suit_lady.util">UID</
 <section class="detail" id="getUID(java.lang.Object...)">
 <h3>getUID</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getUID</span>&#8203;<span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;params)</span></div>
-<div class="block">Returns a unique identification String for this <a href="UIDProcessor.html" title="class in com.taco.suit_lady.util"><code>UIDProcessor</code></a>.
+<div class="block">Returns a unique identification String for this <a href="UIDProcessor.html" title="class in com.taco.tacository.util"><code>UIDProcessor</code></a>.
  <p>
  All parameters passed into this method are appended to the UID returned by this method.
  <ol>
- <li>If a parameter implements <a href="UID.html" title="interface in com.taco.suit_lady.util"><code>UID</code></a>, its <a href="UID.html#getUID(java.lang.Object...)"><code>getUID(Object...)</code></a> method is called with no parameters.</li>
+ <li>If a parameter implements <a href="UID.html" title="interface in com.taco.tacository.util"><code>UID</code></a>, its <a href="UID.html#getUID(java.lang.Object...)"><code>getUID(Object...)</code></a> method is called with no parameters.</li>
  <li>Otherwise, the parameter's <code>toString()</code> method is called.</li>
  <li>A <code>NullPointerException</code> is thrown if any parameters are null.</li>
  </ol></div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="UID.html#getUID(java.lang.Object...)">getUID</a></code>&nbsp;in interface&nbsp;<code><a href="UID.html" title="interface in com.taco.suit_lady.util">UID</a></code></dd>
+<dd><code><a href="UID.html#getUID(java.lang.Object...)">getUID</a></code>&nbsp;in interface&nbsp;<code><a href="UID.html" title="interface in com.taco.tacository.util">UID</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>params</code> - Any additional values to be appended to the UID.
                Leave empty or null for no additional UID parameters.</dd>
 <dt>Returns:</dt>
-<dd>A unique identification String for this <a href="UIDProcessor.html" title="class in com.taco.suit_lady.util"><code>UIDProcessor</code></a>.</dd>
+<dd>A unique identification String for this <a href="UIDProcessor.html" title="class in com.taco.tacository.util"><code>UIDProcessor</code></a>.</dd>
 <dt>See Also:</dt>
-<dd><a href="UIDProcessor.html" title="class in com.taco.suit_lady.util"><code>UIDProcessor</code></a></dd>
+<dd><a href="UIDProcessor.html" title="class in com.taco.tacository.util"><code>UIDProcessor</code></a></dd>
 </dl>
 </section>
 </li>
@@ -203,11 +203,11 @@ implements <a href="UID.html" title="interface in com.taco.suit_lady.util">UID</
  For example, a class <code>Car</code> might return "car".</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="UID.html#getGroupID()">getGroupID</a></code>&nbsp;in interface&nbsp;<code><a href="UID.html" title="interface in com.taco.suit_lady.util">UID</a></code></dd>
+<dd><code><a href="UID.html#getGroupID()">getGroupID</a></code>&nbsp;in interface&nbsp;<code><a href="UID.html" title="interface in com.taco.tacository.util">UID</a></code></dd>
 <dt>Returns:</dt>
 <dd>A string value that is unique to this <code>UID</code> class implementation.</dd>
 <dt>See Also:</dt>
-<dd><a href="UIDProcessor.html" title="class in com.taco.suit_lady.util"><code>UIDProcessor</code></a></dd>
+<dd><a href="UIDProcessor.html" title="class in com.taco.tacository.util"><code>UIDProcessor</code></a></dd>
 </dl>
 </section>
 </li>

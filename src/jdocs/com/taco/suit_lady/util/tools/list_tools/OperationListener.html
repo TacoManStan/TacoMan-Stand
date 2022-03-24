@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="dc.created" content="2021-12-13">
-<meta name="description" content="declaration: package: com.taco.suit_lady.util.tools.list_tools, interface: OperationListener">
+<meta name="description" content="declaration: package: com.taco.tacository.util.tools.list_tools, interface: OperationListener">
 <meta name="generator" content="javadoc/ClassWriterImpl">
 <link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../../../../../../script-dir/jquery-ui.min.css" title="Style">
@@ -72,36 +72,36 @@ loadScripts(document, 'script');</script>
 <main role="main">
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">com.taco.suit_lady.util.tools.list_tools</a></div>
+<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">com.taco.tacository.util.tools.list_tools</a></div>
 <h1 title="Interface OperationListener" class="title">Interface OperationListener&lt;E&gt;</h1>
 </div>
 <section class="description">
 <dl class="notes">
 <dt>Type Parameters:</dt>
-<dd><code>E</code> - The type of element in the <code>ObservableList</code> this <a href="OperationListener.html" title="interface in com.taco.suit_lady.util.tools.list_tools"><code>OperationListener</code></a> is listening to.</dd>
+<dd><code>E</code> - The type of element in the <code>ObservableList</code> this <a href="OperationListener.html" title="interface in com.taco.tacository.util.tools.list_tools"><code>OperationListener</code></a> is listening to.</dd>
 </dl>
 <dl class="notes">
 <dt>All Known Subinterfaces:</dt>
-<dd><code><a href="ListTools.OperationResponder.html" title="interface in com.taco.suit_lady.util.tools.list_tools">ListTools.OperationResponder</a>&lt;E&gt;</code>, <code><a href="ListTools.SimpleOperationListener.html" title="interface in com.taco.suit_lady.util.tools.list_tools">ListTools.SimpleOperationListener</a>&lt;E&gt;</code>, <code><a href="ListTools.SimpleOperationResponder.html" title="interface in com.taco.suit_lady.util.tools.list_tools">ListTools.SimpleOperationResponder</a>&lt;E&gt;</code>, <code><a href="ListTools.UnlinkedOperationResponder.html" title="interface in com.taco.suit_lady.util.tools.list_tools">ListTools.UnlinkedOperationResponder</a>&lt;E&gt;</code></dd>
+<dd><code><a href="ListTools.OperationResponder.html" title="interface in com.taco.tacository.util.tools.list_tools">ListTools.OperationResponder</a>&lt;E&gt;</code>, <code><a href="ListTools.SimpleOperationListener.html" title="interface in com.taco.tacository.util.tools.list_tools">ListTools.SimpleOperationListener</a>&lt;E&gt;</code>, <code><a href="ListTools.SimpleOperationResponder.html" title="interface in com.taco.tacository.util.tools.list_tools">ListTools.SimpleOperationResponder</a>&lt;E&gt;</code>, <code><a href="ListTools.UnlinkedOperationResponder.html" title="interface in com.taco.tacository.util.tools.list_tools">ListTools.UnlinkedOperationResponder</a>&lt;E&gt;</code></dd>
 </dl>
 <dl class="notes">
 <dt>All Known Implementing Classes:</dt>
-<dd><code><a href="OperationHandler.html" title="class in com.taco.suit_lady.util.tools.list_tools">OperationHandler</a></code></dd>
+<dd><code><a href="OperationHandler.html" title="class in com.taco.tacository.util.tools.list_tools">OperationHandler</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">OperationListener&lt;E&gt;</span></div>
 <div class="block"><p>An interface used to help streamline <code>ListChangeListener</code> events to be more easily understandable.</p>
  <h2>Details</h2>
- <p>The primary usage pattern for <a href="OperationListener.html" title="interface in com.taco.suit_lady.util.tools.list_tools"><code>OperationListener</code></a> is as follows:</p>
+ <p>The primary usage pattern for <a href="OperationListener.html" title="interface in com.taco.tacository.util.tools.list_tools"><code>OperationListener</code></a> is as follows:</p>
  <ol>
-     <li>The primary implementation of <a href="OperationListener.html" title="interface in com.taco.suit_lady.util.tools.list_tools"><code>OperationListener</code></a> is the <a href="OperationHandler.html" title="class in com.taco.suit_lady.util.tools.list_tools"><code>OperationHandler</code></a> class.</li>
+     <li>The primary implementation of <a href="OperationListener.html" title="interface in com.taco.tacository.util.tools.list_tools"><code>OperationListener</code></a> is the <a href="OperationHandler.html" title="class in com.taco.tacository.util.tools.list_tools"><code>OperationHandler</code></a> class.</li>
      <li>
-         <a href="OperationListener.html" title="interface in com.taco.suit_lady.util.tools.list_tools"><code>OperationListeners</code></a> are used as the input to <a href="OperationHandler.html" title="class in com.taco.suit_lady.util.tools.list_tools"><code>OperationHandler</code></a> static factory methods located in <a href="ListTools.html" title="class in com.taco.suit_lady.util.tools.list_tools"><code>ListTools</code></a>
+         <a href="OperationListener.html" title="interface in com.taco.tacository.util.tools.list_tools"><code>OperationListeners</code></a> are used as the input to <a href="OperationHandler.html" title="class in com.taco.tacository.util.tools.list_tools"><code>OperationHandler</code></a> static factory methods located in <a href="ListTools.html" title="class in com.taco.tacository.util.tools.list_tools"><code>ListTools</code></a>
          <ul>
              <li>Root Factory Method: <i><a href="ListTools.html#applyListener(java.util.concurrent.locks.ReentrantLock,javafx.collections.ObservableList,com.taco.suit_lady.util.tools.list_tools.OperationListener)"><code>ListTools.applyListener(... OperationListener)</code></a></i></li>
          </ul>
      </li>
-     <li>Various interface extensions of <a href="OperationListener.html" title="interface in com.taco.suit_lady.util.tools.list_tools"><code>OperationListener</code></a> exist to allow varying amounts and types of lambda factory input parameters.</li>
+     <li>Various interface extensions of <a href="OperationListener.html" title="interface in com.taco.tacository.util.tools.list_tools"><code>OperationListener</code></a> exist to allow varying amounts and types of lambda factory input parameters.</li>
  </ol>
  <hr>
  <h2>Operation Event Response Functions</h2>
@@ -139,11 +139,11 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><span class="member-name-link"><a href="#onAdd(com.taco.suit_lady.util.tools.list_tools.Operation)">onAdd</a></span>&#8203;(<a href="Operation.html" title="class in com.taco.suit_lady.util.tools.list_tools">Operation</a>&lt;<a href="OperationListener.html" title="type parameter in OperationListener">E</a>&gt;&nbsp;op)</code></div>
+<div class="col-second even-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><span class="member-name-link"><a href="#onAdd(com.taco.suit_lady.util.tools.list_tools.Operation)">onAdd</a></span>&#8203;(<a href="Operation.html" title="class in com.taco.tacository.util.tools.list_tools">Operation</a>&lt;<a href="OperationListener.html" title="type parameter in OperationListener">E</a>&gt;&nbsp;op)</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><span class="member-name-link"><a href="#onPermutate(com.taco.suit_lady.util.tools.list_tools.Operation,com.taco.suit_lady.util.tools.list_tools.Operation)">onPermutate</a></span>&#8203;(<a href="Operation.html" title="class in com.taco.suit_lady.util.tools.list_tools">Operation</a>&lt;<a href="OperationListener.html" title="type parameter in OperationListener">E</a>&gt;&nbsp;op,
- <a href="Operation.html" title="class in com.taco.suit_lady.util.tools.list_tools">Operation</a>&lt;<a href="OperationListener.html" title="type parameter in OperationListener">E</a>&gt;&nbsp;op2)</code></div>
+<div class="col-second odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><span class="member-name-link"><a href="#onPermutate(com.taco.suit_lady.util.tools.list_tools.Operation,com.taco.suit_lady.util.tools.list_tools.Operation)">onPermutate</a></span>&#8203;(<a href="Operation.html" title="class in com.taco.tacository.util.tools.list_tools">Operation</a>&lt;<a href="OperationListener.html" title="type parameter in OperationListener">E</a>&gt;&nbsp;op,
+ <a href="Operation.html" title="class in com.taco.tacository.util.tools.list_tools">Operation</a>&lt;<a href="OperationListener.html" title="type parameter in OperationListener">E</a>&gt;&nbsp;op2)</code></div>
 <div class="col-last odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3">
 <div class="block">Executed for each <code>permutation</code> operation that is performed on the <code>ObservableList</code>.</div>
 </div>
@@ -178,7 +178,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Executed <u>prior</u> to triggering all <code>removal</code> operations that occurred in a single <code>Change Event</code> <code>step</code>.</div>
 </div>
 <div class="col-first even-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><span class="member-name-link"><a href="#onRemove(com.taco.suit_lady.util.tools.list_tools.Operation)">onRemove</a></span>&#8203;(<a href="Operation.html" title="class in com.taco.suit_lady.util.tools.list_tools">Operation</a>&lt;<a href="OperationListener.html" title="type parameter in OperationListener">E</a>&gt;&nbsp;op)</code></div>
+<div class="col-second even-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><span class="member-name-link"><a href="#onRemove(com.taco.suit_lady.util.tools.list_tools.Operation)">onRemove</a></span>&#8203;(<a href="Operation.html" title="class in com.taco.tacository.util.tools.list_tools">Operation</a>&lt;<a href="OperationListener.html" title="type parameter in OperationListener">E</a>&gt;&nbsp;op)</code></div>
 <div class="col-last even-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table-tab2 method-summary-table method-summary-table-tab3"><code><span class="member-name-link"><a href="#onUpdate(int,int)">onUpdate</a></span>&#8203;(int&nbsp;from,
@@ -203,8 +203,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onPermutate(com.taco.suit_lady.util.tools.list_tools.Operation,com.taco.suit_lady.util.tools.list_tools.Operation)">
 <h3>onPermutate</h3>
-<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">onPermutate</span>&#8203;<span class="parameters">(<a href="Operation.html" title="class in com.taco.suit_lady.util.tools.list_tools">Operation</a>&lt;<a href="OperationListener.html" title="type parameter in OperationListener">E</a>&gt;&nbsp;op,
- <a href="Operation.html" title="class in com.taco.suit_lady.util.tools.list_tools">Operation</a>&lt;<a href="OperationListener.html" title="type parameter in OperationListener">E</a>&gt;&nbsp;op2)</span></div>
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">onPermutate</span>&#8203;<span class="parameters">(<a href="Operation.html" title="class in com.taco.tacository.util.tools.list_tools">Operation</a>&lt;<a href="OperationListener.html" title="type parameter in OperationListener">E</a>&gt;&nbsp;op,
+ <a href="Operation.html" title="class in com.taco.tacository.util.tools.list_tools">Operation</a>&lt;<a href="OperationListener.html" title="type parameter in OperationListener">E</a>&gt;&nbsp;op2)</span></div>
 <div class="block"><p>Executed for each <code>permutation</code> operation that is performed on the <code>ObservableList</code>.</p>
  <h4>Details</h4>
  <ol>
@@ -218,8 +218,8 @@ loadScripts(document, 'script');</script>
  </ol></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>op</code> - The primary <a href="Operation.html" title="class in com.taco.suit_lady.util.tools.list_tools"><code>Operation</code></a>.</dd>
-<dd><code>op2</code> - The secondary <a href="Operation.html" title="class in com.taco.suit_lady.util.tools.list_tools"><code>Operation</code></a>.</dd>
+<dd><code>op</code> - The primary <a href="Operation.html" title="class in com.taco.tacository.util.tools.list_tools"><code>Operation</code></a>.</dd>
+<dd><code>op2</code> - The secondary <a href="Operation.html" title="class in com.taco.tacository.util.tools.list_tools"><code>Operation</code></a>.</dd>
 </dl>
 </section>
 </li>
@@ -248,7 +248,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onAdd(com.taco.suit_lady.util.tools.list_tools.Operation)">
 <h3>onAdd</h3>
-<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">onAdd</span>&#8203;<span class="parameters">(<a href="Operation.html" title="class in com.taco.suit_lady.util.tools.list_tools">Operation</a>&lt;<a href="OperationListener.html" title="type parameter in OperationListener">E</a>&gt;&nbsp;op)</span></div>
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">onAdd</span>&#8203;<span class="parameters">(<a href="Operation.html" title="class in com.taco.tacository.util.tools.list_tools">Operation</a>&lt;<a href="OperationListener.html" title="type parameter in OperationListener">E</a>&gt;&nbsp;op)</span></div>
 </section>
 </li>
 <li>
@@ -276,7 +276,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onRemove(com.taco.suit_lady.util.tools.list_tools.Operation)">
 <h3>onRemove</h3>
-<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">onRemove</span>&#8203;<span class="parameters">(<a href="Operation.html" title="class in com.taco.suit_lady.util.tools.list_tools">Operation</a>&lt;<a href="OperationListener.html" title="type parameter in OperationListener">E</a>&gt;&nbsp;op)</span></div>
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">onRemove</span>&#8203;<span class="parameters">(<a href="Operation.html" title="class in com.taco.tacository.util.tools.list_tools">Operation</a>&lt;<a href="OperationListener.html" title="type parameter in OperationListener">E</a>&gt;&nbsp;op)</span></div>
 </section>
 </li>
 <li>
