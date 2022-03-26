@@ -19,7 +19,6 @@ public class MainApplication {
      * <hr>
      */
     public static void main(String[] args) {
-        System.out.println(Font.loadFont(MainApplication.class.getResourceAsStream("/fonts/Menlo-Regular.ttf"), 10));
         Application.launch(FXApplication.class, args);
     }
     

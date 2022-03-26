@@ -81,8 +81,6 @@ public class FXApplication extends Application {
         // TODO - Update JavaDoc for this method to accurately reflect ApplicationContext initialization process.
         
         // Constructs a new SpringApplicationBuilder instance to handle the ApplicationContext initialization
-        System.out.println("Params: " + getParameters().getRaw());
-        System.out.println("XML Config: " + Arrays.asList(StartupUtil.ROOT.XML.ctx_config()));
         ctx = new SpringApplicationBuilder().sources(MainApplication.class) // Defines all global-scope class-based configurations
                                             .parent(new ClassPathXmlApplicationContext(StartupUtil.ROOT.XML.ctx_config())) // Gives global scope access to applicable XML Configurations
                                             .run(getParameters().getRaw().toArray(new String[0])); // Executes the application builder using no arguments
