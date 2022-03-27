@@ -12,6 +12,8 @@ The Tacository offers a variety of abstract modular frameworks that together for
 >
 > More detailed information can be found in Javadocs.
 
+---
+
 ## 2 Modules
 
 ### [2.1] Foundation Modules
@@ -223,6 +225,8 @@ public class AttributePageController {
 #### [2.2.7] Drag and Drop Framework
 
 #### [2.2.8] ImageButton Framework
+
+---
 
 ### [3] Flow Models
 
