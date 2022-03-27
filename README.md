@@ -4,7 +4,7 @@ _IN PROGRESS_
 
 The Tacository offers a variety of abstract modular frameworks that together form a fully-functional, dynamic, modular application.
 
-## 1 Overview
+## 1. Overview
 
 > The Tacository is a modular JavaFX framework designed to work with internal logic modules.
 >
@@ -14,7 +14,7 @@ The Tacository offers a variety of abstract modular frameworks that together for
 
 ---
 
-## 2 Modules
+## 2. Modules
 
 ### [2.1] Foundation Modules
 
@@ -228,7 +228,7 @@ public class AttributePageController {
 
 ---
 
-### [3] Flow Models
+### 3. Flow Models
 
 #### [3.1] Spring
 
