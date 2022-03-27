@@ -224,11 +224,11 @@ public class AttributePageController {
 
 #### [2.2.8] ImageButton Framework
 
-### [2.3] Flow Models
+### [3] Flow Models
 
-#### [2.3.1] Spring
+#### [3.1] Spring
 
-##### [2.3.1.1] Spring Initialization
+##### [3.1.1] Spring Initialization
 
 ```mermaid
 graph LR
@@ -241,7 +241,7 @@ FXA -- FxWeaver --> FXWI
 FXWI -- Controller Initialization --> AC
 ```
 
-##### Spring Components
+##### [3.1.2] Spring Components
 
 ```mermaid
 graph TB
@@ -259,7 +259,7 @@ SC --> PR
 
 ```
 
-#### LogiCore Flow
+#### [3.2] LogiCore Flow
 
 ```mermaid
 graph TB
@@ -281,7 +281,7 @@ LC --> TE
 
 ```
 
-#### AppUI Flow
+#### [3.3] AppUI Flow
 
 ```mermaid
 
