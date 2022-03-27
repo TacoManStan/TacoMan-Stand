@@ -41,7 +41,8 @@ The Tacository offers a variety of abstract modular frameworks that together for
 
 ##### UIPage
 
-> Each `UIBook` is defined by one or more `UIPage` instances.  
+> Each `UIBook` is defined by one or more `UIPage` instances.
+> 
 > The `Sidebar` framework allows a `UIBook` to turn to any number of pages, with a framework-integrated back button appearing upon a page turn, permitting the user to turn back to the previous page.
 
 #### LogiCore
@@ -51,7 +52,8 @@ The Tacository offers a variety of abstract modular frameworks that together for
 ##### Tickable
 
 > The `Tickable` interface provides the backbone of logic execution.  
-> The `Tickable` interface offers one abstract method, `taskManager()`.  
+> The `Tickable` interface offers one abstract method, `taskManager()`.
+> 
 > The `taskManager()` method supplies a `TaskManager` instance that handles the logic of the `Tickable` implementation.
 
 > _See `TaskManager` documentation for additional information._
@@ -59,7 +61,8 @@ The Tacository offers a variety of abstract modular frameworks that together for
 
 ##### TaskManager
 
-> The `TaskManager` class handles the logic execution for a `Tickable` object.  
+> The `TaskManager` class handles the logic execution for a `Tickable` object.
+> 
 > The `TaskManager` is powered primarily by `GameTask` objects.
 
 > _See `TaskManager` documentation for additional information._
