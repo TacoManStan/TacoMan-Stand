@@ -133,6 +133,8 @@ public class GameMap
     
     private final PrintData p;
     
+    private final boolean enablePathfindingTestImage = false;
+    
     public GameMap(@NotNull GameViewContent content, @Nullable ReentrantLock lock, int tileSize, String mapID) {
         this.content = content;
         this.lock = lock != null ? lock : new ReentrantLock();
@@ -181,12 +183,14 @@ public class GameMap
         //        ArraysSL.iterateMatrix(GameTile::init, getTileMatrix());
         this.model.refreshMapImage();
         
-        this.testPaintCommand.init();
-        this.testPaintCommand.setPaintPriority(0);
-        this.getModel().getCanvas().addPaintable(testPaintCommand);
-        
-        this.getModel().getCanvas().widthBinding().addListener((observable, oldValue, newValue) -> refreshTestImage());
-        this.getModel().getCanvas().heightBinding().addListener((observable, oldValue, newValue) -> refreshTestImage());
+        if (enablePathfindingTestImage) {
+            this.testPaintCommand.init();
+            this.testPaintCommand.setPaintPriority(0);
+            this.getModel().getCanvas().addPaintable(testPaintCommand);
+    
+            this.getModel().getCanvas().widthBinding().addListener((observable, oldValue, newValue) -> refreshTestImage());
+            this.getModel().getCanvas().heightBinding().addListener((observable, oldValue, newValue) -> refreshTestImage());
+        }
         
         return this;
     }
