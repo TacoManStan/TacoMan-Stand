@@ -7,6 +7,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.input.MouseButton;
@@ -49,9 +50,7 @@ public class HyperlinkFX {
             String key, String text,
             EventHandler<ActionEvent> leftClickHandler
                       ) {
-        this(key, text, leftClickHandler, event ->
-        {
-        });
+        this(key, text, leftClickHandler, event -> { });
     }
     
     /**
@@ -67,9 +66,7 @@ public class HyperlinkFX {
             EventHandler<ActionEvent> leftClickHandler,
             EventHandler<ActionEvent> rightClickHandler
                       ) {
-        this(key, text, leftClickHandler, rightClickHandler, event ->
-        {
-        }, null);
+        this(key, text, leftClickHandler, rightClickHandler, event -> { }, null);
     }
     
     /**
@@ -303,7 +300,7 @@ public class HyperlinkFX {
         return "HyperlinkFX{" + "key=" + key + ", text=" + getText() + ", eventHandler=" + leftClickHandler + '}';
     }
     
-    private EventHandler<ActionEvent> createEventHandler(EventHandler source) {
+    private EventHandler<ActionEvent> createEventHandler(EventHandler<ActionEvent> source) {
         if (source != null)
             return event ->
             {
