@@ -19,7 +19,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * <p>Defines an {@link #execute() executable} {@code task} designed to be executed by a {@link TaskManager} object, typically contained by the {@link Tickable} {@link E Type} for this {@link GameTask}.</p>
  * <p><b>Details</b></p>
  * <ol>
- *     <li>To construct a new {@link GameTask}, use any of the available {@link GameTask#GameTask(GameComponent, Tickable) Constructors} or {@link Galaxy#newOneTimeTask(GameComponent, Tickable, Runnable) Factory Methods} located in the static {@link Galaxy} utility class.</li>
+ *     <li>To construct a new {@link GameTask}, use any of the available {@link GameTask#GameTask(GameComponent, Tickable) Constructors} or {@link Galaxy#newOneTimeGameTask(GameComponent, Tickable, Runnable) Factory Methods} located in the static {@link Galaxy} utility class.</li>
  *     <li>Most commonly, {@link GameTask GameTasks} are added to a {@link Tickable} implementation to be processed by the {@link Tickable Tickables} {@link Tickable#taskManager() TaskManager}.</li>
  * </ol>
  * <p><i>See {@link TaskManager} for additional information.</i></p>

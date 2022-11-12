@@ -147,8 +147,8 @@ public final class Galaxy {
     
     //<editor-fold desc="> GameTask Factory Methods">
     
-    public static <E extends Tickable<E>> @NotNull OneTimeTask<E> newOneTimeTask(@NotNull E owner, @NotNull Runnable action) { return newOneTimeTask(null, owner, action); }
-    public static <E extends Tickable<E>> @NotNull OneTimeTask<E> newOneTimeTask(@Nullable GameComponent gameComponent, @NotNull E owner, @NotNull Runnable action) {
+    public static <E extends Tickable<E>> @NotNull OneTimeTask<E> newOneTimeTask(@NotNull E owner, @NotNull Runnable action) { return newOneTimeGameTask(null, owner, action); }
+    public static <E extends Tickable<E>> @NotNull OneTimeTask<E> newOneTimeGameTask(@Nullable GameComponent gameComponent, @NotNull E owner, @NotNull Runnable action) {
         return new OneTimeTask<>(gameComponent, owner) {
             @Override protected void tick() { action.run(); }
         };

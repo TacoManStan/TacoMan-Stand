@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
-@FxmlView("/fxml/game/content/game_view_footer.fxml")
+@FxmlView("/fxml/nia/nia_footer.fxml")
 @Scope("prototype")
 public class NiaFooterController
         extends FooterController<NiaFooter, NiaFooterController, NiaContent, NiaContentData, NiaContentController> {

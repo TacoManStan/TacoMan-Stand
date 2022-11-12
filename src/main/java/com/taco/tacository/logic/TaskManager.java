@@ -30,7 +30,7 @@ import java.util.function.Supplier;
  *         <ul>
  *             <li>Fully-custom {@link GameTask} implementations can be added or removed using the <i>{@link #addTask(GameTask)}</i> or <i>{@link #removeTask(GameTask)}</i> methods.</li>
  *             <li>The <i>{@link #addTaskAndGet(GameTask)}</i> and <i>{@link #removeTaskAndGet(GameTask)}</i> methods can be used to access the {@link GameTask} object itself.</li>
- *             <li>New {@link GameTask} instances can be constructed using either a {@link Galaxy} {@link Galaxy#newOneTimeTask(GameComponent, Tickable, Runnable) Factory Method} or by using any of the available {@link GameTask} {@link GameTask#GameTask(GameComponent, Tickable) Constructors}.</li>
+ *             <li>New {@link GameTask} instances can be constructed using either a {@link Galaxy} {@link Galaxy#newOneTimeGameTask(GameComponent, Tickable, Runnable) Factory Method} or by using any of the available {@link GameTask} {@link GameTask#GameTask(GameComponent, Tickable) Constructors}.</li>
  *         </ul>
  *     </li>
  *     <li>

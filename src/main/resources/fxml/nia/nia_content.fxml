@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+
+<AnchorPane fx:id="root" prefHeight="500.0" prefWidth="1000.0" stylesheets="/css/main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.taco.tacository.game.ui.nia.NiaContentController">
+    <children>
+        <BorderPane fx:id="borderPaneRoot" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <center>
+                <AnchorPane fx:id="mapPane" />
+            </center>
+        </BorderPane>
+    </children>
+</AnchorPane>
