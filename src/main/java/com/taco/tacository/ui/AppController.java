@@ -1,10 +1,8 @@
 package com.taco.tacository.ui;
 
 import com.taco.tacository.game.ui.GameViewContent;
-import com.taco.tacository.game.ui.nia.NiaContent;
+import com.taco.tacository.game.ui.nia.framework.NiaContent;
 import com.taco.tacository.logic.triggers.Galaxy;
-import com.taco.tacository.ui.contents.mandelbrot.MandelbrotContent;
-import com.taco.tacository.ui.contents.mandelbrot.mandelbrot_content_selector_page.MandelbrotContentHandler;
 import com.taco.tacository.ui.jfx.components.button.ImageButton;
 import com.taco.tacository.ui.jfx.components.ImagePane;
 import com.taco.tacository.ui.pages.entity_debug_page.EntityDebugPage;
@@ -589,11 +587,11 @@ public class AppController
     private NiaContent niaContent;
     
     private void initContent() {
-        gameContent = (new GameViewContent(this)).init();
+//        gameContent = (new GameViewContent(this)).init();
         niaContent = (new NiaContent(this)).init();
     }
     
-    public final GameViewContent getGameContent() { return gameContent; }
+    public final Content getGameContent() { return niaContent; }
     
     //
     

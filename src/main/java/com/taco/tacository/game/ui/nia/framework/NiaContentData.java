@@ -1,8 +1,6 @@
-package com.taco.tacository.game.ui.nia;
+package com.taco.tacository.game.ui.nia.framework;
 
 import com.taco.tacository._to_sort._new.interfaces.ObservablePropertyContainable;
-import com.taco.tacository.game.GameComponent;
-import com.taco.tacository.game.ui.*;
 import com.taco.tacository.ui.ContentData;
 import com.taco.tacository.util.UIDProcessable;
 import com.taco.tacository.util.UIDProcessor;

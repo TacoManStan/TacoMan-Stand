@@ -1,9 +1,7 @@
-package com.taco.tacository.game.ui.nia;
+package com.taco.tacository.game.ui.nia.framework;
 
 import com.taco.tacository.game.ui.GameFooterController;
 import com.taco.tacository.game.ui.GameViewContent;
-import com.taco.tacository.game.ui.GameViewContentController;
-import com.taco.tacository.game.ui.GameViewContentData;
 import com.taco.tacository.ui.Content;
 import com.taco.tacository.ui.Footer;
 import org.jetbrains.annotations.NotNull;

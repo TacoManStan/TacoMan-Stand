@@ -1,6 +1,5 @@
-package com.taco.tacository.game.ui.nia;
+package com.taco.tacository.game.ui.nia.framework;
 
-import com.taco.tacository.game.GameComponent;
 import com.taco.tacository.game.GameMap;
 import com.taco.tacository.game.objects.tiles.GameTile;
 import com.taco.tacository.game.ui.GameViewContent;

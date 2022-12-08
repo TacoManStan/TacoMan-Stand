@@ -1,4 +1,4 @@
-package com.taco.tacository.game.ui.nia;
+package com.taco.tacository.game.ui.nia.framework;
 
 import com.taco.tacository.logic.GameTask;
 import com.taco.tacository.logic.Tickable;

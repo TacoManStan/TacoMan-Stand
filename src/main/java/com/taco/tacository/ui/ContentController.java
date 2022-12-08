@@ -1,5 +1,6 @@
 package com.taco.tacository.ui;
 
+import com.taco.tacository.game.GameComponent;
 import com.taco.tacository.game.ui.GFXObject;
 import com.taco.tacository.logic.TaskManager;
 import com.taco.tacository.logic.Tickable;
@@ -151,34 +152,40 @@ public abstract class ContentController<T extends Content<T, TD, TC, F, FC>, TD 
         getContentPane().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
             if (getContent().handleMousePressEvent(event, true))
                 event.consume();
-            taskManager().addTask(Galaxy.newOneTimeTask((TC) this, () -> getContent().handleMousePressEvent(event, false)));
+            if (this instanceof GameComponent)
+                taskManager().addTask(Galaxy.newOneTimeTask((TC) this, () -> getContent().handleMousePressEvent(event, false)));
         });
         getContentPane().addEventFilter(MouseEvent.MOUSE_RELEASED, event -> {
             if (getContent().handleMouseReleaseEvent(event, true))
                 event.consume();
-            taskManager().addTask(Galaxy.newOneTimeTask((TC) this, () -> getContent().handleMouseReleaseEvent(event, false)));
+            if (this instanceof GameComponent)
+                taskManager().addTask(Galaxy.newOneTimeTask((TC) this, () -> getContent().handleMouseReleaseEvent(event, false)));
         });
         
         getContentPane().addEventFilter(MouseEvent.MOUSE_MOVED, event -> {
             if (getContent().handleMouseMoveEvent(event, true))
                 event.consume();
-            taskManager().addTask(Galaxy.newOneTimeTask((TC) this, () -> getContent().handleMouseMoveEvent(event, false)));
+            if (this instanceof GameComponent)
+                taskManager().addTask(Galaxy.newOneTimeTask((TC) this, () -> getContent().handleMouseMoveEvent(event, false)));
         });
         getContentPane().addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
             if (getContent().handleMouseDragEvent(event, true))
                 event.consume();
-            taskManager().addTask(Galaxy.newOneTimeTask((TC) this, () -> getContent().handleMouseDragEvent(event, false)));
+            if (this instanceof GameComponent)
+                taskManager().addTask(Galaxy.newOneTimeTask((TC) this, () -> getContent().handleMouseDragEvent(event, false)));
         });
         
         getContentPane().addEventFilter(MouseEvent.MOUSE_ENTERED, event -> {
             if (getContent().handleMouseEnterEvent(event, true))
                 event.consume();
-            taskManager().addTask(Galaxy.newOneTimeTask((TC) this, () -> getContent().handleMouseEnterEvent(event, false)));
+            if (this instanceof GameComponent)
+                taskManager().addTask(Galaxy.newOneTimeTask((TC) this, () -> getContent().handleMouseEnterEvent(event, false)));
         });
         getContentPane().addEventFilter(MouseEvent.MOUSE_EXITED, event -> {
             if (getContent().handleMouseExitEvent(event, true))
                 event.consume();
-            taskManager().addTask(Galaxy.newOneTimeTask((TC) this, () -> getContent().handleMouseExitEvent(event, false)));
+            if (this instanceof GameComponent)
+                taskManager().addTask(Galaxy.newOneTimeTask((TC) this, () -> getContent().handleMouseExitEvent(event, false)));
         });
     }
     

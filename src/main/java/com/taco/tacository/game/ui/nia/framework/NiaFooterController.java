@@ -1,9 +1,5 @@
-package com.taco.tacository.game.ui.nia;
+package com.taco.tacository.game.ui.nia.framework;
 
-import com.taco.tacository.game.ui.GameFooter;
-import com.taco.tacository.game.ui.GameViewContent;
-import com.taco.tacository.game.ui.GameViewContentController;
-import com.taco.tacository.game.ui.GameViewContentData;
 import com.taco.tacository.ui.FooterController;
 import com.taco.tacository.ui.jfx.components.ImagePane;
 import com.taco.tacository.ui.jfx.components.button.ImageButton;
