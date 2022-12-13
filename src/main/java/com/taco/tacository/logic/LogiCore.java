@@ -117,6 +117,8 @@ public class LogiCore
         
         Printer.print("Starting Up");
         tickables.addListener((ListChangeListener<? super Tickable<?>>) c -> {
+            
+            
             needsCopyRefresh = true;
             Printer.err("Value Changed");
         });

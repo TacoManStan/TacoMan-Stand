@@ -1,4 +1,4 @@
-package com.taco.tacository.game.ui.nia.framework;
+package com.taco.tacository.nia.framework;
 
 import com.taco.tacository.ui.FooterController;
 import com.taco.tacository.ui.jfx.components.ImagePane;

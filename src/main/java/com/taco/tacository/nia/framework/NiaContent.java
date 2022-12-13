@@ -1,4 +1,4 @@
-package com.taco.tacository.game.ui.nia.framework;
+package com.taco.tacository.nia.framework;
 
 import com.taco.tacository.game.GameMap;
 import com.taco.tacository.game.attributes.AttributePage;

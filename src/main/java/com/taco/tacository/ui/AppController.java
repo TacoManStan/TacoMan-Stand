@@ -1,7 +1,7 @@
 package com.taco.tacository.ui;
 
 import com.taco.tacository.game.ui.GameViewContent;
-import com.taco.tacository.game.ui.nia.framework.NiaContent;
+import com.taco.tacository.nia.framework.NiaContent;
 import com.taco.tacository.logic.triggers.Galaxy;
 import com.taco.tacository.ui.jfx.components.button.ImageButton;
 import com.taco.tacository.ui.jfx.components.ImagePane;
