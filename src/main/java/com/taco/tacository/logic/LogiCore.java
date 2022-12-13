@@ -5,8 +5,6 @@ import com.taco.tacository._to_sort._new.initialization.Initializer;
 import com.taco.tacository._to_sort._new.initialization.LockMode;
 import com.taco.tacository.game.ui.GFXObject;
 import com.taco.tacository.logic.triggers.TriggerEventManager;
-import com.taco.tacository.game.GameComponent;
-import com.taco.tacository.game.ui.GameViewContent;
 import com.taco.tacository.ui.Content;
 import com.taco.tacository.util.synchronization.Lockable;
 import com.taco.tacository.util.springable.Springable;
@@ -58,7 +56,7 @@ public class LogiCore
     
     private final Initializer<LogiCore> initializer;
     
-    private final ReadOnlyObjectWrapper<ContentComponent> contentComponentProperty;
+    private final ReadOnlyObjectWrapper<Content> contentProperty;
     
     //
     
@@ -92,7 +90,7 @@ public class LogiCore
                 null,
                 LockMode.OWNER_OR_NEW_LOCK);
         
-        this.contentComponentProperty = new ReadOnlyObjectWrapper<>();
+        this.contentProperty = new ReadOnlyObjectWrapper<>();
         
         //
         
@@ -115,8 +113,7 @@ public class LogiCore
     //<editor-fold desc="--- INITIALIZATION ---">
     
     private void startup(@NotNull Object @NotNull [] params) {
-        System.out.println("VALUE: " + params[0]);
-        contentComponentProperty.set((ContentComponent<?>) params[0]);
+        contentProperty.set((Content) params[0]);
         
         Printer.print("Starting Up");
         tickables.addListener((ListChangeListener<? super Tickable<?>>) c -> {
@@ -151,8 +148,8 @@ public class LogiCore
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    public final @NotNull ReadOnlyObjectProperty<ContentComponent<?>> readOnlyGameProperty() { return contentComponentProperty.getReadOnlyProperty(); }
-    @Override public final @NotNull GameViewContent getContent() { return contentComponentProperty.get(); }
+    public final @NotNull ReadOnlyObjectProperty<Content> readOnlyContentComponentProperty() { return contentProperty.getReadOnlyProperty(); }
+    @Override public final @NotNull Content getContent() { return contentProperty.get(); }
     
     public final @NotNull TriggerEventManager triggers() { return triggers; }
     
@@ -273,7 +270,11 @@ public class LogiCore
     @Override public @NotNull FxWeaver weaver() { return weaver; }
     @Override public @NotNull ConfigurableApplicationContext ctx() { return ctx; }
     
-    @Override public @Nullable Lock getLock() { return contentComponentProperty.get() != null ? contentComponentProperty.get().getLock() : null; }
+    @Override public @Nullable Lock getLock() {
+        if (contentProperty.get() != null && contentProperty.get() instanceof Lockable)
+            return ((Lockable) contentProperty.get()).getLock();
+        return null;
+    }
     
     @Override public final @NotNull Initializer<LogiCore> initializer() { return initializer; }
     

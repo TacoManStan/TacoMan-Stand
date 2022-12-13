@@ -2,6 +2,8 @@ package com.taco.tacository.logic.triggers;
 
 import com.taco.tacository.game.GameComponent;
 import com.taco.tacository.game.ui.GameViewContent;
+import com.taco.tacository.logic.ContentComponent;
+import com.taco.tacository.ui.Content;
 import com.taco.tacository.util.synchronization.Lockable;
 import com.taco.tacository.util.springable.Springable;
 import com.taco.tacository.util.springable.SpringableWrapper;
@@ -32,8 +34,8 @@ import java.util.concurrent.locks.Lock;
  * @param <T> The type of {@link TriggerEvent} the {@link Trigger Triggers} contained within this {@link TriggerGroup} are assigned to.
  */
 //TO-EXPAND - Examples
-public final class TriggerGroup<T extends TriggerEvent<T>>
-        implements SpringableWrapper, Lockable, GameComponent {
+@SuppressWarnings("rawtypes") public final class TriggerGroup<T extends TriggerEvent<T>>
+        implements SpringableWrapper, Lockable, ContentComponent {
     
     private final TriggerEventManager manager;
     private final ListProperty<Trigger<T>> triggers;
@@ -54,7 +56,7 @@ public final class TriggerGroup<T extends TriggerEvent<T>>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull GameViewContent getContent() { return manager.getGame(); }
+    @Override public @NotNull Content getContent() { return manager.getContent(); }
     
     @Override public @NotNull Springable springable() { return manager; }
     @Override public @Nullable Lock getLock() { return manager.getLock(); }
