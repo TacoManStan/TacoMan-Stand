@@ -33,7 +33,7 @@ public class GameItem
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull GameViewContent getGame() { return content; }
+    @Override public @NotNull GameViewContent getContent() { return content; }
     
     //<editor-fold desc="--- GENERIC ---">
     

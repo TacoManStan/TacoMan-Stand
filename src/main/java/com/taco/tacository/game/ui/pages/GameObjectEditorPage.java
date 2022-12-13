@@ -49,7 +49,7 @@ public class GameObjectEditorPage extends UIPage<GameObjectEditorPageController>
         return GameObjectEditorPageController.class;
     }
     
-    @Override public final @NotNull GameViewContent getGame() { return parent.getGame(); }
+    @Override public final @NotNull GameViewContent getContent() { return parent.getGame(); }
     
     //</editor-fold>
 }

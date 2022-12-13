@@ -57,7 +57,7 @@ public class TriggerEventManager
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public final @NotNull GameViewContent getGame() { return gameComponent.getGame(); }
+    @Override public final @NotNull GameViewContent getContent() { return gameComponent.getGame(); }
     
     @Override public final @NotNull Springable springable() { return getGame(); }
     @Override public final @Nullable Lock getLock() { return lock != null ? lock : getGame().getLock(); }

@@ -397,7 +397,7 @@ public class GameObject
     
     //<editor-fold desc="> Game">
     
-    @Override public @NotNull GameViewContent getGame() { return gameComponent.getGame(); }
+    @Override public @NotNull GameViewContent getContent() { return gameComponent.getGame(); }
     @Override public @NotNull Mover mover() { return mover; }
     
     //

@@ -104,7 +104,7 @@ public class GameObjectModel
     @Override public @NotNull Springable springable() { return owner; }
     @Override public @NotNull Lock getLock() { return owner.getLock(); }
     
-    @Override public @NotNull GameViewContent getGame() { return getOwner().getGame(); }
+    @Override public @NotNull GameViewContent getContent() { return getOwner().getGame(); }
     
     //
     

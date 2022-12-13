@@ -62,7 +62,7 @@ public abstract class Effect
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public final @NotNull GameViewContent getGame() { return getSource().getGame(); }
+    @Override public final @NotNull GameViewContent getContent() { return getSource().getGame(); }
     
     @Override public final @NotNull Springable springable() { return getSource(); }
     @Override public @Nullable Lock getLock() { return getSource().getLock(); }

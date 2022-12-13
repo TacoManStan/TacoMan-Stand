@@ -117,7 +117,7 @@ public class CollisionArea<T extends Collidable<T>>
     
     //
     
-    @Override public @NotNull GameViewContent getGame() { return collisionMap().getGame(); }
+    @Override public @NotNull GameViewContent getContent() { return collisionMap().getGame(); }
     
     @Override public @NotNull Springable springable() { return collisionMap(); }
     @Override public @Nullable Lock getLock() { return lock; }

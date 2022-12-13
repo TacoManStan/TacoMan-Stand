@@ -62,7 +62,7 @@ public class GameUIData
     
     //
     
-    @Override public @NotNull GameViewContent getGame() { return parent.getGame(); }
+    @Override public @NotNull GameViewContent getContent() { return parent.getGame(); }
     
     @Override public @NotNull GameViewContentData getData() { return parent; }
     @Override public @NotNull GameUIData getUIData() { return this; }

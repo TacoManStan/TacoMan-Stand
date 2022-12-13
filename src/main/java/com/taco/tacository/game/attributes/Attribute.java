@@ -98,7 +98,7 @@ public class Attribute<T>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull GameViewContent getGame() { return manager.getGame(); }
+    @Override public @NotNull GameViewContent getContent() { return manager.getGame(); }
     
     @Override public @NotNull Springable springable() { return getOwner(); }
     @Override public @Nullable Lock getLock() { return getOwner().getLock(); }

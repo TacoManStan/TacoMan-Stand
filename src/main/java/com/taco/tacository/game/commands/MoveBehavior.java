@@ -65,7 +65,7 @@ public class MoveBehavior
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull GameViewContent getGame() { return owner.getGame(); }
+    @Override public @NotNull GameViewContent getContent() { return owner.getGame(); }
     
     //
     

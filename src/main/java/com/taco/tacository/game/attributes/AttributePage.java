@@ -24,7 +24,7 @@ public class AttributePage extends UIPage<AttributePageController>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull GameViewContent getGame() { return content; }
+    @Override public @NotNull GameViewContent getContent() { return content; }
     
     //
     

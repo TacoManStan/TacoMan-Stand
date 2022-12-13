@@ -50,7 +50,7 @@ public class GameViewPageController extends UIPageController<GameViewPage>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull GameViewContent getGame() { return getPage().getGame(); }
+    @Override public @NotNull GameViewContent getContent() { return getPage().getGame(); }
     
     //
     

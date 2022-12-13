@@ -54,7 +54,7 @@ public final class TriggerGroup<T extends TriggerEvent<T>>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull GameViewContent getGame() { return manager.getGame(); }
+    @Override public @NotNull GameViewContent getContent() { return manager.getGame(); }
     
     @Override public @NotNull Springable springable() { return manager; }
     @Override public @Nullable Lock getLock() { return manager.getLock(); }

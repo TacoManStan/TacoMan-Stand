@@ -364,7 +364,7 @@ public class GameViewContent
     
     //
     
-    public @NotNull GameViewContent getGame() { return this; }
+    public @NotNull GameViewContent getContent() { return this; }
     public @NotNull GameUIData getUIData() { return getData().getUIData(); }
     
     

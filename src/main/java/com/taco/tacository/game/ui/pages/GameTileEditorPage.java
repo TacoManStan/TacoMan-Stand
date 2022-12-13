@@ -42,7 +42,7 @@ public class GameTileEditorPage extends UIPage<GameTileEditorPageController>
         return GameTileEditorPageController.class;
     }
     
-    @Override public final @NotNull GameViewContent getGame() { return content; }
+    @Override public final @NotNull GameViewContent getContent() { return content; }
     
     //</editor-fold>
 }

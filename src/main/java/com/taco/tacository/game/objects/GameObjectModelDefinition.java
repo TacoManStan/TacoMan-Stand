@@ -174,7 +174,7 @@ public class GameObjectModelDefinition
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public final @NotNull GameViewContent getGame() { return getModel().getGame(); }
+    @Override public final @NotNull GameViewContent getContent() { return getModel().getGame(); }
     
     @Override public final @NotNull Springable springable() { return getModel(); }
     @Override public @Nullable Lock getLock() { return getModel().getLock(); }

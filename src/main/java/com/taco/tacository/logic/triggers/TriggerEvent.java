@@ -51,7 +51,7 @@ public abstract class TriggerEvent<T extends TriggerEvent<T>>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public final @NotNull GameViewContent getGame() { return source.getGame(); }
+    @Override public final @NotNull GameViewContent getContent() { return source.getGame(); }
     
     @Override public @NotNull Springable springable() { return getGame(); }
     @Override public @Nullable Lock getLock() { return getGame().getLock(); }

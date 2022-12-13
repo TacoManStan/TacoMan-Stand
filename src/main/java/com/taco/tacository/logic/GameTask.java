@@ -93,7 +93,7 @@ public abstract class GameTask<E extends Tickable<E>>
         return lock;
     }
     
-    @Override public final @NotNull GameViewContent getGame() { return game; }
+    @Override public final @NotNull GameViewContent getContent() { return game; }
     
     //</editor-fold>
     

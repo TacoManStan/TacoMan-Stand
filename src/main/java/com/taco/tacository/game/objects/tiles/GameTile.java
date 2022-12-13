@@ -142,7 +142,7 @@ public class GameTile
     
     //
     
-    @Override public @NotNull GameViewContent getGame() { return getOwner().getGame(); }
+    @Override public @NotNull GameViewContent getContent() { return getOwner().getGame(); }
     @Override public @NotNull CollisionMap<GameTile> collisionMap() { return collisionMap; }
     
     //

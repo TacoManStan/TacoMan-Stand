@@ -88,7 +88,7 @@ public abstract class ValidationFilter<T extends Validatable<T>>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull GameViewContent getGame() { return getOwner().getGame(); }
+    @Override public @NotNull GameViewContent getContent() { return getOwner().getGame(); }
     
     @Override public @NotNull Springable springable() { return getOwner(); }
     @Override public @Nullable Lock getLock() { return getOwner().getLock(); }

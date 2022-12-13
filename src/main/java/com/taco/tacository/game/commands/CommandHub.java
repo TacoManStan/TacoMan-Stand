@@ -28,7 +28,7 @@ public class CommandHub
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull GameViewContent getGame() { return owner.getGame(); }
+    @Override public @NotNull GameViewContent getContent() { return owner.getGame(); }
     
     @Override public @NotNull Springable springable() { return owner; }
     @Override public @Nullable Lock getLock() { return owner.getLock(); }

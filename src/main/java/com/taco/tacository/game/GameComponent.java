@@ -4,6 +4,7 @@ import com.taco.tacository.game.objects.GameObject;
 import com.taco.tacository.game.ui.GameUIData;
 import com.taco.tacository.game.ui.GameViewContent;
 import com.taco.tacository.game.ui.GameViewContentData;
+import com.taco.tacository.logic.ContentComponent;
 import com.taco.tacository.util.values.numbers.Num2D;
 import com.taco.tacository.util.values.numbers.NumExpr2D;
 import javafx.beans.property.ObjectProperty;
@@ -58,14 +59,15 @@ import org.jetbrains.annotations.NotNull;
  * </ol>
  */
 //TO-DO: Examples?
-public interface GameComponent {
+public interface GameComponent
+        extends ContentComponent<GameViewContent> {
     
     /**
      * <p>Returns the {@link GameViewContent Game Instance} this {@link GameComponent} is a component of.</p>
      *
      * @return The {@link GameViewContent Game Instance} this {@link GameComponent} is a component of.
      */
-    @NotNull GameViewContent getGame();
+    default @NotNull GameViewContent getGame() { return getContent(); }
     
     //
     
@@ -77,9 +79,10 @@ public interface GameComponent {
     default GameMap getGameMap() { return getGame().getGameMap(); }
     default GameMap setGameMap(@NotNull GameMap newValue) { return getGame().setGameMap(newValue); }
     
+    
     /**
      * <p><b>Passthrough Definition</b></p>
-     * <blockquote><i>{@link #getGame()}<b>.</b>{@link GameViewContent#getGameMap() getGameMap()}</i></blockquote>
+     * <blockquote><i>{@link #getGame()}<b>.</b>{@link GameViewContent#getData() getData()}</i></blockquote>
      */
     default GameViewContentData getData() { return getGame().getData(); }
     

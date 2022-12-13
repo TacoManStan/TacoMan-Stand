@@ -73,7 +73,7 @@ public abstract class Ability
     
     //
     
-    @Override public @NotNull GameViewContent getGame() { return getSource().getGame(); }
+    @Override public @NotNull GameViewContent getContent() { return getSource().getGame(); }
     
     @Override public final @NotNull Springable springable() { return getSource(); }
     @Override public final @NotNull Lock getLock() { return lock != null ? lock : getSource().getLock(); }

@@ -134,7 +134,7 @@ public class GameTileModel
     @Override public @NotNull Springable springable() { return getOwner(); }
     @Override public @NotNull Lock getLock() { return getOwner().getLock(); }
     
-    @Override public @NotNull GameViewContent getGame() { return getOwner().getGame(); }
+    @Override public @NotNull GameViewContent getContent() { return getOwner().getGame(); }
     
     //
     

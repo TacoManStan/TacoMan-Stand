@@ -76,7 +76,7 @@ public class CollisionMap<T extends Collidable<T>>
     
     //
     
-    @Override public @NotNull GameViewContent getGame() { return getOwner().getGame(); }
+    @Override public @NotNull GameViewContent getContent() { return getOwner().getGame(); }
     
     @Override public @NotNull Springable springable() { return getOwner(); }
     

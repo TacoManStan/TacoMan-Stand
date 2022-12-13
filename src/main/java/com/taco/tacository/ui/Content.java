@@ -109,7 +109,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  *                 <p><b>{@link #getBookshelves() Bookshelves} {@link ListChangeListener Change} Response Methods</b></p>
  *                 <ul>
  *                     <li><i><b>{@link #onBookshelfAdded(SidebarBookshelf)}:</b> Defines any necessary operations required when a new {@link UIBookshelf} is {@code added} to this {@link Content} implementation.</i></li>
- *                     <li><i><b>{@link #onBookshelfAdded(SidebarBookshelf)}:</b> Defines any necessary operations required when a new {@link UIBookshelf} is {@code removed} from this {@link Content} implementation.</i></li>
+ *                     <li><i><b>{@link #onBookshelfRemoved(SidebarBookshelf)}:</b> Defines any necessary operations required when a new {@link UIBookshelf} is {@code removed} from this {@link Content} implementation.</i></li>
  *                 </ul>
  *             </li>
  *         </ul>
@@ -407,7 +407,7 @@ public abstract class Content<T extends Content<T, TD, TC, F, FC>, TD extends Co
         onDeactivate();
     }
     
-    private void onBookshelfAddedInternal(SidebarBookshelf bookshelf) {
+    private void onBookshelfAddedInternal(@NotNull SidebarBookshelf bookshelf) {
         bookshelf.initialize();
         onBookshelfAdded(bookshelf);
     }

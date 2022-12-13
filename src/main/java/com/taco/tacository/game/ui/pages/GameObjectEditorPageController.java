@@ -89,12 +89,10 @@ public class GameObjectEditorPageController extends UIPageController<GameObjectE
     
     @Override public Pane root() { return root; }
     
-    @Override public void initialize() {
-    
-    }
+    @Override public void initialize() { }
     
     
-    @Override public @NotNull GameViewContent getGame() { return getPage().getGame(); }
+    @Override public @NotNull GameViewContent getContent() { return getPage().getGame(); }
     
     //
     

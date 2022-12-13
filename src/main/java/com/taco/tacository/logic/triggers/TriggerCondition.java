@@ -28,7 +28,7 @@ public abstract class TriggerCondition<T extends TriggerEvent<T>>
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull GameViewContent getGame() { return game; }
+    @Override public @NotNull GameViewContent getContent() { return game; }
     
     @Override public @NotNull Springable springable() { return getGame(); }
     @Override public @Nullable Lock getLock() { return getGame().getLock(); }

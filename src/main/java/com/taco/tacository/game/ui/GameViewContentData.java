@@ -30,7 +30,7 @@ public class GameViewContentData extends ContentData<GameViewContent, GameViewCo
     
     //<editor-fold desc="--- IMPLEMENTATIONS ---">
     
-    @Override public @NotNull GameViewContent getGame() { return content; }
+    @Override public @NotNull GameViewContent getContent() { return content; }
     @Override public @NotNull GameViewContentData getData() { return this; }
     @Override public @NotNull GameUIData getUIData() { return uiData; }
     

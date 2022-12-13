@@ -242,7 +242,7 @@ public class GameTileEditorPageController extends UIPageController<GameTileEdito
     }
     
     
-    @Override public @NotNull GameViewContent getGame() { return getPage().getGame(); }
+    @Override public @NotNull GameViewContent getContent() { return getPage().getGame(); }
     
     //
     
