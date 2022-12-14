@@ -195,6 +195,12 @@ public abstract class Content<T extends Content<T, TD, TC, F, FC>, TD extends Co
      *     <li>The primary purpose of <i>{@link #init()}</i> is to define initialization logic such that all standard {@link Content#Content(Springable) Construction} has been completed.</li>
      *     <li>The separation of the {@link Content} {@link Content#Content(Springable) Constructor} and the <i>{@link #init()}</i> method allows dynamic control over the {@link Content} {@link Content#Content(Springable) Construction} process.</li>
      *     <li>Finally, <i>{@link #init()}</i> guarantees that all universal {@link Content} properties have been initialized, further improving control over the {@link Content} initialization process.</li>
+     *     <li>
+     *         Note that <i>{@link #init()}</i> does not modify the {@link ContentManager} and therefore does not call <i>{@link ContentManager#setContent(Content)}</i>.
+     *         <ul>
+     *             <li>The purpose of this is so one (or more) {@link Content} objects can be constructed in sequence without being displayed - most importantly, this can be used to preload resource-intensive {@link Content} instances.</li>
+     *         </ul>
+     *     </li>
      * </ol>
      *
      * @return This {@link Content} instance, cast to and returned as type {@link T}.

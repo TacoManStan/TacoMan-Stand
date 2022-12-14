@@ -106,8 +106,6 @@ public class GameViewContent
         initUIPage();
         initGame();
         
-        ui().getContentManager().setContent(this);
-        
         return super.init();
     }
     

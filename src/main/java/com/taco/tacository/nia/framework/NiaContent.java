@@ -50,9 +50,7 @@ public class NiaContent
     //<editor-fold desc="--- INITIALIZATION ---">
     
     @Override public NiaContent init() {
-        initUIPage();
-        ui().getContentManager().setContent(this);
-        
+//        init UIPage();
         return super.init();
     }
     
