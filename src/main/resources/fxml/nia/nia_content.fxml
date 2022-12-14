@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
@@ -7,7 +8,10 @@
     <children>
         <BorderPane fx:id="borderPaneRoot" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <center>
-                <AnchorPane fx:id="mapPane" />
+                <AnchorPane fx:id="mainContentPane">
+               <children>
+                  <Button fx:id="testButton" layoutX="474.0" layoutY="238.0" mnemonicParsing="false" onAction="#testButtonOnAction" text="Test Button" />
+               </children></AnchorPane>
             </center>
         </BorderPane>
     </children>

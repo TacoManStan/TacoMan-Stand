@@ -211,6 +211,16 @@ public abstract class Content<T extends Content<T, TD, TC, F, FC>, TD extends Co
         return (T) this;
     }
     
+    /**
+     * <p>Registers this {@link Content} instance with the application {@link ContentManager}, which <i>{@link ContentManager#setContent(Content) selects}</i> this {@link Content} object as the currently-active {@link Content} instance.</p>
+     * <p><b>Passthrough Definition</b></p>
+     * <blockquote><i>{@link #ui()}<b>.</b>{@link AppUI#getContentManager() getContentManager()}<b>.</b>{@link ContentManager#setContent(Content) setContent}<b>(</b>this<b>)</b></i></blockquote>
+     */
+    public final T register() {
+        ui().getContentManager().setContent(this);
+        return (T) this;
+    }
+    
     //<editor-fold desc="--- PROPERTIES ---">
     
     /**

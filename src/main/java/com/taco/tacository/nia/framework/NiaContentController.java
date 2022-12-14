@@ -8,7 +8,9 @@ import com.taco.tacository.util.values.numbers.Num2D;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -34,7 +36,9 @@ public class NiaContentController
     
     @FXML private AnchorPane root;
     @FXML private BorderPane borderPaneRoot;
-    @FXML private AnchorPane mapPane;
+    @FXML private AnchorPane mainContentPane;
+    
+    @FXML private Button testButton;
     
     //</editor-fold>
     
@@ -134,7 +138,11 @@ public class NiaContentController
     @Override public @NotNull Lock getLock() { return lock; }
     
     @Override public Pane root() { return root; }
-    @Override public AnchorPane getContentPane() { return mapPane; }
+    @Override public AnchorPane getContentPane() { return mainContentPane; }
     
     //</editor-fold>
+    
+    @FXML private void testButtonOnAction(ActionEvent e) {
+        System.out.println("E: " + e);
+    }
 }

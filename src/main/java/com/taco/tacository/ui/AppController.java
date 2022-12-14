@@ -588,7 +588,7 @@ public class AppController
     
     private void initContent() {
 //        gameContent = (new GameViewContent(this)).init();
-        niaContent = (new NiaContent(this)).init();
+        niaContent = (new NiaContent(this)).init().register();
     }
     
     public final Content getGameContent() { return niaContent; }
