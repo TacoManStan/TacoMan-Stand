@@ -1,4 +1,4 @@
-package com.taco.tacository.nia.framework;
+package com.taco.tacository.nia.content;
 
 import com.taco.tacository._to_sort._new.interfaces.ObservablePropertyContainable;
 import com.taco.tacository.ui.ContentData;

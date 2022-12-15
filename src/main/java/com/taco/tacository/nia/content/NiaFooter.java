@@ -1,4 +1,4 @@
-package com.taco.tacository.nia.framework;
+package com.taco.tacository.nia.content;
 
 import com.taco.tacository.game.ui.GameFooterController;
 import com.taco.tacository.game.ui.GameViewContent;
