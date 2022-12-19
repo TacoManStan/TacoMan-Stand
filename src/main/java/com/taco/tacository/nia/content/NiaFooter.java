@@ -2,6 +2,7 @@ package com.taco.tacository.nia.content;
 
 import com.taco.tacository.game.ui.GameFooterController;
 import com.taco.tacository.game.ui.GameViewContent;
+import com.taco.tacository.nia.content.ui.NiaContentController;
 import com.taco.tacository.ui.Content;
 import com.taco.tacository.ui.Footer;
 import org.jetbrains.annotations.NotNull;

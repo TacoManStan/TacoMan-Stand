@@ -1,5 +1,6 @@
 package com.taco.tacository.nia.content;
 
+import com.taco.tacository.nia.content.ui.NiaContentController;
 import com.taco.tacository.ui.FooterController;
 import com.taco.tacository.ui.jfx.components.ImagePane;
 import com.taco.tacository.ui.jfx.components.button.ImageButton;

@@ -1,6 +1,7 @@
 package com.taco.tacository.nia.content;
 
 import com.taco.tacository._to_sort._new.interfaces.ObservablePropertyContainable;
+import com.taco.tacository.nia.content.ui.NiaContentController;
 import com.taco.tacository.ui.ContentData;
 import com.taco.tacository.util.UIDProcessable;
 import com.taco.tacository.util.UIDProcessor;

@@ -4,6 +4,7 @@ import com.taco.tacository.game.GameMap;
 import com.taco.tacository.game.attributes.AttributePage;
 import com.taco.tacository.game.ui.pages.GameTileEditorPage;
 import com.taco.tacository.game.ui.pages.GameViewPage;
+import com.taco.tacository.nia.content.ui.NiaContentController;
 import com.taco.tacository.ui.*;
 import com.taco.tacository.util.UIDProcessable;
 import com.taco.tacository.util.UIDProcessor;

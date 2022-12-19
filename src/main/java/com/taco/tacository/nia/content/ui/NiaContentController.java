@@ -1,7 +1,11 @@
-package com.taco.tacository.nia.content;
+package com.taco.tacository.nia.content.ui;
 
 import com.taco.tacository.logic.GameTask;
 import com.taco.tacository.logic.Tickable;
+import com.taco.tacository.nia.content.NiaContent;
+import com.taco.tacository.nia.content.NiaContentData;
+import com.taco.tacository.nia.content.NiaFooter;
+import com.taco.tacository.nia.content.NiaFooterController;
 import com.taco.tacository.ui.ContentController;
 import com.taco.tacository.util.synchronization.Lockable;
 import com.taco.tacository.util.values.numbers.Num2D;
