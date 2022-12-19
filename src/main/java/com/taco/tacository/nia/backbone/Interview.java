@@ -4,5 +4,5 @@ import java.util.ArrayList;
 
 public class Interview {
     
-    private final ArrayList<Quote> quotes;
+    private  ArrayList<Quote> quotes;
 }

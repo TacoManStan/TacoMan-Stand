@@ -11,6 +11,7 @@ import com.taco.tacository.util.UIDProcessor;
 import com.taco.tacository.util.springable.Springable;
 import com.taco.tacository.util.synchronization.Lockable;
 import com.taco.tacository.util.tools.Props;
+import com.taco.tacository.util.tools.Stuff;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -30,9 +31,7 @@ public class NiaContent
     
     private SidebarBookshelf bookshelf;
     
-    private GameViewPage coverPage;
-    private GameTileEditorPage tileEditorPage;
-    private AttributePage attributePage;
+    private NiaMainPage coverPage;
     
     
     private final ObjectProperty<GameMap> gameMapProperty;
@@ -51,50 +50,28 @@ public class NiaContent
     //<editor-fold desc="--- INITIALIZATION ---">
     
     @Override public NiaContent init() {
-//        init UIPage();
+        initUIPage();
         return super.init();
     }
     
     private void initUIPage() {
-//        bookshelf = injectBookshelf("Game View",
-//                                    new UIBook(
-//                                            this,
-//                                            "Tile Selector",
-//                                            "details",
-//                                            uiBook -> Stuff.get(
-//                                                    "pages",
-//                                                    uiBook.getUID(uiBook.getButtonID()),
-//                                                    () -> tileEditorPage = new GameTileEditorPage(uiBook, this).init()),
-//                                            null),
-//                                    new UIBook(
-//                                            this,
-//                                            "Attribute List Test",
-//                                            "clients",
-//                                            uiBook -> Stuff.get(
-//                                                    "pages",
-//                                                    uiBook.getUID(uiBook.getButtonID()),
-//                                                    () -> attributePage = new AttributePage(uiBook, this)),
-//                                            null),
-//                                    new UIBook(
-//                                            this,
-//                                            "Game View",
-//                                            "game_engine",
-//                                            uiBook -> Stuff.get(
-//                                                    "pages",
-//                                                    uiBook.getUID(uiBook.getButtonID()),
-//                                                    () -> coverPage = new GameViewPage(uiBook, this)),
-//                                            null)).select();
+        bookshelf = injectBookshelf("Nia Main",
+                                    new UIBook(
+                                            this,
+                                            "Main Page",
+                                            "game_engine",
+                                            uiBook -> Stuff.get(
+                                                    "pages",
+                                                    uiBook.getUID(uiBook.getButtonID()),
+                                                    () -> coverPage = new NiaMainPage(uiBook, this)),
+                                            null)).select();
     }
     
     //</editor-fold>
     
     //<editor-fold desc="--- PROPERTIES ---">
     
-    protected GameViewPage getCoverPage() { return coverPage; }
-    
-    public final @NotNull ObjectProperty<GameMap> gameMapProperty() { return gameMapProperty; }
-    public final GameMap getGameMap() { return gameMapProperty.get(); }
-    public final GameMap setGameMap(@NotNull GameMap newValue) { return Props.setProperty(gameMapProperty, newValue); }
+    protected NiaMainPage getCoverPage() { return coverPage; }
     
     //</editor-fold>
     
