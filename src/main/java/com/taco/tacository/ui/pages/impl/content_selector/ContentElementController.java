@@ -1,6 +1,6 @@
 package com.taco.tacository.ui.pages.impl.content_selector;
 
-import com.taco.tacository._to_sort._new.Debugger;
+import com.taco.tacository._to_sort._new.debugger.Debugger;
 import com.taco.tacository.ui.ContentData;
 import com.taco.tacository.ui.jfx.components.button.ImageButton;
 import com.taco.tacository.ui.jfx.components.ImagePane;
