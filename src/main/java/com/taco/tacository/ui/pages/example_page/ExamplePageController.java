@@ -33,7 +33,7 @@ public class ExamplePageController extends SidebarNodeGroupController<ExamplePag
     @Override
     @FXML public void initialize() {
         pageTurnButton.setOnAction(event -> getPage().getOwner().getPageHandler().turnToNew(new ExamplePage(getPage().getOwner(), "transparent")));
-        displayGameButton.setOnAction(event -> ui().getContentManager().setContent(ui().getController().getGameContent()));
+//        displayGameButton.setOnAction(event -> ui().getContentManager().setContent(ui().getController().getGameContent()));
     }
     
     @Override

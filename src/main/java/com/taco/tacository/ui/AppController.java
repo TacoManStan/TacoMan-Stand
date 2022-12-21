@@ -3,6 +3,7 @@ package com.taco.tacository.ui;
 import com.taco.tacository.game.ui.GameViewContent;
 import com.taco.tacository.nia.content.NiaContent;
 import com.taco.tacository.logic.triggers.Galaxy;
+import com.taco.tacository.ui.contents.mandelbrot.MandelbrotContent;
 import com.taco.tacository.ui.jfx.components.button.ImageButton;
 import com.taco.tacository.ui.jfx.components.ImagePane;
 import com.taco.tacository.ui.pages.entity_debug_page.EntityDebugPage;
@@ -23,7 +24,6 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
@@ -251,13 +251,13 @@ public class AppController
             Printer.print("Filtering Key Event: " + event.getCode());
             if (ui().getContentManager().submitKeyEvent(event, true))
                 event.consume();
-            getGameContent().getController().taskManager().addTask(
+            contentInternal().getController().taskManager().addTask(
                     Galaxy.newOneTimeTask(
-                            getGameContent().getController(),
+                            contentInternal().getController(),
                             () -> ui().getContentManager().submitKeyEvent(event, false)));
         });
         
-        logiCore().init(getGameContent());
+        logiCore().init(contentInternal());
         
         //
         
@@ -585,17 +585,19 @@ public class AppController
     
     private GameViewContent gameContent;
     private NiaContent niaContent;
+    private MandelbrotContent mandelbrotContent;
     
     private void initContent() {
 //        gameContent = (new GameViewContent(this)).init().register();
         niaContent = (new NiaContent(this)).init().register();
     }
     
-    public final Content getGameContent() { return niaContent; }
+    private Content contentInternal() { return niaContent; }
     
     //
     
     private void onShownInit() {
+        System.out.println("Testing");
         Stage stage = getStage();
         sidebarPane.setPrefWidth(PUI_WIDTH);
         STAGE_MIN_WIDTH = stage.getWidth() - PUI_WIDTH;
@@ -701,17 +703,5 @@ public class AppController
                 weaver.loadController(SettingsController.class));
     }
     
-    //</editor-fold>
-    
-    //<editor-fold desc="--- TESTING ---">
-    
-    @FXML void onLoadScriptAction(ActionEvent event) { }
-    
-    @FXML void onRunScriptAction(ActionEvent event) { }
-    
-    @FXML void onPrintAction(ActionEvent event) { }
-    
-    @FXML void onDebugAction(ActionEvent event) { }
-    
-    //</editor-fold>
+    //</editor-fold> v
 }
