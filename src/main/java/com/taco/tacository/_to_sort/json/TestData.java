@@ -1,7 +1,7 @@
 package com.taco.tacository._to_sort.json;
 
 import com.github.cliftonlabs.json_simple.JsonObject;
-import com.taco.tacository._to_sort._new.debugger.Debugger;
+import com.taco.tacository._to_sort._new.Debugger;
 import com.taco.tacository.util.tools.Exc;
 
 import java.util.Arrays;

@@ -1,6 +1,6 @@
 package com.taco.tacository.util.tools.list_tools;
 
-import com.taco.tacository._to_sort._new.debugger.Debugger;
+import com.taco.tacository._to_sort._new.Debugger;
 import com.taco.tacository.util.tools.Exc;
 import com.taco.tacository.util.tools.list_tools.Op.OperationType;
 import com.taco.tacository.util.tools.list_tools.Op.TriggerType;

@@ -1,6 +1,6 @@
 package com.taco.tacository.util.springable;
 
-import com.taco.tacository._to_sort._new.debugger.Debugger;
+import com.taco.tacository._to_sort._new.Debugger;
 import com.taco.tacository.logic.LogiCore;
 import com.taco.tacository.logic.triggers.TriggerEventManager;
 import com.taco.tacository.ui.ContentManager;
